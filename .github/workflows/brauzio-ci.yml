@@ -21,6 +21,21 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Reject legacy local bridge references
+        shell: bash
+        run: |
+          set -euo pipefail
+          if grep -RInE \
+            --exclude-dir=node_modules \
+            --exclude-dir=.output \
+            --exclude='*.map' \
+            'NATIVE_HOST|NATIVE_SERVER_PORT|connectNative|ENSURE_NATIVE|127\.0\.0\.1:12306|mcp-chrome-bridge' \
+            app/chrome-extension; then
+            echo 'Legacy local/native bridge references remain in the Brauzio extension.' >&2
+            exit 1
+          fi
+          echo 'No legacy local/native bridge references found.'
+
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
