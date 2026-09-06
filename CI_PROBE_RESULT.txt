@@ -1,0 +1,1436 @@
+
+===== install =====
+Scope: all 4 workspace projects
+Progress: resolved 0, reused 0, downloaded 1, added 0
+Progress: resolved 184, reused 0, downloaded 183, added 0
+Progress: resolved 506, reused 0, downloaded 459, added 0
+Progress: resolved 852, reused 0, downloaded 682, added 0
+Progress: resolved 992, reused 0, downloaded 810, added 0
+Packages: +809
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Progress: resolved 992, reused 0, downloaded 811, added 808
+Progress: resolved 992, reused 0, downloaded 811, added 809, done
+
+devDependencies:
++ @commitlint/cli 19.8.1
++ @commitlint/config-conventional 19.8.1
++ @eslint/js 9.39.2
++ @typescript-eslint/eslint-plugin 8.49.0
++ @typescript-eslint/parser 8.49.0
++ eslint 9.39.2 (10.10.0 is available)
++ eslint-config-prettier 10.1.8
++ eslint-plugin-vue 10.6.2
++ globals 16.5.0
++ husky 9.1.7
++ lint-staged 15.5.2
++ prettier 3.7.4
++ typescript 5.9.3 (7.0.2 is available)
++ typescript-eslint 8.49.0
++ vue-eslint-parser 10.2.0
+
+ WARN  Issues with peer dependencies found
+app/chrome-extension
+└─┬ wxt 0.20.11
+  └─┬ vite 7.2.7
+    └── ✕ unmet peer @types/node@"^20.19.0 || >=22.12.0": found 18.19.130
+
+Done in 6.9s
+EXIT_CODE=0
+
+===== wxt_prepare =====
+
+[log] [90mWXT[39m [90m[1m0.20.11[22m[39m
+[dotenv@17.2.3] injecting env (0) from .env.production.chrome.local,.env.production.chrome,.env.chrome.local,.env.chrome,.env.production.local,.env.production,.env.local,.env -- tip: ⚙️  specify custom .env file path with { path: '/custom/path/.env' }
+[warn] `InlineConfig#runner` is deprecated, use `InlineConfig#webExt` instead. See https://wxt.dev/guide/resources/upgrading.html#v0-19-0-rarr-v0-20-0
+[info] Generating types...
+[success] Finished in 765 ms
+EXIT_CODE=0
+
+===== shared_build =====
+
+> brauzio-shared@1.0.1 build /home/runner/work/Brauzio/Brauzio/packages/shared
+> tsup src/index.ts --format cjs,esm --dts --clean
+
+[34mCLI[39m Building entry: src/index.ts
+[34mCLI[39m Using tsconfig: tsconfig.json
+[34mCLI[39m tsup v8.5.1
+[34mCLI[39m Target: es2020
+[34mCLI[39m Cleaning output folder
+[34mCJS[39m Build start
+[34mESM[39m Build start
+[32mCJS[39m [1mdist/index.js [22m[32m12.43 KB[39m
+[32mCJS[39m ⚡️ Build success in 22ms
+[32mESM[39m [1mdist/index.mjs [22m[32m11.40 KB[39m
+[32mESM[39m ⚡️ Build success in 22ms
+[34mDTS[39m Build start
+[32mDTS[39m ⚡️ Build success in 1347ms
+[32mDTS[39m [1mdist/index.d.ts  [22m[32m3.37 KB[39m
+[32mDTS[39m [1mdist/index.d.mts [22m[32m3.37 KB[39m
+EXIT_CODE=0
+
+===== cloud_check =====
+
+> brauzio-cloud-mcp@0.1.0 check /home/runner/work/Brauzio/Brauzio/app/cloudflare-mcp
+> tsc --noEmit
+
+EXIT_CODE=0
+
+===== cloud_build =====
+
+> brauzio-cloud-mcp@0.1.0 build /home/runner/work/Brauzio/Brauzio/app/cloudflare-mcp
+> wrangler deploy --dry-run --outdir dist
+
+
+ ⛅️ wrangler 4.129.0
+────────────────────
+Total Upload: 676.10 KiB / gzip: 134.32 KiB
+Your Worker has access to the following bindings:
+Binding                                     Resource                  
+env.BROWSER_SESSIONS (BrowserSession)       Durable Object            
+env.DEFAULT_DEVICE_ID ("default")           Environment Variable      
+
+--dry-run: exiting now.
+
+Cloudflare collects anonymous telemetry about your usage of Wrangler. Learn more at https://github.com/cloudflare/workers-sdk/tree/main/packages/wrangler/telemetry.md
+EXIT_CODE=0
+
+===== extension_compile =====
+
+> brauzio-extension@1.1.0 compile /home/runner/work/Brauzio/Brauzio/app/chrome-extension
+> vue-tsc --noEmit
+
+common/message-types.ts(6,15): error TS2305: Module '"brauzio-shared"' has no exported member 'RealtimeEvent'.
+entrypoints/background/element-marker/index.ts(50,11): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/element-marker/index.ts(53,13): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/element-marker/index.ts(55,11): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/element-marker/index.ts(72,7): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/element-marker/index.ts(90,13): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/element-marker/index.ts(102,11): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/element-marker/index.ts(113,3): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/element-marker/index.ts(113,41): error TS7006: Parameter 'message' implicitly has an 'any' type.
+entrypoints/background/element-marker/index.ts(113,50): error TS7006: Parameter '_sender' implicitly has an 'any' type.
+entrypoints/background/element-marker/index.ts(113,59): error TS7006: Parameter 'sendResponse' implicitly has an 'any' type.
+entrypoints/background/element-marker/index.ts(194,32): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/element-marker/index.ts(200,21): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/element-marker/index.ts(210,31): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/element-marker/index.ts(270,46): error TS2339: Property 'waitForNavigation' does not exist on type '{ selector: string; selectorType?: "css" | "xpath" | undefined; action: MarkerValidationAction; listMode?: boolean | undefined; text?: string | undefined; ... 8 more ...; relativeTo?: "element" | ... 1 more ... | undefined; }'.
+entrypoints/background/element-marker/index.ts(271,50): error TS2339: Property 'timeoutMs' does not exist on type '{ selector: string; selectorType?: "css" | "xpath" | undefined; action: MarkerValidationAction; listMode?: boolean | undefined; text?: string | undefined; ... 8 more ...; relativeTo?: "element" | ... 1 more ... | undefined; }'.
+entrypoints/background/element-marker/index.ts(272,30): error TS2339: Property 'timeoutMs' does not exist on type '{ selector: string; selectorType?: "css" | "xpath" | undefined; action: MarkerValidationAction; listMode?: boolean | undefined; text?: string | undefined; ... 8 more ...; relativeTo?: "element" | ... 1 more ... | undefined; }'.
+entrypoints/background/element-marker/index.ts(285,46): error TS2339: Property 'waitForNavigation' does not exist on type '{ selector: string; selectorType?: "css" | "xpath" | undefined; action: MarkerValidationAction; listMode?: boolean | undefined; text?: string | undefined; ... 8 more ...; relativeTo?: "element" | ... 1 more ... | undefined; }'.
+entrypoints/background/element-marker/index.ts(286,50): error TS2339: Property 'timeoutMs' does not exist on type '{ selector: string; selectorType?: "css" | "xpath" | undefined; action: MarkerValidationAction; listMode?: boolean | undefined; text?: string | undefined; ... 8 more ...; relativeTo?: "element" | ... 1 more ... | undefined; }'.
+entrypoints/background/element-marker/index.ts(287,30): error TS2339: Property 'timeoutMs' does not exist on type '{ selector: string; selectorType?: "css" | "xpath" | undefined; action: MarkerValidationAction; listMode?: boolean | undefined; text?: string | undefined; ... 8 more ...; relativeTo?: "element" | ... 1 more ... | undefined; }'.
+entrypoints/background/element-marker/index.ts(299,46): error TS2339: Property 'waitForNavigation' does not exist on type '{ selector: string; selectorType?: "css" | "xpath" | undefined; action: MarkerValidationAction; listMode?: boolean | undefined; text?: string | undefined; ... 8 more ...; relativeTo?: "element" | ... 1 more ... | undefined; }'.
+entrypoints/background/element-marker/index.ts(300,50): error TS2339: Property 'timeoutMs' does not exist on type '{ selector: string; selectorType?: "css" | "xpath" | undefined; action: MarkerValidationAction; listMode?: boolean | undefined; text?: string | undefined; ... 8 more ...; relativeTo?: "element" | ... 1 more ... | undefined; }'.
+entrypoints/background/element-marker/index.ts(301,30): error TS2339: Property 'timeoutMs' does not exist on type '{ selector: string; selectorType?: "css" | "xpath" | undefined; action: MarkerValidationAction; listMode?: boolean | undefined; text?: string | undefined; ... 8 more ...; relativeTo?: "element" | ... 1 more ... | undefined; }'.
+entrypoints/background/element-marker/index.ts(398,8): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/element-marker/index.ts(399,5): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/element-marker/index.ts(399,54): error TS7006: Parameter 'info' implicitly has an 'any' type.
+entrypoints/background/element-marker/index.ts(399,60): error TS7006: Parameter 'tab' implicitly has an 'any' type.
+entrypoints/background/index.ts(10,3): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/index.ts(10,43): error TS7006: Parameter 'details' implicitly has an 'any' type.
+entrypoints/background/index.ts(12,7): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/index.ts(12,33): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay-v3/bootstrap.ts(51,34): error TS2307: Cannot find module '../keepalive-manager' or its corresponding type declarations.
+entrypoints/background/record-replay-v3/bootstrap.ts(94,11): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay-v3/bootstrap.ts(102,21): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay-v3/bootstrap.ts(112,11): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay-v3/engine/keepalive/offscreen-keepalive.ts(19,8): error TS2307: Cannot find module '@/common/rr-v3-keepalive-protocol' or its corresponding type declarations.
+entrypoints/background/record-replay-v3/engine/keepalive/offscreen-keepalive.ts(101,26): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/background/record-replay-v3/engine/keepalive/offscreen-keepalive.ts(241,16): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay-v3/engine/keepalive/offscreen-keepalive.ts(241,43): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay-v3/engine/keepalive/offscreen-keepalive.ts(246,5): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay-v3/engine/keepalive/offscreen-keepalive.ts(255,34): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/background/record-replay-v3/engine/keepalive/offscreen-keepalive.ts(372,16): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay-v3/engine/keepalive/offscreen-keepalive.ts(372,43): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay-v3/engine/keepalive/offscreen-keepalive.ts(389,15): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay-v3/engine/kernel/artifacts.ts(79,27): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay-v3/engine/kernel/artifacts.ts(91,31): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay-v3/engine/transport/rpc-server.ts(50,9): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/background/record-replay-v3/engine/transport/rpc-server.ts(92,5): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay-v3/engine/transport/rpc-server.ts(104,5): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay-v3/engine/transport/rpc-server.ts(121,34): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/background/record-replay-v3/engine/transport/rpc-server.ts(132,33): error TS7006: Parameter 'msg' implicitly has an 'any' type.
+entrypoints/background/record-replay-v3/engine/triggers/command-trigger.ts(59,45): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/background/record-replay-v3/engine/triggers/command-trigger.ts(82,10): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay-v3/engine/triggers/command-trigger.ts(86,5): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay-v3/engine/triggers/command-trigger.ts(96,7): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay-v3/engine/triggers/context-menu-trigger.ts(35,25): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/background/record-replay-v3/engine/triggers/context-menu-trigger.ts(72,28): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/background/record-replay-v3/engine/triggers/context-menu-trigger.ts(72,67): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/background/record-replay-v3/engine/triggers/context-menu-trigger.ts(96,10): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay-v3/engine/triggers/context-menu-trigger.ts(100,5): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay-v3/engine/triggers/context-menu-trigger.ts(110,7): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay-v3/engine/triggers/context-menu-trigger.ts(123,6): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/background/record-replay-v3/engine/triggers/context-menu-trigger.ts(127,24): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/background/record-replay-v3/engine/triggers/context-menu-trigger.ts(138,12): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay-v3/engine/triggers/context-menu-trigger.ts(145,9): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay-v3/engine/triggers/context-menu-trigger.ts(152,17): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay-v3/engine/triggers/context-menu-trigger.ts(153,32): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay-v3/engine/triggers/context-menu-trigger.ts(171,11): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay-v3/engine/triggers/context-menu-trigger.ts(173,11): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay-v3/engine/triggers/context-menu-trigger.ts(175,17): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay-v3/engine/triggers/context-menu-trigger.ts(177,76): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay-v3/engine/triggers/context-menu-trigger.ts(195,11): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay-v3/engine/triggers/context-menu-trigger.ts(199,15): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay-v3/engine/triggers/cron-trigger.ts(435,10): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay-v3/engine/triggers/cron-trigger.ts(437,29): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay-v3/engine/triggers/cron-trigger.ts(447,10): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay-v3/engine/triggers/cron-trigger.ts(447,36): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay-v3/engine/triggers/cron-trigger.ts(449,44): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay-v3/engine/triggers/cron-trigger.ts(465,10): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay-v3/engine/triggers/cron-trigger.ts(486,27): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay-v3/engine/triggers/cron-trigger.ts(492,27): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/background/record-replay-v3/engine/triggers/cron-trigger.ts(524,10): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay-v3/engine/triggers/cron-trigger.ts(528,5): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay-v3/engine/triggers/cron-trigger.ts(535,7): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay-v3/engine/triggers/dom-trigger.ts(158,26): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay-v3/engine/triggers/dom-trigger.ts(174,10): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay-v3/engine/triggers/dom-trigger.ts(180,13): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay-v3/engine/triggers/dom-trigger.ts(199,13): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay-v3/engine/triggers/dom-trigger.ts(226,10): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay-v3/engine/triggers/dom-trigger.ts(231,15): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/background/record-replay-v3/engine/triggers/dom-trigger.ts(233,20): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay-v3/engine/triggers/dom-trigger.ts(270,13): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/background/record-replay-v3/engine/triggers/dom-trigger.ts(305,14): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/background/record-replay-v3/engine/triggers/dom-trigger.ts(318,10): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay-v3/engine/triggers/dom-trigger.ts(322,5): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay-v3/engine/triggers/dom-trigger.ts(329,7): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay-v3/engine/triggers/dom-trigger.ts(339,10): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay-v3/engine/triggers/dom-trigger.ts(343,5): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay-v3/engine/triggers/dom-trigger.ts(350,7): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay-v3/engine/triggers/interval-trigger.ts(101,10): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay-v3/engine/triggers/interval-trigger.ts(103,29): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay-v3/engine/triggers/interval-trigger.ts(113,10): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay-v3/engine/triggers/interval-trigger.ts(113,36): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay-v3/engine/triggers/interval-trigger.ts(115,44): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay-v3/engine/triggers/interval-trigger.ts(129,10): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay-v3/engine/triggers/interval-trigger.ts(144,9): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay-v3/engine/triggers/interval-trigger.ts(157,27): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/background/record-replay-v3/engine/triggers/interval-trigger.ts(180,10): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay-v3/engine/triggers/interval-trigger.ts(184,5): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay-v3/engine/triggers/interval-trigger.ts(194,7): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay-v3/engine/triggers/once-trigger.ts(124,10): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay-v3/engine/triggers/once-trigger.ts(126,29): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay-v3/engine/triggers/once-trigger.ts(136,10): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay-v3/engine/triggers/once-trigger.ts(136,36): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay-v3/engine/triggers/once-trigger.ts(138,44): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay-v3/engine/triggers/once-trigger.ts(152,10): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay-v3/engine/triggers/once-trigger.ts(163,29): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay-v3/engine/triggers/once-trigger.ts(185,27): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/background/record-replay-v3/engine/triggers/once-trigger.ts(234,10): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay-v3/engine/triggers/once-trigger.ts(238,5): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay-v3/engine/triggers/once-trigger.ts(248,7): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay-v3/engine/triggers/url-trigger.ts(173,33): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/background/record-replay-v3/engine/triggers/url-trigger.ts(212,10): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay-v3/engine/triggers/url-trigger.ts(216,5): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay-v3/engine/triggers/url-trigger.ts(226,7): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay-v3/storage/import/v2-to-v3.ts(200,5): error TS2322: Type 'Record<string, unknown>' is not assignable to type 'JsonObject'.
+  'string' index signatures are incompatible.
+    Type 'unknown' is not assignable to type 'JsonValue'.
+entrypoints/background/record-replay-v3/storage/import/v2-to-v3.ts(371,9): error TS2322: Type '{} | null' is not assignable to type 'JsonValue | undefined'.
+  Type '{}' is not assignable to type 'JsonValue | undefined'.
+entrypoints/background/record-replay-v3/storage/import/v2-to-v3.ts(543,9): error TS2353: Object literal may only specify known properties, and 'command' does not exist in type 'TriggerSpecBase & { kind: "command"; commandKey: string; }'.
+entrypoints/background/record-replay-v3/storage/import/v2-to-v3.ts(553,9): error TS2353: Object literal may only specify known properties, and 'patterns' does not exist in type 'TriggerSpecBase & { kind: "url"; match: UrlMatchRule[]; }'.
+entrypoints/background/record-replay/actions/handlers/assert.ts(154,28): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/actions/handlers/assert.ts(155,38): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/background/record-replay/actions/handlers/common.ts(254,24): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/actions/handlers/common.ts(256,24): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/actions/handlers/common.ts(291,23): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/actions/handlers/control-flow.ts(328,28): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/actions/handlers/control-flow.ts(333,24): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/background/record-replay/actions/handlers/control-flow.ts(343,44): error TS7006: Parameter 'f' implicitly has an 'any' type.
+entrypoints/background/record-replay/actions/handlers/control-flow.ts(363,36): error TS7006: Parameter 'f' implicitly has an 'any' type.
+entrypoints/background/record-replay/actions/handlers/dom.ts(237,30): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/actions/handlers/dom.ts(238,40): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/background/record-replay/actions/handlers/dom.ts(368,30): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/actions/handlers/dom.ts(369,40): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/background/record-replay/actions/handlers/extract.ts(34,30): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/actions/handlers/extract.ts(35,40): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/background/record-replay/actions/handlers/extract.ts(87,28): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/actions/handlers/extract.ts(88,38): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/background/record-replay/actions/handlers/script.ts(102,28): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/actions/handlers/script.ts(103,38): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/background/record-replay/actions/handlers/scroll.ts(101,32): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/actions/handlers/scroll.ts(102,42): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/background/record-replay/actions/handlers/scroll.ts(203,30): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/actions/handlers/scroll.ts(204,40): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/background/record-replay/actions/handlers/tabs.ts(53,30): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/actions/handlers/tabs.ts(65,27): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/actions/handlers/tabs.ts(132,28): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/actions/handlers/tabs.ts(147,14): error TS7006: Parameter 'tab' implicitly has an 'any' type.
+entrypoints/background/record-replay/actions/handlers/tabs.ts(166,14): error TS7006: Parameter 'tab' implicitly has an 'any' type.
+entrypoints/background/record-replay/actions/handlers/tabs.ts(177,13): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/actions/handlers/tabs.ts(180,25): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/actions/handlers/tabs.ts(182,15): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/actions/handlers/tabs.ts(237,28): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/actions/handlers/tabs.ts(239,20): error TS7006: Parameter 'tab' implicitly has an 'any' type.
+entrypoints/background/record-replay/actions/handlers/tabs.ts(240,17): error TS7006: Parameter 'tab' implicitly has an 'any' type.
+entrypoints/background/record-replay/actions/handlers/tabs.ts(252,13): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/actions/handlers/tabs.ts(301,9): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/actions/handlers/tabs.ts(302,9): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/actions/handlers/tabs.ts(313,32): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/background/record-replay/actions/handlers/tabs.ts(334,33): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/background/record-replay/actions/handlers/tabs.ts(369,7): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/actions/handlers/tabs.ts(370,7): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/actions/handlers/tabs.ts(399,27): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/actions/handlers/wait.ts(120,15): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/actions/handlers/wait.ts(121,42): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/background/record-replay/actions/handlers/wait.ts(161,15): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/actions/handlers/wait.ts(162,42): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/background/record-replay/engine/constants.ts(2,10): error TS2305: Module '"brauzio-shared"' has no exported member 'EDGE_LABELS'.
+entrypoints/background/record-replay/engine/logging/run-logger.ts(21,26): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/engine/logging/run-logger.ts(23,15): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/engine/logging/run-logger.ts(29,26): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/engine/logging/run-logger.ts(31,15): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/engine/logging/run-logger.ts(41,26): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/engine/logging/run-logger.ts(43,15): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/engine/policies/wait.ts(14,24): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/engine/policies/wait.ts(24,24): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/engine/policies/wait.ts(34,11): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/engine/policies/wait.ts(37,11): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/engine/policies/wait.ts(40,12): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/engine/policies/wait.ts(45,11): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/engine/policies/wait.ts(77,53): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/background/record-replay/engine/policies/wait.ts(83,7): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/engine/policies/wait.ts(84,7): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/engine/policies/wait.ts(86,10): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/engine/policies/wait.ts(88,7): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/engine/runners/after-script-queue.ts(48,28): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/engine/runners/after-script-queue.ts(51,36): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/engine/runners/step-runner.ts(10,10): error TS2305: Module '"brauzio-shared"' has no exported member 'STEP_TYPES'.
+entrypoints/background/record-replay/engine/runners/step-runner.ts(68,24): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/engine/runners/step-runner.ts(111,32): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/engine/runners/step-runner.ts(127,32): error TS2339: Property 'after' does not exist on type 'Step'.
+  Property 'after' does not exist on type 'StepFill'.
+entrypoints/background/record-replay/engine/runners/subflow-runner.ts(3,10): error TS2305: Module '"brauzio-shared"' has no exported member 'STEP_TYPES'.
+entrypoints/background/record-replay/engine/scheduler.ts(1,10): error TS2305: Module '"brauzio-shared"' has no exported member 'STEP_TYPES'.
+entrypoints/background/record-replay/engine/scheduler.ts(237,51): error TS2339: Property 'url' does not exist on type 'Step'.
+  Property 'url' does not exist on type 'StepClick'.
+entrypoints/background/record-replay/engine/scheduler.ts(304,30): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/engine/scheduler.ts(307,32): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/engine/scheduler.ts(331,26): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/engine/state-manager.ts(74,13): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/engine/state-manager.ts(80,25): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/flow-store.ts(2,10): error TS2305: Module '"brauzio-shared"' has no exported member 'stepsToDAG'.
+entrypoints/background/record-replay/flow-store.ts(2,27): error TS2305: Module '"brauzio-shared"' has no exported member 'RRNode'.
+entrypoints/background/record-replay/flow-store.ts(2,40): error TS2305: Module '"brauzio-shared"' has no exported member 'RREdge'.
+entrypoints/background/record-replay/flow-store.ts(3,28): error TS2307: Cannot find module '@/common/node-types' or its corresponding type declarations.
+entrypoints/background/record-replay/flow-store.ts(66,12): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/index.ts(32,24): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/index.ts(35,16): error TS7006: Parameter 'a' implicitly has an 'any' type.
+entrypoints/background/record-replay/index.ts(36,13): error TS7006: Parameter 'a' implicitly has an 'any' type.
+entrypoints/background/record-replay/index.ts(36,19): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/index.ts(43,13): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/index.ts(46,42): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/index.ts(56,13): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/index.ts(80,3): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/index.ts(80,41): error TS7006: Parameter 'message' implicitly has an 'any' type.
+entrypoints/background/record-replay/index.ts(80,50): error TS7006: Parameter 'sender' implicitly has an 'any' type.
+entrypoints/background/record-replay/index.ts(80,58): error TS7006: Parameter 'sendResponse' implicitly has an 'any' type.
+entrypoints/background/record-replay/index.ts(280,8): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/index.ts(281,5): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/index.ts(281,54): error TS7006: Parameter 'info' implicitly has an 'any' type.
+entrypoints/background/record-replay/index.ts(294,3): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/index.ts(294,48): error TS7006: Parameter 'command' implicitly has an 'any' type.
+entrypoints/background/record-replay/index.ts(304,3): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/index.ts(304,55): error TS7006: Parameter 'details' implicitly has an 'any' type.
+entrypoints/background/record-replay/index.ts(313,18): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/index.ts(326,19): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/index.ts(331,19): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/index.ts(349,3): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/index.ts(349,41): error TS7006: Parameter 'message' implicitly has an 'any' type.
+entrypoints/background/record-replay/index.ts(349,50): error TS7006: Parameter '_sender' implicitly has an 'any' type.
+entrypoints/background/record-replay/index.ts(349,59): error TS7006: Parameter 'sendResponse' implicitly has an 'any' type.
+entrypoints/background/record-replay/index.ts(388,9): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/index.ts(400,13): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/index.ts(413,9): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/index.ts(419,5): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/index.ts(430,11): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/index.ts(440,24): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/index.ts(444,15): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/index.ts(449,15): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/index.ts(470,13): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/index.ts(481,29): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/index.ts(491,1): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/index.ts(491,42): error TS7006: Parameter 'alarm' implicitly has an 'any' type.
+entrypoints/background/record-replay/legacy-types.ts(17,28): error TS2307: Cannot find module '@/common/step-types' or its corresponding type declarations.
+entrypoints/background/record-replay/nodes/assert.ts(37,26): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/nodes/assert.ts(42,35): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/nodes/assert.ts(57,26): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/nodes/assert.ts(62,32): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/nodes/click.ts(14,24): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/nodes/click.ts(26,36): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/nodes/click.ts(63,24): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/nodes/click.ts(75,36): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/nodes/download-screenshot-attr-event-frame-loop.ts(51,24): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/nodes/download-screenshot-attr-event-frame-loop.ts(62,38): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/nodes/download-screenshot-attr-event-frame-loop.ts(75,11): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/nodes/download-screenshot-attr-event-frame-loop.ts(106,24): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/nodes/download-screenshot-attr-event-frame-loop.ts(118,38): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/nodes/download-screenshot-attr-event-frame-loop.ts(131,11): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/nodes/download-screenshot-attr-event-frame-loop.ts(154,24): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/nodes/download-screenshot-attr-event-frame-loop.ts(157,26): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/nodes/download-screenshot-attr-event-frame-loop.ts(197,24): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/nodes/download-screenshot-attr-event-frame-loop.ts(202,23): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/nodes/drag.ts(10,24): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/nodes/execute-flow.ts(53,32): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/nodes/extract.ts(8,24): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/nodes/extract.ts(13,34): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/nodes/extract.ts(28,34): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/nodes/fill.ts(15,24): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/nodes/fill.ts(31,36): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/nodes/fill.ts(44,34): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/nodes/fill.ts(81,15): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/nodes/index.ts(16,10): error TS2305: Module '"brauzio-shared"' has no exported member 'STEP_TYPES'.
+entrypoints/background/record-replay/nodes/script.ts(12,24): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/nodes/script.ts(16,32): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/nodes/tabs.ts(10,28): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/nodes/tabs.ts(11,16): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/nodes/tabs.ts(21,26): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/nodes/tabs.ts(23,10): error TS7006: Parameter 't' implicitly has an 'any' type.
+entrypoints/background/record-replay/nodes/wait.ts(20,26): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/nodes/wait.ts(24,13): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/nodes/wait.ts(29,32): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/nodes/wait.ts(50,26): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/nodes/wait.ts(54,13): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/nodes/wait.ts(59,32): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/recording/browser-event-listener.ts(2,28): error TS2307: Cannot find module '@/common/step-types' or its corresponding type declarations.
+entrypoints/background/record-replay/recording/browser-event-listener.ts(8,3): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/recording/browser-event-listener.ts(8,46): error TS7006: Parameter 'activeInfo' implicitly has an 'any' type.
+entrypoints/background/record-replay/recording/browser-event-listener.ts(19,25): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/recording/browser-event-listener.ts(32,3): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/recording/browser-event-listener.ts(32,55): error TS7006: Parameter 'details' implicitly has an 'any' type.
+entrypoints/background/record-replay/recording/browser-event-listener.ts(49,29): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/recording/browser-event-listener.ts(68,3): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/recording/browser-event-listener.ts(68,38): error TS7006: Parameter 'tabId' implicitly has an 'any' type.
+entrypoints/background/record-replay/recording/content-injection.ts(18,24): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/recording/content-injection.ts(33,27): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/recording/content-injection.ts(48,13): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/recording/content-injection.ts(56,15): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/recording/content-injection.ts(74,24): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/recording/content-injection.ts(82,17): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/recording/content-message-handler.ts(14,3): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/recording/content-message-handler.ts(14,41): error TS7006: Parameter 'message' implicitly has an 'any' type.
+entrypoints/background/record-replay/recording/content-message-handler.ts(14,50): error TS7006: Parameter '_sender' implicitly has an 'any' type.
+entrypoints/background/record-replay/recording/content-message-handler.ts(14,59): error TS7006: Parameter 'sendResponse' implicitly has an 'any' type.
+entrypoints/background/record-replay/recording/flow-builder.ts(2,28): error TS2307: Cannot find module '@/common/step-types' or its corresponding type declarations.
+entrypoints/background/record-replay/recording/flow-builder.ts(4,10): error TS2305: Module '"brauzio-shared"' has no exported member 'mapStepToNodeConfig'.
+entrypoints/background/record-replay/recording/flow-builder.ts(4,31): error TS2305: Module '"brauzio-shared"' has no exported member 'EDGE_LABELS'.
+entrypoints/background/record-replay/recording/recorder-manager.ts(47,23): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/recording/recorder-manager.ts(72,5): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/recording/recorder-manager.ts(82,14): error TS7006: Parameter 'response' implicitly has an 'any' type.
+entrypoints/background/record-replay/recording/recorder-manager.ts(88,15): error TS7006: Parameter 'err' implicitly has an 'any' type.
+entrypoints/background/record-replay/recording/recorder-manager.ts(103,11): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/recording/recorder-manager.ts(143,28): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/recording/session-manager.ts(3,28): error TS2307: Cannot find module '@/common/node-types' or its corresponding type declarations.
+entrypoints/background/record-replay/recording/session-manager.ts(4,10): error TS2305: Module '"brauzio-shared"' has no exported member 'mapStepToNodeConfig'.
+entrypoints/background/record-replay/recording/session-manager.ts(4,31): error TS2305: Module '"brauzio-shared"' has no exported member 'stepsToDAG'.
+entrypoints/background/record-replay/recording/session-manager.ts(4,43): error TS2305: Module '"brauzio-shared"' has no exported member 'EDGE_LABELS'.
+entrypoints/background/record-replay/recording/session-manager.ts(484,9): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/rr-utils.ts(6,3): error TS2305: Module '"brauzio-shared"' has no exported member 'topoOrder'.
+entrypoints/background/record-replay/rr-utils.ts(7,3): error TS2305: Module '"brauzio-shared"' has no exported member 'mapNodeToStep'.
+entrypoints/background/record-replay/rr-utils.ts(11,10): error TS2305: Module '"brauzio-shared"' has no exported member 'EDGE_LABELS'.
+entrypoints/background/record-replay/rr-utils.ts(65,22): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/rr-utils.ts(66,33): error TS7006: Parameter 't' implicitly has an 'any' type.
+entrypoints/background/record-replay/rr-utils.ts(71,27): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/rr-utils.ts(86,22): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/rr-utils.ts(92,34): error TS7006: Parameter 't' implicitly has an 'any' type.
+entrypoints/background/record-replay/rr-utils.ts(94,13): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/rr-utils.ts(145,22): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/rr-utils.ts(156,9): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/rr-utils.ts(159,9): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/rr-utils.ts(162,10): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/rr-utils.ts(167,9): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/rr-utils.ts(209,61): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/background/record-replay/rr-utils.ts(224,5): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/rr-utils.ts(225,5): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/rr-utils.ts(227,8): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/rr-utils.ts(229,5): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/selector-engine.ts(21,18): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/selector-engine.ts(23,16): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/selector-engine.ts(52,31): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/storage/indexeddb-manager.ts(141,26): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/storage/indexeddb-manager.ts(145,25): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/storage/indexeddb-manager.ts(165,13): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/record-replay/trigger-store.ts(21,14): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/background/record-replay/types.ts(14,28): error TS2307: Cannot find module '@/common/node-types' or its corresponding type declarations.
+entrypoints/background/remote-relay.ts(56,3): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/remote-relay.ts(78,24): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/remote-relay.ts(90,9): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/remote-relay.ts(246,29): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/remote-relay.ts(295,3): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/remote-relay.ts(295,41): error TS7006: Parameter 'message' implicitly has an 'any' type.
+entrypoints/background/remote-relay.ts(295,50): error TS7006: Parameter '_sender' implicitly has an 'any' type.
+entrypoints/background/remote-relay.ts(295,59): error TS7006: Parameter 'sendResponse' implicitly has an 'any' type.
+entrypoints/background/remote-relay.ts(350,3): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/base-browser.ts(32,13): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/base-browser.ts(37,13): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/base-browser.ts(67,13): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/base-browser.ts(93,19): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/base-browser.ts(94,19): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/base-browser.ts(117,54): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/background/tools/base-browser.ts(120,20): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/base-browser.ts(129,50): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/background/tools/base-browser.ts(130,28): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/base-browser.ts(140,10): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/background/tools/base-browser.ts(146,13): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/base-browser.ts(149,13): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/base-browser.ts(156,68): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/background/tools/base-browser.ts(158,26): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/base-browser.ts(161,24): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/base-browser.ts(168,75): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/background/tools/browser/bookmark.ts(46,32): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/bookmark.ts(53,35): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/bookmark.ts(82,12): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/background/tools/browser/bookmark.ts(84,25): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/bookmark.ts(98,30): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/bookmark.ts(101,20): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/background/tools/browser/bookmark.ts(106,31): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/background/tools/browser/bookmark.ts(119,30): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/bookmark.ts(138,12): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/background/tools/browser/bookmark.ts(151,32): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/bookmark.ts(154,8): error TS7006: Parameter 'node' implicitly has an 'any' type.
+entrypoints/background/tools/browser/bookmark.ts(163,22): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/background/tools/browser/bookmark.ts(167,21): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/background/tools/browser/bookmark.ts(168,13): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/bookmark.ts(171,27): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/background/tools/browser/bookmark.ts(172,15): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/background/tools/browser/bookmark.ts(181,29): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/bookmark.ts(202,10): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/background/tools/browser/bookmark.ts(203,4): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/background/tools/browser/bookmark.ts(204,17): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/background/tools/browser/bookmark.ts(236,12): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/background/tools/browser/bookmark.ts(238,31): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/bookmark.ts(247,6): error TS7006: Parameter 'bookmark' implicitly has an 'any' type.
+entrypoints/background/tools/browser/bookmark.ts(269,30): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/background/tools/browser/bookmark.ts(270,29): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/background/tools/browser/bookmark.ts(279,31): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/bookmark.ts(284,30): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/background/tools/browser/bookmark.ts(297,37): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/bookmark.ts(305,30): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/bookmark.ts(380,28): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/bookmark.ts(418,33): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/bookmark.ts(434,36): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/bookmark.ts(436,12): error TS7006: Parameter 'node' implicitly has an 'any' type.
+entrypoints/background/tools/browser/bookmark.ts(447,33): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/bookmark.ts(516,30): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/background/tools/browser/bookmark.ts(521,31): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/bookmark.ts(551,17): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/common.ts(66,15): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/common.ts(71,34): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/common.ts(113,17): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/common.ts(116,17): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/common.ts(120,34): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/common.ts(183,35): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/common.ts(188,58): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/background/tools/browser/common.ts(213,27): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/background/tools/browser/common.ts(261,17): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/common.ts(271,34): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/common.ts(300,33): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/common.ts(325,43): error TS7006: Parameter 'tab' implicitly has an 'any' type.
+entrypoints/background/tools/browser/common.ts(339,27): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/background/tools/browser/common.ts(341,32): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/common.ts(344,32): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/common.ts(350,32): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/common.ts(356,19): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/common.ts(388,40): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/common.ts(413,50): error TS7006: Parameter 'tab' implicitly has an 'any' type.
+entrypoints/background/tools/browser/common.ts(430,11): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/common.ts(431,44): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/common.ts(432,57): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/common.ts(489,28): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/common.ts(510,17): error TS7006: Parameter 'tab' implicitly has an 'any' type.
+entrypoints/background/tools/browser/common.ts(511,20): error TS7006: Parameter 'id' implicitly has an 'any' type.
+entrypoints/background/tools/browser/common.ts(517,15): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/common.ts(543,28): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/common.ts(552,20): error TS7006: Parameter 'tab' implicitly has an 'any' type.
+entrypoints/background/tools/browser/common.ts(552,33): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/background/tools/browser/common.ts(553,17): error TS7006: Parameter 'tab' implicitly has an 'any' type.
+entrypoints/background/tools/browser/common.ts(554,20): error TS7006: Parameter 'id' implicitly has an 'any' type.
+entrypoints/background/tools/browser/common.ts(572,15): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/common.ts(593,33): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/common.ts(599,13): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/common.ts(644,15): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/common.ts(646,13): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/common.ts(648,32): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/common.ts(666,11): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/common.ts(667,44): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/common.ts(668,57): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/computer.ts(148,26): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/background/tools/browser/computer.ts(242,32): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/computer.ts(242,112): error TS7006: Parameter 'text' implicitly has an 'any' type.
+entrypoints/background/tools/browser/computer.ts(242,118): error TS7006: Parameter 'shouldAppear' implicitly has an 'any' type.
+entrypoints/background/tools/browser/computer.ts(242,132): error TS7006: Parameter 'timeoutMs' implicitly has an 'any' type.
+entrypoints/background/tools/browser/console-buffer.ts(153,5): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/console-buffer.ts(154,5): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/console-buffer.ts(155,5): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/console-buffer.ts(156,5): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/console-buffer.ts(275,23): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/console-buffer.ts(312,17): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/background/tools/browser/console-buffer.ts(313,10): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/background/tools/browser/console-buffer.ts(336,40): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/background/tools/browser/console-buffer.ts(350,13): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/background/tools/browser/console.ts(162,20): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/background/tools/browser/console.ts(177,25): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/console.ts(187,21): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/console.ts(188,21): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/console.ts(215,45): error TS2345: Argument of type 'number | undefined' is not assignable to parameter of type 'number'.
+  Type 'undefined' is not assignable to type 'number'.
+entrypoints/background/tools/browser/console.ts(219,70): error TS2345: Argument of type 'number | undefined' is not assignable to parameter of type 'number'.
+  Type 'undefined' is not assignable to type 'number'.
+entrypoints/background/tools/browser/console.ts(227,47): error TS2345: Argument of type 'number | undefined' is not assignable to parameter of type 'number'.
+  Type 'undefined' is not assignable to type 'number'.
+entrypoints/background/tools/browser/console.ts(231,41): error TS2345: Argument of type 'number | undefined' is not assignable to parameter of type 'number'.
+  Type 'undefined' is not assignable to type 'number'.
+entrypoints/background/tools/browser/console.ts(245,46): error TS2345: Argument of type 'number | undefined' is not assignable to parameter of type 'number'.
+  Type 'undefined' is not assignable to type 'number'.
+entrypoints/background/tools/browser/console.ts(263,11): error TS2322: Type 'number | undefined' is not assignable to type 'number'.
+  Type 'undefined' is not assignable to type 'number'.
+entrypoints/background/tools/browser/console.ts(285,56): error TS2345: Argument of type 'number | undefined' is not assignable to parameter of type 'number'.
+  Type 'undefined' is not assignable to type 'number'.
+entrypoints/background/tools/browser/console.ts(315,14): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/background/tools/browser/console.ts(317,32): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/console.ts(323,15): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/console.ts(324,15): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/console.ts(329,25): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/background/tools/browser/console.ts(331,28): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/console.ts(342,29): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/console.ts(396,25): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/console.ts(405,38): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/background/tools/browser/console.ts(432,7): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/console.ts(573,9): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/dialog.ts(24,33): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/download.ts(51,9): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/download.ts(54,9): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/download.ts(57,28): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/background/tools/browser/download.ts(62,34): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/background/tools/browser/download.ts(65,31): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/download.ts(86,30): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/background/tools/browser/download.ts(94,31): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/background/tools/browser/download.ts(98,9): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/download.ts(100,18): error TS7006: Parameter 'arr' implicitly has an 'any' type.
+entrypoints/background/tools/browser/download.ts(109,5): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/download.ts(110,5): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/download.ts(113,5): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/download.ts(115,14): error TS7006: Parameter 'arr' implicitly has an 'any' type.
+entrypoints/background/tools/browser/download.ts(116,39): error TS7006: Parameter 'd' implicitly has an 'any' type.
+entrypoints/background/tools/browser/element-picker.ts(133,11): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/element-picker.ts(149,11): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/element-picker.ts(191,14): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/background/tools/browser/element-picker.ts(271,7): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/element-picker.ts(302,15): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/background/tools/browser/element-picker.ts(462,19): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/element-picker.ts(517,7): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/file-upload.ts(190,11): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/file-upload.ts(205,7): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/file-upload.ts(208,7): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/file-upload.ts(222,17): error TS7006: Parameter 'error' implicitly has an 'any' type.
+entrypoints/background/tools/browser/file-upload.ts(225,11): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/gif-auto-capture.ts(121,27): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/gif-recorder.ts(182,31): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/gif-recorder.ts(523,32): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/gif-recorder.ts(534,38): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/gif-recorder.ts(828,36): error TS2322: Type 'Uint8Array<ArrayBufferLike>' is not assignable to type 'BlobPart'.
+  Type 'Uint8Array<ArrayBufferLike>' is not assignable to type 'ArrayBufferView<ArrayBuffer>'.
+    Types of property 'buffer' are incompatible.
+      Type 'ArrayBufferLike' is not assignable to type 'ArrayBuffer'.
+        Type 'SharedArrayBuffer' is missing the following properties from type 'ArrayBuffer': resizable, resize, detached, transfer, transferToFixedLength
+entrypoints/background/tools/browser/gif-recorder.ts(838,38): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/gif-recorder.ts(848,44): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/gif-recorder.ts(983,36): error TS2322: Type 'Uint8Array<ArrayBufferLike>' is not assignable to type 'BlobPart'.
+  Type 'Uint8Array<ArrayBufferLike>' is not assignable to type 'ArrayBufferView<ArrayBuffer>'.
+    Types of property 'buffer' are incompatible.
+      Type 'ArrayBufferLike' is not assignable to type 'ArrayBuffer'.
+        Type 'SharedArrayBuffer' is missing the following properties from type 'ArrayBuffer': resizable, resize, detached, transfer, transferToFixedLength
+entrypoints/background/tools/browser/gif-recorder.ts(993,38): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/gif-recorder.ts(1003,44): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/gif-recorder.ts(1082,40): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/gif-recorder.ts(1123,38): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/gif-recorder.ts(1214,59): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/background/tools/browser/history.ts(14,8): error TS2307: Cannot find module 'date-fns' or its corresponding type declarations.
+entrypoints/background/tools/browser/history.ts(164,34): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/history.ts(175,35): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/history.ts(178,30): error TS7006: Parameter 'tab' implicitly has an 'any' type.
+entrypoints/background/tools/browser/history.ts(185,48): error TS7006: Parameter 'item' implicitly has an 'any' type.
+entrypoints/background/tools/browser/history.ts(193,35): error TS7006: Parameter 'item' implicitly has an 'any' type.
+entrypoints/background/tools/browser/inject-script.ts(29,16): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/background/tools/browser/inject-script.ts(36,21): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/inject-script.ts(40,31): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/inject-script.ts(43,46): error TS7006: Parameter 't' implicitly has an 'any' type.
+entrypoints/background/tools/browser/inject-script.ts(57,23): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/inject-script.ts(71,21): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/inject-script.ts(72,21): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/inject-script.ts(85,15): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/inject-script.ts(86,15): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/inject-script.ts(130,28): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/inject-script.ts(144,28): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/inject-script.ts(170,11): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/inject-script.ts(194,11): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/inject-script.ts(199,11): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/inject-script.ts(201,14): error TS7006: Parameter 'code' implicitly has an 'any' type.
+entrypoints/background/tools/browser/inject-script.ts(206,11): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/inject-script.ts(208,14): error TS7006: Parameter 'code' implicitly has an 'any' type.
+entrypoints/background/tools/browser/inject-script.ts(225,3): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/inject-script.ts(227,13): error TS7006: Parameter 'err' implicitly has an 'any' type.
+entrypoints/background/tools/browser/inject-script.ts(239,1): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/inject-script.ts(239,36): error TS7006: Parameter 'tabId' implicitly has an 'any' type.
+entrypoints/background/tools/browser/javascript.ts(310,27): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/javascript.ts(469,59): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/background/tools/browser/network-capture-debugger.ts(65,5): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/network-capture-debugger.ts(66,5): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/network-capture-debugger.ts(67,5): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/network-capture-debugger.ts(68,5): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/network-capture-debugger.ts(82,39): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/background/tools/browser/network-capture-debugger.ts(147,25): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/network-capture-debugger.ts(211,39): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/background/tools/browser/network-capture-debugger.ts(238,40): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/background/tools/browser/network-capture-debugger.ts(779,25): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/background/tools/browser/network-capture-debugger.ts(783,36): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/network-capture-debugger.ts(789,17): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/network-capture-debugger.ts(790,17): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/network-capture-debugger.ts(792,34): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/network-capture-debugger.ts(798,34): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/network-capture-debugger.ts(895,30): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/network-capture-web-request.ts(144,5): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/network-capture-web-request.ts(146,5): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/network-capture-web-request.ts(163,39): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/background/tools/browser/network-capture-web-request.ts(352,9): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+entrypoints/background/tools/browser/network-capture-web-request.ts(357,48): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/background/tools/browser/network-capture-web-request.ts(400,46): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/background/tools/browser/network-capture-web-request.ts(406,41): error TS7006: Parameter 'header' implicitly has an 'any' type.
+entrypoints/background/tools/browser/network-capture-web-request.ts(414,50): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/background/tools/browser/network-capture-web-request.ts(424,10): error TS7006: Parameter 'h' implicitly has an 'any' type.
+entrypoints/background/tools/browser/network-capture-web-request.ts(447,42): error TS7006: Parameter 'header' implicitly has an 'any' type.
+entrypoints/background/tools/browser/network-capture-web-request.ts(457,44): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/background/tools/browser/network-capture-web-request.ts(470,48): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/background/tools/browser/network-capture-web-request.ts(481,5): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/network-capture-web-request.ts(487,5): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/network-capture-web-request.ts(493,5): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/network-capture-web-request.ts(499,5): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/network-capture-web-request.ts(501,5): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/network-capture-web-request.ts(522,7): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/network-capture-web-request.ts(526,7): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/network-capture-web-request.ts(530,7): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/network-capture-web-request.ts(534,7): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/network-capture-web-request.ts(538,7): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/network-capture-web-request.ts(548,43): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/background/tools/browser/network-capture-web-request.ts(582,25): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/network-capture-web-request.ts(801,27): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/background/tools/browser/network-capture-web-request.ts(805,36): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/network-capture-web-request.ts(814,34): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/network-capture-web-request.ts(821,28): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/network-capture-web-request.ts(908,32): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/network-request.ts(42,26): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/performance.ts(23,31): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/background/tools/browser/performance.ts(93,30): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/performance.ts(97,28): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/performance.ts(120,9): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/performance.ts(130,11): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/performance.ts(134,7): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/performance.ts(135,7): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/performance.ts(148,17): error TS7006: Parameter 'err' implicitly has an 'any' type.
+entrypoints/background/tools/browser/performance.ts(150,11): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/performance.ts(171,9): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/performance.ts(181,11): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/performance.ts(185,7): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/performance.ts(186,7): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/performance.ts(200,11): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/performance.ts(227,33): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/performance.ts(261,7): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/performance.ts(322,33): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/performance.ts(350,9): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/performance.ts(423,33): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/performance.ts(447,15): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/performance.ts(457,17): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/performance.ts(461,13): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/performance.ts(462,13): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/performance.ts(471,23): error TS7006: Parameter 'err' implicitly has an 'any' type.
+entrypoints/background/tools/browser/performance.ts(473,17): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/screenshot.ts(33,45): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/screenshot.ts(249,37): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/screenshot.ts(315,36): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/screenshot.ts(331,42): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/screenshot.ts(422,41): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/screenshot.ts(493,29): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/userscript.ts(70,21): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/userscript.ts(75,9): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/userscript.ts(102,23): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/userscript.ts(223,40): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/background/tools/browser/userscript.ts(224,22): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/userscript.ts(229,9): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/userscript.ts(234,11): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/userscript.ts(248,11): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/userscript.ts(275,11): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/userscript.ts(277,14): error TS7006: Parameter 'src' implicitly has an 'any' type.
+entrypoints/background/tools/browser/userscript.ts(290,11): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/userscript.ts(292,14): error TS7006: Parameter 'userCode' implicitly has an 'any' type.
+entrypoints/background/tools/browser/userscript.ts(295,12): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/userscript.ts(340,23): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/userscript.ts(373,1): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/userscript.ts(373,36): error TS7006: Parameter 'tabId' implicitly has an 'any' type.
+entrypoints/background/tools/browser/userscript.ts(373,43): error TS7006: Parameter 'changeInfo' implicitly has an 'any' type.
+entrypoints/background/tools/browser/userscript.ts(373,55): error TS7006: Parameter 'tab' implicitly has an 'any' type.
+entrypoints/background/tools/browser/userscript.ts(380,1): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/userscript.ts(380,53): error TS7006: Parameter 'details' implicitly has an 'any' type.
+entrypoints/background/tools/browser/userscript.ts(382,21): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/userscript.ts(384,27): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/userscript.ts(401,1): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/userscript.ts(401,60): error TS7006: Parameter 'details' implicitly has an 'any' type.
+entrypoints/background/tools/browser/userscript.ts(403,21): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/userscript.ts(405,27): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/userscript.ts(465,30): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/userscript.ts(696,11): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/userscript.ts(710,31): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/userscript.ts(720,30): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/userscript.ts(731,30): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/web-fetcher.ts(44,21): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/web-fetcher.ts(48,31): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/web-fetcher.ts(51,46): error TS7006: Parameter 't' implicitly has an 'any' type.
+entrypoints/background/tools/browser/web-fetcher.ts(65,23): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/web-fetcher.ts(75,21): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/web-fetcher.ts(76,21): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/web-fetcher.ts(89,15): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/web-fetcher.ts(90,15): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/web-fetcher.ts(190,26): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/window.ts(9,29): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/tools/browser/window.ts(12,46): error TS7006: Parameter 'window' implicitly has an 'any' type.
+entrypoints/background/tools/browser/window.ts(14,29): error TS7006: Parameter 'tab' implicitly has an 'any' type.
+entrypoints/background/utils/sidepanel.ts(33,23): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/web-editor/index.ts(543,11): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/web-editor/index.ts(545,13): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/web-editor/index.ts(547,11): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/web-editor/index.ts(579,63): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/web-editor/index.ts(595,11): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/web-editor/index.ts(614,11): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/web-editor/index.ts(634,11): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/web-editor/index.ts(721,28): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/web-editor/index.ts(722,40): error TS7006: Parameter 's' implicitly has an 'any' type.
+entrypoints/background/web-editor/index.ts(729,11): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/web-editor/index.ts(752,46): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/web-editor/index.ts(775,24): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/web-editor/index.ts(787,3): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/web-editor/index.ts(787,38): error TS7006: Parameter 'tabId' implicitly has an 'any' type.
+entrypoints/background/web-editor/index.ts(794,7): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/web-editor/index.ts(798,8): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/web-editor/index.ts(799,5): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/web-editor/index.ts(799,54): error TS7006: Parameter 'info' implicitly has an 'any' type.
+entrypoints/background/web-editor/index.ts(799,60): error TS7006: Parameter 'tab' implicitly has an 'any' type.
+entrypoints/background/web-editor/index.ts(809,3): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/web-editor/index.ts(809,48): error TS7006: Parameter 'command' implicitly has an 'any' type.
+entrypoints/background/web-editor/index.ts(818,3): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/web-editor/index.ts(818,41): error TS7006: Parameter 'message' implicitly has an 'any' type.
+entrypoints/background/web-editor/index.ts(818,50): error TS7006: Parameter '_sender' implicitly has an 'any' type.
+entrypoints/background/web-editor/index.ts(818,59): error TS7006: Parameter 'sendResponse' implicitly has an 'any' type.
+entrypoints/background/web-editor/index.ts(823,41): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/background/web-editor/index.ts(845,21): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/web-editor/index.ts(886,43): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/background/web-editor/index.ts(907,19): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/web-editor/index.ts(909,19): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/web-editor/index.ts(913,11): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/web-editor/index.ts(937,43): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/background/web-editor/index.ts(958,19): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/web-editor/index.ts(960,19): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/web-editor/index.ts(964,11): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/web-editor/index.ts(998,19): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/web-editor/index.ts(1050,38): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/web-editor/index.ts(1084,36): error TS2304: Cannot find name 'chrome'.
+entrypoints/background/web-editor/index.ts(1130,36): error TS2304: Cannot find name 'chrome'.
+entrypoints/element-picker.content.ts(77,16): error TS2304: Cannot find name 'chrome'.
+entrypoints/element-picker.content.ts(85,16): error TS2304: Cannot find name 'chrome'.
+entrypoints/element-picker.content.ts(93,16): error TS2304: Cannot find name 'chrome'.
+entrypoints/element-picker.content.ts(102,16): error TS2304: Cannot find name 'chrome'.
+entrypoints/element-picker.content.ts(119,16): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/element-picker.content.ts(195,5): error TS2304: Cannot find name 'chrome'.
+entrypoints/element-picker.content.ts(199,7): error TS2304: Cannot find name 'chrome'.
+entrypoints/offscreen/gif-encoder.ts(149,28): error TS2345: Argument of type 'string' is not assignable to parameter of type '"gifAddFrame" | "gifFinish" | "gifReset"'.
+entrypoints/offscreen/main.ts(60,1): error TS2304: Cannot find name 'chrome'.
+entrypoints/offscreen/main.ts(63,14): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/offscreen/main.ts(355,16): error TS2304: Cannot find name 'chrome'.
+entrypoints/offscreen/main.ts(355,42): error TS2304: Cannot find name 'chrome'.
+entrypoints/offscreen/main.ts(355,60): error TS2304: Cannot find name 'chrome'.
+entrypoints/offscreen/main.ts(356,13): error TS2304: Cannot find name 'chrome'.
+entrypoints/offscreen/main.ts(361,15): error TS2304: Cannot find name 'chrome'.
+entrypoints/offscreen/rr-keepalive.ts(19,8): error TS2307: Cannot find module '@/common/rr-v3-keepalive-protocol' or its corresponding type declarations.
+entrypoints/offscreen/rr-keepalive.ts(42,20): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/offscreen/rr-keepalive.ts(95,33): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/offscreen/rr-keepalive.ts(96,14): error TS2304: Cannot find name 'chrome'.
+entrypoints/offscreen/rr-keepalive.ts(96,41): error TS2304: Cannot find name 'chrome'.
+entrypoints/offscreen/rr-keepalive.ts(102,18): error TS2304: Cannot find name 'chrome'.
+entrypoints/offscreen/rr-keepalive.ts(228,14): error TS2304: Cannot find name 'chrome'.
+entrypoints/offscreen/rr-keepalive.ts(228,41): error TS2304: Cannot find name 'chrome'.
+entrypoints/offscreen/rr-keepalive.ts(235,3): error TS2304: Cannot find name 'chrome'.
+entrypoints/offscreen/rr-keepalive.ts(235,55): error TS7006: Parameter '_sender' implicitly has an 'any' type.
+entrypoints/offscreen/rr-keepalive.ts(235,64): error TS7006: Parameter 'sendResponse' implicitly has an 'any' type.
+entrypoints/offscreen/rr-keepalive.ts(254,7): error TS2304: Cannot find name 'chrome'.
+entrypoints/offscreen/rr-keepalive.ts(280,8): error TS2307: Cannot find module '@/common/rr-v3-keepalive-protocol' or its corresponding type declarations.
+entrypoints/popup/App.vue(26,17): error TS2304: Cannot find name 'chrome'.
+entrypoints/popup/App.vue(36,90): error TS2304: Cannot find name 'chrome'.
+entrypoints/popup/App.vue(36,156): error TS2304: Cannot find name 'chrome'.
+entrypoints/popup/App.vue(37,125): error TS2304: Cannot find name 'chrome'.
+entrypoints/popup/App.vue(38,102): error TS2304: Cannot find name 'chrome'.
+entrypoints/popup/App.vue(39,103): error TS2304: Cannot find name 'chrome'.
+entrypoints/popup/App.vue(42,25): error TS2304: Cannot find name 'chrome'.
+entrypoints/popup/App.vue(43,23): error TS2304: Cannot find name 'chrome'.
+entrypoints/popup/components/builder/components/Canvas.vue(32,8): error TS2307: Cannot find module '@vue-flow/core' or its corresponding type declarations.
+entrypoints/popup/components/builder/components/Canvas.vue(33,28): error TS2307: Cannot find module '@vue-flow/background' or its corresponding type declarations.
+entrypoints/popup/components/builder/components/Canvas.vue(43,10): error TS2305: Module '"brauzio-shared"' has no exported member 'EDGE_LABELS'.
+entrypoints/popup/components/builder/components/Canvas.vue(146,37): error TS7006: Parameter 'n' implicitly has an 'any' type.
+entrypoints/popup/components/builder/components/PropertyPanel.vue(325,24): error TS2304: Cannot find name 'chrome'.
+entrypoints/popup/components/builder/components/PropertyPanel.vue(329,11): error TS2304: Cannot find name 'chrome'.
+entrypoints/popup/components/builder/components/PropertyPanel.vue(344,24): error TS2304: Cannot find name 'chrome'.
+entrypoints/popup/components/builder/components/PropertyPanel.vue(348,29): error TS2304: Cannot find name 'chrome'.
+entrypoints/popup/components/builder/components/PropertyPanel.vue(473,23): error TS2304: Cannot find name 'chrome'.
+entrypoints/popup/components/builder/components/nodes/NodeCard.vue(42,34): error TS2307: Cannot find module '@vue-flow/core' or its corresponding type declarations.
+entrypoints/popup/components/builder/components/nodes/NodeIf.vue(54,34): error TS2307: Cannot find module '@vue-flow/core' or its corresponding type declarations.
+entrypoints/popup/components/builder/components/properties/PropertyExecuteFlow.vue(40,23): error TS2304: Cannot find name 'chrome'.
+entrypoints/popup/components/builder/components/properties/PropertyFormRenderer.vue(24,15): error TS2305: Module '"@/entrypoints/popup/components/builder/model/node-spec"' has no exported member 'FieldSpec'.
+entrypoints/popup/components/builder/components/properties/PropertyFormRenderer.vue(24,26): error TS2305: Module '"@/entrypoints/popup/components/builder/model/node-spec"' has no exported member 'NodeSpec'.
+entrypoints/popup/components/builder/components/properties/PropertyFormRenderer.vue(25,10): error TS2305: Module '"@/entrypoints/popup/components/builder/model/node-spec-registry"' has no exported member 'getNodeSpec'.
+entrypoints/popup/components/builder/components/properties/PropertyFormRenderer.vue(254,7): error TS7022: 'ArrayField' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+entrypoints/popup/components/builder/components/properties/PropertyFormRenderer.vue(278,11): error TS7023: 'compOf' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+entrypoints/popup/components/builder/components/properties/PropertyFormRenderer.vue(290,12): error TS7024: Function implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+entrypoints/popup/components/builder/components/properties/PropertyFormRenderer.vue(292,28): error TS7024: Function implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+entrypoints/popup/components/builder/components/properties/PropertyFromSpec.vue(2,62): error TS2322: Type '{ key: string; origin?: string | undefined; nodeId?: string | undefined; nodeName?: string | undefined; }[] | undefined' is not assignable to type 'VariableOption[] | undefined'.
+  Type '{ key: string; origin?: string | undefined; nodeId?: string | undefined; nodeName?: string | undefined; }[]' is not assignable to type 'VariableOption[]'.
+    Type '{ key: string; origin?: string | undefined; nodeId?: string | undefined; nodeName?: string | undefined; }' is not assignable to type 'VariableOption'.
+      Types of property 'origin' are incompatible.
+        Type 'string | undefined' is not assignable to type 'VariableOrigin'.
+          Type 'undefined' is not assignable to type 'VariableOrigin'.
+entrypoints/popup/components/builder/components/properties/PropertyFromSpec.vue(13,10): error TS2305: Module '"@/entrypoints/popup/components/builder/model/node-spec-registry"' has no exported member 'getNodeSpec'.
+entrypoints/popup/components/builder/components/properties/SelectorEditor.vue(75,24): error TS2304: Cannot find name 'chrome'.
+entrypoints/popup/components/builder/components/properties/SelectorEditor.vue(79,11): error TS2304: Cannot find name 'chrome'.
+entrypoints/popup/components/builder/components/properties/SelectorEditor.vue(91,24): error TS2304: Cannot find name 'chrome'.
+entrypoints/popup/components/builder/components/properties/SelectorEditor.vue(95,29): error TS2304: Cannot find name 'chrome'.
+entrypoints/popup/components/builder/model/transforms.ts(7,3): error TS2305: Module '"brauzio-shared"' has no exported member 'nodesToSteps'.
+entrypoints/popup/components/builder/model/transforms.ts(8,3): error TS2305: Module '"brauzio-shared"' has no exported member 'stepsToNodes'.
+entrypoints/popup/components/builder/model/transforms.ts(9,3): error TS2305: Module '"brauzio-shared"' has no exported member 'topoOrder'.
+entrypoints/popup/components/builder/model/transforms.ts(11,10): error TS2305: Module '"brauzio-shared"' has no exported member 'STEP_TYPES'.
+entrypoints/popup/components/builder/model/transforms.ts(12,10): error TS2305: Module '"brauzio-shared"' has no exported member 'EDGE_LABELS'.
+entrypoints/popup/components/builder/model/ui-nodes.ts(6,28): error TS2307: Cannot find module '@/common/node-types' or its corresponding type declarations.
+entrypoints/popup/components/builder/model/ui-nodes.ts(10,3): error TS2305: Module '"@/entrypoints/popup/components/builder/model/node-spec-registry"' has no exported member 'listNodeSpecs'.
+entrypoints/popup/components/builder/model/ui-nodes.ts(11,3): error TS2305: Module '"@/entrypoints/popup/components/builder/model/node-spec-registry"' has no exported member 'getNodeSpec'.
+entrypoints/popup/components/builder/model/ui-nodes.ts(13,10): error TS2305: Module '"brauzio-shared"' has no exported member 'STEP_TYPES'.
+entrypoints/popup/components/builder/model/ui-nodes.ts(28,10): error TS2305: Module '"@/entrypoints/popup/components/builder/model/node-specs-builtin"' has no exported member 'registerBuiltinSpecs'.
+entrypoints/popup/components/builder/model/validation.ts(2,10): error TS2305: Module '"brauzio-shared"' has no exported member 'STEP_TYPES'.
+entrypoints/popup/components/builder/store/useBuilderStore.ts(527,37): error TS2307: Cannot find module 'elkjs/lib/elk.bundled.js' or its corresponding type declarations.
+entrypoints/popup/components/builder/widgets/FieldSelector.vue(28,24): error TS2304: Cannot find name 'chrome'.
+entrypoints/popup/components/builder/widgets/FieldSelector.vue(32,11): error TS2304: Cannot find name 'chrome'.
+entrypoints/popup/components/builder/widgets/FieldSelector.vue(45,24): error TS2304: Cannot find name 'chrome'.
+entrypoints/popup/components/builder/widgets/FieldSelector.vue(49,28): error TS2304: Cannot find name 'chrome'.
+entrypoints/shared/composables/useRRV3Rpc.ts(142,27): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/shared/composables/useRRV3Rpc.ts(246,30): error TS2304: Cannot find name 'chrome'.
+entrypoints/shared/composables/useRRV3Rpc.ts(310,20): error TS2304: Cannot find name 'chrome'.
+entrypoints/shared/composables/useRRV3Rpc.ts(310,47): error TS2304: Cannot find name 'chrome'.
+entrypoints/shared/composables/useRRV3Rpc.ts(315,19): error TS2304: Cannot find name 'chrome'.
+entrypoints/sidepanel/composables/useAgentInputPreferences.ts(50,18): error TS2304: Cannot find name 'chrome'.
+entrypoints/sidepanel/composables/useAgentInputPreferences.ts(50,45): error TS2304: Cannot find name 'chrome'.
+entrypoints/sidepanel/composables/useAgentInputPreferences.ts(55,28): error TS2304: Cannot find name 'chrome'.
+entrypoints/sidepanel/composables/useAgentInputPreferences.ts(75,18): error TS2304: Cannot find name 'chrome'.
+entrypoints/sidepanel/composables/useAgentInputPreferences.ts(75,45): error TS2304: Cannot find name 'chrome'.
+entrypoints/sidepanel/composables/useAgentInputPreferences.ts(76,13): error TS2304: Cannot find name 'chrome'.
+entrypoints/sidepanel/composables/useAgentServer.ts(2,15): error TS2305: Module '"brauzio-shared"' has no exported member 'AgentEngineInfo'.
+entrypoints/sidepanel/composables/useAgentServer.ts(2,32): error TS2305: Module '"brauzio-shared"' has no exported member 'RealtimeEvent'.
+entrypoints/sidepanel/composables/useAgentServer.ts(53,30): error TS2304: Cannot find name 'chrome'.
+entrypoints/sidepanel/composables/useAgentServer.ts(78,30): error TS2304: Cannot find name 'chrome'.
+entrypoints/sidepanel/composables/useAgentServer.ts(118,30): error TS2304: Cannot find name 'chrome'.
+entrypoints/sidepanel/composables/useAgentServer.ts(139,5): error TS2304: Cannot find name 'chrome'.
+entrypoints/sidepanel/composables/useAgentServer.ts(143,5): error TS2304: Cannot find name 'chrome'.
+entrypoints/sidepanel/composables/useAgentTheme.ts(85,28): error TS2304: Cannot find name 'chrome'.
+entrypoints/sidepanel/composables/useAgentTheme.ts(119,13): error TS2304: Cannot find name 'chrome'.
+entrypoints/sidepanel/composables/useAgentTheme.ts(157,26): error TS2304: Cannot find name 'chrome'.
+entrypoints/sidepanel/composables/useAgentThreads.ts(7,3): error TS2305: Module '"brauzio-shared"' has no exported member 'AgentMessage'.
+entrypoints/sidepanel/composables/useAgentThreads.ts(8,3): error TS2305: Module '"brauzio-shared"' has no exported member 'AgentMessageAttachmentMetadata'.
+entrypoints/sidepanel/composables/useAgentThreads.ts(9,3): error TS2305: Module '"brauzio-shared"' has no exported member 'AttachmentMetadata'.
+entrypoints/sidepanel/composables/useAgentThreads.ts(11,35): error TS2307: Cannot find module './useAgentChat' or its corresponding type declarations.
+entrypoints/sidepanel/composables/useAttachments.ts(6,15): error TS2305: Module '"brauzio-shared"' has no exported member 'AgentAttachment'.
+entrypoints/sidepanel/composables/useAttachments.ts(35,68): error TS2339: Property 'type' does not exist on type '{ previewUrl?: string | undefined; }'.
+entrypoints/sidepanel/composables/useAttachments.ts(72,31): error TS2339: Property 'mimeType' does not exist on type 'AttachmentWithPreview'.
+entrypoints/sidepanel/composables/useAttachments.ts(72,61): error TS2339: Property 'dataBase64' does not exist on type 'AttachmentWithPreview'.
+entrypoints/sidepanel/composables/useAttachments.ts(113,11): error TS2353: Object literal may only specify known properties, and 'type' does not exist in type '{ previewUrl?: string | undefined; }'.
+entrypoints/sidepanel/composables/useAttachments.ts(225,37): error TS2339: Property 'type' does not exist on type '{ previewUrl?: string | undefined; }'.
+entrypoints/sidepanel/composables/useAttachments.ts(225,43): error TS2339: Property 'name' does not exist on type '{ previewUrl?: string | undefined; }'.
+entrypoints/sidepanel/composables/useAttachments.ts(225,49): error TS2339: Property 'mimeType' does not exist on type '{ previewUrl?: string | undefined; }'.
+entrypoints/sidepanel/composables/useAttachments.ts(225,59): error TS2339: Property 'dataBase64' does not exist on type '{ previewUrl?: string | undefined; }'.
+entrypoints/sidepanel/composables/useFloatingDrag.ts(56,26): error TS2304: Cannot find name 'chrome'.
+entrypoints/sidepanel/composables/useFloatingDrag.ts(78,11): error TS2304: Cannot find name 'chrome'.
+entrypoints/sidepanel/composables/useWebEditorTxState.ts(175,16): error TS2304: Cannot find name 'chrome'.
+entrypoints/sidepanel/composables/useWebEditorTxState.ts(175,43): error TS2304: Cannot find name 'chrome'.
+entrypoints/sidepanel/composables/useWebEditorTxState.ts(177,11): error TS2304: Cannot find name 'chrome'.
+entrypoints/sidepanel/composables/useWebEditorTxState.ts(188,16): error TS2304: Cannot find name 'chrome'.
+entrypoints/sidepanel/composables/useWebEditorTxState.ts(188,43): error TS2304: Cannot find name 'chrome'.
+entrypoints/sidepanel/composables/useWebEditorTxState.ts(189,24): error TS2304: Cannot find name 'chrome'.
+entrypoints/sidepanel/composables/useWebEditorTxState.ts(203,16): error TS2304: Cannot find name 'chrome'.
+entrypoints/sidepanel/composables/useWebEditorTxState.ts(203,43): error TS2304: Cannot find name 'chrome'.
+entrypoints/sidepanel/composables/useWebEditorTxState.ts(204,23): error TS2304: Cannot find name 'chrome'.
+entrypoints/sidepanel/composables/useWebEditorTxState.ts(384,18): error TS2304: Cannot find name 'chrome'.
+entrypoints/sidepanel/composables/useWebEditorTxState.ts(384,45): error TS2304: Cannot find name 'chrome'.
+entrypoints/sidepanel/composables/useWebEditorTxState.ts(393,29): error TS2304: Cannot find name 'chrome'.
+entrypoints/sidepanel/composables/useWebEditorTxState.ts(435,14): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/sidepanel/composables/useWebEditorTxState.ts(478,55): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/sidepanel/composables/useWebEditorTxState.ts(515,39): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/sidepanel/composables/useWebEditorTxState.ts(540,18): error TS2304: Cannot find name 'chrome'.
+entrypoints/sidepanel/composables/useWebEditorTxState.ts(540,44): error TS2304: Cannot find name 'chrome'.
+entrypoints/sidepanel/composables/useWebEditorTxState.ts(541,9): error TS2304: Cannot find name 'chrome'.
+entrypoints/sidepanel/composables/useWebEditorTxState.ts(549,18): error TS2304: Cannot find name 'chrome'.
+entrypoints/sidepanel/composables/useWebEditorTxState.ts(549,44): error TS2304: Cannot find name 'chrome'.
+entrypoints/sidepanel/composables/useWebEditorTxState.ts(551,9): error TS2304: Cannot find name 'chrome'.
+entrypoints/sidepanel/composables/useWebEditorTxState.ts(554,13): error TS2304: Cannot find name 'chrome'.
+entrypoints/sidepanel/composables/useWebEditorTxState.ts(557,25): error TS2304: Cannot find name 'chrome'.
+entrypoints/sidepanel/composables/useWebEditorTxState.ts(557,51): error TS2304: Cannot find name 'chrome'.
+entrypoints/sidepanel/composables/useWebEditorTxState.ts(560,37): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/sidepanel/composables/useWebEditorTxState.ts(561,21): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/sidepanel/composables/useWebEditorTxState.ts(567,9): error TS2304: Cannot find name 'chrome'.
+entrypoints/sidepanel/composables/useWebEditorTxState.ts(570,13): error TS2304: Cannot find name 'chrome'.
+entrypoints/sidepanel/composables/useWebEditorTxState.ts(583,18): error TS2304: Cannot find name 'chrome'.
+entrypoints/sidepanel/composables/useWebEditorTxState.ts(583,44): error TS2304: Cannot find name 'chrome'.
+entrypoints/sidepanel/composables/useWebEditorTxState.ts(584,9): error TS2304: Cannot find name 'chrome'.
+entrypoints/sidepanel/composables/useWebEditorTxState.ts(587,13): error TS2304: Cannot find name 'chrome'.
+entrypoints/sidepanel/composables/useWebEditorTxState.ts(614,18): error TS2304: Cannot find name 'chrome'.
+entrypoints/sidepanel/composables/useWebEditorTxState.ts(614,44): error TS2304: Cannot find name 'chrome'.
+entrypoints/sidepanel/composables/useWebEditorTxState.ts(615,9): error TS2304: Cannot find name 'chrome'.
+entrypoints/web-editor-v2/core/editor.ts(477,18): error TS2304: Cannot find name 'chrome'.
+entrypoints/web-editor-v2/core/editor.ts(477,44): error TS2304: Cannot find name 'chrome'.
+entrypoints/web-editor-v2/core/editor.ts(478,9): error TS2304: Cannot find name 'chrome'.
+entrypoints/web-editor-v2/core/editor.ts(536,16): error TS2304: Cannot find name 'chrome'.
+entrypoints/web-editor-v2/core/editor.ts(536,42): error TS2304: Cannot find name 'chrome'.
+entrypoints/web-editor-v2/core/editor.ts(537,7): error TS2304: Cannot find name 'chrome'.
+entrypoints/web-editor-v2/core/editor.ts(556,16): error TS2304: Cannot find name 'chrome'.
+entrypoints/web-editor-v2/core/editor.ts(556,43): error TS2304: Cannot find name 'chrome'.
+entrypoints/web-editor-v2/core/editor.ts(578,5): error TS2304: Cannot find name 'chrome'.
+entrypoints/web-editor-v2/core/editor.ts(585,5): error TS2304: Cannot find name 'chrome'.
+entrypoints/web-editor-v2/core/editor.ts(836,18): error TS2304: Cannot find name 'chrome'.
+entrypoints/web-editor-v2/core/editor.ts(836,45): error TS2304: Cannot find name 'chrome'.
+entrypoints/web-editor-v2/core/editor.ts(847,26): error TS2304: Cannot find name 'chrome'.
+entrypoints/web-editor-v2/core/execution-tracker.ts(186,30): error TS2304: Cannot find name 'chrome'.
+entrypoints/web-editor-v2/core/execution-tracker.ts(338,30): error TS2304: Cannot find name 'chrome'.
+entrypoints/web-editor-v2/core/message-listener.ts(230,14): error TS2503: Cannot find namespace 'chrome'.
+entrypoints/web-editor-v2/core/message-listener.ts(338,3): error TS2304: Cannot find name 'chrome'.
+entrypoints/web-editor-v2/core/message-listener.ts(341,5): error TS2304: Cannot find name 'chrome'.
+entrypoints/web-editor-v2/core/payload-builder.ts(438,14): error TS2304: Cannot find name 'chrome'.
+entrypoints/web-editor-v2/core/payload-builder.ts(438,41): error TS2304: Cannot find name 'chrome'.
+entrypoints/web-editor-v2/core/payload-builder.ts(442,10): error TS2304: Cannot find name 'chrome'.
+entrypoints/web-editor-v2/ui/property-panel/controls/layout-control.ts(1396,37): error TS2345: Argument of type 'string | boolean' is not assignable to parameter of type 'boolean'.
+  Type 'string' is not assignable to type 'boolean'.
+entrypoints/web-editor-v2/ui/property-panel/props-panel.ts(683,44): error TS2339: Property 'value' does not exist on type 'SerializedValue'.
+  Property 'value' does not exist on type '{ kind: "null"; } & SerializedValueBase'.
+entrypoints/web-editor-v2/ui/property-panel/props-panel.ts(927,16): error TS2304: Cannot find name 'chrome'.
+entrypoints/web-editor-v2/ui/property-panel/props-panel.ts(927,43): error TS2304: Cannot find name 'chrome'.
+entrypoints/web-editor-v2/ui/property-panel/props-panel.ts(945,26): error TS2304: Cannot find name 'chrome'.
+entrypoints/web-editor-v2/ui/property-panel/props-panel.ts(969,16): error TS2304: Cannot find name 'chrome'.
+entrypoints/web-editor-v2/ui/property-panel/props-panel.ts(969,43): error TS2304: Cannot find name 'chrome'.
+entrypoints/web-editor-v2/ui/property-panel/props-panel.ts(976,26): error TS2304: Cannot find name 'chrome'.
+entrypoints/welcome/App.vue(46,5): error TS2304: Cannot find name 'chrome'.
+entrypoints/welcome/App.vue(47,5): error TS2304: Cannot find name 'chrome'.
+entrypoints/welcome/App.vue(71,3): error TS2304: Cannot find name 'chrome'.
+entrypoints/welcome/App.vue(75,23): error TS2304: Cannot find name 'chrome'.
+entrypoints/welcome/App.vue(146,27): error TS2339: Property 'chrome' does not exist on type 'CreateComponentPublicInstanceWithMixins<ToResolvedProps<{}, {}>, { status: { state: RelayState; authenticated: boolean; lastError: string; }; copied: Ref<boolean, boolean>; connected: ComputedRef<...>; ... 4 more ...; closePage: () => void; }, ... 23 more ..., {}>'.
+shared/quick-panel/core/agent-bridge.ts(31,15): error TS2305: Module '"brauzio-shared"' has no exported member 'RealtimeEvent'.
+shared/quick-panel/core/agent-bridge.ts(106,5): error TS2304: Cannot find name 'chrome'.
+shared/quick-panel/core/agent-bridge.ts(117,5): error TS2304: Cannot find name 'chrome'.
+shared/quick-panel/core/agent-bridge.ts(207,30): error TS2304: Cannot find name 'chrome'.
+shared/quick-panel/core/agent-bridge.ts(236,30): error TS2304: Cannot find name 'chrome'.
+shared/quick-panel/providers/tabs-provider.ts(67,16): error TS2304: Cannot find name 'chrome'.
+shared/quick-panel/providers/tabs-provider.ts(67,43): error TS2304: Cannot find name 'chrome'.
+shared/quick-panel/providers/tabs-provider.ts(74,25): error TS2304: Cannot find name 'chrome'.
+shared/quick-panel/providers/tabs-provider.ts(92,16): error TS2304: Cannot find name 'chrome'.
+shared/quick-panel/providers/tabs-provider.ts(92,43): error TS2304: Cannot find name 'chrome'.
+shared/quick-panel/providers/tabs-provider.ts(96,25): error TS2304: Cannot find name 'chrome'.
+shared/quick-panel/providers/tabs-provider.ts(108,16): error TS2304: Cannot find name 'chrome'.
+shared/quick-panel/providers/tabs-provider.ts(108,43): error TS2304: Cannot find name 'chrome'.
+shared/quick-panel/providers/tabs-provider.ts(112,25): error TS2304: Cannot find name 'chrome'.
+shared/quick-panel/ui/ai-chat-panel.ts(16,3): error TS2305: Module '"brauzio-shared"' has no exported member 'AgentMessage'.
+shared/quick-panel/ui/ai-chat-panel.ts(17,3): error TS2305: Module '"brauzio-shared"' has no exported member 'AgentStatusEvent'.
+shared/quick-panel/ui/ai-chat-panel.ts(18,3): error TS2305: Module '"brauzio-shared"' has no exported member 'AgentUsageStats'.
+shared/quick-panel/ui/ai-chat-panel.ts(19,3): error TS2305: Module '"brauzio-shared"' has no exported member 'RealtimeEvent'.
+shared/quick-panel/ui/message-renderer.ts(13,15): error TS2305: Module '"brauzio-shared"' has no exported member 'AgentMessage'.
+shared/quick-panel/ui/message-renderer.ts(13,29): error TS2305: Module '"brauzio-shared"' has no exported member 'AgentRole'.
+shared/quick-panel/ui/shadow-host.ts(184,10): error TS2304: Cannot find name 'chrome'.
+shared/quick-panel/ui/shadow-host.ts(185,26): error TS2304: Cannot find name 'chrome'.
+shared/quick-panel/ui/shadow-host.ts(321,29): error TS2503: Cannot find namespace 'chrome'.
+shared/quick-panel/ui/shadow-host.ts(333,5): error TS2304: Cannot find name 'chrome'.
+shared/quick-panel/ui/shadow-host.ts(334,24): error TS2304: Cannot find name 'chrome'.
+shared/selector/locator.ts(528,22): error TS2304: Cannot find name 'chrome'.
+shared/selector/locator.ts(530,20): error TS2304: Cannot find name 'chrome'.
+shared/selector/locator.ts(533,28): error TS2304: Cannot find name 'chrome'.
+shared/selector/locator.ts(534,34): error TS7006: Parameter 'f' implicitly has an 'any' type.
+shared/selector/strategies/css-path.ts(24,13): error TS7022: 'parent' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+shared/selector/strategies/css-path.ts(26,68): error TS18046: 'c' is of type 'unknown'.
+tailwind.config.ts(1,29): error TS2307: Cannot find module 'tailwindcss' or its corresponding type declarations.
+tests/record-replay-v3/command-trigger.test.ts(62,17): error TS7017: Element implicitly has an 'any' type because type 'typeof globalThis' has no index signature.
+tests/record-replay-v3/context-menu-trigger.test.ts(104,15): error TS7017: Element implicitly has an 'any' type because type 'typeof globalThis' has no index signature.
+tests/record-replay-v3/context-menu-trigger.test.ts(110,15): error TS7017: Element implicitly has an 'any' type because type 'typeof globalThis' has no index signature.
+tests/record-replay-v3/cron-trigger.test.ts(85,17): error TS7017: Element implicitly has an 'any' type because type 'typeof globalThis' has no index signature.
+tests/record-replay-v3/dom-trigger.test.ts(34,45): error TS2503: Cannot find namespace 'chrome'.
+tests/record-replay-v3/dom-trigger.test.ts(41,15): error TS2503: Cannot find namespace 'chrome'.
+tests/record-replay-v3/dom-trigger.test.ts(59,31): error TS2503: Cannot find namespace 'chrome'.
+tests/record-replay-v3/dom-trigger.test.ts(103,17): error TS7017: Element implicitly has an 'any' type because type 'typeof globalThis' has no index signature.
+tests/record-replay-v3/dom-trigger.test.ts(104,22): error TS7017: Element implicitly has an 'any' type because type 'typeof globalThis' has no index signature.
+tests/record-replay-v3/dom-trigger.test.ts(108,17): error TS7017: Element implicitly has an 'any' type because type 'typeof globalThis' has no index signature.
+tests/record-replay-v3/dom-trigger.test.ts(112,17): error TS7017: Element implicitly has an 'any' type because type 'typeof globalThis' has no index signature.
+tests/record-replay-v3/dom-trigger.test.ts(116,17): error TS7017: Element implicitly has an 'any' type because type 'typeof globalThis' has no index signature.
+tests/record-replay-v3/dom-trigger.test.ts(124,19): error TS7017: Element implicitly has an 'any' type because type 'typeof globalThis' has no index signature.
+tests/record-replay-v3/dom-trigger.test.ts(129,19): error TS7017: Element implicitly has an 'any' type because type 'typeof globalThis' has no index signature.
+tests/record-replay-v3/dom-trigger.test.ts(161,25): error TS7017: Element implicitly has an 'any' type because type 'typeof globalThis' has no index signature.
+tests/record-replay-v3/dom-trigger.test.ts(171,20): error TS7017: Element implicitly has an 'any' type because type 'typeof globalThis' has no index signature.
+tests/record-replay-v3/dom-trigger.test.ts(176,37): error TS7017: Element implicitly has an 'any' type because type 'typeof globalThis' has no index signature.
+tests/record-replay-v3/dom-trigger.test.ts(197,19): error TS7017: Element implicitly has an 'any' type because type 'typeof globalThis' has no index signature.
+tests/record-replay-v3/dom-trigger.test.ts(201,19): error TS7017: Element implicitly has an 'any' type because type 'typeof globalThis' has no index signature.
+tests/record-replay-v3/dom-trigger.test.ts(228,37): error TS7017: Element implicitly has an 'any' type because type 'typeof globalThis' has no index signature.
+tests/record-replay-v3/dom-trigger.test.ts(243,19): error TS7017: Element implicitly has an 'any' type because type 'typeof globalThis' has no index signature.
+tests/record-replay-v3/dom-trigger.test.ts(266,64): error TS2503: Cannot find namespace 'chrome'.
+tests/record-replay-v3/dom-trigger.test.ts(276,19): error TS7017: Element implicitly has an 'any' type because type 'typeof globalThis' has no index signature.
+tests/record-replay-v3/dom-trigger.test.ts(299,31): error TS2503: Cannot find namespace 'chrome'.
+tests/record-replay-v3/dom-trigger.test.ts(306,19): error TS7017: Element implicitly has an 'any' type because type 'typeof globalThis' has no index signature.
+tests/record-replay-v3/dom-trigger.test.ts(329,19): error TS7017: Element implicitly has an 'any' type because type 'typeof globalThis' has no index signature.
+tests/record-replay-v3/dom-trigger.test.ts(330,19): error TS7017: Element implicitly has an 'any' type because type 'typeof globalThis' has no index signature.
+tests/record-replay-v3/dom-trigger.test.ts(353,19): error TS7017: Element implicitly has an 'any' type because type 'typeof globalThis' has no index signature.
+tests/record-replay-v3/dom-trigger.test.ts(359,25): error TS7017: Element implicitly has an 'any' type because type 'typeof globalThis' has no index signature.
+tests/record-replay-v3/dom-trigger.test.ts(369,19): error TS7017: Element implicitly has an 'any' type because type 'typeof globalThis' has no index signature.
+tests/record-replay-v3/dom-trigger.test.ts(384,19): error TS7017: Element implicitly has an 'any' type because type 'typeof globalThis' has no index signature.
+tests/record-replay-v3/dom-trigger.test.ts(390,25): error TS7017: Element implicitly has an 'any' type because type 'typeof globalThis' has no index signature.
+tests/record-replay-v3/dom-trigger.test.ts(394,19): error TS7017: Element implicitly has an 'any' type because type 'typeof globalThis' has no index signature.
+tests/record-replay-v3/dom-trigger.test.ts(409,19): error TS7017: Element implicitly has an 'any' type because type 'typeof globalThis' has no index signature.
+tests/record-replay-v3/dom-trigger.test.ts(415,25): error TS7017: Element implicitly has an 'any' type because type 'typeof globalThis' has no index signature.
+tests/record-replay-v3/dom-trigger.test.ts(421,19): error TS7017: Element implicitly has an 'any' type because type 'typeof globalThis' has no index signature.
+tests/record-replay-v3/dom-trigger.test.ts(444,19): error TS7017: Element implicitly has an 'any' type because type 'typeof globalThis' has no index signature.
+tests/record-replay-v3/dom-trigger.test.ts(476,19): error TS7017: Element implicitly has an 'any' type because type 'typeof globalThis' has no index signature.
+tests/record-replay-v3/interval-trigger.test.ts(48,35): error TS2503: Cannot find namespace 'chrome'.
+tests/record-replay-v3/interval-trigger.test.ts(70,45): error TS2503: Cannot find namespace 'chrome'.
+tests/record-replay-v3/interval-trigger.test.ts(73,48): error TS2503: Cannot find namespace 'chrome'.
+tests/record-replay-v3/once-trigger.test.ts(48,35): error TS2503: Cannot find namespace 'chrome'.
+tests/record-replay-v3/once-trigger.test.ts(73,45): error TS2503: Cannot find namespace 'chrome'.
+tests/record-replay-v3/once-trigger.test.ts(76,48): error TS2503: Cannot find namespace 'chrome'.
+tests/record-replay-v3/trigger-manager.test.ts(176,7): error TS2322: Type 'Mock<(event: any) => Promise<unknown>>' is not assignable to type '(event: RunEventInput) => Promise<RunEvent>'.
+  Type 'Promise<unknown>' is not assignable to type 'Promise<RunEvent>'.
+    Type 'unknown' is not assignable to type 'RunEvent'.
+tests/record-replay-v3/trigger-manager.test.ts(209,29): error TS2322: Type 'TriggerHandlerFactory<TriggerKind>' is not assignable to type 'TriggerHandlerFactory<"command">'.
+  Call signature return types 'TriggerHandler<TriggerKind>' and 'TriggerHandler<"command">' are incompatible.
+    The types of 'kind' are incompatible between these types.
+      Type 'TriggerKind' is not assignable to type '"command"'.
+        Type '"url"' is not assignable to type '"command"'.
+tests/record-replay-v3/trigger-manager.test.ts(239,29): error TS2322: Type 'TriggerHandlerFactory<TriggerKind>' is not assignable to type 'TriggerHandlerFactory<"command">'.
+  Call signature return types 'TriggerHandler<TriggerKind>' and 'TriggerHandler<"command">' are incompatible.
+    The types of 'kind' are incompatible between these types.
+      Type 'TriggerKind' is not assignable to type '"command"'.
+        Type '"url"' is not assignable to type '"command"'.
+tests/record-replay-v3/trigger-manager.test.ts(270,29): error TS2322: Type 'TriggerHandlerFactory<TriggerKind>' is not assignable to type 'TriggerHandlerFactory<"command">'.
+  Call signature return types 'TriggerHandler<TriggerKind>' and 'TriggerHandler<"command">' are incompatible.
+    The types of 'kind' are incompatible between these types.
+      Type 'TriggerKind' is not assignable to type '"command"'.
+        Type '"url"' is not assignable to type '"command"'.
+tests/record-replay-v3/trigger-manager.test.ts(312,29): error TS2322: Type 'TriggerHandlerFactory<TriggerKind>' is not assignable to type 'TriggerHandlerFactory<"command">'.
+  Call signature return types 'TriggerHandler<TriggerKind>' and 'TriggerHandler<"command">' are incompatible.
+    The types of 'kind' are incompatible between these types.
+      Type 'TriggerKind' is not assignable to type '"command"'.
+        Type '"url"' is not assignable to type '"command"'.
+tests/record-replay-v3/trigger-manager.test.ts(352,29): error TS2322: Type 'TriggerHandlerFactory<TriggerKind>' is not assignable to type 'TriggerHandlerFactory<"command">'.
+  Call signature return types 'TriggerHandler<TriggerKind>' and 'TriggerHandler<"command">' are incompatible.
+    The types of 'kind' are incompatible between these types.
+      Type 'TriggerKind' is not assignable to type '"command"'.
+        Type '"url"' is not assignable to type '"command"'.
+tests/record-replay-v3/trigger-manager.test.ts(391,29): error TS2322: Type 'TriggerHandlerFactory<TriggerKind>' is not assignable to type 'TriggerHandlerFactory<"command">'.
+  Call signature return types 'TriggerHandler<TriggerKind>' and 'TriggerHandler<"command">' are incompatible.
+    The types of 'kind' are incompatible between these types.
+      Type 'TriggerKind' is not assignable to type '"command"'.
+        Type '"url"' is not assignable to type '"command"'.
+tests/record-replay-v3/trigger-manager.test.ts(421,29): error TS2322: Type 'TriggerHandlerFactory<TriggerKind>' is not assignable to type 'TriggerHandlerFactory<"command">'.
+  Call signature return types 'TriggerHandler<TriggerKind>' and 'TriggerHandler<"command">' are incompatible.
+    The types of 'kind' are incompatible between these types.
+      Type 'TriggerKind' is not assignable to type '"command"'.
+        Type '"url"' is not assignable to type '"command"'.
+tests/record-replay-v3/trigger-manager.test.ts(454,29): error TS2322: Type 'TriggerHandlerFactory<TriggerKind>' is not assignable to type 'TriggerHandlerFactory<"command">'.
+  Call signature return types 'TriggerHandler<TriggerKind>' and 'TriggerHandler<"command">' are incompatible.
+    The types of 'kind' are incompatible between these types.
+      Type 'TriggerKind' is not assignable to type '"command"'.
+        Type '"url"' is not assignable to type '"command"'.
+tests/record-replay-v3/trigger-manager.test.ts(502,29): error TS2322: Type 'TriggerHandlerFactory<TriggerKind>' is not assignable to type 'TriggerHandlerFactory<"command">'.
+  Call signature return types 'TriggerHandler<TriggerKind>' and 'TriggerHandler<"command">' are incompatible.
+    The types of 'kind' are incompatible between these types.
+      Type 'TriggerKind' is not assignable to type '"command"'.
+        Type '"url"' is not assignable to type '"command"'.
+tests/record-replay-v3/trigger-manager.test.ts(544,29): error TS2322: Type 'TriggerHandlerFactory<TriggerKind>' is not assignable to type 'TriggerHandlerFactory<"command">'.
+  Call signature return types 'TriggerHandler<TriggerKind>' and 'TriggerHandler<"command">' are incompatible.
+    The types of 'kind' are incompatible between these types.
+      Type 'TriggerKind' is not assignable to type '"command"'.
+        Type '"url"' is not assignable to type '"command"'.
+tests/record-replay-v3/trigger-manager.test.ts(580,29): error TS2322: Type 'TriggerHandlerFactory<TriggerKind>' is not assignable to type 'TriggerHandlerFactory<"command">'.
+  Call signature return types 'TriggerHandler<TriggerKind>' and 'TriggerHandler<"command">' are incompatible.
+    The types of 'kind' are incompatible between these types.
+      Type 'TriggerKind' is not assignable to type '"command"'.
+        Type '"url"' is not assignable to type '"command"'.
+tests/record-replay-v3/trigger-manager.test.ts(630,11): error TS2322: Type 'TriggerHandlerFactory<TriggerKind>' is not assignable to type 'TriggerHandlerFactory<"command">'.
+  Call signature return types 'TriggerHandler<TriggerKind>' and 'TriggerHandler<"command">' are incompatible.
+    The types of 'kind' are incompatible between these types.
+      Type 'TriggerKind' is not assignable to type '"command"'.
+        Type '"url"' is not assignable to type '"command"'.
+tests/record-replay-v3/trigger-manager.test.ts(631,11): error TS2322: Type 'TriggerHandlerFactory<TriggerKind>' is not assignable to type 'TriggerHandlerFactory<"url">'.
+  Call signature return types 'TriggerHandler<TriggerKind>' and 'TriggerHandler<"url">' are incompatible.
+    The types of 'kind' are incompatible between these types.
+      Type 'TriggerKind' is not assignable to type '"url"'.
+        Type '"command"' is not assignable to type '"url"'.
+tests/record-replay-v3/trigger-manager.test.ts(690,29): error TS2322: Type 'TriggerHandlerFactory<TriggerKind>' is not assignable to type 'TriggerHandlerFactory<"command">'.
+  Call signature return types 'TriggerHandler<TriggerKind>' and 'TriggerHandler<"command">' are incompatible.
+    The types of 'kind' are incompatible between these types.
+      Type 'TriggerKind' is not assignable to type '"command"'.
+        Type '"url"' is not assignable to type '"command"'.
+tests/record-replay-v3/trigger-manager.test.ts(710,29): error TS2322: Type 'TriggerHandlerFactory<TriggerKind>' is not assignable to type 'TriggerHandlerFactory<"command">'.
+  Call signature return types 'TriggerHandler<TriggerKind>' and 'TriggerHandler<"command">' are incompatible.
+    The types of 'kind' are incompatible between these types.
+      Type 'TriggerKind' is not assignable to type '"command"'.
+        Type '"url"' is not assignable to type '"command"'.
+tests/record-replay-v3/trigger-manager.test.ts(749,29): error TS2322: Type 'TriggerHandlerFactory<TriggerKind>' is not assignable to type 'TriggerHandlerFactory<"command">'.
+  Call signature return types 'TriggerHandler<TriggerKind>' and 'TriggerHandler<"command">' are incompatible.
+    The types of 'kind' are incompatible between these types.
+      Type 'TriggerKind' is not assignable to type '"command"'.
+        Type '"url"' is not assignable to type '"command"'.
+tests/record-replay-v3/trigger-manager.test.ts(811,29): error TS2322: Type 'TriggerHandlerFactory<TriggerKind>' is not assignable to type 'TriggerHandlerFactory<"command">'.
+  Call signature return types 'TriggerHandler<TriggerKind>' and 'TriggerHandler<"command">' are incompatible.
+    The types of 'kind' are incompatible between these types.
+      Type 'TriggerKind' is not assignable to type '"command"'.
+        Type '"url"' is not assignable to type '"command"'.
+tests/record-replay-v3/trigger-manager.test.ts(848,29): error TS2322: Type 'TriggerHandlerFactory<TriggerKind>' is not assignable to type 'TriggerHandlerFactory<"command">'.
+  Call signature return types 'TriggerHandler<TriggerKind>' and 'TriggerHandler<"command">' are incompatible.
+    The types of 'kind' are incompatible between these types.
+      Type 'TriggerKind' is not assignable to type '"command"'.
+        Type '"url"' is not assignable to type '"command"'.
+tests/record-replay-v3/url-trigger.test.ts(62,17): error TS7017: Element implicitly has an 'any' type because type 'typeof globalThis' has no index signature.
+tests/record-replay-v3/v2-action-adapter.test.ts(80,38): error TS2344: Type '"test"' does not satisfy the constraint 'keyof ActionParamsByType'.
+tests/record-replay-v3/v2-action-adapter.test.ts(81,18): error TS2344: Type '"test"' does not satisfy the constraint 'ExecutableActionType'.
+tests/record-replay-v3/v2-action-adapter.test.ts(97,62): error TS2345: Argument of type 'ActionHandler<"test">' is not assignable to parameter of type 'ActionHandler<ExecutableActionType>'.
+  Types of property 'type' are incompatible.
+    Type '"test"' is not assignable to type 'ExecutableActionType'.
+tests/record-replay-v3/v2-action-adapter.test.ts(112,62): error TS2345: Argument of type 'ActionHandler<"test">' is not assignable to parameter of type 'ActionHandler<ExecutableActionType>'.
+  Types of property 'type' are incompatible.
+    Type '"test"' is not assignable to type 'ExecutableActionType'.
+tests/record-replay-v3/v2-action-adapter.test.ts(119,21): error TS2339: Property 'error' does not exist on type 'NodeExecutionResult'.
+  Property 'error' does not exist on type '{ status: "succeeded"; next?: { kind: "edgeLabel"; label: string; } | { kind: "end"; } | undefined; outputs?: JsonObject | undefined; varsPatch?: VarsPatchOp[] | undefined; }'.
+tests/record-replay-v3/v2-action-adapter.test.ts(120,21): error TS2339: Property 'error' does not exist on type 'NodeExecutionResult'.
+  Property 'error' does not exist on type '{ status: "succeeded"; next?: { kind: "edgeLabel"; label: string; } | { kind: "end"; } | undefined; outputs?: JsonObject | undefined; varsPatch?: VarsPatchOp[] | undefined; }'.
+tests/record-replay-v3/v2-action-adapter.test.ts(128,62): error TS2345: Argument of type 'ActionHandler<"test">' is not assignable to parameter of type 'ActionHandler<ExecutableActionType>'.
+  Types of property 'type' are incompatible.
+    Type '"test"' is not assignable to type 'ExecutableActionType'.
+tests/record-replay-v3/v2-action-adapter.test.ts(135,21): error TS2339: Property 'error' does not exist on type 'NodeExecutionResult'.
+  Property 'error' does not exist on type '{ status: "succeeded"; next?: { kind: "edgeLabel"; label: string; } | { kind: "end"; } | undefined; outputs?: JsonObject | undefined; varsPatch?: VarsPatchOp[] | undefined; }'.
+tests/record-replay-v3/v2-action-adapter.test.ts(136,21): error TS2339: Property 'error' does not exist on type 'NodeExecutionResult'.
+  Property 'error' does not exist on type '{ status: "succeeded"; next?: { kind: "edgeLabel"; label: string; } | { kind: "end"; } | undefined; outputs?: JsonObject | undefined; varsPatch?: VarsPatchOp[] | undefined; }'.
+tests/record-replay-v3/v2-action-adapter.test.ts(147,62): error TS2345: Argument of type 'ActionHandler<"test">' is not assignable to parameter of type 'ActionHandler<ExecutableActionType>'.
+  Types of property 'type' are incompatible.
+    Type '"test"' is not assignable to type 'ExecutableActionType'.
+tests/record-replay-v3/v2-action-adapter.test.ts(154,21): error TS2339: Property 'varsPatch' does not exist on type 'NodeExecutionResult'.
+  Property 'varsPatch' does not exist on type '{ status: "failed"; error: RRError; }'.
+tests/record-replay-v3/v2-action-adapter.test.ts(163,62): error TS2345: Argument of type 'ActionHandler<"test">' is not assignable to parameter of type 'ActionHandler<ExecutableActionType>'.
+  Types of property 'type' are incompatible.
+    Type '"test"' is not assignable to type 'ExecutableActionType'.
+tests/record-replay-v3/v2-action-adapter.test.ts(170,21): error TS2339: Property 'varsPatch' does not exist on type 'NodeExecutionResult'.
+  Property 'varsPatch' does not exist on type '{ status: "failed"; error: RRError; }'.
+tests/record-replay-v3/v2-action-adapter.test.ts(179,62): error TS2345: Argument of type 'ActionHandler<"test">' is not assignable to parameter of type 'ActionHandler<ExecutableActionType>'.
+  Types of property 'type' are incompatible.
+    Type '"test"' is not assignable to type 'ExecutableActionType'.
+tests/record-replay-v3/v2-action-adapter.test.ts(186,21): error TS2339: Property 'varsPatch' does not exist on type 'NodeExecutionResult'.
+  Property 'varsPatch' does not exist on type '{ status: "failed"; error: RRError; }'.
+tests/record-replay-v3/v2-action-adapter.test.ts(195,62): error TS2345: Argument of type 'ActionHandler<"test">' is not assignable to parameter of type 'ActionHandler<ExecutableActionType>'.
+  Types of property 'type' are incompatible.
+    Type '"test"' is not assignable to type 'ExecutableActionType'.
+tests/record-replay-v3/v2-action-adapter.test.ts(202,21): error TS2339: Property 'varsPatch' does not exist on type 'NodeExecutionResult'.
+  Property 'varsPatch' does not exist on type '{ status: "failed"; error: RRError; }'.
+tests/record-replay-v3/v2-action-adapter.test.ts(214,62): error TS2345: Argument of type 'ActionHandler<"test">' is not assignable to parameter of type 'ActionHandler<ExecutableActionType>'.
+  Types of property 'type' are incompatible.
+    Type '"test"' is not assignable to type 'ExecutableActionType'.
+tests/record-replay-v3/v2-action-adapter.test.ts(221,21): error TS2339: Property 'varsPatch' does not exist on type 'NodeExecutionResult'.
+  Property 'varsPatch' does not exist on type '{ status: "failed"; error: RRError; }'.
+tests/record-replay-v3/v2-action-adapter.test.ts(232,62): error TS2345: Argument of type 'ActionHandler<"test">' is not assignable to parameter of type 'ActionHandler<ExecutableActionType>'.
+  Types of property 'type' are incompatible.
+    Type '"test"' is not assignable to type 'ExecutableActionType'.
+tests/record-replay-v3/v2-action-adapter.test.ts(239,21): error TS2339: Property 'next' does not exist on type 'NodeExecutionResult'.
+  Property 'next' does not exist on type '{ status: "failed"; error: RRError; }'.
+tests/record-replay-v3/v2-action-adapter.test.ts(247,62): error TS2345: Argument of type 'ActionHandler<"test">' is not assignable to parameter of type 'ActionHandler<ExecutableActionType>'.
+  Types of property 'type' are incompatible.
+    Type '"test"' is not assignable to type 'ExecutableActionType'.
+tests/record-replay-v3/v2-action-adapter.test.ts(254,21): error TS2339: Property 'next' does not exist on type 'NodeExecutionResult'.
+  Property 'next' does not exist on type '{ status: "failed"; error: RRError; }'.
+tests/record-replay-v3/v2-action-adapter.test.ts(281,64): error TS2345: Argument of type 'ActionHandler<"test">' is not assignable to parameter of type 'ActionHandler<ExecutableActionType>'.
+  Types of property 'type' are incompatible.
+    Type '"test"' is not assignable to type 'ExecutableActionType'.
+tests/record-replay-v3/v2-action-adapter.test.ts(288,23): error TS2339: Property 'error' does not exist on type 'NodeExecutionResult'.
+  Property 'error' does not exist on type '{ status: "succeeded"; next?: { kind: "edgeLabel"; label: string; } | { kind: "end"; } | undefined; outputs?: JsonObject | undefined; varsPatch?: VarsPatchOp[] | undefined; }'.
+tests/record-replay-v3/v2-action-adapter.test.ts(300,62): error TS2345: Argument of type 'ActionHandler<"test">' is not assignable to parameter of type 'ActionHandler<ExecutableActionType>'.
+  Types of property 'type' are incompatible.
+    Type '"test"' is not assignable to type 'ExecutableActionType'.
+tests/record-replay-v3/v2-action-adapter.test.ts(307,21): error TS2339: Property 'varsPatch' does not exist on type 'NodeExecutionResult'.
+  Property 'varsPatch' does not exist on type '{ status: "failed"; error: RRError; }'.
+tests/record-replay-v3/v2-action-adapter.test.ts(320,62): error TS2345: Argument of type 'ActionHandler<"test">' is not assignable to parameter of type 'ActionHandler<ExecutableActionType>'.
+  Types of property 'type' are incompatible.
+    Type '"test"' is not assignable to type 'ExecutableActionType'.
+tests/record-replay-v3/v2-action-adapter.test.ts(327,21): error TS2339: Property 'varsPatch' does not exist on type 'NodeExecutionResult'.
+  Property 'varsPatch' does not exist on type '{ status: "failed"; error: RRError; }'.
+tests/record-replay-v3/v2-action-adapter.test.ts(341,62): error TS2345: Argument of type 'ActionHandler<"test">' is not assignable to parameter of type 'ActionHandler<ExecutableActionType>'.
+  Types of property 'type' are incompatible.
+    Type '"test"' is not assignable to type 'ExecutableActionType'.
+tests/record-replay-v3/v2-action-adapter.test.ts(360,62): error TS2345: Argument of type 'ActionHandler<"test">' is not assignable to parameter of type 'ActionHandler<ExecutableActionType>'.
+  Types of property 'type' are incompatible.
+    Type '"test"' is not assignable to type 'ExecutableActionType'.
+tests/record-replay-v3/v2-action-adapter.test.ts(377,62): error TS2345: Argument of type 'ActionHandler<"test">' is not assignable to parameter of type 'ActionHandler<ExecutableActionType>'.
+  Types of property 'type' are incompatible.
+    Type '"test"' is not assignable to type 'ExecutableActionType'.
+tests/record-replay-v3/v2-action-adapter.test.ts(385,21): error TS2339: Property 'varsPatch' does not exist on type 'NodeExecutionResult'.
+  Property 'varsPatch' does not exist on type '{ status: "failed"; error: RRError; }'.
+tests/record-replay-v3/v2-action-adapter.test.ts(399,62): error TS2345: Argument of type 'ActionHandler<"test">' is not assignable to parameter of type 'ActionHandler<ExecutableActionType>'.
+  Types of property 'type' are incompatible.
+    Type '"test"' is not assignable to type 'ExecutableActionType'.
+tests/record-replay-v3/v2-action-adapter.test.ts(406,21): error TS2339: Property 'error' does not exist on type 'NodeExecutionResult'.
+  Property 'error' does not exist on type '{ status: "succeeded"; next?: { kind: "edgeLabel"; label: string; } | { kind: "end"; } | undefined; outputs?: JsonObject | undefined; varsPatch?: VarsPatchOp[] | undefined; }'.
+tests/record-replay-v3/v2-action-adapter.test.ts(420,62): error TS2345: Argument of type 'ActionHandler<"test">' is not assignable to parameter of type 'ActionHandler<ExecutableActionType>'.
+  Types of property 'type' are incompatible.
+    Type '"test"' is not assignable to type 'ExecutableActionType'.
+tests/record-replay-v3/v2-action-adapter.test.ts(427,21): error TS2339: Property 'error' does not exist on type 'NodeExecutionResult'.
+  Property 'error' does not exist on type '{ status: "succeeded"; next?: { kind: "edgeLabel"; label: string; } | { kind: "end"; } | undefined; outputs?: JsonObject | undefined; varsPatch?: VarsPatchOp[] | undefined; }'.
+tests/record-replay-v3/v2-action-adapter.test.ts(428,21): error TS2339: Property 'error' does not exist on type 'NodeExecutionResult'.
+  Property 'error' does not exist on type '{ status: "succeeded"; next?: { kind: "edgeLabel"; label: string; } | { kind: "end"; } | undefined; outputs?: JsonObject | undefined; varsPatch?: VarsPatchOp[] | undefined; }'.
+tests/record-replay-v3/v2-action-adapter.test.ts(432,53): error TS2322: Type 'Promise<{ status: "success"; control: { kind: "while"; condition: { left: string; op: "=="; right: string; }; subflowId: string; maxIterations: number; }; }>' is not assignable to type 'Promise<ActionExecutionResult<"test">>'.
+  Type '{ status: "success"; control: { kind: "while"; condition: { left: string; op: "=="; right: string; }; subflowId: string; maxIterations: number; }; }' is not assignable to type 'ActionExecutionResult<"test">'.
+    Types of property 'control' are incompatible.
+      Type '{ kind: "while"; condition: { left: string; op: "=="; right: string; }; subflowId: string; maxIterations: number; }' is not assignable to type 'ControlDirective | undefined'.
+        Type '{ kind: "while"; condition: { left: string; op: "=="; right: string; }; subflowId: string; maxIterations: number; }' is not assignable to type '{ kind: "while"; condition: Condition; subflowId: string; maxIterations: number; }'.
+          Types of property 'condition' are incompatible.
+            Type '{ left: string; op: "=="; right: string; }' is not assignable to type 'Condition'.
+              Property 'kind' is missing in type '{ left: string; op: "=="; right: string; }' but required in type '{ kind: "compare"; left: Resolvable<JsonValue>; op: CompareOp; right: Resolvable<JsonValue>; }'.
+tests/record-replay-v3/v2-action-adapter.test.ts(442,62): error TS2345: Argument of type 'ActionHandler<"test">' is not assignable to parameter of type 'ActionHandler<ExecutableActionType>'.
+  Types of property 'type' are incompatible.
+    Type '"test"' is not assignable to type 'ExecutableActionType'.
+tests/record-replay-v3/v2-action-adapter.test.ts(449,21): error TS2339: Property 'error' does not exist on type 'NodeExecutionResult'.
+  Property 'error' does not exist on type '{ status: "succeeded"; next?: { kind: "edgeLabel"; label: string; } | { kind: "end"; } | undefined; outputs?: JsonObject | undefined; varsPatch?: VarsPatchOp[] | undefined; }'.
+tests/record-replay-v3/v2-action-adapter.test.ts(450,21): error TS2339: Property 'error' does not exist on type 'NodeExecutionResult'.
+  Property 'error' does not exist on type '{ status: "succeeded"; next?: { kind: "edgeLabel"; label: string; } | { kind: "end"; } | undefined; outputs?: JsonObject | undefined; varsPatch?: VarsPatchOp[] | undefined; }'.
+tests/record-replay-v3/v2-action-adapter.test.ts(456,53): error TS2322: Type 'Promise<{ status: "success"; output: { extracted: string; }; }>' is not assignable to type 'Promise<ActionExecutionResult<"test">>'.
+  Type '{ status: "success"; output: { extracted: string; }; }' is not assignable to type 'ActionExecutionResult<"test">'.
+    Types of property 'output' are incompatible.
+      Type '{ extracted: string; }' is not assignable to type 'undefined'.
+tests/record-replay-v3/v2-action-adapter.test.ts(461,62): error TS2345: Argument of type 'ActionHandler<"test">' is not assignable to parameter of type 'ActionHandler<ExecutableActionType>'.
+  Types of property 'type' are incompatible.
+    Type '"test"' is not assignable to type 'ExecutableActionType'.
+tests/record-replay-v3/v2-action-adapter.test.ts(468,21): error TS2339: Property 'outputs' does not exist on type 'NodeExecutionResult'.
+  Property 'outputs' does not exist on type '{ status: "failed"; error: RRError; }'.
+tests/record-replay-v3/v2-action-adapter.test.ts(474,53): error TS2322: Type 'Promise<{ status: "success"; output: { extracted: string; }; }>' is not assignable to type 'Promise<ActionExecutionResult<"test">>'.
+  Type '{ status: "success"; output: { extracted: string; }; }' is not assignable to type 'ActionExecutionResult<"test">'.
+    Types of property 'output' are incompatible.
+      Type '{ extracted: string; }' is not assignable to type 'undefined'.
+tests/record-replay-v3/v2-action-adapter.test.ts(479,62): error TS2345: Argument of type 'ActionHandler<"test">' is not assignable to parameter of type 'ActionHandler<ExecutableActionType>'.
+  Types of property 'type' are incompatible.
+    Type '"test"' is not assignable to type 'ExecutableActionType'.
+tests/record-replay-v3/v2-action-adapter.test.ts(488,21): error TS2339: Property 'outputs' does not exist on type 'NodeExecutionResult'.
+  Property 'outputs' does not exist on type '{ status: "failed"; error: RRError; }'.
+tests/record-replay-v3/v2-action-adapter.test.ts(496,62): error TS2345: Argument of type 'ActionHandler<"test">' is not assignable to parameter of type 'ActionHandler<ExecutableActionType>'.
+  Types of property 'type' are incompatible.
+    Type '"test"' is not assignable to type 'ExecutableActionType'.
+tests/record-replay-v3/v2-action-adapter.test.ts(503,21): error TS2339: Property 'outputs' does not exist on type 'NodeExecutionResult'.
+  Property 'outputs' does not exist on type '{ status: "failed"; error: RRError; }'.
+tests/record-replay-v3/v2-action-adapter.test.ts(509,36): error TS2344: Type '"test"' does not satisfy the constraint 'ExecutableActionType'.
+tests/record-replay-v3/v2-action-adapter.test.ts(515,62): error TS2345: Argument of type 'ActionHandler<"test">' is not assignable to parameter of type 'ActionHandler<ExecutableActionType>'.
+  Types of property 'type' are incompatible.
+    Type '"test"' is not assignable to type 'ExecutableActionType'.
+tests/record-replay-v3/v2-action-adapter.test.ts(522,21): error TS2339: Property 'error' does not exist on type 'NodeExecutionResult'.
+  Property 'error' does not exist on type '{ status: "succeeded"; next?: { kind: "edgeLabel"; label: string; } | { kind: "end"; } | undefined; outputs?: JsonObject | undefined; varsPatch?: VarsPatchOp[] | undefined; }'.
+tests/record-replay-v3/v2-action-adapter.test.ts(523,21): error TS2339: Property 'error' does not exist on type 'NodeExecutionResult'.
+  Property 'error' does not exist on type '{ status: "succeeded"; next?: { kind: "edgeLabel"; label: string; } | { kind: "end"; } | undefined; outputs?: JsonObject | undefined; varsPatch?: VarsPatchOp[] | undefined; }'.
+tests/record-replay-v3/v2-action-adapter.test.ts(527,36): error TS2344: Type '"test"' does not satisfy the constraint 'ExecutableActionType'.
+tests/record-replay-v3/v2-action-adapter.test.ts(533,62): error TS2345: Argument of type 'ActionHandler<"test">' is not assignable to parameter of type 'ActionHandler<ExecutableActionType>'.
+  Types of property 'type' are incompatible.
+    Type '"test"' is not assignable to type 'ExecutableActionType'.
+tests/record-replay-v3/v2-adapter-integration.test.ts(182,21): error TS2339: Property 'next' does not exist on type 'NodeExecutionResult'.
+  Property 'next' does not exist on type '{ status: "failed"; error: RRError; }'.
+tests/record-replay-v3/v2-adapter-integration.test.ts(214,21): error TS2339: Property 'next' does not exist on type 'NodeExecutionResult'.
+  Property 'next' does not exist on type '{ status: "failed"; error: RRError; }'.
+tests/record-replay-v3/v2-adapter-integration.test.ts(249,21): error TS2339: Property 'next' does not exist on type 'NodeExecutionResult'.
+  Property 'next' does not exist on type '{ status: "failed"; error: RRError; }'.
+tests/record-replay-v3/v2-adapter-integration.test.ts(299,21): error TS2339: Property 'next' does not exist on type 'NodeExecutionResult'.
+  Property 'next' does not exist on type '{ status: "failed"; error: RRError; }'.
+tests/record-replay-v3/v2-adapter-integration.test.ts(397,21): error TS2339: Property 'next' does not exist on type 'NodeExecutionResult'.
+  Property 'next' does not exist on type '{ status: "failed"; error: RRError; }'.
+tests/record-replay-v3/v2-adapter-integration.test.ts(431,21): error TS2339: Property 'next' does not exist on type 'NodeExecutionResult'.
+  Property 'next' does not exist on type '{ status: "failed"; error: RRError; }'.
+tests/record-replay-v3/v2-adapter-integration.test.ts(462,21): error TS2339: Property 'next' does not exist on type 'NodeExecutionResult'.
+  Property 'next' does not exist on type '{ status: "failed"; error: RRError; }'.
+tests/record-replay-v3/v2-adapter-integration.test.ts(505,23): error TS2339: Property 'next' does not exist on type 'NodeExecutionResult'.
+  Property 'next' does not exist on type '{ status: "failed"; error: RRError; }'.
+tests/record-replay-v3/v3-e2e-harness.ts(152,9): error TS2503: Cannot find namespace 'chrome'.
+tests/record-replay-v3/v3-e2e-harness.ts(192,61): error TS2344: Type 'TestNodeConfig' does not satisfy the constraint 'JsonObject'.
+  Index signature for type 'string' is missing in type 'TestNodeConfig'.
+tests/record-replay-v3/v3-e2e-harness.ts(244,24): error TS2345: Argument of type 'NodeDefinition<"test", TestNodeConfig>' is not assignable to parameter of type 'NodeDefinition<string, JsonObject>'.
+  The types of 'schema._type' are incompatible between these types.
+    Type 'TestNodeConfig' is not assignable to type 'JsonObject'.
+      Index signature for type 'string' is missing in type 'TestNodeConfig'.
+tests/record-replay-v3/v3-e2e-harness.ts(331,21): error TS2503: Cannot find namespace 'chrome'.
+tests/vitest.setup.ts(9,8): error TS2882: Cannot find module or type declarations for side-effect import of 'fake-indexeddb/auto'.
+tests/vitest.setup.ts(12,23): error TS7017: Element implicitly has an 'any' type because type 'typeof globalThis' has no index signature.
+tests/web-editor-v2/design-tokens.test.ts(183,58): error TS2352: Conversion of type '{ getPropertyValue: () => string; }' to type 'CSSStyleDeclaration' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Type '{ getPropertyValue: () => string; }' is missing the following properties from type 'CSSStyleDeclaration': [Symbol.iterator], accentColor, alignContent, alignItems, and 537 more.
+tests/web-editor-v2/design-tokens.test.ts(345,58): error TS2352: Conversion of type '{ getPropertyValue: () => string; }' to type 'CSSStyleDeclaration' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Type '{ getPropertyValue: () => string; }' is missing the following properties from type 'CSSStyleDeclaration': [Symbol.iterator], accentColor, alignContent, alignItems, and 537 more.
+tests/web-editor-v2/event-controller.test.ts(15,8): error TS2305: Module '"@/entrypoints/web-editor-v2/core/event-controller"' has no exported member 'Modifiers'.
+tests/web-editor-v2/event-controller.test.ts(116,7): error TS2353: Object literal may only specify known properties, and 'isEditorUiElement' does not exist in type 'EventControllerOptions'.
+tests/web-editor-v2/event-controller.test.ts(162,7): error TS2353: Object literal may only specify known properties, and 'isEditorUiElement' does not exist in type 'EventControllerOptions'.
+tests/web-editor-v2/event-controller.test.ts(209,7): error TS2353: Object literal may only specify known properties, and 'isEditorUiElement' does not exist in type 'EventControllerOptions'.
+tests/web-editor-v2/property-panel-live-sync.test.ts(157,7): error TS2349: This expression is not callable.
+  Type 'never' has no call signatures.
+utils/cdp-session-manager.ts(33,27): error TS2304: Cannot find name 'chrome'.
+utils/cdp-session-manager.ts(34,36): error TS7006: Parameter 't' implicitly has an 'any' type.
+utils/cdp-session-manager.ts(36,36): error TS2304: Cannot find name 'chrome'.
+utils/cdp-session-manager.ts(52,11): error TS2304: Cannot find name 'chrome'.
+utils/cdp-session-manager.ts(72,15): error TS2304: Cannot find name 'chrome'.
+utils/cdp-session-manager.ts(100,21): error TS2304: Cannot find name 'chrome'.
+utils/cdp-session-manager.ts(104,21): error TS2304: Cannot find name 'chrome'.
+utils/content-indexer.ts(48,28): error TS2304: Cannot find name 'chrome'.
+utils/content-indexer.ts(144,25): error TS2304: Cannot find name 'chrome'.
+utils/content-indexer.ts(289,53): error TS2307: Cannot find module '@/entrypoints/background/semantic-similarity' or its corresponding type declarations.
+utils/content-indexer.ts(385,15): error TS2304: Cannot find name 'chrome'.
+utils/content-indexer.ts(501,5): error TS2304: Cannot find name 'chrome'.
+utils/content-indexer.ts(501,46): error TS7006: Parameter 'tabId' implicitly has an 'any' type.
+utils/content-indexer.ts(501,53): error TS7006: Parameter 'changeInfo' implicitly has an 'any' type.
+utils/content-indexer.ts(501,65): error TS7006: Parameter 'tab' implicitly has an 'any' type.
+utils/content-indexer.ts(518,5): error TS2304: Cannot find name 'chrome'.
+utils/content-indexer.ts(518,46): error TS7006: Parameter 'tabId' implicitly has an 'any' type.
+utils/content-indexer.ts(522,9): error TS2304: Cannot find name 'chrome'.
+utils/content-indexer.ts(523,7): error TS2304: Cannot find name 'chrome'.
+utils/content-indexer.ts(523,59): error TS7006: Parameter 'details' implicitly has an 'any' type.
+utils/content-indexer.ts(548,13): error TS2304: Cannot find name 'chrome'.
+utils/content-indexer.ts(553,30): error TS2304: Cannot find name 'chrome'.
+utils/i18n.ts(177,16): error TS2304: Cannot find name 'chrome'.
+utils/i18n.ts(177,42): error TS2304: Cannot find name 'chrome'.
+utils/i18n.ts(177,57): error TS2304: Cannot find name 'chrome'.
+utils/i18n.ts(178,23): error TS2304: Cannot find name 'chrome'.
+utils/i18n.ts(194,14): error TS2304: Cannot find name 'chrome'.
+utils/i18n.ts(194,40): error TS2304: Cannot find name 'chrome'.
+utils/i18n.ts(194,62): error TS2304: Cannot find name 'chrome'.
+utils/offscreen-manager.ts(46,12): error TS2304: Cannot find name 'chrome'.
+utils/offscreen-manager.ts(50,39): error TS2304: Cannot find name 'chrome'.
+utils/offscreen-manager.ts(60,13): error TS2304: Cannot find name 'chrome'.
+utils/offscreen-manager.ts(87,11): error TS2304: Cannot find name 'chrome'.
+utils/offscreen-manager.ts(88,15): error TS2304: Cannot find name 'chrome'.
+utils/semantic-similarity-engine.ts(1,55): error TS2307: Cannot find module '@xenova/transformers' or its corresponding type declarations.
+utils/semantic-similarity-engine.ts(2,72): error TS2307: Cannot find module '@xenova/transformers' or its corresponding type declarations.
+utils/semantic-similarity-engine.ts(110,26): error TS2304: Cannot find name 'chrome'.
+utils/semantic-similarity-engine.ts(508,30): error TS2304: Cannot find name 'chrome'.
+utils/semantic-similarity-engine.ts(548,32): error TS2304: Cannot find name 'chrome'.
+utils/semantic-similarity-engine.ts(581,32): error TS2304: Cannot find name 'chrome'.
+utils/semantic-similarity-engine.ts(595,39): error TS2304: Cannot find name 'chrome'.
+utils/semantic-similarity-engine.ts(618,41): error TS2304: Cannot find name 'chrome'.
+utils/semantic-similarity-engine.ts(992,25): error TS2304: Cannot find name 'chrome'.
+utils/semantic-similarity-engine.ts(1173,32): error TS2304: Cannot find name 'chrome'.
+utils/semantic-similarity-engine.ts(1288,32): error TS2304: Cannot find name 'chrome'.
+utils/semantic-similarity-engine.ts(1349,42): error TS2304: Cannot find name 'chrome'.
+utils/semantic-similarity-engine.ts(1520,38): error TS2304: Cannot find name 'chrome'.
+utils/semantic-similarity-engine.ts(1799,30): error TS2304: Cannot find name 'chrome'.
+utils/semantic-similarity-engine.ts(1917,30): error TS2304: Cannot find name 'chrome'.
+utils/semantic-similarity-engine.ts(2063,30): error TS2304: Cannot find name 'chrome'.
+utils/simd-math-engine.ts(49,23): error TS2304: Cannot find name 'chrome'.
+utils/vector-database.ts(7,29): error TS2307: Cannot find module 'hnswlib-wasm-static' or its corresponding type declarations.
+utils/vector-database.ts(902,17): error TS2304: Cannot find name 'chrome'.
+utils/vector-database.ts(1168,17): error TS2304: Cannot find name 'chrome'.
+utils/vector-database.ts(1208,32): error TS2304: Cannot find name 'chrome'.
+utils/vector-database.ts(1424,15): error TS2304: Cannot find name 'chrome'.
+utils/vector-database.ts(1548,13): error TS2304: Cannot find name 'chrome'.
+/home/runner/work/Brauzio/Brauzio/app/chrome-extension:
+ ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL  brauzio-extension@1.1.0 compile: `vue-tsc --noEmit`
+Exit status 2
+EXIT_CODE=2
+FAILED_STEP=pnpm
