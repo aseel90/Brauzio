@@ -29,12 +29,12 @@ jobs:
             --exclude-dir=node_modules \
             --exclude-dir=.output \
             --exclude='*.map' \
-            '127\.0\.0\.1|localhost|nativeServerPort|NATIVE_HOST|NATIVE_SERVER_PORT|NativeMessageType|connectNative|ENSURE_NATIVE|mcp-chrome-bridge' \
+            '127\.0\.0\.1|localhost|12306|Default Popup Title|Native Server|native server|nativeServerPort|NATIVE_HOST|NATIVE_SERVER_PORT|NativeMessageType|connectNative|ENSURE_NATIVE|mcp-chrome-bridge' \
             app/chrome-extension; then
-            echo 'Legacy localhost/native bridge references remain in the Brauzio extension.' >&2
+            echo 'Legacy local/native/branding references remain in the Brauzio extension.' >&2
             exit 1
           fi
-          echo 'Brauzio extension is cloud-only: no localhost/native bridge references found.'
+          echo 'Brauzio extension is cloud-only and clean of legacy bridge branding.'
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -71,11 +71,19 @@ jobs:
           cd app/chrome-extension/.output/chrome-mv3
           zip -qr ../brauzio-chrome.zip .
 
-      - name: Show generated package
+      - name: Verify packaged extension
         shell: bash
         run: |
-          ls -lh app/chrome-extension/.output/brauzio-chrome.zip
-          unzip -t app/chrome-extension/.output/brauzio-chrome.zip >/dev/null
+          set -euo pipefail
+          ZIP=app/chrome-extension/.output/brauzio-chrome.zip
+          ls -lh "$ZIP"
+          unzip -t "$ZIP" >/dev/null
+          unzip -p "$ZIP" manifest.json | grep -Fq '"default_locale": "ar"'
+          unzip -p "$ZIP" manifest.json | grep -Fq '"default_title": "Brauzio"'
+          if unzip -l "$ZIP" | grep -Eq '_locales/(zh_CN|zh_TW)/'; then
+            echo 'Chinese locale directory unexpectedly present in package.' >&2
+            exit 1
+          fi
 
       - name: Upload installable Brauzio ZIP
         uses: actions/upload-artifact@v4
