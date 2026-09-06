@@ -58,3 +58,5 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git commit -m "feat: Arabicize and brand extension as Brauzio"
           git push origin HEAD:main
+
+# trigger phase 1
