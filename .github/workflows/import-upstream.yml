@@ -28,8 +28,7 @@ jobs:
           git clone --depth=1 https://github.com/hangwin/mcp-chrome.git /tmp/mcp-chrome
 
           find . -mindepth 1 -maxdepth 1 ! -name .git -exec rm -rf {} +
-          cp -a /tmp/mcp-chrome/. .
-          rm -rf .git
+          rsync -a --exclude='.git' /tmp/mcp-chrome/ ./
 
           mkdir -p .github/workflows
           cp /tmp/import-upstream.yml "$WORKFLOW_FILE"
@@ -45,4 +44,4 @@ jobs:
           git commit -m "chore: import hangwin/mcp-chrome upstream"
           git push origin HEAD:main
 
-# Brauzio bootstrap trigger
+# Brauzio bootstrap trigger v2
