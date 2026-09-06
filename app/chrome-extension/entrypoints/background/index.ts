@@ -1,4 +1,5 @@
 import { initRemoteRelayListener } from './remote-relay';
+import { initMouseHoldSafetyListeners } from '@/utils/mouse-hold-safety';
 
 /**
  * Brauzio background entry point.
@@ -13,5 +14,6 @@ export default defineBackground(() => {
     }
   });
 
+  initMouseHoldSafetyListeners();
   initRemoteRelayListener();
 });
