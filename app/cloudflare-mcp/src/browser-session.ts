@@ -11,6 +11,11 @@ interface SocketAttachment {
   connectedAt: number;
 }
 
+interface PairingRecord {
+  code: string;
+  expiresAt: number;
+}
+
 interface PendingCall {
   resolve: (response: Response) => void;
   timer: ReturnType<typeof setTimeout>;
@@ -29,9 +34,24 @@ interface ToolResultMessage {
   error?: string;
 }
 
+const PAIRING_STORAGE_KEY = 'oauth-pairing-v1';
+const PAIRING_TTL_MS = 5 * 60 * 1000;
+const PAIRING_ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+
 function normalizeDeviceId(value: unknown): string {
   const normalized = String(value || 'default').trim().slice(0, 128);
   return normalized || 'default';
+}
+
+function normalizePairingCode(value: unknown): string {
+  return String(value || '').toUpperCase().replace(/[^A-Z2-9]/g, '').slice(0, 8);
+}
+
+function createPairingCode(): string {
+  const bytes = new Uint8Array(8);
+  crypto.getRandomValues(bytes);
+  const raw = Array.from(bytes, (value) => PAIRING_ALPHABET[value % PAIRING_ALPHABET.length]).join('');
+  return `${raw.slice(0, 4)}-${raw.slice(4)}`;
 }
 
 function validTraceId(value: unknown): string | null {
@@ -76,6 +96,28 @@ export class BrowserSession extends DurableObject<Env> {
     if (url.pathname === '/status') {
       const sockets = this.authenticatedSockets();
       return Response.json({ connected: sockets.length > 0, connections: sockets.length });
+    }
+
+    if (url.pathname === '/pairing/consume' && request.method === 'POST') {
+      if (this.authenticatedSockets().length === 0) {
+        return Response.json({ error: 'Brauzio extension is not connected' }, { status: 409 });
+      }
+
+      const body = (await request.json().catch(() => ({}))) as { code?: string };
+      const suppliedCode = normalizePairingCode(body.code);
+      const record = await this.ctx.storage.get<PairingRecord>(PAIRING_STORAGE_KEY);
+
+      if (!record || record.expiresAt <= Date.now() || suppliedCode !== normalizePairingCode(record.code)) {
+        if (record?.expiresAt && record.expiresAt <= Date.now()) {
+          await this.ctx.storage.delete(PAIRING_STORAGE_KEY);
+        }
+        sessionLog('PAIRING_REJECTED');
+        return Response.json({ error: 'Invalid or expired pairing code' }, { status: 401 });
+      }
+
+      await this.ctx.storage.delete(PAIRING_STORAGE_KEY);
+      sessionLog('PAIRING_CONSUMED', { expiresAt: record.expiresAt });
+      return Response.json({ ok: true });
     }
 
     if (url.pathname === '/call' && request.method === 'POST') {
@@ -208,6 +250,15 @@ export class BrowserSession extends DurableObject<Env> {
     if (!attachment.authenticated) {
       ws.send(JSON.stringify({ type: 'error', message: 'Authenticate first' }));
       ws.close(1008, 'Authentication required');
+      return;
+    }
+
+    if (payload.type === 'pairing_create') {
+      const code = createPairingCode();
+      const expiresAt = Date.now() + PAIRING_TTL_MS;
+      await this.ctx.storage.put(PAIRING_STORAGE_KEY, { code, expiresAt } satisfies PairingRecord);
+      sessionLog('PAIRING_CREATED', { deviceId: attachment.deviceId, expiresAt });
+      ws.send(JSON.stringify({ type: 'pairing_code', code, expiresAt, deviceId: attachment.deviceId }));
       return;
     }
 
