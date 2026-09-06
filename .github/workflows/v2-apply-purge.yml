@@ -8,6 +8,8 @@ on:
 
 permissions:
   contents: write
+  issues: write
+  pull-requests: write
 
 jobs:
   purge-and-verify:
@@ -100,17 +102,46 @@ jobs:
           echo "BUILD_EXIT_CODE=$CODE" >> PURGE_RESULT.txt
           exit 0
 
-      - name: Persist purge and diagnostics
+      - name: Try to persist purge
         if: always()
         shell: bash
         run: |
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add -A
-          if ! git diff --cached --quiet; then
+          set +e
+          {
+            echo '===== git status before commit ====='
+            git status --short
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git add -A
+            echo '===== staged diff summary ====='
+            git diff --cached --stat
             git commit -m 'cleanup: persist Brauzio V2 purge diagnostics [skip ci]'
+            echo "COMMIT_EXIT_CODE=$?"
             git push origin HEAD:v2-ci-probe
-          fi
+            echo "PUSH_EXIT_CODE=$?"
+          } > PERSIST_RESULT.txt 2>&1
+          exit 0
+
+      - name: Publish diagnostics to PR
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          {
+            echo '## Brauzio V2 purge diagnostic'
+            echo
+            echo '### Compile / build'
+            echo '```text'
+            tail -n 180 PURGE_RESULT.txt 2>/dev/null || true
+            echo '```'
+            echo
+            echo '### Persist attempt'
+            echo '```text'
+            cat PERSIST_RESULT.txt 2>/dev/null || true
+            echo '```'
+          } > PR_DIAGNOSTIC.md
+          gh pr comment 1 --repo aseel90/Brauzio --body-file PR_DIAGNOSTIC.md
 
       - name: Fail when verification failed
         if: steps.compile.outputs.compile_code != '0' || (steps.build.outcome == 'success' && steps.build.outputs.build_code != '0')
