@@ -1,23 +1,23 @@
 # Brauzio Development Roadmap
 
-هذه الوثيقة هي خريطة التطوير الرسمية لـBrauzio بعد تثبيت نواة V2 وتنظيف المشروع من أنظمة المنتج القديم.
+هذه الوثيقة هي خريطة التطوير الرسمية لـBrauzio.
 
 ## الهدف
 
-الانتقال من MCP يتحكم في Chrome إلى منصة Browser Agent حقيقية، مع الحفاظ على المبادئ التالية:
+تحويل Brauzio من MCP يتحكم في Chrome إلى Browser Agent سحابي متكامل مع الحفاظ على المسار:
 
-- لا Python أو Node أو Native Host مطلوب من المستخدم النهائي.
-- الاتصال الأساسي يبقى: ChatGPT → Cloudflare → Brauzio Extension → Chrome.
+```text
+ChatGPT → Cloudflare → Brauzio Extension → Chrome
+```
+
+المبادئ الثابتة:
+
+- لا Node أو Python أو Native Host مطلوب من المستخدم النهائي.
+- تفضيل أدوات عالية المستوى سهلة للنموذج، مع Raw CDP للحالات المتقدمة فقط.
+- كل عملية مهمة يجب أن تكون قابلة للمراقبة والتحقق والتشخيص.
 - عدم تضخيم عدد أدوات MCP بدون حاجة.
-- تفضيل أدوات عالية المستوى سهلة للنموذج، مع طبقة CDP متقدمة عند الحاجة.
-- كل عملية مهمة يجب أن تكون قابلة للمراقبة والتحقق والتتبع.
-- الإنسان يظل قادرًا على رؤية تحكم الوكيل والتدخل فورًا.
-
-## مرجع الدراسة
-
-تمت دراسة مشروع `captivus/chrome-agent` كمرجع هندسي لأفكار CDP، الجلسات المعزولة، Event-driven automation، التعاون بين الإنسان والوكيل، ونمط Sense → Act → Verify.
-
-Brauzio لن ينسخ معمارية chrome-agent المحلية. سنأخذ الأفكار التي تناسب منتجنا السحابي فقط.
+- الإنسان يستطيع رؤية التحكم والتدخل وإيقاف الوكيل.
+- لا نعتبر مرحلة مكتملة قبل نجاح الكود والبناء والاختبارات المطلوبة لها.
 
 ---
 
@@ -25,25 +25,30 @@ Brauzio لن ينسخ معمارية chrome-agent المحلية. سنأخذ ا�
 
 الأولوية: P0
 
-- [x] إعادة بناء UI خاصة بـBrauzio.
-- [x] إزالة Record/Replay وWorkflow Builder وAgent Chat وQuick Panel وWeb Editor وLocal AI/Vector والـNative Host القديم.
+## مكتمل في المصدر
+
+- [x] UI خاصة بـBrauzio وتنظيف Runtime المنتج القديم.
 - [x] اتصال ChatGPT → Cloudflare → Extension → Chrome.
-- [x] إضافة Virtual Cursor مرئي.
-- [x] إضافة `mouse_move` و`mouse_down` و`mouse_up` و`drag_hold`.
-- [x] توحيد traceId عبر Worker → Durable Object → Extension.
-- [x] استبدال MCP `?key=` بـOAuth 2.1 + Pairing Code مؤقت، وفصل Device Token عن MCP auth.
-- [x] فحص ZIP النهائي والتأكد من عدم وجود Runtime قديم.
+- [x] OAuth 2.1 + Pairing Code وفصل Device Token عن MCP auth.
+- [x] Virtual Cursor مرئي.
+- [x] `mouse_move`, `mouse_down`, `mouse_up`, `drag_hold`.
+- [x] traceId عبر Worker → Durable Object → Extension لمسار الأدوات الحالي.
+- [x] emergency mouse release عند Relay disconnect/error، navigation، tab close، ومحاولة suspend.
+- [x] تنظيف CDP bookkeeping عند debugger detach أو tab close.
+- [x] ZIP يبنى وينشر تلقائيًا عبر GitHub Actions.
+
+## ما يزال يحتاج اختبارًا على ZIP النهائي
+
 - [ ] تثبيت آخر ZIP على جهاز الاختبار.
-- [x] إضافة emergency mouse release داخلي عند Relay disconnect/error، tab close، navigation، وتعليق Service Worker.
-- [x] تنظيف CDP session bookkeeping تلقائيًا عند debugger detach أو إغلاق التبويب.
-- [ ] اختبار Virtual Mouse فعليًا على Wreckmarch وCanvas وDrag & Drop وsliders على ZIP 2.1.1.
-- [ ] اختبار release آمن لأي Mouse Down عالق عند disconnect أو tab close أو navigation على ZIP 2.1.1.
+- [ ] اختبار Virtual Mouse على Wreckmarch وCanvas وDrag & Drop وsliders.
+- [ ] اختبار `mouse_down` ثم Relay disconnect والتأكد من release.
+- [ ] اختبار `mouse_down` ثم navigation/tab close والتأكد من عدم بقاء state أو debugger session عالقة.
 
 معيار الإكمال:
 
-- نجاح joystick في Wreckmarch بحركة ناتجة من الماوس نفسه وليس knockback.
+- joystick في Wreckmarch يتحرك من mouse input نفسه.
 - `mouse_up` يعيد الحالة دائمًا إلى released.
-- لا يبقى debugger session أو mouse hold عالقًا بعد أي فشل.
+- لا يوجد mouse hold أو debugger ownership leak بعد الفشل.
 
 ---
 
@@ -51,9 +56,7 @@ Brauzio لن ينسخ معمارية chrome-agent المحلية. سنأخذ ا�
 
 الأولوية: P0
 
-إعادة تصميم طبقة CDP الحالية لتصبح Session Router حقيقية بدل attachment واحد بسيط لكل tab.
-
-المكونات المخطط لها:
+الهدف: Session Router حقيقية بدل attachment بسيط لكل tab.
 
 ```text
 CDPRouter
@@ -61,29 +64,35 @@ CDPRouter
  ├── Child sessions
  ├── Session ownership
  ├── Event routing
- ├── reconnect / recovery
- └── emergency input release
+ ├── recovery
+ └── emergency input cleanup
 ```
 
-المهام:
+## مكتمل
 
-- [ ] إنشاء `CDPRouter` جديد فوق `chrome.debugger`.
-- [ ] دعم session ownership لكل أداة أو مراقب.
-- [ ] دعم child sessions عندما يسمح Chrome بذلك.
-- [ ] إضافة API داخلي مثل:
-  - `attach(tabId, owner)`
-  - `createChildSession(tabId, owner)`
-  - `send(sessionId, method, params)`
-  - `detach(sessionId)`
-- [ ] عزل Network / Performance / Input / Console قدر الإمكان.
-- [ ] إضافة emergency release للماوس والكيبورد عند الخطأ.
-- [ ] استعادة attachment بعد disconnect غير المتوقع.
+- [x] إنشاء `CDPRouter` فوق `chrome.debugger`.
+- [x] ownership بعدّادات مستقلة لكل owner بدل `Set + refCount` غير الدقيق.
+- [x] منع owner غير مسجل من إنقاص ملكية session تخص أداة أخرى.
+- [x] Root APIs: `attach`, `detach`, `sendCommand`, `withSession`, `forceDetach`, `getSessionSnapshot`.
+- [x] event routing داخلي عبر `chrome.debugger.onEvent`.
+- [x] lazy recovery عند فقد root debugger attachment.
+- [x] Child CDP Sessions عبر `Target.attachToTarget(..., flatten: true)`.
+- [x] Child APIs: `createChildSession`, `sendToChild`, `detachChildSession`, `getChildSessionSnapshot`.
+- [x] ownership وتنظيف مستقل للـchild sessions.
+- [x] compatibility layer باسم `cdpSessionManager` حتى تعمل الأدوات الحالية فوق V3 بدون إعادة كتابة جماعية.
+- [x] emergency mouse release مربوط بمسار الأخطاء والانقطاع.
+
+## متبقٍ
+
+- [ ] نقل Network / Performance / Console إلى child sessions عندما يعطي ذلك عزلًا حقيقيًا.
+- [ ] إضافة keyboard-held state وemergency key release عندما ندعم key-down/key-up المستمر.
+- [ ] اختبارات E2E لتعدد owners وchild lifecycle والفشل أثناء الاستخدام.
 
 معيار الإكمال:
 
-- أكثر من مراقب يستطيع قراءة نفس tab بدون تداخل في الأحداث.
-- فشل أداة لا يفصل sessions الخاصة بالأدوات الأخرى.
-- لا يوجد debugger ownership leak.
+- أكثر من مراقب يستطيع استخدام tab نفسه دون أن يفصل أحدهم session الآخر.
+- فشل أداة لا يفصل أدوات أخرى.
+- لا يوجد root أو child debugger ownership leak.
 
 ---
 
@@ -91,11 +100,9 @@ CDPRouter
 
 الأولوية: P0
 
-هذه أهم خطوة بعد CDP Core.
+الهدف: استبدال `sleep` الثابت بمراقبة أحداث Chrome الحقيقية.
 
-الهدف هو استبدال الانتظار الثابت بنظام يعتمد على أحداث Chrome الحقيقية.
-
-أدوات MCP المخطط لها:
+أدوات MCP:
 
 ```text
 chrome_watch_start
@@ -104,40 +111,42 @@ chrome_watch_read
 chrome_watch_stop
 ```
 
-الأحداث الأولى المستهدفة:
+## مكتمل في Extension
 
-- `Page.frameNavigated`
-- `Page.loadEventFired`
-- `Runtime.exceptionThrown`
-- `Network.requestWillBeSent`
-- `Network.responseReceived`
-- `Network.loadingFinished`
-- `Network.loadingFailed`
-- Dialog / Download events المناسبة والمتاحة.
+- [x] Event Router مبني فوق `CDPRouter.subscribeEvents`.
+- [x] الأدوات الأربع موجودة في Shared MCP schema وExtension dispatcher.
+- [x] دعم أولي لأحداث Navigation / Network / Runtime errors / Log / Dialog / Lifecycle.
+- [x] Filtering حسب categories وCDP methods و`urlIncludes`.
+- [x] local ring buffer لكل Watch.
+- [x] sequence number متزايد لكل event.
+- [x] timestamp + tabId + sessionId/watchId.
+- [x] `watch_wait` يعيد event موجود مسبقًا فورًا، فلا تضيع الأحداث التي حدثت قبل wait.
+- [x] حدود للذاكرة: 20 Watch، وحجم buffer افتراضي 100 وأقصى 500.
+- [x] TTL وحد أقصى للانتظار.
+- [x] stop/cancel يحل waiters المعلقة ويحرر CDP ownership.
+- [x] cleanup للـWatches عند tab close أو Relay disconnect/error.
+- [x] summaries آمنة للشبكة لا تسجل cookies أو auth headers أو tokens.
+- [x] تجاهل الأحداث عالية التردد افتراضيًا ما لم تكن مطلوبة صراحة.
 
-المهام:
+## متبقٍ قبل إغلاق المرحلة
 
-- [ ] Event Router داخل Extension.
-- [ ] Filtering قبل رفع الأحداث إلى Cloudflare.
-- [ ] Ring Buffer قصير لكل Watch داخل Durable Object.
-- [ ] sequence number لكل event.
-- [ ] timestamp + tabId + sessionId/watchId + traceId.
-- [ ] backpressure وحد أقصى للذاكرة.
-- [ ] تجاهل الأحداث عالية التردد افتراضيًا مثل mousemove.
-- [ ] timeout وcancel لكل watch.
+- [ ] Durable Object ring buffer أو مزامنة event state مع Cloudflare كي لا تضيع الحالة عند Service Worker restart/suspend.
+- [ ] ربط traceId الكامل بسياق Watch وكل event.
+- [ ] download events ضمن Event Engine الموحد.
+- [ ] اختبار Watch فعليًا على ZIP المثبت: start → action → navigation/network event → wait/read → stop.
+- [ ] اختبار race: وصول event قبل `watch_wait`.
 
 معيار الإكمال:
 
-- يمكن بدء Watch قبل النقر ثم انتظار navigation/network event بدون sleep ثابت.
-- إذا وصل الحدث قبل `watch_wait` يبقى موجودًا في buffer ولا يضيع.
+- يمكن بدء Watch قبل النقر وانتظار navigation/network بدون sleep ثابت.
+- event الذي يصل قبل `watch_wait` يبقى قابلًا للقراءة.
+- Restart/Suspend لا يفقد الأحداث المهمة بعد إضافة Cloud persistence.
 
 ---
 
 # المرحلة 3 — Smart Wait
 
 الأولوية: P0
-
-تطوير `wait` الحالي إلى شروط حقيقية.
 
 الشروط المخطط لها:
 
@@ -153,9 +162,7 @@ chrome_watch_stop
 - [ ] `console_error`
 - [ ] `dialog_opened`
 
-المبدأ:
-
-لا نستخدم `sleep 5s` إذا كان Chrome يستطيع إخبارنا بأن الحالة المطلوبة تحققت بعد 280ms.
+المبدأ: إذا تحقق الشرط بعد 280ms فلا ننتظر 5 ثوانٍ.
 
 ---
 
@@ -163,36 +170,17 @@ chrome_watch_stop
 
 الأولوية: P1
 
-إضافة أداة متقدمة واحدة بدل عشرات أدوات MCP الجديدة:
+أداة واحدة متقدمة:
 
 ```text
 chrome_cdp
 ```
 
-مثال داخلي:
-
-```json
-{
-  "method": "DOM.getDocument",
-  "params": {
-    "depth": -1,
-    "pierce": true
-  }
-}
-```
-
-المهام:
-
-- [ ] allowlist للـDomains المسموحة والآمنة.
-- [ ] validation لاسم method وparams.
-- [ ] منع الأوامر غير المتاحة عبر `chrome.debugger`.
+- [ ] allowlist للـDomains الآمنة.
+- [ ] validation للـmethod والparams.
 - [ ] حدود output وحماية من payloads كبيرة.
-- [ ] logging بالـtraceId بدون أسرار.
-- [ ] إبقاء الأداة في Advanced Mode وعدم استخدامها للنقرات اليومية البسيطة.
-
-الهدف:
-
-الحفاظ على حوالي 30 أداة عالية الجودة بدل زيادة Brauzio إلى 70–100 أداة ثابتة.
+- [ ] trace logging بدون أسرار.
+- [ ] Advanced Mode فقط؛ لا تستخدم بدل الأدوات اليومية البسيطة.
 
 ---
 
@@ -200,19 +188,14 @@ chrome_cdp
 
 الأولوية: P2
 
-المخطط:
-
 ```text
 chrome_cdp_capabilities
 chrome_cdp_describe
 ```
 
-المهام:
-
-- [ ] اختبار `Schema.getDomains` عبر `chrome.debugger`.
-- [ ] إذا لم يكن متاحًا، توليد DevTools Protocol schema داخل CI.
-- [ ] ربط schema بإصدار Chrome قدر الإمكان.
-- [ ] إرجاع method description + params + return shape للنموذج.
+- [ ] تجربة `Schema.getDomains` حيث يكون متاحًا.
+- [ ] fallback إلى DevTools Protocol schema مولدة في CI.
+- [ ] ربط الإمكانات بإصدار Chrome قدر الإمكان.
 
 ---
 
@@ -220,60 +203,39 @@ chrome_cdp_describe
 
 الأولوية: P1
 
-لا نعتبر نجاح dispatch دليلاً على أن هدف المستخدم تحقق.
-
-أمثلة verification المخطط لها:
+لا نعتبر dispatch ناجحًا دليلًا أن هدف المستخدم تحقق.
 
 ```text
 click
  → URL changed
  → expected text appeared
- → POST /api/order observed
+ → expected network request observed
 ```
 
-المهام:
-
-- [ ] verification اختياري داخل `chrome_computer`.
-- [ ] URL change verification.
+- [ ] URL verification.
 - [ ] DOM/text verification.
 - [ ] Network verification.
 - [ ] Console verification.
-- [ ] نتيجة واحدة توضح Action + Evidence.
-
-هذا يمنع الاستنتاجات الخاطئة مثل اعتبار حركة ناتجة عن enemy knockback دليلًا على نجاح joystick input.
+- [ ] نتيجة موحدة: Action + Evidence.
 
 ---
 
-# المرحلة 7 — Human Takeover
+# المرحلة 7 — Human Takeover + Emergency Stop
 
 الأولوية: P1
 
-Brauzio يجب أن يعرف عندما يبدأ الإنسان باستخدام المتصفح أثناء عمل Agent.
-
-الأحداث المستهدفة:
-
-- `pointerdown`
-- `click`
-- `keydown`
-- `scroll`
-- `selectionchange`
-
-السلوك:
-
 ```text
 Human input detected
- → release held mouse/button
+ → release held input
  → pause agent input
- → update popup state
+ → update UI
  → notify Cloudflare
 ```
 
-المهام:
-
-- [ ] تمييز Agent-generated input عن Human input باستخدام التوقيت/الإحداثيات وحالة الأوامر المرسلة.
-- [ ] عدم الاعتماد على `isTrusted` وحده.
+- [ ] مراقبة pointer/click/keyboard/scroll/selection.
+- [ ] تمييز Human input عن Agent-generated input بدون الاعتماد على `isTrusted` وحده.
+- [ ] زر Emergency Stop.
 - [ ] زر "استئناف تحكم ChatGPT".
-- [ ] زر Emergency Stop واضح في Popup.
 
 ---
 
@@ -281,25 +243,15 @@ Human input detected
 
 الأولوية: P1
 
-الهدف: أكثر من عميل أو Agent يستطيع المراقبة، لكن Actor واحد فقط يملك حق التغيير في اللحظة نفسها.
-
-الأدوار:
-
 ```text
-Actor
-  click / type / navigate / drag
-
-Observer
-  DOM / Network / Console / Screenshot / Performance
+Actor   = click / type / navigate / drag
+Observer = DOM / Network / Console / Screenshot / Performance
 ```
 
-المهام:
-
 - [ ] Actor Lease داخل Durable Object.
-- [ ] lease timeout وتجديد آمن.
-- [ ] Observer sessions متعددة.
-- [ ] منع Agentين من النقر أو التنقل في نفس الوقت.
-- [ ] إظهار actor الحالي في Diagnostics.
+- [ ] lease timeout وتجديد.
+- [ ] عدة Observer sessions.
+- [ ] منع Agentين من التغيير في الوقت نفسه.
 
 ---
 
@@ -307,40 +259,34 @@ Observer
 
 الأولوية: P1
 
-إضافة صفحة تشخيص وزر "فحص Brauzio".
-
-الاختبارات:
+زر "فحص Brauzio" يجب أن يعرض على الأقل:
 
 ```text
-Cloudflare             ✅
-WebSocket              ✅
-Authentication         ✅
-Extension              ✅
-Chrome debugger        ✅
-CDP Runtime            ✅
-Child session          ✅
-Event Engine           ✅
-Input                  ✅
-Tool schema            ✅
-Latency                86 ms
+Cloudflare       ✅
+WebSocket        ✅
+Authentication   ✅
+Extension        ✅
+Chrome debugger  ✅
+CDP Core         ✅
+Child session    ✅
+Event Engine     ✅
+Input            ✅
+Latency          86 ms
 ```
 
-المهام:
-
-- [ ] آخر Tool call.
-- [ ] آخر Trace ID.
+- [ ] آخر Tool call وTrace ID.
 - [ ] latency لكل طبقة.
 - [ ] reconnect count.
+- [ ] CDP root/child ownership snapshots.
+- [ ] active watches.
 - [ ] آخر خطأ قابل للنسخ.
-- [ ] زر "نسخ تقرير التشخيص" بدون Tokens أو Secrets.
+- [ ] تقرير تشخيص بدون Tokens أو Secrets.
 
 ---
 
 # المرحلة 10 — Virtual Cursor UX
 
 الأولوية: P2
-
-الحالات المخطط لها:
 
 ```text
 B      MOVE
@@ -350,13 +296,11 @@ B→     DRAG
 B⌨     TYPE
 ```
 
-المهام:
-
-- [ ] toggle لإظهار/إخفاء المؤشر.
-- [ ] smooth interpolation.
-- [ ] حالة pressed/drag/type واضحة.
+- [ ] toggle إظهار/إخفاء.
+- [ ] حالات pressed/drag/type أوضح.
 - [ ] label اختياري `Brauzio — ChatGPT`.
-- [ ] عدم إعاقة الصفحة: `pointer-events: none` دائمًا.
+- [x] `pointer-events: none` للمؤشر.
+- [x] smooth visual movement أولي.
 
 ---
 
@@ -364,60 +308,57 @@ B⌨     TYPE
 
 الأولوية: P2
 
-- [ ] أسماء أجهزة بدل الاعتماد على `default` فقط.
-- [ ] حالة Online / Offline لكل جهاز.
-- [ ] Device Token rotation.
-- [ ] revoke token.
+- [ ] أسماء أجهزة بدل `default` فقط.
+- [ ] Online / Offline لكل جهاز.
+- [ ] Device Token rotation/revoke.
 - [ ] منع session collision.
-- [ ] إظهار الإصدار وschemaVersion لكل جهاز.
+- [ ] إظهار extensionVersion وschemaVersion لكل جهاز.
 
 ---
 
-# المرحلة 12 — Automated Regression Suite
+# المرحلة 12 — Automated Regression / E2E
 
 الأولوية: مستمرة
 
-الاختبارات المطلوبة:
-
-- [ ] Mouse hold / move / release.
+- [ ] Mouse hold/move/release.
 - [ ] reconnect أثناء Mouse Down.
-- [ ] tab close أثناء drag.
-- [ ] navigation أثناء held input.
+- [ ] tab close/navigation أثناء held input.
+- [ ] root ownership counters.
 - [ ] child session lifecycle.
 - [ ] Event buffer race conditions.
+- [ ] Event cleanup عند Relay disconnect.
 - [ ] Smart Wait timeout/cancel.
 - [ ] Raw CDP validation.
-- [ ] Human Takeover detection.
+- [ ] Human Takeover.
 - [ ] Actor lease conflicts.
-- [ ] schema compatibility.
 - [ ] packaged ZIP legacy-residue scan.
 - [ ] secret scanning.
 
 ---
 
-# ترتيب التنفيذ
+# ترتيب التنفيذ الحالي
 
-| # | المرحلة | الأولوية |
-|---:|---|---|
-| 1 | اختبار واعتماد Virtual Mouse V2 | P0 |
-| 2 | CDP Core V3 | P0 |
-| 3 | Event Engine | P0 |
-| 4 | Smart Wait | P0 |
-| 5 | Raw `chrome_cdp` | P1 |
-| 6 | Sense → Act → Verify | P1 |
-| 7 | Human Takeover + Emergency Stop | P1 |
-| 8 | Actor / Observer Sessions | P1 |
-| 9 | Diagnostics + Self Test | P1 |
-| 10 | CDP Capability Discovery | P2 |
-| 11 | Virtual Cursor UX | P2 |
-| 12 | Device & Session Management | P2 |
-| 13 | Regression / E2E Suite | مستمرة |
+| # | المرحلة | الأولوية | الحالة |
+|---:|---|---|---|
+| 1 | اعتماد Virtual Mouse V2 على ZIP النهائي | P0 | الكود مكتمل، الاختبار النهائي متبقٍ |
+| 2 | CDP Core V3 | P0 | Foundation + child sessions مكتملة، العزل/E2E متبقٍ |
+| 3 | Event Engine | P0 | Extension engine مكتمل، Cloud persistence/E2E متبقٍ |
+| 4 | Smart Wait | P0 | التالي بعد تثبيت Event persistence |
+| 5 | Raw `chrome_cdp` | P1 | لاحقًا |
+| 6 | Sense → Act → Verify | P1 | لاحقًا |
+| 7 | Human Takeover + Emergency Stop | P1 | لاحقًا |
+| 8 | Actor / Observer Sessions | P1 | لاحقًا |
+| 9 | Diagnostics + Self Test | P1 | لاحقًا |
+| 10 | CDP Capability Discovery | P2 | لاحقًا |
+| 11 | Virtual Cursor UX | P2 | لاحقًا |
+| 12 | Device & Session Management | P2 | لاحقًا |
+| 13 | Regression / E2E Suite | مستمرة | مستمرة |
 
 ## قاعدة معمارية ثابتة
 
-أي ميزة جديدة يجب أن تجيب عن سؤالين قبل إضافتها:
+قبل إضافة أي ميزة:
 
 1. هل تحتاج Tool جديدة فعلًا، أم يمكن تنفيذها عبر أداة موجودة أو Raw CDP؟
-2. هل تضيف قدرة Browser Agent حقيقية، أم تعيد تضخيم Brauzio بواجهة أو نظام لا نحتاجه؟
+2. هل تضيف Browser Agent capability حقيقية أم تعيد تضخيم Brauzio؟
 
 Brauzio V3 يجب أن يكون **أصغر في النواة، أكبر في القدرات، أوضح في التشخيص، وأكثر أمانًا عند التعاون بين الإنسان والوكيل**.
