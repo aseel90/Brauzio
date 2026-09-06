@@ -13,6 +13,15 @@ const DEBUGGER_PROTOCOL_VERSION = '1.3';
 class CDPSessionManager {
   private sessions = new Map<number, TabSessionState>();
 
+  constructor() {
+    chrome.debugger.onDetach.addListener((source) => {
+      if (typeof source.tabId === 'number') this.sessions.delete(source.tabId);
+    });
+    chrome.tabs.onRemoved.addListener((tabId) => {
+      this.sessions.delete(tabId);
+    });
+  }
+
   private getState(tabId: number): TabSessionState | undefined {
     return this.sessions.get(tabId);
   }
