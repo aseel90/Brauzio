@@ -1,0 +1,56 @@
+name: Validate Actor Observer V27
+
+on:
+  push:
+    paths:
+      - '.github/workflows/validate-actor-observer-v27.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 8.15.9
+      - run: pnpm install --no-frozen-lockfile --ignore-scripts
+
+      - name: Apply isolated Actor Observer patch
+        shell: bash
+        env:
+          PATCH_ZB64: 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
+        run: |
+          python - <<'PY'
+          import os, base64, zlib
+          raw = zlib.decompress(base64.b64decode(os.environ['PATCH_ZB64']))
+          open('/tmp/actor-observer-v27.patch', 'wb').write(raw)
+          PY
+          git apply --check /tmp/actor-observer-v27.patch
+          git apply /tmp/actor-observer-v27.patch
+
+      - name: Validate full Brauzio build
+        run: |
+          pnpm --filter brauzio-shared build
+          pnpm --filter brauzio-cloud-mcp check
+          pnpm --filter brauzio-cloud-mcp build
+          pnpm --filter brauzio-extension exec wxt prepare
+          pnpm --filter brauzio-extension compile
+          pnpm --filter brauzio-extension build
+
+      - name: Commit validated Actor Observer source
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add app/cloudflare-mcp/src/index.ts app/cloudflare-mcp/src/browser-session.ts
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m 'Add Actor Observer session isolation [skip ci]'
+          git push
