@@ -222,6 +222,16 @@ const defaultHandler = {
         toolCount: TOOL_SCHEMAS.length,
       });
     }
+    if (url.pathname === '/ws') {
+      const deviceId = deviceIdFromRequest(request, env);
+      const stub = browserStub(env, deviceId);
+      const target = new URL(request.url);
+      target.protocol = 'https:';
+      target.hostname = 'brauzio-browser.internal';
+      target.pathname = '/ws';
+      return stub.fetch(new Request(target.toString(), request));
+    }
+
     if (url.pathname === '/authorize') {
       return await handleAuthorize(request, env);
     }
