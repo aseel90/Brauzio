@@ -50,10 +50,10 @@ jobs:
         run: pnpm install --no-frozen-lockfile --ignore-scripts
 
       - name: Prepare WXT extension types
-        run: pnpm --filter chrome-mcp-server exec wxt prepare
+        run: pnpm --filter brauzio-extension exec wxt prepare
 
       - name: Build shared schemas
-        run: pnpm --filter chrome-mcp-shared build
+        run: pnpm --filter brauzio-shared build
 
       - name: Typecheck Brauzio Cloud MCP
         run: pnpm --filter brauzio-cloud-mcp check
@@ -62,7 +62,7 @@ jobs:
         run: pnpm --filter brauzio-cloud-mcp build
 
       - name: Build Chrome extension
-        run: pnpm --filter chrome-mcp-server build
+        run: pnpm --filter brauzio-extension build
 
       - name: Package Chrome extension ZIP
         shell: bash
@@ -94,8 +94,10 @@ jobs:
           assert (root / '_locales' / 'ar' / 'messages.json').is_file(), 'Arabic locale missing'
           assert not (root / '_locales' / 'zh_CN').exists(), 'zh_CN unexpectedly present'
           assert not (root / '_locales' / 'zh_TW').exists(), 'zh_TW unexpectedly present'
+          assert manifest.get('icons', {}).get('128') == 'icon/128.png', manifest.get('icons')
+          assert not (root / 'wxt.svg').exists(), 'WXT scaffold asset unexpectedly present'
 
-          print('Packaged manifest verified: Arabic default locale, Brauzio title, no Chinese locales.')
+          print('Packaged manifest verified: Brauzio identity, Arabic locale, custom icons, no Chinese locales.')
           PY
 
       - name: Upload installable Brauzio ZIP
