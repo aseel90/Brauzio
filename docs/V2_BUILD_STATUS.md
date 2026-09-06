@@ -11,11 +11,11 @@ Lockfile is up to date, resolution step is skipped
 Progress: resolved 1, reused 0, downloaded 0, added 0
 Packages: +810
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-Progress: resolved 810, reused 0, downloaded 186, added 186
-Progress: resolved 810, reused 0, downloaded 397, added 396
-Progress: resolved 810, reused 0, downloaded 661, added 657
-Progress: resolved 810, reused 0, downloaded 716, added 704
+Progress: resolved 810, reused 0, downloaded 319, added 308
+Progress: resolved 810, reused 0, downloaded 444, added 441
+Progress: resolved 810, reused 0, downloaded 714, added 704
 Progress: resolved 810, reused 0, downloaded 808, added 808
+Progress: resolved 810, reused 0, downloaded 809, added 808
 Progress: resolved 810, reused 0, downloaded 810, added 810, done
 
 devDependencies:
@@ -35,14 +35,14 @@ devDependencies:
 + typescript-eslint 8.49.0
 + vue-eslint-parser 10.2.0
 
-Done in 6.6s
+Done in 6.7s
 === prepare ===
 
 [log] [90mWXT[39m [90m[1m0.20.11[22m[39m
-[dotenv@17.2.3] injecting env (0) from .env.production.chrome.local,.env.production.chrome,.env.chrome.local,.env.chrome,.env.production.local,.env.production,.env.local,.env -- tip: 🛠️  run anywhere with `dotenvx run -- yourcommand`
+[dotenv@17.2.3] injecting env (0) from .env.production.chrome.local,.env.production.chrome,.env.chrome.local,.env.chrome,.env.production.local,.env.production,.env.local,.env -- tip: 👥 sync secrets across teammates & machines: https://dotenvx.com/ops
 [warn] `InlineConfig#runner` is deprecated, use `InlineConfig#webExt` instead. See https://wxt.dev/guide/resources/upgrading.html#v0-19-0-rarr-v0-20-0
 [info] Generating types...
-[success] Finished in 706 ms
+[success] Finished in 493 ms
 === shared ===
 
 > brauzio-shared@1.0.1 build /home/runner/work/Brauzio/Brauzio/packages/shared
@@ -56,11 +56,11 @@ Done in 6.6s
 [34mCJS[39m Build start
 [34mESM[39m Build start
 [32mESM[39m [1mdist/index.mjs [22m[32m46.21 KB[39m
-[32mESM[39m ⚡️ Build success in 37ms
+[32mESM[39m ⚡️ Build success in 21ms
 [32mCJS[39m [1mdist/index.js [22m[32m47.37 KB[39m
-[32mCJS[39m ⚡️ Build success in 40ms
+[32mCJS[39m ⚡️ Build success in 21ms
 [34mDTS[39m Build start
-[32mDTS[39m ⚡️ Build success in 1461ms
+[32mDTS[39m ⚡️ Build success in 1040ms
 [32mDTS[39m [1mdist/index.d.ts  [22m[32m5.31 KB[39m
 [32mDTS[39m [1mdist/index.d.mts [22m[32m5.31 KB[39m
 === cloud check ===
@@ -75,18 +75,19 @@ Done in 6.6s
 
 
 [log] [90mWXT[39m [90m[1m0.20.11[22m[39m
-[dotenv@17.2.3] injecting env (0) from .env.production.chrome.local,.env.production.chrome,.env.chrome.local,.env.chrome,.env.production.local,.env.production,.env.local,.env -- tip: ⚙️  enable debug logging with { debug: true }
+[dotenv@17.2.3] injecting env (0) from .env.production.chrome.local,.env.production.chrome,.env.chrome.local,.env.chrome,.env.production.local,.env.production,.env.local,.env -- tip: 🔑 add access controls to secrets: https://dotenvx.com/ops
 [warn] `InlineConfig#runner` is deprecated, use `InlineConfig#webExt` instead. See https://wxt.dev/guide/resources/upgrading.html#v0-19-0-rarr-v0-20-0
 [info] Building [36mchrome-mv3[39m for [36mproduction[39m with [32mVite 7.2.7[39m
 - Preparing...
-[31m✗[39m Build failed in 448ms
-[error] [31mCould not resolve "./gif-recorder" from "entrypoints/background/tools/browser/common.ts"[39m
-file: [36m/home/runner/work/Brauzio/Brauzio/app/chrome-extension/entrypoints/background/tools/browser/common.ts[39m
-  at getRollupError (/home/runner/work/Brauzio/Brauzio/node_modules/.pnpm/rollup@4.53.3/node_modules/rollup/dist/es/shared/parseAst.js:401:41)
-  at error (/home/runner/work/Brauzio/Brauzio/node_modules/.pnpm/rollup@4.53.3/node_modules/rollup/dist/es/shared/parseAst.js:397:42)
-  at ModuleLoader.handleInvalidResolvedId (/home/runner/work/Brauzio/Brauzio/node_modules/.pnpm/rollup@4.53.3/node_modules/rollup/dist/es/shared/node-entry.js:21590:24)
-  at /home/runner/work/Brauzio/Brauzio/node_modules/.pnpm/rollup@4.53.3/node_modules/rollup/dist/es/shared/node-entry.js:21550:26
-[fail] Command failed after 1.029 s
+[31m✗[39m Build failed in 581ms
+[error] [31m[vite:load-fallback] Could not load /home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/i18n (imported by entrypoints/background/tools/browser/bookmark.ts): ENOENT: no such file or directory, open '/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/i18n'[39m
+  at open (node:internal/fs/promises:639:25)
+  at Object.readFile (node:internal/fs/promises:1252:14)
+  at Object.handler (/home/runner/work/Brauzio/Brauzio/node_modules/.pnpm/vite@7.2.7_@types+node@18.19.130/node_modules/vite/dist/node/chunks/config.js:33168:21)
+  at PluginDriver.hookFirstAndGetPlugin (/home/runner/work/Brauzio/Brauzio/node_modules/.pnpm/rollup@4.53.3/node_modules/rollup/dist/es/shared/node-entry.js:22333:28)
+  at /home/runner/work/Brauzio/Brauzio/node_modules/.pnpm/rollup@4.53.3/node_modules/rollup/dist/es/shared/node-entry.js:21333:33
+  at Queue.work (/home/runner/work/Brauzio/Brauzio/node_modules/.pnpm/rollup@4.53.3/node_modules/rollup/dist/es/shared/node-entry.js:22561:32)
+[fail] Command failed after 1.017 s
 [error] Failed to build background
   at buildEntrypoints (/home/runner/work/Brauzio/Brauzio/node_modules/.pnpm/wxt@0.20.11_@types+node@18.19.130/node_modules/wxt/dist/core/utils/building/build-entrypoints.mjs:19:13)
   at rebuild (/home/runner/work/Brauzio/Brauzio/node_modules/.pnpm/wxt@0.20.11_@types+node@18.19.130/node_modules/wxt/dist/core/utils/building/rebuild.mjs:15:21)
@@ -96,12 +97,13 @@ file: [36m/home/runner/work/Brauzio/Brauzio/app/chrome-extension/entrypoints/ba
   at CAC.<anonymous> (/home/runner/work/Brauzio/Brauzio/node_modules/.pnpm/wxt@0.20.11_@types+node@18.19.130/node_modules/wxt/dist/cli/cli-utils.mjs:17:22)
   at /home/runner/work/Brauzio/Brauzio/node_modules/.pnpm/wxt@0.20.11_@types+node@18.19.130/node_modules/wxt/dist/cli/index.mjs:10:1
 
-  [cause]: [31mCould not resolve "./gif-recorder" from "entrypoints/background/tools/browser/common.ts"[39m
-file: [36m/home/runner/work/Brauzio/Brauzio/app/chrome-extension/entrypoints/background/tools/browser/common.ts[39m
-    at getRollupError (/home/runner/work/Brauzio/Brauzio/node_modules/.pnpm/rollup@4.53.3/node_modules/rollup/dist/es/shared/parseAst.js:401:41)
-    at error (/home/runner/work/Brauzio/Brauzio/node_modules/.pnpm/rollup@4.53.3/node_modules/rollup/dist/es/shared/parseAst.js:397:42)
-    at ModuleLoader.handleInvalidResolvedId (/home/runner/work/Brauzio/Brauzio/node_modules/.pnpm/rollup@4.53.3/node_modules/rollup/dist/es/shared/node-entry.js:21590:24)
-    at /home/runner/work/Brauzio/Brauzio/node_modules/.pnpm/rollup@4.53.3/node_modules/rollup/dist/es/shared/node-entry.js:21550:26
+  [cause]: [31m[vite:load-fallback] Could not load /home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/i18n (imported by entrypoints/background/tools/browser/bookmark.ts): ENOENT: no such file or directory, open '/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/i18n'[39m
+    at open (node:internal/fs/promises:639:25)
+    at Object.readFile (node:internal/fs/promises:1252:14)
+    at Object.handler (/home/runner/work/Brauzio/Brauzio/node_modules/.pnpm/vite@7.2.7_@types+node@18.19.130/node_modules/vite/dist/node/chunks/config.js:33168:21)
+    at PluginDriver.hookFirstAndGetPlugin (/home/runner/work/Brauzio/Brauzio/node_modules/.pnpm/rollup@4.53.3/node_modules/rollup/dist/es/shared/node-entry.js:22333:28)
+    at /home/runner/work/Brauzio/Brauzio/node_modules/.pnpm/rollup@4.53.3/node_modules/rollup/dist/es/shared/node-entry.js:21333:33
+    at Queue.work (/home/runner/work/Brauzio/Brauzio/node_modules/.pnpm/rollup@4.53.3/node_modules/rollup/dist/es/shared/node-entry.js:22561:32)
 /home/runner/work/Brauzio/Brauzio/app/chrome-extension:
  ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL  brauzio-extension@1.0.0 build: `wxt build`
 Exit status 1
