@@ -67,4 +67,4 @@ jobs:
           git commit -m "chore: update lockfile for Brauzio Cloud MCP"
           git push origin HEAD:main
 
-# Do not install the legacy native-server package in Brauzio Cloud CI.
+# Brauzio CI validates the cloud path without starting the legacy native host.
