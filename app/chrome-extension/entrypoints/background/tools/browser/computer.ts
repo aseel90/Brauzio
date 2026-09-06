@@ -54,7 +54,7 @@ async function showCursor(tabId: number, point: Point, state: MouseState = 'move
       let e=document.getElementById(id);
       if(!e){
         e=document.createElement('div'); e.id=id; e.setAttribute('aria-hidden','true');
-        e.style.cssText='position:fixed;left:0;top:0;width:34px;height:42px;pointer-events:none;z-index:2147483647;transform:translate3d(-80px,-80px,0);transition:transform 65ms linear,opacity 120ms ease;filter:drop-shadow(0 2px 4px rgba(0,0,0,.35));opacity:1';
+        e.style.cssText='position:fixed;left:0;top:0;width:34px;height:42px;pointer-events:none;z-index:2147483647;transform:translate3d(-80px,-80px,0);transition:transform 360ms cubic-bezier(.22,.61,.36,1),opacity 120ms ease;filter:drop-shadow(0 2px 4px rgba(0,0,0,.35));opacity:1';
         e.innerHTML='<svg width="34" height="42" viewBox="0 0 34 42" xmlns="http://www.w3.org/2000/svg"><path d="M3 2L3 31L10.8 23.4L16.3 37L22.4 34.4L16.9 21.5L28 21.2L3 2Z" fill="#fff" stroke="#111827" stroke-width="2" stroke-linejoin="round"/><circle cx="25" cy="8" r="7" fill="#5B5BD6" stroke="#fff" stroke-width="2"/><text x="25" y="11" text-anchor="middle" font-family="Arial" font-size="8" font-weight="700" fill="#fff">B</text></svg>';
         (document.documentElement||document.body).appendChild(e);
       }
