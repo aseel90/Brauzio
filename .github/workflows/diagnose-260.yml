@@ -55,10 +55,25 @@ jobs:
           watch_text = watch_text.replace(old_watch_import, "import type { BrauzioToolSchema } from './tools';", 1)
           watch_text = watch_text.replace('export const WATCH_TOOL_SCHEMAS: Tool[] = [', 'export const WATCH_TOOL_SCHEMAS: BrauzioToolSchema[] = [', 1)
           watch.write_text(watch_text, encoding='utf-8')
+
+          common = Path('app/chrome-extension/entrypoints/background/tools/browser/common.ts')
+          common_text = common.read_text(encoding='utf-8')
+          old_update = """          if (newTab.id && shouldVerify) {\n            await armVerification(newTab.id);\n            newTab = await chrome.tabs.update(newTab.id, { url });\n          }\n"""
+          new_update = """          if (newTab.id && shouldVerify) {\n            await armVerification(newTab.id);\n            const updatedTab = await chrome.tabs.update(newTab.id, { url });\n            if (!updatedTab) {\n              return createErrorResponse('Tab closed before navigation could start');\n            }\n            newTab = updatedTab;\n          }\n"""
+          if old_update not in common_text:
+              raise SystemExit('navigation update marker not found')
+          common.write_text(common_text.replace(old_update, new_update, 1), encoding='utf-8')
+
+          verification = Path('app/chrome-extension/utils/action-verification.ts')
+          verification_text = verification.read_text(encoding='utf-8')
+          old_status = '  status?: chrome.tabs.TabStatus;'
+          if old_status not in verification_text:
+              raise SystemExit('TabStatus marker not found')
+          verification.write_text(verification_text.replace(old_status, "  status?: chrome.tabs.Tab['status'];", 1), encoding='utf-8')
           PY
 
-          printf 'Applied diagnostic type fix: unified JSON-safe BrauzioToolSchema\n' >> "$LOG"
-          git diff -- packages/shared/src/tools.ts packages/shared/src/watch-tools.ts >> "$LOG"
+          printf 'Applied diagnostic fixes: unified schemas + action verification compile guards\n' >> "$LOG"
+          git diff -- packages/shared/src/tools.ts packages/shared/src/watch-tools.ts app/chrome-extension/entrypoints/background/tools/browser/common.ts app/chrome-extension/utils/action-verification.ts >> "$LOG"
 
           run_step() {
             label="$1"
@@ -87,12 +102,12 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          git restore packages/shared/src/tools.ts packages/shared/src/watch-tools.ts || true
+          git restore packages/shared/src/tools.ts packages/shared/src/watch-tools.ts app/chrome-extension/entrypoints/background/tools/browser/common.ts app/chrome-extension/utils/action-verification.ts || true
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add -f CI_DIAGNOSE_260.txt
           if git diff --cached --quiet; then
             exit 0
           fi
-          git commit -m 'diagnostics: capture unified schema validation [skip ci]'
+          git commit -m 'diagnostics: capture compile-fix validation [skip ci]'
           git push
