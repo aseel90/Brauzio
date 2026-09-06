@@ -1,4 +1,4 @@
-name: Brauzio Chinese audit
+name: Brauzio language audit
 
 on:
   push:
@@ -6,42 +6,32 @@ on:
       - '.github/workflows/chinese-audit.yml'
       - 'scripts/audit_chinese.py'
       - 'scripts/audit_ui_chinese.py'
-      - 'scripts/extract_ui_cjk_phrases.py'
       - 'app/chrome-extension/**'
-      - 'docs/**'
+      - 'packages/shared/src/node-specs-builtin.ts'
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   audit:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
-      - name: Scan all source and docs
-        run: python scripts/audit_chinese.py
+      - name: Verify Chinese locale folders are absent
+        shell: bash
+        run: |
+          test ! -e app/chrome-extension/_locales/zh_CN
+          test ! -e app/chrome-extension/_locales/zh_TW
 
       - name: Scan user-facing UI
         run: python scripts/audit_ui_chinese.py
 
-      - name: Extract user-facing phrases
-        run: python scripts/extract_ui_cjk_phrases.py
-
-      - name: Commit audit reports
+      - name: Require zero user-facing Chinese text
         shell: bash
         run: |
-          git add docs/CHINESE_AUDIT.md docs/UI_CHINESE_STRINGS.md docs/UI_CJK_PHRASES.json
-          if git diff --cached --quiet; then
-            echo "Audit reports unchanged."
-            exit 0
-          fi
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git commit -m "chore: refresh Chinese-language audits"
-          git fetch origin main
-          git rebase origin/main
-          git push origin HEAD:main
+          grep -Fq 'Potential user-facing CJK lines: **0**' docs/UI_CHINESE_STRINGS.md
+
+      - name: Generate full repository audit for job logs
+        run: python scripts/audit_chinese.py
