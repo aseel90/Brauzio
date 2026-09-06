@@ -6,8 +6,10 @@ import { BrowserSession } from './browser-session';
 
 export { BrowserSession };
 
-const BRAUZIO_RUNTIME_VERSION = '2.1.2';
-const BRAUZIO_SCHEMA_VERSION = 'v2.1.2-2026-09-06';
+const BRAUZIO_RUNTIME_VERSION = '2.1.3';
+const BRAUZIO_SCHEMA_VERSION = 'v2.1.3-2026-09-06';
+const BRAUZIO_ORIGIN = 'https://brauzio-mcp.aseelsalah266.workers.dev';
+const BRAUZIO_RESOURCE = `${BRAUZIO_ORIGIN}/mcp`;
 const BRAUZIO_SCOPE = 'brauzio:control';
 const BRAUZIO_COMPUTER_ACTIONS = [
   'mouse_move',
@@ -187,8 +189,6 @@ function authorizationPage(options: {
 </html>`;
 
   return new Response(body, {
-    // Pairing validation errors are part of the interactive OAuth page, not HTTP auth failures.
-    // Returning 200 avoids browsers/clients treating a retryable form validation error as a failed OAuth endpoint.
     status: 200,
     headers: {
       'content-type': 'text/html; charset=utf-8',
@@ -300,9 +300,24 @@ async function handleAuthorize(request: Request, env: Env): Promise<Response> {
 
 const mcpApiHandler = {
   async fetch(request: Request, env: Env, ctx: ExecutionContext) {
+    const requestUrl = new URL(request.url);
+    const ctxProps = ((ctx as ExecutionContext & { props?: Partial<BrauzioAuthProps> }).props || {});
+    workerLog('MCP_REQUEST', {
+      method: request.method,
+      path: requestUrl.pathname,
+      mcpMethod: request.headers.get('Mcp-Method') || request.headers.get('mcp-method') || '',
+      mcpName: request.headers.get('Mcp-Name') || request.headers.get('mcp-name') || '',
+      hasAuthorizedDevice: Boolean(ctxProps.deviceId),
+    });
+
     return createMcpHandler(() => createServer(env), {
       route: '/mcp',
       legacy: 'stateless',
+      onerror(error) {
+        workerLog('MCP_HANDLER_ERROR', {
+          message: error instanceof Error ? error.message : String(error),
+        });
+      },
     })(request, env, ctx);
   },
 } satisfies ExportedHandler<Env>;
@@ -359,7 +374,26 @@ export default new OAuthProvider<Env>({
   allowPlainPKCE: false,
   clientIdMetadataDocumentEnabled: true,
   resourceMetadata: {
+    resource: BRAUZIO_RESOURCE,
+    authorization_servers: [BRAUZIO_ORIGIN],
     scopes_supported: [BRAUZIO_SCOPE],
     resource_name: 'Brauzio Chrome Control',
+  },
+  tokenExchangeCallback: async (options) => {
+    workerLog('OAUTH_TOKEN_EXCHANGE', {
+      grantType: options.grantType,
+      clientId: options.clientId,
+      userId: options.userId,
+    });
+  },
+  onError({ code, description, status, internal, request }) {
+    workerLog('OAUTH_ERROR', {
+      code,
+      status,
+      description,
+      category: internal?.category || '',
+      reason: internal?.reason || '',
+      path: request ? new URL(request.url).pathname : '',
+    });
   },
 });
