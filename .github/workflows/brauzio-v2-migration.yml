@@ -1,0 +1,317 @@
+name: Brauzio v2 Migration
+
+on:
+  push:
+    branches:
+      - brauzio-v2-clean-ui
+    paths:
+      - '.github/workflows/brauzio-v2-migration.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  migrate:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout v2 branch
+        uses: actions/checkout@v4
+        with:
+          ref: brauzio-v2-clean-ui
+          fetch-depth: 0
+
+      - name: Remove legacy product surfaces and slim Brauzio core
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          import json
+          import re
+          import shutil
+
+          root = Path('.')
+
+          def remove(path: str):
+              p = root / path
+              if p.is_dir():
+                  shutil.rmtree(p)
+                  print('removed dir ', path)
+              elif p.exists():
+                  p.unlink()
+                  print('removed file', path)
+
+          def replace_once(path: str, old: str, new: str):
+              p = root / path
+              text = p.read_text(encoding='utf-8')
+              if old not in text:
+                  raise RuntimeError(f'Expected text not found in {path}: {old[:90]!r}')
+              p.write_text(text.replace(old, new, 1), encoding='utf-8')
+
+          legacy_paths = [
+              # Old user-facing products / entrypoints
+              'app/chrome-extension/entrypoints/builder',
+              'app/chrome-extension/entrypoints/options',
+              'app/chrome-extension/entrypoints/sidepanel',
+              'app/chrome-extension/entrypoints/offscreen',
+              'app/chrome-extension/entrypoints/welcome',
+              'app/chrome-extension/entrypoints/web-editor-v2',
+              'app/chrome-extension/entrypoints/web-editor-v2.ts',
+              'app/chrome-extension/entrypoints/quick-panel.content.ts',
+              'app/chrome-extension/entrypoints/content.ts',
+              'app/chrome-extension/entrypoints/styles',
+              'app/chrome-extension/entrypoints/shared',
+
+              # Old background products
+              'app/chrome-extension/entrypoints/background/quick-panel',
+              'app/chrome-extension/entrypoints/background/record-replay',
+              'app/chrome-extension/entrypoints/background/record-replay-v3',
+              'app/chrome-extension/entrypoints/background/web-editor',
+              'app/chrome-extension/entrypoints/background/semantic-similarity.ts',
+              'app/chrome-extension/entrypoints/background/storage-manager.ts',
+              'app/chrome-extension/entrypoints/background/tools/record-replay.ts',
+
+              # Heavy / non-core browser tools
+              'app/chrome-extension/entrypoints/background/tools/browser/vector-search.ts',
+              'app/chrome-extension/entrypoints/background/tools/browser/gif-auto-capture.ts',
+              'app/chrome-extension/entrypoints/background/tools/browser/gif-enhanced-renderer.ts',
+              'app/chrome-extension/entrypoints/background/tools/browser/gif-recorder.ts',
+
+              # Popup legacy components
+              'app/chrome-extension/entrypoints/popup/components/ConfirmDialog.vue',
+              'app/chrome-extension/entrypoints/popup/components/ElementMarkerManagement.vue',
+              'app/chrome-extension/entrypoints/popup/components/LocalModelPage.vue',
+              'app/chrome-extension/entrypoints/popup/components/ModelCacheManagement.vue',
+              'app/chrome-extension/entrypoints/popup/components/ProgressIndicator.vue',
+              'app/chrome-extension/entrypoints/popup/components/ScheduleDialog.vue',
+              'app/chrome-extension/entrypoints/popup/components/builder',
+              'app/chrome-extension/entrypoints/popup/components/icons',
+
+              # Local AI / semantic/vector stack
+              'app/chrome-extension/workers',
+              'app/chrome-extension/public/libs',
+              'app/chrome-extension/utils/content-indexer.ts',
+              'app/chrome-extension/utils/indexeddb-client.ts',
+              'app/chrome-extension/utils/lru-cache.ts',
+              'app/chrome-extension/utils/model-cache-manager.ts',
+              'app/chrome-extension/utils/offscreen-manager.ts',
+              'app/chrome-extension/utils/semantic-similarity-engine.ts',
+              'app/chrome-extension/utils/simd-math-engine.ts',
+              'app/chrome-extension/utils/text-chunker.ts',
+              'app/chrome-extension/utils/vector-database.ts',
+              'app/chrome-extension/utils/i18n.ts',
+              'packages/wasm-simd',
+
+              # Old product types / shared UI helpers
+              'app/chrome-extension/common/agent-models.ts',
+              'app/chrome-extension/common/node-types.ts',
+              'app/chrome-extension/common/rr-v3-keepalive-protocol.ts',
+              'app/chrome-extension/common/step-types.ts',
+              'app/chrome-extension/common/web-editor-types.ts',
+              'app/chrome-extension/shared/quick-panel',
+              'app/chrome-extension/types/gifenc.d.ts',
+              'app/chrome-extension/brand.css',
+              'app/chrome-extension/tailwind.config.ts',
+
+              # Old copied injectors
+              'app/chrome-extension/inject-scripts/recorder.js',
+              'app/chrome-extension/inject-scripts/web-editor.js',
+              'app/chrome-extension/inject-scripts/props-agent.js',
+
+              # Old shared workflow/agent model
+              'packages/shared/src/agent-types.ts',
+              'packages/shared/src/labels.ts',
+              'packages/shared/src/node-spec-registry.ts',
+              'packages/shared/src/node-spec.ts',
+              'packages/shared/src/node-specs-builtin.ts',
+              'packages/shared/src/rr-graph.ts',
+              'packages/shared/src/step-types.ts',
+
+              # Historical upstream-facing docs/scripts/workflows
+              'docs/ARCHITECTURE.md',
+              'docs/BRAUZIO_CJK_AUDIT.md',
+              'docs/CONTRIBUTING.md',
+              'docs/TOOLS.md',
+              'docs/TROUBLESHOOTING.md',
+              'docs/UI_CHINESE_STRINGS.md',
+              'docs/VisualEditor.md',
+              'docs/mcp-cli-config.md',
+              'scripts/apply_brauzio_identity.py',
+              'scripts/audit_chinese.py',
+              'scripts/audit_ui_chinese.py',
+              '.github/workflows/apply-brauzio-identity.yml',
+              '.github/workflows/chinese-audit.yml',
+          ]
+          for path in legacy_paths:
+              remove(path)
+
+          # Arabic-only product locale for v2. More languages can be reintroduced deliberately later.
+          locales = root / 'app/chrome-extension/_locales'
+          if locales.exists():
+              for child in locales.iterdir():
+                  if child.name != 'ar':
+                      remove(str(child))
+          ar_messages = root / 'app/chrome-extension/_locales/ar/messages.json'
+          ar_messages.write_text(json.dumps({
+              'extensionName': {
+                  'message': 'Brauzio',
+                  'description': 'اسم إضافة Brauzio'
+              },
+              'extensionDescription': {
+                  'message': 'تحكم آمن بمتصفح Chrome عبر ChatGPT وMCP',
+                  'description': 'وصف إضافة Brauzio'
+              }
+          }, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+
+          # Browser tool registry: Record/Replay is no longer a Brauzio product surface.
+          tools_index = root / 'app/chrome-extension/entrypoints/background/tools/index.ts'
+          text = tools_index.read_text(encoding='utf-8')
+          text = text.replace("import { flowRunTool, listPublishedFlowsTool } from './record-replay';\n", '')
+          text = text.replace(
+              "const tools = { ...browserTools, flowRunTool, listPublishedFlowsTool } as any;",
+              "const tools = { ...browserTools } as any;"
+          )
+          tools_index.write_text(text, encoding='utf-8')
+
+          # Browser registry: remove non-core vector/GIF tools.
+          browser_index = root / 'app/chrome-extension/entrypoints/background/tools/browser/index.ts'
+          text = browser_index.read_text(encoding='utf-8')
+          text = text.replace("export { vectorSearchTabsContentTool as searchTabsContentTool } from './vector-search';\n", '')
+          text = text.replace("export { gifRecorderTool } from './gif-recorder';\n", '')
+          browser_index.write_text(text, encoding='utf-8')
+
+          # Shared schema: remove the GIF tool from MCP discovery and document persistent pointer actions.
+          shared_tools = root / 'packages/shared/src/tools.ts'
+          text = shared_tools.read_text(encoding='utf-8')
+          text = text.replace("    GIF_RECORDER: 'chrome_gif_recorder',\n", '')
+          text = text.replace(
+              'Action to perform: left_click | right_click | double_click | triple_click | left_click_drag | scroll | scroll_to | type | key | fill | fill_form | hover | wait | resize_page | zoom | screenshot',
+              'Action to perform: left_click | right_click | double_click | triple_click | left_click_drag | mouse_down | mouse_move | mouse_up | scroll | scroll_to | type | key | fill | fill_form | hover | wait | resize_page | zoom | screenshot. Use mouse_down -> one or more mouse_move -> mouse_up for held-pointer interactions such as virtual sticks, canvas games, sliders and drag handles.'
+          )
+          modifiers = """        modifiers: {\n          type: 'object',\n          description:\n            'Modifier keys for click actions (left_click/right_click/double_click/triple_click).',\n          properties: {\n            altKey: { type: 'boolean' },\n            ctrlKey: { type: 'boolean' },\n            metaKey: { type: 'boolean' },\n            shiftKey: { type: 'boolean' },\n          },\n        },\n"""
+          if modifiers not in text:
+              raise RuntimeError('Could not locate computer modifiers schema')
+          text = text.replace(modifiers, modifiers + """        button: {\n          type: 'string',\n          enum: ['left', 'right', 'middle'],\n          description: 'Mouse button for mouse_down persistent pointer sessions (default: left).',\n        },\n""", 1)
+          gif_start = text.find("  {\n    name: TOOL_NAMES.BROWSER.GIF_RECORDER,")
+          if gif_start >= 0:
+              gif_end_marker = "\n  },\n];"
+              gif_end = text.find(gif_end_marker, gif_start)
+              if gif_end < 0:
+                  raise RuntimeError('Could not locate GIF schema end')
+              text = text[:gif_start] + text[gif_end + len("\n  },"):]
+          shared_tools.write_text(text, encoding='utf-8')
+
+          # Shared package should only expose primitives used by Brauzio core.
+          shared_index = root / 'packages/shared/src/index.ts'
+          shared_index.write_text(
+              "export * from './constants';\nexport * from './types';\nexport * from './tools';\n",
+              encoding='utf-8'
+          )
+
+          # Computer tool: remove GIF hooks and add a persistent pointer session.
+          computer = root / 'app/chrome-extension/entrypoints/background/tools/browser/computer.ts'
+          text = computer.read_text(encoding='utf-8')
+          text = text.replace("""import {\n  captureFrameOnAction,\n  isAutoCaptureActive,\n  type ActionMetadata,\n  type ActionType,\n} from './gif-recorder';\n""", '')
+          text = text.replace("    | 'left_click_drag'\n    | 'scroll'", "    | 'left_click_drag'\n    | 'mouse_down'\n    | 'mouse_move'\n    | 'mouse_up'\n    | 'scroll'", 1)
+          text = text.replace("  modifiers?: Modifiers; // for click actions\n", "  modifiers?: Modifiers; // for click actions\n  button?: MouseButton; // persistent pointer button (default: left)\n", 1)
+
+          marker = "}\n\n// Minimal CDP helper encapsulated here to avoid scattering CDP code\n"
+          persistent_state = """}\n\ninterface HeldMouseState {\n  button: MouseButton;\n  x: number;\n  y: number;\n}\n\nconst heldMouseSessions = new Map<number, HeldMouseState>();\nconst heldMouseOwner = (tabId: number) => `computer-mouse-hold:${tabId}`;\n\nfunction mouseButtonsMask(button: MouseButton): number {\n  if (button === 'right') return 2;\n  if (button === 'middle') return 4;\n  return 1;\n}\n\n// Minimal CDP helper encapsulated here to avoid scattering CDP code\n"""
+          if marker not in text:
+              raise RuntimeError('Could not locate ComputerParams end')
+          text = text.replace(marker, persistent_state, 1)
+
+          auto_start = text.find('      // Execute the action and capture frame on success\n')
+          auto_end = text.find('      return result;\n', auto_start)
+          if auto_start < 0 or auto_end < 0:
+              raise RuntimeError('Could not locate computer auto-capture section')
+          text = text[:auto_start] + "      const result = await this.executeAction(params, tab);\n\n" + text[auto_end:]
+
+          map_start = text.find('  private mapActionToCapture(action: string)')
+          map_end = text.find('  private async executeAction(', map_start)
+          if map_start < 0 or map_end < 0:
+              raise RuntimeError('Could not locate mapActionToCapture')
+          text = text[:map_start] + text[map_end:]
+
+          project_marker = """    const project = (c?: Coordinates): Coordinates | undefined => {\n      if (!c) return undefined;\n      const ctx = screenshotContextManager.getContext(tab.id!);\n      if (!ctx) return c;\n      const scaled = scaleCoordinates(c.x, c.y, ctx);\n      return { x: scaled.x, y: scaled.y };\n    };\n\n    switch (params.action) {\n"""
+          project_replacement = """    const project = (c?: Coordinates): Coordinates | undefined => {\n      if (!c) return undefined;\n      const ctx = screenshotContextManager.getContext(tab.id!);\n      if (!ctx) return c;\n      const scaled = scaleCoordinates(c.x, c.y, ctx);\n      return { x: scaled.x, y: scaled.y };\n    };\n\n    const resolvePointerCoordinate = async (): Promise<Coordinates | undefined> => {\n      if (params.ref) {\n        await this.injectContentScript(tab.id!, ['inject-scripts/accessibility-tree-helper.js']);\n        try {\n          const resolved = await this.sendMessageToTab(tab.id!, {\n            action: TOOL_MESSAGE_TYPES.RESOLVE_REF,\n            ref: params.ref,\n          });\n          if (resolved?.success) return project({ x: resolved.center.x, y: resolved.center.y });\n        } catch {\n          // Fall through to coordinates.\n        }\n      }\n      return params.coordinates ? project(params.coordinates) : undefined;\n    };\n\n    switch (params.action) {\n"""
+          if project_marker not in text:
+              raise RuntimeError('Could not locate coordinate projector')
+          text = text.replace(project_marker, project_replacement, 1)
+
+          drag_marker = "      case 'left_click_drag': {\n"
+          persistent_cases = """      case 'mouse_down': {\n        const point = await resolvePointerCoordinate();\n        if (!point) return createErrorResponse('Provide ref or coordinates for mouse_down');\n        if (heldMouseSessions.has(tab.id)) {\n          return createErrorResponse('A mouse button is already held on this tab. Call mouse_up first.');\n        }\n        const button = params.button || 'left';\n        try {\n          await cdpSessionManager.attach(tab.id, heldMouseOwner(tab.id));\n          await CDPHelper.dispatchMouseEvent(tab.id, { type: 'mouseMoved', x: point.x, y: point.y, button: 'none', buttons: 0 });\n          await CDPHelper.dispatchMouseEvent(tab.id, { type: 'mousePressed', x: point.x, y: point.y, button, buttons: mouseButtonsMask(button), clickCount: 1 });\n          heldMouseSessions.set(tab.id, { button, x: point.x, y: point.y });\n          return { content: [{ type: 'text', text: JSON.stringify({ success: true, action: 'mouse_down', button, coordinates: point, holding: true }) }], isError: false };\n        } catch (error) {\n          heldMouseSessions.delete(tab.id);\n          await cdpSessionManager.detach(tab.id, heldMouseOwner(tab.id));\n          return createErrorResponse(`mouse_down failed: ${error instanceof Error ? error.message : String(error)}`);\n        }\n      }\n      case 'mouse_move': {\n        const point = await resolvePointerCoordinate();\n        if (!point) return createErrorResponse('Provide ref or coordinates for mouse_move');\n        const held = heldMouseSessions.get(tab.id);\n        try {\n          if (held) {\n            await CDPHelper.dispatchMouseEvent(tab.id, { type: 'mouseMoved', x: point.x, y: point.y, button: held.button, buttons: mouseButtonsMask(held.button) });\n            held.x = point.x;\n            held.y = point.y;\n          } else {\n            await cdpSessionManager.withSession(tab.id, 'computer-mouse-move', async () => {\n              await CDPHelper.dispatchMouseEvent(tab.id!, { type: 'mouseMoved', x: point.x, y: point.y, button: 'none', buttons: 0 });\n            });\n          }\n          return { content: [{ type: 'text', text: JSON.stringify({ success: true, action: 'mouse_move', coordinates: point, holding: Boolean(held) }) }], isError: false };\n        } catch (error) {\n          return createErrorResponse(`mouse_move failed: ${error instanceof Error ? error.message : String(error)}`);\n        }\n      }\n      case 'mouse_up': {\n        const held = heldMouseSessions.get(tab.id);\n        if (!held) return createErrorResponse('No mouse button is currently held on this tab');\n        const requestedPoint = await resolvePointerCoordinate();\n        const point = requestedPoint || { x: held.x, y: held.y };\n        try {\n          await CDPHelper.dispatchMouseEvent(tab.id, { type: 'mouseReleased', x: point.x, y: point.y, button: held.button, buttons: 0, clickCount: 1 });\n          heldMouseSessions.delete(tab.id);\n          await cdpSessionManager.detach(tab.id, heldMouseOwner(tab.id));\n          return { content: [{ type: 'text', text: JSON.stringify({ success: true, action: 'mouse_up', button: held.button, coordinates: point, holding: false }) }], isError: false };\n        } catch (error) {\n          heldMouseSessions.delete(tab.id);\n          await cdpSessionManager.detach(tab.id, heldMouseOwner(tab.id));\n          return createErrorResponse(`mouse_up failed: ${error instanceof Error ? error.message : String(error)}`);\n        }\n      }\n"""
+          if drag_marker not in text:
+              raise RuntimeError('Could not locate left_click_drag')
+          text = text.replace(drag_marker, persistent_cases + drag_marker, 1)
+
+          capture_start = text.find('  /**\n   * Trigger GIF auto-capture after a successful action.')
+          if capture_start >= 0:
+              capture_end = text.find('\n}\n\nexport const computerTool', capture_start)
+              if capture_end < 0:
+                  raise RuntimeError('Could not locate GIF auto-capture method end')
+              text = text[:capture_start] + text[capture_end:]
+          computer.write_text(text, encoding='utf-8')
+
+          # Package dependencies: remove libraries that only supported deleted products.
+          package_path = root / 'app/chrome-extension/package.json'
+          package = json.loads(package_path.read_text(encoding='utf-8'))
+          for dep in [
+              '@vue-flow/background', '@vue-flow/controls', '@vue-flow/core', '@vue-flow/minimap',
+              '@xenova/transformers', 'elkjs', 'gifenc', 'hnswlib-wasm-static', 'markstream-vue'
+          ]:
+              package.get('dependencies', {}).pop(dep, None)
+          for dep in ['@iconify-json/lucide', '@tailwindcss/vite', 'tailwindcss', 'unplugin-icons', 'unplugin-vue-components']:
+              package.get('devDependencies', {}).pop(dep, None)
+          package_path.write_text(json.dumps(package, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+
+          # WXT manifest/build: remove deleted UI surfaces, model workers, and their permissions/plugins.
+          config = root / 'app/chrome-extension/wxt.config.ts'
+          text = config.read_text(encoding='utf-8')
+          for line in [
+              "import tailwindcss from '@tailwindcss/vite';\n",
+              "import Icons from 'unplugin-icons/vite';\n",
+              "import Components from 'unplugin-vue-components/vite';\n",
+              "import IconsResolver from 'unplugin-icons/resolver';\n",
+          ]:
+              text = text.replace(line, '')
+          text = text.replace("      'offscreen',\n", '')
+          text = text.replace("      'sidePanel',\n", '')
+          text = text.replace("""    options_ui: {\n      page: 'options.html',\n      open_in_tab: true,\n    },\n""", '')
+          text = text.replace("""    side_panel: {\n      default_path: 'sidepanel.html',\n    },\n""", '')
+          commands = """    commands: {\n      toggle_web_editor: {\n        suggested_key: { default: 'Ctrl+Shift+O', mac: 'Command+Shift+O' },\n        description: 'تبديل وضع محرر الصفحة',\n      },\n      toggle_quick_panel: {\n        suggested_key: { default: 'Ctrl+Shift+U', mac: 'Command+Shift+U' },\n        description: 'تبديل لوحة Brauzio السريعة',\n      },\n    },\n"""
+          text = text.replace(commands, '')
+          text = text.replace("resources: ['/models/*', '/workers/*', '/inject-scripts/*']", "resources: ['/inject-scripts/*']")
+          text = text.replace("      tailwindcss(),\n", '')
+          components_block = """      Components({\n        dts: false,\n        resolvers: [IconsResolver({ prefix: 'i', enabledCollections: ['lucide', 'mdi', 'ri'] })],\n      }) as any,\n      Icons({ compiler: 'vue3', autoInstall: false }) as any,\n"""
+          text = text.replace(components_block, '')
+          workers_copy = """          {\n            src: ['workers/*'],\n            dest: 'workers',\n          },\n"""
+          text = text.replace(workers_copy, '')
+          text = text.replace("          cross_origin_embedder_policy: { value: 'require-corp' as const },\n", '')
+          text = text.replace("          cross_origin_opener_policy: { value: 'same-origin' as const },\n", '')
+          text = text.replace("script-src 'self' 'wasm-unsafe-eval';", "script-src 'self';")
+          config.write_text(text, encoding='utf-8')
+
+          print('Brauzio v2 migration prepared successfully.')
+          PY
+
+      - name: Refresh lockfile
+        run: |
+          corepack enable
+          corepack prepare pnpm@8.15.9 --activate
+          pnpm install --lockfile-only --ignore-scripts --no-frozen-lockfile
+
+      - name: Commit migration
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          if git diff --cached --quiet; then
+            echo 'No migration changes to commit.'
+            exit 0
+          fi
+          git commit -m 'v2: remove legacy extension surfaces and slim core [v2-migrate]'
+          git push origin HEAD:brauzio-v2-clean-ui
