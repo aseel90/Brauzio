@@ -14,6 +14,20 @@ locale_exclusions = {
     Path('app/chrome-extension/_locales/ko/messages.json'),
 }
 
+
+def classify(line: str) -> str:
+    stripped = line.strip()
+    if not stripped:
+        return 'blank'
+    if stripped.startswith(('//', '*', '/*', '<!--', '-->')):
+        return 'comment'
+    if '//' in line:
+        prefix, suffix = line.split('//', 1)
+        if CJK.search(suffix) and not CJK.search(prefix):
+            return 'inline-comment'
+    return 'code-or-text'
+
+
 hits = []
 for path in ROOT.rglob('*'):
     if not path.is_file() or path.suffix.lower() not in TEXT_EXTS:
@@ -29,10 +43,11 @@ for path in ROOT.rglob('*'):
         continue
     for number, line in enumerate(lines, 1):
         if CJK.search(line):
-            sample = line.strip().replace('`', "'")[:220]
-            hits.append((str(rel), number, sample))
+            sample = line.strip().replace('`', "'")[:260]
+            hits.append((str(rel), number, sample, classify(line)))
 
-counts = Counter(rel for rel, _, _ in hits)
+counts = Counter(rel for rel, _, _, _ in hits)
+classes = Counter(kind for _, _, _, kind in hits)
 body = [
     '# Brauzio Chinese-language audit',
     '',
@@ -40,6 +55,9 @@ body = [
     '',
     f'Remaining CJK-containing source/document lines: **{len(hits)}**',
     f'Files containing CJK text: **{len(counts)}**',
+    f'Comment-only lines: **{classes["comment"]}**',
+    f'Inline-comment lines: **{classes["inline-comment"]}**',
+    f'Code/text lines requiring review: **{classes["code-or-text"]}**',
     '',
     '## Files by hit count',
     '',
@@ -47,13 +65,23 @@ body = [
 for rel, count in counts.most_common():
     body.append(f'- **{count}** — `{rel}`')
 
-body += ['', '## Matching lines', '']
-for rel, number, sample in hits:
-    body.append(f'- `{rel}:{number}` — `{sample}`')
+body += ['', '## Code/text lines requiring review', '']
+for rel, number, sample, kind in hits:
+    if kind == 'code-or-text':
+        body.append(f'- `{rel}:{number}` — `{sample}`')
+
+body += ['', '## Comment lines', '']
+for rel, number, sample, kind in hits:
+    if kind != 'code-or-text':
+        body.append(f'- `{rel}:{number}` — `{sample}`')
 
 if not hits:
-    body.append('No Chinese/CJK text remains in the scanned Brauzio source and documentation outside ja/ko locales.')
+    body.append('No Chinese/CJK text remains in scanned source and documentation outside ja/ko locales.')
 
 OUT.parent.mkdir(parents=True, exist_ok=True)
 OUT.write_text('\n'.join(body) + '\n', encoding='utf-8')
-print(f'Chinese audit hits: {len(hits)} across {len(counts)} files')
+print(
+    f'Chinese audit hits: {len(hits)} across {len(counts)} files; '
+    f'comments={classes["comment"] + classes["inline-comment"]}; '
+    f'code/text={classes["code-or-text"]}'
+)
