@@ -1,0 +1,68 @@
+name: Apply Brauzio Raw CDP
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/apply-raw-cdp.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Apply Raw CDP tool
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/.brauzio-raw-cdp.py
+          git diff --check
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 8.15.9
+
+      - name: Install dependencies
+        run: pnpm install --no-frozen-lockfile --ignore-scripts
+
+      - name: Prepare extension types
+        run: pnpm --filter brauzio-extension exec wxt prepare
+
+      - name: Build shared schemas
+        run: pnpm --filter brauzio-shared build
+
+      - name: Typecheck Cloud MCP
+        run: pnpm --filter brauzio-cloud-mcp check
+
+      - name: Build extension
+        run: pnpm --filter brauzio-extension build
+
+      - name: Commit validated Raw CDP
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add \
+            app/chrome-extension/entrypoints/background/tools/browser/raw-cdp.ts \
+            app/chrome-extension/entrypoints/background/tools/browser/index.ts \
+            packages/shared/src/tools.ts
+          if git diff --cached --quiet; then
+            echo 'Raw CDP already applied.'
+            exit 0
+          fi
+          git commit -m 'Add allowlisted Raw CDP tool'
+          git push
