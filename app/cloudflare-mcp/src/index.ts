@@ -5,6 +5,15 @@ import { BrowserSession } from './browser-session';
 
 export { BrowserSession };
 
+const BRAUZIO_RUNTIME_VERSION = '2.0.0';
+const BRAUZIO_SCHEMA_VERSION = 'v2-2026-09-06';
+const BRAUZIO_COMPUTER_ACTIONS = [
+  'mouse_move',
+  'mouse_down',
+  'mouse_up',
+  'drag_hold',
+] as const;
+
 interface Env {
   BROWSER_SESSIONS: DurableObjectNamespace<BrowserSession>;
   DEFAULT_DEVICE_ID?: string;
@@ -85,7 +94,7 @@ async function callBrowserTool(
 
 function createServer(env: Env, deviceId: string) {
   const server = new Server(
-    { name: 'Brauzio', version: '0.1.0' },
+    { name: 'Brauzio', version: BRAUZIO_RUNTIME_VERSION },
     {
       capabilities: {
         tools: {},
@@ -120,7 +129,14 @@ export default {
     const url = new URL(request.url);
 
     if (url.pathname === '/health') {
-      return Response.json({ service: 'Brauzio MCP', ok: true, version: '0.1.0' });
+      return Response.json({
+        service: 'Brauzio MCP',
+        ok: true,
+        version: BRAUZIO_RUNTIME_VERSION,
+        schemaVersion: BRAUZIO_SCHEMA_VERSION,
+        toolCount: TOOL_SCHEMAS.length,
+        computerActions: BRAUZIO_COMPUTER_ACTIONS,
+      });
     }
 
     if (url.pathname === '/ws') {
