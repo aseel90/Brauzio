@@ -8,12 +8,6 @@ import { keyboardTool } from './keyboard';
 import { screenshotTool } from './screenshot';
 import { screenshotContextManager, scaleCoordinates } from '@/utils/screenshot-context';
 import { cdpSessionManager } from '@/utils/cdp-session-manager';
-import {
-  captureFrameOnAction,
-  isAutoCaptureActive,
-  type ActionMetadata,
-  type ActionType,
-} from './gif-recorder';
 
 type MouseButton = 'left' | 'right' | 'middle';
 
@@ -43,6 +37,9 @@ interface ComputerParams {
     | 'double_click'
     | 'triple_click'
     | 'left_click_drag'
+    | 'mouse_down'
+    | 'mouse_move'
+    | 'mouse_up'
     | 'scroll'
     | 'type'
     | 'key'
@@ -65,6 +62,7 @@ interface ComputerParams {
   text?: string; // for type/key
   repeat?: number; // for key action (1-100)
   modifiers?: Modifiers; // for click actions
+  button?: MouseButton; // persistent pointer button (default: left)
   region?: ZoomRegion; // for zoom action
   duration?: number; // seconds for wait
   // For fill
@@ -75,6 +73,21 @@ interface ComputerParams {
   tabId?: number; // target existing tab id
   windowId?: number;
   background?: boolean; // avoid focusing/activating
+}
+
+interface HeldMouseState {
+  button: MouseButton;
+  x: number;
+  y: number;
+}
+
+const heldMouseSessions = new Map<number, HeldMouseState>();
+const heldMouseOwner = (tabId: number) => `computer-mouse-hold:${tabId}`;
+
+function mouseButtonsMask(button: MouseButton): number {
+  if (button === 'right') return 2;
+  if (button === 'middle') return 4;
+  return 1;
 }
 
 // Minimal CDP helper encapsulated here to avoid scattering CDP code
@@ -232,36 +245,7 @@ class ComputerTool extends BaseBrowserToolExecutor {
       if (!tab.id)
         return createErrorResponse(ERROR_MESSAGES.TAB_NOT_FOUND + ': Active tab has no ID');
 
-      // Execute the action and capture frame on success
       const result = await this.executeAction(params, tab);
-
-      // Trigger auto-capture on successful actions (except screenshot which is read-only)
-      if (!result.isError && params.action !== 'screenshot' && params.action !== 'wait') {
-        const actionType = this.mapActionToCapture(params.action);
-        if (actionType) {
-          // Convert to viewport-space coordinates for GIF overlays
-          // params.coordinates may be screenshot-space when screenshot context exists
-          const ctx = screenshotContextManager.getContext(tab.id);
-          const toViewport = (c?: Coordinates): { x: number; y: number } | undefined => {
-            if (!c) return undefined;
-            if (!ctx) return { x: c.x, y: c.y };
-            const scaled = scaleCoordinates(c.x, c.y, ctx);
-            return { x: scaled.x, y: scaled.y };
-          };
-
-          const endCoords = toViewport(params.coordinates);
-          const startCoords = toViewport(params.startCoordinates);
-
-          await this.triggerAutoCapture(tab.id, actionType, {
-            coordinateSpace: 'viewport',
-            coordinates: endCoords,
-            startCoordinates: startCoords,
-            endCoordinates: actionType === 'drag' ? endCoords : undefined,
-            text: params.text,
-            ref: params.ref,
-          });
-        }
-      }
 
       return result;
     } catch (error) {
@@ -270,26 +254,6 @@ class ComputerTool extends BaseBrowserToolExecutor {
         `Failed to execute action: ${error instanceof Error ? error.message : String(error)}`,
       );
     }
-  }
-
-  private mapActionToCapture(action: string): ActionType | null {
-    const mapping: Record<string, ActionType> = {
-      left_click: 'click',
-      right_click: 'right_click',
-      double_click: 'double_click',
-      triple_click: 'triple_click',
-      left_click_drag: 'drag',
-      scroll: 'scroll',
-      type: 'type',
-      key: 'key',
-      hover: 'hover',
-      fill: 'fill',
-      fill_form: 'fill',
-      resize_page: 'other',
-      scroll_to: 'scroll',
-      zoom: 'other',
-    };
-    return mapping[action] || null;
   }
 
   private async executeAction(params: ComputerParams, tab: chrome.tabs.Tab): Promise<ToolResult> {
@@ -304,6 +268,22 @@ class ComputerTool extends BaseBrowserToolExecutor {
       if (!ctx) return c;
       const scaled = scaleCoordinates(c.x, c.y, ctx);
       return { x: scaled.x, y: scaled.y };
+    };
+
+    const resolvePointerCoordinate = async (): Promise<Coordinates | undefined> => {
+      if (params.ref) {
+        await this.injectContentScript(tab.id!, ['inject-scripts/accessibility-tree-helper.js']);
+        try {
+          const resolved = await this.sendMessageToTab(tab.id!, {
+            action: TOOL_MESSAGE_TYPES.RESOLVE_REF,
+            ref: params.ref,
+          });
+          if (resolved?.success) return project({ x: resolved.center.x, y: resolved.center.y });
+        } catch {
+          // Fall through to coordinates.
+        }
+      }
+      return params.coordinates ? project(params.coordinates) : undefined;
     };
 
     switch (params.action) {
@@ -736,6 +716,60 @@ class ComputerTool extends BaseBrowserToolExecutor {
           return createErrorResponse(
             `CDP ${params.action} failed: ${e instanceof Error ? e.message : String(e)}`,
           );
+        }
+      }
+      case 'mouse_down': {
+        const point = await resolvePointerCoordinate();
+        if (!point) return createErrorResponse('Provide ref or coordinates for mouse_down');
+        if (heldMouseSessions.has(tab.id)) {
+          return createErrorResponse('A mouse button is already held on this tab. Call mouse_up first.');
+        }
+        const button = params.button || 'left';
+        try {
+          await cdpSessionManager.attach(tab.id, heldMouseOwner(tab.id));
+          await CDPHelper.dispatchMouseEvent(tab.id, { type: 'mouseMoved', x: point.x, y: point.y, button: 'none', buttons: 0 });
+          await CDPHelper.dispatchMouseEvent(tab.id, { type: 'mousePressed', x: point.x, y: point.y, button, buttons: mouseButtonsMask(button), clickCount: 1 });
+          heldMouseSessions.set(tab.id, { button, x: point.x, y: point.y });
+          return { content: [{ type: 'text', text: JSON.stringify({ success: true, action: 'mouse_down', button, coordinates: point, holding: true }) }], isError: false };
+        } catch (error) {
+          heldMouseSessions.delete(tab.id);
+          await cdpSessionManager.detach(tab.id, heldMouseOwner(tab.id));
+          return createErrorResponse(`mouse_down failed: ${error instanceof Error ? error.message : String(error)}`);
+        }
+      }
+      case 'mouse_move': {
+        const point = await resolvePointerCoordinate();
+        if (!point) return createErrorResponse('Provide ref or coordinates for mouse_move');
+        const held = heldMouseSessions.get(tab.id);
+        try {
+          if (held) {
+            await CDPHelper.dispatchMouseEvent(tab.id, { type: 'mouseMoved', x: point.x, y: point.y, button: held.button, buttons: mouseButtonsMask(held.button) });
+            held.x = point.x;
+            held.y = point.y;
+          } else {
+            await cdpSessionManager.withSession(tab.id, 'computer-mouse-move', async () => {
+              await CDPHelper.dispatchMouseEvent(tab.id!, { type: 'mouseMoved', x: point.x, y: point.y, button: 'none', buttons: 0 });
+            });
+          }
+          return { content: [{ type: 'text', text: JSON.stringify({ success: true, action: 'mouse_move', coordinates: point, holding: Boolean(held) }) }], isError: false };
+        } catch (error) {
+          return createErrorResponse(`mouse_move failed: ${error instanceof Error ? error.message : String(error)}`);
+        }
+      }
+      case 'mouse_up': {
+        const held = heldMouseSessions.get(tab.id);
+        if (!held) return createErrorResponse('No mouse button is currently held on this tab');
+        const requestedPoint = await resolvePointerCoordinate();
+        const point = requestedPoint || { x: held.x, y: held.y };
+        try {
+          await CDPHelper.dispatchMouseEvent(tab.id, { type: 'mouseReleased', x: point.x, y: point.y, button: held.button, buttons: 0, clickCount: 1 });
+          heldMouseSessions.delete(tab.id);
+          await cdpSessionManager.detach(tab.id, heldMouseOwner(tab.id));
+          return { content: [{ type: 'text', text: JSON.stringify({ success: true, action: 'mouse_up', button: held.button, coordinates: point, holding: false }) }], isError: false };
+        } catch (error) {
+          heldMouseSessions.delete(tab.id);
+          await cdpSessionManager.detach(tab.id, heldMouseOwner(tab.id));
+          return createErrorResponse(`mouse_up failed: ${error instanceof Error ? error.message : String(error)}`);
         }
       }
       case 'left_click_drag': {
@@ -1399,29 +1433,7 @@ class ComputerTool extends BaseBrowserToolExecutor {
     }
   }
 
-  /**
-   * Trigger GIF auto-capture after a successful action.
-   * This is a no-op if auto-capture is not active.
-   */
-  private async triggerAutoCapture(
-    tabId: number,
-    actionType: ActionType,
-    metadata?: Partial<ActionMetadata>,
-  ): Promise<void> {
-    if (!isAutoCaptureActive(tabId)) {
-      return;
-    }
 
-    try {
-      await captureFrameOnAction(tabId, {
-        type: actionType,
-        ...metadata,
-      });
-    } catch (error) {
-      // Log but don't fail the main action
-      console.warn('[ComputerTool] Auto-capture failed:', error);
-    }
-  }
 }
 
 export const computerTool = new ComputerTool();

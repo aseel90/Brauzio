@@ -1,11 +1,7 @@
 import { defineConfig } from 'wxt';
-import tailwindcss from '@tailwindcss/vite';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
 import { config } from 'dotenv';
 import { resolve } from 'path';
-import Icons from 'unplugin-icons/vite';
-import Components from 'unplugin-vue-components/vite';
-import IconsResolver from 'unplugin-icons/resolver';
 
 config({ path: resolve(process.cwd(), '.env') });
 config({ path: resolve(process.cwd(), '.env.local') });
@@ -51,17 +47,11 @@ export default defineConfig({
       'debugger',
       'history',
       'bookmarks',
-      'offscreen',
       'storage',
       'declarativeNetRequest',
       'alarms',
-      'sidePanel',
     ],
     host_permissions: ['<all_urls>'],
-    options_ui: {
-      page: 'options.html',
-      open_in_tab: true,
-    },
     action: {
       default_popup: 'popup.html',
       default_title: 'Brauzio',
@@ -72,44 +62,23 @@ export default defineConfig({
         128: 'icon/128.png',
       },
     },
-    side_panel: {
-      default_path: 'sidepanel.html',
-    },
-    commands: {
-      toggle_web_editor: {
-        suggested_key: { default: 'Ctrl+Shift+O', mac: 'Command+Shift+O' },
-        description: 'تبديل وضع محرر الصفحة',
-      },
-      toggle_quick_panel: {
-        suggested_key: { default: 'Ctrl+Shift+U', mac: 'Command+Shift+U' },
-        description: 'تبديل لوحة Brauzio السريعة',
-      },
-    },
     web_accessible_resources: [
       {
-        resources: ['/models/*', '/workers/*', '/inject-scripts/*'],
+        resources: ['/inject-scripts/*'],
         matches: ['<all_urls>'],
       },
     ],
     ...(IS_DEV
       ? {}
       : {
-          cross_origin_embedder_policy: { value: 'require-corp' as const },
-          cross_origin_opener_policy: { value: 'same-origin' as const },
           content_security_policy: {
             extension_pages:
-              "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:;",
+              "script-src 'self'; object-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:;",
           },
         }),
   },
   vite: (env) => ({
     plugins: [
-      tailwindcss(),
-      Components({
-        dts: false,
-        resolvers: [IconsResolver({ prefix: 'i', enabledCollections: ['lucide', 'mdi', 'ri'] })],
-      }) as any,
-      Icons({ compiler: 'vue3', autoInstall: false }) as any,
       // WXT validates web_accessible_resources before Rollup's writeBundle phase.
       // Copy these files at buildStart so they always exist before manifest validation.
       viteStaticCopy({
@@ -117,10 +86,6 @@ export default defineConfig({
           {
             src: 'inject-scripts/*.js',
             dest: 'inject-scripts',
-          },
-          {
-            src: ['workers/*'],
-            dest: 'workers',
           },
           {
             src: '_locales/**/*',
