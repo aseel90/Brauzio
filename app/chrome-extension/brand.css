@@ -1,0 +1,178 @@
+:root {
+  --brauzio-ink: #0b1220;
+  --brauzio-ink-soft: #334155;
+  --brauzio-muted: #64748b;
+  --brauzio-canvas: #f7f9fc;
+  --brauzio-surface: #ffffff;
+  --brauzio-border: #e2e8f0;
+  --brauzio-indigo: #5b5bd6;
+  --brauzio-indigo-hover: #4f46e5;
+  --brauzio-teal: #12b8b0;
+  --brauzio-teal-hover: #0d9488;
+  --brauzio-gradient: linear-gradient(135deg, #5b5bd6 0%, #12b8b0 100%);
+  --brauzio-glow: 0 14px 40px rgba(91, 91, 214, 0.16);
+}
+
+html,
+body {
+  background: var(--brauzio-canvas);
+  color: var(--brauzio-ink);
+}
+
+body,
+button,
+input,
+textarea,
+select {
+  font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+}
+
+.agent-theme {
+  --ac-font-body: 'Segoe UI', Tahoma, Arial, sans-serif !important;
+  --ac-font-heading: 'Segoe UI', Tahoma, Arial, sans-serif !important;
+  --ac-bg: #f7f9fc !important;
+  --ac-header-bg: rgba(247, 249, 252, 0.96) !important;
+  --ac-header-border: rgba(91, 91, 214, 0.12) !important;
+  --ac-surface: #ffffff !important;
+  --ac-surface-muted: #f1f5f9 !important;
+  --ac-surface-inset: #f1f5f9 !important;
+  --ac-text: #0b1220 !important;
+  --ac-text-muted: #64748b !important;
+  --ac-text-subtle: #94a3b8 !important;
+  --ac-border: #e2e8f0 !important;
+  --ac-border-strong: #cbd5e1 !important;
+  --ac-hover-bg: #eef2ff !important;
+  --ac-hover-bg-subtle: #f8fafc !important;
+  --ac-accent: #5b5bd6 !important;
+  --ac-accent-hover: #4f46e5 !important;
+  --ac-accent-subtle: rgba(91, 91, 214, 0.12) !important;
+  --ac-accent-contrast: #ffffff !important;
+  --ac-accent-2: #12b8b0 !important;
+  --ac-link: #5b5bd6 !important;
+  --ac-link-hover: #4f46e5 !important;
+  --ac-focus-ring: rgba(91, 91, 214, 0.3) !important;
+  --ac-selection-bg: rgba(18, 184, 176, 0.16) !important;
+  --ac-selection-text: #0b1220 !important;
+  --ac-shadow-card: 0 8px 24px rgba(15, 23, 42, 0.07) !important;
+  --ac-shadow-float: 0 16px 44px rgba(15, 23, 42, 0.12) !important;
+}
+
+.brand-lockup {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.brand-mark {
+  width: 34px;
+  height: 34px;
+  flex: 0 0 auto;
+  filter: drop-shadow(0 8px 16px rgba(79, 70, 229, 0.2));
+}
+
+.brand-title-stack {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.brand-subtitle {
+  margin-top: 1px;
+  color: #64748b;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0;
+}
+
+.popup-container .header {
+  background:
+    radial-gradient(circle at 92% 0%, rgba(18, 184, 176, 0.12), transparent 38%),
+    radial-gradient(circle at 8% 0%, rgba(91, 91, 214, 0.14), transparent 40%),
+    #ffffff !important;
+  border-bottom-color: rgba(91, 91, 214, 0.12) !important;
+}
+
+.popup-container .header-title {
+  color: var(--brauzio-ink) !important;
+  letter-spacing: -0.02em;
+}
+
+.popup-container .section-title {
+  color: var(--brauzio-ink-soft) !important;
+}
+
+.popup-container .entry-card,
+.popup-container .config-card,
+.popup-container .stats-card,
+.popup-container .semantic-engine-card,
+.popup-container .model-card {
+  border-color: var(--brauzio-border) !important;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06) !important;
+}
+
+.popup-container .entry-item:hover,
+.popup-container .model-card:hover {
+  background: #f8fafc !important;
+  border-color: rgba(91, 91, 214, 0.35) !important;
+}
+
+.popup-container .primary-button,
+.popup-container .connect-button,
+.popup-container .semantic-engine-button,
+.popup-container .current-model-badge,
+.popup-container .check-icon {
+  background: var(--brauzio-gradient) !important;
+  color: #ffffff !important;
+}
+
+.popup-container .primary-button:hover,
+.popup-container .connect-button:hover:not(:disabled),
+.popup-container .semantic-engine-button:hover:not(:disabled) {
+  filter: brightness(0.96);
+}
+
+.popup-container .model-name.selected-text,
+.popup-container .current-model-name,
+.popup-container .footer-link:hover {
+  color: var(--brauzio-indigo) !important;
+}
+
+.cloud-card {
+  border-color: rgba(91, 91, 214, 0.18) !important;
+  box-shadow: var(--brauzio-glow) !important;
+}
+
+.cloud-card__eyebrow,
+.secret-toggle,
+.mcp-url-box__label {
+  color: var(--brauzio-indigo) !important;
+}
+
+.cloud-field input:focus {
+  border-color: var(--brauzio-indigo) !important;
+  box-shadow: 0 0 0 3px rgba(91, 91, 214, 0.12) !important;
+}
+
+.auto-connect input {
+  accent-color: var(--brauzio-indigo) !important;
+}
+
+.mcp-url-box {
+  background: linear-gradient(135deg, #eef2ff 0%, #ecfeff 100%) !important;
+  border-color: rgba(91, 91, 214, 0.28) !important;
+}
+
+.mcp-url-box button,
+.cloud-button--primary {
+  background: var(--brauzio-gradient) !important;
+  color: #ffffff !important;
+}
+
+.cloud-button--primary:hover:not(:disabled) {
+  filter: brightness(0.96);
+}
+
+::selection {
+  background: rgba(18, 184, 176, 0.2);
+  color: var(--brauzio-ink);
+}
