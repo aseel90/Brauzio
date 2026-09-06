@@ -6,7 +6,29 @@
 
 تحويل `hangwin/mcp-chrome` من بنية تعتمد على Native Messaging وخادم Node محلي إلى إضافة Chrome عربية تتصل مباشرةً بـ ChatGPT Custom MCP عبر Cloudflare، بدون `cloudflared` وبدون Node.js على جهاز المستخدم النهائي.
 
-## البنية المستهدفة
+## الحالة الحالية
+
+تم تنفيذ البنية السحابية ونشرها فعليًا على Cloudflare بتاريخ 2026-09-06.
+
+Worker الحالي:
+
+```text
+https://brauzio-mcp.aseelsalah266.workers.dev
+```
+
+اسم Worker:
+
+```text
+brauzio-mcp
+```
+
+المعرف الافتراضي للجهاز:
+
+```text
+default
+```
+
+## البنية الحالية
 
 ```text
 ┌──────────────────────────┐
@@ -90,39 +112,46 @@ MCP Client
 
 ```text
 ChatGPT
-  -> https://worker/mcp
+  -> https://brauzio-mcp.aseelsalah266.workers.dev/mcp
   -> Cloudflare Worker + Durable Object
-  -> wss://worker/ws
+  -> wss://brauzio-mcp.aseelsalah266.workers.dev/ws
   -> Extension
 ```
 
-## ما أزيل من مسار التشغيل
+## ما أزيل نهائيًا من مسار Brauzio
 
 - `nativeMessaging` permission من Manifest.
-- التشغيل التلقائي لـ `initNativeHostListener()`.
+- Native Host المحلي.
+- `app/native-server` من Workspace والمشروع الحالي.
 - واجهة المنفذ 12306 في popup.
 - إعداد `127.0.0.1` للمستخدم.
 - الحاجة إلى `mcp-chrome-bridge` للمستخدم النهائي.
 - الحاجة إلى `cloudflared` بالكامل.
-
-## لماذا ما زال `app/native-server` موجودًا؟
-
-المجلد محفوظ مؤقتًا كمرجع توافق للمزايا التي ربما كانت تعتمد على معالجة Node خاصة، وليس جزءًا من مسار Brauzio السحابي الأساسي. لا يجب إعادة ربطه تلقائيًا بالإصدار السحابي.
-
-قبل حذفه نهائيًا يجب إجراء audit لكل أداة لمعرفة إن كانت تعتمد على وظائف native-only. أي وظيفة لازمة يجب نقلها إلى الإضافة أو Cloudflare بطريقة مناسبة أولًا.
+- نظام Agent المحلي القديم المعتمد على localhost/SSE.
 
 ## المصادقة الحالية
 
 نسخة الاستخدام الفردي تستخدم أسرارًا مشتركة:
 
 - `BROWSER_SHARED_SECRET`: بين إضافة Chrome والـ Worker.
-- `MCP_SHARED_SECRET`: بين عميل MCP والـ Worker، ويمكن أن يكون منفصلًا.
+- `MCP_SHARED_SECRET`: بين عميل MCP والـ Worker.
 
-الإضافة ترسل الرمز داخل رسالة المصادقة الأولى للـ WebSocket. Endpoint MCP يقبل Bearer token، ويوجد دعم `?key=` لتسهيل MVP الفردي.
+الإضافة ترسل `BROWSER_SHARED_SECRET` داخل رسالة المصادقة الأولى للـ WebSocket.
+Endpoint MCP يقبل:
+
+```text
+Authorization: Bearer <MCP_SHARED_SECRET>
+```
+
+كما يدعم مؤقتًا للاستخدام الفردي:
+
+```text
+?key=<MCP_SHARED_SECRET>
+```
 
 ### قبل الإطلاق العام
 
-يجب استبدال `?key=` بمصادقة OAuth مناسبة وربط كل مستخدم/جهاز بهوية مستقلة. لا تُخزن أسرار Cloudflare داخل المستودع.
+يجب استبدال `?key=` بمصادقة OAuth وربط كل مستخدم/جهاز بهوية مستقلة. لا تُخزن أسرار Cloudflare أو MCP داخل المستودع أو داخل الإضافة المبنية.
 
 ## Device routing
 
@@ -132,7 +161,9 @@ ChatGPT
 /mcp?device=default
 ```
 
-ويتم توجيه الطلب إلى Durable Object الموافق لذلك الجهاز. هذا يسمح مستقبلًا بإدارة أكثر من متصفح دون تغيير أدوات MCP نفسها.
+ويتم توجيه الطلب إلى Durable Object الموافق لذلك الجهاز.
+
+WebSocket نفسه يربط الجهاز بمسار Durable Object ويتحقق من أن `deviceId` المعلن من الإضافة يطابق الجهاز المتوقع قبل قبول المصادقة.
 
 ## دورة tool call
 
@@ -146,40 +177,103 @@ ChatGPT
 8. Durable Object يحل الطلب المنتظر.
 9. MCP يعيد النتيجة إلى ChatGPT.
 
+## إعداد الإضافة الحالية
+
+Relay URL:
+
+```text
+https://brauzio-mcp.aseelsalah266.workers.dev
+```
+
+Device ID:
+
+```text
+default
+```
+
+Device token:
+
+```text
+BROWSER_SHARED_SECRET
+```
+
+## إعداد ChatGPT Custom MCP الحالي
+
+في وضع MVP الفردي:
+
+```text
+https://brauzio-mcp.aseelsalah266.workers.dev/mcp?device=default&key=<MCP_SHARED_SECRET>
+```
+
+الأفضل عند دعم العميل لـ Authorization header استخدام Bearer بدل وضع السر داخل URL.
+
 ## سياسة اللغة
 
 - العربية هي اللغة الافتراضية.
 - اتجاه الواجهات RTL.
 - القيم التقنية مثل URLs وJSON وأسماء الأدوات تبقى LTR حيث يلزم.
 - `_locales/zh_CN` و`_locales/zh_TW` غير موجودتين في إصدار Brauzio.
-- `scripts/audit_ui_chinese.py` يفحص واجهات التشغيل لمنع عودة نص صيني ظاهر للمستخدم.
+- `scripts/audit_ui_chinese.py` و`chinese-audit.yml` يمنعان عودة نص صيني إلى واجهات Brauzio.
 
-## CI
+## CI والبناء
 
 `.github/workflows/brauzio-ci.yml` يتحقق من:
 
-1. تثبيت الاعتماديات مع `--ignore-scripts` لتجنب postinstall الخاص بالـ Native Server القديم.
-2. `wxt prepare`.
-3. بناء shared schemas.
-4. Typecheck لـ Cloud MCP.
-5. build لـ Cloud MCP.
-6. build لإضافة Chrome.
+1. عدم وجود مراجع Local/Native legacy داخل الإضافة.
+2. تثبيت الاعتماديات.
+3. `wxt prepare`.
+4. بناء shared schemas.
+5. Typecheck لـ Cloud MCP.
+6. build لـ Cloud MCP.
+7. build لإضافة Chrome.
+8. إنشاء ZIP.
+9. التحقق من manifest والعربية وعدم وجود zh_CN/zh_TW.
+10. رفع Artifact قابل للتثبيت.
 
-أي تغيير في relay أو Cloudflare أو الإضافة يجب أن يمر بهذا البناء قبل اعتباره جاهزًا.
+## النشر التلقائي
 
-## خطة ما قبل الإصدار العام
+`.github/workflows/deploy-cloudflare.yml` ينشر `app/cloudflare-mcp` إلى Cloudflare.
 
-1. نشر Worker على حساب Cloudflare الفعلي.
-2. ضبط أسرار Worker.
-3. تثبيت build حديث من الإضافة.
-4. التحقق من WebSocket authentication.
-5. اختبار `/browser-status`.
-6. إضافة MCP إلى ChatGPT.
-7. اختبار `get_windows_and_tabs` أولًا.
-8. اختبار read/click/type/screenshot/navigation.
-9. اختبار الأدوات المتقدمة واحدةً واحدة لتحديد أي native-only gaps.
-10. اعتماد OAuth قبل خدمة متعددة المستخدمين.
-11. إصدار ZIP/Release مبني تلقائيًا للمستخدم النهائي.
+GitHub repository secrets المطلوبة:
+
+```text
+CLOUDFLARE_API_TOKEN
+CLOUDFLARE_ACCOUNT_ID
+BRAUZIO_BROWSER_SHARED_SECRET
+BRAUZIO_MCP_SHARED_SECRET
+```
+
+الـ workflow:
+
+1. يتحقق من وجود الأسرار.
+2. يبني shared schemas.
+3. يعمل Typecheck لـ Cloud MCP.
+4. يرفع `BROWSER_SHARED_SECRET` و`MCP_SHARED_SECRET` إلى Cloudflare عبر Wrangler.
+5. ينشر Worker وDurable Object migration.
+
+أول نشر فعلي نجح في GitHub Actions run:
+
+```text
+34032671942
+```
+
+Cloudflare Version ID لذلك النشر:
+
+```text
+363ed682-d1f5-46a9-b552-961b01e79440
+```
+
+## ما تبقى قبل اعتبار المنتج مختبرًا End-to-End
+
+1. تثبيت أحدث ZIP للإضافة في Chrome.
+2. إدخال Worker URL + `default` + `BROWSER_SHARED_SECRET` في popup.
+3. التأكد أن حالة الإضافة أصبحت متصلة.
+4. اختبار `/browser-status`.
+5. إضافة Remote MCP إلى ChatGPT باستخدام `MCP_SHARED_SECRET`.
+6. اختبار `get_windows_and_tabs` أولًا.
+7. اختبار navigation/read/click/type/screenshot.
+8. اختبار الأدوات المتقدمة.
+9. اعتماد OAuth قبل إطلاق عام متعدد المستخدمين.
 
 ## الأصل والترخيص
 
