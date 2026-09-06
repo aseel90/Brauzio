@@ -78,12 +78,25 @@ jobs:
           ZIP=app/chrome-extension/.output/brauzio-chrome.zip
           ls -lh "$ZIP"
           unzip -t "$ZIP" >/dev/null
-          unzip -p "$ZIP" manifest.json | grep -Fq '"default_locale": "ar"'
-          unzip -p "$ZIP" manifest.json | grep -Fq '"default_title": "Brauzio"'
-          if unzip -l "$ZIP" | grep -Eq '_locales/(zh_CN|zh_TW)/'; then
-            echo 'Chinese locale directory unexpectedly present in package.' >&2
-            exit 1
-          fi
+          TMP_DIR="$(mktemp -d)"
+          trap 'rm -rf "$TMP_DIR"' EXIT
+          unzip -q "$ZIP" -d "$TMP_DIR"
+          python - "$TMP_DIR" <<'PY'
+          import json
+          import pathlib
+          import sys
+
+          root = pathlib.Path(sys.argv[1])
+          manifest = json.loads((root / 'manifest.json').read_text(encoding='utf-8'))
+
+          assert manifest.get('default_locale') == 'ar', manifest.get('default_locale')
+          assert manifest.get('action', {}).get('default_title') == 'Brauzio', manifest.get('action')
+          assert (root / '_locales' / 'ar' / 'messages.json').is_file(), 'Arabic locale missing'
+          assert not (root / '_locales' / 'zh_CN').exists(), 'zh_CN unexpectedly present'
+          assert not (root / '_locales' / 'zh_TW').exists(), 'zh_TW unexpectedly present'
+
+          print('Packaged manifest verified: Arabic default locale, Brauzio title, no Chinese locales.')
+          PY
 
       - name: Upload installable Brauzio ZIP
         uses: actions/upload-artifact@v4
