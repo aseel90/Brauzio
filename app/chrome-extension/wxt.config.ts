@@ -7,6 +7,7 @@ config({ path: resolve(process.cwd(), '.env') });
 config({ path: resolve(process.cwd(), '.env.local') });
 
 const CHROME_EXTENSION_KEY = process.env.CHROME_EXTENSION_KEY;
+const IS_DEV = process.env.NODE_ENV !== 'production' && process.env.MODE !== 'production';
 
 export default defineConfig({
   modules: ['@wxt-dev/module-vue'],
@@ -36,7 +37,6 @@ export default defineConfig({
       'bookmarks',
       'offscreen',
       'storage',
-      'declarativeNetRequest',
     ],
     host_permissions: ['<all_urls>'],
     action: {
@@ -55,6 +55,14 @@ export default defineConfig({
         matches: ['<all_urls>'],
       },
     ],
+    ...(IS_DEV
+      ? {}
+      : {
+          content_security_policy: {
+            extension_pages:
+              "script-src 'self'; object-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:;",
+          },
+        }),
   },
   vite: (env) => ({
     plugins: [
