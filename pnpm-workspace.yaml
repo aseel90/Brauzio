@@ -1,3 +1,4 @@
 packages:
-  - 'app/*'
+  - 'app/chrome-extension'
+  - 'app/cloudflare-mcp'
   - 'packages/*'
