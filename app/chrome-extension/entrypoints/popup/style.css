@@ -34,7 +34,6 @@
   --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
   --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.1);
 
-  /* Brauzio internal note. */
   --spacing-xs: 4px;
   --spacing-sm: 8px;
   --spacing-md: 12px;
@@ -43,19 +42,16 @@
   --spacing-2xl: 24px;
   --spacing-3xl: 32px;
 
-  /* Brauzio internal note. */
   --radius-sm: 4px;
   --radius-md: 6px;
   --radius-lg: 8px;
   --radius-xl: 12px;
   --radius-2xl: 16px;
 
-  /* Brauzio internal note. */
   --transition-fast: 0.15s ease;
   --transition-normal: 0.3s ease;
   --transition-slow: 0.5s ease;
 
-  /* Brauzio internal note. */
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -63,20 +59,24 @@
   -webkit-text-size-adjust: 100%;
 }
 
-/* Brauzio internal note. */
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
+html,
 body {
+  width: 400px;
+  height: 600px;
+  min-height: 600px;
+  max-height: 600px;
   margin: 0;
   padding: 0;
-  width: 400px;
-  min-height: 500px;
-  max-height: 600px;
   overflow: hidden;
+}
+
+body {
   font-family: inherit;
   background: var(--bg-secondary);
   color: var(--text-primary);
@@ -84,12 +84,48 @@ body {
 
 #app {
   width: 100%;
-  height: 100%;
+  height: 600px;
+  min-height: 0;
   margin: 0;
   padding: 0;
+  overflow: hidden;
 }
 
-/* Brauzio internal note. */
+/* Keep exactly one vertical scroll owner in the popup. This prevents Chrome's
+   popup viewport from resizing/re-anchoring while reactive status cards update. */
+#app .popup-container {
+  width: 100%;
+  height: 600px;
+  max-height: 600px;
+  min-height: 0;
+  overflow: hidden;
+}
+
+#app .home-view {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+}
+
+#app .home-view > .header,
+#app .home-view > .footer {
+  flex: 0 0 auto;
+}
+
+#app .home-view > .content {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior-y: contain;
+  scroll-behavior: auto;
+  overflow-anchor: none;
+  -webkit-overflow-scrolling: touch;
+}
+
 a {
   color: var(--primary-color);
   text-decoration: none;
@@ -100,7 +136,6 @@ a:hover {
   color: var(--primary-dark);
 }
 
-/* Brauzio internal note. */
 button {
   font-family: inherit;
   font-size: inherit;
@@ -116,7 +151,6 @@ button:disabled {
   opacity: 0.6;
 }
 
-/* Brauzio internal note. */
 input,
 textarea,
 select {
@@ -139,7 +173,6 @@ select:focus {
   box-shadow: 0 0 0 3px rgba(91, 91, 214, 0.12);
 }
 
-/* Brauzio internal note. */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
@@ -160,62 +193,36 @@ select:focus {
   background: var(--text-muted);
 }
 
-/* Brauzio internal note. */
 ::selection {
   background: rgba(91, 91, 214, 0.18);
   color: var(--text-primary);
 }
 
-/* Brauzio internal note. */
 :focus-visible {
   outline: 2px solid var(--primary-color);
   outline-offset: 2px;
 }
 
-/* Brauzio internal note. */
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 @keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes slideDown {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes scaleIn {
-  from {
-    opacity: 0;
-    transform: scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
 }
 
-/* Brauzio internal note. */
 @media (max-width: 420px) {
   :root {
     --spacing-xs: 3px;
@@ -228,7 +235,6 @@ select:focus {
   }
 }
 
-/* Brauzio internal note. */
 @media (prefers-contrast: high) {
   :root {
     --border-color: #000000;
@@ -236,7 +242,6 @@ select:focus {
   }
 }
 
-/* Brauzio internal note. */
 @media (prefers-reduced-motion: reduce) {
   * {
     animation-duration: 0.01ms !important;
