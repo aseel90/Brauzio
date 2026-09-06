@@ -1,4 +1,5 @@
 import { handleCallTool } from './tools';
+import { releaseAllMouseHolds } from '@/utils/mouse-hold-safety';
 
 const LOG_PREFIX = '[BrauzioRelay]';
 const HEARTBEAT_MS = 20_000;
@@ -108,7 +109,21 @@ function clearReconnect() {
   reconnectTimer = null;
 }
 
+function releaseMouseSafety(reason: string) {
+  void releaseAllMouseHolds(reason)
+    .then((count) => {
+      if (count > 0) relayLog('MOUSE_HOLD_EMERGENCY_RELEASE', { reason, count });
+    })
+    .catch((error) => {
+      relayLog('MOUSE_HOLD_RELEASE_FAILED', {
+        reason,
+        error: error instanceof Error ? error.message : String(error),
+      });
+    });
+}
+
 function closeSocket() {
+  releaseMouseSafety('relay_socket_close_requested');
   clearHeartbeat();
   if (socket) {
     try {
@@ -274,11 +289,13 @@ export async function connectRelay(): Promise<BrauzioRelayStatus> {
 
     socket.addEventListener('error', () => {
       relayLog('WS_ERROR', { relayHost: new URL(wsUrl).host });
+      releaseMouseSafety('relay_socket_error');
       updateStatus({ state: 'error', authenticated: false, lastError: 'WebSocket connection error' });
     });
 
     socket.addEventListener('close', (event) => {
       relayLog('WS_CLOSED', { code: event.code, reason: event.reason || '', wasClean: event.wasClean });
+      releaseMouseSafety('relay_socket_closed');
       clearHeartbeat();
       socket = null;
       if (!manualDisconnect) {
@@ -303,6 +320,7 @@ export async function disconnectRelay() {
   manualDisconnect = true;
   currentPairing = null;
   clearReconnect();
+  await releaseAllMouseHolds('manual_relay_disconnect').catch(() => {});
   closeSocket();
   updateStatus({ state: 'disconnected', authenticated: false, lastError: undefined });
 }
