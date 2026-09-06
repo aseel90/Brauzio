@@ -116,31 +116,39 @@ export class BrowserSession extends DurableObject<Env> {
     }
 
     if (url.pathname === '/pairing/consume' && request.method === 'POST') {
-      if (this.authenticatedSockets().length === 0) {
-        return Response.json({ error: 'Brauzio extension is not connected' }, { status: 409 });
-      }
-
       const body = (await request.json().catch(() => ({}))) as { code?: string };
       const suppliedHash = await pairingCodeHash(body.code);
       const record = await this.ctx.storage.get<PairingRecord>(PAIRING_STORAGE_KEY);
-      const expired = Boolean(record && record.expiresAt <= Date.now());
-      const matched = Boolean(record && !expired && constantTimeEqual(suppliedHash, record.codeHash));
+      const connectedSockets = this.authenticatedSockets().length;
 
-      if (!record || expired || !matched) {
-        if (record) {
-          const attempts = record.attempts + 1;
-          if (expired || attempts >= PAIRING_MAX_ATTEMPTS) {
-            await this.ctx.storage.delete(PAIRING_STORAGE_KEY);
-          } else {
-            await this.ctx.storage.put(PAIRING_STORAGE_KEY, { ...record, attempts });
-          }
+      // A pairing code is proof that the user approved from the authenticated extension.
+      // Do not invalidate it just because the MV3 WebSocket reconnects between creation
+      // and OAuth form submission. It remains one-time, short-lived and rate-limited.
+      if (!record) {
+        sessionLog('PAIRING_REJECTED', { reason: 'not_found', connectedSockets });
+        return Response.json({ error: 'No active pairing code', code: 'PAIRING_NOT_FOUND' }, { status: 404 });
+      }
+
+      if (record.expiresAt <= Date.now()) {
+        await this.ctx.storage.delete(PAIRING_STORAGE_KEY);
+        sessionLog('PAIRING_REJECTED', { reason: 'expired', expiresAt: record.expiresAt, connectedSockets });
+        return Response.json({ error: 'Pairing code expired', code: 'PAIRING_EXPIRED' }, { status: 410 });
+      }
+
+      if (!constantTimeEqual(suppliedHash, record.codeHash)) {
+        const attempts = record.attempts + 1;
+        if (attempts >= PAIRING_MAX_ATTEMPTS) {
+          await this.ctx.storage.delete(PAIRING_STORAGE_KEY);
+          sessionLog('PAIRING_REJECTED', { reason: 'attempts_exceeded', attempts, connectedSockets });
+          return Response.json({ error: 'Pairing attempts exceeded', code: 'PAIRING_ATTEMPTS_EXCEEDED' }, { status: 429 });
         }
-        sessionLog('PAIRING_REJECTED');
-        return Response.json({ error: 'Invalid or expired pairing code' }, { status: 401 });
+        await this.ctx.storage.put(PAIRING_STORAGE_KEY, { ...record, attempts });
+        sessionLog('PAIRING_REJECTED', { reason: 'mismatch', attempts, connectedSockets });
+        return Response.json({ error: 'Pairing code mismatch', code: 'PAIRING_MISMATCH' }, { status: 401 });
       }
 
       await this.ctx.storage.delete(PAIRING_STORAGE_KEY);
-      sessionLog('PAIRING_CONSUMED', { expiresAt: record.expiresAt });
+      sessionLog('PAIRING_CONSUMED', { expiresAt: record.expiresAt, connectedSockets });
       return Response.json({ ok: true });
     }
 

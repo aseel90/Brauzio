@@ -6,8 +6,8 @@ import { BrowserSession } from './browser-session';
 
 export { BrowserSession };
 
-const BRAUZIO_RUNTIME_VERSION = '2.1.0';
-const BRAUZIO_SCHEMA_VERSION = 'v2.1-2026-09-06';
+const BRAUZIO_RUNTIME_VERSION = '2.1.1';
+const BRAUZIO_SCHEMA_VERSION = 'v2.1.1-2026-09-06';
 const BRAUZIO_SCOPE = 'brauzio:control';
 const BRAUZIO_COMPUTER_ACTIONS = [
   'mouse_move',
@@ -198,15 +198,49 @@ function authorizationPage(options: {
   });
 }
 
-async function consumePairingCode(env: Env, deviceId: string, code: string): Promise<boolean> {
-  const response = await browserStub(env, deviceId).fetch(
-    new Request('https://brauzio-browser.internal/pairing/consume', {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ code }),
-    }),
-  );
-  return response.ok;
+type PairingConsumeFailure =
+  | 'missing'
+  | 'not_found'
+  | 'expired'
+  | 'mismatch'
+  | 'attempts_exceeded'
+  | 'server_error';
+
+type PairingConsumeResult = { ok: true } | { ok: false; reason: PairingConsumeFailure };
+
+async function consumePairingCode(env: Env, deviceId: string, code: string): Promise<PairingConsumeResult> {
+  try {
+    const response = await browserStub(env, deviceId).fetch(
+      new Request('https://brauzio-browser.internal/pairing/consume', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ code }),
+      }),
+    );
+    if (response.ok) return { ok: true };
+    const payload = (await response.json().catch(() => ({}))) as { code?: string };
+    const reason: PairingConsumeFailure =
+      payload.code === 'PAIRING_NOT_FOUND' ? 'not_found'
+        : payload.code === 'PAIRING_EXPIRED' ? 'expired'
+          : payload.code === 'PAIRING_MISMATCH' ? 'mismatch'
+            : payload.code === 'PAIRING_ATTEMPTS_EXCEEDED' ? 'attempts_exceeded'
+              : 'server_error';
+    return { ok: false, reason };
+  } catch (error) {
+    workerLog('PAIRING_CONSUME_FAILED', { deviceId, error: error instanceof Error ? error.message : String(error) });
+    return { ok: false, reason: 'server_error' };
+  }
+}
+
+function pairingErrorMessage(reason: PairingConsumeFailure): string {
+  switch (reason) {
+    case 'missing': return 'أدخل رمز الربط الذي ظهر في إضافة Brauzio.';
+    case 'not_found': return 'لا يوجد رمز ربط نشط لهذا الجهاز. أنشئ رمزًا جديدًا من إضافة Brauzio ثم حاول مرة أخرى.';
+    case 'expired': return 'انتهت صلاحية رمز الربط. أنشئ رمزًا جديدًا من إضافة Brauzio.';
+    case 'mismatch': return 'رمز الربط لا يطابق آخر رمز تم إنشاؤه لهذا الجهاز. انسخ أحدث رمز ظاهر في إضافة Brauzio.';
+    case 'attempts_exceeded': return 'تم تجاوز عدد محاولات رمز الربط. أنشئ رمزًا جديدًا من إضافة Brauzio.';
+    default: return 'تعذر التحقق من رمز الربط بسبب خطأ في Brauzio Cloud. حاول إنشاء رمز جديد ثم أعد المحاولة.';
+  }
 }
 
 async function handleAuthorize(request: Request, env: Env): Promise<Response> {
@@ -234,13 +268,17 @@ async function handleAuthorize(request: Request, env: Env): Promise<Response> {
   const deviceId = normalizeDeviceId(form.get('device') || defaultDeviceId);
   const pairingCode = String(form.get('pairing_code') || '').trim();
 
-  if (!pairingCode || !(await consumePairingCode(env, deviceId, pairingCode))) {
-    workerLog('OAUTH_PAIRING_REJECTED', { deviceId, clientId: oauthRequest.clientId });
+  const pairingResult: PairingConsumeResult = pairingCode
+    ? await consumePairingCode(env, deviceId, pairingCode)
+    : { ok: false, reason: 'missing' };
+
+  if (!pairingResult.ok) {
+    workerLog('OAUTH_PAIRING_REJECTED', { deviceId, clientId: oauthRequest.clientId, reason: pairingResult.reason });
     return authorizationPage({
       requestUrl: request.url,
       clientName,
       defaultDeviceId: deviceId,
-      error: 'رمز الربط غير صحيح أو انتهت صلاحيته. أنشئ رمزًا جديدًا من إضافة Brauzio.',
+      error: pairingErrorMessage(pairingResult.reason),
     });
   }
 
