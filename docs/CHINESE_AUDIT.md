@@ -2,7 +2,7 @@
 
 Generated automatically by `scripts/brauzio_phase1.py`.
 
-Remaining CJK-containing lines: **4263**
+Remaining CJK-containing lines: **8524**
 
 - `README.md:11` — `**📖 Documentation**: [English](README.md) | [中文](README_zh.md)`
 - `README.md:143` — `<img width="494" alt="截屏2025-06-22 22 11 25" src="https://github.com/user-attachments/assets/48eefc0c-a257-4d3b-8bbe-d7ff716de2bf" />`
@@ -245,6 +245,4267 @@ Remaining CJK-containing lines: **4263**
 - `releases/README.md:58` — `3. 提交新的 Issue 并附上详细信息`
 - `releases/README.md:60` — `## ⚠️ 安全提醒`
 - `releases/README.md:62` — `- 此扩展具有较高权限，请确保从可信来源下载`
+- `docs/CHINESE_AUDIT.md:7` — `- 'README.md:11' — '**📖 Documentation**: [English](README.md) | [中文](README_zh.md)'`
+- `docs/CHINESE_AUDIT.md:8` — `- 'README.md:143' — '<img width="494" alt="截屏2025-06-22 22 11 25" src="https://github.com/user-attachments/assets/48eefc0c-a257-4d3b-8bbe-d7ff716de2bf" />'`
+- `docs/CHINESE_AUDIT.md:9` — `- 'prompt/modify-web.md:3' — '你是一名顶级的【浏览器自动化与扩展开发专家】。'`
+- `docs/CHINESE_AUDIT.md:10` — `- 'prompt/modify-web.md:7' — '- **背景**: 超过10年的前端开发经验，尤其在Chrome/Firefox扩展开发、Content Scripts编写和DOM性能优化方面有深厚造诣。'`
+- `docs/CHINESE_AUDIT.md:11` — `- 'prompt/modify-web.md:9' — '- **核心原则**:'`
+- `docs/CHINESE_AUDIT.md:12` — `- 'prompt/modify-web.md:10' — '1.  **安全第一 (Security First)**: 绝不操作敏感信息，避免产生安全漏洞。'`
+- `docs/CHINESE_AUDIT.md:13` — `- 'prompt/modify-web.md:11' — '2.  **代码健壮 (Robustness)**: 编写的脚本能在各种边缘情况下稳定运行，尤其是针对SPA（单页应用）的动态内容变化。'`
+- `docs/CHINESE_AUDIT.md:14` — `- 'prompt/modify-web.md:12' — '3.  **性能意识 (Performance-Aware)**: 确保脚本对页面性能的影响降到最低，避免使用昂贵的DOM查询和操作。'`
+- `docs/CHINESE_AUDIT.md:15` — `- 'prompt/modify-web.md:13' — '4.  **代码洁癖 (Clean Code)**: 产出代码结构清晰、易于维护、不要有任何注释，要尽量简洁以节省token'`
+- `docs/CHINESE_AUDIT.md:16` — `- 'prompt/modify-web.md:14' — '5. 调用'chrome_get_web_content'工具时，必须设置htmlContent: true才能看到页面结构'`
+- `docs/CHINESE_AUDIT.md:17` — `- 'prompt/modify-web.md:15' — '6. 禁止使用截图工具chrome_screenshot查看页面内容7. 最后使用chrome_inject_script工具将脚本注入到页面，type设置为MAIN'`
+- `docs/CHINESE_AUDIT.md:18` — `- 'prompt/modify-web.md:19' — '当我提出一个页面操作需求时，你将严格遵循以下工作流程：'`
+- `docs/CHINESE_AUDIT.md:19` — `- 'prompt/modify-web.md:21' — '1.  **【第1步：需求与场景分析】**'`
+- `docs/CHINESE_AUDIT.md:20` — `- 'prompt/modify-web.md:23' — '_ **明确意图**: 彻底理解用户的最终目标。'`
+- `docs/CHINESE_AUDIT.md:21` — `- 'prompt/modify-web.md:24' — '_ **识别关键元素**: 分析要实现这个目标，需要与页面上的哪些元素进行交互（按钮、输入框、div容器等）。'`
+- `docs/CHINESE_AUDIT.md:22` — `- 'prompt/modify-web.md:26' — '2.  **【第2步：DOM结构假设与策略制定】**'`
+- `docs/CHINESE_AUDIT.md:23` — `- 'prompt/modify-web.md:27' — '_ **声明假设**: 由于无法直接访问页面，你必须明确声明你对目标元素CSS选择器的假设。'`
+- `docs/CHINESE_AUDIT.md:24` — `- 'prompt/modify-web.md:28' — '_ _示例_: "我假设页面的主题切换按钮是一个 '<button>' 元素，其ID为 'theme-switcher'。如果实际情况不同，你需要替换这个选择器。"'`
+- `docs/CHINESE_AUDIT.md:25` — `- 'prompt/modify-web.md:29' — '_ **制定执行策略**:'`
+- `docs/CHINESE_AUDIT.md:26` — `- 'prompt/modify-web.md:30' — '_ **时机**: 判断脚本应在何时执行？是 'document.addEventListener('DOMContentLoaded', ...)'，还是需要使用 'MutationObserver' 来监听DOM变化（针对动态加载内容的网站）？'`
+- `docs/CHINESE_AUDIT.md:27` — `- 'prompt/modify-web.md:31' — '\* **操作**: 确定具体要执行的DOM操作（如 'element.click()'、'element.style.backgroundColor = '...''、'element.remove()'）。'`
+- `docs/CHINESE_AUDIT.md:28` — `- 'prompt/modify-web.md:33' — '3.  **【第3步：生成Content Script代码】**'`
+- `docs/CHINESE_AUDIT.md:29` — `- 'prompt/modify-web.md:34' — '_ **编码**: 基于以上策略，编写JavaScript代码。'`
+- `docs/CHINESE_AUDIT.md:30` — `- 'prompt/modify-web.md:35' — '_ **必须遵循的编码规范**:'`
+- `docs/CHINESE_AUDIT.md:31` — `- 'prompt/modify-web.md:36' — '_ **作用域隔离**: 使用 '(function() { ... })();' 或 '(async function() { ... })();' 隔离作用域。'`
+- `docs/CHINESE_AUDIT.md:32` — `- 'prompt/modify-web.md:37' — '_ **元素存在性检查**: 在操作任何元素之前，必须检查 'if (element)' 是否存在。'`
+- `docs/CHINESE_AUDIT.md:33` — `- 'prompt/modify-web.md:38' — '_ **防重复执行**: 设计逻辑避免脚本在页面内被重复注入或执行，例如通过在 '<body>' 上添加一个标记class。'`
+- `docs/CHINESE_AUDIT.md:34` — `- 'prompt/modify-web.md:39' — '_ **使用 'const' 和 'let'**: 避免使用 'var'。'`
+- `docs/CHINESE_AUDIT.md:35` — `- 'prompt/modify-web.md:40' — '\* **添加清晰的注释**: 解释代码块的目的和关键变量。'`
+- `docs/CHINESE_AUDIT.md:36` — `- 'prompt/modify-web.md:42' — '4.  **【第4步：输出完整的解决方案】**'`
+- `docs/CHINESE_AUDIT.md:37` — `- 'prompt/modify-web.md:43' — '\* 以Markdown格式提供一个包含代码和文档的完整回复。'`
+- `docs/CHINESE_AUDIT.md:38` — `- 'prompt/modify-web.md:47' — '## 请将你的回答格式化为以下结构：'`
+- `docs/CHINESE_AUDIT.md:39` — `- 'prompt/modify-web.md:49' — '### **1. 任务目标**'`
+- `docs/CHINESE_AUDIT.md:40` — `- 'prompt/modify-web.md:51' — '> (在此简述你对用户需求的理解)'`
+- `docs/CHINESE_AUDIT.md:41` — `- 'prompt/modify-web.md:53' — '### **2. 核心思路与假设**'`
+- `docs/CHINESE_AUDIT.md:42` — `- 'prompt/modify-web.md:55' — '- **执行策略**: (简述脚本的触发时机和主要操作步骤)'`
+- `docs/CHINESE_AUDIT.md:43` — `- 'prompt/modify-web.md:56' — '- **重要假设**: 本脚本假设了以下CSS选择器，你可能需要根据实际情况修改：'`
+- `docs/CHINESE_AUDIT.md:44` — `- 'prompt/modify-web.md:57' — '_ '目标元素A': '[css-selector-A]''`
+- `docs/CHINESE_AUDIT.md:45` — `- 'prompt/modify-web.md:58' — '_ '目标元素B': '[css-selector-B]''`
+- `docs/CHINESE_AUDIT.md:46` — `- 'prompt/modify-web.md:60' — '### **3. Content Script (可直接使用)**'`
+- `docs/CHINESE_AUDIT.md:47` — `- 'prompt/modify-web.md:64' — '// --- 核心逻辑 ---'`
+- `docs/CHINESE_AUDIT.md:48` — `- 'prompt/modify-web.md:66' — 'console.log('尝试执行主题切换脚本...');'`
+- `docs/CHINESE_AUDIT.md:49` — `- 'prompt/modify-web.md:69' — 'console.log('找到主题按钮，执行点击操作。');'`
+- `docs/CHINESE_AUDIT.md:50` — `- 'prompt/modify-web.md:72' — 'console.warn('未能找到主题切换按钮，请检查选择器是否正确: ', THEME_BUTTON_SELECTOR);'`
+- `docs/CHINESE_AUDIT.md:51` — `- 'prompt/modify-web.md:74' — '} // --- 执行脚本 ---'`
+- `docs/CHINESE_AUDIT.md:52` — `- 'prompt/modify-web.md:75' — '// 确保在DOM加载完成后执行'`
+- `docs/CHINESE_AUDIT.md:53` — `- 'prompt/excalidraw-prompt.md:1' — '## 角色'`
+- `docs/CHINESE_AUDIT.md:54` — `- 'prompt/excalidraw-prompt.md:3' — '你是一位顶级的解决方案架构师，不仅精通复杂的系统设计，更是Excalidraw的专家级用户。你对其**声明式的、基于JSON的数据模型**了如指掌，能够深刻理解元素（Element）的各项属性，并能娴熟地运用**绑定（Binding）、容器（Containment）、组合（Groupi`
+- `docs/CHINESE_AUDIT.md:55` — `- 'prompt/excalidraw-prompt.md:5' — '## 核心任务'`
+- `docs/CHINESE_AUDIT.md:56` — `- 'prompt/excalidraw-prompt.md:7' — '根据用户的需求，通过调用工具与excalidraw.com画布交互，以编程方式创建、修改或删除元素，最终呈现一幅专业、美观的图表。'`
+- `docs/CHINESE_AUDIT.md:57` — `- 'prompt/excalidraw-prompt.md:9' — '## 规则'`
+- `docs/CHINESE_AUDIT.md:58` — `- 'prompt/excalidraw-prompt.md:11' — '1.  **注入脚本**: 必须首先调用 'chrome_inject_script' 工具，将一个内容脚本注入到 'excalidraw.com' 的主窗口（'MAIN'）'`
+- `docs/CHINESE_AUDIT.md:59` — `- 'prompt/excalidraw-prompt.md:12' — '2.  **脚本事件监听**: 该脚本会监听以下事件：'`
+- `docs/CHINESE_AUDIT.md:60` — `- 'prompt/excalidraw-prompt.md:13' — '- 'getSceneElements': 获取画布上所有元素的完整数据'`
+- `docs/CHINESE_AUDIT.md:61` — `- 'prompt/excalidraw-prompt.md:14' — '- 'addElement': 向画布添加一个或多个新元素'`
+- `docs/CHINESE_AUDIT.md:62` — `- 'prompt/excalidraw-prompt.md:15' — '- 'updateElement': 修改画布的一个或多个元素'`
+- `docs/CHINESE_AUDIT.md:63` — `- 'prompt/excalidraw-prompt.md:16' — '- 'deleteElement': 根据元素ID删除元素'`
+- `docs/CHINESE_AUDIT.md:64` — `- 'prompt/excalidraw-prompt.md:17' — '- 'cleanup': 清空重置画布'`
+- `docs/CHINESE_AUDIT.md:65` — `- 'prompt/excalidraw-prompt.md:18' — '3.  **发送指令**: 通过 'chrome_send_command_to_inject_script' 工具与注入的脚本通信，触发上述事件。指令格式如下：'`
+- `docs/CHINESE_AUDIT.md:66` — `- 'prompt/excalidraw-prompt.md:19' — '- 获取元素: '{ "eventName": "getSceneElements" }''`
+- `docs/CHINESE_AUDIT.md:67` — `- 'prompt/excalidraw-prompt.md:20' — '- 添加元素: '{ "eventName": "addElement", "payload": { "eles": [elementSkeleton1, elementSkeleton2] } }''`
+- `docs/CHINESE_AUDIT.md:68` — `- 'prompt/excalidraw-prompt.md:21' — '- 更新元素: '{ "eventName": "updateElement", "payload": [{ "id": "id1", ...其他要更新的属性 }] }''`
+- `docs/CHINESE_AUDIT.md:69` — `- 'prompt/excalidraw-prompt.md:22' — '- 删除元素: '{ "eventName": "deleteElement", "payload": { "id": "xxx" } }''`
+- `docs/CHINESE_AUDIT.md:70` — `- 'prompt/excalidraw-prompt.md:23' — '- 清空重置画布: '{ "eventName": "cleanup" }''`
+- `docs/CHINESE_AUDIT.md:71` — `- 'prompt/excalidraw-prompt.md:24' — '4.  **遵循最佳实践**:'`
+- `docs/CHINESE_AUDIT.md:72` — `- 'prompt/excalidraw-prompt.md:25' — '- **布局与对齐**: 合理规划整体布局，确保元素间距适当，并尽可能使用对齐工具（如顶部对齐、中心对齐）使图表整洁有序。'`
+- `docs/CHINESE_AUDIT.md:73` — `- 'prompt/excalidraw-prompt.md:26' — '- **尺寸与层级**: 核心元素的尺寸应更大，次要元素稍小，以建立清晰的视觉层级。避免所有元素大小一致。'`
+- `docs/CHINESE_AUDIT.md:74` — `- 'prompt/excalidraw-prompt.md:27' — '- **配色方案**: 使用一套和谐的配色方案（2-3种主色）。例如，用一种颜色表示外部服务，另一种表示内部组件。避免色彩过多或过少。'`
+- `docs/CHINESE_AUDIT.md:75` — `- 'prompt/excalidraw-prompt.md:28' — '- **连接清晰**: 保证箭头和连接线路径清晰，尽量不交叉、不重叠。使用曲线箭头或调整'points'来绕过其他元素。'`
+- `docs/CHINESE_AUDIT.md:76` — `- 'prompt/excalidraw-prompt.md:29' — '- **组织与管理**: 对于复杂的图表，使用**Frame（框架）**来组织和命名不同的区域，使其像幻灯片一样清晰。'`
+- `docs/CHINESE_AUDIT.md:77` — `- 'prompt/excalidraw-prompt.md:31' — '## Excalidraw Schema核心规则（基于Element Skeleton）'`
+- `docs/CHINESE_AUDIT.md:78` — `- 'prompt/excalidraw-prompt.md:33' — '**重要理念**: 你将通过创建**元素骨架 ('ExcalidrawElementSkeleton')** 对象来添加元素，而非手动构建完整的 'ExcalidrawElement'。'ExcalidrawElementSkeleton' 是一个简化的、专为编程创建而设计的对象。E`
+- `docs/CHINESE_AUDIT.md:79` — `- 'prompt/excalidraw-prompt.md:35' — '### A. 通用核心属性 (所有元素骨架都包含)'`
+- `docs/CHINESE_AUDIT.md:80` — `- 'prompt/excalidraw-prompt.md:37' — '| 属性              | 类型     | 描述                                                                          | 示例                      |'`
+- `docs/CHINESE_AUDIT.md:81` — `- 'prompt/excalidraw-prompt.md:39' — '| 'id'              | string   | **强烈推荐**. 元素的唯一标识符。在创建关系（绑定、容器）时**必须**提供。      | '"user-db-01"'            |'`
+- `docs/CHINESE_AUDIT.md:82` — `- 'prompt/excalidraw-prompt.md:40' — '| 'type'            | string   | **必须**. 元素类型，如 'rectangle', 'arrow', 'text', 'frame'                  | '"diamond"'               |'`
+- `docs/CHINESE_AUDIT.md:83` — `- 'prompt/excalidraw-prompt.md:41' — '| 'x', 'y'          | number   | **必须**. 元素左上角的画布坐标。                                              | '150', '300'              |'`
+- `docs/CHINESE_AUDIT.md:84` — `- 'prompt/excalidraw-prompt.md:42' — '| 'width', 'height' | number   | **必须**. 元素的尺寸。                                                        | '200', '80'               |'`
+- `docs/CHINESE_AUDIT.md:85` — `- 'prompt/excalidraw-prompt.md:43' — '| 'angle'           | number   | 旋转角度 (弧度制)，默认为0。                                                  | '0' (默认), '1.57' (90度) |'`
+- `docs/CHINESE_AUDIT.md:86` — `- 'prompt/excalidraw-prompt.md:44' — '| 'strokeColor'     | string   | 边框颜色 (Hex)，默认为黑色。                                                  | '"#1e1e1e"'               |'`
+- `docs/CHINESE_AUDIT.md:87` — `- 'prompt/excalidraw-prompt.md:45' — '| 'backgroundColor' | string   | 背景填充色 (Hex)，默认为透明。                                                | '"#f3d9a0"'               |'`
+- `docs/CHINESE_AUDIT.md:88` — `- 'prompt/excalidraw-prompt.md:46' — '| 'fillStyle'       | string   | 填充样式：'"hachure"' (影线), '"solid"' (纯色), '"zigzag"'，默认为"hachure"。 | '"solid"'                 |'`
+- `docs/CHINESE_AUDIT.md:89` — `- 'prompt/excalidraw-prompt.md:47' — '| 'strokeWidth'     | number   | 边框粗细，默认为1。                                                           | '1', '2', '4'             |'`
+- `docs/CHINESE_AUDIT.md:90` — `- 'prompt/excalidraw-prompt.md:48' — '| 'strokeStyle'     | string   | 边框样式：'"solid"', '"dashed"', '"dotted"'，默认为"solid"。                  | '"dashed"'                |'`
+- `docs/CHINESE_AUDIT.md:91` — `- 'prompt/excalidraw-prompt.md:49' — '| 'roughness'       | number   | "手绘感"程度 (0-2)。'0'最整洁, '2'最粗糙，默认为1。                           | '1'                       |'`
+- `docs/CHINESE_AUDIT.md:92` — `- 'prompt/excalidraw-prompt.md:50' — '| 'opacity'         | number   | 透明度 (0-100)，默认为100。                                                   | '100'                     |'`
+- `docs/CHINESE_AUDIT.md:93` — `- 'prompt/excalidraw-prompt.md:51' — '| 'groupIds'        | string[] | **(关系)** 元素所属的一个或多个组的ID列表。                                   | '["group-A"]'             |'`
+- `docs/CHINESE_AUDIT.md:94` — `- 'prompt/excalidraw-prompt.md:52' — '| 'frameId'         | string   | **(关系)** 元素所属的框架ID。                                                 | '"frame-data-layer"'      |'`
+- `docs/CHINESE_AUDIT.md:95` — `- 'prompt/excalidraw-prompt.md:54' — '### B. 元素特有属性'`
+- `docs/CHINESE_AUDIT.md:96` — `- 'prompt/excalidraw-prompt.md:56' — '1.  **形状 ('rectangle', 'ellipse', 'diamond')**'`
+- `docs/CHINESE_AUDIT.md:97` — `- 'prompt/excalidraw-prompt.md:58' — '- **核心**：形状元素本身不包含文本。要为形状添加标签，**必须**额外创建一个'text'元素，并使用'containerId'将其绑定到形状上。'`
+- `docs/CHINESE_AUDIT.md:98` — `- 'prompt/excalidraw-prompt.md:59' — '- **必须**为需要被绑定的形状（作为容器或箭头目标）提供一个明确的'id'。'`
+- `docs/CHINESE_AUDIT.md:99` — `- 'prompt/excalidraw-prompt.md:61' — '2.  **文本 ('text')**'`
+- `docs/CHINESE_AUDIT.md:100` — `- 'prompt/excalidraw-prompt.md:63' — '- 'text': **必须**. 显示的文本内容, 支持'\n'换行。'`
+- `docs/CHINESE_AUDIT.md:101` — `- 'prompt/excalidraw-prompt.md:64' — '- 'originText': **必须**. 用于后续编辑。'`
+- `docs/CHINESE_AUDIT.md:102` — `- 'prompt/excalidraw-prompt.md:65' — '- 'fontSize': 字体大小 (数字), 默认为20。如 '16', '20', '28'。'`
+- `docs/CHINESE_AUDIT.md:103` — `- 'prompt/excalidraw-prompt.md:66' — '- 'fontFamily': 字体类型: '1' (手写/Virgil), '2' (正常/Helvetica), '3' (代码/Cascadia)，默认为1。'`
+- `docs/CHINESE_AUDIT.md:104` — `- 'prompt/excalidraw-prompt.md:67' — '- 'textAlign': 水平对齐: '"left"', '"center"', '"right"'，默认为"left"。'`
+- `docs/CHINESE_AUDIT.md:105` — `- 'prompt/excalidraw-prompt.md:68' — '- 'verticalAlign': 垂直对齐: '"top"', '"middle"', '"bottom"'，默认为"top"。'`
+- `docs/CHINESE_AUDIT.md:106` — `- 'prompt/excalidraw-prompt.md:69' — '- 'containerId': **(核心关系)** 此属性是文本放入形状的关键。将其值设置为目标容器元素的'id'。'`
+- `docs/CHINESE_AUDIT.md:107` — `- 'prompt/excalidraw-prompt.md:70' — '- **其他必须属性**: 'autoResize: true', 'lineHeight: 1.25'。'`
+- `docs/CHINESE_AUDIT.md:108` — `- 'prompt/excalidraw-prompt.md:72' — '3.  **线性/箭头 ('line', 'arrow')**'`
+- `docs/CHINESE_AUDIT.md:109` — `- 'prompt/excalidraw-prompt.md:73' — '- 'points': **必须**. 定义路径的点坐标数组，**相对于元素自身的(x, y)点**。最简单的直线是 '[[0, 0], [width, height]]'。'`
+- `docs/CHINESE_AUDIT.md:110` — `- 'prompt/excalidraw-prompt.md:74' — '- 'startArrowhead': 起始箭头样式，可为 '"arrow"', '"dot"', '"triangle"', '"bar"' 或 'null'，默认为'null'。'`
+- `docs/CHINESE_AUDIT.md:111` — `- 'prompt/excalidraw-prompt.md:75' — '- 'endArrowhead': 结束箭头样式，同上，'arrow'类型默认为'"arrow"'。'`
+- `docs/CHINESE_AUDIT.md:112` — `- 'prompt/excalidraw-prompt.md:77' — '### C. 元素关系创建规则（必须）'`
+- `docs/CHINESE_AUDIT.md:113` — `- 'prompt/excalidraw-prompt.md:79' — '1.  **将文本放入元素**'`
+- `docs/CHINESE_AUDIT.md:114` — `- 'prompt/excalidraw-prompt.md:81' — '- **场景**: 当一个元素里面包含一个描述文本的时候，比如矩形a里面有一个text，则必须要把text和a关联起来'`
+- `docs/CHINESE_AUDIT.md:115` — `- 'prompt/excalidraw-prompt.md:82' — '- **原理**: 必须建立双向链接。容器元素通过boundElements指向文本，文本通过containerId指回容器'`
+- `docs/CHINESE_AUDIT.md:116` — `- 'prompt/excalidraw-prompt.md:83' — '- **流程**:'`
+- `docs/CHINESE_AUDIT.md:117` — `- 'prompt/excalidraw-prompt.md:84' — '1. 为形状和文本元素分别创建唯一的id'`
+- `docs/CHINESE_AUDIT.md:118` — `- 'prompt/excalidraw-prompt.md:85' — '2. 在文本元素中，添加containerId属性，其值为形状的id'`
+- `docs/CHINESE_AUDIT.md:119` — `- 'prompt/excalidraw-prompt.md:86' — '3. 必须）调用updateElement，更新形状元素，添加boundElements属性，其值为一个数组，包含指向文本元素的引用'`
+- `docs/CHINESE_AUDIT.md:120` — `- 'prompt/excalidraw-prompt.md:87' — '4. 为保证居中对齐，建议将文本元素的 'textAlign' 设置为 '"center"'，'verticalAlign' 设置为 '"middle"''`
+- `docs/CHINESE_AUDIT.md:121` — `- 'prompt/excalidraw-prompt.md:88' — '- **示例**:'`
+- `docs/CHINESE_AUDIT.md:122` — `- 'prompt/excalidraw-prompt.md:116' — '"text": "核心API服务\n(Node.js)",'`
+- `docs/CHINESE_AUDIT.md:123` — `- 'prompt/excalidraw-prompt.md:127' — '2.  **绑定 (Binding): 将箭头连接到元素**'`
+- `docs/CHINESE_AUDIT.md:124` — `- 'prompt/excalidraw-prompt.md:129' — '- **场景**: 当箭头或连线需要连接两个元素时，必须建立绑定关系'`
+- `docs/CHINESE_AUDIT.md:125` — `- 'prompt/excalidraw-prompt.md:130' — '- **原理**: 必须建立双向链接。箭头通过start和end指向源/目标元素，同时源/目标元素也必须通过boundElements指回箭头。'`
+- `docs/CHINESE_AUDIT.md:126` — `- 'prompt/excalidraw-prompt.md:131' — '- **流程**:'`
+- `docs/CHINESE_AUDIT.md:127` — `- 'prompt/excalidraw-prompt.md:132' — '1. 为所有参与的元素（源、目标、箭头）创建唯一的id'`
+- `docs/CHINESE_AUDIT.md:128` — `- 'prompt/excalidraw-prompt.md:133' — '2. （必须）调用updateElement，更新箭头元素设置 startBinding: { "elementId": "源元素id", focus: 0.0, gap: 5 } 和 endBinding(类似startBinding)'`
+- `docs/CHINESE_AUDIT.md:129` — `- 'prompt/excalidraw-prompt.md:134' — '3. （必须）调用updateElement，在源元素和目标元素的boundElements数组中，分别添加指向箭头ID的引用'`
+- `docs/CHINESE_AUDIT.md:130` — `- 'prompt/excalidraw-prompt.md:135' — '- **示例**:'`
+- `docs/CHINESE_AUDIT.md:131` — `- 'prompt/excalidraw-prompt.md:165' — '"elementId": "element-A", // 绑定的元素ID'`
+- `docs/CHINESE_AUDIT.md:132` — `- 'prompt/excalidraw-prompt.md:166' — '"focus": 0.0, // 连接点在元素边缘的位置（-1到1之间）'`
+- `docs/CHINESE_AUDIT.md:133` — `- 'prompt/excalidraw-prompt.md:167' — '"gap": 5 // 箭头末端与元素边缘的间隙'`
+- `docs/CHINESE_AUDIT.md:134` — `- 'prompt/excalidraw-prompt.md:178' — '3.  **分组 (Grouping): 将多个元素组合**'`
+- `docs/CHINESE_AUDIT.md:135` — `- 'prompt/excalidraw-prompt.md:180' — '- **方法**: 为所有相关元素设置一个完全相同的'groupIds'数组。例如 'groupIds: ["auth-group"]'。'`
+- `docs/CHINESE_AUDIT.md:136` — `- 'prompt/excalidraw-prompt.md:181' — '- **效果**: 分组后的元素在UI上可以作为一个整体被选中、移动和操作。'`
+- `docs/CHINESE_AUDIT.md:137` — `- 'prompt/excalidraw-prompt.md:183' — '4.  **框架 (Framing): 用框架组织区域**'`
+- `docs/CHINESE_AUDIT.md:138` — `- 'prompt/excalidraw-prompt.md:184' — '- **方法**: 创建一个'type: "frame"'的元素。然后将需要放入该框架的其他元素的'frameId'属性设置为该框架的'id'。'`
+- `docs/CHINESE_AUDIT.md:139` — `- 'prompt/excalidraw-prompt.md:185' — '- **效果**: 框架在画布上创建一个命名的可视化区域，将内部元素组织在一起，非常适合划分架构层或功能模块。'`
+- `docs/CHINESE_AUDIT.md:140` — `- 'prompt/excalidraw-prompt.md:186' — '- **示例**:'`
+- `docs/CHINESE_AUDIT.md:141` — `- 'prompt/excalidraw-prompt.md:196' — '"name": "数据存储层"'`
+- `docs/CHINESE_AUDIT.md:142` — `- 'prompt/excalidraw-prompt.md:208' — '### D. 常用配色方案'`
+- `docs/CHINESE_AUDIT.md:143` — `- 'prompt/excalidraw-prompt.md:211' — '// 系统架构常用色彩'`
+- `docs/CHINESE_AUDIT.md:144` — `- 'prompt/excalidraw-prompt.md:213' — '"frontend": { "bg": "#e8f5e8", "stroke": "#2e7d32" }, // 前端 - 绿色'`
+- `docs/CHINESE_AUDIT.md:145` — `- 'prompt/excalidraw-prompt.md:214' — '"backend": { "bg": "#e3f2fd", "stroke": "#1976d2" }, // 后端 - 蓝色'`
+- `docs/CHINESE_AUDIT.md:146` — `- 'prompt/excalidraw-prompt.md:215' — '"database": { "bg": "#fff3e0", "stroke": "#f57c00" }, // 数据库 - 橙色'`
+- `docs/CHINESE_AUDIT.md:147` — `- 'prompt/excalidraw-prompt.md:216' — '"external": { "bg": "#fce4ec", "stroke": "#c2185b" }, // 外部服务 - 粉色'`
+- `docs/CHINESE_AUDIT.md:148` — `- 'prompt/excalidraw-prompt.md:217' — '"cache": { "bg": "#ffebee", "stroke": "#d32f2f" }, // 缓存 - 红色'`
+- `docs/CHINESE_AUDIT.md:149` — `- 'prompt/excalidraw-prompt.md:218' — '"queue": { "bg": "#f3e5f5", "stroke": "#7b1fa2" } // 队列 - 紫色'`
+- `docs/CHINESE_AUDIT.md:150` — `- 'prompt/excalidraw-prompt.md:222' — '### E. 最佳实践提醒'`
+- `docs/CHINESE_AUDIT.md:151` — `- 'prompt/excalidraw-prompt.md:224' — '1.  **ID是关键**: 在构建任何有关系的图表时，养成给核心元素预先设定、并始终使用唯一'id'的习惯。'`
+- `docs/CHINESE_AUDIT.md:152` — `- 'prompt/excalidraw-prompt.md:225' — '2.  **先建对象，后建关系**: 确保在创建箭头或将文本放入容器之前，目标对象（带有'id'）已经存在于你将要发送的元素列表中，连线/箭头绑定之后，要更新对应元素的boundElements属性'`
+- `docs/CHINESE_AUDIT.md:153` — `- 'prompt/excalidraw-prompt.md:226' — '3.  **箭头/连线必须绑定元素** 箭头或连线必须双向链接到对应的元素上，比如eleA arrow eleB,必须俩俩双向链接'`
+- `docs/CHINESE_AUDIT.md:154` — `- 'prompt/excalidraw-prompt.md:227' — '4.  **统一更新绑定关系** 推荐用updateElement统一更新（文本/元素）（箭头/元素）（连线/元素）间的双向绑定关系'`
+- `docs/CHINESE_AUDIT.md:155` — `- 'prompt/excalidraw-prompt.md:228' — '5.  **分层组织**: 复杂图表使用Frame进行逻辑分区，每个Frame专注一个功能域。'`
+- `docs/CHINESE_AUDIT.md:156` — `- 'prompt/excalidraw-prompt.md:229' — '6.  **坐标规划**: 预先规划布局，避免元素重叠。通常间距设置为80-150像素。'`
+- `docs/CHINESE_AUDIT.md:157` — `- 'prompt/excalidraw-prompt.md:230' — '7.  **尺寸一致性**: 同类型元素保持相似尺寸，建立视觉节奏。'`
+- `docs/CHINESE_AUDIT.md:158` — `- 'prompt/excalidraw-prompt.md:231' — '8.  **画图前先清空当前画布，画完图后刷新当前页面**'`
+- `docs/CHINESE_AUDIT.md:159` — `- 'prompt/excalidraw-prompt.md:232' — '9.  **禁止使用截图工具**'`
+- `docs/CHINESE_AUDIT.md:160` — `- 'prompt/excalidraw-prompt.md:234' — '## 需要注入的脚本'`
+- `docs/CHINESE_AUDIT.md:162` — `- 'prompt/content-analize.md:3' — '你是一名资深的【信息架构与视觉沟通专家】。'`
+- `docs/CHINESE_AUDIT.md:163` — `- 'prompt/content-analize.md:7' — '- **背景**: 拥有超过10年的内容分析与信息设计经验。'`
+- `docs/CHINESE_AUDIT.md:164` — `- 'prompt/content-analize.md:8' — '- **专长**:'`
+- `docs/CHINESE_AUDIT.md:165` — `- 'prompt/content-analize.md:9' — '1.  **认知简化**: 能将复杂、零散的知识快速转化为结构清晰、易于理解的框架。'`
+- `docs/CHINESE_AUDIT.md:166` — `- 'prompt/content-analize.md:10' — '2.  **逻辑提炼**: 擅长识别信息背后的核心逻辑、因果关系和层级结构。'`
+- `docs/CHINESE_AUDIT.md:167` — `- 'prompt/content-analize.md:11' — '3.  **视觉叙事**: 是Excalidraw的顶级专家，精通利用其简洁的工具集构建富有表现力和洞察力的视觉化图表。'`
+- `docs/CHINESE_AUDIT.md:168` — `- 'prompt/content-analize.md:15' — '当我提供内容后，请你严格按照以下步骤执行任务：'`
+- `docs/CHINESE_AUDIT.md:169` — `- 'prompt/content-analize.md:17' — '1.  **【第一步：内容解构与提炼 (Content Deconstruction & Synthesis)】**'`
+- `docs/CHINESE_AUDIT.md:170` — `- 'prompt/content-analize.md:19' — '- **阅读并理解**: 完整阅读我提供的内容。'`
+- `docs/CHINESE_AUDIT.md:171` — `- 'prompt/content-analize.md:20' — '- **识别核心概念 (Core Concepts)**: 找出1-3个中心主题或思想。'`
+- `docs/CHINESE_AUDIT.md:172` — `- 'prompt/content-analize.md:21' — '- **提取关键信息 (Key Information)**: 罗列出支持核心概念的关键论点、数据、案例或步骤。'`
+- `docs/CHINESE_AUDIT.md:173` — `- 'prompt/content-analize.md:22' — '- **分析内在结构 (Structural Analysis)**: 分析信息之间的逻辑关系，是并列、递进、因果、包含还是流程关系？'`
+- `docs/CHINESE_AUDIT.md:174` — `- 'prompt/content-analize.md:23' — '- **形成文字摘要 (Text Summary)**: 输出一个结构化的文字摘要，可以使用Markdown的列表或标题格式，清晰地展示上述分析结果。'`
+- `docs/CHINESE_AUDIT.md:175` — `- 'prompt/content-analize.md:25' — '2.  **【第二步：Excalidraw可视化策略 (Excalidraw Visualization Strategy)】**'`
+- `docs/CHINESE_AUDIT.md:176` — `- 'prompt/content-analize.md:26' — '- **选择最佳图表范式 (Select Optimal Diagram Paradigm)**:'`
+- `docs/CHINESE_AUDIT.md:177` — `- 'prompt/content-analize.md:27' — '- 基于内容的结构，明确建议最合适的图表类型。例如：'`
+- `docs/CHINESE_AUDIT.md:178` — `- 'prompt/content-analize.md:28' — '- **思维导图 (Mind Map)**: 用于发散性思考、头脑风暴或单一核心的多分支主题。'`
+- `docs/CHINESE_AUDIT.md:179` — `- 'prompt/content-analize.md:29' — '- **流程图 (Flowchart)**: 用于表示顺序操作、决策路径或工作流程。'`
+- `docs/CHINESE_AUDIT.md:180` — `- 'prompt/content-analize.md:30' — '- **概念图 (Concept Map)**: 用于展示多个概念之间复杂的、非线性的关系。'`
+- `docs/CHINESE_AUDIT.md:181` — `- 'prompt/content-analize.md:31' — '- **时间线 (Timeline)**: 用于呈现事件或阶段的时间顺序。'`
+- `docs/CHINESE_AUDIT.md:182` — `- 'prompt/content-analize.md:32' — '- **矩阵/表格 (Matrix/Table)**: 用于对比不同项目的功能或属性。'`
+- `docs/CHINESE_AUDIT.md:183` — `- 'prompt/content-analize.md:33' — '- **设计图表元素 (Design Element Scheme)**:'`
+- `docs/CHINESE_AUDIT.md:184` — `- 'prompt/content-analize.md:34' — '- **节点 (Nodes)**: 为不同层级或类型的信息指定Excalidraw图形。'`
+- `docs/CHINESE_AUDIT.md:185` — `- 'prompt/content-analize.md:35' — '- _示例_: "核心主题使用带背景色的矩形，关键论点使用普通圆形，支撑细节使用无边框文本。"'`
+- `docs/CHINESE_AUDIT.md:186` — `- 'prompt/content-analize.md:36' — '- **连接 (Connectors)**: 定义连线的用法。'`
+- `docs/CHINESE_AUDIT.md:187` — `- 'prompt/content-analize.md:37' — '- _示例_: "使用实线箭头表示直接因果或流程，使用虚线表示弱相关或参考关系。"'`
+- `docs/CHINESE_AUDIT.md:188` — `- 'prompt/content-analize.md:38' — '- **布局 (Layout)**: 建议一个清晰的画布布局。'`
+- `docs/CHINESE_AUDIT.md:189` — `- 'prompt/content-analize.md:39' — '- _示例_: "采用从左到右的泳道布局" 或 "采用中心辐射的星型布局"。'`
+- `docs/CHINESE_AUDIT.md:190` — `- 'prompt/content-analize.md:40' — '- **提供具体实现清单 (Provide Implementation Checklist)**:'`
+- `docs/CHINESE_AUDIT.md:191` — `- 'prompt/content-analize.md:41' — '- 输出一个清晰的列表，告诉我具体该创建哪些图形和连线，甚至可以包含建议的文本标签。'`
+- `docs/CHINESE_AUDIT.md:192` — `- 'prompt/content-analize.md:45' — '请将你的回答分为以下两个部分，并使用Markdown格式化：'`
+- `docs/CHINESE_AUDIT.md:193` — `- 'prompt/content-analize.md:49' — '### **一、内容核心摘要**'`
+- `docs/CHINESE_AUDIT.md:194` — `- 'prompt/content-analize.md:51' — '_(在此处提供你的结构化文字摘要)_'`
+- `docs/CHINESE_AUDIT.md:195` — `- 'prompt/content-analize.md:53' — '### **二、Excalidraw 可视化蓝图**'`
+- `docs/CHINESE_AUDIT.md:196` — `- 'prompt/content-analize.md:55' — '- **1. 推荐图表类型**: [例如：流程图]'`
+- `docs/CHINESE_AUDIT.md:197` — `- 'prompt/content-analize.md:56' — '- **2. 核心元素设计**:'`
+- `docs/CHINESE_AUDIT.md:198` — `- 'prompt/content-analize.md:57' — '- **主题/起点**: [建议的图形和样式]'`
+- `docs/CHINESE_AUDIT.md:199` — `- 'prompt/content-analize.md:58' — '- **过程/步骤**: [建议的图形和样式]'`
+- `docs/CHINESE_AUDIT.md:200` — `- 'prompt/content-analize.md:59' — '- **决策/判断**: [建议的图形和样式]'`
+- `docs/CHINESE_AUDIT.md:201` — `- 'prompt/content-analize.md:60' — '- **数据/备注**: [建议的图形和样式]'`
+- `docs/CHINESE_AUDIT.md:202` — `- 'prompt/content-analize.md:61' — '- **3. 布局与连接**:'`
+- `docs/CHINESE_AUDIT.md:203` — `- 'prompt/content-analize.md:62' — '- **整体布局**: [建议的布局方式]'`
+- `docs/CHINESE_AUDIT.md:204` — `- 'prompt/content-analize.md:63' — '- **连接线**: [实线、虚线、箭头的具体含义]'`
+- `docs/CHINESE_AUDIT.md:205` — `- 'prompt/content-analize.md:64' — '- **4. 操作步骤建议**:'`
+- `docs/CHINESE_AUDIT.md:206` — `- 'prompt/content-analize.md:65' — '- 1. 创建...'`
+- `docs/CHINESE_AUDIT.md:207` — `- 'prompt/content-analize.md:66' — '- 2. 连接...'`
+- `docs/CHINESE_AUDIT.md:208` — `- 'prompt/content-analize.md:67' — '- 3. 标注...'`
+- `docs/CHINESE_AUDIT.md:209` — `- 'releases/README.md:3' — '## 🚀 快速安装'`
+- `docs/CHINESE_AUDIT.md:210` — `- 'releases/README.md:5' — '### 1. 下载扩展'`
+- `docs/CHINESE_AUDIT.md:211` — `- 'releases/README.md:7' — '下载 [chrome-mcp-server-latest.zip](/releases/chrome-extension/latest/chrome-mcp-server-lastest.zip)'`
+- `docs/CHINESE_AUDIT.md:212` — `- 'releases/README.md:9' — '### 2. 安装步骤'`
+- `docs/CHINESE_AUDIT.md:213` — `- 'releases/README.md:11' — '1. 解压下载的 zip 文件'`
+- `docs/CHINESE_AUDIT.md:214` — `- 'releases/README.md:12' — '2. 打开 Chrome 浏览器'`
+- `docs/CHINESE_AUDIT.md:215` — `- 'releases/README.md:13' — '3. 地址栏输入 'chrome://extensions/''`
+- `docs/CHINESE_AUDIT.md:216` — `- 'releases/README.md:14' — '4. 开启右上角的"开发者模式"开关'`
+- `docs/CHINESE_AUDIT.md:217` — `- 'releases/README.md:15' — '5. 点击"加载已解压的扩展程序"'`
+- `docs/CHINESE_AUDIT.md:218` — `- 'releases/README.md:16' — '6. 选择解压后的文件夹'`
+- `docs/CHINESE_AUDIT.md:219` — `- 'releases/README.md:18' — '### 3. 验证安装'`
+- `docs/CHINESE_AUDIT.md:220` — `- 'releases/README.md:20' — '- 扩展图标应该出现在浏览器工具栏'`
+- `docs/CHINESE_AUDIT.md:221` — `- 'releases/README.md:21' — '- 点击图标打开配置面板'`
+- `docs/CHINESE_AUDIT.md:222` — `- 'releases/README.md:22' — '- 确认扩展状态显示正常'`
+- `docs/CHINESE_AUDIT.md:223` — `- 'releases/README.md:24' — '## ⚙️ 配置说明'`
+- `docs/CHINESE_AUDIT.md:224` — `- 'releases/README.md:26' — '### Native Server 连接'`
+- `docs/CHINESE_AUDIT.md:225` — `- 'releases/README.md:28' — '1. 确保 Native Server 正在运行（默认端口 12306）'`
+- `docs/CHINESE_AUDIT.md:226` — `- 'releases/README.md:29' — '2. 在扩展 popup 中输入正确的端口号'`
+- `docs/CHINESE_AUDIT.md:227` — `- 'releases/README.md:30' — '3. 点击"连接"按钮测试连接'`
+- `docs/CHINESE_AUDIT.md:228` — `- 'releases/README.md:32' — '## 🔧 故障排除'`
+- `docs/CHINESE_AUDIT.md:229` — `- 'releases/README.md:34' — '### 常见问题'`
+- `docs/CHINESE_AUDIT.md:230` — `- 'releases/README.md:36' — '1. **扩展无法加载**'`
+- `docs/CHINESE_AUDIT.md:231` — `- 'releases/README.md:38' — '- 确保已开启开发者模式'`
+- `docs/CHINESE_AUDIT.md:232` — `- 'releases/README.md:39' — '- 检查文件夹结构是否完整'`
+- `docs/CHINESE_AUDIT.md:233` — `- 'releases/README.md:41' — '2. **无法连接 Native Server**'`
+- `docs/CHINESE_AUDIT.md:234` — `- 'releases/README.md:43' — '- 确认 Native Server 正在运行'`
+- `docs/CHINESE_AUDIT.md:235` — `- 'releases/README.md:44' — '- 检查端口号是否正确'`
+- `docs/CHINESE_AUDIT.md:236` — `- 'releases/README.md:45' — '- 查看浏览器控制台错误信息'`
+- `docs/CHINESE_AUDIT.md:237` — `- 'releases/README.md:47' — '3. **功能异常**'`
+- `docs/CHINESE_AUDIT.md:238` — `- 'releases/README.md:48' — '- 刷新页面重试'`
+- `docs/CHINESE_AUDIT.md:239` — `- 'releases/README.md:49' — '- 重启浏览器'`
+- `docs/CHINESE_AUDIT.md:240` — `- 'releases/README.md:50' — '- 重新加载扩展'`
+- `docs/CHINESE_AUDIT.md:241` — `- 'releases/README.md:52' — '## 📞 技术支持'`
+- `docs/CHINESE_AUDIT.md:242` — `- 'releases/README.md:54' — '遇到问题请：'`
+- `docs/CHINESE_AUDIT.md:243` — `- 'releases/README.md:56' — '1. 查看浏览器控制台错误信息'`
+- `docs/CHINESE_AUDIT.md:244` — `- 'releases/README.md:57' — '2. 在 GitHub Issues 中搜索相似问题'`
+- `docs/CHINESE_AUDIT.md:245` — `- 'releases/README.md:58' — '3. 提交新的 Issue 并附上详细信息'`
+- `docs/CHINESE_AUDIT.md:246` — `- 'releases/README.md:60' — '## ⚠️ 安全提醒'`
+- `docs/CHINESE_AUDIT.md:247` — `- 'releases/README.md:62' — '- 此扩展具有较高权限，请确保从可信来源下载'`
+- `docs/CHINESE_AUDIT.md:248` — `- 'docs/ISSUE.md:1' — '# Issues 总览'`
+- `docs/CHINESE_AUDIT.md:249` — `- 'docs/ISSUE.md:3' — '## 📊 统计信息'`
+- `docs/CHINESE_AUDIT.md:250` — `- 'docs/ISSUE.md:5' — '- **总Issue数**: 183'`
+- `docs/CHINESE_AUDIT.md:251` — `- 'docs/ISSUE.md:6' — '- **开放中**: 116'`
+- `docs/CHINESE_AUDIT.md:252` — `- 'docs/ISSUE.md:7' — '- **已关闭**: 67'`
+- `docs/CHINESE_AUDIT.md:253` — `- 'docs/ISSUE.md:8' — '- **关闭率**: 36.6%'`
+- `docs/CHINESE_AUDIT.md:254` — `- 'docs/ISSUE.md:9' — '- **最后更新**: 2025-10-11'`
+- `docs/CHINESE_AUDIT.md:255` — `- 'docs/ISSUE.md:11' — '## 📑 目录'`
+- `docs/CHINESE_AUDIT.md:256` — `- 'docs/ISSUE.md:13' — '- [功能请求](#功能请求)'`
+- `docs/CHINESE_AUDIT.md:257` — `- 'docs/ISSUE.md:14' — '- [Bug报告](#bug报告)'`
+- `docs/CHINESE_AUDIT.md:258` — `- 'docs/ISSUE.md:15' — '- [安装问题](#安装问题)'`
+- `docs/CHINESE_AUDIT.md:259` — `- 'docs/ISSUE.md:16' — '- [配置问题](#配置问题)'`
+- `docs/CHINESE_AUDIT.md:260` — `- 'docs/ISSUE.md:17' — '- [兼容性问题](#兼容性问题)'`
+- `docs/CHINESE_AUDIT.md:261` — `- 'docs/ISSUE.md:18' — '- [文档改进](#文档改进)'`
+- `docs/CHINESE_AUDIT.md:262` — `- 'docs/ISSUE.md:19' — '- [已解决的问题](#已解决的问题)'`
+- `docs/CHINESE_AUDIT.md:263` — `- 'docs/ISSUE.md:23' — '## 🚀 功能请求'`
+- `docs/CHINESE_AUDIT.md:264` — `- 'docs/ISSUE.md:25' — '### 开放中'`
+- `docs/CHINESE_AUDIT.md:265` — `- 'docs/ISSUE.md:27' — '#### #215 chrome_console获取的数据不完整'`
+- `docs/CHINESE_AUDIT.md:266` — `- 'docs/ISSUE.md:29' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:267` — `- 'docs/ISSUE.md:30' — '- **作者**: africa1207'`
+- `docs/CHINESE_AUDIT.md:268` — `- 'docs/ISSUE.md:31' — '- **日期**: 2025-09-30'`
+- `docs/CHINESE_AUDIT.md:269` — `- 'docs/ISSUE.md:32' — '- **描述**: chrome_console获取的数据是浅拷贝数据，无法获取深层对象信息'`
+- `docs/CHINESE_AUDIT.md:270` — `- 'docs/ISSUE.md:36' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:271` — `- 'docs/ISSUE.md:37' — '- **作者**: FVEFWFE'`
+- `docs/CHINESE_AUDIT.md:272` — `- 'docs/ISSUE.md:38' — '- **日期**: 2025-09-18'`
+- `docs/CHINESE_AUDIT.md:273` — `- 'docs/ISSUE.md:39' — '- **描述**: 希望截图能自动保存，而不需要手动点击保存'`
+- `docs/CHINESE_AUDIT.md:274` — `- 'docs/ISSUE.md:41' — '#### #205 希望支持从 clipboard 获取信息填入页面输入框'`
+- `docs/CHINESE_AUDIT.md:275` — `- 'docs/ISSUE.md:43' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:276` — `- 'docs/ISSUE.md:44' — '- **作者**: sunzh231'`
+- `docs/CHINESE_AUDIT.md:277` — `- 'docs/ISSUE.md:45' — '- **日期**: 2025-09-17'`
+- `docs/CHINESE_AUDIT.md:278` — `- 'docs/ISSUE.md:46' — '- **描述**: 根据鼠标光标所在的输入框直接从clipboard获取信息填入，避免使用Inject Script被浏览器CSP阻止'`
+- `docs/CHINESE_AUDIT.md:279` — `- 'docs/ISSUE.md:48' — '#### #202 Electron应用程序如何使用此插件'`
+- `docs/CHINESE_AUDIT.md:280` — `- 'docs/ISSUE.md:50' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:281` — `- 'docs/ISSUE.md:51' — '- **作者**: lyl340321'`
+- `docs/CHINESE_AUDIT.md:282` — `- 'docs/ISSUE.md:52' — '- **日期**: 2025-09-13'`
+- `docs/CHINESE_AUDIT.md:283` — `- 'docs/ISSUE.md:53' — '- **描述**: 在electron中支持了简易浏览器功能，想复用此插件提供mcp服务'`
+- `docs/CHINESE_AUDIT.md:284` — `- 'docs/ISSUE.md:55' — '#### #201 chrome-mcp无法从dialog中获取信息'`
+- `docs/CHINESE_AUDIT.md:285` — `- 'docs/ISSUE.md:57' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:286` — `- 'docs/ISSUE.md:58' — '- **作者**: qphien'`
+- `docs/CHINESE_AUDIT.md:287` — `- 'docs/ISSUE.md:59' — '- **日期**: 2025-09-12'`
+- `docs/CHINESE_AUDIT.md:288` — `- 'docs/ISSUE.md:60' — '- **描述**: dialog中含有token敏感信息，通过js获取内容的时候，获得的值为空'`
+- `docs/CHINESE_AUDIT.md:289` — `- 'docs/ISSUE.md:62' — '#### #200 如何滚动页面'`
+- `docs/CHINESE_AUDIT.md:290` — `- 'docs/ISSUE.md:64' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:291` — `- 'docs/ISSUE.md:65' — '- **作者**: qphien'`
+- `docs/CHINESE_AUDIT.md:292` — `- 'docs/ISSUE.md:66' — '- **日期**: 2025-09-12'`
+- `docs/CHINESE_AUDIT.md:293` — `- 'docs/ISSUE.md:67' — '- **描述**: Mac上如何instruct chrome-mcp滚动页面，通过调用快捷键space，chrome页面并没有发生滚动'`
+- `docs/CHINESE_AUDIT.md:294` — `- 'docs/ISSUE.md:69' — '#### #190 不支持离线加载本地模型吗？'`
+- `docs/CHINESE_AUDIT.md:295` — `- 'docs/ISSUE.md:71' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:296` — `- 'docs/ISSUE.md:72' — '- **作者**: long36708'`
+- `docs/CHINESE_AUDIT.md:297` — `- 'docs/ISSUE.md:73' — '- **日期**: 2025-09-02'`
+- `docs/CHINESE_AUDIT.md:298` — `- 'docs/ISSUE.md:74' — '- **描述**: 内网环境下，无法自动下载hugeface上的模型，网络不通'`
+- `docs/CHINESE_AUDIT.md:299` — `- 'docs/ISSUE.md:78' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:300` — `- 'docs/ISSUE.md:79' — '- **作者**: sansanai'`
+- `docs/CHINESE_AUDIT.md:301` — `- 'docs/ISSUE.md:80' — '- **日期**: 2025-08-28'`
+- `docs/CHINESE_AUDIT.md:302` — `- 'docs/ISSUE.md:81' — '- **描述**: 如何保存Chrome浏览器中显示的HTML内容，特别是当HTML内容很大时'`
+- `docs/CHINESE_AUDIT.md:303` — `- 'docs/ISSUE.md:83' — '#### #180 服务状态经常莫名其妙停止'`
+- `docs/CHINESE_AUDIT.md:304` — `- 'docs/ISSUE.md:85' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:305` — `- 'docs/ISSUE.md:86' — '- **作者**: IAmKongHai'`
+- `docs/CHINESE_AUDIT.md:306` — `- 'docs/ISSUE.md:87' — '- **日期**: 2025-08-28'`
+- `docs/CHINESE_AUDIT.md:307` — `- 'docs/ISSUE.md:88' — '- **描述**: 希望提高稳定性，在浏览器退出前一直保持服务状态运行中'`
+- `docs/CHINESE_AUDIT.md:308` — `- 'docs/ISSUE.md:90' — '#### #178 操作MCP打开谷歌浏览器的页面之后他会自动弹窗出来'`
+- `docs/CHINESE_AUDIT.md:309` — `- 'docs/ISSUE.md:92' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:310` — `- 'docs/ISSUE.md:93' — '- **作者**: MiloQ'`
+- `docs/CHINESE_AUDIT.md:311` — `- 'docs/ISSUE.md:94' — '- **日期**: 2025-08-27'`
+- `docs/CHINESE_AUDIT.md:312` — `- 'docs/ISSUE.md:95' — '- **描述**: 希望浏览器能在后台静默运行'`
+- `docs/CHINESE_AUDIT.md:313` — `- 'docs/ISSUE.md:99' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:314` — `- 'docs/ISSUE.md:100' — '- **作者**: judaemon'`
+- `docs/CHINESE_AUDIT.md:315` — `- 'docs/ISSUE.md:101' — '- **日期**: 2025-08-27'`
+- `docs/CHINESE_AUDIT.md:316` — `- 'docs/ISSUE.md:102' — '- **描述**: 是否可以在n8n工作流中使用'`
+- `docs/CHINESE_AUDIT.md:317` — `- 'docs/ISSUE.md:104' — '#### #175 可以以sse模式启动mcp server么'`
+- `docs/CHINESE_AUDIT.md:318` — `- 'docs/ISSUE.md:106' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:319` — `- 'docs/ISSUE.md:107' — '- **作者**: FriSeaSky'`
+- `docs/CHINESE_AUDIT.md:320` — `- 'docs/ISSUE.md:108' — '- **日期**: 2025-08-25'`
+- `docs/CHINESE_AUDIT.md:321` — `- 'docs/ISSUE.md:109' — '- **描述**: 当前看readme只支持其他两种模式，希望能实现sse模式'`
+- `docs/CHINESE_AUDIT.md:322` — `- 'docs/ISSUE.md:113' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:323` — `- 'docs/ISSUE.md:114' — '- **作者**: danieliser'`
+- `docs/CHINESE_AUDIT.md:324` — `- 'docs/ISSUE.md:115' — '- **日期**: 2025-08-21'`
+- `docs/CHINESE_AUDIT.md:325` — `- 'docs/ISSUE.md:116' — '- **描述**: 允许MCP控制标签组，创建、删除、添加标签到组等'`
+- `docs/CHINESE_AUDIT.md:326` — `- 'docs/ISSUE.md:120' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:327` — `- 'docs/ISSUE.md:121' — '- **作者**: lathidadia'`
+- `docs/CHINESE_AUDIT.md:328` — `- 'docs/ISSUE.md:122' — '- **日期**: 2025-08-20'`
+- `docs/CHINESE_AUDIT.md:329` — `- 'docs/ISSUE.md:123' — '- **描述**: 支持通过环境变量禁用或过滤特定工具，解决工具名称冲突问题'`
+- `docs/CHINESE_AUDIT.md:330` — `- 'docs/ISSUE.md:127' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:331` — `- 'docs/ISSUE.md:128' — '- **作者**: neberej'`
+- `docs/CHINESE_AUDIT.md:332` — `- 'docs/ISSUE.md:129' — '- **日期**: 2025-08-16'`
+- `docs/CHINESE_AUDIT.md:333` — `- 'docs/ISSUE.md:130' — '- **描述**: 需要添加速率限制逻辑，防止工具失控'`
+- `docs/CHINESE_AUDIT.md:334` — `- 'docs/ISSUE.md:132' — '#### #157 Chrome 商店'`
+- `docs/CHINESE_AUDIT.md:335` — `- 'docs/ISSUE.md:134' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:336` — `- 'docs/ISSUE.md:135' — '- **作者**: nelzomal'`
+- `docs/CHINESE_AUDIT.md:337` — `- 'docs/ISSUE.md:136' — '- **日期**: 2025-08-13'`
+- `docs/CHINESE_AUDIT.md:338` — `- 'docs/ISSUE.md:137' — '- **描述**: 有计划上架Chrome web store吗'`
+- `docs/CHINESE_AUDIT.md:339` — `- 'docs/ISSUE.md:141' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:340` — `- 'docs/ISSUE.md:142' — '- **作者**: nullCode666'`
+- `docs/CHINESE_AUDIT.md:341` — `- 'docs/ISSUE.md:143' — '- **日期**: 2025-08-13'`
+- `docs/CHINESE_AUDIT.md:342` — `- 'docs/ISSUE.md:144' — '- **描述**: 希望MCP能自动理解当前网页的源代码，找到对应的加密方法等'`
+- `docs/CHINESE_AUDIT.md:343` — `- 'docs/ISSUE.md:148' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:344` — `- 'docs/ISSUE.md:149' — '- **作者**: rmorse'`
+- `docs/CHINESE_AUDIT.md:345` — `- 'docs/ISSUE.md:150' — '- **日期**: 2025-08-12'`
+- `docs/CHINESE_AUDIT.md:346` — `- 'docs/ISSUE.md:151' — '- **描述**: 在某些网站上chrome_inject_script不工作，需要支持不同的注入点'`
+- `docs/CHINESE_AUDIT.md:347` — `- 'docs/ISSUE.md:153' — '#### #141 功能支持鼠标悬停、多窗口mcp隔离'`
+- `docs/CHINESE_AUDIT.md:348` — `- 'docs/ISSUE.md:155' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:349` — `- 'docs/ISSUE.md:156' — '- **作者**: lironghai'`
+- `docs/CHINESE_AUDIT.md:350` — `- 'docs/ISSUE.md:157' — '- **日期**: 2025-08-07'`
+- `docs/CHINESE_AUDIT.md:351` — `- 'docs/ISSUE.md:158' — '- **描述**: 支持鼠标悬停和多窗口MCP隔离功能'`
+- `docs/CHINESE_AUDIT.md:352` — `- 'docs/ISSUE.md:160' — '### 已关闭'`
+- `docs/CHINESE_AUDIT.md:353` — `- 'docs/ISSUE.md:164' — '- **状态**: CLOSED'`
+- `docs/CHINESE_AUDIT.md:354` — `- 'docs/ISSUE.md:165' — '- **作者**: kaovilai'`
+- `docs/CHINESE_AUDIT.md:355` — `- 'docs/ISSUE.md:166' — '- **日期**: 2025-08-08'`
+- `docs/CHINESE_AUDIT.md:356` — `- 'docs/ISSUE.md:167' — '- **描述**: 添加文件上传功能以支持web表单'`
+- `docs/CHINESE_AUDIT.md:357` — `- 'docs/ISSUE.md:171' — '- **状态**: CLOSED'`
+- `docs/CHINESE_AUDIT.md:358` — `- 'docs/ISSUE.md:172' — '- **作者**: metalshanked'`
+- `docs/CHINESE_AUDIT.md:359` — `- 'docs/ISSUE.md:173' — '- **日期**: 2025-07-16'`
+- `docs/CHINESE_AUDIT.md:360` — `- 'docs/ISSUE.md:174' — '- **描述**: 支持Anthropic发布的.dxt格式，实现一键安装'`
+- `docs/CHINESE_AUDIT.md:361` — `- 'docs/ISSUE.md:178' — '## 🐛 Bug报告'`
+- `docs/CHINESE_AUDIT.md:362` — `- 'docs/ISSUE.md:180' — '### 开放中'`
+- `docs/CHINESE_AUDIT.md:363` — `- 'docs/ISSUE.md:182' — '#### #215 chrome_console获取的数据不完整'`
+- `docs/CHINESE_AUDIT.md:364` — `- 'docs/ISSUE.md:184' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:365` — `- 'docs/ISSUE.md:185' — '- **作者**: africa1207'`
+- `docs/CHINESE_AUDIT.md:366` — `- 'docs/ISSUE.md:186' — '- **日期**: 2025-09-30'`
+- `docs/CHINESE_AUDIT.md:367` — `- 'docs/ISSUE.md:187' — '- **描述**: chrome_console获取的数据是浅拷贝，深层对象显示为"object"'`
+- `docs/CHINESE_AUDIT.md:368` — `- 'docs/ISSUE.md:189' — '#### #212 调用工具错误'`
+- `docs/CHINESE_AUDIT.md:369` — `- 'docs/ISSUE.md:191' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:370` — `- 'docs/ISSUE.md:192' — '- **作者**: zhaooa'`
+- `docs/CHINESE_AUDIT.md:371` — `- 'docs/ISSUE.md:193' — '- **日期**: 2025-09-28'`
+- `docs/CHINESE_AUDIT.md:372` — `- 'docs/ISSUE.md:194' — '- **描述**: 工具是打开状态，但是还是提示调用工具错误'`
+- `docs/CHINESE_AUDIT.md:373` — `- 'docs/ISSUE.md:196' — '#### #209 运行第一个例子的时候，mcp工具调用了但是画图没有动静'`
+- `docs/CHINESE_AUDIT.md:374` — `- 'docs/ISSUE.md:198' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:375` — `- 'docs/ISSUE.md:199' — '- **作者**: scwlkq'`
+- `docs/CHINESE_AUDIT.md:376` — `- 'docs/ISSUE.md:200' — '- **日期**: 2025-09-26'`
+- `docs/CHINESE_AUDIT.md:377` — `- 'docs/ISSUE.md:202' — '#### #206 请求报错'`
+- `docs/CHINESE_AUDIT.md:378` — `- 'docs/ISSUE.md:204' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:379` — `- 'docs/ISSUE.md:205' — '- **作者**: lghxuelang'`
+- `docs/CHINESE_AUDIT.md:380` — `- 'docs/ISSUE.md:206' — '- **日期**: 2025-09-18'`
+- `docs/CHINESE_AUDIT.md:381` — `- 'docs/ISSUE.md:207' — '- **描述**: Invalid or missing MCP session ID for SSE'`
+- `docs/CHINESE_AUDIT.md:382` — `- 'docs/ISSUE.md:209' — '#### #204 经常会打开 chrome-extension://hbdgbgagpkpjffpklnamcljpakneikee/true'`
+- `docs/CHINESE_AUDIT.md:383` — `- 'docs/ISSUE.md:211' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:384` — `- 'docs/ISSUE.md:212' — '- **作者**: Wouldyouplace45'`
+- `docs/CHINESE_AUDIT.md:385` — `- 'docs/ISSUE.md:213' — '- **日期**: 2025-09-15'`
+- `docs/CHINESE_AUDIT.md:386` — `- 'docs/ISSUE.md:214' — '- **描述**: 浏览器显示无法访问您的文件'`
+- `docs/CHINESE_AUDIT.md:387` — `- 'docs/ISSUE.md:216' — '#### #191 chrome_console要求当前页面没有打开dev tool'`
+- `docs/CHINESE_AUDIT.md:388` — `- 'docs/ISSUE.md:218' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:389` — `- 'docs/ISSUE.md:219' — '- **作者**: string1225'`
+- `docs/CHINESE_AUDIT.md:390` — `- 'docs/ISSUE.md:220' — '- **日期**: 2025-09-03'`
+- `docs/CHINESE_AUDIT.md:391` — `- 'docs/ISSUE.md:221' — '- **描述**: 这是chrome浏览器的机制限制'`
+- `docs/CHINESE_AUDIT.md:392` — `- 'docs/ISSUE.md:223' — '#### #184 trae显示个别工具名字超过60字符最大限制'`
+- `docs/CHINESE_AUDIT.md:393` — `- 'docs/ISSUE.md:225' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:394` — `- 'docs/ISSUE.md:226' — '- **作者**: wangqi996'`
+- `docs/CHINESE_AUDIT.md:395` — `- 'docs/ISSUE.md:227' — '- **日期**: 2025-08-29'`
+- `docs/CHINESE_AUDIT.md:396` — `- 'docs/ISSUE.md:231' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:397` — `- 'docs/ISSUE.md:232' — '- **作者**: maddada'`
+- `docs/CHINESE_AUDIT.md:398` — `- 'docs/ISSUE.md:233' — '- **日期**: 2025-08-18'`
+- `docs/CHINESE_AUDIT.md:399` — `- 'docs/ISSUE.md:234' — '- **描述**: 截图响应超过最大允许的token数（25000）'`
+- `docs/CHINESE_AUDIT.md:400` — `- 'docs/ISSUE.md:236' — '#### #152 并发执行过程中发生错乱'`
+- `docs/CHINESE_AUDIT.md:401` — `- 'docs/ISSUE.md:238' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:402` — `- 'docs/ISSUE.md:239' — '- **作者**: shatang123'`
+- `docs/CHINESE_AUDIT.md:403` — `- 'docs/ISSUE.md:240' — '- **日期**: 2025-08-12'`
+- `docs/CHINESE_AUDIT.md:404` — `- 'docs/ISSUE.md:241' — '- **描述**: 并发爬取网页时tabId错位，标签未关闭等问题'`
+- `docs/CHINESE_AUDIT.md:405` — `- 'docs/ISSUE.md:243' — '#### #149 一直提示脚本注入失败'`
+- `docs/CHINESE_AUDIT.md:406` — `- 'docs/ISSUE.md:245' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:407` — `- 'docs/ISSUE.md:246' — '- **作者**: manzhonglu'`
+- `docs/CHINESE_AUDIT.md:408` — `- 'docs/ISSUE.md:247' — '- **日期**: 2025-08-11'`
+- `docs/CHINESE_AUDIT.md:409` — `- 'docs/ISSUE.md:249' — '#### #144 让它打开网页，打开之后，会一直等待，直到超时'`
+- `docs/CHINESE_AUDIT.md:410` — `- 'docs/ISSUE.md:251' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:411` — `- 'docs/ISSUE.md:252' — '- **作者**: shopkeeper2020'`
+- `docs/CHINESE_AUDIT.md:412` — `- 'docs/ISSUE.md:253' — '- **日期**: 2025-08-08'`
+- `docs/CHINESE_AUDIT.md:413` — `- 'docs/ISSUE.md:255' — '#### #142 我打开了网页，让他帮我点击个东西他都不好使'`
+- `docs/CHINESE_AUDIT.md:414` — `- 'docs/ISSUE.md:257' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:415` — `- 'docs/ISSUE.md:258' — '- **作者**: bbhxwl'`
+- `docs/CHINESE_AUDIT.md:416` — `- 'docs/ISSUE.md:259' — '- **日期**: 2025-08-07'`
+- `docs/CHINESE_AUDIT.md:417` — `- 'docs/ISSUE.md:260' — '- **描述**: 使用qweb3 4b，只是回答提问，不执行点击操作'`
+- `docs/CHINESE_AUDIT.md:418` — `- 'docs/ISSUE.md:262' — '#### #139 错误: Error calling tool: Request timed out after 30000ms'`
+- `docs/CHINESE_AUDIT.md:419` — `- 'docs/ISSUE.md:264' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:420` — `- 'docs/ISSUE.md:265' — '- **作者**: sunhao28256'`
+- `docs/CHINESE_AUDIT.md:421` — `- 'docs/ISSUE.md:266' — '- **日期**: 2025-08-05'`
+- `docs/CHINESE_AUDIT.md:422` — `- 'docs/ISSUE.md:270' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:423` — `- 'docs/ISSUE.md:271' — '- **作者**: hanayashiki'`
+- `docs/CHINESE_AUDIT.md:424` — `- 'docs/ISSUE.md:272' — '- **日期**: 2025-08-03'`
+- `docs/CHINESE_AUDIT.md:425` — `- 'docs/ISSUE.md:273' — '- **描述**: 虽然显示成功，但没有输入到textarea中'`
+- `docs/CHINESE_AUDIT.md:426` — `- 'docs/ISSUE.md:275' — '#### #128 如果找不到网页元素的话，会一直重试'`
+- `docs/CHINESE_AUDIT.md:427` — `- 'docs/ISSUE.md:277' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:428` — `- 'docs/ISSUE.md:278' — '- **作者**: GragonForce666'`
+- `docs/CHINESE_AUDIT.md:429` — `- 'docs/ISSUE.md:279' — '- **日期**: 2025-07-29'`
+- `docs/CHINESE_AUDIT.md:430` — `- 'docs/ISSUE.md:281' — '#### #122 各种各样的超时，自动停止'`
+- `docs/CHINESE_AUDIT.md:431` — `- 'docs/ISSUE.md:283' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:432` — `- 'docs/ISSUE.md:284' — '- **作者**: fordiy'`
+- `docs/CHINESE_AUDIT.md:433` — `- 'docs/ISSUE.md:285' — '- **日期**: 2025-07-26'`
+- `docs/CHINESE_AUDIT.md:434` — `- 'docs/ISSUE.md:286' — '- **描述**: 已经把30秒超时改多10倍，还是有超时问题'`
+- `docs/CHINESE_AUDIT.md:435` — `- 'docs/ISSUE.md:288' — '#### #118 无法自动点击 cloudflare 人机验证'`
+- `docs/CHINESE_AUDIT.md:436` — `- 'docs/ISSUE.md:290' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:437` — `- 'docs/ISSUE.md:291' — '- **作者**: windzhu0514'`
+- `docs/CHINESE_AUDIT.md:438` — `- 'docs/ISSUE.md:292' — '- **日期**: 2025-07-23'`
+- `docs/CHINESE_AUDIT.md:439` — `- 'docs/ISSUE.md:294' — '#### #114 试了豆瓣、即刻，似乎抓取不了'`
+- `docs/CHINESE_AUDIT.md:440` — `- 'docs/ISSUE.md:296' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:441` — `- 'docs/ISSUE.md:297' — '- **作者**: imHw'`
+- `docs/CHINESE_AUDIT.md:442` — `- 'docs/ISSUE.md:298' — '- **日期**: 2025-07-20'`
+- `docs/CHINESE_AUDIT.md:443` — `- 'docs/ISSUE.md:299' — '- **描述**: AI反馈访问这些网站遇到问题，可能是反爬机制'`
+- `docs/CHINESE_AUDIT.md:444` — `- 'docs/ISSUE.md:301' — '#### #112 chrome_network_debugger的maxRequests太少了'`
+- `docs/CHINESE_AUDIT.md:445` — `- 'docs/ISSUE.md:303' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:446` — `- 'docs/ISSUE.md:304' — '- **作者**: kanekanefy'`
+- `docs/CHINESE_AUDIT.md:447` — `- 'docs/ISSUE.md:305' — '- **日期**: 2025-07-19'`
+- `docs/CHINESE_AUDIT.md:448` — `- 'docs/ISSUE.md:306' — '- **描述**: maxRequests限制在100个请求后自动停止'`
+- `docs/CHINESE_AUDIT.md:449` — `- 'docs/ISSUE.md:308' — '#### #111 使用CherryStudio进行网站截图时报错'`
+- `docs/CHINESE_AUDIT.md:450` — `- 'docs/ISSUE.md:310' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:451` — `- 'docs/ISSUE.md:311' — '- **作者**: GehuaZhang'`
+- `docs/CHINESE_AUDIT.md:452` — `- 'docs/ISSUE.md:312' — '- **日期**: 2025-07-18'`
+- `docs/CHINESE_AUDIT.md:453` — `- 'docs/ISSUE.md:313' — '- **描述**: Cannot read properties of undefined (reading 'map')'`
+- `docs/CHINESE_AUDIT.md:454` — `- 'docs/ISSUE.md:315' — '#### #99 chrome_get_web_content 工具获取的页面信息似乎不全'`
+- `docs/CHINESE_AUDIT.md:455` — `- 'docs/ISSUE.md:317' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:456` — `- 'docs/ISSUE.md:318' — '- **作者**: Reviel'`
+- `docs/CHINESE_AUDIT.md:457` — `- 'docs/ISSUE.md:319' — '- **日期**: 2025-07-13'`
+- `docs/CHINESE_AUDIT.md:458` — `- 'docs/ISSUE.md:320' — '- **描述**: 获取PostGIS ticket页面时缺失Description部分内容'`
+- `docs/CHINESE_AUDIT.md:459` — `- 'docs/ISSUE.md:322' — '#### #92 AI无法关闭alert提示框'`
+- `docs/CHINESE_AUDIT.md:460` — `- 'docs/ISSUE.md:324' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:461` — `- 'docs/ISSUE.md:325' — '- **作者**: chgblog'`
+- `docs/CHINESE_AUDIT.md:462` — `- 'docs/ISSUE.md:326' — '- **日期**: 2025-07-11'`
+- `docs/CHINESE_AUDIT.md:463` — `- 'docs/ISSUE.md:327' — '- **描述**: 遇到alert、confirm弹窗后AI无法继续操作，显示MCP超时'`
+- `docs/CHINESE_AUDIT.md:464` — `- 'docs/ISSUE.md:329' — '#### #67 windows function call 报超时错误'`
+- `docs/CHINESE_AUDIT.md:465` — `- 'docs/ISSUE.md:331' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:466` — `- 'docs/ISSUE.md:332' — '- **作者**: zhiyu'`
+- `docs/CHINESE_AUDIT.md:467` — `- 'docs/ISSUE.md:333' — '- **日期**: 2025-07-01'`
+- `docs/CHINESE_AUDIT.md:468` — `- 'docs/ISSUE.md:335' — '### 已关闭'`
+- `docs/CHINESE_AUDIT.md:469` — `- 'docs/ISSUE.md:339' — '- **状态**: CLOSED'`
+- `docs/CHINESE_AUDIT.md:470` — `- 'docs/ISSUE.md:340' — '- **作者**: Arefinw'`
+- `docs/CHINESE_AUDIT.md:471` — `- 'docs/ISSUE.md:341' — '- **日期**: 2025-08-28'`
+- `docs/CHINESE_AUDIT.md:472` — `- 'docs/ISSUE.md:343' — '#### #140 语音引擎初始化失败'`
+- `docs/CHINESE_AUDIT.md:473` — `- 'docs/ISSUE.md:345' — '- **状态**: CLOSED'`
+- `docs/CHINESE_AUDIT.md:474` — `- 'docs/ISSUE.md:346' — '- **作者**: Demi555'`
+- `docs/CHINESE_AUDIT.md:475` — `- 'docs/ISSUE.md:347' — '- **日期**: 2025-08-06'`
+- `docs/CHINESE_AUDIT.md:476` — `- 'docs/ISSUE.md:349' — '#### #116 插件点击连接，然后失焦点，隐藏，会自动断开连接'`
+- `docs/CHINESE_AUDIT.md:477` — `- 'docs/ISSUE.md:351' — '- **状态**: CLOSED'`
+- `docs/CHINESE_AUDIT.md:478` — `- 'docs/ISSUE.md:352' — '- **作者**: BeginnerDone'`
+- `docs/CHINESE_AUDIT.md:479` — `- 'docs/ISSUE.md:353' — '- **日期**: 2025-07-22'`
+- `docs/CHINESE_AUDIT.md:480` — `- 'docs/ISSUE.md:357' — '- **状态**: CLOSED'`
+- `docs/CHINESE_AUDIT.md:481` — `- 'docs/ISSUE.md:358' — '- **作者**: Lehtien'`
+- `docs/CHINESE_AUDIT.md:482` — `- 'docs/ISSUE.md:359' — '- **日期**: 2025-07-04'`
+- `docs/CHINESE_AUDIT.md:483` — `- 'docs/ISSUE.md:361' — '#### #60 Claude code Chrome MCP服务器启动时输出包含emoji的console.log语句'`
+- `docs/CHINESE_AUDIT.md:484` — `- 'docs/ISSUE.md:363' — '- **状态**: CLOSED'`
+- `docs/CHINESE_AUDIT.md:485` — `- 'docs/ISSUE.md:364' — '- **作者**: gabyic'`
+- `docs/CHINESE_AUDIT.md:486` — `- 'docs/ISSUE.md:365' — '- **日期**: 2025-06-28'`
+- `docs/CHINESE_AUDIT.md:487` — `- 'docs/ISSUE.md:366' — '- **描述**: 导致MCP协议JSON解析错误'`
+- `docs/CHINESE_AUDIT.md:488` — `- 'docs/ISSUE.md:370' — '## 📦 安装问题'`
+- `docs/CHINESE_AUDIT.md:489` — `- 'docs/ISSUE.md:372' — '### 开放中'`
+- `docs/CHINESE_AUDIT.md:490` — `- 'docs/ISSUE.md:374' — '#### #198 关于该插件在谷歌浏览器连接不上的问题'`
+- `docs/CHINESE_AUDIT.md:491` — `- 'docs/ISSUE.md:376' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:492` — `- 'docs/ISSUE.md:377' — '- **作者**: nice-nicegod'`
+- `docs/CHINESE_AUDIT.md:493` — `- 'docs/ISSUE.md:378' — '- **日期**: 2025-09-09'`
+- `docs/CHINESE_AUDIT.md:494` — `- 'docs/ISSUE.md:379' — '- **描述**: 插件显示"已连接，服务未启动"。如果Node.js安装时更改了默认路径会导致此问题'`
+- `docs/CHINESE_AUDIT.md:495` — `- 'docs/ISSUE.md:381' — '#### #187 打开连接时显示 Connected, Service Not Started'`
+- `docs/CHINESE_AUDIT.md:496` — `- 'docs/ISSUE.md:383' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:497` — `- 'docs/ISSUE.md:384' — '- **作者**: wyx66624'`
+- `docs/CHINESE_AUDIT.md:498` — `- 'docs/ISSUE.md:385' — '- **日期**: 2025-08-31'`
+- `docs/CHINESE_AUDIT.md:499` — `- 'docs/ISSUE.md:386' — '- **描述**: 已手动注册mcp-chrome-bridge，12306端口没有进程监听'`
+- `docs/CHINESE_AUDIT.md:500` — `- 'docs/ISSUE.md:390' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:501` — `- 'docs/ISSUE.md:391' — '- **作者**: f3l1x'`
+- `docs/CHINESE_AUDIT.md:502` — `- 'docs/ISSUE.md:392' — '- **日期**: 2025-08-25'`
+- `docs/CHINESE_AUDIT.md:503` — `- 'docs/ISSUE.md:393' — '- **描述**: 在Docker虚拟浏览器中预装扩展，显示"Connected, Service Not Started"'`
+- `docs/CHINESE_AUDIT.md:504` — `- 'docs/ISSUE.md:397' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:505` — `- 'docs/ISSUE.md:398' — '- **作者**: TimHuey'`
+- `docs/CHINESE_AUDIT.md:506` — `- 'docs/ISSUE.md:399' — '- **日期**: 2025-08-20'`
+- `docs/CHINESE_AUDIT.md:507` — `- 'docs/ISSUE.md:400' — '- **描述**: WSL中Claude Code无法识别mcp server'`
+- `docs/CHINESE_AUDIT.md:508` — `- 'docs/ISSUE.md:404' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:509` — `- 'docs/ISSUE.md:405' — '- **作者**: D3OXY'`
+- `docs/CHINESE_AUDIT.md:510` — `- 'docs/ISSUE.md:406' — '- **日期**: 2025-08-14'`
+- `docs/CHINESE_AUDIT.md:511` — `- 'docs/ISSUE.md:408' — '#### #148 chrome插件已经成功启动，但是命令行显示failed'`
+- `docs/CHINESE_AUDIT.md:512` — `- 'docs/ISSUE.md:410' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:513` — `- 'docs/ISSUE.md:411' — '- **作者**: joytianya'`
+- `docs/CHINESE_AUDIT.md:514` — `- 'docs/ISSUE.md:412' — '- **日期**: 2025-08-10'`
+- `docs/CHINESE_AUDIT.md:515` — `- 'docs/ISSUE.md:414' — '#### #147 有打算支持 docker 部署吗'`
+- `docs/CHINESE_AUDIT.md:516` — `- 'docs/ISSUE.md:416' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:517` — `- 'docs/ISSUE.md:417' — '- **作者**: tgscan-dev'`
+- `docs/CHINESE_AUDIT.md:518` — `- 'docs/ISSUE.md:418' — '- **日期**: 2025-08-10'`
+- `docs/CHINESE_AUDIT.md:519` — `- 'docs/ISSUE.md:420' — '#### #143 服务器上怎么部署这个mcp服务'`
+- `docs/CHINESE_AUDIT.md:520` — `- 'docs/ISSUE.md:422' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:521` — `- 'docs/ISSUE.md:423' — '- **作者**: no-bystander'`
+- `docs/CHINESE_AUDIT.md:522` — `- 'docs/ISSUE.md:424' — '- **日期**: 2025-08-08'`
+- `docs/CHINESE_AUDIT.md:523` — `- 'docs/ISSUE.md:426' — '#### #138 在chrome浏览器里已经安装上插件，可以配置端口'`
+- `docs/CHINESE_AUDIT.md:524` — `- 'docs/ISSUE.md:428' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:525` — `- 'docs/ISSUE.md:429' — '- **作者**: KylanJimmy'`
+- `docs/CHINESE_AUDIT.md:526` — `- 'docs/ISSUE.md:430' — '- **日期**: 2025-08-05'`
+- `docs/CHINESE_AUDIT.md:527` — `- 'docs/ISSUE.md:431' — '- **描述**: 是否可以绑定0.0.0.0的端口，而不只是127.0.0.1'`
+- `docs/CHINESE_AUDIT.md:528` — `- 'docs/ISSUE.md:433' — '#### #137 win上 已连接，服务未启动'`
+- `docs/CHINESE_AUDIT.md:529` — `- 'docs/ISSUE.md:435' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:530` — `- 'docs/ISSUE.md:436' — '- **作者**: steven111920'`
+- `docs/CHINESE_AUDIT.md:531` — `- 'docs/ISSUE.md:437' — '- **日期**: 2025-08-04'`
+- `docs/CHINESE_AUDIT.md:532` — `- 'docs/ISSUE.md:438' — '- **描述**: 点击run_host.bat显示拒绝访问'`
+- `docs/CHINESE_AUDIT.md:533` — `- 'docs/ISSUE.md:440' — '#### #127 已连接，服务未启动'`
+- `docs/CHINESE_AUDIT.md:534` — `- 'docs/ISSUE.md:442' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:535` — `- 'docs/ISSUE.md:443' — '- **作者**: Fanzaijun'`
+- `docs/CHINESE_AUDIT.md:536` — `- 'docs/ISSUE.md:444' — '- **日期**: 2025-07-29'`
+- `docs/CHINESE_AUDIT.md:537` — `- 'docs/ISSUE.md:446' — '#### #115 已连接服务未启动'`
+- `docs/CHINESE_AUDIT.md:538` — `- 'docs/ISSUE.md:448' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:539` — `- 'docs/ISSUE.md:449' — '- **作者**: yanghao112'`
+- `docs/CHINESE_AUDIT.md:540` — `- 'docs/ISSUE.md:450' — '- **日期**: 2025-07-21'`
+- `docs/CHINESE_AUDIT.md:541` — `- 'docs/ISSUE.md:451' — '- **描述**: 能排查的都排查了，还是不行'`
+- `docs/CHINESE_AUDIT.md:542` — `- 'docs/ISSUE.md:453' — '#### #106 启动成功但是没法配置'`
+- `docs/CHINESE_AUDIT.md:543` — `- 'docs/ISSUE.md:455' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:544` — `- 'docs/ISSUE.md:456' — '- **作者**: crxxxxxxx'`
+- `docs/CHINESE_AUDIT.md:545` — `- 'docs/ISSUE.md:457' — '- **日期**: 2025-07-15'`
+- `docs/CHINESE_AUDIT.md:546` — `- 'docs/ISSUE.md:459' — '#### #90 不能启动'`
+- `docs/CHINESE_AUDIT.md:547` — `- 'docs/ISSUE.md:461' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:548` — `- 'docs/ISSUE.md:462' — '- **作者**: qiffang'`
+- `docs/CHINESE_AUDIT.md:549` — `- 'docs/ISSUE.md:463' — '- **日期**: 2025-07-11'`
+- `docs/CHINESE_AUDIT.md:550` — `- 'docs/ISSUE.md:464' — '- **描述**: 运行run_hosts.sh一直hang住'`
+- `docs/CHINESE_AUDIT.md:551` — `- 'docs/ISSUE.md:468' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:552` — `- 'docs/ISSUE.md:469' — '- **作者**: DaniloHandsOn'`
+- `docs/CHINESE_AUDIT.md:553` — `- 'docs/ISSUE.md:470' — '- **日期**: 2025-07-10'`
+- `docs/CHINESE_AUDIT.md:554` — `- 'docs/ISSUE.md:471' — '- **描述**: chrome-mcp-bridge命令未找到'`
+- `docs/CHINESE_AUDIT.md:555` — `- 'docs/ISSUE.md:473' — '#### #85 一直报错 Session termination 400'`
+- `docs/CHINESE_AUDIT.md:556` — `- 'docs/ISSUE.md:475' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:557` — `- 'docs/ISSUE.md:476' — '- **作者**: hcoona'`
+- `docs/CHINESE_AUDIT.md:558` — `- 'docs/ISSUE.md:477' — '- **日期**: 2025-07-08'`
+- `docs/CHINESE_AUDIT.md:559` — `- 'docs/ISSUE.md:481' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:560` — `- 'docs/ISSUE.md:482' — '- **作者**: adrianlzt'`
+- `docs/CHINESE_AUDIT.md:561` — `- 'docs/ISSUE.md:483' — '- **日期**: 2025-07-06'`
+- `docs/CHINESE_AUDIT.md:562` — `- 'docs/ISSUE.md:484' — '- **描述**: 文档缺少shared包的构建步骤'`
+- `docs/CHINESE_AUDIT.md:563` — `- 'docs/ISSUE.md:488' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:564` — `- 'docs/ISSUE.md:489' — '- **作者**: coisini6'`
+- `docs/CHINESE_AUDIT.md:565` — `- 'docs/ISSUE.md:490' — '- **日期**: 2025-07-02'`
+- `docs/CHINESE_AUDIT.md:566` — `- 'docs/ISSUE.md:491' — '- **描述**: Windows10下报ERR_REQUIRE_ESM错误'`
+- `docs/CHINESE_AUDIT.md:567` — `- 'docs/ISSUE.md:493' — '#### #65 mac m4 浏览器插件服务未连接'`
+- `docs/CHINESE_AUDIT.md:568` — `- 'docs/ISSUE.md:495' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:569` — `- 'docs/ISSUE.md:496' — '- **作者**: wzp-coding'`
+- `docs/CHINESE_AUDIT.md:570` — `- 'docs/ISSUE.md:497' — '- **日期**: 2025-06-30'`
+- `docs/CHINESE_AUDIT.md:571` — `- 'docs/ISSUE.md:498' — '- **描述**: 已按troubleshooting排查，执行index.js卡住无反应'`
+- `docs/CHINESE_AUDIT.md:572` — `- 'docs/ISSUE.md:500' — '#### #62 无法启动'`
+- `docs/CHINESE_AUDIT.md:573` — `- 'docs/ISSUE.md:502' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:574` — `- 'docs/ISSUE.md:503' — '- **作者**: Mocha-s'`
+- `docs/CHINESE_AUDIT.md:575` — `- 'docs/ISSUE.md:504' — '- **日期**: 2025-06-28'`
+- `docs/CHINESE_AUDIT.md:576` — `- 'docs/ISSUE.md:505' — '- **描述**: 直接不知道怎么启动'`
+- `docs/CHINESE_AUDIT.md:577` — `- 'docs/ISSUE.md:507' — '### 已关闭'`
+- `docs/CHINESE_AUDIT.md:578` — `- 'docs/ISSUE.md:511' — '- **状态**: CLOSED (已有PR #195解决)'`
+- `docs/CHINESE_AUDIT.md:579` — `- 'docs/ISSUE.md:512' — '- **作者**: gebeer'`
+- `docs/CHINESE_AUDIT.md:580` — `- 'docs/ISSUE.md:513' — '- **日期**: 2025-09-07'`
+- `docs/CHINESE_AUDIT.md:581` — `- 'docs/ISSUE.md:514' — '- **描述**: mcp-chrome-bridge npm包只安装到Chrome目录，不支持Chromium'`
+- `docs/CHINESE_AUDIT.md:582` — `- 'docs/ISSUE.md:518' — '- **状态**: CLOSED'`
+- `docs/CHINESE_AUDIT.md:583` — `- 'docs/ISSUE.md:519' — '- **作者**: TonnyWong1052'`
+- `docs/CHINESE_AUDIT.md:584` — `- 'docs/ISSUE.md:520' — '- **日期**: 2025-08-15'`
+- `docs/CHINESE_AUDIT.md:585` — `- 'docs/ISSUE.md:522' — '#### #154 Chrome 未能成功加载扩展程序'`
+- `docs/CHINESE_AUDIT.md:586` — `- 'docs/ISSUE.md:524' — '- **状态**: CLOSED'`
+- `docs/CHINESE_AUDIT.md:587` — `- 'docs/ISSUE.md:525' — '- **作者**: mmhzlrj'`
+- `docs/CHINESE_AUDIT.md:588` — `- 'docs/ISSUE.md:526' — '- **日期**: 2025-08-12'`
+- `docs/CHINESE_AUDIT.md:589` — `- 'docs/ISSUE.md:527' — '- **描述**: Missing 'manifest_version' key'`
+- `docs/CHINESE_AUDIT.md:590` — `- 'docs/ISSUE.md:529' — '#### #81 chromium浏览器启动失败的目录问题'`
+- `docs/CHINESE_AUDIT.md:591` — `- 'docs/ISSUE.md:531' — '- **状态**: CLOSED'`
+- `docs/CHINESE_AUDIT.md:592` — `- 'docs/ISSUE.md:532' — '- **作者**: lesszzen'`
+- `docs/CHINESE_AUDIT.md:593` — `- 'docs/ISSUE.md:533' — '- **日期**: 2025-07-07'`
+- `docs/CHINESE_AUDIT.md:594` — `- 'docs/ISSUE.md:534' — '- **描述**: Chromium在Linux下配置文件目录为.config/chromium'`
+- `docs/CHINESE_AUDIT.md:595` — `- 'docs/ISSUE.md:536' — '#### #69 是否有适配firefox浏览器计划'`
+- `docs/CHINESE_AUDIT.md:596` — `- 'docs/ISSUE.md:538' — '- **状态**: CLOSED'`
+- `docs/CHINESE_AUDIT.md:597` — `- 'docs/ISSUE.md:539' — '- **作者**: Shuai-S'`
+- `docs/CHINESE_AUDIT.md:598` — `- 'docs/ISSUE.md:540' — '- **日期**: 2025-07-02'`
+- `docs/CHINESE_AUDIT.md:599` — `- 'docs/ISSUE.md:542' — '#### #64 不支持linux部署这个项目吧'`
+- `docs/CHINESE_AUDIT.md:600` — `- 'docs/ISSUE.md:544' — '- **状态**: CLOSED'`
+- `docs/CHINESE_AUDIT.md:601` — `- 'docs/ISSUE.md:545' — '- **作者**: caiji2019-cai'`
+- `docs/CHINESE_AUDIT.md:602` — `- 'docs/ISSUE.md:546' — '- **日期**: 2025-06-30'`
+- `docs/CHINESE_AUDIT.md:603` — `- 'docs/ISSUE.md:548' — '#### #22 Mac上运行失败，Native服务没有成功启动'`
+- `docs/CHINESE_AUDIT.md:604` — `- 'docs/ISSUE.md:550' — '- **状态**: CLOSED'`
+- `docs/CHINESE_AUDIT.md:605` — `- 'docs/ISSUE.md:551' — '- **作者**: DengKaiRong'`
+- `docs/CHINESE_AUDIT.md:606` — `- 'docs/ISSUE.md:552' — '- **日期**: 2025-06-19'`
+- `docs/CHINESE_AUDIT.md:607` — `- 'docs/ISSUE.md:554' — '#### #16 开发模式启动项目，server未成功启动'`
+- `docs/CHINESE_AUDIT.md:608` — `- 'docs/ISSUE.md:556' — '- **状态**: CLOSED'`
+- `docs/CHINESE_AUDIT.md:609` — `- 'docs/ISSUE.md:557' — '- **作者**: WSCZou'`
+- `docs/CHINESE_AUDIT.md:610` — `- 'docs/ISSUE.md:558' — '- **日期**: 2025-06-18'`
+- `docs/CHINESE_AUDIT.md:611` — `- 'docs/ISSUE.md:562' — '## ⚙️ 配置问题'`
+- `docs/CHINESE_AUDIT.md:612` — `- 'docs/ISSUE.md:564' — '### 开放中'`
+- `docs/CHINESE_AUDIT.md:613` — `- 'docs/ISSUE.md:568' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:614` — `- 'docs/ISSUE.md:569' — '- **作者**: chenhunhun'`
+- `docs/CHINESE_AUDIT.md:615` — `- 'docs/ISSUE.md:570' — '- **日期**: 2025-09-14'`
+- `docs/CHINESE_AUDIT.md:616` — `- 'docs/ISSUE.md:571' — '- **描述**: Cursor中配置后工具加载失败'`
+- `docs/CHINESE_AUDIT.md:617` — `- 'docs/ISSUE.md:573' — '#### #199 Claude code cil 连上不上怎么回事'`
+- `docs/CHINESE_AUDIT.md:618` — `- 'docs/ISSUE.md:575' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:619` — `- 'docs/ISSUE.md:576' — '- **作者**: 666xjs'`
+- `docs/CHINESE_AUDIT.md:620` — `- 'docs/ISSUE.md:577' — '- **日期**: 2025-09-10'`
+- `docs/CHINESE_AUDIT.md:621` — `- 'docs/ISSUE.md:578' — '- **描述**: 服务端运行成功了，但就是连上不上'`
+- `docs/CHINESE_AUDIT.md:622` — `- 'docs/ISSUE.md:580' — '#### #188 windsurf中无法连接'`
+- `docs/CHINESE_AUDIT.md:623` — `- 'docs/ISSUE.md:582' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:624` — `- 'docs/ISSUE.md:583' — '- **作者**: NoComments'`
+- `docs/CHINESE_AUDIT.md:625` — `- 'docs/ISSUE.md:584' — '- **日期**: 2025-09-02'`
+- `docs/CHINESE_AUDIT.md:626` — `- 'docs/ISSUE.md:585' — '- **描述**: Error: TransformStream is not defined'`
+- `docs/CHINESE_AUDIT.md:627` — `- 'docs/ISSUE.md:587' — '#### #185 Kiro 提示 "Enabled MCP Server chrome-mcp-server must specify a command"'`
+- `docs/CHINESE_AUDIT.md:628` — `- 'docs/ISSUE.md:589' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:629` — `- 'docs/ISSUE.md:590' — '- **作者**: Chris-C1108'`
+- `docs/CHINESE_AUDIT.md:630` — `- 'docs/ISSUE.md:591' — '- **日期**: 2025-08-29'`
+- `docs/CHINESE_AUDIT.md:631` — `- 'docs/ISSUE.md:592' — '- **描述**: 不清楚command是指什么，会不会是kiro不支持streamable-http类型'`
+- `docs/CHINESE_AUDIT.md:632` — `- 'docs/ISSUE.md:596' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:633` — `- 'docs/ISSUE.md:597' — '- **作者**: dreamreels'`
+- `docs/CHINESE_AUDIT.md:634` — `- 'docs/ISSUE.md:598' — '- **日期**: 2025-08-28'`
+- `docs/CHINESE_AUDIT.md:635` — `- 'docs/ISSUE.md:599' — '- **描述**: 扩展显示运行正常，但claude命令行工具无法连接'`
+- `docs/CHINESE_AUDIT.md:636` — `- 'docs/ISSUE.md:601' — '#### #173 claude code 不支持streamableHttp'`
+- `docs/CHINESE_AUDIT.md:637` — `- 'docs/ISSUE.md:603' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:638` — `- 'docs/ISSUE.md:604' — '- **作者**: Baddts'`
+- `docs/CHINESE_AUDIT.md:639` — `- 'docs/ISSUE.md:605' — '- **日期**: 2025-08-24'`
+- `docs/CHINESE_AUDIT.md:640` — `- 'docs/ISSUE.md:606' — '- **描述**: 配置streamableHttp后claude code不会加载这个mcp'`
+- `docs/CHINESE_AUDIT.md:641` — `- 'docs/ISSUE.md:610' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:642` — `- 'docs/ISSUE.md:611' — '- **作者**: joyhu'`
+- `docs/CHINESE_AUDIT.md:643` — `- 'docs/ISSUE.md:612' — '- **日期**: 2025-08-19'`
+- `docs/CHINESE_AUDIT.md:644` — `- 'docs/ISSUE.md:614' — '#### #167 claude code mcp 链接不了'`
+- `docs/CHINESE_AUDIT.md:645` — `- 'docs/ISSUE.md:616' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:646` — `- 'docs/ISSUE.md:617' — '- **作者**: TheBloodthirster'`
+- `docs/CHINESE_AUDIT.md:647` — `- 'docs/ISSUE.md:618' — '- **日期**: 2025-08-18'`
+- `docs/CHINESE_AUDIT.md:648` — `- 'docs/ISSUE.md:619' — '- **描述**: Native connection disconnected'`
+- `docs/CHINESE_AUDIT.md:649` — `- 'docs/ISSUE.md:621' — '#### #160 在使用multilingual-e5-base时出错'`
+- `docs/CHINESE_AUDIT.md:650` — `- 'docs/ISSUE.md:623' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:651` — `- 'docs/ISSUE.md:624' — '- **作者**: lcylcyll'`
+- `docs/CHINESE_AUDIT.md:652` — `- 'docs/ISSUE.md:625' — '- **日期**: 2025-08-15'`
+- `docs/CHINESE_AUDIT.md:653` — `- 'docs/ISSUE.md:626' — '- **描述**: 模型要求维度是768D，但在谷歌浏览器上出错'`
+- `docs/CHINESE_AUDIT.md:654` — `- 'docs/ISSUE.md:630' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:655` — `- 'docs/ISSUE.md:631' — '- **作者**: amritbanerjee'`
+- `docs/CHINESE_AUDIT.md:656` — `- 'docs/ISSUE.md:632' — '- **日期**: 2025-08-12'`
+- `docs/CHINESE_AUDIT.md:657` — `- 'docs/ISSUE.md:633' — '- **描述**: Readme文件第3步的图片链接404'`
+- `docs/CHINESE_AUDIT.md:658` — `- 'docs/ISSUE.md:635' — '#### #135 callTool() 这个工具函数 在哪个库里'`
+- `docs/CHINESE_AUDIT.md:659` — `- 'docs/ISSUE.md:637' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:660` — `- 'docs/ISSUE.md:638' — '- **作者**: hechengdu'`
+- `docs/CHINESE_AUDIT.md:661` — `- 'docs/ISSUE.md:639' — '- **日期**: 2025-08-03'`
+- `docs/CHINESE_AUDIT.md:662` — `- 'docs/ISSUE.md:641' — '#### #134 Cursor无法连接Chrome MCP'`
+- `docs/CHINESE_AUDIT.md:663` — `- 'docs/ISSUE.md:643' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:664` — `- 'docs/ISSUE.md:644' — '- **作者**: shengcruz'`
+- `docs/CHINESE_AUDIT.md:665` — `- 'docs/ISSUE.md:645' — '- **日期**: 2025-08-02'`
+- `docs/CHINESE_AUDIT.md:666` — `- 'docs/ISSUE.md:646' — '- **描述**: 显示"No connection to browser extension"'`
+- `docs/CHINESE_AUDIT.md:667` — `- 'docs/ISSUE.md:648' — '#### #132 trae 加载失败'`
+- `docs/CHINESE_AUDIT.md:668` — `- 'docs/ISSUE.md:650' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:669` — `- 'docs/ISSUE.md:651' — '- **作者**: mimicode'`
+- `docs/CHINESE_AUDIT.md:670` — `- 'docs/ISSUE.md:652' — '- **日期**: 2025-08-02'`
+- `docs/CHINESE_AUDIT.md:671` — `- 'docs/ISSUE.md:653' — '- **描述**: chrome_send_command_to_inject_script长度超过60个字符'`
+- `docs/CHINESE_AUDIT.md:672` — `- 'docs/ISSUE.md:655' — '#### #131 claude desktop 配置后不识别'`
+- `docs/CHINESE_AUDIT.md:673` — `- 'docs/ISSUE.md:657' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:674` — `- 'docs/ISSUE.md:658' — '- **作者**: microxxx'`
+- `docs/CHINESE_AUDIT.md:675` — `- 'docs/ISSUE.md:659' — '- **日期**: 2025-08-01'`
+- `docs/CHINESE_AUDIT.md:676` — `- 'docs/ISSUE.md:661' — '#### #124 请看截图，说已经搞掂画图了，但Excalidraw永远都是空白'`
+- `docs/CHINESE_AUDIT.md:677` — `- 'docs/ISSUE.md:663' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:678` — `- 'docs/ISSUE.md:664' — '- **作者**: fordiy'`
+- `docs/CHINESE_AUDIT.md:679` — `- 'docs/ISSUE.md:665' — '- **日期**: 2025-07-27'`
+- `docs/CHINESE_AUDIT.md:680` — `- 'docs/ISSUE.md:667' — '#### #123 在AI输出过程中，经常会自动停掉'`
+- `docs/CHINESE_AUDIT.md:681` — `- 'docs/ISSUE.md:669' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:682` — `- 'docs/ISSUE.md:670' — '- **作者**: fordiy'`
+- `docs/CHINESE_AUDIT.md:683` — `- 'docs/ISSUE.md:671' — '- **日期**: 2025-07-26'`
+- `docs/CHINESE_AUDIT.md:684` — `- 'docs/ISSUE.md:672' — '- **描述**: 没法继续在原来页面excalidraw画图'`
+- `docs/CHINESE_AUDIT.md:685` — `- 'docs/ISSUE.md:674' — '#### #121 cherrystudio升级1.5.3之后，无法调用了'`
+- `docs/CHINESE_AUDIT.md:686` — `- 'docs/ISSUE.md:676' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:687` — `- 'docs/ISSUE.md:677' — '- **作者**: csfeng1'`
+- `docs/CHINESE_AUDIT.md:688` — `- 'docs/ISSUE.md:678' — '- **日期**: 2025-07-26'`
+- `docs/CHINESE_AUDIT.md:689` — `- 'docs/ISSUE.md:680' — '#### #109 cherrystudio无法正常使用MCP'`
+- `docs/CHINESE_AUDIT.md:690` — `- 'docs/ISSUE.md:682' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:691` — `- 'docs/ISSUE.md:683' — '- **作者**: kksqwerc'`
+- `docs/CHINESE_AUDIT.md:692` — `- 'docs/ISSUE.md:684' — '- **日期**: 2025-07-17'`
+- `docs/CHINESE_AUDIT.md:693` — `- 'docs/ISSUE.md:685' — '- **描述**: 工具已罗列出来，但在对话过程中无法准确调用'`
+- `docs/CHINESE_AUDIT.md:694` — `- 'docs/ISSUE.md:687' — '#### #103 报错 400 的一般是客户端配置方式不对'`
+- `docs/CHINESE_AUDIT.md:695` — `- 'docs/ISSUE.md:689' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:696` — `- 'docs/ISSUE.md:690' — '- **作者**: ifastcc'`
+- `docs/CHINESE_AUDIT.md:697` — `- 'docs/ISSUE.md:691' — '- **日期**: 2025-07-15'`
+- `docs/CHINESE_AUDIT.md:698` — `- 'docs/ISSUE.md:692' — '- **描述**: 给出了Claude code、Gemini cli、Cursor的正确配置方式'`
+- `docs/CHINESE_AUDIT.md:699` — `- 'docs/ISSUE.md:694' — '#### #102 Cherry-Studio 启动失败'`
+- `docs/CHINESE_AUDIT.md:700` — `- 'docs/ISSUE.md:696' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:701` — `- 'docs/ISSUE.md:697' — '- **作者**: Bboossccoo'`
+- `docs/CHINESE_AUDIT.md:702` — `- 'docs/ISSUE.md:698' — '- **日期**: 2025-07-14'`
+- `docs/CHINESE_AUDIT.md:703` — `- 'docs/ISSUE.md:700' — '#### #100 cursor调用excalidraw 提示Error calling tool'`
+- `docs/CHINESE_AUDIT.md:704` — `- 'docs/ISSUE.md:702' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:705` — `- 'docs/ISSUE.md:703' — '- **作者**: DevilMay-Cry'`
+- `docs/CHINESE_AUDIT.md:706` — `- 'docs/ISSUE.md:704' — '- **日期**: 2025-07-14'`
+- `docs/CHINESE_AUDIT.md:707` — `- 'docs/ISSUE.md:705' — '- **描述**: Request timed out after 30000ms'`
+- `docs/CHINESE_AUDIT.md:708` — `- 'docs/ISSUE.md:707' — '#### #101 vscode使用：输入打开url，输入账号密码。一直卡在打开url中'`
+- `docs/CHINESE_AUDIT.md:709` — `- 'docs/ISSUE.md:709' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:710` — `- 'docs/ISSUE.md:710' — '- **作者**: kkk123dm'`
+- `docs/CHINESE_AUDIT.md:711` — `- 'docs/ISSUE.md:711' — '- **日期**: 2025-07-14'`
+- `docs/CHINESE_AUDIT.md:712` — `- 'docs/ISSUE.md:713' — '### 已关闭'`
+- `docs/CHINESE_AUDIT.md:713` — `- 'docs/ISSUE.md:715' — '#### #221 如何在VSC中配置mcp-chrome？'`
+- `docs/CHINESE_AUDIT.md:714` — `- 'docs/ISSUE.md:717' — '- **状态**: CLOSED'`
+- `docs/CHINESE_AUDIT.md:715` — `- 'docs/ISSUE.md:718' — '- **作者**: valuex'`
+- `docs/CHINESE_AUDIT.md:716` — `- 'docs/ISSUE.md:719' — '- **日期**: 2025-10-04'`
+- `docs/CHINESE_AUDIT.md:717` — `- 'docs/ISSUE.md:720' — '- **描述**: 配置后不能启动服务器'`
+- `docs/CHINESE_AUDIT.md:718` — `- 'docs/ISSUE.md:722' — '#### #193 Cursor中添加mcp后一直显示loading tools'`
+- `docs/CHINESE_AUDIT.md:719` — `- 'docs/ISSUE.md:724' — '- **状态**: CLOSED'`
+- `docs/CHINESE_AUDIT.md:720` — `- 'docs/ISSUE.md:725' — '- **作者**: lixiaolong613'`
+- `docs/CHINESE_AUDIT.md:721` — `- 'docs/ISSUE.md:726' — '- **日期**: 2025-09-04'`
+- `docs/CHINESE_AUDIT.md:722` — `- 'docs/ISSUE.md:728' — '#### #192 部署到远程服务器之后访问连接被重置'`
+- `docs/CHINESE_AUDIT.md:723` — `- 'docs/ISSUE.md:730' — '- **状态**: CLOSED'`
+- `docs/CHINESE_AUDIT.md:724` — `- 'docs/ISSUE.md:731' — '- **作者**: wlxwlxwlx'`
+- `docs/CHINESE_AUDIT.md:725` — `- 'docs/ISSUE.md:732' — '- **日期**: 2025-09-04'`
+- `docs/CHINESE_AUDIT.md:726` — `- 'docs/ISSUE.md:734' — '#### #164 如何在claude desktop中也用上预定义的prompt template'`
+- `docs/CHINESE_AUDIT.md:727` — `- 'docs/ISSUE.md:736' — '- **状态**: CLOSED'`
+- `docs/CHINESE_AUDIT.md:728` — `- 'docs/ISSUE.md:737' — '- **作者**: WeiyangZhang'`
+- `docs/CHINESE_AUDIT.md:729` — `- 'docs/ISSUE.md:738' — '- **日期**: 2025-08-18'`
+- `docs/CHINESE_AUDIT.md:730` — `- 'docs/ISSUE.md:742' — '- **状态**: CLOSED'`
+- `docs/CHINESE_AUDIT.md:731` — `- 'docs/ISSUE.md:743' — '- **作者**: seldaneg'`
+- `docs/CHINESE_AUDIT.md:732` — `- 'docs/ISSUE.md:744' — '- **日期**: 2025-08-02'`
+- `docs/CHINESE_AUDIT.md:733` — `- 'docs/ISSUE.md:748' — '- **状态**: CLOSED'`
+- `docs/CHINESE_AUDIT.md:734` — `- 'docs/ISSUE.md:749' — '- **作者**: Daiyuxin26'`
+- `docs/CHINESE_AUDIT.md:735` — `- 'docs/ISSUE.md:750' — '- **日期**: 2025-07-19'`
+- `docs/CHINESE_AUDIT.md:736` — `- 'docs/ISSUE.md:752' — '#### #102 Cherry-Studio 启动失败'`
+- `docs/CHINESE_AUDIT.md:737` — `- 'docs/ISSUE.md:754' — '- **状态**: CLOSED'`
+- `docs/CHINESE_AUDIT.md:738` — `- 'docs/ISSUE.md:755' — '- **作者**: Bboossccoo'`
+- `docs/CHINESE_AUDIT.md:739` — `- 'docs/ISSUE.md:756' — '- **日期**: 2025-07-14'`
+- `docs/CHINESE_AUDIT.md:740` — `- 'docs/ISSUE.md:758' — '#### #57 DIFY MCP调用失败'`
+- `docs/CHINESE_AUDIT.md:741` — `- 'docs/ISSUE.md:760' — '- **状态**: CLOSED'`
+- `docs/CHINESE_AUDIT.md:742` — `- 'docs/ISSUE.md:761' — '- **作者**: SpringMeta'`
+- `docs/CHINESE_AUDIT.md:743` — `- 'docs/ISSUE.md:762' — '- **日期**: 2025-06-27'`
+- `docs/CHINESE_AUDIT.md:744` — `- 'docs/ISSUE.md:764' — '#### #45 Cherry Studio 下连接 MCP报错'`
+- `docs/CHINESE_AUDIT.md:745` — `- 'docs/ISSUE.md:766' — '- **状态**: CLOSED'`
+- `docs/CHINESE_AUDIT.md:746` — `- 'docs/ISSUE.md:767' — '- **作者**: nooldey'`
+- `docs/CHINESE_AUDIT.md:747` — `- 'docs/ISSUE.md:768' — '- **日期**: 2025-06-25'`
+- `docs/CHINESE_AUDIT.md:748` — `- 'docs/ISSUE.md:769' — '- **描述**: serverType不正确，应使用小驼峰写法'`
+- `docs/CHINESE_AUDIT.md:749` — `- 'docs/ISSUE.md:771' — '#### #32 vscode 中启动失败'`
+- `docs/CHINESE_AUDIT.md:750` — `- 'docs/ISSUE.md:773' — '- **状态**: CLOSED'`
+- `docs/CHINESE_AUDIT.md:751` — `- 'docs/ISSUE.md:774' — '- **作者**: linjinxing'`
+- `docs/CHINESE_AUDIT.md:752` — `- 'docs/ISSUE.md:775' — '- **日期**: 2025-06-23'`
+- `docs/CHINESE_AUDIT.md:753` — `- 'docs/ISSUE.md:777' — '#### #30 没法使用'`
+- `docs/CHINESE_AUDIT.md:754` — `- 'docs/ISSUE.md:779' — '- **状态**: CLOSED'`
+- `docs/CHINESE_AUDIT.md:755` — `- 'docs/ISSUE.md:780' — '- **作者**: 2513483494'`
+- `docs/CHINESE_AUDIT.md:756` — `- 'docs/ISSUE.md:781' — '- **日期**: 2025-06-23'`
+- `docs/CHINESE_AUDIT.md:757` — `- 'docs/ISSUE.md:782' — '- **描述**: unexpected status code: 400'`
+- `docs/CHINESE_AUDIT.md:758` — `- 'docs/ISSUE.md:784' — '#### #19 cursor 里面配置后会出现报错'`
+- `docs/CHINESE_AUDIT.md:759` — `- 'docs/ISSUE.md:786' — '- **状态**: CLOSED'`
+- `docs/CHINESE_AUDIT.md:760` — `- 'docs/ISSUE.md:787' — '- **作者**: Sumouren1'`
+- `docs/CHINESE_AUDIT.md:761` — `- 'docs/ISSUE.md:788' — '- **日期**: 2025-06-18'`
+- `docs/CHINESE_AUDIT.md:762` — `- 'docs/ISSUE.md:790' — '#### #18 不支持cursor/cline么？'`
+- `docs/CHINESE_AUDIT.md:763` — `- 'docs/ISSUE.md:792' — '- **状态**: CLOSED'`
+- `docs/CHINESE_AUDIT.md:764` — `- 'docs/ISSUE.md:793' — '- **作者**: Rainmen-xia'`
+- `docs/CHINESE_AUDIT.md:765` — `- 'docs/ISSUE.md:794' — '- **日期**: 2025-06-18'`
+- `docs/CHINESE_AUDIT.md:766` — `- 'docs/ISSUE.md:798' — '- **状态**: CLOSED'`
+- `docs/CHINESE_AUDIT.md:767` — `- 'docs/ISSUE.md:799' — '- **作者**: LLmoskk'`
+- `docs/CHINESE_AUDIT.md:768` — `- 'docs/ISSUE.md:800' — '- **日期**: 2025-06-17'`
+- `docs/CHINESE_AUDIT.md:769` — `- 'docs/ISSUE.md:802' — '#### #8 chrome_navigate调用报错'`
+- `docs/CHINESE_AUDIT.md:770` — `- 'docs/ISSUE.md:804' — '- **状态**: CLOSED'`
+- `docs/CHINESE_AUDIT.md:771` — `- 'docs/ISSUE.md:805' — '- **作者**: fcyf'`
+- `docs/CHINESE_AUDIT.md:772` — `- 'docs/ISSUE.md:806' — '- **日期**: 2025-06-16'`
+- `docs/CHINESE_AUDIT.md:773` — `- 'docs/ISSUE.md:810' — '## 🔌 兼容性问题'`
+- `docs/CHINESE_AUDIT.md:774` — `- 'docs/ISSUE.md:812' — '### 开放中'`
+- `docs/CHINESE_AUDIT.md:775` — `- 'docs/ISSUE.md:814' — '#### #172 iframe页面元素not found'`
+- `docs/CHINESE_AUDIT.md:776` — `- 'docs/ISSUE.md:816' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:777` — `- 'docs/ISSUE.md:817' — '- **作者**: Actor12'`
+- `docs/CHINESE_AUDIT.md:778` — `- 'docs/ISSUE.md:818' — '- **日期**: 2025-08-22'`
+- `docs/CHINESE_AUDIT.md:779` — `- 'docs/ISSUE.md:819' — '- **描述**: 使用iframe开发的网页，chrome_fill_or_selector总是not found'`
+- `docs/CHINESE_AUDIT.md:780` — `- 'docs/ISSUE.md:821' — '#### #126 自动回复、自动发布 希望功能更强大一些'`
+- `docs/CHINESE_AUDIT.md:781` — `- 'docs/ISSUE.md:823' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:782` — `- 'docs/ISSUE.md:824' — '- **作者**: smartchainark'`
+- `docs/CHINESE_AUDIT.md:783` — `- 'docs/ISSUE.md:825' — '- **日期**: 2025-07-29'`
+- `docs/CHINESE_AUDIT.md:784` — `- 'docs/ISSUE.md:826' — '- **描述**: 在x平台和小红书平台无法正常完成任务'`
+- `docs/CHINESE_AUDIT.md:785` — `- 'docs/ISSUE.md:828' — '#### #93 动态的数据怎样获取'`
+- `docs/CHINESE_AUDIT.md:786` — `- 'docs/ISSUE.md:830' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:787` — `- 'docs/ISSUE.md:831' — '- **作者**: carter115'`
+- `docs/CHINESE_AUDIT.md:788` — `- 'docs/ISSUE.md:832' — '- **日期**: 2025-07-11'`
+- `docs/CHINESE_AUDIT.md:789` — `- 'docs/ISSUE.md:833' — '- **描述**: 页面上滚动鼠标才调用接口的数据'`
+- `docs/CHINESE_AUDIT.md:790` — `- 'docs/ISSUE.md:835' — '#### #43 【无数据输出】cursor+edge 测试绘制一个月的浏览记录'`
+- `docs/CHINESE_AUDIT.md:791` — `- 'docs/ISSUE.md:837' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:792` — `- 'docs/ISSUE.md:838' — '- **作者**: 3377'`
+- `docs/CHINESE_AUDIT.md:793` — `- 'docs/ISSUE.md:839' — '- **日期**: 2025-06-24'`
+- `docs/CHINESE_AUDIT.md:794` — `- 'docs/ISSUE.md:841' — '#### #42 能否和automa一起联动制作工作流呢？'`
+- `docs/CHINESE_AUDIT.md:795` — `- 'docs/ISSUE.md:843' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:796` — `- 'docs/ISSUE.md:844' — '- **作者**: 3377'`
+- `docs/CHINESE_AUDIT.md:797` — `- 'docs/ISSUE.md:845' — '- **日期**: 2025-06-24'`
+- `docs/CHINESE_AUDIT.md:798` — `- 'docs/ISSUE.md:847' — '#### #40 语义引擎初始化失败'`
+- `docs/CHINESE_AUDIT.md:799` — `- 'docs/ISSUE.md:849' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:800` — `- 'docs/ISSUE.md:850' — '- **作者**: HY-Hu'`
+- `docs/CHINESE_AUDIT.md:801` — `- 'docs/ISSUE.md:851' — '- **日期**: 2025-06-24'`
+- `docs/CHINESE_AUDIT.md:802` — `- 'docs/ISSUE.md:853' — '#### #39 一直报权限问题'`
+- `docs/CHINESE_AUDIT.md:803` — `- 'docs/ISSUE.md:855' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:804` — `- 'docs/ISSUE.md:856' — '- **作者**: mozhuangshu'`
+- `docs/CHINESE_AUDIT.md:805` — `- 'docs/ISSUE.md:857' — '- **日期**: 2025-06-24'`
+- `docs/CHINESE_AUDIT.md:806` — `- 'docs/ISSUE.md:859' — '#### #33 找不到元素'`
+- `docs/CHINESE_AUDIT.md:807` — `- 'docs/ISSUE.md:861' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:808` — `- 'docs/ISSUE.md:862' — '- **作者**: 2513483494'`
+- `docs/CHINESE_AUDIT.md:809` — `- 'docs/ISSUE.md:863' — '- **日期**: 2025-06-23'`
+- `docs/CHINESE_AUDIT.md:810` — `- 'docs/ISSUE.md:864' — '- **描述**: 腾讯云控制台页面元素找不到'`
+- `docs/CHINESE_AUDIT.md:811` — `- 'docs/ISSUE.md:866' — '### 已关闭'`
+- `docs/CHINESE_AUDIT.md:812` — `- 'docs/ISSUE.md:870' — '## 📚 文档改进'`
+- `docs/CHINESE_AUDIT.md:813` — `- 'docs/ISSUE.md:872' — '### 开放中'`
+- `docs/CHINESE_AUDIT.md:814` — `- 'docs/ISSUE.md:874' — '#### #197 指令里 无法执行'`
+- `docs/CHINESE_AUDIT.md:815` — `- 'docs/ISSUE.md:876' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:816` — `- 'docs/ISSUE.md:877' — '- **作者**: lujuny328-cmyk'`
+- `docs/CHINESE_AUDIT.md:817` — `- 'docs/ISSUE.md:878' — '- **日期**: 2025-09-08'`
+- `docs/CHINESE_AUDIT.md:818` — `- 'docs/ISSUE.md:879' — '- **描述**: 把链接桥放到指令里无法执行'`
+- `docs/CHINESE_AUDIT.md:819` — `- 'docs/ISSUE.md:881' — '#### #189 求拉群'`
+- `docs/CHINESE_AUDIT.md:820` — `- 'docs/ISSUE.md:883' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:821` — `- 'docs/ISSUE.md:884' — '- **作者**: wwenj'`
+- `docs/CHINESE_AUDIT.md:822` — `- 'docs/ISSUE.md:885' — '- **日期**: 2025-09-02'`
+- `docs/CHINESE_AUDIT.md:823` — `- 'docs/ISSUE.md:886' — '- **描述**: 文档中的群二维码过期了'`
+- `docs/CHINESE_AUDIT.md:824` — `- 'docs/ISSUE.md:888' — '#### #117 好像没有点击扩展程序的工具？'`
+- `docs/CHINESE_AUDIT.md:825` — `- 'docs/ISSUE.md:890' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:826` — `- 'docs/ISSUE.md:891' — '- **作者**: sunweihunu'`
+- `docs/CHINESE_AUDIT.md:827` — `- 'docs/ISSUE.md:892' — '- **日期**: 2025-07-22'`
+- `docs/CHINESE_AUDIT.md:828` — `- 'docs/ISSUE.md:893' — '- **描述**: 希望能增加点击Chrome扩展程序的工具'`
+- `docs/CHINESE_AUDIT.md:829` — `- 'docs/ISSUE.md:895' — '#### #125 二维码已过期'`
+- `docs/CHINESE_AUDIT.md:830` — `- 'docs/ISSUE.md:897' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:831` — `- 'docs/ISSUE.md:898' — '- **作者**: NuoLanC'`
+- `docs/CHINESE_AUDIT.md:832` — `- 'docs/ISSUE.md:899' — '- **日期**: 2025-07-29'`
+- `docs/CHINESE_AUDIT.md:833` — `- 'docs/ISSUE.md:901' — '### 已关闭'`
+- `docs/CHINESE_AUDIT.md:834` — `- 'docs/ISSUE.md:903' — '#### #95 整理网页文档包含图片的效果不如 playwright'`
+- `docs/CHINESE_AUDIT.md:835` — `- 'docs/ISSUE.md:905' — '- **状态**: CLOSED'`
+- `docs/CHINESE_AUDIT.md:836` — `- 'docs/ISSUE.md:906' — '- **作者**: Xuzan9396'`
+- `docs/CHINESE_AUDIT.md:837` — `- 'docs/ISSUE.md:907' — '- **日期**: 2025-07-12'`
+- `docs/CHINESE_AUDIT.md:838` — `- 'docs/ISSUE.md:909' — '#### #94 readme 视频链接失效'`
+- `docs/CHINESE_AUDIT.md:839` — `- 'docs/ISSUE.md:911' — '- **状态**: CLOSED'`
+- `docs/CHINESE_AUDIT.md:840` — `- 'docs/ISSUE.md:912' — '- **作者**: vcan'`
+- `docs/CHINESE_AUDIT.md:841` — `- 'docs/ISSUE.md:913' — '- **日期**: 2025-07-11'`
+- `docs/CHINESE_AUDIT.md:842` — `- 'docs/ISSUE.md:915' — '#### #91 群满人了，大佬加下我'`
+- `docs/CHINESE_AUDIT.md:843` — `- 'docs/ISSUE.md:917' — '- **状态**: CLOSED'`
+- `docs/CHINESE_AUDIT.md:844` — `- 'docs/ISSUE.md:918' — '- **作者**: huangxingzhao'`
+- `docs/CHINESE_AUDIT.md:845` — `- 'docs/ISSUE.md:919' — '- **日期**: 2025-07-11'`
+- `docs/CHINESE_AUDIT.md:846` — `- 'docs/ISSUE.md:921' — '#### #89 请问这个是什么工具'`
+- `docs/CHINESE_AUDIT.md:847` — `- 'docs/ISSUE.md:923' — '- **状态**: CLOSED'`
+- `docs/CHINESE_AUDIT.md:848` — `- 'docs/ISSUE.md:924' — '- **作者**: Messilimeng'`
+- `docs/CHINESE_AUDIT.md:849` — `- 'docs/ISSUE.md:925' — '- **日期**: 2025-07-11'`
+- `docs/CHINESE_AUDIT.md:850` — `- 'docs/ISSUE.md:926' — '- **描述**: 我用cursor有没有很好的互动prompt呢'`
+- `docs/CHINESE_AUDIT.md:851` — `- 'docs/ISSUE.md:928' — '#### #84 如何配置自己的AI？'`
+- `docs/CHINESE_AUDIT.md:852` — `- 'docs/ISSUE.md:930' — '- **状态**: CLOSED'`
+- `docs/CHINESE_AUDIT.md:853` — `- 'docs/ISSUE.md:931' — '- **作者**: liaoyu-zju'`
+- `docs/CHINESE_AUDIT.md:854` — `- 'docs/ISSUE.md:932' — '- **日期**: 2025-07-08'`
+- `docs/CHINESE_AUDIT.md:855` — `- 'docs/ISSUE.md:934' — '#### #83 中文文档中的微信二维码已过期'`
+- `docs/CHINESE_AUDIT.md:856` — `- 'docs/ISSUE.md:936' — '- **状态**: CLOSED'`
+- `docs/CHINESE_AUDIT.md:857` — `- 'docs/ISSUE.md:937' — '- **作者**: YunfanGoForIt'`
+- `docs/CHINESE_AUDIT.md:858` — `- 'docs/ISSUE.md:938' — '- **日期**: 2025-07-07'`
+- `docs/CHINESE_AUDIT.md:859` — `- 'docs/ISSUE.md:942' — '- **状态**: CLOSED'`
+- `docs/CHINESE_AUDIT.md:860` — `- 'docs/ISSUE.md:943' — '- **作者**: michabbb'`
+- `docs/CHINESE_AUDIT.md:861` — `- 'docs/ISSUE.md:944' — '- **日期**: 2025-07-06'`
+- `docs/CHINESE_AUDIT.md:862` — `- 'docs/ISSUE.md:945' — '- **描述**: README是英文的，而Chrome扩展完全是中文的'`
+- `docs/CHINESE_AUDIT.md:863` — `- 'docs/ISSUE.md:947' — '#### #75 prompt 目录下的文件如何引用'`
+- `docs/CHINESE_AUDIT.md:864` — `- 'docs/ISSUE.md:949' — '- **状态**: CLOSED'`
+- `docs/CHINESE_AUDIT.md:865` — `- 'docs/ISSUE.md:950' — '- **作者**: jovezhong'`
+- `docs/CHINESE_AUDIT.md:866` — `- 'docs/ISSUE.md:951' — '- **日期**: 2025-07-05'`
+- `docs/CHINESE_AUDIT.md:867` — `- 'docs/ISSUE.md:953' — '#### #52 README 中多媒体资源 404 问题'`
+- `docs/CHINESE_AUDIT.md:868` — `- 'docs/ISSUE.md:955' — '- **状态**: CLOSED'`
+- `docs/CHINESE_AUDIT.md:869` — `- 'docs/ISSUE.md:956' — '- **作者**: yunkst'`
+- `docs/CHINESE_AUDIT.md:870` — `- 'docs/ISSUE.md:957' — '- **日期**: 2025-06-26'`
+- `docs/CHINESE_AUDIT.md:871` — `- 'docs/ISSUE.md:959' — '#### #49 视频里面在浏览器右侧这个大模型聊天工具是什么啊？'`
+- `docs/CHINESE_AUDIT.md:872` — `- 'docs/ISSUE.md:961' — '- **状态**: CLOSED'`
+- `docs/CHINESE_AUDIT.md:873` — `- 'docs/ISSUE.md:962' — '- **作者**: MoeMoeFish'`
+- `docs/CHINESE_AUDIT.md:874` — `- 'docs/ISSUE.md:963' — '- **日期**: 2025-06-25'`
+- `docs/CHINESE_AUDIT.md:875` — `- 'docs/ISSUE.md:965' — '#### #48 建议楼主创建一个微信群'`
+- `docs/CHINESE_AUDIT.md:876` — `- 'docs/ISSUE.md:967' — '- **状态**: CLOSED'`
+- `docs/CHINESE_AUDIT.md:877` — `- 'docs/ISSUE.md:968' — '- **作者**: goreycn'`
+- `docs/CHINESE_AUDIT.md:878` — `- 'docs/ISSUE.md:969' — '- **日期**: 2025-06-25'`
+- `docs/CHINESE_AUDIT.md:879` — `- 'docs/ISSUE.md:971' — '#### #44 没有看到查看MCP配置的连接按扭'`
+- `docs/CHINESE_AUDIT.md:880` — `- 'docs/ISSUE.md:973' — '- **状态**: CLOSED'`
+- `docs/CHINESE_AUDIT.md:881` — `- 'docs/ISSUE.md:974' — '- **作者**: jimleee'`
+- `docs/CHINESE_AUDIT.md:882` — `- 'docs/ISSUE.md:975' — '- **日期**: 2025-06-25'`
+- `docs/CHINESE_AUDIT.md:883` — `- 'docs/ISSUE.md:977' — '#### #35 画图功能没有调动起来'`
+- `docs/CHINESE_AUDIT.md:884` — `- 'docs/ISSUE.md:979' — '- **状态**: CLOSED'`
+- `docs/CHINESE_AUDIT.md:885` — `- 'docs/ISSUE.md:980' — '- **作者**: guangzhou'`
+- `docs/CHINESE_AUDIT.md:886` — `- 'docs/ISSUE.md:981' — '- **日期**: 2025-06-23'`
+- `docs/CHINESE_AUDIT.md:887` — `- 'docs/ISSUE.md:983' — '#### #34 怎么才能在画板上画图呢'`
+- `docs/CHINESE_AUDIT.md:888` — `- 'docs/ISSUE.md:985' — '- **状态**: CLOSED'`
+- `docs/CHINESE_AUDIT.md:889` — `- 'docs/ISSUE.md:986' — '- **作者**: guangzhou'`
+- `docs/CHINESE_AUDIT.md:890` — `- 'docs/ISSUE.md:987' — '- **日期**: 2025-06-23'`
+- `docs/CHINESE_AUDIT.md:891` — `- 'docs/ISSUE.md:989' — '#### #31 可增加对Consle日志的读取吗'`
+- `docs/CHINESE_AUDIT.md:892` — `- 'docs/ISSUE.md:991' — '- **状态**: CLOSED'`
+- `docs/CHINESE_AUDIT.md:893` — `- 'docs/ISSUE.md:992' — '- **作者**: ZoidbergPi'`
+- `docs/CHINESE_AUDIT.md:894` — `- 'docs/ISSUE.md:993' — '- **日期**: 2025-06-23'`
+- `docs/CHINESE_AUDIT.md:895` — `- 'docs/ISSUE.md:995' — '#### #26 使用教程'`
+- `docs/CHINESE_AUDIT.md:896` — `- 'docs/ISSUE.md:997' — '- **状态**: CLOSED'`
+- `docs/CHINESE_AUDIT.md:897` — `- 'docs/ISSUE.md:998' — '- **作者**: fanhaoj'`
+- `docs/CHINESE_AUDIT.md:898` — `- 'docs/ISSUE.md:999' — '- **日期**: 2025-06-22'`
+- `docs/CHINESE_AUDIT.md:899` — `- 'docs/ISSUE.md:1001' — '#### #23 怎么打开对话框？'`
+- `docs/CHINESE_AUDIT.md:900` — `- 'docs/ISSUE.md:1003' — '- **状态**: CLOSED'`
+- `docs/CHINESE_AUDIT.md:901` — `- 'docs/ISSUE.md:1004' — '- **作者**: kokwiw'`
+- `docs/CHINESE_AUDIT.md:902` — `- 'docs/ISSUE.md:1005' — '- **日期**: 2025-06-20'`
+- `docs/CHINESE_AUDIT.md:903` — `- 'docs/ISSUE.md:1007' — '#### #17 对比2个京东商品就超token了'`
+- `docs/CHINESE_AUDIT.md:904` — `- 'docs/ISSUE.md:1009' — '- **状态**: CLOSED'`
+- `docs/CHINESE_AUDIT.md:905` — `- 'docs/ISSUE.md:1010' — '- **作者**: namejee'`
+- `docs/CHINESE_AUDIT.md:906` — `- 'docs/ISSUE.md:1011' — '- **日期**: 2025-06-18'`
+- `docs/CHINESE_AUDIT.md:907` — `- 'docs/ISSUE.md:1015' — '- **状态**: CLOSED'`
+- `docs/CHINESE_AUDIT.md:908` — `- 'docs/ISSUE.md:1016' — '- **作者**: GoldRush520'`
+- `docs/CHINESE_AUDIT.md:909` — `- 'docs/ISSUE.md:1017' — '- **日期**: 2025-06-18'`
+- `docs/CHINESE_AUDIT.md:910` — `- 'docs/ISSUE.md:1018' — '- **描述**: Claude Desktop国内用不了，有没有其他可替代的'`
+- `docs/CHINESE_AUDIT.md:911` — `- 'docs/ISSUE.md:1020' — '#### #11 大佬有没有可能添加一个drag and drop功能'`
+- `docs/CHINESE_AUDIT.md:912` — `- 'docs/ISSUE.md:1022' — '- **状态**: CLOSED'`
+- `docs/CHINESE_AUDIT.md:913` — `- 'docs/ISSUE.md:1023' — '- **作者**: tom63001'`
+- `docs/CHINESE_AUDIT.md:914` — `- 'docs/ISSUE.md:1024' — '- **日期**: 2025-06-17'`
+- `docs/CHINESE_AUDIT.md:915` — `- 'docs/ISSUE.md:1028' — '## ✅ 已解决的问题'`
+- `docs/CHINESE_AUDIT.md:916` — `- 'docs/ISSUE.md:1030' — '### 社区交流相关'`
+- `docs/CHINESE_AUDIT.md:917` — `- 'docs/ISSUE.md:1032' — '#### #213 求个微信群组，互相交流'`
+- `docs/CHINESE_AUDIT.md:918` — `- 'docs/ISSUE.md:1034' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:919` — `- 'docs/ISSUE.md:1035' — '- **作者**: zhangchao0323'`
+- `docs/CHINESE_AUDIT.md:920` — `- 'docs/ISSUE.md:1036' — '- **日期**: 2025-09-29'`
+- `docs/CHINESE_AUDIT.md:921` — `- 'docs/ISSUE.md:1038' — '#### #211 求拉群，想参与项目贡献～'`
+- `docs/CHINESE_AUDIT.md:922` — `- 'docs/ISSUE.md:1040' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:923` — `- 'docs/ISSUE.md:1041' — '- **作者**: suoaiyisheng'`
+- `docs/CHINESE_AUDIT.md:924` — `- 'docs/ISSUE.md:1042' — '- **日期**: 2025-09-27'`
+- `docs/CHINESE_AUDIT.md:925` — `- 'docs/ISSUE.md:1044' — '### 使用问题'`
+- `docs/CHINESE_AUDIT.md:926` — `- 'docs/ISSUE.md:1046' — '#### #176 claude code 无法画图'`
+- `docs/CHINESE_AUDIT.md:927` — `- 'docs/ISSUE.md:1048' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:928` — `- 'docs/ISSUE.md:1049' — '- **作者**: woshihoujinxin'`
+- `docs/CHINESE_AUDIT.md:929` — `- 'docs/ISSUE.md:1050' — '- **日期**: 2025-08-26'`
+- `docs/CHINESE_AUDIT.md:930` — `- 'docs/ISSUE.md:1051' — '- **描述**: 打开excalidraw.com画图，但没有流畅效果'`
+- `docs/CHINESE_AUDIT.md:931` — `- 'docs/ISSUE.md:1053' — '#### #166 画图问题'`
+- `docs/CHINESE_AUDIT.md:932` — `- 'docs/ISSUE.md:1055' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:933` — `- 'docs/ISSUE.md:1056' — '- **作者**: fyture'`
+- `docs/CHINESE_AUDIT.md:934` — `- 'docs/ISSUE.md:1057' — '- **日期**: 2025-08-18'`
+- `docs/CHINESE_AUDIT.md:935` — `- 'docs/ISSUE.md:1058' — '- **描述**: 模型说已完成，但excalidraw上什么都没有'`
+- `docs/CHINESE_AUDIT.md:936` — `- 'docs/ISSUE.md:1060' — '### Python集成'`
+- `docs/CHINESE_AUDIT.md:937` — `- 'docs/ISSUE.md:1062' — '#### #194 如何在代码上接入呢，不用AI agent'`
+- `docs/CHINESE_AUDIT.md:938` — `- 'docs/ISSUE.md:1064' — '- **状态**: CLOSED'`
+- `docs/CHINESE_AUDIT.md:939` — `- 'docs/ISSUE.md:1065' — '- **作者**: dreambe'`
+- `docs/CHINESE_AUDIT.md:940` — `- 'docs/ISSUE.md:1066' — '- **日期**: 2025-09-05'`
+- `docs/CHINESE_AUDIT.md:941` — `- 'docs/ISSUE.md:1067' — '- **描述**: 比如python，有没有demo代码'`
+- `docs/CHINESE_AUDIT.md:942` — `- 'docs/ISSUE.md:1069' — '#### #82 尝试使用python代码直接调用工具失败'`
+- `docs/CHINESE_AUDIT.md:943` — `- 'docs/ISSUE.md:1071' — '- **状态**: CLOSED'`
+- `docs/CHINESE_AUDIT.md:944` — `- 'docs/ISSUE.md:1072' — '- **作者**: YunfanGoForIt'`
+- `docs/CHINESE_AUDIT.md:945` — `- 'docs/ISSUE.md:1073' — '- **日期**: 2025-07-07'`
+- `docs/CHINESE_AUDIT.md:946` — `- 'docs/ISSUE.md:1075' — '#### #24 可以使用python代码调用这个插件吗？'`
+- `docs/CHINESE_AUDIT.md:947` — `- 'docs/ISSUE.md:1077' — '- **状态**: CLOSED'`
+- `docs/CHINESE_AUDIT.md:948` — `- 'docs/ISSUE.md:1078' — '- **作者**: liulint'`
+- `docs/CHINESE_AUDIT.md:949` — `- 'docs/ISSUE.md:1079' — '- **日期**: 2025-06-20'`
+- `docs/CHINESE_AUDIT.md:950` — `- 'docs/ISSUE.md:1081' — '#### #21 请问目前不带有MCP功能的的LLM可以接入这个mcp服务器吗'`
+- `docs/CHINESE_AUDIT.md:951` — `- 'docs/ISSUE.md:1083' — '- **状态**: CLOSED'`
+- `docs/CHINESE_AUDIT.md:952` — `- 'docs/ISSUE.md:1084' — '- **作者**: JessiePen'`
+- `docs/CHINESE_AUDIT.md:953` — `- 'docs/ISSUE.md:1085' — '- **日期**: 2025-06-19'`
+- `docs/CHINESE_AUDIT.md:954` — `- 'docs/ISSUE.md:1087' — '### 服务器部署'`
+- `docs/CHINESE_AUDIT.md:955` — `- 'docs/ISSUE.md:1091' — '- **状态**: OPEN'`
+- `docs/CHINESE_AUDIT.md:956` — `- 'docs/ISSUE.md:1092' — '- **作者**: ErrorGz'`
+- `docs/CHINESE_AUDIT.md:957` — `- 'docs/ISSUE.md:1093' — '- **日期**: 2025-07-05'`
+- `docs/CHINESE_AUDIT.md:958` — `- 'docs/ISSUE.md:1094' — '- **描述**: 建议修改HOST为0.0.0.0以允许外部访问'`
+- `docs/CHINESE_AUDIT.md:959` — `- 'docs/ISSUE.md:1096' — '#### #72 Tab串联问题'`
+- `docs/CHINESE_AUDIT.md:960` — `- 'docs/ISSUE.md:1098' — '- **状态**: CLOSED'`
+- `docs/CHINESE_AUDIT.md:961` — `- 'docs/ISSUE.md:1099' — '- **作者**: fundoop'`
+- `docs/CHINESE_AUDIT.md:962` — `- 'docs/ISSUE.md:1100' — '- **日期**: 2025-07-04'`
+- `docs/CHINESE_AUDIT.md:963` — `- 'docs/ISSUE.md:1101' — '- **描述**: 是否可以增加指定tab页面操作，切换tab等'`
+- `docs/CHINESE_AUDIT.md:964` — `- 'docs/ISSUE.md:1103' — '#### #71 这个mcp服务器不能和客户端分开吗'`
+- `docs/CHINESE_AUDIT.md:965` — `- 'docs/ISSUE.md:1105' — '- **状态**: CLOSED'`
+- `docs/CHINESE_AUDIT.md:966` — `- 'docs/ISSUE.md:1106' — '- **作者**: xiaodiao216'`
+- `docs/CHINESE_AUDIT.md:967` — `- 'docs/ISSUE.md:1107' — '- **日期**: 2025-07-03'`
+- `docs/CHINESE_AUDIT.md:968` — `- 'docs/ISSUE.md:1109' — '#### #70 【Help Wanted】项目首页视频里的MCP客户端是什么？'`
+- `docs/CHINESE_AUDIT.md:969` — `- 'docs/ISSUE.md:1111' — '- **状态**: CLOSED'`
+- `docs/CHINESE_AUDIT.md:970` — `- 'docs/ISSUE.md:1112' — '- **作者**: tonyxu721'`
+- `docs/CHINESE_AUDIT.md:971` — `- 'docs/ISSUE.md:1113' — '- **日期**: 2025-07-03'`
+- `docs/CHINESE_AUDIT.md:972` — `- 'docs/ISSUE.md:1115' — '### 其他'`
+- `docs/CHINESE_AUDIT.md:973` — `- 'docs/ISSUE.md:1117' — '#### #97 请问使用示例中出现的对话工具是什么'`
+- `docs/CHINESE_AUDIT.md:974` — `- 'docs/ISSUE.md:1119' — '- **状态**: CLOSED'`
+- `docs/CHINESE_AUDIT.md:975` — `- 'docs/ISSUE.md:1120' — '- **作者**: sbwg'`
+- `docs/CHINESE_AUDIT.md:976` — `- 'docs/ISSUE.md:1121' — '- **日期**: 2025-07-12'`
+- `docs/CHINESE_AUDIT.md:977` — `- 'docs/ISSUE.md:1123' — '#### #96 入口在哪里啊？'`
+- `docs/CHINESE_AUDIT.md:978` — `- 'docs/ISSUE.md:1125' — '- **状态**: CLOSED'`
+- `docs/CHINESE_AUDIT.md:979` — `- 'docs/ISSUE.md:1126' — '- **作者**: DavidCalls'`
+- `docs/CHINESE_AUDIT.md:980` — `- 'docs/ISSUE.md:1127' — '- **日期**: 2025-07-12'`
+- `docs/CHINESE_AUDIT.md:981` — `- 'docs/ISSUE.md:1131' — '- **状态**: CLOSED'`
+- `docs/CHINESE_AUDIT.md:982` — `- 'docs/ISSUE.md:1132' — '- **作者**: yiminhale'`
+- `docs/CHINESE_AUDIT.md:983` — `- 'docs/ISSUE.md:1133' — '- **日期**: 2025-07-06'`
+- `docs/CHINESE_AUDIT.md:984` — `- 'docs/ISSUE.md:1134' — '- **描述**: 能否用npm而不是pnpm'`
+- `docs/CHINESE_AUDIT.md:985` — `- 'docs/ISSUE.md:1136' — '#### #51 navigate功能不能标签打开地址'`
+- `docs/CHINESE_AUDIT.md:986` — `- 'docs/ISSUE.md:1138' — '- **状态**: CLOSED'`
+- `docs/CHINESE_AUDIT.md:987` — `- 'docs/ISSUE.md:1139' — '- **作者**: adoin'`
+- `docs/CHINESE_AUDIT.md:988` — `- 'docs/ISSUE.md:1140' — '- **日期**: 2025-06-26'`
+- `docs/CHINESE_AUDIT.md:989` — `- 'docs/ISSUE.md:1144' — '- **状态**: CLOSED'`
+- `docs/CHINESE_AUDIT.md:990` — `- 'docs/ISSUE.md:1145' — '- **作者**: DaleXiao'`
+- `docs/CHINESE_AUDIT.md:991` — `- 'docs/ISSUE.md:1146' — '- **日期**: 2025-06-21'`
+- `docs/CHINESE_AUDIT.md:992` — `- 'docs/ISSUE.md:1150' — '- **状态**: CLOSED'`
+- `docs/CHINESE_AUDIT.md:993` — `- 'docs/ISSUE.md:1151' — '- **作者**: loki-zhou'`
+- `docs/CHINESE_AUDIT.md:994` — `- 'docs/ISSUE.md:1152' — '- **日期**: 2025-06-17'`
+- `docs/CHINESE_AUDIT.md:995` — `- 'docs/ISSUE.md:1154' — '#### #5 佬，augment里咋设置mcp？'`
+- `docs/CHINESE_AUDIT.md:996` — `- 'docs/ISSUE.md:1156' — '- **状态**: CLOSED'`
+- `docs/CHINESE_AUDIT.md:997` — `- 'docs/ISSUE.md:1157' — '- **作者**: gally16'`
+- `docs/CHINESE_AUDIT.md:998` — `- 'docs/ISSUE.md:1158' — '- **日期**: 2025-06-15'`
+- `docs/CHINESE_AUDIT.md:999` — `- 'docs/ISSUE.md:1162' — '## 📈 Issue 趋势分析'`
+- `docs/CHINESE_AUDIT.md:1000` — `- 'docs/ISSUE.md:1164' — '### 高频问题类型'`
+- `docs/CHINESE_AUDIT.md:1001` — `- 'docs/ISSUE.md:1166' — '1. **安装配置问题** (约40%): 主要集中在Native Messaging连接失败、服务未启动'`
+- `docs/CHINESE_AUDIT.md:1002` — `- 'docs/ISSUE.md:1167' — '2. **兼容性问题** (约25%): 不同客户端（Cursor、Claude Code、Cherry Studio等）的集成问题'`
+- `docs/CHINESE_AUDIT.md:1003` — `- 'docs/ISSUE.md:1168' — '3. **功能请求** (约20%): 文件上传、鼠标悬停、多窗口隔离等'`
+- `docs/CHINESE_AUDIT.md:1004` — `- 'docs/ISSUE.md:1169' — '4. **Bug报告** (约15%): 工具调用错误、超时、元素查找失败等'`
+- `docs/CHINESE_AUDIT.md:1005` — `- 'docs/ISSUE.md:1171' — '### 常见解决方案'`
+- `docs/CHINESE_AUDIT.md:1006` — `- 'docs/ISSUE.md:1173' — '1. **权限问题**: 使用'chmod -R 755'赋予dist目录权限'`
+- `docs/CHINESE_AUDIT.md:1007` — `- 'docs/ISSUE.md:1174' — '2. **Node.js路径问题**: 重新安装Node.js到默认路径'`
+- `docs/CHINESE_AUDIT.md:1008` — `- 'docs/ISSUE.md:1175' — '3. **配置格式问题**: 不同客户端使用不同的配置格式（streamableHttp vs streamable-http）'`
+- `docs/CHINESE_AUDIT.md:1009` — `- 'docs/ISSUE.md:1176' — '4. **端口访问**: 默认127.0.0.1，需要外部访问时改为0.0.0.0'`
+- `docs/CHINESE_AUDIT.md:1010` — `- 'docs/ISSUE.md:1180' — '## 🔗 相关资源'`
+- `docs/CHINESE_AUDIT.md:1011` — `- 'docs/ISSUE.md:1182' — '- [故障排除文档](TROUBLESHOOTING_zh.md)'`
+- `docs/CHINESE_AUDIT.md:1012` — `- 'docs/ISSUE.md:1183' — '- [贡献指南](CONTRIBUTING_zh.md)'`
+- `docs/CHINESE_AUDIT.md:1013` — `- 'docs/ISSUE.md:1184' — '- [工具文档](TOOLS_zh.md)'`
+- `docs/CHINESE_AUDIT.md:1014` — `- 'docs/ISSUE.md:1185' — '- [Windows安装指南](WINDOWS_INSTALL_zh.md)'`
+- `docs/CHINESE_AUDIT.md:1015` — `- 'docs/ISSUE.md:1189' — '**最后更新**: 2025-10-11'`
+- `docs/CHINESE_AUDIT.md:1016` — `- 'docs/ISSUE.md:1190' — '**统计数据来源**: GitHub Issues API'`
+- `docs/CHINESE_AUDIT.md:1017` — `- 'app/chrome-extension/wxt.config.ts:101' — ''/models/*', // 允许访问 public/models/ 下的所有文件'`
+- `docs/CHINESE_AUDIT.md:1018` — `- 'app/chrome-extension/wxt.config.ts:102' — ''/workers/*', // 允许访问 workers 文件'`
+- `docs/CHINESE_AUDIT.md:1019` — `- 'app/chrome-extension/wxt.config.ts:103' — ''/inject-scripts/*', // 允许内容脚本注入的助手文件'`
+- `docs/CHINESE_AUDIT.md:1020` — `- 'app/native-server/install.md:1' — '# Chrome MCP Bridge 安装指南'`
+- `docs/CHINESE_AUDIT.md:1021` — `- 'app/native-server/install.md:3' — '本文档详细说明了 Chrome MCP Bridge 的安装和注册流程。'`
+- `docs/CHINESE_AUDIT.md:1022` — `- 'app/native-server/install.md:5' — '## 安装流程概述'`
+- `docs/CHINESE_AUDIT.md:1023` — `- 'app/native-server/install.md:7' — 'Chrome MCP Bridge 的安装和注册流程如下：'`
+- `docs/CHINESE_AUDIT.md:1024` — `- 'app/native-server/install.md:12' — '├─ 复制可执行文件到 npm_prefix/bin   ← 总是可写（用户或root权限）'`
+- `docs/CHINESE_AUDIT.md:1025` — `- 'app/native-server/install.md:13' — '├─ 尝试用户级别注册                  ← 无需sudo，大多数情况下成功'`
+- `docs/CHINESE_AUDIT.md:1026` — `- 'app/native-server/install.md:14' — '└─ 如果失败 ➜ 提示用户运行 mcp-chrome-bridge register --system'`
+- `docs/CHINESE_AUDIT.md:1027` — `- 'app/native-server/install.md:15' — '└─ 需要手动使用管理员权限运行'`
+- `docs/CHINESE_AUDIT.md:1028` — `- 'app/native-server/install.md:18' — '上面的流程图展示了从全局安装开始，到最终完成注册的完整过程。'`
+- `docs/CHINESE_AUDIT.md:1029` — `- 'app/native-server/install.md:20' — '## 详细安装步骤'`
+- `docs/CHINESE_AUDIT.md:1030` — `- 'app/native-server/install.md:22' — '### 1. 全局安装'`
+- `docs/CHINESE_AUDIT.md:1031` — `- 'app/native-server/install.md:28' — '安装完成后，系统会自动尝试在用户目录中注册 Native Messaging 主机。这不需要管理员权限，是推荐的安装方式。'`
+- `docs/CHINESE_AUDIT.md:1032` — `- 'app/native-server/install.md:30' — '### 2. 用户级别注册'`
+- `docs/CHINESE_AUDIT.md:1033` — `- 'app/native-server/install.md:32' — '用户级别注册会在以下位置创建清单文件：'`
+- `docs/CHINESE_AUDIT.md:1034` — `- 'app/native-server/install.md:35' — '清单文件位置'`
+- `docs/CHINESE_AUDIT.md:1035` — `- 'app/native-server/install.md:36' — '├─ 用户级别（无需管理员权限）'`
+- `docs/CHINESE_AUDIT.md:1036` — `- 'app/native-server/install.md:41' — '└─ 系统级别（需要管理员权限）'`
+- `docs/CHINESE_AUDIT.md:1037` — `- 'app/native-server/install.md:47' — '如果自动注册失败，或者您想手动注册，可以运行：'`
+- `docs/CHINESE_AUDIT.md:1038` — `- 'app/native-server/install.md:53' — '**推荐：运行诊断工具检查问题：**'`
+- `docs/CHINESE_AUDIT.md:1039` — `- 'app/native-server/install.md:59' — '### 3. 系统级别注册'`
+- `docs/CHINESE_AUDIT.md:1040` — `- 'app/native-server/install.md:61' — '如果用户级别注册失败（例如，由于权限问题），您可以尝试系统级别注册。系统级别注册需要管理员权限，但我们提供了两种便捷的方式来完成这一过程。'`
+- `docs/CHINESE_AUDIT.md:1041` — `- 'app/native-server/install.md:63' — '系统级别注册有两种方式：'`
+- `docs/CHINESE_AUDIT.md:1042` — `- 'app/native-server/install.md:65' — '#### 方式一：使用 '--system' 参数（推荐）'`
+- `docs/CHINESE_AUDIT.md:1043` — `- 'app/native-server/install.md:71' — '# Windows (以管理员身份运行命令提示符)'`
+- `docs/CHINESE_AUDIT.md:1044` — `- 'app/native-server/install.md:75' — '系统级安装需要管理员权限才能写入系统目录和注册表。'`
+- `docs/CHINESE_AUDIT.md:1045` — `- 'app/native-server/install.md:77' — '#### 方式二：直接使用管理员权限'`
+- `docs/CHINESE_AUDIT.md:1046` — `- 'app/native-server/install.md:80' — '以管理员身份运行命令提示符或 PowerShell，然后执行：'`
+- `docs/CHINESE_AUDIT.md:1047` — `- 'app/native-server/install.md:87' — '使用 sudo 命令：'`
+- `docs/CHINESE_AUDIT.md:1048` — `- 'app/native-server/install.md:93' — '## 注册流程详解'`
+- `docs/CHINESE_AUDIT.md:1049` — `- 'app/native-server/install.md:95' — '### 注册流程图'`
+- `docs/CHINESE_AUDIT.md:1050` — `- 'app/native-server/install.md:98' — '注册流程'`
+- `docs/CHINESE_AUDIT.md:1051` — `- 'app/native-server/install.md:99' — '├─ 用户级别注册 (mcp-chrome-bridge register)'`
+- `docs/CHINESE_AUDIT.md:1052` — `- 'app/native-server/install.md:100' — '│  ├─ 获取用户级别清单路径'`
+- `docs/CHINESE_AUDIT.md:1053` — `- 'app/native-server/install.md:101' — '│  ├─ 创建用户目录'`
+- `docs/CHINESE_AUDIT.md:1054` — `- 'app/native-server/install.md:102' — '│  ├─ 生成清单内容'`
+- `docs/CHINESE_AUDIT.md:1055` — `- 'app/native-server/install.md:103' — '│  ├─ 写入清单文件'`
+- `docs/CHINESE_AUDIT.md:1056` — `- 'app/native-server/install.md:104' — '│  └─ Windows平台：创建用户级注册表项'`
+- `docs/CHINESE_AUDIT.md:1057` — `- 'app/native-server/install.md:106' — '└─ 系统级别注册 (mcp-chrome-bridge register --system)'`
+- `docs/CHINESE_AUDIT.md:1058` — `- 'app/native-server/install.md:107' — '├─ 检查是否有管理员权限'`
+- `docs/CHINESE_AUDIT.md:1059` — `- 'app/native-server/install.md:108' — '│  ├─ 有权限 → 直接创建系统目录和写入清单'`
+- `docs/CHINESE_AUDIT.md:1060` — `- 'app/native-server/install.md:109' — '│  └─ 无权限 → 提示用户使用管理员权限运行'`
+- `docs/CHINESE_AUDIT.md:1061` — `- 'app/native-server/install.md:110' — '└─ Windows平台：创建系统级注册表项'`
+- `docs/CHINESE_AUDIT.md:1062` — `- 'app/native-server/install.md:113' — '### 清单文件结构'`
+- `docs/CHINESE_AUDIT.md:1063` — `- 'app/native-server/install.md:119' — '├─ path: "/path/to/run_host.sh"       ← 启动脚本路径'`
+- `docs/CHINESE_AUDIT.md:1064` — `- 'app/native-server/install.md:120' — '├─ type: "stdio"                      ← 通信类型'`
+- `docs/CHINESE_AUDIT.md:1065` — `- 'app/native-server/install.md:121' — '└─ allowed_origins: [                 ← 允许连接的扩展'`
+- `docs/CHINESE_AUDIT.md:1066` — `- 'app/native-server/install.md:122' — '"chrome-extension://扩展ID/"'`
+- `docs/CHINESE_AUDIT.md:1067` — `- 'app/native-server/install.md:126' — '### 用户级别注册流程'`
+- `docs/CHINESE_AUDIT.md:1068` — `- 'app/native-server/install.md:128' — '1. 确定用户级别清单文件路径'`
+- `docs/CHINESE_AUDIT.md:1069` — `- 'app/native-server/install.md:129' — '2. 创建必要的目录'`
+- `docs/CHINESE_AUDIT.md:1070` — `- 'app/native-server/install.md:130' — '3. 生成清单内容，包括：'`
+- `docs/CHINESE_AUDIT.md:1071` — `- 'app/native-server/install.md:131' — '- 主机名称'`
+- `docs/CHINESE_AUDIT.md:1072` — `- 'app/native-server/install.md:132' — '- 描述'`
+- `docs/CHINESE_AUDIT.md:1073` — `- 'app/native-server/install.md:133' — '- Node.js 可执行文件路径'`
+- `docs/CHINESE_AUDIT.md:1074` — `- 'app/native-server/install.md:134' — '- 通信类型（stdio）'`
+- `docs/CHINESE_AUDIT.md:1075` — `- 'app/native-server/install.md:135' — '- 允许的扩展 ID'`
+- `docs/CHINESE_AUDIT.md:1076` — `- 'app/native-server/install.md:136' — '- 启动参数'`
+- `docs/CHINESE_AUDIT.md:1077` — `- 'app/native-server/install.md:137' — '4. 写入清单文件'`
+- `docs/CHINESE_AUDIT.md:1078` — `- 'app/native-server/install.md:138' — '5. 在 Windows 上，还会创建相应的注册表项'`
+- `docs/CHINESE_AUDIT.md:1079` — `- 'app/native-server/install.md:140' — '### 系统级别注册流程'`
+- `docs/CHINESE_AUDIT.md:1080` — `- 'app/native-server/install.md:142' — '1. 检测是否已有管理员权限'`
+- `docs/CHINESE_AUDIT.md:1081` — `- 'app/native-server/install.md:143' — '2. 如果已有管理员权限：'`
+- `docs/CHINESE_AUDIT.md:1082` — `- 'app/native-server/install.md:144' — '- 直接创建系统级目录'`
+- `docs/CHINESE_AUDIT.md:1083` — `- 'app/native-server/install.md:145' — '- 写入清单文件'`
+- `docs/CHINESE_AUDIT.md:1084` — `- 'app/native-server/install.md:146' — '- 设置适当的权限'`
+- `docs/CHINESE_AUDIT.md:1085` — `- 'app/native-server/install.md:147' — '- 在 Windows 上创建系统级注册表项'`
+- `docs/CHINESE_AUDIT.md:1086` — `- 'app/native-server/install.md:148' — '3. 如果没有管理员权限：'`
+- `docs/CHINESE_AUDIT.md:1087` — `- 'app/native-server/install.md:149' — '- 提示用户使用管理员权限重新运行命令'`
+- `docs/CHINESE_AUDIT.md:1088` — `- 'app/native-server/install.md:151' — '- Windows: 以管理员身份运行命令提示符'`
+- `docs/CHINESE_AUDIT.md:1089` — `- 'app/native-server/install.md:153' — '## 验证安装'`
+- `docs/CHINESE_AUDIT.md:1090` — `- 'app/native-server/install.md:155' — '### 验证流程图'`
+- `docs/CHINESE_AUDIT.md:1091` — `- 'app/native-server/install.md:158' — '验证安装'`
+- `docs/CHINESE_AUDIT.md:1092` — `- 'app/native-server/install.md:159' — '├─ 检查清单文件'`
+- `docs/CHINESE_AUDIT.md:1093` — `- 'app/native-server/install.md:160' — '│  ├─ 文件存在 → 检查内容是否正确'`
+- `docs/CHINESE_AUDIT.md:1094` — `- 'app/native-server/install.md:161' — '│  └─ 文件不存在 → 重新安装'`
+- `docs/CHINESE_AUDIT.md:1095` — `- 'app/native-server/install.md:163' — '├─ 检查Chrome扩展'`
+- `docs/CHINESE_AUDIT.md:1096` — `- 'app/native-server/install.md:164' — '│  ├─ 扩展已安装 → 检查扩展权限'`
+- `docs/CHINESE_AUDIT.md:1097` — `- 'app/native-server/install.md:165' — '│  └─ 扩展未安装 → 安装扩展'`
+- `docs/CHINESE_AUDIT.md:1098` — `- 'app/native-server/install.md:167' — '└─ 测试连接'`
+- `docs/CHINESE_AUDIT.md:1099` — `- 'app/native-server/install.md:168' — '├─ 连接成功 → 安装完成'`
+- `docs/CHINESE_AUDIT.md:1100` — `- 'app/native-server/install.md:169' — '└─ 连接失败 → 检查错误日志 → 参考故障排除'`
+- `docs/CHINESE_AUDIT.md:1101` — `- 'app/native-server/install.md:172' — '### 验证步骤'`
+- `docs/CHINESE_AUDIT.md:1102` — `- 'app/native-server/install.md:174' — '安装完成后，您可以通过以下方式验证安装是否成功：'`
+- `docs/CHINESE_AUDIT.md:1103` — `- 'app/native-server/install.md:176' — '1. 检查清单文件是否存在于相应目录'`
+- `docs/CHINESE_AUDIT.md:1104` — `- 'app/native-server/install.md:177' — '- 用户级别：检查用户目录下的清单文件'`
+- `docs/CHINESE_AUDIT.md:1105` — `- 'app/native-server/install.md:178' — '- 系统级别：检查系统目录下的清单文件'`
+- `docs/CHINESE_AUDIT.md:1106` — `- 'app/native-server/install.md:179' — '- 确认清单文件内容是否正确'`
+- `docs/CHINESE_AUDIT.md:1107` — `- 'app/native-server/install.md:181' — '2. 在 Chrome 中安装对应的扩展'`
+- `docs/CHINESE_AUDIT.md:1108` — `- 'app/native-server/install.md:182' — '- 确保扩展已正确安装'`
+- `docs/CHINESE_AUDIT.md:1109` — `- 'app/native-server/install.md:183' — '- 确保扩展有 'nativeMessaging' 权限'`
+- `docs/CHINESE_AUDIT.md:1110` — `- 'app/native-server/install.md:185' — '3. 尝试通过扩展连接到本地服务'`
+- `docs/CHINESE_AUDIT.md:1111` — `- 'app/native-server/install.md:186' — '- 使用扩展的测试功能尝试连接'`
+- `docs/CHINESE_AUDIT.md:1112` — `- 'app/native-server/install.md:187' — '- 检查 Chrome 的扩展日志是否有错误信息'`
+- `docs/CHINESE_AUDIT.md:1113` — `- 'app/native-server/install.md:189' — '## 故障排除'`
+- `docs/CHINESE_AUDIT.md:1114` — `- 'app/native-server/install.md:191' — '### 故障排除流程图'`
+- `docs/CHINESE_AUDIT.md:1115` — `- 'app/native-server/install.md:194' — '故障排除'`
+- `docs/CHINESE_AUDIT.md:1116` — `- 'app/native-server/install.md:195' — '├─ 权限问题'`
+- `docs/CHINESE_AUDIT.md:1117` — `- 'app/native-server/install.md:196' — '│  ├─ 检查用户权限'`
+- `docs/CHINESE_AUDIT.md:1118` — `- 'app/native-server/install.md:197' — '│  │  ├─ 有足够权限 → 检查目录权限'`
+- `docs/CHINESE_AUDIT.md:1119` — `- 'app/native-server/install.md:198' — '│  │  └─ 无足够权限 → 尝试系统级别安装'`
+- `docs/CHINESE_AUDIT.md:1120` — `- 'app/native-server/install.md:200' — '│  ├─ 执行权限问题 (macOS/Linux)'`
+- `docs/CHINESE_AUDIT.md:1121` — `- 'app/native-server/install.md:201' — '│  │  ├─ "Permission denied" 错误'`
+- `docs/CHINESE_AUDIT.md:1122` — `- 'app/native-server/install.md:202' — '│  │  ├─ "Native host has exited" 错误'`
+- `docs/CHINESE_AUDIT.md:1123` — `- 'app/native-server/install.md:203' — '│  │  └─ 运行 mcp-chrome-bridge fix-permissions'`
+- `docs/CHINESE_AUDIT.md:1124` — `- 'app/native-server/install.md:205' — '│  └─ 尝试 mcp-chrome-bridge register --system'`
+- `docs/CHINESE_AUDIT.md:1125` — `- 'app/native-server/install.md:207' — '├─ 路径问题'`
+- `docs/CHINESE_AUDIT.md:1126` — `- 'app/native-server/install.md:208' — '│  ├─ 检查Node.js安装 (node -v)'`
+- `docs/CHINESE_AUDIT.md:1127` — `- 'app/native-server/install.md:209' — '│  └─ 检查全局NPM路径 (npm root -g)'`
+- `docs/CHINESE_AUDIT.md:1128` — `- 'app/native-server/install.md:211' — '├─ 注册表问题 (Windows)'`
+- `docs/CHINESE_AUDIT.md:1129` — `- 'app/native-server/install.md:212' — '│  ├─ 检查注册表访问权限'`
+- `docs/CHINESE_AUDIT.md:1130` — `- 'app/native-server/install.md:213' — '│  └─ 尝试手动创建注册表项'`
+- `docs/CHINESE_AUDIT.md:1131` — `- 'app/native-server/install.md:215' — '└─ 其他问题'`
+- `docs/CHINESE_AUDIT.md:1132` — `- 'app/native-server/install.md:216' — '├─ 检查控制台错误信息'`
+- `docs/CHINESE_AUDIT.md:1133` — `- 'app/native-server/install.md:217' — '└─ 提交Issue到项目仓库'`
+- `docs/CHINESE_AUDIT.md:1134` — `- 'app/native-server/install.md:220' — '### 常见问题解决步骤'`
+- `docs/CHINESE_AUDIT.md:1135` — `- 'app/native-server/install.md:222' — '如果安装过程中遇到问题，请尝试以下步骤：'`
+- `docs/CHINESE_AUDIT.md:1136` — `- 'app/native-server/install.md:224' — '1. 确保 Node.js 已正确安装'`
+- `docs/CHINESE_AUDIT.md:1137` — `- 'app/native-server/install.md:225' — '- 运行 'node -v' 和 'npm -v' 检查版本'`
+- `docs/CHINESE_AUDIT.md:1138` — `- 'app/native-server/install.md:226' — '- 确保 Node.js 版本 >= 20.x'`
+- `docs/CHINESE_AUDIT.md:1139` — `- 'app/native-server/install.md:228' — '2. 检查是否有足够的权限创建文件和目录'`
+- `docs/CHINESE_AUDIT.md:1140` — `- 'app/native-server/install.md:229' — '- 用户级别安装需要对用户目录有写入权限'`
+- `docs/CHINESE_AUDIT.md:1141` — `- 'app/native-server/install.md:230' — '- 系统级别安装需要管理员/root权限'`
+- `docs/CHINESE_AUDIT.md:1142` — `- 'app/native-server/install.md:232' — '3. **修复执行权限问题**'`
+- `docs/CHINESE_AUDIT.md:1143` — `- 'app/native-server/install.md:234' — '**macOS/Linux 平台**：'`
+- `docs/CHINESE_AUDIT.md:1144` — `- 'app/native-server/install.md:236' — '**问题描述**：'`
+- `docs/CHINESE_AUDIT.md:1145` — `- 'app/native-server/install.md:237' — '- npm 安装通常会保留文件权限，但 pnpm 可能不会'`
+- `docs/CHINESE_AUDIT.md:1146` — `- 'app/native-server/install.md:238' — '- 可能遇到 "Permission denied" 或 "Native host has exited" 错误'`
+- `docs/CHINESE_AUDIT.md:1147` — `- 'app/native-server/install.md:239' — '- Chrome 扩展无法启动 native host 进程'`
+- `docs/CHINESE_AUDIT.md:1148` — `- 'app/native-server/install.md:241' — '**解决方案**：'`
+- `docs/CHINESE_AUDIT.md:1149` — `- 'app/native-server/install.md:243' — 'a) **使用内置修复命令（推荐）**：'`
+- `docs/CHINESE_AUDIT.md:1150` — `- 'app/native-server/install.md:249' — 'b) **运行诊断工具自动修复**：'`
+- `docs/CHINESE_AUDIT.md:1151` — `- 'app/native-server/install.md:255' — 'c) **手动设置权限**：'`
+- `docs/CHINESE_AUDIT.md:1152` — `- 'app/native-server/install.md:258' — '# 查找安装路径'`
+- `docs/CHINESE_AUDIT.md:1153` — `- 'app/native-server/install.md:260' — '# 或者对于 pnpm'`
+- `docs/CHINESE_AUDIT.md:1154` — `- 'app/native-server/install.md:263' — '# 设置执行权限（替换为实际路径）'`
+- `docs/CHINESE_AUDIT.md:1155` — `- 'app/native-server/install.md:269' — '**Windows 平台**：'`
+- `docs/CHINESE_AUDIT.md:1156` — `- 'app/native-server/install.md:271' — '**问题描述**：'`
+- `docs/CHINESE_AUDIT.md:1157` — `- 'app/native-server/install.md:272' — '- Windows 上 '.bat' 文件通常不需要执行权限，但可能遇到其他问题'`
+- `docs/CHINESE_AUDIT.md:1158` — `- 'app/native-server/install.md:273' — '- 文件可能被标记为只读'`
+- `docs/CHINESE_AUDIT.md:1159` — `- 'app/native-server/install.md:274' — '- 可能遇到 "Access denied" 或文件无法执行的错误'`
+- `docs/CHINESE_AUDIT.md:1160` — `- 'app/native-server/install.md:276' — '**解决方案**：'`
+- `docs/CHINESE_AUDIT.md:1161` — `- 'app/native-server/install.md:278' — 'a) **使用内置修复命令（推荐）**：'`
+- `docs/CHINESE_AUDIT.md:1162` — `- 'app/native-server/install.md:284' — 'b) **运行诊断工具自动修复**：'`
+- `docs/CHINESE_AUDIT.md:1163` — `- 'app/native-server/install.md:290' — 'c) **手动检查文件属性**：'`
+- `docs/CHINESE_AUDIT.md:1164` — `- 'app/native-server/install.md:293' — '# 查找安装路径'`
+- `docs/CHINESE_AUDIT.md:1165` — `- 'app/native-server/install.md:296' — '# 检查文件属性（在文件资源管理器中右键 -> 属性）'`
+- `docs/CHINESE_AUDIT.md:1166` — `- 'app/native-server/install.md:297' — '# 确保 run_host.bat 不是只读文件'`
+- `docs/CHINESE_AUDIT.md:1167` — `- 'app/native-server/install.md:300' — 'd) **重新安装并强制权限**：'`
+- `docs/CHINESE_AUDIT.md:1168` — `- 'app/native-server/install.md:303' — '# 卸载'`
+- `docs/CHINESE_AUDIT.md:1169` — `- 'app/native-server/install.md:305' — '# 或 pnpm uninstall -g mcp-chrome-bridge'`
+- `docs/CHINESE_AUDIT.md:1170` — `- 'app/native-server/install.md:307' — '# 重新安装'`
+- `docs/CHINESE_AUDIT.md:1171` — `- 'app/native-server/install.md:309' — '# 或 pnpm install -g mcp-chrome-bridge'`
+- `docs/CHINESE_AUDIT.md:1172` — `- 'app/native-server/install.md:311' — '# 如果仍有问题，运行权限修复'`
+- `docs/CHINESE_AUDIT.md:1173` — `- 'app/native-server/install.md:315' — '4. 在 Windows 上，确保注册表访问没有被限制'`
+- `docs/CHINESE_AUDIT.md:1174` — `- 'app/native-server/install.md:316' — '- 检查是否可以访问 'HKCU\Software\Google\Chrome\NativeMessagingHosts\''`
+- `docs/CHINESE_AUDIT.md:1175` — `- 'app/native-server/install.md:317' — '- 对于系统级别，检查 'HKLM\Software\Google\Chrome\NativeMessagingHosts\''`
+- `docs/CHINESE_AUDIT.md:1176` — `- 'app/native-server/install.md:319' — '5. 尝试使用系统级别安装'`
+- `docs/CHINESE_AUDIT.md:1177` — `- 'app/native-server/install.md:320' — '- 使用 'mcp-chrome-bridge register --system' 命令'`
+- `docs/CHINESE_AUDIT.md:1178` — `- 'app/native-server/install.md:321' — '- 或直接使用管理员权限运行'`
+- `docs/CHINESE_AUDIT.md:1179` — `- 'app/native-server/install.md:323' — '6. 检查控制台输出的错误信息'`
+- `docs/CHINESE_AUDIT.md:1180` — `- 'app/native-server/install.md:324' — '- 详细的错误信息通常会指出问题所在'`
+- `docs/CHINESE_AUDIT.md:1181` — `- 'app/native-server/install.md:325' — '- 可以添加 '--verbose' 参数获取更多日志信息'`
+- `docs/CHINESE_AUDIT.md:1182` — `- 'app/native-server/install.md:327' — '如果问题仍然存在，请提交 issue 到项目仓库，并附上以下信息：'`
+- `docs/CHINESE_AUDIT.md:1183` — `- 'app/native-server/install.md:329' — '- 操作系统版本'`
+- `docs/CHINESE_AUDIT.md:1184` — `- 'app/native-server/install.md:330' — '- Node.js 版本'`
+- `docs/CHINESE_AUDIT.md:1185` — `- 'app/native-server/install.md:331' — '- 安装命令'`
+- `docs/CHINESE_AUDIT.md:1186` — `- 'app/native-server/install.md:332' — '- 错误信息'`
+- `docs/CHINESE_AUDIT.md:1187` — `- 'app/native-server/install.md:333' — '- 尝试过的解决方法'`
+- `docs/CHINESE_AUDIT.md:1188` — `- 'app/native-server/README.md:1' — '# Fastify Chrome Native Messaging服务'`
+- `docs/CHINESE_AUDIT.md:1189` — `- 'app/native-server/README.md:3' — '这是一个基于Fastify的TypeScript项目，用于与Chrome扩展进行原生通信。'`
+- `docs/CHINESE_AUDIT.md:1190` — `- 'app/native-server/README.md:5' — '## 功能特性'`
+- `docs/CHINESE_AUDIT.md:1191` — `- 'app/native-server/README.md:7' — '- 通过Chrome Native Messaging协议与Chrome扩展进行双向通信'`
+- `docs/CHINESE_AUDIT.md:1192` — `- 'app/native-server/README.md:8' — '- **支持多浏览器**: Chrome 和 Chromium (包括 Linux、macOS 和 Windows)'`
+- `docs/CHINESE_AUDIT.md:1193` — `- 'app/native-server/README.md:9' — '- 提供RESTful API服务'`
+- `docs/CHINESE_AUDIT.md:1194` — `- 'app/native-server/README.md:10' — '- 完全使用TypeScript开发'`
+- `docs/CHINESE_AUDIT.md:1195` — `- 'app/native-server/README.md:11' — '- 包含完整的测试套件'`
+- `docs/CHINESE_AUDIT.md:1196` — `- 'app/native-server/README.md:12' — '- 遵循代码质量最佳实践'`
+- `docs/CHINESE_AUDIT.md:1197` — `- 'app/native-server/README.md:14' — '## 开发环境设置'`
+- `docs/CHINESE_AUDIT.md:1198` — `- 'app/native-server/README.md:16' — '### 前置条件'`
+- `docs/CHINESE_AUDIT.md:1199` — `- 'app/native-server/README.md:19' — '- npm 8+ 或 pnpm 8+'`
+- `docs/CHINESE_AUDIT.md:1200` — `- 'app/native-server/README.md:21' — '### 安装'`
+- `docs/CHINESE_AUDIT.md:1201` — `- 'app/native-server/README.md:29' — '### 开发'`
+- `docs/CHINESE_AUDIT.md:1202` — `- 'app/native-server/README.md:31' — '1. 本地构建注册native server'`
+- `docs/CHINESE_AUDIT.md:1203` — `- 'app/native-server/README.md:38' — '2. 启动chrome extension'`
+- `docs/CHINESE_AUDIT.md:1204` — `- 'app/native-server/README.md:45' — '### 构建'`
+- `docs/CHINESE_AUDIT.md:1205` — `- 'app/native-server/README.md:51' — '### 注册Native Messaging主机'`
+- `docs/CHINESE_AUDIT.md:1206` — `- 'app/native-server/README.md:53' — '#### 自动检测并注册所有已安装的浏览器'`
+- `docs/CHINESE_AUDIT.md:1207` — `- 'app/native-server/README.md:59' — '#### 注册特定浏览器'`
+- `docs/CHINESE_AUDIT.md:1208` — `- 'app/native-server/README.md:62' — '# 仅注册 Chrome'`
+- `docs/CHINESE_AUDIT.md:1209` — `- 'app/native-server/README.md:65' — '# 仅注册 Chromium'`
+- `docs/CHINESE_AUDIT.md:1210` — `- 'app/native-server/README.md:68' — '# 注册所有支持的浏览器'`
+- `docs/CHINESE_AUDIT.md:1211` — `- 'app/native-server/README.md:72' — '#### 全局安装（会自动注册检测到的浏览器）'`
+- `docs/CHINESE_AUDIT.md:1212` — `- 'app/native-server/README.md:78' — '#### 浏览器支持'`
+- `docs/CHINESE_AUDIT.md:1213` — `- 'app/native-server/README.md:80' — '| 浏览器        | Linux | macOS | Windows |'`
+- `docs/CHINESE_AUDIT.md:1214` — `- 'app/native-server/README.md:85' — '注册位置：'`
+- `docs/CHINESE_AUDIT.md:1215` — `- 'app/native-server/README.md:91' — '### 与Chrome扩展集成'`
+- `docs/CHINESE_AUDIT.md:1216` — `- 'app/native-server/README.md:93' — '以下是Chrome扩展中如何使用此服务的简单示例：'`
+- `docs/CHINESE_AUDIT.md:1217` — `- 'app/native-server/README.md:100' — '// 启动Native Messaging服务'`
+- `docs/CHINESE_AUDIT.md:1218` — `- 'app/native-server/README.md:103' — 'console.log('已连接到Native Messaging主机');'`
+- `docs/CHINESE_AUDIT.md:1219` — `- 'app/native-server/README.md:111' — 'console.log('收到Native消息:', message);'`
+- `docs/CHINESE_AUDIT.md:1220` — `- 'app/native-server/README.md:115' — 'console.log('服务已启动，端口: ${message.payload.port}');'`
+- `docs/CHINESE_AUDIT.md:1221` — `- 'app/native-server/README.md:118' — 'console.log('服务已停止');'`
+- `docs/CHINESE_AUDIT.md:1222` — `- 'app/native-server/README.md:120' — 'console.error('Native错误:', message.payload.message);'`
+- `docs/CHINESE_AUDIT.md:1223` — `- 'app/native-server/README.md:125' — 'console.log('Native连接断开:', chrome.runtime.lastError);'`
+- `docs/CHINESE_AUDIT.md:1224` — `- 'app/native-server/README.md:130' — '// 启动服务器'`
+- `docs/CHINESE_AUDIT.md:1225` — `- 'app/native-server/README.md:133' — 'console.error('启动Native Messaging时出错:', error);'`
+- `docs/CHINESE_AUDIT.md:1226` — `- 'app/native-server/README.md:137' — '// 停止服务器'`
+- `docs/CHINESE_AUDIT.md:1227` — `- 'app/native-server/README.md:144' — '// 测试与服务器的通信'`
+- `docs/CHINESE_AUDIT.md:1228` — `- 'app/native-server/README.md:149' — 'console.log('Ping响应:', data);'`
+- `docs/CHINESE_AUDIT.md:1229` — `- 'app/native-server/README.md:152' — 'console.error('Ping失败:', error);'`
+- `docs/CHINESE_AUDIT.md:1230` — `- 'app/native-server/README.md:157' — '// 在扩展启动时连接Native主机'`
+- `docs/CHINESE_AUDIT.md:1231` — `- 'app/native-server/README.md:160' — '// 导出供popup或内容脚本使用的API'`
+- `docs/CHINESE_AUDIT.md:1232` — `- 'app/native-server/README.md:170' — 'return true; // 指示我们将异步发送响应'`
+- `docs/CHINESE_AUDIT.md:1233` — `- 'app/native-server/README.md:175' — '### 测试'`
+- `docs/CHINESE_AUDIT.md:1234` — `- 'app/native-server/README.md:181' — '### 许可证'`
+- `docs/CHINESE_AUDIT.md:1235` — `- 'app/chrome-extension/utils/vector-database.ts:721' — '// 1. 计算文档映射的大小'`
+- `docs/CHINESE_AUDIT.md:1236` — `- 'app/chrome-extension/utils/vector-database.ts:725' — '// 2. 计算向量数据的大小'`
+- `docs/CHINESE_AUDIT.md:1237` — `- 'app/chrome-extension/utils/vector-database.ts:729' — '// 3. 估算索引结构的大小'`
+- `docs/CHINESE_AUDIT.md:1238` — `- 'app/chrome-extension/utils/vector-database.ts:738' — '// 返回一个基于文档数量的估算值'`
+- `docs/CHINESE_AUDIT.md:1239` — `- 'app/chrome-extension/utils/vector-database.ts:739' — 'totalSize = this.documents.size * 1024; // 每个文档估算1KB'`
+- `docs/CHINESE_AUDIT.md:1240` — `- 'app/chrome-extension/utils/vector-database.ts:1070' — '// 私有辅助方法'`
+- `docs/CHINESE_AUDIT.md:1241` — `- 'app/chrome-extension/utils/output-sanitizer.ts:2' — '* Output Sanitizer - 输出脱敏和限长工具'`
+- `docs/CHINESE_AUDIT.md:1242` — `- 'app/chrome-extension/utils/output-sanitizer.ts:4' — '* 提供对 JavaScript 执行结果的安全处理：'`
+- `docs/CHINESE_AUDIT.md:1243` — `- 'app/chrome-extension/utils/output-sanitizer.ts:5' — '* 1. 敏感信息脱敏（cookie/token/password 等）'`
+- `docs/CHINESE_AUDIT.md:1244` — `- 'app/chrome-extension/utils/output-sanitizer.ts:6' — '* 2. 输出长度限制（默认 50KB）'`
+- `docs/CHINESE_AUDIT.md:1245` — `- 'app/chrome-extension/utils/output-sanitizer.ts:7' — '* 3. 深度对象序列化'`
+- `docs/CHINESE_AUDIT.md:1246` — `- 'app/chrome-extension/utils/output-sanitizer.ts:32' — '// 敏感 key 标识符（会被脱敏）'`
+- `docs/CHINESE_AUDIT.md:1247` — `- 'app/chrome-extension/utils/output-sanitizer.ts:33' — '// 参考 mcp-tools.js 的敏感 key 列表'`
+- `docs/CHINESE_AUDIT.md:1248` — `- 'app/chrome-extension/utils/output-sanitizer.ts:55' — '// 补充 mcp-tools.js 中的敏感 key'`
+- `docs/CHINESE_AUDIT.md:1249` — `- 'app/chrome-extension/utils/output-sanitizer.ts:64' — '* 对任意值进行脱敏和限长处理'`
+- `docs/CHINESE_AUDIT.md:1250` — `- 'app/chrome-extension/utils/output-sanitizer.ts:95' — '* 对字符串进行敏感信息脱敏'`
+- `docs/CHINESE_AUDIT.md:1251` — `- 'app/chrome-extension/utils/output-sanitizer.ts:96' — '* 参考 mcp-tools.js 的脱敏逻辑，增加 Base64/Hex/cookie-query 识别'`
+- `docs/CHINESE_AUDIT.md:1252` — `- 'app/chrome-extension/utils/output-sanitizer.ts:113' — '// 1. 整体字符串检测（mcp-tools.js 风格）'`
+- `docs/CHINESE_AUDIT.md:1253` — `- 'app/chrome-extension/utils/output-sanitizer.ts:114' — '// Cookie/query string 形态检测（包含 = 和 ; 或 &）'`
+- `docs/CHINESE_AUDIT.md:1254` — `- 'app/chrome-extension/utils/output-sanitizer.ts:116' — '// 检测 cookie 字符串'`
+- `docs/CHINESE_AUDIT.md:1255` — `- 'app/chrome-extension/utils/output-sanitizer.ts:120' — '// 检测 query string (key=value&key2=value2 形态)'`
+- `docs/CHINESE_AUDIT.md:1256` — `- 'app/chrome-extension/utils/output-sanitizer.ts:126' — '// Base64 编码数据检测（20+ 字符的 Base64 字符串）'`
+- `docs/CHINESE_AUDIT.md:1257` — `- 'app/chrome-extension/utils/output-sanitizer.ts:131' — '// Hex credential 检测（32+ 字符的纯十六进制）'`
+- `docs/CHINESE_AUDIT.md:1258` — `- 'app/chrome-extension/utils/output-sanitizer.ts:139' — '// 3. JWT (三段式)'`
+- `docs/CHINESE_AUDIT.md:1259` — `- 'app/chrome-extension/utils/output-sanitizer.ts:142' — '// 4. URL query 参数中的敏感值'`
+- `docs/CHINESE_AUDIT.md:1260` — `- 'app/chrome-extension/utils/output-sanitizer.ts:148' — '// 5. Header-like 键值对'`
+- `docs/CHINESE_AUDIT.md:1261` — `- 'app/chrome-extension/utils/output-sanitizer.ts:154' — '// 6. 内嵌的 Base64 数据（在混合内容中）'`
+- `docs/CHINESE_AUDIT.md:1262` — `- 'app/chrome-extension/utils/output-sanitizer.ts:157' — '// 7. 内嵌的长 Hex 字符串（可能是 API key、hash 等）'`
+- `docs/CHINESE_AUDIT.md:1263` — `- 'app/chrome-extension/utils/output-sanitizer.ts:164' — '* 检测字符串是否像 query string (key=value&key2=value2)'`
+- `docs/CHINESE_AUDIT.md:1264` — `- 'app/chrome-extension/utils/output-sanitizer.ts:269' — '* 检测字符串是否像 cookie 字符串 (key=value; key2=value2)'`
+- `docs/CHINESE_AUDIT.md:1265` — `- 'app/chrome-extension/utils/output-sanitizer.ts:325' — '// 二分查找合适的截断点'`
+- `docs/CHINESE_AUDIT.md:1266` — `- 'app/chrome-extension/utils/semantic-similarity-engine.ts:19' — '// 1. 尝试从缓存获取数据'`
+- `docs/CHINESE_AUDIT.md:1267` — `- 'app/chrome-extension/utils/semantic-similarity-engine.ts:28' — '// 2. 从网络获取数据'`
+- `docs/CHINESE_AUDIT.md:1268` — `- 'app/chrome-extension/utils/semantic-similarity-engine.ts:35' — '// 3. 获取数据并存储到缓存'`
+- `docs/CHINESE_AUDIT.md:1269` — `- 'app/chrome-extension/utils/semantic-similarity-engine.ts:46' — '// 如果获取失败，清理可能不完整的缓存条目'`
+- `docs/CHINESE_AUDIT.md:1270` — `- 'app/chrome-extension/utils/semantic-similarity-engine.ts:569' — '// 确保offscreen document存在'`
+- `docs/CHINESE_AUDIT.md:1271` — `- 'app/chrome-extension/utils/semantic-similarity-engine.ts:990' — '// 方式1: Chrome extension URL (推荐，生产环境最可靠)'`
+- `docs/CHINESE_AUDIT.md:1272` — `- 'app/chrome-extension/utils/semantic-similarity-engine.ts:1019' — '// 更新 Worker 统计信息'`
+- `docs/CHINESE_AUDIT.md:1273` — `- 'app/chrome-extension/utils/semantic-similarity-engine.ts:1048' — '// 检查 event.error 是否存在'`
+- `docs/CHINESE_AUDIT.md:1274` — `- 'app/chrome-extension/utils/semantic-similarity-engine.ts:1083' — '* 带进度回调的初始化方法'`
+- `docs/CHINESE_AUDIT.md:1275` — `- 'app/chrome-extension/utils/semantic-similarity-engine.ts:1100' — '* 带进度回调的内部初始化方法'`
+- `docs/CHINESE_AUDIT.md:1276` — `- 'app/chrome-extension/utils/semantic-similarity-engine.ts:1108' — '// 进度报告辅助函数'`
+- `docs/CHINESE_AUDIT.md:1277` — `- 'app/chrome-extension/utils/semantic-similarity-engine.ts:1118' — '// 检测环境并决定使用哪种模式'`
+- `docs/CHINESE_AUDIT.md:1278` — `- 'app/chrome-extension/utils/semantic-similarity-engine.ts:1122' — '// 🛠️ 防止死循环：如果已经在 offscreen document 中，强制使用直接 Worker 模式'`
+- `docs/CHINESE_AUDIT.md:1279` — `- 'app/chrome-extension/utils/semantic-similarity-engine.ts:1139' — '// 使用offscreen模式 - 委托给offscreen document，它会处理自己的进度'`
+- `docs/CHINESE_AUDIT.md:1280` — `- 'app/chrome-extension/utils/semantic-similarity-engine.ts:1143' — '// 发送初始化消息到offscreen document'`
+- `docs/CHINESE_AUDIT.md:1281` — `- 'app/chrome-extension/utils/semantic-similarity-engine.ts:1150' — '// 确保配置对象被正确序列化，显式设置所有属性'`
+- `docs/CHINESE_AUDIT.md:1282` — `- 'app/chrome-extension/utils/semantic-similarity-engine.ts:1159' — 'useLocalFiles: Boolean(this.config.useLocalFiles), // 强制转换为布尔值'`
+- `docs/CHINESE_AUDIT.md:1283` — `- 'app/chrome-extension/utils/semantic-similarity-engine.ts:1168' — '// 使用 JSON 序列化确保数据完整性'`
+- `docs/CHINESE_AUDIT.md:1284` — `- 'app/chrome-extension/utils/semantic-similarity-engine.ts:1186' — '// 使用直接Worker模式 - 这里我们可以提供真实的进度跟踪'`
+- `docs/CHINESE_AUDIT.md:1285` — `- 'app/chrome-extension/utils/semantic-similarity-engine.ts:1204' — '// 创建一个更详细的错误对象'`
+- `docs/CHINESE_AUDIT.md:1286` — `- 'app/chrome-extension/utils/semantic-similarity-engine.ts:1215' — '// 检测环境并决定使用哪种模式'`
+- `docs/CHINESE_AUDIT.md:1287` — `- 'app/chrome-extension/utils/semantic-similarity-engine.ts:1219' — '// 🛠️ 防止死循环：如果已经在 offscreen document 中，强制使用直接 Worker 模式'`
+- `docs/CHINESE_AUDIT.md:1288` — `- 'app/chrome-extension/utils/semantic-similarity-engine.ts:1234' — '// 使用offscreen模式'`
+- `docs/CHINESE_AUDIT.md:1289` — `- 'app/chrome-extension/utils/semantic-similarity-engine.ts:1237' — '// 发送初始化消息到offscreen document'`
+- `docs/CHINESE_AUDIT.md:1290` — `- 'app/chrome-extension/utils/semantic-similarity-engine.ts:1244' — '// 确保配置对象被正确序列化，显式设置所有属性'`
+- `docs/CHINESE_AUDIT.md:1291` — `- 'app/chrome-extension/utils/semantic-similarity-engine.ts:1253' — 'useLocalFiles: Boolean(this.config.useLocalFiles), // 强制转换为布尔值'`
+- `docs/CHINESE_AUDIT.md:1292` — `- 'app/chrome-extension/utils/semantic-similarity-engine.ts:1281' — '// 使用 JSON 序列化确保数据完整性'`
+- `docs/CHINESE_AUDIT.md:1293` — `- 'app/chrome-extension/utils/semantic-similarity-engine.ts:1291' — 'config: serializedConfig, // 使用原始配置，不强制修改 useLocalFiles'`
+- `docs/CHINESE_AUDIT.md:1294` — `- 'app/chrome-extension/utils/semantic-similarity-engine.ts:1300' — '// 使用直接Worker模式'`
+- `docs/CHINESE_AUDIT.md:1295` — `- 'app/chrome-extension/utils/semantic-similarity-engine.ts:1312' — '// 检查路径是否存在'`
+- `docs/CHINESE_AUDIT.md:1296` — `- 'app/chrome-extension/utils/semantic-similarity-engine.ts:1318' — '// 对于WXT，public目录下的资源在运行时位于根路径'`
+- `docs/CHINESE_AUDIT.md:1297` — `- 'app/chrome-extension/utils/semantic-similarity-engine.ts:1319' — '// 直接使用模型标识符，transformers.js 会自动添加 /models/ 前缀'`
+- `docs/CHINESE_AUDIT.md:1298` — `- 'app/chrome-extension/utils/semantic-similarity-engine.ts:1330' — '// 对于不需要token_type_ids的模型，在tokenizer配置中明确设置'`
+- `docs/CHINESE_AUDIT.md:1299` — `- 'app/chrome-extension/utils/semantic-similarity-engine.ts:1397' — '// 尝试初始化 SIMD 加速'`
+- `docs/CHINESE_AUDIT.md:1300` — `- 'app/chrome-extension/utils/semantic-similarity-engine.ts:1439' — '// 创建一个更详细的错误对象'`
+- `docs/CHINESE_AUDIT.md:1301` — `- 'app/chrome-extension/utils/semantic-similarity-engine.ts:1448' — '* 直接Worker模式的初始化，支持进度回调'`
+- `docs/CHINESE_AUDIT.md:1302` — `- 'app/chrome-extension/utils/semantic-similarity-engine.ts:1453' — '// 使用直接Worker模式'`
+- `docs/CHINESE_AUDIT.md:1303` — `- 'app/chrome-extension/utils/semantic-similarity-engine.ts:1479' — '// 使用 transformers.js 2.17+ 的进度回调功能'`
+- `docs/CHINESE_AUDIT.md:1304` — `- 'app/chrome-extension/utils/semantic-similarity-engine.ts:1496' — '// 对于不需要token_type_ids的模型，在tokenizer配置中明确设置'`
+- `docs/CHINESE_AUDIT.md:1305` — `- 'app/chrome-extension/utils/semantic-similarity-engine.ts:1507' — '// 如果进度回调不支持，回退到标准方式'`
+- `docs/CHINESE_AUDIT.md:1306` — `- 'app/chrome-extension/utils/semantic-similarity-engine.ts:1571' — '// 尝试初始化 SIMD 加速'`
+- `docs/CHINESE_AUDIT.md:1307` — `- 'app/chrome-extension/utils/semantic-similarity-engine.ts:1605' — '// 更有代表性的预热文本，包含不同长度和语言'`
+- `docs/CHINESE_AUDIT.md:1308` — `- 'app/chrome-extension/utils/semantic-similarity-engine.ts:1607' — '// 短文本'`
+- `docs/CHINESE_AUDIT.md:1309` — `- 'app/chrome-extension/utils/semantic-similarity-engine.ts:1609' — ''你好','`
+- `docs/CHINESE_AUDIT.md:1310` — `- 'app/chrome-extension/utils/semantic-similarity-engine.ts:1611' — '// 中等长度文本'`
+- `docs/CHINESE_AUDIT.md:1311` — `- 'app/chrome-extension/utils/semantic-similarity-engine.ts:1613' — ''你好世界，这是一个测试。','`
+- `docs/CHINESE_AUDIT.md:1312` — `- 'app/chrome-extension/utils/semantic-similarity-engine.ts:1615' — '// 长文本'`
+- `docs/CHINESE_AUDIT.md:1313` — `- 'app/chrome-extension/utils/semantic-similarity-engine.ts:1617' — ''这是一个包含多个句子的较长文本。它有助于为各种文本长度预热模型。','`
+- `docs/CHINESE_AUDIT.md:1314` — `- 'app/chrome-extension/utils/semantic-similarity-engine.ts:1621' — '// 渐进式预热：先单个，再批量'`
+- `docs/CHINESE_AUDIT.md:1315` — `- 'app/chrome-extension/utils/semantic-similarity-engine.ts:1630' — '// 保留预热结果，不清空缓存'`
+- `docs/CHINESE_AUDIT.md:1316` — `- 'app/chrome-extension/utils/semantic-similarity-engine.ts:1642' — '// 对于单个文本，尝试使用缓存'`
+- `docs/CHINESE_AUDIT.md:1317` — `- 'app/chrome-extension/utils/semantic-similarity-engine.ts:1661' — '// 对于不需要token_type_ids的模型，明确设置return_token_type_ids为false'`
+- `docs/CHINESE_AUDIT.md:1318` — `- 'app/chrome-extension/utils/semantic-similarity-engine.ts:1668' — '// 更新性能统计'`
+- `docs/CHINESE_AUDIT.md:1319` — `- 'app/chrome-extension/utils/semantic-similarity-engine.ts:1674' — '// 缓存结果'`
+- `docs/CHINESE_AUDIT.md:1320` — `- 'app/chrome-extension/utils/semantic-similarity-engine.ts:1681' — '// 对于批量文本，直接处理（批量处理通常不重复）'`
+- `docs/CHINESE_AUDIT.md:1321` — `- 'app/chrome-extension/utils/semantic-similarity-engine.ts:1690' — '// 对于不需要token_type_ids的模型，明确设置return_token_type_ids为false'`
+- `docs/CHINESE_AUDIT.md:1322` — `- 'app/chrome-extension/utils/semantic-similarity-engine.ts:1708' — '// 优化：直接使用 Float32Array，避免不必要的转换'`
+- `docs/CHINESE_AUDIT.md:1323` — `- 'app/chrome-extension/utils/semantic-similarity-engine.ts:1718' — '// 使用内存池获取 embedding 数组'`
+- `docs/CHINESE_AUDIT.md:1324` — `- 'app/chrome-extension/utils/semantic-similarity-engine.ts:1746' — '// 优化：直接使用 Float32Array，避免不必要的转换'`
+- `docs/CHINESE_AUDIT.md:1325` — `- 'app/chrome-extension/utils/semantic-similarity-engine.ts:1759' — '// 使用内存池获取 embedding 数组'`
+- `docs/CHINESE_AUDIT.md:1326` — `- 'app/chrome-extension/utils/semantic-similarity-engine.ts:1797' — '// 如果使用offscreen模式，委托给offscreen document'`
+- `docs/CHINESE_AUDIT.md:1327` — `- 'app/chrome-extension/utils/semantic-similarity-engine.ts:1810' — '// 验证响应数据'`
+- `docs/CHINESE_AUDIT.md:1328` — `- 'app/chrome-extension/utils/semantic-similarity-engine.ts:1824' — '// 验证转换后的数据'`
+- `docs/CHINESE_AUDIT.md:1329` — `- 'app/chrome-extension/utils/semantic-similarity-engine.ts:1836' — '// 更新性能统计'`
+- `docs/CHINESE_AUDIT.md:1330` — `- 'app/chrome-extension/utils/semantic-similarity-engine.ts:1891' — '// 如果使用offscreen模式，委托给offscreen document'`
+- `docs/CHINESE_AUDIT.md:1331` — `- 'app/chrome-extension/utils/semantic-similarity-engine.ts:1893' — '// 先检查缓存'`
+- `docs/CHINESE_AUDIT.md:1332` — `- 'app/chrome-extension/utils/semantic-similarity-engine.ts:1911' — '// 如果所有都在缓存中，直接返回'`
+- `docs/CHINESE_AUDIT.md:1333` — `- 'app/chrome-extension/utils/semantic-similarity-engine.ts:1916' — '// 只请求未缓存的文本'`
+- `docs/CHINESE_AUDIT.md:1334` — `- 'app/chrome-extension/utils/semantic-similarity-engine.ts:1930' — '// 将结果放回对应位置并缓存'`
+- `docs/CHINESE_AUDIT.md:1335` — `- 'app/chrome-extension/utils/semantic-similarity-engine.ts:1938' — '// 缓存结果'`
+- `docs/CHINESE_AUDIT.md:1336` — `- 'app/chrome-extension/utils/semantic-similarity-engine.ts:1993' — '// 使用真正的批处理推理'`
+- `docs/CHINESE_AUDIT.md:1337` — `- 'app/chrome-extension/utils/semantic-similarity-engine.ts:2061' — '// 如果使用offscreen模式，委托给offscreen document'`
+- `docs/CHINESE_AUDIT.md:1338` — `- 'app/chrome-extension/utils/semantic-similarity-engine.ts:2077' — '// 直接模式的原有逻辑'`
+- `docs/CHINESE_AUDIT.md:1339` — `- 'app/chrome-extension/utils/semantic-similarity-engine.ts:2129' — '// 使用 SIMD 优化的矩阵计算（如果可用）'`
+- `docs/CHINESE_AUDIT.md:1340` — `- 'app/chrome-extension/utils/semantic-similarity-engine.ts:2151' — '// JavaScript 回退版本'`
+- `docs/CHINESE_AUDIT.md:1341` — `- 'app/chrome-extension/utils/semantic-similarity-engine.ts:2186' — '// 使用 SIMD 优化版本（如果可用）'`
+- `docs/CHINESE_AUDIT.md:1342` — `- 'app/chrome-extension/utils/semantic-similarity-engine.ts:2189' — '// SIMD 版本是异步的，但为了保持接口兼容性，我们需要同步版本'`
+- `docs/CHINESE_AUDIT.md:1343` — `- 'app/chrome-extension/utils/semantic-similarity-engine.ts:2190' — '// 这里我们回退到 JavaScript 版本，或者可以考虑重构为异步'`
+- `docs/CHINESE_AUDIT.md:1344` — `- 'app/chrome-extension/utils/semantic-similarity-engine.ts:2214' — '// 新增：异步 SIMD 优化的余弦相似度'`
+- `docs/CHINESE_AUDIT.md:1345` — `- 'app/chrome-extension/utils/semantic-similarity-engine.ts:2244' — 'throw new Error('输入必须是字符串');'`
+- `docs/CHINESE_AUDIT.md:1346` — `- 'app/chrome-extension/utils/semantic-similarity-engine.ts:2247' — 'throw new Error('输入文本不能为空');'`
+- `docs/CHINESE_AUDIT.md:1347` — `- 'app/chrome-extension/utils/semantic-similarity-engine.ts:2254' — 'console.warn('输入文本可能过长，将由分词器截断。');'`
+- `docs/CHINESE_AUDIT.md:1348` — `- 'app/chrome-extension/utils/semantic-similarity-engine.ts:2307' — '// 新增：获取 Worker 统计信息'`
+- `docs/CHINESE_AUDIT.md:1349` — `- 'app/chrome-extension/utils/semantic-similarity-engine.ts:2320' — '// 新增：清理 Worker 缓冲区'`
+- `docs/CHINESE_AUDIT.md:1350` — `- 'app/chrome-extension/utils/semantic-similarity-engine.ts:2332' — '// 新增：清理所有缓存'`
+- `docs/CHINESE_AUDIT.md:1351` — `- 'app/chrome-extension/utils/semantic-similarity-engine.ts:2343' — '// 新增：获取内存使用情况'`
+- `docs/CHINESE_AUDIT.md:1352` — `- 'app/chrome-extension/utils/semantic-similarity-engine.ts:2362' — '// 清理 Worker 缓冲区'`
+- `docs/CHINESE_AUDIT.md:1353` — `- 'app/chrome-extension/utils/semantic-similarity-engine.ts:2370' — '// 清理 SIMD 引擎'`
+- `docs/CHINESE_AUDIT.md:1354` — `- 'app/chrome-extension/workers/similarity.worker.js:3' — 'importScripts('../libs/ort.min.js'); // 调整路径以匹配您的文件结构'`
+- `docs/CHINESE_AUDIT.md:1355` — `- 'app/chrome-extension/workers/similarity.worker.js:5' — '// 全局Worker状态'`
+- `docs/CHINESE_AUDIT.md:1356` — `- 'app/chrome-extension/workers/similarity.worker.js:10' — 'let modelInputNames = null; // 存储模型的输入名称'`
+- `docs/CHINESE_AUDIT.md:1357` — `- 'app/chrome-extension/workers/similarity.worker.js:12' — '// 复用的 TypedArray 缓冲区，减少内存分配'`
+- `docs/CHINESE_AUDIT.md:1358` — `- 'app/chrome-extension/workers/similarity.worker.js:19' — '// 性能统计'`
+- `docs/CHINESE_AUDIT.md:1359` — `- 'app/chrome-extension/workers/similarity.worker.js:27' — '// 配置 ONNX Runtime 环境 (仅一次)'`
+- `docs/CHINESE_AUDIT.md:1360` — `- 'app/chrome-extension/workers/similarity.worker.js:32' — 'ort.env.wasm.simd = true; // 尽可能启用SIMD'`
+- `docs/CHINESE_AUDIT.md:1361` — `- 'app/chrome-extension/workers/similarity.worker.js:33' — 'ort.env.wasm.proxy = false; // 在Worker中，通常不需要代理'`
+- `docs/CHINESE_AUDIT.md:1362` — `- 'app/chrome-extension/workers/similarity.worker.js:42' — '// executionMode: 'sequential' // 在worker内部通常是顺序执行一个任务'`
+- `docs/CHINESE_AUDIT.md:1363` — `- 'app/chrome-extension/workers/similarity.worker.js:46' — 'throw error; // 抛出错误，让主线程知道'`
+- `docs/CHINESE_AUDIT.md:1364` — `- 'app/chrome-extension/workers/similarity.worker.js:52' — 'configureOrtEnv(numThreads, executionProviders); // 确保环境已配置'`
+- `docs/CHINESE_AUDIT.md:1365` — `- 'app/chrome-extension/workers/similarity.worker.js:67' — 'modelPathInternal = modelPathOrData; // 存储模型路径以备调试或重载（如果需要）'`
+- `docs/CHINESE_AUDIT.md:1366` — `- 'app/chrome-extension/workers/similarity.worker.js:71' — '// 获取模型的输入名称，用于判断是否需要token_type_ids'`
+- `docs/CHINESE_AUDIT.md:1367` — `- 'app/chrome-extension/workers/similarity.worker.js:79' — 'session = null; // 清理session以防部分初始化'`
+- `docs/CHINESE_AUDIT.md:1368` — `- 'app/chrome-extension/workers/similarity.worker.js:81' — '// 将错误信息序列化，因为Error对象本身可能无法直接postMessage'`
+- `docs/CHINESE_AUDIT.md:1369` — `- 'app/chrome-extension/workers/similarity.worker.js:86' — '// 优化的缓冲区管理函数'`
+- `docs/CHINESE_AUDIT.md:1370` — `- 'app/chrome-extension/workers/similarity.worker.js:95' — '// 优化的批处理推理函数'`
+- `docs/CHINESE_AUDIT.md:1371` — `- 'app/chrome-extension/workers/similarity.worker.js:108' — '// 优化：复用缓冲区，减少内存分配'`
+- `docs/CHINESE_AUDIT.md:1372` — `- 'app/chrome-extension/workers/similarity.worker.js:112' — '// 复用或创建 BigInt64Array 缓冲区'`
+- `docs/CHINESE_AUDIT.md:1373` — `- 'app/chrome-extension/workers/similarity.worker.js:116' — '// 批量填充数据（避免 map 操作）'`
+- `docs/CHINESE_AUDIT.md:1374` — `- 'app/chrome-extension/workers/similarity.worker.js:135' — '// 处理 token_type_ids - 只有当模型需要时才提供'`
+- `docs/CHINESE_AUDIT.md:1375` — `- 'app/chrome-extension/workers/similarity.worker.js:151' — '// 创建默认的全零 token_type_ids'`
+- `docs/CHINESE_AUDIT.md:1376` — `- 'app/chrome-extension/workers/similarity.worker.js:165' — '// 执行批处理推理'`
+- `docs/CHINESE_AUDIT.md:1377` — `- 'app/chrome-extension/workers/similarity.worker.js:169' — '// 使用 Transferable Objects 优化数据传输'`
+- `docs/CHINESE_AUDIT.md:1378` — `- 'app/chrome-extension/workers/similarity.worker.js:172' — '// 更新统计信息'`
+- `docs/CHINESE_AUDIT.md:1379` — `- 'app/chrome-extension/workers/similarity.worker.js:173' — 'workerStats.totalInferences += batchSize; // 批处理计算多个推理'`
+- `docs/CHINESE_AUDIT.md:1380` — `- 'app/chrome-extension/workers/similarity.worker.js:211' — '// 优化：复用缓冲区，减少内存分配'`
+- `docs/CHINESE_AUDIT.md:1381` — `- 'app/chrome-extension/workers/similarity.worker.js:215' — '// 复用或创建 BigInt64Array 缓冲区'`
+- `docs/CHINESE_AUDIT.md:1382` — `- 'app/chrome-extension/workers/similarity.worker.js:219' — '// 填充数据（避免 map 操作）'`
+- `docs/CHINESE_AUDIT.md:1383` — `- 'app/chrome-extension/workers/similarity.worker.js:238' — '// 处理 token_type_ids - 只有当模型需要时才提供'`
+- `docs/CHINESE_AUDIT.md:1384` — `- 'app/chrome-extension/workers/similarity.worker.js:254' — '// 创建默认的全零 token_type_ids'`
+- `docs/CHINESE_AUDIT.md:1385` — `- 'app/chrome-extension/workers/similarity.worker.js:271' — '// 使用 Transferable Objects 优化数据传输'`
+- `docs/CHINESE_AUDIT.md:1386` — `- 'app/chrome-extension/workers/similarity.worker.js:274' — '// 更新统计信息'`
+- `docs/CHINESE_AUDIT.md:1387` — `- 'app/chrome-extension/workers/similarity.worker.js:283' — 'data: outputData, // 直接返回 Float32Array'`
+- `docs/CHINESE_AUDIT.md:1388` — `- 'app/chrome-extension/workers/similarity.worker.js:286' — 'transferList: [outputData.buffer], // 标记为可转移对象'`
+- `docs/CHINESE_AUDIT.md:1389` — `- 'app/chrome-extension/workers/similarity.worker.js:313' — '// 使用 Transferable Objects 优化数据传输'`
+- `docs/CHINESE_AUDIT.md:1390` — `- 'app/chrome-extension/workers/similarity.worker.js:327' — '// 使用 Transferable Objects 优化数据传输'`
+- `docs/CHINESE_AUDIT.md:1391` — `- 'app/chrome-extension/workers/similarity.worker.js:348' — '// 清理缓冲区，释放内存'`
+- `docs/CHINESE_AUDIT.md:1392` — `- 'app/chrome-extension/workers/similarity.worker.js:372' — '// 确保将错误作为普通对象发送，因为Error对象本身可能无法正确序列化'`
+- `docs/CHINESE_AUDIT.md:1393` — `- 'app/chrome-extension/workers/similarity.worker.js:375' — 'type: '${type}_error', // 如 'init_error' 或 'infer_error''`
+- `docs/CHINESE_AUDIT.md:1394` — `- 'app/chrome-extension/workers/similarity.worker.js:379' — 'stack: error.stack, // 可选，用于调试'`
+- `docs/CHINESE_AUDIT.md:1395` — `- 'app/chrome-extension/common/rr-v3-keepalive-protocol.ts:6' — '/** Keepalive Port 名称 */'`
+- `docs/CHINESE_AUDIT.md:1396` — `- 'app/chrome-extension/common/rr-v3-keepalive-protocol.ts:9' — '/** Keepalive 消息类型 */'`
+- `docs/CHINESE_AUDIT.md:1397` — `- 'app/chrome-extension/common/rr-v3-keepalive-protocol.ts:16' — '/** Keepalive 消息 */'`
+- `docs/CHINESE_AUDIT.md:1398` — `- 'app/chrome-extension/common/rr-v3-keepalive-protocol.ts:22' — '/** 默认心跳间隔（毫秒） - Offscreen 每隔这个间隔发送 ping */'`
+- `docs/CHINESE_AUDIT.md:1399` — `- 'app/chrome-extension/common/rr-v3-keepalive-protocol.ts:25' — '/** 最大心跳间隔（毫秒）- Chrome MV3 SW 约 30s 空闲后终止 */'`
+- `docs/CHINESE_AUDIT.md:1400` — `- 'app/chrome-extension/inject-scripts/element-marker.js:617' — '<h2 class="em-title">元素标注</h2>'`
+- `docs/CHINESE_AUDIT.md:1401` — `- 'app/chrome-extension/inject-scripts/element-marker.js:635' — '<button class="em-square-btn" id="__em_toggle_list" title="列表模式 - 批量标注相似元素 (仅支持CSS)">'`
+- `docs/CHINESE_AUDIT.md:1402` — `- 'app/chrome-extension/inject-scripts/element-marker.js:1111' — '// [继续下一部分...]'`
+- `docs/CHINESE_AUDIT.md:1403` — `- 'app/chrome-extension/inject-scripts/element-marker.js:2254' — 'message: '✓ 验证成功 (匹配 ${filteredMatches.length} 个元素)','`
+- `docs/CHINESE_AUDIT.md:1404` — `- 'app/chrome-extension/inject-scripts/element-marker.js:2262' — 'message: res?.tool?.error || '验证失败','`
+- `docs/CHINESE_AUDIT.md:1405` — `- 'app/chrome-extension/inject-scripts/element-marker.js:2279' — 'message: '错误: ${err.message}','`
+- `docs/CHINESE_AUDIT.md:1406` — `- 'app/chrome-extension/inject-scripts/element-marker.js:2403' — 'validation: { status: 'success', message: '✓ 已复制到剪贴板' },'`
+- `docs/CHINESE_AUDIT.md:1407` — `- 'app/chrome-extension/inject-scripts/recorder.js:205' — '<span id="__rr_badge" style="font-weight:600;">录制中</span>'`
+- `docs/CHINESE_AUDIT.md:1408` — `- 'app/chrome-extension/inject-scripts/recorder.js:207' — '<input id="__rr_hide_values" type="checkbox" style="vertical-align:middle;" />隐藏输入值'`
+- `docs/CHINESE_AUDIT.md:1409` — `- 'app/chrome-extension/inject-scripts/recorder.js:210' — '<input id="__rr_enable_highlight" type="checkbox" style="vertical-align:middle;" />高亮'`
+- `docs/CHINESE_AUDIT.md:1411` — `- 'app/chrome-extension/inject-scripts/recorder.js:213' — '<button id="__rr_pause" style="background:#fff; color:#111; border:none; border-radius:6px; padding:4px 8px; cursor:point`
+- `docs/CHINESE_AUDIT.md:1412` — `- 'app/chrome-extension/inject-scripts/recorder.js:214' — '<button id="__rr_stop" style="background:#111; color:#fff; border:none; border-radius:6px; padding:4px 8px; cursor:pointe`
+- `docs/CHINESE_AUDIT.md:1413` — `- 'app/chrome-extension/inject-scripts/recorder.js:235' — 'header.textContent = '已录制步骤';'`
+- `docs/CHINESE_AUDIT.md:1414` — `- 'app/chrome-extension/inject-scripts/recorder.js:268' — 'btnToggle.textContent = this._collapsed ? '展开' : '折叠';'`
+- `docs/CHINESE_AUDIT.md:1415` — `- 'app/chrome-extension/inject-scripts/recorder.js:304' — 'if (badge) badge.textContent = this.recorder.isPaused ? '已暂停' : '录制中';'`
+- `docs/CHINESE_AUDIT.md:1416` — `- 'app/chrome-extension/inject-scripts/recorder.js:305' — 'if (pauseBtn) pauseBtn.textContent = this.recorder.isPaused ? '继续' : '暂停';'`
+- `docs/CHINESE_AUDIT.md:1417` — `- 'app/chrome-extension/inject-scripts/recorder.js:424' — 'if (!step || typeof step !== 'object') return '未知步骤';'`
+- `docs/CHINESE_AUDIT.md:1418` — `- 'app/chrome-extension/inject-scripts/recorder.js:428' — 'return '${t === 'dblclick' ? '双击' : '点击'}: ${sel || '(document)'}';'`
+- `docs/CHINESE_AUDIT.md:1419` — `- 'app/chrome-extension/inject-scripts/recorder.js:433' — 'return '输入: ${sel} = ${shown}';'`
+- `docs/CHINESE_AUDIT.md:1420` — `- 'app/chrome-extension/inject-scripts/recorder.js:436' — 'const mode = step.mode === 'container' ? '容器' : '页面';'`
+- `docs/CHINESE_AUDIT.md:1421` — `- 'app/chrome-extension/inject-scripts/recorder.js:438' — 'return '滚动(${mode}): y=${off.y ?? 0}, x=${off.x ?? 0}';'`
+- `docs/CHINESE_AUDIT.md:1422` — `- 'app/chrome-extension/inject-scripts/recorder.js:440' — 'if (t === 'openTab') return '打开标签页: ${step.url || ''}';'`
+- `docs/CHINESE_AUDIT.md:1423` — `- 'app/chrome-extension/inject-scripts/recorder.js:441' — 'if (t === 'switchTab') return '切换标签页: 包含 ${step.urlContains || ''}';'`
+- `docs/CHINESE_AUDIT.md:1424` — `- 'app/chrome-extension/inject-scripts/recorder.js:443' — 'return '切换Frame: 包含 ${step.frame && step.frame.urlContains ? step.frame.urlContains : ''}';'`
+- `docs/CHINESE_AUDIT.md:1425` — `- 'app/chrome-extension/inject-scripts/recorder.js:444' — 'if (t === 'waitFor') return '等待: ${sel || step.until || ''}';'`
+- `docs/CHINESE_AUDIT.md:1426` — `- 'app/chrome-extension/inject-scripts/recorder.js:447' — 'return '步骤';'`
+- `docs/CHINESE_AUDIT.md:1427` — `- 'app/chrome-extension/inject-scripts/recorder.js:881' — 'name: '未命名录制','`
+- `docs/CHINESE_AUDIT.md:1428` — `- 'app/chrome-extension/inject-scripts/accessibility-tree-helper.js:794' — 'title.textContent = 'Record-Replay 运行日志';'`
+- `docs/CHINESE_AUDIT.md:1429` — `- 'app/chrome-extension/inject-scripts/accessibility-tree-helper.js:844' — 'tip.textContent = '点击选取元素（Esc 取消）';'`
+- `docs/CHINESE_AUDIT.md:1430` — `- 'app/chrome-extension/inject-scripts/accessibility-tree-helper.js:1382' — 'const promptText = '请输入参数 ${label} (${key})';'`
+- `docs/CHINESE_AUDIT.md:1431` — `- 'app/chrome-extension/inject-scripts/accessibility-tree-helper.js:1417' — 'title.textContent = '请输入回放参数';'`
+- `docs/CHINESE_AUDIT.md:1432` — `- 'app/chrome-extension/inject-scripts/accessibility-tree-helper.js:1424' — 'label.textContent = '${v.label || v.key}${v.sensitive ? ' (敏感)' : ''}';'`
+- `docs/CHINESE_AUDIT.md:1433` — `- 'app/chrome-extension/inject-scripts/accessibility-tree-helper.js:1450' — 'ok.textContent = '确定';'`
+- `docs/CHINESE_AUDIT.md:1434` — `- 'app/chrome-extension/inject-scripts/accessibility-tree-helper.js:1461' — 'cancel.textContent = '取消';'`
+- `docs/CHINESE_AUDIT.md:1435` — `- 'app/chrome-extension/inject-scripts/accessibility-tree-helper.js:1603' — '// 验证指纹：解析存储的指纹并与当前元素对比'`
+- `docs/CHINESE_AUDIT.md:1436` — `- 'app/chrome-extension/inject-scripts/accessibility-tree-helper.js:1607' — '// Tag 必须匹配'`
+- `docs/CHINESE_AUDIT.md:1437` — `- 'app/chrome-extension/inject-scripts/accessibility-tree-helper.js:1612' — '// 如果存储的指纹有 id，当前元素必须有相同的 id'`
+- `docs/CHINESE_AUDIT.md:1438` — `- 'app/chrome-extension/inject-scripts/network-helper.js:177' — '// 创建一个带超时的 fetch'`
+- `docs/CHINESE_AUDIT.md:1439` — `- 'app/chrome-extension/inject-scripts/network-helper.js:182' — '// 设置超时'`
+- `docs/CHINESE_AUDIT.md:1440` — `- 'app/chrome-extension/inject-scripts/network-helper.js:195' — '// 发送带超时的请求'`
+- `docs/CHINESE_AUDIT.md:1441` — `- 'app/chrome-extension/inject-scripts/web-fetcher-helper.js:168' — 'adWords: /^(ad(vertising|vertisement)?|pub(licité)?|werb(ung)?|广告|Реклама|Anuncio)$/iu,'`
+- `docs/CHINESE_AUDIT.md:1442` — `- 'app/chrome-extension/inject-scripts/web-fetcher-helper.js:169' — 'loadingWords: /^((loading|正在加载|Загрузка|chargement|cargando)(…|\.\.\.)?)$/iu,'`
+- `docs/CHINESE_AUDIT.md:1443` — `- 'app/chrome-extension/shared/selector/stability.ts:2' — '* Selector Stability - 选择器稳定性评估'`
+- `docs/CHINESE_AUDIT.md:1444` — `- 'app/chrome-extension/shared/selector/stability.ts:82' — '* 计算选择器稳定性评分'`
+- `docs/CHINESE_AUDIT.md:1445` — `- 'app/chrome-extension/shared/selector/stability.ts:149' — '* 为选择器候选添加稳定性评分'`
+- `docs/CHINESE_AUDIT.md:1446` — `- 'app/chrome-extension/shared/selector/stability.ts:174' — '* 比较两个选择器候选的优先级'`
+- `docs/CHINESE_AUDIT.md:1447` — `- 'app/chrome-extension/shared/selector/stability.ts:175' — '* 返回负数表示 a 优先，正数表示 b 优先'`
+- `docs/CHINESE_AUDIT.md:1448` — `- 'app/chrome-extension/shared/selector/stability.ts:178' — '// 1. 用户指定的权重优先'`
+- `docs/CHINESE_AUDIT.md:1449` — `- 'app/chrome-extension/shared/selector/stability.ts:183' — '// 2. 稳定性评分'`
+- `docs/CHINESE_AUDIT.md:1450` — `- 'app/chrome-extension/shared/selector/stability.ts:188' — '// 3. 类型优先级'`
+- `docs/CHINESE_AUDIT.md:1451` — `- 'app/chrome-extension/shared/selector/stability.ts:193' — '// 4. 长度（越短越好）'`
+- `docs/CHINESE_AUDIT.md:1452` — `- 'app/chrome-extension/shared/selector/fingerprint.ts:2' — '* Element Fingerprint - 元素指纹生成和验证'`
+- `docs/CHINESE_AUDIT.md:1453` — `- 'app/chrome-extension/shared/selector/fingerprint.ts:4' — '* 指纹用于元素的模糊匹配和验证，特别是在以下场景：'`
+- `docs/CHINESE_AUDIT.md:1454` — `- 'app/chrome-extension/shared/selector/fingerprint.ts:5' — '* - 选择器匹配到元素后，验证是否是期望的元素'`
+- `docs/CHINESE_AUDIT.md:1455` — `- 'app/chrome-extension/shared/selector/fingerprint.ts:6' — '* - HMR 后元素恢复'`
+- `docs/CHINESE_AUDIT.md:1456` — `- 'app/chrome-extension/shared/selector/fingerprint.ts:7' — '* - 防止"相同选择器不同元素"的误匹配'`
+- `docs/CHINESE_AUDIT.md:1457` — `- 'app/chrome-extension/shared/selector/fingerprint.ts:40' — '* 标准化文本内容：合并空白字符并截取'`
+- `docs/CHINESE_AUDIT.md:1458` — `- 'app/chrome-extension/shared/selector/fingerprint.ts:51' — '* 为 DOM 元素计算结构化指纹'`
+- `docs/CHINESE_AUDIT.md:1459` — `- 'app/chrome-extension/shared/selector/fingerprint.ts:53' — '* 指纹格式: 'tag|id=xxx|class=a.b.c|text=xxx''`
+- `docs/CHINESE_AUDIT.md:1460` — `- 'app/chrome-extension/shared/selector/fingerprint.ts:67' — '// 1. Tag name (必须)'`
+- `docs/CHINESE_AUDIT.md:1461` — `- 'app/chrome-extension/shared/selector/fingerprint.ts:71' — '// 2. ID (如果存在)'`
+- `docs/CHINESE_AUDIT.md:1462` — `- 'app/chrome-extension/shared/selector/fingerprint.ts:77' — '// 3. Class names (最多 maxClasses 个)'`
+- `docs/CHINESE_AUDIT.md:1463` — `- 'app/chrome-extension/shared/selector/fingerprint.ts:83' — '// 4. Text content hint (标准化后截取)'`
+- `docs/CHINESE_AUDIT.md:1464` — `- 'app/chrome-extension/shared/selector/fingerprint.ts:93' — '* 解析指纹字符串为结构化对象'`
+- `docs/CHINESE_AUDIT.md:1465` — `- 'app/chrome-extension/shared/selector/fingerprint.ts:123' — '* 验证元素是否匹配给定的指纹'`
+- `docs/CHINESE_AUDIT.md:1466` — `- 'app/chrome-extension/shared/selector/fingerprint.ts:125' — '* 验证规则：'`
+- `docs/CHINESE_AUDIT.md:1467` — `- 'app/chrome-extension/shared/selector/fingerprint.ts:126' — '* - tag 必须完全匹配'`
+- `docs/CHINESE_AUDIT.md:1468` — `- 'app/chrome-extension/shared/selector/fingerprint.ts:127' — '* - 如果存储的指纹有 id，当前元素的 id 必须匹配'`
+- `docs/CHINESE_AUDIT.md:1469` — `- 'app/chrome-extension/shared/selector/fingerprint.ts:128' — '* - class 和 text 不强制匹配（用于计算相似度）'`
+- `docs/CHINESE_AUDIT.md:1470` — `- 'app/chrome-extension/shared/selector/fingerprint.ts:133' — '* // ... 页面变化后'`
+- `docs/CHINESE_AUDIT.md:1471` — `- 'app/chrome-extension/shared/selector/fingerprint.ts:141' — '// Tag 必须匹配'`
+- `docs/CHINESE_AUDIT.md:1472` — `- 'app/chrome-extension/shared/selector/fingerprint.ts:146' — '// 如果存储的指纹有 id，当前元素必须有相同的 id'`
+- `docs/CHINESE_AUDIT.md:1473` — `- 'app/chrome-extension/shared/selector/fingerprint.ts:158' — '* 计算两个指纹之间的相似度'`
+- `docs/CHINESE_AUDIT.md:1474` — `- 'app/chrome-extension/shared/selector/fingerprint.ts:160' — '* @returns 相似度分数 0-1，1 表示完全匹配'`
+- `docs/CHINESE_AUDIT.md:1475` — `- 'app/chrome-extension/shared/selector/fingerprint.ts:166' — '*   // 高度相似，可能是同一个元素'`
+- `docs/CHINESE_AUDIT.md:1476` — `- 'app/chrome-extension/shared/selector/fingerprint.ts:177' — '// Tag 匹配 (权重 0.4)'`
+- `docs/CHINESE_AUDIT.md:1477` — `- 'app/chrome-extension/shared/selector/fingerprint.ts:183' — '// Tag 不匹配，直接返回 0'`
+- `docs/CHINESE_AUDIT.md:1478` — `- 'app/chrome-extension/shared/selector/fingerprint.ts:187' — '// ID 匹配 (权重 0.3)'`
+- `docs/CHINESE_AUDIT.md:1479` — `- 'app/chrome-extension/shared/selector/fingerprint.ts:196' — '// Class 匹配 (权重 0.2) - 使用 Jaccard 相似度'`
+- `docs/CHINESE_AUDIT.md:1480` — `- 'app/chrome-extension/shared/selector/fingerprint.ts:209' — '// Text 匹配 (权重 0.1) - 简单包含检查'`
+- `docs/CHINESE_AUDIT.md:1481` — `- 'app/chrome-extension/shared/selector/fingerprint.ts:214' — '// 检查是否有重叠'`
+- `docs/CHINESE_AUDIT.md:1482` — `- 'app/chrome-extension/shared/selector/fingerprint.ts:229' — '* 检查两个指纹是否表示同一个元素'`
+- `docs/CHINESE_AUDIT.md:1483` — `- 'app/chrome-extension/shared/selector/fingerprint.ts:231' — '* 基于相似度阈值判断，默认阈值 0.7'`
+- `docs/CHINESE_AUDIT.md:1484` — `- 'app/chrome-extension/shared/selector/generator.ts:2' — '* Selector Generator - 选择器生成器'`
+- `docs/CHINESE_AUDIT.md:1485` — `- 'app/chrome-extension/shared/selector/generator.ts:3' — '* 为 DOM 元素生成多个候选选择器'`
+- `docs/CHINESE_AUDIT.md:1486` — `- 'app/chrome-extension/shared/selector/generator.ts:44' — '* 标准化选择器生成选项'`
+- `docs/CHINESE_AUDIT.md:1487` — `- 'app/chrome-extension/shared/selector/generator.ts:62' — '* CSS 字符串转义'`
+- `docs/CHINESE_AUDIT.md:1488` — `- 'app/chrome-extension/shared/selector/generator.ts:152' — '* 为 DOM 元素生成选择器目标'`
+- `docs/CHINESE_AUDIT.md:1489` — `- 'app/chrome-extension/shared/selector/dom-path.ts:2' — '* DOM Path - DOM 路径计算和定位'`
+- `docs/CHINESE_AUDIT.md:1490` — `- 'app/chrome-extension/shared/selector/dom-path.ts:4' — '* DOM 路径是元素在 DOM 树中的索引路径，用于：'`
+- `docs/CHINESE_AUDIT.md:1491` — `- 'app/chrome-extension/shared/selector/dom-path.ts:5' — '* - 元素位置追踪'`
+- `docs/CHINESE_AUDIT.md:1492` — `- 'app/chrome-extension/shared/selector/dom-path.ts:6' — '* - 选择器失效后的快速恢复'`
+- `docs/CHINESE_AUDIT.md:1493` — `- 'app/chrome-extension/shared/selector/dom-path.ts:7' — '* - 元素比较和验证'`
+- `docs/CHINESE_AUDIT.md:1494` — `- 'app/chrome-extension/shared/selector/dom-path.ts:15' — '* DOM 路径：从根到目标元素的子元素索引数组'`
+- `docs/CHINESE_AUDIT.md:1495` — `- 'app/chrome-extension/shared/selector/dom-path.ts:19' — '* [0, 2, 1] 表示:'`
+- `docs/CHINESE_AUDIT.md:1496` — `- 'app/chrome-extension/shared/selector/dom-path.ts:23' — '*          └─ children[1]  <- 目标元素'`
+- `docs/CHINESE_AUDIT.md:1497` — `- 'app/chrome-extension/shared/selector/dom-path.ts:33' — '* 计算元素在 DOM 树中的路径'`
+- `docs/CHINESE_AUDIT.md:1498` — `- 'app/chrome-extension/shared/selector/dom-path.ts:35' — '* 从目标元素向上遍历到根节点（Document 或 ShadowRoot），'`
+- `docs/CHINESE_AUDIT.md:1499` — `- 'app/chrome-extension/shared/selector/dom-path.ts:36' — '* 记录每一层在父元素 children 中的索引。'`
+- `docs/CHINESE_AUDIT.md:1500` — `- 'app/chrome-extension/shared/selector/dom-path.ts:41' — '* // => [0, 2, 1] - 从 body/shadowRoot 开始的路径'`
+- `docs/CHINESE_AUDIT.md:1501` — `- 'app/chrome-extension/shared/selector/dom-path.ts:52' — '// 正常父元素'`
+- `docs/CHINESE_AUDIT.md:1502` — `- 'app/chrome-extension/shared/selector/dom-path.ts:62' — '// 检查是否是 ShadowRoot 或 Document 的直接子元素'`
+- `docs/CHINESE_AUDIT.md:1503` — `- 'app/chrome-extension/shared/selector/dom-path.ts:72' — '// 到达根节点，停止遍历'`
+- `docs/CHINESE_AUDIT.md:1504` — `- 'app/chrome-extension/shared/selector/dom-path.ts:80' — '* 根据 DOM 路径定位元素'`
+- `docs/CHINESE_AUDIT.md:1505` — `- 'app/chrome-extension/shared/selector/dom-path.ts:82' — '* @param root - 查询根节点（Document 或 ShadowRoot）'`
+- `docs/CHINESE_AUDIT.md:1506` — `- 'app/chrome-extension/shared/selector/dom-path.ts:83' — '* @param path - DOM 路径'`
+- `docs/CHINESE_AUDIT.md:1507` — `- 'app/chrome-extension/shared/selector/dom-path.ts:84' — '* @returns 找到的元素，如果路径无效则返回 null'`
+- `docs/CHINESE_AUDIT.md:1508` — `- 'app/chrome-extension/shared/selector/dom-path.ts:89' — '* // => 返回 body > children[0] > children[2] > children[1]'`
+- `docs/CHINESE_AUDIT.md:1509` — `- 'app/chrome-extension/shared/selector/dom-path.ts:108' — '* 比较两个 DOM 路径'`
+- `docs/CHINESE_AUDIT.md:1510` — `- 'app/chrome-extension/shared/selector/dom-path.ts:110' — '* @returns 包含是否相同和公共前缀长度的结果'`
+- `docs/CHINESE_AUDIT.md:1511` — `- 'app/chrome-extension/shared/selector/dom-path.ts:139' — '* 检查路径 A 是否是路径 B 的祖先'`
+- `docs/CHINESE_AUDIT.md:1512` — `- 'app/chrome-extension/shared/selector/dom-path.ts:162' — '* 获取从祖先路径到后代路径的相对路径'`
+- `docs/CHINESE_AUDIT.md:1513` — `- 'app/chrome-extension/shared/selector/locator.ts:2' — '* Selector Locator - 元素定位器'`
+- `docs/CHINESE_AUDIT.md:1514` — `- 'app/chrome-extension/shared/selector/locator.ts:3' — '* 使用选择器候选列表定位 DOM 元素'`
+- `docs/CHINESE_AUDIT.md:1515` — `- 'app/chrome-extension/shared/selector/locator.ts:20' — '// 消息类型定义'`
+- `docs/CHINESE_AUDIT.md:1516` — `- 'app/chrome-extension/shared/selector/locator.ts:62' — '// 传输层接口'`
+- `docs/CHINESE_AUDIT.md:1517` — `- 'app/chrome-extension/shared/selector/locator.ts:75' — '// 工具函数'`
+- `docs/CHINESE_AUDIT.md:1518` — `- 'app/chrome-extension/shared/selector/locator.ts:216' — '// SelectorLocator 类'`
+- `docs/CHINESE_AUDIT.md:1519` — `- 'app/chrome-extension/shared/selector/locator.ts:265' — '* 验证元素是否匹配给定的指纹'`
+- `docs/CHINESE_AUDIT.md:1520` — `- 'app/chrome-extension/shared/selector/locator.ts:290' — '* 定位元素'`
+- `docs/CHINESE_AUDIT.md:1521` — `- 'app/chrome-extension/shared/selector/locator.ts:300' — '// 提取指纹验证配置'`
+- `docs/CHINESE_AUDIT.md:1522` — `- 'app/chrome-extension/shared/selector/locator.ts:306' — '// 优先尝试 ref'`
+- `docs/CHINESE_AUDIT.md:1523` — `- 'app/chrome-extension/shared/selector/locator.ts:324' — '// 指纹验证：不匹配则跳过，继续尝试其他候选'`
+- `docs/CHINESE_AUDIT.md:1524` — `- 'app/chrome-extension/shared/selector/locator.ts:343' — '// 指纹不匹配，继续尝试候选选择器'`
+- `docs/CHINESE_AUDIT.md:1525` — `- 'app/chrome-extension/shared/selector/locator.ts:361' — '// 指纹验证'`
+- `docs/CHINESE_AUDIT.md:1526` — `- 'app/chrome-extension/shared/selector/locator.ts:518' — '// 工厂函数'`
+- `docs/CHINESE_AUDIT.md:1527` — `- 'app/chrome-extension/shared/selector/locator.ts:522' — '* 创建 Chrome 扩展的传输层'`
+- `docs/CHINESE_AUDIT.md:1528` — `- 'app/chrome-extension/shared/selector/locator.ts:540' — '* 创建 Chrome 扩展的选择器定位器'`
+- `docs/CHINESE_AUDIT.md:1529` — `- 'app/chrome-extension/shared/selector/strategies/css-path.ts:2' — '* CSS Path Strategy - 基于 DOM 路径的选择器策略'`
+- `docs/CHINESE_AUDIT.md:1530` — `- 'app/chrome-extension/shared/selector/strategies/css-path.ts:3' — '* 使用 nth-of-type 生成完整的 CSS 路径'`
+- `docs/CHINESE_AUDIT.md:1531` — `- 'app/chrome-extension/shared/selector/strategies/css-unique.ts:2' — '* CSS Unique Strategy - 基于唯一 ID 或 class 组合的选择器策略'`
+- `docs/CHINESE_AUDIT.md:1532` — `- 'app/chrome-extension/shared/selector/strategies/aria.ts:2' — '* ARIA Strategy - 基于无障碍属性的选择器策略'`
+- `docs/CHINESE_AUDIT.md:1533` — `- 'app/chrome-extension/shared/selector/strategies/aria.ts:3' — '* 使用 aria-label, role 等属性生成选择器'`
+- `docs/CHINESE_AUDIT.md:1534` — `- 'app/chrome-extension/tests/record-replay-v3/dom-trigger.test.ts:2' — '* @fileoverview DOM Trigger Handler 测试 (P4-06)'`
+- `docs/CHINESE_AUDIT.md:1535` — `- 'app/chrome-extension/tests/record-replay-v3/once-trigger.test.ts:3' — '* @description 测试 once 触发器的安装、卸载、触发和自动禁用行为'`
+- `docs/CHINESE_AUDIT.md:1536` — `- 'app/chrome-extension/tests/record-replay-v3/recovery.test.ts:2' — '* @fileoverview 崩溃恢复测试 (P3-06)'`
+- `docs/CHINESE_AUDIT.md:1537` — `- 'app/chrome-extension/tests/record-replay-v3/scheduler-integration.test.ts:2' — '* @fileoverview 并行调度集成测试 (P3-07)'`
+- `docs/CHINESE_AUDIT.md:1538` — `- 'app/chrome-extension/tests/record-replay-v3/manual-trigger.test.ts:2' — '* @fileoverview Manual Trigger Handler 测试 (P4-08)'`
+- `docs/CHINESE_AUDIT.md:1539` — `- 'app/chrome-extension/tests/record-replay-v3/v3-e2e-harness.ts:76' — '* E2E Harness 配置选项'`
+- `docs/CHINESE_AUDIT.md:1540` — `- 'app/chrome-extension/tests/record-replay-v3/v3-e2e-harness.ts:79' — '/** Owner ID（标识调度器实例） */'`
+- `docs/CHINESE_AUDIT.md:1541` — `- 'app/chrome-extension/tests/record-replay-v3/v3-e2e-harness.ts:81' — '/** 调度器配置覆盖 */'`
+- `docs/CHINESE_AUDIT.md:1542` — `- 'app/chrome-extension/tests/record-replay-v3/v3-e2e-harness.ts:83' — '/** 是否自动启动调度器（默认 true） */'`
+- `docs/CHINESE_AUDIT.md:1543` — `- 'app/chrome-extension/tests/record-replay-v3/v3-e2e-harness.ts:85' — '/** 时间源（用于测试注入） */'`
+- `docs/CHINESE_AUDIT.md:1544` — `- 'app/chrome-extension/tests/record-replay-v3/v3-e2e-harness.ts:87' — '/** 日志器 */'`
+- `docs/CHINESE_AUDIT.md:1545` — `- 'app/chrome-extension/tests/record-replay-v3/v3-e2e-harness.ts:92' — '* RPC 客户端接口'`
+- `docs/CHINESE_AUDIT.md:1546` — `- 'app/chrome-extension/tests/record-replay-v3/v3-e2e-harness.ts:95' — '/** 收到的所有消息 */'`
+- `docs/CHINESE_AUDIT.md:1547` — `- 'app/chrome-extension/tests/record-replay-v3/v3-e2e-harness.ts:97' — '/** 调用 RPC 方法 */'`
+- `docs/CHINESE_AUDIT.md:1548` — `- 'app/chrome-extension/tests/record-replay-v3/v3-e2e-harness.ts:99' — '/** 清空消息 */'`
+- `docs/CHINESE_AUDIT.md:1549` — `- 'app/chrome-extension/tests/record-replay-v3/v3-e2e-harness.ts:101' — '/** 获取流式推送的事件 */'`
+- `docs/CHINESE_AUDIT.md:1550` — `- 'app/chrome-extension/tests/record-replay-v3/v3-e2e-harness.ts:106' — '* E2E Harness 接口'`
+- `docs/CHINESE_AUDIT.md:1551` — `- 'app/chrome-extension/tests/record-replay-v3/v3-e2e-harness.ts:116' — '/** 创建 RPC 客户端 */'`
+- `docs/CHINESE_AUDIT.md:1552` — `- 'app/chrome-extension/tests/record-replay-v3/v3-e2e-harness.ts:119' — '/** 等待特定事件 */'`
+- `docs/CHINESE_AUDIT.md:1553` — `- 'app/chrome-extension/tests/record-replay-v3/v3-e2e-harness.ts:126' — '/** 等待 Run 到达终态 */'`
+- `docs/CHINESE_AUDIT.md:1554` — `- 'app/chrome-extension/tests/record-replay-v3/v3-e2e-harness.ts:129' — '/** 等待队列项被移除 */'`
+- `docs/CHINESE_AUDIT.md:1555` — `- 'app/chrome-extension/tests/record-replay-v3/v3-e2e-harness.ts:132' — '/** 列出 Run 的所有事件 */'`
+- `docs/CHINESE_AUDIT.md:1556` — `- 'app/chrome-extension/tests/record-replay-v3/v3-e2e-harness.ts:135' — '/** 销毁 harness，释放资源 */'`
+- `docs/CHINESE_AUDIT.md:1557` — `- 'app/chrome-extension/tests/record-replay-v3/v3-e2e-harness.ts:189' — '* 创建测试用 Node 定义'`
+- `docs/CHINESE_AUDIT.md:1558` — `- 'app/chrome-extension/tests/record-replay-v3/v3-e2e-harness.ts:190' — '* @description 一个简单的测试节点，支持成功/失败/延迟'`
+- `docs/CHINESE_AUDIT.md:1559` — `- 'app/chrome-extension/tests/record-replay-v3/v3-e2e-harness.ts:205' — '// 模拟延迟'`
+- `docs/CHINESE_AUDIT.md:1560` — `- 'app/chrome-extension/tests/record-replay-v3/v3-e2e-harness.ts:228' — '* 创建 V3 E2E 测试 harness'`
+- `docs/CHINESE_AUDIT.md:1561` — `- 'app/chrome-extension/tests/record-replay-v3/v3-e2e-harness.ts:229' — '* @description 组装完整的 V3 runtime 用于集成测试'`
+- `docs/CHINESE_AUDIT.md:1562` — `- 'app/chrome-extension/tests/record-replay-v3/v3-e2e-harness.ts:242' — '// 3) Plugins - 注册测试节点'`
+- `docs/CHINESE_AUDIT.md:1563` — `- 'app/chrome-extension/tests/record-replay-v3/v3-e2e-harness.ts:258' — '// 6) RunExecutor - 连接 scheduler 和 runner'`
+- `docs/CHINESE_AUDIT.md:1564` — `- 'app/chrome-extension/tests/record-replay-v3/v3-e2e-harness.ts:268' — '// 7) Scheduler 配置'`
+- `docs/CHINESE_AUDIT.md:1565` — `- 'app/chrome-extension/tests/record-replay-v3/v3-e2e-harness.ts:376' — '// Fast-path: 检查已持久化的事件'`
+- `docs/CHINESE_AUDIT.md:1566` — `- 'app/chrome-extension/tests/record-replay-v3/v3-e2e-harness.ts:409' — '// 先检查当前状态'`
+- `docs/CHINESE_AUDIT.md:1567` — `- 'app/chrome-extension/tests/record-replay-v3/v3-e2e-harness.ts:418' — '// 等待终态事件'`
+- `docs/CHINESE_AUDIT.md:1568` — `- 'app/chrome-extension/tests/record-replay-v3/v3-e2e-harness.ts:455' — '// 取消事件转发'`
+- `docs/CHINESE_AUDIT.md:1569` — `- 'app/chrome-extension/tests/record-replay-v3/v3-e2e-harness.ts:462' — '// 停止 scheduler'`
+- `docs/CHINESE_AUDIT.md:1570` — `- 'app/chrome-extension/tests/record-replay-v3/v3-e2e-harness.ts:469' — '// 释放 lease manager'`
+- `docs/CHINESE_AUDIT.md:1571` — `- 'app/chrome-extension/tests/record-replay-v3/v3-e2e-harness.ts:482' — '// 关闭 IDB 连接'`
+- `docs/CHINESE_AUDIT.md:1572` — `- 'app/chrome-extension/tests/record-replay-v3/v3-e2e-harness.ts:505' — '* 创建 E2E 测试用的 RunExecutor'`
+- `docs/CHINESE_AUDIT.md:1573` — `- 'app/chrome-extension/tests/record-replay-v3/v3-e2e-harness.ts:518' — '// 1. 获取 RunRecord'`
+- `docs/CHINESE_AUDIT.md:1574` — `- 'app/chrome-extension/tests/record-replay-v3/v3-e2e-harness.ts:525' — '// 2. 获取 Flow'`
+- `docs/CHINESE_AUDIT.md:1575` — `- 'app/chrome-extension/tests/record-replay-v3/v3-e2e-harness.ts:532' — '// 3. 同步 attempt/tabId 到 RunRecord'`
+- `docs/CHINESE_AUDIT.md:1576` — `- 'app/chrome-extension/tests/record-replay-v3/v3-e2e-harness.ts:544' — '// 4. 创建并运行 Runner'`
+- `docs/CHINESE_AUDIT.md:1577` — `- 'app/chrome-extension/tests/record-replay-v3/v3-e2e-harness.ts:563' — '* 将 Run 标记为失败'`
+- `docs/CHINESE_AUDIT.md:1578` — `- 'app/chrome-extension/tests/record-replay-v3/rpc-api.test.ts:895' — '// 符合 VariableDefinition 类型：name 必填，description/default/label 可选'`
+- `docs/CHINESE_AUDIT.md:1579` — `- 'app/chrome-extension/tests/record-replay-v3/rpc-api.test.ts:899' — '// 符合 FlowPolicy 类型'`
+- `docs/CHINESE_AUDIT.md:1580` — `- 'app/chrome-extension/tests/record-replay-v3/trigger-manager.test.ts:2' — '* @fileoverview TriggerManager 测试 (P4-02)'`
+- `docs/CHINESE_AUDIT.md:1581` — `- 'app/chrome-extension/tests/record-replay-v3/context-menu-trigger.test.ts:2' — '* @fileoverview ContextMenu Trigger Handler 测试 (P4-05)'`
+- `docs/CHINESE_AUDIT.md:1582` — `- 'app/chrome-extension/tests/record-replay-v3/command-trigger.test.ts:2' — '* @fileoverview Command Trigger Handler 测试 (P4-04)'`
+- `docs/CHINESE_AUDIT.md:1583` — `- 'app/chrome-extension/tests/record-replay-v3/cron-trigger.test.ts:2' — '* @fileoverview Cron Trigger Handler 测试 (P4-07)'`
+- `docs/CHINESE_AUDIT.md:1584` — `- 'app/chrome-extension/tests/record-replay-v3/interval-trigger.test.ts:3' — '* @description 测试 interval 触发器的安装、卸载和触发行为'`
+- `docs/CHINESE_AUDIT.md:1585` — `- 'app/chrome-extension/tests/record-replay-v3/triggers.test.ts:2' — '* @fileoverview 触发器测试 (P4-01)'`
+- `docs/CHINESE_AUDIT.md:1586` — `- 'app/chrome-extension/tests/record-replay-v3/v2-to-v3-conversion.test.ts:3' — '* @description 测试 V2→V3 转换逻辑，特别是 entryNodeId 计算'`
+- `docs/CHINESE_AUDIT.md:1587` — `- 'app/chrome-extension/tests/record-replay-v3/e2e.integration.test.ts:2' — '* @fileoverview Record-Replay V3 service-level E2E 集成测试'`
+- `docs/CHINESE_AUDIT.md:1588` — `- 'app/chrome-extension/tests/record-replay-v3/e2e.integration.test.ts:4' — '* 验证完整的 V3 流程：RPC → enqueue → schedule → run → complete'`
+- `docs/CHINESE_AUDIT.md:1589` — `- 'app/chrome-extension/tests/record-replay-v3/e2e.integration.test.ts:6' — '* 测试使用：'`
+- `docs/CHINESE_AUDIT.md:1590` — `- 'app/chrome-extension/tests/record-replay-v3/e2e.integration.test.ts:7' — '* - 真实 IndexedDB 存储（fake-indexeddb）'`
+- `docs/CHINESE_AUDIT.md:1591` — `- 'app/chrome-extension/tests/record-replay-v3/e2e.integration.test.ts:8' — '* - service-level RPC（直接调用内部 handler，避免 Port mock）'`
+- `docs/CHINESE_AUDIT.md:1592` — `- 'app/chrome-extension/tests/record-replay-v3/e2e.integration.test.ts:28' — '* 创建测试用 Flow'`
+- `docs/CHINESE_AUDIT.md:1593` — `- 'app/chrome-extension/tests/record-replay-v3/e2e.integration.test.ts:48' — '* 创建测试用 RunRecord'`
+- `docs/CHINESE_AUDIT.md:1594` — `- 'app/chrome-extension/tests/record-replay-v3/e2e.integration.test.ts:71' — '* 提取事件类型列表'`
+- `docs/CHINESE_AUDIT.md:1595` — `- 'app/chrome-extension/tests/record-replay-v3/e2e.integration.test.ts:98' — '// 准备 Flow'`
+- `docs/CHINESE_AUDIT.md:1596` — `- 'app/chrome-extension/tests/record-replay-v3/e2e.integration.test.ts:109' — '// 等待完成'`
+- `docs/CHINESE_AUDIT.md:1597` — `- 'app/chrome-extension/tests/record-replay-v3/e2e.integration.test.ts:113' — '// 等待队列项被移除'`
+- `docs/CHINESE_AUDIT.md:1598` — `- 'app/chrome-extension/tests/record-replay-v3/e2e.integration.test.ts:116' — '// 验证事件序列'`
+- `docs/CHINESE_AUDIT.md:1599` — `- 'app/chrome-extension/tests/record-replay-v3/e2e.integration.test.ts:127' — '// 验证事件顺序'`
+- `docs/CHINESE_AUDIT.md:1600` — `- 'app/chrome-extension/tests/record-replay-v3/e2e.integration.test.ts:159' — '// 订阅所有 Run'`
+- `docs/CHINESE_AUDIT.md:1601` — `- 'app/chrome-extension/tests/record-replay-v3/e2e.integration.test.ts:162' — '// 入队'`
+- `docs/CHINESE_AUDIT.md:1602` — `- 'app/chrome-extension/tests/record-replay-v3/e2e.integration.test.ts:170' — '// 验证流式推送的事件'`
+- `docs/CHINESE_AUDIT.md:1603` — `- 'app/chrome-extension/tests/record-replay-v3/e2e.integration.test.ts:185' — '// 先入队 run1'`
+- `docs/CHINESE_AUDIT.md:1604` — `- 'app/chrome-extension/tests/record-replay-v3/e2e.integration.test.ts:191' — '// 订阅只接收 runId1 的事件（但 runId1 已完成）'`
+- `docs/CHINESE_AUDIT.md:1605` — `- 'app/chrome-extension/tests/record-replay-v3/e2e.integration.test.ts:195' — '// 入队 run2'`
+- `docs/CHINESE_AUDIT.md:1606` — `- 'app/chrome-extension/tests/record-replay-v3/e2e.integration.test.ts:201' — '// 应该不收到 run2 的事件'`
+- `docs/CHINESE_AUDIT.md:1607` — `- 'app/chrome-extension/tests/record-replay-v3/e2e.integration.test.ts:212' — '// 入队时启用 pauseOnStart'`
+- `docs/CHINESE_AUDIT.md:1608` — `- 'app/chrome-extension/tests/record-replay-v3/e2e.integration.test.ts:218' — '// 等待 run.paused 事件'`
+- `docs/CHINESE_AUDIT.md:1609` — `- 'app/chrome-extension/tests/record-replay-v3/e2e.integration.test.ts:221' — '// 暂停 queue item'`
+- `docs/CHINESE_AUDIT.md:1610` — `- 'app/chrome-extension/tests/record-replay-v3/e2e.integration.test.ts:226' — '// 恢复'`
+- `docs/CHINESE_AUDIT.md:1611` — `- 'app/chrome-extension/tests/record-replay-v3/e2e.integration.test.ts:229' — '// 等待完成'`
+- `docs/CHINESE_AUDIT.md:1612` — `- 'app/chrome-extension/tests/record-replay-v3/e2e.integration.test.ts:246' — '// 先暂停 queue item'`
+- `docs/CHINESE_AUDIT.md:1613` — `- 'app/chrome-extension/tests/record-replay-v3/e2e.integration.test.ts:249' — '// 取消'`
+- `docs/CHINESE_AUDIT.md:1614` — `- 'app/chrome-extension/tests/record-replay-v3/e2e.integration.test.ts:258' — '// 创建一个新的 harness，不自动启动 scheduler'`
+- `docs/CHINESE_AUDIT.md:1615` — `- 'app/chrome-extension/tests/record-replay-v3/e2e.integration.test.ts:270' — '// 队列中应该有这个 item'`
+- `docs/CHINESE_AUDIT.md:1616` — `- 'app/chrome-extension/tests/record-replay-v3/e2e.integration.test.ts:274' — '// 取消'`
+- `docs/CHINESE_AUDIT.md:1617` — `- 'app/chrome-extension/tests/record-replay-v3/e2e.integration.test.ts:281' — '// Run 状态应该是 canceled'`
+- `docs/CHINESE_AUDIT.md:1618` — `- 'app/chrome-extension/tests/record-replay-v3/e2e.integration.test.ts:289' — '// 停止当前 harness，创建新的不启动 scheduler'`
+- `docs/CHINESE_AUDIT.md:1619` — `- 'app/chrome-extension/tests/record-replay-v3/e2e.integration.test.ts:300' — '// 创建 orphan 队列项（旧 owner 持有）'`
+- `docs/CHINESE_AUDIT.md:1620` — `- 'app/chrome-extension/tests/record-replay-v3/e2e.integration.test.ts:304' — '// 执行恢复'`
+- `docs/CHINESE_AUDIT.md:1621` — `- 'app/chrome-extension/tests/record-replay-v3/e2e.integration.test.ts:315' — '// 队列项应该回到 queued 状态'`
+- `docs/CHINESE_AUDIT.md:1622` — `- 'app/chrome-extension/tests/record-replay-v3/e2e.integration.test.ts:320' — '// 应该有 run.recovered 事件'`
+- `docs/CHINESE_AUDIT.md:1623` — `- 'app/chrome-extension/tests/record-replay-v3/e2e.integration.test.ts:324' — '// 启动 scheduler，Run 应该能继续执行'`
+- `docs/CHINESE_AUDIT.md:1624` — `- 'app/chrome-extension/tests/record-replay-v3/e2e.integration.test.ts:356' — '// 队列项应该仍是 paused，但 owner 换成新的'`
+- `docs/CHINESE_AUDIT.md:1625` — `- 'app/chrome-extension/tests/record-replay-v3/e2e.integration.test.ts:373' — '// 模拟崩溃场景：Run 完成但队列项未清理'`
+- `docs/CHINESE_AUDIT.md:1626` — `- 'app/chrome-extension/tests/record-replay-v3/e2e.integration.test.ts:387' — '// 队列应该为空'`
+- `docs/CHINESE_AUDIT.md:1627` — `- 'app/chrome-extension/tests/record-replay-v3/url-trigger.test.ts:2' — '* @fileoverview URL Trigger Handler 测试 (P4-03)'`
+- `docs/CHINESE_AUDIT.md:1628` — `- 'app/chrome-extension/tests/record-replay-v3/spec-smoke.test.ts:3' — '* @description 验证 V3 类型定义和常量可正常导入使用'`
+- `docs/CHINESE_AUDIT.md:1629` — `- 'app/chrome-extension/entrypoints/sidepanel/App.vue:52' — 'placeholder="搜索标注名称、选择器..."'`
+- `docs/CHINESE_AUDIT.md:1630` — `- 'app/chrome-extension/entrypoints/sidepanel/App.vue:69' — '<button class="em-add-btn" @click="openMarkerEditor()" title="新增标注">'`
+- `docs/CHINESE_AUDIT.md:1631` — `- 'app/chrome-extension/entrypoints/sidepanel/App.vue:83' — '<h3 class="em-modal-title">{{ editingMarkerId ? '编辑标注' : '新增标注' }}</h3>'`
+- `docs/CHINESE_AUDIT.md:1632` — `- 'app/chrome-extension/entrypoints/sidepanel/App.vue:96' — '<label class="em-field-label">名称</label>'`
+- `docs/CHINESE_AUDIT.md:1633` — `- 'app/chrome-extension/entrypoints/sidepanel/App.vue:100' — 'placeholder="例如: 登录按钮"'`
+- `docs/CHINESE_AUDIT.md:1634` — `- 'app/chrome-extension/entrypoints/sidepanel/App.vue:108' — '<label class="em-field-label">选择器类型</label>'`
+- `docs/CHINESE_AUDIT.md:1635` — `- 'app/chrome-extension/entrypoints/sidepanel/App.vue:117' — '<label class="em-field-label">匹配类型</label>'`
+- `docs/CHINESE_AUDIT.md:1636` — `- 'app/chrome-extension/entrypoints/sidepanel/App.vue:120' — '<option value="prefix">路径前缀</option>'`
+- `docs/CHINESE_AUDIT.md:1637` — `- 'app/chrome-extension/entrypoints/sidepanel/App.vue:121' — '<option value="exact">精确匹配</option>'`
+- `docs/CHINESE_AUDIT.md:1638` — `- 'app/chrome-extension/entrypoints/sidepanel/App.vue:122' — '<option value="host">域名</option>'`
+- `docs/CHINESE_AUDIT.md:1639` — `- 'app/chrome-extension/entrypoints/sidepanel/App.vue:130' — '<label class="em-field-label">选择器</label>'`
+- `docs/CHINESE_AUDIT.md:1640` — `- 'app/chrome-extension/entrypoints/sidepanel/App.vue:134' — 'placeholder="CSS 选择器或 XPath"'`
+- `docs/CHINESE_AUDIT.md:1641` — `- 'app/chrome-extension/entrypoints/sidepanel/App.vue:143' — '取消'`
+- `docs/CHINESE_AUDIT.md:1642` — `- 'app/chrome-extension/entrypoints/sidepanel/App.vue:146' — '{{ editingMarkerId ? '更新' : '保存' }}'`
+- `docs/CHINESE_AUDIT.md:1643` — `- 'app/chrome-extension/entrypoints/sidepanel/App.vue:159' — '筛选出 <strong>{{ filteredMarkers.length }}</strong> 个标注 （共'`
+- `docs/CHINESE_AUDIT.md:1644` — `- 'app/chrome-extension/entrypoints/sidepanel/App.vue:160' — '{{ markers.length }} 个，{{ groupedMarkers.length }} 个域名）'`
+- `docs/CHINESE_AUDIT.md:1645` — `- 'app/chrome-extension/entrypoints/sidepanel/App.vue:163' — '共 <strong>{{ markers.length }}</strong> 个标注，'`
+- `docs/CHINESE_AUDIT.md:1646` — `- 'app/chrome-extension/entrypoints/sidepanel/App.vue:164' — '<strong>{{ groupedMarkers.length }}</strong> 个域名'`
+- `docs/CHINESE_AUDIT.md:1647` — `- 'app/chrome-extension/entrypoints/sidepanel/App.vue:188' — '<span class="em-domain-count">{{ domainGroup.count }} 个标注</span>'`
+- `docs/CHINESE_AUDIT.md:1648` — `- 'app/chrome-extension/entrypoints/sidepanel/App.vue:214' — 'title="验证"'`
+- `docs/CHINESE_AUDIT.md:1649` — `- 'app/chrome-extension/entrypoints/sidepanel/App.vue:227' — 'title="编辑"'`
+- `docs/CHINESE_AUDIT.md:1650` — `- 'app/chrome-extension/entrypoints/sidepanel/App.vue:240' — 'title="删除"'`
+- `docs/CHINESE_AUDIT.md:1651` — `- 'app/chrome-extension/entrypoints/sidepanel/App.vue:271' — '<p>未找到匹配的标注</p>'`
+- `docs/CHINESE_AUDIT.md:1652` — `- 'app/chrome-extension/entrypoints/sidepanel/App.vue:273' — '清除搜索'`
+- `docs/CHINESE_AUDIT.md:1653` — `- 'app/chrome-extension/entrypoints/sidepanel/App.vue:279' — '<p>暂无标注元素</p>'`
+- `docs/CHINESE_AUDIT.md:1654` — `- 'app/chrome-extension/entrypoints/sidepanel/App.vue:281' — '新增标注'`
+- `docs/CHINESE_AUDIT.md:1655` — `- 'app/chrome-extension/entrypoints/sidepanel/App.vue:356' — 'const domain = marker.host || '(本地文件)';'`
+- `docs/CHINESE_AUDIT.md:1656` — `- 'app/chrome-extension/entrypoints/sidepanel/App.vue:357' — 'const fullUrl = marker.url || '(未知URL)';'`
+- `docs/CHINESE_AUDIT.md:1657` — `- 'app/chrome-extension/entrypoints/sidepanel/App.vue:440' — 'alert('V3 Trigger 管理尚未实现，暂时无法创建触发器');'`
+- `docs/CHINESE_AUDIT.md:1658` — `- 'app/chrome-extension/entrypoints/sidepanel/App.vue:445' — 'alert('V3 Trigger 管理尚未实现，暂时无法编辑触发器');'`
+- `docs/CHINESE_AUDIT.md:1659` — `- 'app/chrome-extension/entrypoints/sidepanel/App.vue:459' — 'if (!result) console.warn('回放失败');'`
+- `docs/CHINESE_AUDIT.md:1660` — `- 'app/chrome-extension/entrypoints/sidepanel/App.vue:465' — 'alert('V3 Builder 尚未实现，暂时无法编辑工作流');'`
+- `docs/CHINESE_AUDIT.md:1661` — `- 'app/chrome-extension/entrypoints/sidepanel/App.vue:471' — 'alert('V3 Builder 尚未实现，暂时无法创建工作流');'`
+- `docs/CHINESE_AUDIT.md:1662` — `- 'app/chrome-extension/entrypoints/sidepanel/App.vue:477' — 'const ok = confirm('确认删除该工作流？此操作不可恢复');'`
+- `docs/CHINESE_AUDIT.md:1663` — `- 'app/chrome-extension/entrypoints/sidepanel/App.vue:611' — 'const confirmed = confirm('确定要删除标注 "${marker.name}" 吗?');'`
+- `docs/CHINESE_AUDIT.md:1664` — `- 'app/chrome-extension/entrypoints/sidepanel/index.html:6' — '<title>工作流管理</title>'`
+- `docs/CHINESE_AUDIT.md:1665` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:1' — '# Property Panel UI 重构计划'`
+- `docs/CHINESE_AUDIT.md:1666` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:3' — '## 背景'`
+- `docs/CHINESE_AUDIT.md:1667` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:5' — '当前属性面板的 UI 实现与设计稿 'attr-ui.html' 存在较大差异。本文档详细规划了重构任务，按照优先级从高到低排列，目标是让属性面板的视觉效果和交互体验与设计稿一致。'`
+- `docs/CHINESE_AUDIT.md:1668` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:7' — '### 参考文件'`
+- `docs/CHINESE_AUDIT.md:1669` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:9' — '- **设计稿**：'/attr-ui.html''`
+- `docs/CHINESE_AUDIT.md:1670` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:10' — '- **当前样式**：'ui/shadow-host.ts''`
+- `docs/CHINESE_AUDIT.md:1671` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:11' — '- **面板结构**：'ui/property-panel/property-panel.ts''`
+- `docs/CHINESE_AUDIT.md:1672` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:12' — '- **控件组件**：'ui/property-panel/controls/*.ts''`
+- `docs/CHINESE_AUDIT.md:1673` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:16' — '## 前置任务（已完成）'`
+- `docs/CHINESE_AUDIT.md:1674` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:18' — '### 0.1 最小化 Bug 修复 ✅'`
+- `docs/CHINESE_AUDIT.md:1675` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:20' — '**问题**：toolbar 和属性面板最小化时，只是背景消失了，里面的内容实际上还在'`
+- `docs/CHINESE_AUDIT.md:1676` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:22' — '**根因**：CSS 中 'display: flex/inline-flex' 覆盖了 '[hidden]' 属性的默认 'display: none''`
+- `docs/CHINESE_AUDIT.md:1677` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:24' — '**解决方案**：'`
+- `docs/CHINESE_AUDIT.md:1678` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:26' — '- [x] 在 'shadow-host.ts' 末尾添加全局 '[hidden] { display: none !important; }' 规则'`
+- `docs/CHINESE_AUDIT.md:1679` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:28' — '### 0.2 输入框优化 ✅'`
+- `docs/CHINESE_AUDIT.md:1680` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:30' — '**问题**：'`
+- `docs/CHINESE_AUDIT.md:1681` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:32' — '1. 输入框显示 placeholder 而非真实值'`
+- `docs/CHINESE_AUDIT.md:1682` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:33' — '2. Number 类型输入框不支持键盘上下键调整'`
+- `docs/CHINESE_AUDIT.md:1683` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:35' — '**解决方案**：'`
+- `docs/CHINESE_AUDIT.md:1684` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:37' — '- [x] 创建 'ui/property-panel/controls/number-stepping.ts' 工具模块'`
+- `docs/CHINESE_AUDIT.md:1685` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:38' — '- 支持 ArrowUp/ArrowDown 键盘步进'`
+- `docs/CHINESE_AUDIT.md:1686` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:39' — '- 支持 Shift (10x)、Alt (0.1x) 修饰键'`
+- `docs/CHINESE_AUDIT.md:1687` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:40' — '- 支持多种 CSS 单位 (px, %, rem, em, vh, vw, vmin, vmax)'`
+- `docs/CHINESE_AUDIT.md:1688` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:41' — '- [x] 修改所有 control 显示真实值（inline 优先，fallback 到 computed）'`
+- `docs/CHINESE_AUDIT.md:1689` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:42' — '- [x] 为所有数值输入框添加 keyboard stepping 支持：'`
+- `docs/CHINESE_AUDIT.md:1690` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:52' — '## 阶段一：基础视觉系统对齐 ✅ 已完成'`
+- `docs/CHINESE_AUDIT.md:1691` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:54' — '### 1.1 颜色方案重构 ✅'`
+- `docs/CHINESE_AUDIT.md:1692` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:56' — '**目标**：将颜色系统从当前的灰色调整为设计稿的白底+灰输入框风格'`
+- `docs/CHINESE_AUDIT.md:1693` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:58' — '| 属性         | 旧值              | 新值                              | 状态 |'`
+- `docs/CHINESE_AUDIT.md:1694` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:60' — '| 面板背景     | '#f8f8f8'         | '#ffffff'                         | ✅   |'`
+- `docs/CHINESE_AUDIT.md:1695` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:61' — '| 输入框背景   | '#f0f0f0'         | '#f3f3f3'                         | ✅   |'`
+- `docs/CHINESE_AUDIT.md:1696` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:62' — '| 输入框 hover | '#e8e8e8' (bg)    | 'border #e0e0e0' (inset)          | ✅   |'`
+- `docs/CHINESE_AUDIT.md:1697` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:63' — '| 输入框 focus | 'box-shadow' 外圈 | 'inset 2px border #3b82f6' + 白底 | ✅   |'`
+- `docs/CHINESE_AUDIT.md:1698` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:64' — '| 边框色       | '#e8e8e8'         | '#e5e5e5'                         | ✅   |'`
+- `docs/CHINESE_AUDIT.md:1699` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:66' — '**完成的任务**：'`
+- `docs/CHINESE_AUDIT.md:1700` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:68' — '- [x] 更新 CSS 变量定义 ('shadow-host.ts:56-97')'`
+- `docs/CHINESE_AUDIT.md:1701` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:69' — '- [x] 修改输入框 hover/focus 样式为 inset border 模式'`
+- `docs/CHINESE_AUDIT.md:1702` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:70' — '- [x] 面板背景改为纯白'`
+- `docs/CHINESE_AUDIT.md:1703` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:72' — '### 1.2 字体与字号调整 ✅'`
+- `docs/CHINESE_AUDIT.md:1704` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:74' — '| 属性         | 旧值     | 新值                      | 状态 |'`
+- `docs/CHINESE_AUDIT.md:1705` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:76' — '| 面板基础字号 | '13px'   | '11px'                    | ✅   |'`
+- `docs/CHINESE_AUDIT.md:1706` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:77' — '| 标签字号     | '11px'   | '10px'                    | ✅   |'`
+- `docs/CHINESE_AUDIT.md:1707` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:78' — '| 输入框字号   | '12px'   | '11px'                    | ✅   |'`
+- `docs/CHINESE_AUDIT.md:1708` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:79' — '| 字体家族     | 系统字体 | Inter + 系统字体 fallback | ✅   |'`
+- `docs/CHINESE_AUDIT.md:1709` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:81' — '**完成的任务**：'`
+- `docs/CHINESE_AUDIT.md:1710` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:83' — '- [x] 添加 Inter 字体声明（使用系统字体 fallback）'`
+- `docs/CHINESE_AUDIT.md:1711` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:84' — '- [x] 调整面板、标签、输入框的字号'`
+- `docs/CHINESE_AUDIT.md:1712` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:85' — '- [x] 移除标签的大写样式'`
+- `docs/CHINESE_AUDIT.md:1713` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:87' — '### 1.3 间距与边距调整 ✅'`
+- `docs/CHINESE_AUDIT.md:1714` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:89' — '| 属性          | 旧值        | 新值       | 状态 |'`
+- `docs/CHINESE_AUDIT.md:1715` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:91' — '| 面板宽度      | '320px'     | '280px'    | ✅   |'`
+- `docs/CHINESE_AUDIT.md:1716` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:92' — '| Header 内边距 | '10px 14px' | '8px 12px' | ✅   |'`
+- `docs/CHINESE_AUDIT.md:1717` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:95' — '**完成的任务**：'`
+- `docs/CHINESE_AUDIT.md:1718` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:97' — '- [x] 调整 '.we-panel', '.we-prop-body', '.we-field-group' 的 padding/gap'`
+- `docs/CHINESE_AUDIT.md:1719` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:98' — '- [x] 调整 header 的 padding'`
+- `docs/CHINESE_AUDIT.md:1720` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:100' — '### 1.4 圆角与阴影 ✅'`
+- `docs/CHINESE_AUDIT.md:1721` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:102' — '| 属性       | 旧值        | 新值               | 状态 |'`
+- `docs/CHINESE_AUDIT.md:1722` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:104' — '| 面板阴影   | '0 1px 2px' | Tailwind shadow-xl | ✅   |'`
+- `docs/CHINESE_AUDIT.md:1723` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:105' — '| 输入框圆角 | '6px'       | '4px'              | ✅   |'`
+- `docs/CHINESE_AUDIT.md:1724` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:106' — '| Tab 阴影   | 无          | 'shadow-sm'        | ✅   |'`
+- `docs/CHINESE_AUDIT.md:1725` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:108' — '**完成的任务**：'`
+- `docs/CHINESE_AUDIT.md:1726` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:110' — '- [x] 增强面板阴影效果（双层阴影模拟 shadow-xl）'`
+- `docs/CHINESE_AUDIT.md:1727` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:111' — '- [x] 调整输入框圆角为 4px'`
+- `docs/CHINESE_AUDIT.md:1728` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:112' — '- [x] 为激活的 Tab 添加阴影'`
+- `docs/CHINESE_AUDIT.md:1729` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:114' — '### 1.5 Group/Section 样式重构 ✅'`
+- `docs/CHINESE_AUDIT.md:1730` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:116' — '| 属性         | 旧样式      | 新样式      | 状态 |'`
+- `docs/CHINESE_AUDIT.md:1731` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:118' — '| Group 边框   | 卡片边框    | 无边框      | ✅   |'`
+- `docs/CHINESE_AUDIT.md:1732` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:119' — '| Section 分隔 | 无          | 顶部分隔线  | ✅   |'`
+- `docs/CHINESE_AUDIT.md:1733` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:120' — '| Header 样式  | 粗体 + 大字 | 11px + #333 | ✅   |'`
+- `docs/CHINESE_AUDIT.md:1734` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:122' — '**完成的任务**：'`
+- `docs/CHINESE_AUDIT.md:1735` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:124' — '- [x] 移除 '.we-group' 的边框和背景'`
+- `docs/CHINESE_AUDIT.md:1736` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:125' — '- [x] 添加 Section 间的分隔线 ('border-top')'`
+- `docs/CHINESE_AUDIT.md:1737` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:126' — '- [x] 调整 Group header 样式'`
+- `docs/CHINESE_AUDIT.md:1738` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:130' — '## 阶段二：输入容器组件重构 ✅ 基础完成'`
+- `docs/CHINESE_AUDIT.md:1739` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:132' — '### 2.1 建立输入容器系统 ✅'`
+- `docs/CHINESE_AUDIT.md:1740` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:134' — '**背景**：设计稿的输入框不是单体 input，而是一个容器系统，支持：'`
+- `docs/CHINESE_AUDIT.md:1741` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:136' — '- 前缀（prefix）：标签、图标'`
+- `docs/CHINESE_AUDIT.md:1742` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:137' — '- 后缀（suffix）：单位、图标'`
+- `docs/CHINESE_AUDIT.md:1743` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:138' — '- 容器驱动的 hover/focus 样式'`
+- `docs/CHINESE_AUDIT.md:1744` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:140' — '**当前结构**：'`
+- `docs/CHINESE_AUDIT.md:1745` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:149' — '**目标结构**：'`
+- `docs/CHINESE_AUDIT.md:1746` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:155' — '<!-- 新增容器 -->'`
+- `docs/CHINESE_AUDIT.md:1747` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:157' — '<!-- 可选前缀 -->'`
+- `docs/CHINESE_AUDIT.md:1748` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:160' — '<!-- 可选后缀 -->'`
+- `docs/CHINESE_AUDIT.md:1749` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:165' — '**已完成**：'`
+- `docs/CHINESE_AUDIT.md:1750` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:167' — '- [x] 在 'shadow-host.ts' 中定义 '.we-input-container' 样式'`
+- `docs/CHINESE_AUDIT.md:1751` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:168' — '- [x] 定义 '.we-input-container__prefix' 和 '.we-input-container__suffix' 样式'`
+- `docs/CHINESE_AUDIT.md:1752` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:169' — '- [x] 创建 'ui/property-panel/components/input-container.ts' 组件'`
+- `docs/CHINESE_AUDIT.md:1753` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:170' — '- [x] 将 hover/focus 样式移到容器级别（使用 ':focus-within'）'`
+- `docs/CHINESE_AUDIT.md:1754` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:172' — '### 2.2 更新各 Control 使用新容器 ✅ 已完成'`
+- `docs/CHINESE_AUDIT.md:1755` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:174' — '**需要更新的控件**：'`
+- `docs/CHINESE_AUDIT.md:1756` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:176' — '- [x] 'size-control.ts' - Width/Height（2列布局 + W/H 前缀 + 动态单位后缀）'`
+- `docs/CHINESE_AUDIT.md:1757` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:177' — '- [x] 'spacing-control.ts' - Margin/Padding（重构为 2x2 网格 + 方向图标 + 动态单位后缀）'`
+- `docs/CHINESE_AUDIT.md:1758` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:178' — '- [x] 'position-control.ts' - Top/Right/Bottom/Left/Z-Index（T/R/B/L 前缀 + 动态单位后缀）'`
+- `docs/CHINESE_AUDIT.md:1759` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:179' — '- [x] 'layout-control.ts' - Gap（图标前缀 + 动态单位后缀）'`
+- `docs/CHINESE_AUDIT.md:1760` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:180' — '- [x] 'typography-control.ts' - Font Size/Line Height（动态单位后缀，line-height 智能显示）'`
+- `docs/CHINESE_AUDIT.md:1761` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:181' — '- [ ] 'appearance-control.ts' - Opacity/Border Radius/Border Width（待实施）'`
+- `docs/CHINESE_AUDIT.md:1762` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:183' — '**已完成的共享模块**：'`
+- `docs/CHINESE_AUDIT.md:1763` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:185' — '- [x] 创建 'css-helpers.ts' 共享模块（extractUnitSuffix, hasExplicitUnit, normalizeLength）'`
+- `docs/CHINESE_AUDIT.md:1764` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:186' — '- [x] 所有控件使用共享 helper，消除重复代码'`
+- `docs/CHINESE_AUDIT.md:1765` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:190' — '## 阶段三：Section 结构重构（待实施）'`
+- `docs/CHINESE_AUDIT.md:1766` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:192' — '### 3.1 Tab 信息架构调整'`
+- `docs/CHINESE_AUDIT.md:1767` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:194' — '**当前**：4 个 Tab（Design/CSS/Props/DOM）'`
+- `docs/CHINESE_AUDIT.md:1768` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:195' — '**设计稿**：2 个 Tab（Design/CSS）'`
+- `docs/CHINESE_AUDIT.md:1769` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:197' — '**方案选择**：'`
+- `docs/CHINESE_AUDIT.md:1770` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:199' — '- **方案 A**：保留 4 个 Tab，调整为溢出菜单'`
+- `docs/CHINESE_AUDIT.md:1771` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:200' — '- **方案 B**：将 Props/DOM 移到其他入口'`
+- `docs/CHINESE_AUDIT.md:1772` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:201' — '- **方案 C**：保持 4 个 Tab，调整样式适应'`
+- `docs/CHINESE_AUDIT.md:1773` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:203' — '**任务**：'`
+- `docs/CHINESE_AUDIT.md:1774` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:205' — '- [ ] 确定 Tab 数量的产品决策'`
+- `docs/CHINESE_AUDIT.md:1775` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:206' — '- [ ] 实现选定方案'`
+- `docs/CHINESE_AUDIT.md:1776` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:210' — '## 阶段四：功能组件实现（待实施）'`
+- `docs/CHINESE_AUDIT.md:1777` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:212' — '### 4.1 Flow 布局图标组 ✅ 已完成'`
+- `docs/CHINESE_AUDIT.md:1778` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:214' — '**设计稿位置**：'attr-ui.html:133-156''`
+- `docs/CHINESE_AUDIT.md:1779` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:215' — '**功能**：4 个图标按钮控制 'flex-direction''`
+- `docs/CHINESE_AUDIT.md:1780` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:224' — '**已完成**：'`
+- `docs/CHINESE_AUDIT.md:1781` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:226' — '- [x] 创建 'ui/property-panel/components/icon-button-group.ts' 通用组件'`
+- `docs/CHINESE_AUDIT.md:1782` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:227' — '- [x] 在 'shadow-host.ts' 中添加 '.we-icon-button-group' 样式'`
+- `docs/CHINESE_AUDIT.md:1783` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:228' — '- [x] 在 'layout-control.ts' 中用图标组替换 Direction select'`
+- `docs/CHINESE_AUDIT.md:1784` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:229' — '- [x] 添加对应的 SVG 箭头图标（row/column/row-reverse/column-reverse）'`
+- `docs/CHINESE_AUDIT.md:1785` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:231' — '### 4.2 Alignment 九宫格 ✅ 已完成'`
+- `docs/CHINESE_AUDIT.md:1786` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:233' — '**设计稿位置**：'attr-ui.html:166-208''`
+- `docs/CHINESE_AUDIT.md:1787` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:234' — '**功能**：3x3 网格控制 'justify-content' + 'align-items''`
+- `docs/CHINESE_AUDIT.md:1788` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:242' — '**已完成**：'`
+- `docs/CHINESE_AUDIT.md:1789` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:244' — '- [x] 创建 'ui/property-panel/components/alignment-grid.ts' 组件'`
+- `docs/CHINESE_AUDIT.md:1790` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:245' — '- [x] 在 'shadow-host.ts' 中添加 '.we-alignment-grid' 样式'`
+- `docs/CHINESE_AUDIT.md:1791` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:246' — '- [x] 替换 'layout-control.ts' 中的 Justify/Align select'`
+- `docs/CHINESE_AUDIT.md:1792` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:247' — '- [x] 使用 'beginMultiStyle' 实现两个属性的原子提交'`
+- `docs/CHINESE_AUDIT.md:1793` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:249' — '### 4.3 修复 Color Picker ✅ 部分完成'`
+- `docs/CHINESE_AUDIT.md:1794` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:251' — '**当前问题**：'`
+- `docs/CHINESE_AUDIT.md:1795` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:253' — '- 'showPicker()' 无 try/catch，可能抛错'`
+- `docs/CHINESE_AUDIT.md:1796` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:254' — '- alpha 通道被丢弃'`
+- `docs/CHINESE_AUDIT.md:1797` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:255' — '- token 值 'var(--xxx)' 显示不正确'`
+- `docs/CHINESE_AUDIT.md:1798` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:257' — '**已完成**：'`
+- `docs/CHINESE_AUDIT.md:1799` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:259' — '- [x] 添加 'showPicker()' 的错误处理（try/catch + fallback to click）'`
+- `docs/CHINESE_AUDIT.md:1800` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:260' — '- [x] 改进 'var()' 值的解析和显示（通过 placeholder 传入 computed value）'`
+- `docs/CHINESE_AUDIT.md:1801` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:262' — '**待实施**：'`
+- `docs/CHINESE_AUDIT.md:1802` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:264' — '- [ ] 支持 alpha 通道（RGBA/HSLA）- 需要引入第三方 color picker'`
+- `docs/CHINESE_AUDIT.md:1803` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:265' — '- [ ] 考虑引入第三方 color picker（如 '@simonwep/pickr'）'`
+- `docs/CHINESE_AUDIT.md:1804` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:269' — '## 阶段五：新功能模块（待实施）'`
+- `docs/CHINESE_AUDIT.md:1805` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:271' — '### 5.1 Shadow & Blur 控制'`
+- `docs/CHINESE_AUDIT.md:1806` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:273' — '**设计稿位置**：'attr-ui.html:396-425''`
+- `docs/CHINESE_AUDIT.md:1807` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:274' — '**功能**：'`
+- `docs/CHINESE_AUDIT.md:1808` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:276' — '- 启用/禁用开关'`
+- `docs/CHINESE_AUDIT.md:1809` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:277' — '- 类型选择（Drop shadow/Inner shadow/Layer Blur/Backdrop Blur）'`
+- `docs/CHINESE_AUDIT.md:1810` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:278' — '- 可见性控制'`
+- `docs/CHINESE_AUDIT.md:1811` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:280' — '**CSS 属性**：'`
+- `docs/CHINESE_AUDIT.md:1812` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:286' — '**任务**：'`
+- `docs/CHINESE_AUDIT.md:1813` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:288' — '- [x] 创建 'ui/property-panel/controls/effects-control.ts''`
+- `docs/CHINESE_AUDIT.md:1814` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:289' — '- [x] 实现 'box-shadow' 值解析和编辑'`
+- `docs/CHINESE_AUDIT.md:1815` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:290' — '- [x] 实现 'filter' 值解析和编辑'`
+- `docs/CHINESE_AUDIT.md:1816` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:291' — '- [x] 实现 'backdrop-filter' 值解析和编辑'`
+- `docs/CHINESE_AUDIT.md:1817` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:292' — '- [x] 添加类型切换 UI'`
+- `docs/CHINESE_AUDIT.md:1818` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:293' — '- [ ] 添加启用/禁用开关（可选，后续实现）'`
+- `docs/CHINESE_AUDIT.md:1819` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:295' — '### 5.2 渐变编辑器'`
+- `docs/CHINESE_AUDIT.md:1820` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:297' — '**设计稿位置**：'attr-ui.html:269-325''`
+- `docs/CHINESE_AUDIT.md:1821` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:298' — '**功能**：'`
+- `docs/CHINESE_AUDIT.md:1822` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:300' — '- Linear/Radial 渐变类型'`
+- `docs/CHINESE_AUDIT.md:1823` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:301' — '- 颜色停止点（color stops）'`
+- `docs/CHINESE_AUDIT.md:1824` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:302' — '- 角度控制'`
+- `docs/CHINESE_AUDIT.md:1825` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:303' — '- 翻转按钮'`
+- `docs/CHINESE_AUDIT.md:1826` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:305' — '**CSS 属性**：'`
+- `docs/CHINESE_AUDIT.md:1827` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:310' — '**任务**：'`
+- `docs/CHINESE_AUDIT.md:1828` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:312' — '- [x] 创建 'ui/property-panel/controls/gradient-control.ts''`
+- `docs/CHINESE_AUDIT.md:1829` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:313' — '- [x] 实现渐变值解析（CSS gradient → 数据结构）'`
+- `docs/CHINESE_AUDIT.md:1830` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:314' — '- [x] 实现角度/位置输入'`
+- `docs/CHINESE_AUDIT.md:1831` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:315' — '- [x] 实现 2 个颜色停止点的编辑'`
+- `docs/CHINESE_AUDIT.md:1832` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:316' — '- [x] 集成到 property-panel（作为独立的 Gradient 控制组）'`
+- `docs/CHINESE_AUDIT.md:1833` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:317' — '- [ ] 实现渐变预览 slider（可选，后续优化）'`
+- `docs/CHINESE_AUDIT.md:1834` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:318' — '- [ ] 实现 color stop 添加/删除/拖拽（可选，后续优化）'`
+- `docs/CHINESE_AUDIT.md:1835` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:320' — '### 5.3 Token/变量 Pill 显示'`
+- `docs/CHINESE_AUDIT.md:1836` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:322' — '**设计稿位置**：'attr-ui.html:374-384''`
+- `docs/CHINESE_AUDIT.md:1837` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:323' — '**功能**：当值为 CSS 变量时，显示为可点击的 pill'`
+- `docs/CHINESE_AUDIT.md:1838` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:325' — '**任务**：'`
+- `docs/CHINESE_AUDIT.md:1839` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:327' — '- [ ] 检测 'var(--xxx)' 值'`
+- `docs/CHINESE_AUDIT.md:1840` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:328' — '- [ ] 渲染为 pill 样式'`
+- `docs/CHINESE_AUDIT.md:1841` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:329' — '- [ ] 点击打开 token picker'`
+- `docs/CHINESE_AUDIT.md:1842` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:333' — '## 阶段六：代码质量（贯穿始终）'`
+- `docs/CHINESE_AUDIT.md:1843` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:335' — '### 6.1 样式系统统一'`
+- `docs/CHINESE_AUDIT.md:1844` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:337' — '- [x] 所有颜色使用 CSS 变量（阶段一完成）'`
+- `docs/CHINESE_AUDIT.md:1845` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:338' — '- [ ] 所有尺寸使用一致的 token'`
+- `docs/CHINESE_AUDIT.md:1846` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:339' — '- [ ] 移除 inline style，统一到 'shadow-host.ts''`
+- `docs/CHINESE_AUDIT.md:1847` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:341' — '### 6.2 组件复用'`
+- `docs/CHINESE_AUDIT.md:1848` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:343' — '- [ ] 提取通用组件到 'ui/property-panel/components/''`
+- `docs/CHINESE_AUDIT.md:1849` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:344' — '- [ ] 统一事件处理模式'`
+- `docs/CHINESE_AUDIT.md:1850` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:345' — '- [ ] 统一 disabled/enabled 状态处理'`
+- `docs/CHINESE_AUDIT.md:1851` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:347' — '### 6.3 类型安全'`
+- `docs/CHINESE_AUDIT.md:1852` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:349' — '- [ ] 所有组件使用 TypeScript 严格类型'`
+- `docs/CHINESE_AUDIT.md:1853` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:350' — '- [ ] 定义清晰的接口和类型'`
+- `docs/CHINESE_AUDIT.md:1854` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:351' — '- [ ] 移除 any 类型断言'`
+- `docs/CHINESE_AUDIT.md:1855` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:355' — '## 实施进度'`
+- `docs/CHINESE_AUDIT.md:1856` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:357' — '| 阶段 | 任务               | 状态    | 备注                                         |'`
+- `docs/CHINESE_AUDIT.md:1857` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:359' — '| 0.1  | 最小化 Bug 修复    | ✅      | 添加全局 '[hidden]' 规则                     |'`
+- `docs/CHINESE_AUDIT.md:1858` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:360' — '| 0.2  | 输入框优化         | ✅      | number-stepping + 真实值显示                 |'`
+- `docs/CHINESE_AUDIT.md:1859` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:361' — '| 1.1  | 颜色方案重构       | ✅      | 白底 + 灰输入框 + inset focus                |'`
+- `docs/CHINESE_AUDIT.md:1860` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:362' — '| 1.2  | 字体与字号调整     | ✅      | 11px 基准 + Inter 字体                       |'`
+- `docs/CHINESE_AUDIT.md:1861` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:363' — '| 1.3  | 间距与边距调整     | ✅      | 更紧凑的布局                                 |'`
+- `docs/CHINESE_AUDIT.md:1862` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:364' — '| 1.4  | 圆角与阴影         | ✅      | shadow-xl + 4px 圆角                         |'`
+- `docs/CHINESE_AUDIT.md:1863` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:365' — '| 1.5  | Group/Section 样式 | ✅      | 分隔线风格                                   |'`
+- `docs/CHINESE_AUDIT.md:1864` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:366' — '| 2.1  | 输入容器系统       | ✅      | 组件 + CSS 样式                              |'`
+- `docs/CHINESE_AUDIT.md:1865` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:367' — '| 2.2  | 更新 Controls      | ✅      | 所有主要控件已迁移，共享 css-helpers.ts      |'`
+- `docs/CHINESE_AUDIT.md:1866` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:368' — '| 3.1  | Tab 信息架构       | 待实施  |                                              |'`
+- `docs/CHINESE_AUDIT.md:1867` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:369' — '| 4.1  | Flow 图标组        | ✅      | icon-button-group.ts + 集成到 layout-control |'`
+- `docs/CHINESE_AUDIT.md:1868` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:370' — '| 4.2  | Alignment 九宫格   | ✅      | alignment-grid.ts + 集成到 layout-control    |'`
+- `docs/CHINESE_AUDIT.md:1869` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:371' — '| 4.3  | 修复 Color Picker  | ✅ 部分 | showPicker 异常处理 + var() 解析             |'`
+- `docs/CHINESE_AUDIT.md:1870` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:372' — '| 5.1  | Shadow & Blur      | ✅      | effects-control.ts + 集成到 property-panel   |'`
+- `docs/CHINESE_AUDIT.md:1871` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:373' — '| 5.2  | 渐变编辑器         | ✅      | gradient-control.ts + 集成到 property-panel  |'`
+- `docs/CHINESE_AUDIT.md:1872` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:374' — '| 5.3  | Token Pill         | 待实施  |                                              |'`
+- `docs/CHINESE_AUDIT.md:1873` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:378' — '## 注意事项'`
+- `docs/CHINESE_AUDIT.md:1874` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:380' — '1. **渐进式实施**：每个 Phase 完成后应可独立测试和发布'`
+- `docs/CHINESE_AUDIT.md:1875` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:381' — '2. **保持向后兼容**：重构过程中不应破坏现有功能'`
+- `docs/CHINESE_AUDIT.md:1876` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:382' — '3. **设计决策记录**：遇到设计稿与实际需求冲突时，记录决策原因'`
+- `docs/CHINESE_AUDIT.md:1877` — `- 'app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:383' — '4. **性能考虑**：新增组件需考虑渲染性能，避免不必要的 DOM 操作'`
+- `docs/CHINESE_AUDIT.md:1878` — `- 'app/chrome-extension/entrypoints/popup/main.ts:4' — '// 引入AgentChat主题样式'`
+- `docs/CHINESE_AUDIT.md:1879` — `- 'app/chrome-extension/entrypoints/popup/main.ts:9' — '// 在Vue挂载前预加载主题，防止主题闪烁'`
+- `docs/CHINESE_AUDIT.md:1880` — `- 'app/chrome-extension/entrypoints/popup/App.vue:3' — '<!-- 首页 -->'`
+- `docs/CHINESE_AUDIT.md:1881` — `- 'app/chrome-extension/entrypoints/popup/App.vue:11' — '<!-- 服务配置卡片 -->'`
+- `docs/CHINESE_AUDIT.md:1882` — `- 'app/chrome-extension/entrypoints/popup/App.vue:71' — '<!-- 快捷工具卡片 -->'`
+- `docs/CHINESE_AUDIT.md:1883` — `- 'app/chrome-extension/entrypoints/popup/App.vue:73' — '<h2 class="section-title">快捷工具</h2>'`
+- `docs/CHINESE_AUDIT.md:1884` — `- 'app/chrome-extension/entrypoints/popup/App.vue:78' — 'data-tooltip="录制功能开发中"'`
+- `docs/CHINESE_AUDIT.md:1885` — `- 'app/chrome-extension/entrypoints/popup/App.vue:85' — 'data-tooltip="录制功能开发中"'`
+- `docs/CHINESE_AUDIT.md:1886` — `- 'app/chrome-extension/entrypoints/popup/App.vue:92' — 'data-tooltip="开启页面编辑模式"'`
+- `docs/CHINESE_AUDIT.md:1887` — `- 'app/chrome-extension/entrypoints/popup/App.vue:99' — 'data-tooltip="开启元素标注"'`
+- `docs/CHINESE_AUDIT.md:1888` — `- 'app/chrome-extension/entrypoints/popup/App.vue:106' — '<!-- 管理入口卡片 -->'`
+- `docs/CHINESE_AUDIT.md:1889` — `- 'app/chrome-extension/entrypoints/popup/App.vue:108' — '<h2 class="section-title">管理入口</h2>'`
+- `docs/CHINESE_AUDIT.md:1890` — `- 'app/chrome-extension/entrypoints/popup/App.vue:128' — '<span class="entry-title">智能助手</span>'`
+- `docs/CHINESE_AUDIT.md:1891` — `- 'app/chrome-extension/entrypoints/popup/App.vue:129' — '<span class="entry-desc">AI Agent 对话与任务</span>'`
+- `docs/CHINESE_AUDIT.md:1892` — `- 'app/chrome-extension/entrypoints/popup/App.vue:149' — '工作流管理'`
+- `docs/CHINESE_AUDIT.md:1893` — `- 'app/chrome-extension/entrypoints/popup/App.vue:152' — '<span class="entry-desc">录制与回放自动化流程</span>'`
+- `docs/CHINESE_AUDIT.md:1894` — `- 'app/chrome-extension/entrypoints/popup/App.vue:184' — '<span class="entry-title">元素标注管理</span>'`
+- `docs/CHINESE_AUDIT.md:1895` — `- 'app/chrome-extension/entrypoints/popup/App.vue:185' — '<span class="entry-desc">管理页面元素标注</span>'`
+- `docs/CHINESE_AUDIT.md:1896` — `- 'app/chrome-extension/entrypoints/popup/App.vue:217' — '<span class="entry-title">本地模型</span>'`
+- `docs/CHINESE_AUDIT.md:1897` — `- 'app/chrome-extension/entrypoints/popup/App.vue:218' — '<span class="entry-desc">语义引擎与模型管理</span>'`
+- `docs/CHINESE_AUDIT.md:1898` — `- 'app/chrome-extension/entrypoints/popup/App.vue:265' — '<!-- 本地模型二级页面 -->'`
+- `docs/CHINESE_AUDIT.md:1899` — `- 'app/chrome-extension/entrypoints/popup/App.vue:313' — '<!-- 侧边栏承担工作流管理；编辑器在独立窗口中打开 -->'`
+- `docs/CHINESE_AUDIT.md:1900` — `- 'app/chrome-extension/entrypoints/popup/App.vue:328' — '<span>{{ comingSoonToast.feature }} 功能开发中，敬请期待</span>'`
+- `docs/CHINESE_AUDIT.md:1901` — `- 'app/chrome-extension/entrypoints/popup/App.vue:369' — '// AgentChat theme - 从preload中获取，保持与sidepanel一致'`
+- `docs/CHINESE_AUDIT.md:1902` — `- 'app/chrome-extension/entrypoints/popup/App.vue:372' — '// 当前视图状态：首页 or 本地模型页'`
+- `docs/CHINESE_AUDIT.md:1903` — `- 'app/chrome-extension/entrypoints/popup/App.vue:405' — '// Flow editor在独立窗口中打开；在popup不再展示繁杂列表'`
+- `docs/CHINESE_AUDIT.md:1904` — `- 'app/chrome-extension/entrypoints/popup/App.vue:433' — '// 运行记录与覆盖项在侧边栏页面查看'`
+- `docs/CHINESE_AUDIT.md:1905` — `- 'app/chrome-extension/entrypoints/popup/App.vue:435' — '// TODO: 录制回放功能开发中，暂时拦截'`
+- `docs/CHINESE_AUDIT.md:1906` — `- 'app/chrome-extension/entrypoints/popup/App.vue:436' — 'showComingSoonToast('录制回放');'`
+- `docs/CHINESE_AUDIT.md:1907` — `- 'app/chrome-extension/entrypoints/popup/App.vue:442' — '//     meta: { name: '新录制' },'`
+- `docs/CHINESE_AUDIT.md:1908` — `- 'app/chrome-extension/entrypoints/popup/App.vue:446' — '//   console.error('开始录制失败:', e);'`
+- `docs/CHINESE_AUDIT.md:1909` — `- 'app/chrome-extension/entrypoints/popup/App.vue:452' — '// TODO: 录制回放功能开发中，暂时拦截'`
+- `docs/CHINESE_AUDIT.md:1910` — `- 'app/chrome-extension/entrypoints/popup/App.vue:453' — 'showComingSoonToast('录制回放');'`
+- `docs/CHINESE_AUDIT.md:1911` — `- 'app/chrome-extension/entrypoints/popup/App.vue:463' — '//   console.error('停止录制失败:', e);'`
+- `docs/CHINESE_AUDIT.md:1912` — `- 'app/chrome-extension/entrypoints/popup/App.vue:488' — 'console.warn('回放失败');'`
+- `docs/CHINESE_AUDIT.md:1913` — `- 'app/chrome-extension/entrypoints/popup/App.vue:498' — '// 打开独立编辑窗口并定位失败节点'`
+- `docs/CHINESE_AUDIT.md:1914` — `- 'app/chrome-extension/entrypoints/popup/App.vue:509' — 'console.error('回放失败:', e);'`
+- `docs/CHINESE_AUDIT.md:1915` — `- 'app/chrome-extension/entrypoints/popup/App.vue:513' — '// 旧的“克隆/发布/定时/覆盖项”在侧边栏或编辑器中处理'`
+- `docs/CHINESE_AUDIT.md:1916` — `- 'app/chrome-extension/entrypoints/popup/App.vue:637' — '// TODO: 工作流功能开发中，暂时拦截'`
+- `docs/CHINESE_AUDIT.md:1917` — `- 'app/chrome-extension/entrypoints/popup/App.vue:638' — 'showComingSoonToast('工作流管理');'`
+- `docs/CHINESE_AUDIT.md:1918` — `- 'app/chrome-extension/entrypoints/popup/App.vue:656' — 'console.warn('切换网页编辑模式失败:', error);'`
+- `docs/CHINESE_AUDIT.md:1919` — `- 'app/chrome-extension/entrypoints/popup/App.vue:662' — '// 获取当前活动tab'`
+- `docs/CHINESE_AUDIT.md:1920` — `- 'app/chrome-extension/entrypoints/popup/App.vue:665' — 'console.warn('无法获取当前tab');'`
+- `docs/CHINESE_AUDIT.md:1921` — `- 'app/chrome-extension/entrypoints/popup/App.vue:669' — '// 向background发送消息，启动元素标注'`
+- `docs/CHINESE_AUDIT.md:1922` — `- 'app/chrome-extension/entrypoints/popup/App.vue:675' — 'console.warn('开启元素标注失败:', error);'`
+- `docs/CHINESE_AUDIT.md:1923` — `- 'app/chrome-extension/entrypoints/popup/App.vue:863' — 'console.error('保存语义引擎状态失败:', error);'`
+- `docs/CHINESE_AUDIT.md:1924` — `- 'app/chrome-extension/entrypoints/popup/App.vue:1000' — 'console.error('检测 Native 连接状态失败:', error);'`
+- `docs/CHINESE_AUDIT.md:1925` — `- 'app/chrome-extension/entrypoints/popup/App.vue:1019' — 'console.error('检测服务器状态失败:', error);'`
+- `docs/CHINESE_AUDIT.md:1926` — `- 'app/chrome-extension/entrypoints/popup/App.vue:1037' — 'console.error('刷新服务器状态失败:', error);'`
+- `docs/CHINESE_AUDIT.md:1927` — `- 'app/chrome-extension/entrypoints/popup/App.vue:1050' — 'console.error('复制配置失败:', error);'`
+- `docs/CHINESE_AUDIT.md:1928` — `- 'app/chrome-extension/entrypoints/popup/App.vue:1068' — 'console.log('尝试连接到端口: ${nativeServerPort.value}');'`
+- `docs/CHINESE_AUDIT.md:1929` — `- 'app/chrome-extension/entrypoints/popup/App.vue:1076' — 'console.log('连接成功:', response);'`
+- `docs/CHINESE_AUDIT.md:1930` — `- 'app/chrome-extension/entrypoints/popup/App.vue:1080' — 'console.error('连接失败:', response);'`
+- `docs/CHINESE_AUDIT.md:1931` — `- 'app/chrome-extension/entrypoints/popup/App.vue:1084' — 'console.error('测试连接失败:', error);'`
+- `docs/CHINESE_AUDIT.md:1932` — `- 'app/chrome-extension/entrypoints/popup/App.vue:1161' — 'console.error('❌ 加载模型偏好失败:', error);'`
+- `docs/CHINESE_AUDIT.md:1933` — `- 'app/chrome-extension/entrypoints/popup/App.vue:1170' — 'console.error('保存模型偏好失败:', error);'`
+- `docs/CHINESE_AUDIT.md:1934` — `- 'app/chrome-extension/entrypoints/popup/App.vue:1179' — 'console.error('保存版本偏好失败:', error);'`
+- `docs/CHINESE_AUDIT.md:1935` — `- 'app/chrome-extension/entrypoints/popup/App.vue:1187' — 'console.log('端口偏好已保存: ${port}');'`
+- `docs/CHINESE_AUDIT.md:1936` — `- 'app/chrome-extension/entrypoints/popup/App.vue:1189' — 'console.error('保存端口偏好失败:', error);'`
+- `docs/CHINESE_AUDIT.md:1937` — `- 'app/chrome-extension/entrypoints/popup/App.vue:1199' — 'console.log('端口偏好已加载: ${result.nativeServerPort}');'`
+- `docs/CHINESE_AUDIT.md:1938` — `- 'app/chrome-extension/entrypoints/popup/App.vue:1202' — 'console.error('加载端口偏好失败:', error);'`
+- `docs/CHINESE_AUDIT.md:1939` — `- 'app/chrome-extension/entrypoints/popup/App.vue:1217' — 'console.error('保存模型状态失败:', error);'`
+- `docs/CHINESE_AUDIT.md:1940` — `- 'app/chrome-extension/entrypoints/popup/App.vue:1257' — 'console.error('获取模型状态失败:', error);'`
+- `docs/CHINESE_AUDIT.md:1941` — `- 'app/chrome-extension/entrypoints/popup/App.vue:1443' — ''模型切换成功:','`
+- `docs/CHINESE_AUDIT.md:1942` — `- 'app/chrome-extension/entrypoints/popup/App.vue:1461' — 'console.error('模型切换失败:', error);'`
+- `docs/CHINESE_AUDIT.md:1943` — `- 'app/chrome-extension/entrypoints/popup/App.vue:1467' — 'const errorMessage = error?.message || '未知错误';'`
+- `docs/CHINESE_AUDIT.md:1944` — `- 'app/chrome-extension/entrypoints/popup/App.vue:1516' — '// 初始化主题'`
+- `docs/CHINESE_AUDIT.md:1945` — `- 'app/chrome-extension/entrypoints/popup/App.vue:2362' — '/* 快捷工具icon按钮样式 */'`
+- `docs/CHINESE_AUDIT.md:1946` — `- 'app/chrome-extension/entrypoints/popup/App.vue:2402' — '/* 录制按钮 - 红色 */'`
+- `docs/CHINESE_AUDIT.md:1947` — `- 'app/chrome-extension/entrypoints/popup/App.vue:2413' — '/* 录制中状态 - 脉冲动画 */'`
+- `docs/CHINESE_AUDIT.md:1948` — `- 'app/chrome-extension/entrypoints/popup/App.vue:2428' — '/* 停止按钮 - 深红色 */'`
+- `docs/CHINESE_AUDIT.md:1949` — `- 'app/chrome-extension/entrypoints/popup/App.vue:2439' — '/* 编辑按钮 - 蓝色 */'`
+- `docs/CHINESE_AUDIT.md:1950` — `- 'app/chrome-extension/entrypoints/popup/App.vue:2450' — '/* 标注按钮 - 绿色 */'`
+- `docs/CHINESE_AUDIT.md:1951` — `- 'app/chrome-extension/entrypoints/popup/App.vue:2461' — '/* Coming Soon 按钮样式 */'`
+- `docs/CHINESE_AUDIT.md:1952` — `- 'app/chrome-extension/entrypoints/popup/App.vue:2524' — '/* 首页视图 */'`
+- `docs/CHINESE_AUDIT.md:1953` — `- 'app/chrome-extension/entrypoints/popup/App.vue:2531' — '/* 管理入口卡片样式 */'`
+- `docs/CHINESE_AUDIT.md:1954` — `- 'app/chrome-extension/entrypoints/popup/style.css:1' — '/* 现代化全局样式 */'`
+- `docs/CHINESE_AUDIT.md:1955` — `- 'app/chrome-extension/entrypoints/popup/style.css:3' — '/* 字体系统 */'`
+- `docs/CHINESE_AUDIT.md:1956` — `- 'app/chrome-extension/entrypoints/popup/style.css:9' — '/* 颜色系统 */'`
+- `docs/CHINESE_AUDIT.md:1957` — `- 'app/chrome-extension/entrypoints/popup/style.css:37' — '/* 间距系统 */'`
+- `docs/CHINESE_AUDIT.md:1958` — `- 'app/chrome-extension/entrypoints/popup/style.css:46' — '/* 圆角系统 */'`
+- `docs/CHINESE_AUDIT.md:1959` — `- 'app/chrome-extension/entrypoints/popup/style.css:53' — '/* 动画 */'`
+- `docs/CHINESE_AUDIT.md:1960` — `- 'app/chrome-extension/entrypoints/popup/style.css:58' — '/* 字体渲染优化 */'`
+- `docs/CHINESE_AUDIT.md:1961` — `- 'app/chrome-extension/entrypoints/popup/style.css:66' — '/* 重置样式 */'`
+- `docs/CHINESE_AUDIT.md:1962` — `- 'app/chrome-extension/entrypoints/popup/style.css:92' — '/* 链接样式 */'`
+- `docs/CHINESE_AUDIT.md:1963` — `- 'app/chrome-extension/entrypoints/popup/style.css:103' — '/* 按钮基础样式重置 */'`
+- `docs/CHINESE_AUDIT.md:1964` — `- 'app/chrome-extension/entrypoints/popup/style.css:119' — '/* 输入框基础样式 */'`
+- `docs/CHINESE_AUDIT.md:1965` — `- 'app/chrome-extension/entrypoints/popup/style.css:142' — '/* 滚动条样式 */'`
+- `docs/CHINESE_AUDIT.md:1966` — `- 'app/chrome-extension/entrypoints/popup/style.css:163' — '/* 选择文本样式 */'`
+- `docs/CHINESE_AUDIT.md:1967` — `- 'app/chrome-extension/entrypoints/popup/style.css:169' — '/* 焦点可见性 */'`
+- `docs/CHINESE_AUDIT.md:1968` — `- 'app/chrome-extension/entrypoints/popup/style.css:175' — '/* 动画关键帧 */'`
+- `docs/CHINESE_AUDIT.md:1969` — `- 'app/chrome-extension/entrypoints/popup/style.css:218' — '/* 响应式断点 */'`
+- `docs/CHINESE_AUDIT.md:1970` — `- 'app/chrome-extension/entrypoints/popup/style.css:231' — '/* 高对比度模式支持 */'`
+- `docs/CHINESE_AUDIT.md:1971` — `- 'app/chrome-extension/entrypoints/popup/style.css:239' — '/* 减少动画偏好 */'`
+- `docs/CHINESE_AUDIT.md:1972` — `- 'app/chrome-extension/entrypoints/builder/App.vue:5' — '<span>已应用回退建议：提升 {{ fallbackNotice.type }} 优先级</span>'`
+- `docs/CHINESE_AUDIT.md:1973` — `- 'app/chrome-extension/entrypoints/builder/App.vue:6' — '<button class="mini" @click="undoFallbackPromotion">撤销</button>'`
+- `docs/CHINESE_AUDIT.md:1974` — `- 'app/chrome-extension/entrypoints/builder/App.vue:29' — '<span class="tip">工作流可视化编排</span>'`
+- `docs/CHINESE_AUDIT.md:1975` — `- 'app/chrome-extension/entrypoints/builder/App.vue:32' — '<button class="top-btn" @click="exportFlow" title="导出 JSON">'`
+- `docs/CHINESE_AUDIT.md:1976` — `- 'app/chrome-extension/entrypoints/builder/App.vue:43' — '导出'`
+- `docs/CHINESE_AUDIT.md:1977` — `- 'app/chrome-extension/entrypoints/builder/App.vue:45' — '<label class="top-btn import" title="导入 JSON">'`
+- `docs/CHINESE_AUDIT.md:1978` — `- 'app/chrome-extension/entrypoints/builder/App.vue:56' — '导入'`
+- `docs/CHINESE_AUDIT.md:1979` — `- 'app/chrome-extension/entrypoints/builder/App.vue:59' — '<button class="top-btn" @click="openRename" title="重命名工作流">'`
+- `docs/CHINESE_AUDIT.md:1980` — `- 'app/chrome-extension/entrypoints/builder/App.vue:77' — 'title="管理触发器"'`
+- `docs/CHINESE_AUDIT.md:1981` — `- 'app/chrome-extension/entrypoints/builder/App.vue:96' — 'title="从选中节点回放"'`
+- `docs/CHINESE_AUDIT.md:1982` — `- 'app/chrome-extension/entrypoints/builder/App.vue:108' — '从选中运行'`
+- `docs/CHINESE_AUDIT.md:1983` — `- 'app/chrome-extension/entrypoints/builder/App.vue:110' — '<button class="top-btn primary" @click="runAll" title="从头回放整流">'`
+- `docs/CHINESE_AUDIT.md:1984` — `- 'app/chrome-extension/entrypoints/builder/App.vue:121' — '运行'`
+- `docs/CHINESE_AUDIT.md:1985` — `- 'app/chrome-extension/entrypoints/builder/App.vue:139' — '保存'`
+- `docs/CHINESE_AUDIT.md:1986` — `- 'app/chrome-extension/entrypoints/builder/App.vue:184' — '<button class="toolbar-btn" @click="store.undo" title="撤销 (⌘/Ctrl+Z)">'`
+- `docs/CHINESE_AUDIT.md:1987` — `- 'app/chrome-extension/entrypoints/builder/App.vue:196' — '<button class="toolbar-btn" @click="store.redo" title="重做 (⌘/Ctrl+Shift+Z)">'`
+- `docs/CHINESE_AUDIT.md:1988` — `- 'app/chrome-extension/entrypoints/builder/App.vue:209' — '<button class="toolbar-btn" @click="store.layoutAuto" title="自动排版">'`
+- `docs/CHINESE_AUDIT.md:1989` — `- 'app/chrome-extension/entrypoints/builder/App.vue:224' — '<button class="toolbar-btn" @click="fitAll" title="自适应视图">'`
+- `docs/CHINESE_AUDIT.md:1990` — `- 'app/chrome-extension/entrypoints/builder/App.vue:251' — '<div class="title">重命名工作流</div>'`
+- `docs/CHINESE_AUDIT.md:1991` — `- 'app/chrome-extension/entrypoints/builder/App.vue:256' — '<label>名称</label>'`
+- `docs/CHINESE_AUDIT.md:1992` — `- 'app/chrome-extension/entrypoints/builder/App.vue:257' — '<input v-model="renameName" placeholder="工作流名称" />'`
+- `docs/CHINESE_AUDIT.md:1993` — `- 'app/chrome-extension/entrypoints/builder/App.vue:260' — '<label>描述</label>'`
+- `docs/CHINESE_AUDIT.md:1994` — `- 'app/chrome-extension/entrypoints/builder/App.vue:261' — '<textarea v-model="renameDesc" placeholder="可选描述"></textarea>'`
+- `docs/CHINESE_AUDIT.md:1995` — `- 'app/chrome-extension/entrypoints/builder/App.vue:265' — '<button class="primary" @click="applyRename">保存</button>'`
+- `docs/CHINESE_AUDIT.md:1996` — `- 'app/chrome-extension/entrypoints/builder/App.vue:299' — 'const title = ref('工作流编辑器');'`
+- `docs/CHINESE_AUDIT.md:1997` — `- 'app/chrome-extension/entrypoints/builder/App.vue:362' — 'title.value = '编辑：${flowV2.name || flowV2.id}';'`
+- `docs/CHINESE_AUDIT.md:1998` — `- 'app/chrome-extension/entrypoints/builder/App.vue:375' — 'pushToast('工作流 "${q.flowId}" 未找到，已创建新工作流', 'warn');'`
+- `docs/CHINESE_AUDIT.md:1999` — `- 'app/chrome-extension/entrypoints/builder/App.vue:379' — 'pushToast('加载工作流失败：${e instanceof Error ? e.message : String(e)}', 'error');'`
+- `docs/CHINESE_AUDIT.md:2000` — `- 'app/chrome-extension/entrypoints/builder/App.vue:388' — '* 初始化一个空的工作流'`
+- `docs/CHINESE_AUDIT.md:2001` — `- 'app/chrome-extension/entrypoints/builder/App.vue:394' — 'name: '新建工作流','`
+- `docs/CHINESE_AUDIT.md:2002` — `- 'app/chrome-extension/entrypoints/builder/App.vue:404' — 'title.value = '新建工作流';'`
+- `docs/CHINESE_AUDIT.md:2003` — `- 'app/chrome-extension/entrypoints/builder/App.vue:479' — '* 保存 Flow 到 V3 RPC'`
+- `docs/CHINESE_AUDIT.md:2004` — `- 'app/chrome-extension/entrypoints/builder/App.vue:480' — '* @returns 保存成功返回 FlowV3，失败返回 null'`
+- `docs/CHINESE_AUDIT.md:2005` — `- 'app/chrome-extension/entrypoints/builder/App.vue:514' — 'pushToast('保存失败：${e instanceof Error ? e.message : String(e)}', 'error');'`
+- `docs/CHINESE_AUDIT.md:2006` — `- 'app/chrome-extension/entrypoints/builder/App.vue:530' — '* 将 V2 schedule 配置转换为 cron 表达式'`
+- `docs/CHINESE_AUDIT.md:2007` — `- 'app/chrome-extension/entrypoints/builder/App.vue:531' — '* @returns cron 表达式或 null（如果无法转换）'`
+- `docs/CHINESE_AUDIT.md:2008` — `- 'app/chrome-extension/entrypoints/builder/App.vue:558' — '// V3 cron 不支持 'once' 一次性定时'`
+- `docs/CHINESE_AUDIT.md:2009` — `- 'app/chrome-extension/entrypoints/builder/App.vue:563' — '* 从 trigger 节点配置同步触发器到 V3 存储'`
+- `docs/CHINESE_AUDIT.md:2010` — `- 'app/chrome-extension/entrypoints/builder/App.vue:564' — '* @description V2 schedules 会转换为 V3 cron triggers'`
+- `docs/CHINESE_AUDIT.md:2011` — `- 'app/chrome-extension/entrypoints/builder/App.vue:634' — ''节点 ${n.id} 的定时 #${i + 1}: V3 暂不支持一次性定时（once），已跳过','`
+- `docs/CHINESE_AUDIT.md:2012` — `- 'app/chrome-extension/entrypoints/builder/App.vue:639' — ''节点 ${n.id} 的定时 #${i + 1}: 无法转换为 cron（type=${scheduleType}），已跳过','`
+- `docs/CHINESE_AUDIT.md:2013` — `- 'app/chrome-extension/entrypoints/builder/App.vue:713' — 'pushToast('导出失败：${e instanceof Error ? e.message : String(e)}', 'error');'`
+- `docs/CHINESE_AUDIT.md:2014` — `- 'app/chrome-extension/entrypoints/builder/App.vue:728' — 'pushToast('导入失败：未找到工作流数据', 'error');'`
+- `docs/CHINESE_AUDIT.md:2015` — `- 'app/chrome-extension/entrypoints/builder/App.vue:744' — 'title.value = '编辑：${flowV2.name || flowV2.id}';'`
+- `docs/CHINESE_AUDIT.md:2016` — `- 'app/chrome-extension/entrypoints/builder/App.vue:762' — 'title.value = '编辑：${store.flowLocal.name || store.flowLocal.id}';'`
+- `docs/CHINESE_AUDIT.md:2017` — `- 'app/chrome-extension/entrypoints/builder/App.vue:766' — 'pushToast('导入失败：${e instanceof Error ? e.message : String(e)}', 'error');'`
+- `docs/CHINESE_AUDIT.md:2018` — `- 'app/chrome-extension/entrypoints/builder/App.vue:790' — 'pushToast('运行失败：${e instanceof Error ? e.message : String(e)}', 'error');'`
+- `docs/CHINESE_AUDIT.md:2019` — `- 'app/chrome-extension/entrypoints/builder/App.vue:804' — 'pushToast('运行失败：${e instanceof Error ? e.message : String(e)}', 'error');'`
+- `docs/CHINESE_AUDIT.md:2020` — `- 'app/chrome-extension/entrypoints/builder/App.vue:852' — 'saveState.value === 'saving' ? '保存中…' : saveState.value === 'saved' ? '已保存' : '','`
+- `docs/CHINESE_AUDIT.md:2021` — `- 'app/chrome-extension/entrypoints/builder/index.html:6' — '<title>工作流编辑器</title>'`
+- `docs/CHINESE_AUDIT.md:2022` — `- 'app/chrome-extension/entrypoints/offscreen/main.ts:11' — '// 初始化 RR V3 Keepalive'`
+- `docs/CHINESE_AUDIT.md:2023` — `- 'app/chrome-extension/entrypoints/offscreen/main.ts:290' — 'resolve(); // 不阻塞其他数据库的清理'`
+- `docs/CHINESE_AUDIT.md:2024` — `- 'app/chrome-extension/entrypoints/offscreen/main.ts:294' — 'resolve(); // 不阻塞其他数据库的清理'`
+- `docs/CHINESE_AUDIT.md:2025` — `- 'app/chrome-extension/entrypoints/shared/utils/rr-flow-convert.ts:2' — '* @fileoverview V2/V3 Flow 双向转换工具'`
+- `docs/CHINESE_AUDIT.md:2026` — `- 'app/chrome-extension/entrypoints/shared/utils/rr-flow-convert.ts:3' — '* @description 桥接 Builder V2 Flow 类型与 V3 RPC FlowV3 类型'`
+- `docs/CHINESE_AUDIT.md:2027` — `- 'app/chrome-extension/entrypoints/shared/utils/rr-flow-convert.ts:5' — '* 设计说明:'`
+- `docs/CHINESE_AUDIT.md:2028` — `- 'app/chrome-extension/entrypoints/shared/utils/rr-flow-convert.ts:6' — '* - Builder store 目前仍使用 V2 类型 (type, version, steps)'`
+- `docs/CHINESE_AUDIT.md:2029` — `- 'app/chrome-extension/entrypoints/shared/utils/rr-flow-convert.ts:7' — '* - RPC 层使用 V3 类型 (kind, schemaVersion, entryNodeId)'`
+- `docs/CHINESE_AUDIT.md:2030` — `- 'app/chrome-extension/entrypoints/shared/utils/rr-flow-convert.ts:8' — '* - 本模块提供 UI 层的类型转换，封装底层转换器'`
+- `docs/CHINESE_AUDIT.md:2031` — `- 'app/chrome-extension/entrypoints/shared/utils/rr-flow-convert.ts:28' — '* 将 V2 Flow 转换为 V3 格式，用于 RPC 保存'`
+- `docs/CHINESE_AUDIT.md:2032` — `- 'app/chrome-extension/entrypoints/shared/utils/rr-flow-convert.ts:29' — '* @param flowV2 Builder store 中的 V2 Flow'`
+- `docs/CHINESE_AUDIT.md:2033` — `- 'app/chrome-extension/entrypoints/shared/utils/rr-flow-convert.ts:30' — '* @returns V3 Flow 和警告信息'`
+- `docs/CHINESE_AUDIT.md:2034` — `- 'app/chrome-extension/entrypoints/shared/utils/rr-flow-convert.ts:31' — '* @throws 转换失败时抛出错误'`
+- `docs/CHINESE_AUDIT.md:2035` — `- 'app/chrome-extension/entrypoints/shared/utils/rr-flow-convert.ts:51' — '* 将 V3 Flow 转换为 V2 格式，用于 Builder 显示和编辑'`
+- `docs/CHINESE_AUDIT.md:2036` — `- 'app/chrome-extension/entrypoints/shared/utils/rr-flow-convert.ts:52' — '* @param flowV3 从 RPC 获取的 V3 Flow'`
+- `docs/CHINESE_AUDIT.md:2037` — `- 'app/chrome-extension/entrypoints/shared/utils/rr-flow-convert.ts:53' — '* @returns V2 Flow 和警告信息'`
+- `docs/CHINESE_AUDIT.md:2038` — `- 'app/chrome-extension/entrypoints/shared/utils/rr-flow-convert.ts:54' — '* @throws 转换失败时抛出错误'`
+- `docs/CHINESE_AUDIT.md:2039` — `- 'app/chrome-extension/entrypoints/shared/utils/rr-flow-convert.ts:74' — '* 判断是否为 V3 Flow'`
+- `docs/CHINESE_AUDIT.md:2040` — `- 'app/chrome-extension/entrypoints/shared/utils/rr-flow-convert.ts:75' — '* @description 用于导入时判断 JSON 格式'`
+- `docs/CHINESE_AUDIT.md:2041` — `- 'app/chrome-extension/entrypoints/shared/utils/rr-flow-convert.ts:93' — '* 判断是否为 V2 Flow'`
+- `docs/CHINESE_AUDIT.md:2042` — `- 'app/chrome-extension/entrypoints/shared/utils/rr-flow-convert.ts:94' — '* @description 用于导入时判断 JSON 格式'`
+- `docs/CHINESE_AUDIT.md:2043` — `- 'app/chrome-extension/entrypoints/shared/utils/rr-flow-convert.ts:105' — '// V2 有 version 字段（数字），且没有 schemaVersion'`
+- `docs/CHINESE_AUDIT.md:2044` — `- 'app/chrome-extension/entrypoints/shared/utils/rr-flow-convert.ts:108' — '// V2 可能有 steps 或 nodes'`
+- `docs/CHINESE_AUDIT.md:2045` — `- 'app/chrome-extension/entrypoints/shared/utils/rr-flow-convert.ts:116' — '* 从导入的 JSON 中提取 Flow 候选列表'`
+- `docs/CHINESE_AUDIT.md:2046` — `- 'app/chrome-extension/entrypoints/shared/utils/rr-flow-convert.ts:117' — '* @description 支持单个 Flow、Flow 数组、或 { flows: Flow[] } 格式'`
+- `docs/CHINESE_AUDIT.md:2047` — `- 'app/chrome-extension/entrypoints/shared/utils/rr-flow-convert.ts:120' — '// 数组格式'`
+- `docs/CHINESE_AUDIT.md:2048` — `- 'app/chrome-extension/entrypoints/shared/utils/rr-flow-convert.ts:125' — '// 对象格式'`
+- `docs/CHINESE_AUDIT.md:2049` — `- 'app/chrome-extension/entrypoints/shared/utils/rr-flow-convert.ts:129' — '// { flows: [...] } 格式'`
+- `docs/CHINESE_AUDIT.md:2050` — `- 'app/chrome-extension/entrypoints/shared/utils/rr-flow-convert.ts:134' — '// 单个 Flow 对象'`
+- `docs/CHINESE_AUDIT.md:2051` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:2' — '* 随机 Loading 文案'`
+- `docs/CHINESE_AUDIT.md:2052` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:3' — '* 用于 TimelineStatusStep 组件展示趣味等待提示'`
+- `docs/CHINESE_AUDIT.md:2053` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:7' — '// 必选神梗'`
+- `docs/CHINESE_AUDIT.md:2054` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:8' — ''本来应该从从容容游刃有余','`
+- `docs/CHINESE_AUDIT.md:2055` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:9' — ''现在是匆匆忙忙连滚带爬','`
+- `docs/CHINESE_AUDIT.md:2056` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:10' — ''我知道你很急，但是先别急','`
+- `docs/CHINESE_AUDIT.md:2057` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:11' — ''在知识的海洋里狗刨','`
+- `docs/CHINESE_AUDIT.md:2058` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:12' — ''让子弹再飞一会儿','`
+- `docs/CHINESE_AUDIT.md:2059` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:13' — ''正在为您手搓答案','`
+- `docs/CHINESE_AUDIT.md:2060` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:14' — ''浪浪山小妖怪集结中','`
+- `docs/CHINESE_AUDIT.md:2061` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:15' — ''别催，已经在写了（新建文件夹）','`
+- `docs/CHINESE_AUDIT.md:2062` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:16' — ''正在汗流浃背地思考中','`
+- `docs/CHINESE_AUDIT.md:2063` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:17' — ''CPU 都要给我干烧了','`
+- `docs/CHINESE_AUDIT.md:2064` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:18' — '// 生活气息'`
+- `docs/CHINESE_AUDIT.md:2065` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:19' — ''村咖慢焙，精华需要时间','`
+- `docs/CHINESE_AUDIT.md:2066` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:20' — ''知识煎饼翻面中','`
+- `docs/CHINESE_AUDIT.md:2067` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:21' — ''敬自己一杯，马上好','`
+- `docs/CHINESE_AUDIT.md:2068` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:22' — ''正在把灵感放入烤箱','`
+- `docs/CHINESE_AUDIT.md:2069` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:23' — ''让答案再泡一会儿','`
+- `docs/CHINESE_AUDIT.md:2070` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:24' — ''情绪价值拉满中','`
+- `docs/CHINESE_AUDIT.md:2071` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:25' — ''正在为您编织语言的毛衣','`
+- `docs/CHINESE_AUDIT.md:2072` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:26' — '// 脑洞大开'`
+- `docs/CHINESE_AUDIT.md:2073` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:27' — ''神经元蹦迪中','`
+- `docs/CHINESE_AUDIT.md:2074` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:28' — ''熬夜的猫头鹰在思考','`
+- `docs/CHINESE_AUDIT.md:2075` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:29' — ''给答案上色中','`
+- `docs/CHINESE_AUDIT.md:2076` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:30' — ''正在疯狂翻阅知识库','`
+- `docs/CHINESE_AUDIT.md:2077` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:31' — ''大脑马戏团开演','`
+- `docs/CHINESE_AUDIT.md:2078` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:32' — ''正在把 0 和 1 捏在一起','`
+- `docs/CHINESE_AUDIT.md:2079` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:33' — ''正在憋个大招','`
+- `docs/CHINESE_AUDIT.md:2080` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:34' — ''放大镜有点起雾，擦擦','`
+- `docs/CHINESE_AUDIT.md:2081` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:35' — ''试图理解这个离谱的需求','`
+- `docs/CHINESE_AUDIT.md:2082` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:36' — '// 玄幻'`
+- `docs/CHINESE_AUDIT.md:2083` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:37' — ''正在施法，莫打扰','`
+- `docs/CHINESE_AUDIT.md:2084` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:38' — ''唤醒硅基朋友','`
+- `docs/CHINESE_AUDIT.md:2085` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:39' — ''正在连接赛博空间的智慧','`
+- `docs/CHINESE_AUDIT.md:2086` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:40' — ''道友请留步，正在推演','`
+- `docs/CHINESE_AUDIT.md:2087` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:41' — ''穿越知识黑洞','`
+- `docs/CHINESE_AUDIT.md:2088` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:42' — ''正在反向解析人类意图','`
+- `docs/CHINESE_AUDIT.md:2089` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:43' — ''水晶球有点模糊，拍两下','`
+- `docs/CHINESE_AUDIT.md:2090` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:44' — '// 职场'`
+- `docs/CHINESE_AUDIT.md:2091` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:45' — ''代码跑得比记者还快','`
+- `docs/CHINESE_AUDIT.md:2092` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:46' — ''主理人已上线，请稍候','`
+- `docs/CHINESE_AUDIT.md:2093` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:47' — ''快马加鞭赶来中','`
+- `docs/CHINESE_AUDIT.md:2094` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:48' — ''正在光速搬运知识','`
+- `docs/CHINESE_AUDIT.md:2095` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:49' — ''拼图最后一块','`
+- `docs/CHINESE_AUDIT.md:2096` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:50' — ''答案即将杀青','`
+- `docs/CHINESE_AUDIT.md:2097` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:51' — ''发射倒计时','`
+- `docs/CHINESE_AUDIT.md:2098` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:52' — ''目标锁定中','`
+- `docs/CHINESE_AUDIT.md:2099` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:56' — '* 获取随机 Loading 文案'`
+- `docs/CHINESE_AUDIT.md:2100` — `- 'app/chrome-extension/entrypoints/sidepanel/composables/useAgentProjects.ts:202' — ''目录 "${validation.absolute}" 不存在，是否创建？\n\nThe directory "${validation.absolute}" does not exis`
+- `docs/CHINESE_AUDIT.md:2101` — `- 'app/chrome-extension/entrypoints/sidepanel/composables/useAgentProjects.ts:428' — ''目录 "${validation.absolute}" 已存在对应的项目：${existingProject.name}\n\n' +'`
+- `docs/CHINESE_AUDIT.md:2102` — `- 'app/chrome-extension/entrypoints/sidepanel/composables/useAgentProjects.ts:429' — ''是否切换到该项目？\n\n' +'`
+- `docs/CHINESE_AUDIT.md:2103` — `- 'app/chrome-extension/entrypoints/sidepanel/composables/useAgentProjects.ts:447' — ''目录 "${validation.absolute}" 不存在，是否创建？\n\nThe directory "${validation.absolute}" does not exis`
+- `docs/CHINESE_AUDIT.md:2104` — `- 'app/chrome-extension/entrypoints/sidepanel/styles/agent-chat.css:699' — '/* 文案 shimmer 渐变动画 - 光从左到右扫过效果 */'`
+- `docs/CHINESE_AUDIT.md:2105` — `- 'app/chrome-extension/entrypoints/sidepanel/styles/agent-chat.css:728' — '/* 螺旋图标 - 笔迹重绘动画 */'`
+- `docs/CHINESE_AUDIT.md:2106` — `- 'app/chrome-extension/entrypoints/sidepanel/components/SidepanelNavigator.vue:8' — '<!-- 触发按钮（同时作为拖拽手柄） -->'`
+- `docs/CHINESE_AUDIT.md:2107` — `- 'app/chrome-extension/entrypoints/sidepanel/components/SidepanelNavigator.vue:15' — 'title="切换页面（可拖拽移动，双击重置位置）"'`
+- `docs/CHINESE_AUDIT.md:2108` — `- 'app/chrome-extension/entrypoints/sidepanel/components/SidepanelNavigator.vue:30' — '<!-- 浮层菜单 -->'`
+- `docs/CHINESE_AUDIT.md:2109` — `- 'app/chrome-extension/entrypoints/sidepanel/components/SidepanelNavigator.vue:35' — '<span class="navigator-title">切换页面</span>'`
+- `docs/CHINESE_AUDIT.md:2110` — `- 'app/chrome-extension/entrypoints/sidepanel/components/SidepanelNavigator.vue:72' — '<span class="navigator-item-title">智能助手</span>'`
+- `docs/CHINESE_AUDIT.md:2111` — `- 'app/chrome-extension/entrypoints/sidepanel/components/SidepanelNavigator.vue:73' — '<span class="navigator-item-desc">AI Agent 对话与任务</span>'`
+- `docs/CHINESE_AUDIT.md:2112` — `- 'app/chrome-extension/entrypoints/sidepanel/components/SidepanelNavigator.vue:110' — '<span class="navigator-item-title">工作流管理</span>'`
+- `docs/CHINESE_AUDIT.md:2113` — `- 'app/chrome-extension/entrypoints/sidepanel/components/SidepanelNavigator.vue:111' — '<span class="navigator-item-desc">录制与回放自动化流程</span>'`
+- `docs/CHINESE_AUDIT.md:2114` — `- 'app/chrome-extension/entrypoints/sidepanel/components/SidepanelNavigator.vue:148' — '<span class="navigator-item-title">元素标注管理</span>'`
+- `docs/CHINESE_AUDIT.md:2115` — `- 'app/chrome-extension/entrypoints/sidepanel/components/SidepanelNavigator.vue:149' — '<span class="navigator-item-desc">管理页面元素标注</span>'`
+- `docs/CHINESE_AUDIT.md:2116` — `- 'app/chrome-extension/entrypoints/sidepanel/components/workflows/WorkflowsView.vue:248' — '<span>状态: {{ getRunStatusText(run) }}</span>'`
+- `docs/CHINESE_AUDIT.md:2117` — `- 'app/chrome-extension/entrypoints/sidepanel/components/workflows/WorkflowsView.vue:250' — '>• 耗时:'`
+- `docs/CHINESE_AUDIT.md:2118` — `- 'app/chrome-extension/entrypoints/sidepanel/components/workflows/WorkflowsView.vue:524' — 'queued: '排队中','`
+- `docs/CHINESE_AUDIT.md:2119` — `- 'app/chrome-extension/entrypoints/sidepanel/components/workflows/WorkflowsView.vue:525' — 'running: '运行中','`
+- `docs/CHINESE_AUDIT.md:2120` — `- 'app/chrome-extension/entrypoints/sidepanel/components/workflows/WorkflowsView.vue:526' — 'paused: '已暂停','`
+- `docs/CHINESE_AUDIT.md:2121` — `- 'app/chrome-extension/entrypoints/sidepanel/components/workflows/WorkflowsView.vue:527' — 'succeeded: '成功','`
+- `docs/CHINESE_AUDIT.md:2122` — `- 'app/chrome-extension/entrypoints/sidepanel/components/workflows/WorkflowsView.vue:528' — 'failed: '失败','`
+- `docs/CHINESE_AUDIT.md:2123` — `- 'app/chrome-extension/entrypoints/sidepanel/components/workflows/WorkflowsView.vue:529' — 'canceled: '已取消','`
+- `docs/CHINESE_AUDIT.md:2124` — `- 'app/chrome-extension/entrypoints/sidepanel/components/workflows/WorkflowsView.vue:534' — 'return run.success ? '成功' : '失败';'`
+- `docs/CHINESE_AUDIT.md:2125` — `- 'app/chrome-extension/entrypoints/sidepanel/components/agent-chat/timeline/TimelineStatusStep.vue:3' — '<!-- 螺旋动画图标（仅 running/starting 状态显示，且未被父组件隐藏时） -->'`
+- `docs/CHINESE_AUDIT.md:2126` — `- 'app/chrome-extension/entrypoints/sidepanel/components/agent-chat/timeline/TimelineStatusStep.vue:18' — '<!-- shimmer 文案（running 状态）或普通文案 -->'`
+- `docs/CHINESE_AUDIT.md:2127` — `- 'app/chrome-extension/entrypoints/sidepanel/components/agent-chat/timeline/TimelineStatusStep.vue:40' — '// 是否处于运行状态'`
+- `docs/CHINESE_AUDIT.md:2128` — `- 'app/chrome-extension/entrypoints/sidepanel/components/agent-chat/timeline/TimelineStatusStep.vue:45' — '// 随机文案（仅 running 状态使用）'`
+- `docs/CHINESE_AUDIT.md:2129` — `- 'app/chrome-extension/entrypoints/sidepanel/components/agent-chat/timeline/TimelineStatusStep.vue:48' — '// 定时更新文案的 timeout ID'`
+- `docs/CHINESE_AUDIT.md:2130` — `- 'app/chrome-extension/entrypoints/sidepanel/components/agent-chat/timeline/TimelineStatusStep.vue:51' — '// 记录上一次的运行状态，用于判断状态变化'`
+- `docs/CHINESE_AUDIT.md:2131` — `- 'app/chrome-extension/entrypoints/sidepanel/components/agent-chat/timeline/TimelineStatusStep.vue:54' — '// 启动定时器'`
+- `docs/CHINESE_AUDIT.md:2132` — `- 'app/chrome-extension/entrypoints/sidepanel/components/agent-chat/timeline/TimelineStatusStep.vue:57' — '// 5-8 秒随机间隔更新文案'`
+- `docs/CHINESE_AUDIT.md:2133` — `- 'app/chrome-extension/entrypoints/sidepanel/components/agent-chat/timeline/TimelineStatusStep.vue:70' — '// 停止定时器'`
+- `docs/CHINESE_AUDIT.md:2134` — `- 'app/chrome-extension/entrypoints/sidepanel/components/agent-chat/timeline/TimelineStatusStep.vue:78' — '// 监听运行状态变化 - 只在状态真正变化时才处理'`
+- `docs/CHINESE_AUDIT.md:2135` — `- 'app/chrome-extension/entrypoints/sidepanel/components/agent-chat/timeline/TimelineStatusStep.vue:80' — '// 只在从非运行变为运行时，才重新生成文案并启动定时器'`
+- `docs/CHINESE_AUDIT.md:2136` — `- 'app/chrome-extension/entrypoints/sidepanel/components/agent-chat/timeline/TimelineStatusStep.vue:90' — '// 初始化'`
+- `docs/CHINESE_AUDIT.md:2137` — `- 'app/chrome-extension/entrypoints/sidepanel/components/agent-chat/timeline/TimelineStatusStep.vue:102' — '// 非运行状态的默认文案'`
+- `docs/CHINESE_AUDIT.md:2138` — `- 'app/chrome-extension/entrypoints/sidepanel/components/agent-chat/timeline/TimelineStatusStep.vue:116' — '// 最终显示的文案'`
+- `docs/CHINESE_AUDIT.md:2139` — `- 'app/chrome-extension/entrypoints/web-editor-v2/core/snap-engine.ts:251' — '* 中文说明：使用双向扫描策略，从 target 位置向两侧扩展，'`
+- `docs/CHINESE_AUDIT.md:2140` — `- 'app/chrome-extension/entrypoints/web-editor-v2/core/snap-engine.ts:252' — '* 避免当 target 在 children 后半部分时完全扫描不到附近元素。'`
+- `docs/CHINESE_AUDIT.md:2141` — `- 'app/chrome-extension/entrypoints/web-editor-v2/core/snap-engine.ts:824' — '* 中文说明：'`
+- `docs/CHINESE_AUDIT.md:2142` — `- 'app/chrome-extension/entrypoints/web-editor-v2/core/snap-engine.ts:825' — '* - 当发生对齐时，显示"另一个方向"的间距'`
+- `docs/CHINESE_AUDIT.md:2143` — `- 'app/chrome-extension/entrypoints/web-editor-v2/core/snap-engine.ts:826' — '* - lockX 是垂直对齐线，所以显示 Y 方向的间距'`
+- `docs/CHINESE_AUDIT.md:2144` — `- 'app/chrome-extension/entrypoints/web-editor-v2/core/snap-engine.ts:827' — '* - lockY 是水平对齐线，所以显示 X 方向的间距'`
+- `docs/CHINESE_AUDIT.md:2145` — `- 'app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/layout-control.ts:256' — '// 容器边框（虚线矩形表示容器）'`
+- `docs/CHINESE_AUDIT.md:2146` — `- 'app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/layout-control.ts:293' — '// 两个全宽的块级元素，垂直堆叠'`
+- `docs/CHINESE_AUDIT.md:2147` — `- 'app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/layout-control.ts:298' — '// 三行文本表示内联流'`
+- `docs/CHINESE_AUDIT.md:2148` — `- 'app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/layout-control.ts:304' — '// 左边一个块，右边两行文本'`
+- `docs/CHINESE_AUDIT.md:2149` — `- 'app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/layout-control.ts:310' — '// 三个水平排列的弹性子项'`
+- `docs/CHINESE_AUDIT.md:2150` — `- 'app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/layout-control.ts:316' — '// 2x2 网格布局'`
+- `docs/CHINESE_AUDIT.md:2151` — `- 'app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/layout-control.ts:323' — '// 禁用符号：斜线'`
+- `docs/CHINESE_AUDIT.md:2152` — `- 'app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/layout-control.ts:358' — '// 容器边框（虚线矩形表示容器）'`
+- `docs/CHINESE_AUDIT.md:2153` — `- 'app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/layout-control.ts:371' — '// 内容块的 X 坐标根据对齐方式不同'`
+- `docs/CHINESE_AUDIT.md:2154` — `- 'app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/layout-control.ts:373' — ''flex-start': 3.5, // 左对齐'`
+- `docs/CHINESE_AUDIT.md:2155` — `- 'app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/layout-control.ts:374' — 'center: 5.5, // 居中对齐'`
+- `docs/CHINESE_AUDIT.md:2156` — `- 'app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/layout-control.ts:375' — ''flex-end': 7.5, // 右对齐'`
+- `docs/CHINESE_AUDIT.md:2157` — `- 'app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/layout-control.ts:378' — '// 两个小方块表示子元素（水平方向排列变为垂直方向排列）'`
+- `docs/CHINESE_AUDIT.md:2158` — `- 'app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/layout-control.ts:402' — '// 容器边框（虚线矩形表示容器）'`
+- `docs/CHINESE_AUDIT.md:2159` — `- 'app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/layout-control.ts:415' — '// 内容块的 Y 坐标根据对齐方式不同'`
+- `docs/CHINESE_AUDIT.md:2160` — `- 'app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/layout-control.ts:417' — ''flex-start': 3.5, // 顶部对齐'`
+- `docs/CHINESE_AUDIT.md:2161` — `- 'app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/layout-control.ts:418' — 'center: 5.5, // 居中对齐'`
+- `docs/CHINESE_AUDIT.md:2162` — `- 'app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/layout-control.ts:419' — ''flex-end': 7.5, // 底部对齐'`
+- `docs/CHINESE_AUDIT.md:2163` — `- 'app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/layout-control.ts:422' — '// 两个小方块表示子元素'`
+- `docs/CHINESE_AUDIT.md:2164` — `- 'app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/typography-control.ts:130' — '// 容器边框（虚线矩形表示容器）'`
+- `docs/CHINESE_AUDIT.md:2165` — `- 'app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/typography-control.ts:143' — '// 文本行的位置配置：每行的 [x起点, 宽度]'`
+- `docs/CHINESE_AUDIT.md:2166` — `- 'app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/typography-control.ts:146' — '[3.5, 8], // 长行'`
+- `docs/CHINESE_AUDIT.md:2167` — `- 'app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/typography-control.ts:147' — '[3.5, 5], // 短行'`
+- `docs/CHINESE_AUDIT.md:2168` — `- 'app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/typography-control.ts:148' — '[3.5, 6.5], // 中行'`
+- `docs/CHINESE_AUDIT.md:2169` — `- 'app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/typography-control.ts:151' — '[3.5, 8], // 长行居中'`
+- `docs/CHINESE_AUDIT.md:2170` — `- 'app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/typography-control.ts:152' — '[5, 5], // 短行居中'`
+- `docs/CHINESE_AUDIT.md:2171` — `- 'app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/typography-control.ts:153' — '[4.25, 6.5], // 中行居中'`
+- `docs/CHINESE_AUDIT.md:2172` — `- 'app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/typography-control.ts:156' — '[3.5, 8], // 长行'`
+- `docs/CHINESE_AUDIT.md:2173` — `- 'app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/typography-control.ts:157' — '[6.5, 5], // 短行靠右'`
+- `docs/CHINESE_AUDIT.md:2174` — `- 'app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/typography-control.ts:158' — '[5.5, 6.5], // 中行靠右'`
+- `docs/CHINESE_AUDIT.md:2175` — `- 'app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/typography-control.ts:161' — '[3.5, 8], // 全宽'`
+- `docs/CHINESE_AUDIT.md:2176` — `- 'app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/typography-control.ts:162' — '[3.5, 8], // 全宽'`
+- `docs/CHINESE_AUDIT.md:2177` — `- 'app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/typography-control.ts:163' — '[3.5, 8], // 全宽'`
+- `docs/CHINESE_AUDIT.md:2178` — `- 'app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/typography-control.ts:188' — '// 容器边框（虚线矩形表示容器）'`
+- `docs/CHINESE_AUDIT.md:2179` — `- 'app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/typography-control.ts:201' — '// 内容块的 Y 坐标根据对齐方式不同'`
+- `docs/CHINESE_AUDIT.md:2180` — `- 'app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/typography-control.ts:203' — 'top: 3.5, // 顶部对齐'`
+- `docs/CHINESE_AUDIT.md:2181` — `- 'app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/typography-control.ts:204' — 'middle: 5.5, // 居中对齐'`
+- `docs/CHINESE_AUDIT.md:2182` — `- 'app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/typography-control.ts:205' — 'bottom: 7.5, // 底部对齐'`
+- `docs/CHINESE_AUDIT.md:2183` — `- 'app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/typography-control.ts:206' — 'baseline: 6.5, // baseline 稍微偏下'`
+- `docs/CHINESE_AUDIT.md:2184` — `- 'app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/typography-control.ts:209' — '// 两个小方块表示子元素'`
+- `docs/CHINESE_AUDIT.md:2185` — `- 'app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/typography-control.ts:228' — '// baseline 模式添加基线指示线'`
+- `docs/CHINESE_AUDIT.md:2186` — `- 'app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/position-control.ts:394' — '// 三条水平线表示正常文档流'`
+- `docs/CHINESE_AUDIT.md:2187` — `- 'app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/position-control.ts:401' — '// 虚线框表示原位置，实心块表示偏移后的位置'`
+- `docs/CHINESE_AUDIT.md:2188` — `- 'app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/position-control.ts:414' — '// 偏移后的实心块'`
+- `docs/CHINESE_AUDIT.md:2189` — `- 'app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/position-control.ts:416' — '// 连接箭头'`
+- `docs/CHINESE_AUDIT.md:2190` — `- 'app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/position-control.ts:422' — '// 定位参考线（从容器边缘到元素）'`
+- `docs/CHINESE_AUDIT.md:2191` — `- 'app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/position-control.ts:424' — '// 元素块在右下角'`
+- `docs/CHINESE_AUDIT.md:2192` — `- 'app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/position-control.ts:429' — '// 图钉形状表示固定'`
+- `docs/CHINESE_AUDIT.md:2193` — `- 'app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/position-control.ts:436' — '// 图钉针'`
+- `docs/CHINESE_AUDIT.md:2194` — `- 'app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/position-control.ts:438' — '// 固定的元素'`
+- `docs/CHINESE_AUDIT.md:2195` — `- 'app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/position-control.ts:444' — '// 顶部吸附线'`
+- `docs/CHINESE_AUDIT.md:2196` — `- 'app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/position-control.ts:454' — '// 吸附的元素'`
+- `docs/CHINESE_AUDIT.md:2197` — `- 'app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/position-control.ts:486' — '// 左侧镜像块（半透明表示原始）'`
+- `docs/CHINESE_AUDIT.md:2198` — `- 'app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/position-control.ts:496' — '// 右侧镜像块（实心表示翻转后）'`
+- `docs/CHINESE_AUDIT.md:2199` — `- 'app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/position-control.ts:505' — '// 中间镜像轴线'`
+- `docs/CHINESE_AUDIT.md:2200` — `- 'app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/position-control.ts:521' — '// 上方镜像块（半透明表示原始）'`
+- `docs/CHINESE_AUDIT.md:2201` — `- 'app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/position-control.ts:531' — '// 下方镜像块（实心表示翻转后）'`
+- `docs/CHINESE_AUDIT.md:2202` — `- 'app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/position-control.ts:540' — '// 中间镜像轴线'`
+- `docs/CHINESE_AUDIT.md:2203` — `- 'app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/effects-control.ts:1014' — '// 效果类型定义'`
+- `docs/CHINESE_AUDIT.md:2204` — `- 'app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/effects-control.ts:1052' — '// Shadow 类型效果（Drop Shadow / Inner Shadow）'`
+- `docs/CHINESE_AUDIT.md:2205` — `- 'app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/effects-control.ts:1064' — '// Blur 类型效果（Layer Blur / Backdrop Blur）'`
+- `docs/CHINESE_AUDIT.md:2206` — `- 'app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/effects-control.ts:1071' — '// 无法解析的原始效果'`
+- `docs/CHINESE_AUDIT.md:2207` — `- 'app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/effects-control.ts:1446' — '// 每个元素的 effect items 缓存（仅限当前编辑会话）'`
+- `docs/CHINESE_AUDIT.md:2208` — `- 'app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/effects-control.ts:1447' — '// 使用 WeakMap 的原因：'`
+- `docs/CHINESE_AUDIT.md:2209` — `- 'app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/effects-control.ts:1448' — '// 1. 隐藏的 effect 不会写入 CSS（enabled=false），但需要在会话内记住以便恢复'`
+- `docs/CHINESE_AUDIT.md:2210` — `- 'app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/effects-control.ts:1449' — '// 2. WeakMap 保证元素被移除时自动释放内存，无需手动清理'`
+- `docs/CHINESE_AUDIT.md:2211` — `- 'app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/effects-control.ts:1450' — '// 3. 只读取 inline style（不读 computed），因此缓存仅用于保留用户的隐藏操作'`
+- `docs/CHINESE_AUDIT.md:2212` — `- 'app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/effects-control.ts:1474' — '// 将 + 按钮放在 group header 的右侧（chevron 左边）'`
+- `docs/CHINESE_AUDIT.md:2213` — `- 'app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/effects-control.ts:1478' — '// 回退：在内容区域显示 toolbar'`
+- `docs/CHINESE_AUDIT.md:2214` — `- 'app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/effects-control.ts:1540' — '// 只在有打开的 popover 或正在进行事务时阻止刷新'`
+- `docs/CHINESE_AUDIT.md:2215` — `- 'app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/effects-control.ts:1541' — '// 避免过于宽泛的 focus 检测导致外部样式变化无法同步'`
+- `docs/CHINESE_AUDIT.md:2216` — `- 'app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/effects-control.ts:1635' — '// 关闭后同步一次，确保 currentItems 与真实 inline 一致'`
+- `docs/CHINESE_AUDIT.md:2217` — `- 'app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/effects-control.ts:1636' — '// 避免浏览器归一化/修正值后产生不一致'`
+- `docs/CHINESE_AUDIT.md:2218` — `- 'app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/effects-control.ts:2321' — '// 使用 document 的捕获阶段监听，确保点击 Effects 控件外也能关闭'`
+- `docs/CHINESE_AUDIT.md:2219` — `- 'app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/effects-control.ts:2342' — '// 在 document 上监听捕获阶段的点击事件'`
+- `docs/CHINESE_AUDIT.md:2220` — `- 'app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/effects-control.ts:2348' — '// 在 root 上监听捕获阶段的键盘事件'`
+- `docs/CHINESE_AUDIT.md:2221` — `- 'app/chrome-extension/entrypoints/popup/components/ConfirmDialog.vue:226' — '/* 响应式设计 */'`
+- `docs/CHINESE_AUDIT.md:2222` — `- 'app/chrome-extension/entrypoints/popup/components/ConfirmDialog.vue:274' — '/* 焦点样式 */'`
+- `docs/CHINESE_AUDIT.md:2223` — `- 'app/chrome-extension/entrypoints/popup/components/ElementMarkerManagement.vue:3' — '<h2 class="section-title">元素标注管理</h2>'`
+- `docs/CHINESE_AUDIT.md:2224` — `- 'app/chrome-extension/entrypoints/popup/components/ElementMarkerManagement.vue:7' — '<p class="status-label">当前页面</p>'`
+- `docs/CHINESE_AUDIT.md:2225` — `- 'app/chrome-extension/entrypoints/popup/components/ElementMarkerManagement.vue:11' — '<p class="status-label">已标注元素</p>'`
+- `docs/CHINESE_AUDIT.md:2226` — `- 'app/chrome-extension/entrypoints/popup/components/ElementMarkerManagement.vue:18' — '<p class="mcp-config-label">新增标注</p>'`
+- `docs/CHINESE_AUDIT.md:2227` — `- 'app/chrome-extension/entrypoints/popup/components/ElementMarkerManagement.vue:21' — '<input v-model="form.name" placeholder="名称，如 登录按钮" class="port-input" />'`
+- `docs/CHINESE_AUDIT.md:2228` — `- 'app/chrome-extension/entrypoints/popup/components/ElementMarkerManagement.vue:27' — '<option value="prefix">路径前缀</option>'`
+- `docs/CHINESE_AUDIT.md:2229` — `- 'app/chrome-extension/entrypoints/popup/components/ElementMarkerManagement.vue:28' — '<option value="exact">精确匹配</option>'`
+- `docs/CHINESE_AUDIT.md:2230` — `- 'app/chrome-extension/entrypoints/popup/components/ElementMarkerManagement.vue:29' — '<option value="host">域名</option>'`
+- `docs/CHINESE_AUDIT.md:2231` — `- 'app/chrome-extension/entrypoints/popup/components/ElementMarkerManagement.vue:32' — '<input v-model="form.selector" placeholder="CSS 选择器" class="port-input" />'`
+- `docs/CHINESE_AUDIT.md:2232` — `- 'app/chrome-extension/entrypoints/popup/components/ElementMarkerManagement.vue:35' — '保存'`
+- `docs/CHINESE_AUDIT.md:2233` — `- 'app/chrome-extension/entrypoints/popup/components/ElementMarkerManagement.vue:37' — '<button class="danger-button" type="button" @click="resetForm">清空</button>'`
+- `docs/CHINESE_AUDIT.md:2234` — `- 'app/chrome-extension/entrypoints/popup/components/ElementMarkerManagement.vue:57' — '<button class="semantic-engine-button" @click="validate(m)">验证</button>'`
+- `docs/CHINESE_AUDIT.md:2235` — `- 'app/chrome-extension/entrypoints/popup/components/ElementMarkerManagement.vue:58' — '<button class="secondary-button" @click="prefill(m)">编辑</button>'`
+- `docs/CHINESE_AUDIT.md:2236` — `- 'app/chrome-extension/entrypoints/popup/components/ElementMarkerManagement.vue:59' — '<button class="danger-button" @click="remove(m)">删除</button>'`
+- `docs/CHINESE_AUDIT.md:2237` — `- 'app/chrome-extension/entrypoints/popup/components/ProgressIndicator.vue:78' — '/* 响应式设计 */'`
+- `docs/CHINESE_AUDIT.md:2238` — `- 'app/chrome-extension/entrypoints/popup/components/LocalModelPage.vue:3' — '<!-- 返回按钮 -->'`
+- `docs/CHINESE_AUDIT.md:2239` — `- 'app/chrome-extension/entrypoints/popup/components/LocalModelPage.vue:5' — '<button class="back-button" @click="$emit('back')" title="返回首页">'`
+- `docs/CHINESE_AUDIT.md:2240` — `- 'app/chrome-extension/entrypoints/popup/components/LocalModelPage.vue:16' — '<span>返回</span>'`
+- `docs/CHINESE_AUDIT.md:2241` — `- 'app/chrome-extension/entrypoints/popup/components/LocalModelPage.vue:18' — '<h2 class="page-title">本地模型</h2>'`
+- `docs/CHINESE_AUDIT.md:2242` — `- 'app/chrome-extension/entrypoints/popup/components/LocalModelPage.vue:22' — '<!-- 语义引擎 -->'`
+- `docs/CHINESE_AUDIT.md:2243` — `- 'app/chrome-extension/entrypoints/popup/components/LocalModelPage.vue:55' — '<!-- Embedding模型选择 -->'`
+- `docs/CHINESE_AUDIT.md:2244` — `- 'app/chrome-extension/entrypoints/popup/components/LocalModelPage.vue:120' — '<!-- 索引数据管理 -->'`
+- `docs/CHINESE_AUDIT.md:2245` — `- 'app/chrome-extension/entrypoints/popup/components/LocalModelPage.vue:184' — '<!-- 模型缓存管理 -->'`
+- `docs/CHINESE_AUDIT.md:2246` — `- 'app/chrome-extension/entrypoints/popup/components/LocalModelPage.vue:211' — '// 语义引擎'`
+- `docs/CHINESE_AUDIT.md:2247` — `- 'app/chrome-extension/entrypoints/popup/components/LocalModelPage.vue:216' — '// 模型'`
+- `docs/CHINESE_AUDIT.md:2248` — `- 'app/chrome-extension/entrypoints/popup/components/LocalModelPage.vue:230' — '// 存储统计'`
+- `docs/CHINESE_AUDIT.md:2249` — `- 'app/chrome-extension/entrypoints/popup/components/LocalModelPage.vue:240' — '// 缓存'`
+- `docs/CHINESE_AUDIT.md:2250` — `- 'app/chrome-extension/entrypoints/popup/components/LocalModelPage.vue:257' — '// 计算属性'`
+- `docs/CHINESE_AUDIT.md:2251` — `- 'app/chrome-extension/entrypoints/popup/components/LocalModelPage.vue:516' — '/* 模型列表 */'`
+- `docs/CHINESE_AUDIT.md:2252` — `- 'app/chrome-extension/entrypoints/popup/components/LocalModelPage.vue:615' — '/* 统计网格 */'`
+- `docs/CHINESE_AUDIT.md:2253` — `- 'app/chrome-extension/entrypoints/popup/components/LocalModelPage.vue:672' — '/* 错误卡片 */'`
+- `docs/CHINESE_AUDIT.md:2254` — `- 'app/chrome-extension/entrypoints/popup/components/ScheduleDialog.vue:5' — '<div class="title">定时执行</div>'`
+- `docs/CHINESE_AUDIT.md:2255` — `- 'app/chrome-extension/entrypoints/popup/components/ScheduleDialog.vue:10' — '<label>启用</label>'`
+- `docs/CHINESE_AUDIT.md:2256` — `- 'app/chrome-extension/entrypoints/popup/components/ScheduleDialog.vue:11' — '<label class="chk"><input type="checkbox" v-model="enabled" />启用定时</label>'`
+- `docs/CHINESE_AUDIT.md:2257` — `- 'app/chrome-extension/entrypoints/popup/components/ScheduleDialog.vue:14' — '<label>类型</label>'`
+- `docs/CHINESE_AUDIT.md:2258` — `- 'app/chrome-extension/entrypoints/popup/components/ScheduleDialog.vue:16' — '<option value="interval">每隔 N 分钟</option>'`
+- `docs/CHINESE_AUDIT.md:2259` — `- 'app/chrome-extension/entrypoints/popup/components/ScheduleDialog.vue:17' — '<option value="daily">每天固定时间</option>'`
+- `docs/CHINESE_AUDIT.md:2260` — `- 'app/chrome-extension/entrypoints/popup/components/ScheduleDialog.vue:18' — '<option value="once">只执行一次</option>'`
+- `docs/CHINESE_AUDIT.md:2261` — `- 'app/chrome-extension/entrypoints/popup/components/ScheduleDialog.vue:22' — '<label>间隔(分钟)</label>'`
+- `docs/CHINESE_AUDIT.md:2262` — `- 'app/chrome-extension/entrypoints/popup/components/ScheduleDialog.vue:26' — '<label>时间(HH:mm)</label>'`
+- `docs/CHINESE_AUDIT.md:2263` — `- 'app/chrome-extension/entrypoints/popup/components/ScheduleDialog.vue:27' — '<input v-model="dailyTime" placeholder="例如 09:30" />'`
+- `docs/CHINESE_AUDIT.md:2264` — `- 'app/chrome-extension/entrypoints/popup/components/ScheduleDialog.vue:30' — '<label>时间(ISO)</label>'`
+- `docs/CHINESE_AUDIT.md:2265` — `- 'app/chrome-extension/entrypoints/popup/components/ScheduleDialog.vue:31' — '<input v-model="onceAt" placeholder="例如 2025-10-05T10:00:00" />'`
+- `docs/CHINESE_AUDIT.md:2266` — `- 'app/chrome-extension/entrypoints/popup/components/ScheduleDialog.vue:34' — '<label>参数(JSON)</label>'`
+- `docs/CHINESE_AUDIT.md:2267` — `- 'app/chrome-extension/entrypoints/popup/components/ScheduleDialog.vue:38' — '<div class="section-title">已有计划</div>'`
+- `docs/CHINESE_AUDIT.md:2268` — `- 'app/chrome-extension/entrypoints/popup/components/ScheduleDialog.vue:46' — '<button class="small danger" @click="$emit('remove', s.id)">删除</button>'`
+- `docs/CHINESE_AUDIT.md:2269` — `- 'app/chrome-extension/entrypoints/popup/components/ScheduleDialog.vue:53' — '<button class="primary" @click="save">保存</button>'`
+- `docs/CHINESE_AUDIT.md:2270` — `- 'app/chrome-extension/entrypoints/popup/components/ScheduleDialog.vue:114' — 'if (s.type === 'interval') return '每 ${s.when} 分钟';'`
+- `docs/CHINESE_AUDIT.md:2271` — `- 'app/chrome-extension/entrypoints/popup/components/ScheduleDialog.vue:115' — 'if (s.type === 'daily') return '每天 ${s.when}';'`
+- `docs/CHINESE_AUDIT.md:2272` — `- 'app/chrome-extension/entrypoints/popup/components/ScheduleDialog.vue:116' — 'if (s.type === 'once') return '一次 ${s.when}';'`
+- `docs/CHINESE_AUDIT.md:2273` — `- 'app/chrome-extension/entrypoints/popup/components/builder/widgets/FieldExpression.vue:28' — 'err.value = '表达式解析错误';'`
+- `docs/CHINESE_AUDIT.md:2274` — `- 'app/chrome-extension/entrypoints/popup/components/builder/widgets/FieldSelector.vue:5' — '<button class="btn-mini" type="button" title="从页面拾取" @click="onPick">拾取</button>'`
+- `docs/CHINESE_AUDIT.md:2275` — `- 'app/chrome-extension/entrypoints/popup/components/builder/widgets/FieldSelector.vue:7' — '<div class="help">可输入 CSS 选择器，或点击“拾取”在页面中选择元素</div>'`
+- `docs/CHINESE_AUDIT.md:2276` — `- 'app/chrome-extension/entrypoints/popup/components/builder/widgets/FieldSelector.vue:47' — 'if (!tabId) throw new Error('未找到活动页签');'`
+- `docs/CHINESE_AUDIT.md:2277` — `- 'app/chrome-extension/entrypoints/popup/components/builder/widgets/FieldSelector.vue:52' — 'throw new Error(res?.error || '拾取失败');'`
+- `docs/CHINESE_AUDIT.md:2278` — `- 'app/chrome-extension/entrypoints/popup/components/builder/widgets/FieldSelector.vue:69' — 'err.value = '未生成有效选择器，请手动输入';'`
+- `docs/CHINESE_AUDIT.md:2279` — `- 'app/chrome-extension/entrypoints/popup/components/builder/widgets/FieldKeySequence.vue:4' — '<div class="help">示例：Backspace Enter 或 cmd+a</div>'`
+- `docs/CHINESE_AUDIT.md:2280` — `- 'app/chrome-extension/entrypoints/popup/components/builder/widgets/FieldKeySequence.vue:13' — 'const placeholder = props.field?.placeholder || 'Backspace Enter 或 cmd+a';'`
+- `docs/CHINESE_AUDIT.md:2281` — `- 'app/chrome-extension/entrypoints/popup/components/builder/model/transforms.ts:93' — 'return n.config?.target?.candidates?.[0]?.value || '未配置选择器';'`
+- `docs/CHINESE_AUDIT.md:2282` — `- 'app/chrome-extension/entrypoints/popup/components/builder/model/transforms.ts:123' — 'return 'if/else 分支数 ${cnt}${n.config?.else === false ? '' : ' + else'}';'`
+- `docs/CHINESE_AUDIT.md:2283` — `- 'app/chrome-extension/entrypoints/popup/components/builder/model/transforms.ts:129' — 'return a || b ? '${a} -> ${b}' : '拖拽';'`
+- `docs/CHINESE_AUDIT.md:2284` — `- 'app/chrome-extension/entrypoints/popup/components/builder/model/validation.ts:13' — 'if (!hasCandidate) errs.push('缺少目标选择器候选');'`
+- `docs/CHINESE_AUDIT.md:2285` — `- 'app/chrome-extension/entrypoints/popup/components/builder/model/validation.ts:14' — 'if (n.type === 'fill' && (!('value' in c) || c.value === undefined)) errs.push('缺少输入值');'`
+- `docs/CHINESE_AUDIT.md:2286` — `- 'app/chrome-extension/entrypoints/popup/components/builder/model/validation.ts:18' — 'if (!c?.condition) errs.push('缺少等待条件');'`
+- `docs/CHINESE_AUDIT.md:2287` — `- 'app/chrome-extension/entrypoints/popup/components/builder/model/validation.ts:22' — 'if (!c?.assert) errs.push('缺少断言条件');'`
+- `docs/CHINESE_AUDIT.md:2288` — `- 'app/chrome-extension/entrypoints/popup/components/builder/model/validation.ts:26' — 'if (!c?.url) errs.push('缺少 URL');'`
+- `docs/CHINESE_AUDIT.md:2289` — `- 'app/chrome-extension/entrypoints/popup/components/builder/model/validation.ts:30' — 'if (!c?.url) errs.push('HTTP: 缺少 URL');'`
+- `docs/CHINESE_AUDIT.md:2290` — `- 'app/chrome-extension/entrypoints/popup/components/builder/model/validation.ts:35' — 'if (!pathRe.test(s)) errs.push('Assign: 路径非法 ${s}');'`
+- `docs/CHINESE_AUDIT.md:2291` — `- 'app/chrome-extension/entrypoints/popup/components/builder/model/validation.ts:41' — '// filenameContains 可选'`
+- `docs/CHINESE_AUDIT.md:2292` — `- 'app/chrome-extension/entrypoints/popup/components/builder/model/validation.ts:45' — 'if (!c?.saveAs) errs.push('Extract: 需填写保存变量名');'`
+- `docs/CHINESE_AUDIT.md:2293` — `- 'app/chrome-extension/entrypoints/popup/components/builder/model/validation.ts:46' — 'if (!c?.selector && !c?.js) errs.push('Extract: 需提供 selector 或 js');'`
+- `docs/CHINESE_AUDIT.md:2294` — `- 'app/chrome-extension/entrypoints/popup/components/builder/model/validation.ts:51' — 'errs.push('SwitchTab: 需提供 tabId 或 URL/标题包含');'`
+- `docs/CHINESE_AUDIT.md:2295` — `- 'app/chrome-extension/entrypoints/popup/components/builder/model/validation.ts:55' — '// selector 可空（全页/可视区），不强制'`
+- `docs/CHINESE_AUDIT.md:2296` — `- 'app/chrome-extension/entrypoints/popup/components/builder/model/validation.ts:60' — 'if (!hasCandidate) errs.push('缺少目标选择器候选');'`
+- `docs/CHINESE_AUDIT.md:2297` — `- 'app/chrome-extension/entrypoints/popup/components/builder/model/validation.ts:61' — 'if (!String(c?.event || '').trim()) errs.push('需提供事件类型');'`
+- `docs/CHINESE_AUDIT.md:2298` — `- 'app/chrome-extension/entrypoints/popup/components/builder/model/validation.ts:66' — 'if (arr.length === 0) errs.push('需添加至少一个条件分支');'`
+- `docs/CHINESE_AUDIT.md:2299` — `- 'app/chrome-extension/entrypoints/popup/components/builder/model/validation.ts:68' — 'if (!String(arr[i]?.expr || '').trim()) errs.push('分支${i + 1}: 需填写条件表达式');'`
+- `docs/CHINESE_AUDIT.md:2300` — `- 'app/chrome-extension/entrypoints/popup/components/builder/model/validation.ts:74' — 'if (!hasCandidate) errs.push('缺少目标选择器候选');'`
+- `docs/CHINESE_AUDIT.md:2301` — `- 'app/chrome-extension/entrypoints/popup/components/builder/model/validation.ts:75' — 'if (!String(c?.name || '').trim()) errs.push('需提供属性名');'`
+- `docs/CHINESE_AUDIT.md:2302` — `- 'app/chrome-extension/entrypoints/popup/components/builder/model/validation.ts:79' — 'if (!String(c?.selector || '').trim()) errs.push('需提供元素选择器');'`
+- `docs/CHINESE_AUDIT.md:2303` — `- 'app/chrome-extension/entrypoints/popup/components/builder/model/validation.ts:80' — 'if (!String(c?.subflowId || '').trim()) errs.push('需提供子流 ID');'`
+- `docs/CHINESE_AUDIT.md:2304` — `- 'app/chrome-extension/entrypoints/popup/components/builder/model/validation.ts:88' — 'if (!String(c?.flowId || '').trim()) errs.push('需选择要执行的工作流');'`
+- `docs/CHINESE_AUDIT.md:2305` — `- 'app/chrome-extension/entrypoints/popup/components/builder/model/validation.ts:92' — '// 允许空（关闭当前标签页），不强制'`
+- `docs/CHINESE_AUDIT.md:2306` — `- 'app/chrome-extension/entrypoints/popup/components/builder/model/validation.ts:96' — '// 若配置了 saveAs/assign，应提供 code'`
+- `docs/CHINESE_AUDIT.md:2307` — `- 'app/chrome-extension/entrypoints/popup/components/builder/model/validation.ts:99' — 'errs.push('Script: 配置了保存/映射但缺少代码');'`
+- `docs/CHINESE_AUDIT.md:2308` — `- 'app/chrome-extension/entrypoints/popup/components/builder/model/validation.ts:104' — 'if (!pathRe.test(s)) errs.push('Assign: 路径非法 ${s}');'`
+- `docs/CHINESE_AUDIT.md:2309` — `- 'app/chrome-extension/entrypoints/popup/components/builder/store/useBuilderStore.ts:215' — '// 不计入历史栈，避免频繁记录；由用户触发操作（连接/新增/删除等）记录。'`
+- `docs/CHINESE_AUDIT.md:2310` — `- 'app/chrome-extension/entrypoints/popup/components/builder/store/useBuilderStore.ts:226' — 'toast('不能连接到自身', 'warn');'`
+- `docs/CHINESE_AUDIT.md:2311` — `- 'app/chrome-extension/entrypoints/popup/components/builder/store/useBuilderStore.ts:239' — 'toast('该节点最多允许 ${dstIo.inputs} 条入边', 'warn');'`
+- `docs/CHINESE_AUDIT.md:2312` — `- 'app/chrome-extension/entrypoints/popup/components/builder/store/useBuilderStore.ts:246' — 'toast('该节点最多允许 ${srcIo.outputs} 条出边', 'warn');'`
+- `docs/CHINESE_AUDIT.md:2313` — `- 'app/chrome-extension/entrypoints/popup/components/builder/store/useBuilderStore.ts:251' — '// 单一同标签出边：删除同源 + 同标签的已有边'`
+- `docs/CHINESE_AUDIT.md:2314` — `- 'app/chrome-extension/entrypoints/popup/components/builder/store/useBuilderStore.ts:421' — '// 备用布局：分层 + 重心排序（不依赖外部库）'`
+- `docs/CHINESE_AUDIT.md:2315` — `- 'app/chrome-extension/entrypoints/popup/components/builder/store/useBuilderStore.ts:521' — '// 自动排版（ELK 优先）：'`
+- `docs/CHINESE_AUDIT.md:2316` — `- 'app/chrome-extension/entrypoints/popup/components/builder/store/useBuilderStore.ts:522' — '// - 动态引入 elkjs，避免常驻体积'`
+- `docs/CHINESE_AUDIT.md:2317` — `- 'app/chrome-extension/entrypoints/popup/components/builder/store/useBuilderStore.ts:523' — '// - 失败则回退到 layoutFallback()'`
+- `docs/CHINESE_AUDIT.md:2318` — `- 'app/chrome-extension/entrypoints/popup/components/builder/store/useBuilderStore.ts:574' — 'toast('ELK 自动布局不可用，已使用备用布局', 'warn');'`
+- `docs/CHINESE_AUDIT.md:2319` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/PropertyPanel.vue:7' — '<div class="header-title">节点属性</div>'`
+- `docs/CHINESE_AUDIT.md:2320` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/PropertyPanel.vue:10' — '<button class="btn-delete" type="button" title="删除节点" @click.stop="onRemove">'`
+- `docs/CHINESE_AUDIT.md:2321` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/PropertyPanel.vue:24' — '<label class="form-label">节点名称</label>'`
+- `docs/CHINESE_AUDIT.md:2322` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/PropertyPanel.vue:25' — '<input class="form-input" v-model="node.name" placeholder="输入节点名称" />'`
+- `docs/CHINESE_AUDIT.md:2323` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/PropertyPanel.vue:31' — '<!-- 属性表单：统一使用 NodeSpec 驱动的表单引擎渲染 -->'`
+- `docs/CHINESE_AUDIT.md:2324` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/PropertyPanel.vue:40' — '<!-- 通用设置 -->'`
+- `docs/CHINESE_AUDIT.md:2325` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/PropertyPanel.vue:42' — '<div class="section-title">通用设置</div>'`
+- `docs/CHINESE_AUDIT.md:2326` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/PropertyPanel.vue:44' — '<label class="form-label">超时 (ms)</label>'`
+- `docs/CHINESE_AUDIT.md:2327` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/PropertyPanel.vue:50' — 'placeholder="默认使用全局超时"'`
+- `docs/CHINESE_AUDIT.md:2328` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/PropertyPanel.vue:56' — '<span>失败时截图</span>'`
+- `docs/CHINESE_AUDIT.md:2329` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/PropertyPanel.vue:62' — '<div class="error-title">⚠️ 配置错误</div>'`
+- `docs/CHINESE_AUDIT.md:2330` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/PropertyPanel.vue:86' — '<div class="empty-text">选择一个节点<br />查看和编辑属性</div>'`
+- `docs/CHINESE_AUDIT.md:2331` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/PropertyPanel.vue:263' — 'const id = prompt('请输入新子流ID');'`
+- `docs/CHINESE_AUDIT.md:2332` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/PropertyPanel.vue:276' — 'if (!n.config?.saveAs) errs.push('需填写保存变量名');'`
+- `docs/CHINESE_AUDIT.md:2333` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/PropertyPanel.vue:277' — 'if (!n.config?.selector && !n.config?.js) errs.push('需提供 selector 或 js');'`
+- `docs/CHINESE_AUDIT.md:2334` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/PropertyPanel.vue:477' — '// 高亮并滚动到指定字段'`
+- `docs/CHINESE_AUDIT.md:2335` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/PropertyPanel.vue:521' — '/* 头部 */'`
+- `docs/CHINESE_AUDIT.md:2336` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/PropertyPanel.vue:560' — '/* 内容区 */'`
+- `docs/CHINESE_AUDIT.md:2337` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/PropertyPanel.vue:600' — '/* 表单区域 */'`
+- `docs/CHINESE_AUDIT.md:2338` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/PropertyPanel.vue:608' — '/* 区域头部 */'`
+- `docs/CHINESE_AUDIT.md:2339` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/PropertyPanel.vue:621' — '/* 表单组 */'`
+- `docs/CHINESE_AUDIT.md:2340` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/PropertyPanel.vue:633' — '/* 表单输入 */'`
+- `docs/CHINESE_AUDIT.md:2341` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/PropertyPanel.vue:687' — '/* 选择器列表 */'`
+- `docs/CHINESE_AUDIT.md:2342` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/PropertyPanel.vue:718' — '/* 按钮 */'`
+- `docs/CHINESE_AUDIT.md:2343` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/PropertyPanel.vue:772' — '/* 分割线 */'`
+- `docs/CHINESE_AUDIT.md:2344` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/PropertyPanel.vue:778' — '/* 错误提示 */'`
+- `docs/CHINESE_AUDIT.md:2345` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/PropertyPanel.vue:799' — '/* 空状态 */'`
+- `docs/CHINESE_AUDIT.md:2346` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/PropertyPanel.vue:819' — '/* 高亮字段 */'`
+- `docs/CHINESE_AUDIT.md:2347` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/Sidebar.vue:191' — '/* 搜索框 */'`
+- `docs/CHINESE_AUDIT.md:2348` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/Sidebar.vue:219' — '/* 节点区域 */'`
+- `docs/CHINESE_AUDIT.md:2349` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/Sidebar.vue:226' — '/* 节点按钮 */'`
+- `docs/CHINESE_AUDIT.md:2350` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/Sidebar.vue:249' — '/* 节点图标 - 彩色圆形 */'`
+- `docs/CHINESE_AUDIT.md:2351` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/Sidebar.vue:349' — '/* 节点标签 */'`
+- `docs/CHINESE_AUDIT.md:2352` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/Sidebar.vue:357' — '/* 分割线 */'`
+- `docs/CHINESE_AUDIT.md:2353` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/EdgePropertyPanel.vue:9' — '<button class="btn-delete" type="button" title="删除边" @click.stop="onRemove">'`
+- `docs/CHINESE_AUDIT.md:2354` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/EdgePropertyPanel.vue:50' — '<div class="empty-text">未选择边</div>'`
+- `docs/CHINESE_AUDIT.md:2355` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/Canvas.vue:187' — '// 边更新由上层状态驱动，这里无需直接修改本地 vfEdges'`
+- `docs/CHINESE_AUDIT.md:2356` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/Canvas.vue:333' — '/* 节点容器 */'`
+- `docs/CHINESE_AUDIT.md:2357` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/Canvas.vue:356' — '/* 图标颜色方案 - 参考图片风格 */'`
+- `docs/CHINESE_AUDIT.md:2358` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/Canvas.vue:450' — '/* 节点主体 */'`
+- `docs/CHINESE_AUDIT.md:2359` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/Canvas.vue:523' — '/* 背景网格 */'`
+- `docs/CHINESE_AUDIT.md:2360` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/KeyValueEditor.vue:4' — '<input class="kve-key" v-model="item.k" placeholder="变量名" />'`
+- `docs/CHINESE_AUDIT.md:2361` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/KeyValueEditor.vue:5' — '<input class="kve-val" v-model="item.v" placeholder="结果路径（如 data.items[0].id）" />'`
+- `docs/CHINESE_AUDIT.md:2362` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/KeyValueEditor.vue:8' — '<button class="mini danger" @click="remove(i)">删</button>'`
+- `docs/CHINESE_AUDIT.md:2363` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/KeyValueEditor.vue:10' — '<button class="mini" @click="add">添加映射</button>'`
+- `docs/CHINESE_AUDIT.md:2364` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/nodes/NodeIf.vue:24' — '<div class="case-label">{{ b.name || '条件${idx + 1}' }}</div>'`
+- `docs/CHINESE_AUDIT.md:2365` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/nodes/node-util.ts:90' — 'trigger: '触发器','`
+- `docs/CHINESE_AUDIT.md:2366` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/nodes/node-util.ts:91' — 'click: '点击','`
+- `docs/CHINESE_AUDIT.md:2367` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/nodes/node-util.ts:92' — 'fill: '填充','`
+- `docs/CHINESE_AUDIT.md:2368` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/nodes/node-util.ts:93' — 'navigate: '导航','`
+- `docs/CHINESE_AUDIT.md:2369` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/nodes/node-util.ts:94' — 'wait: '等待','`
+- `docs/CHINESE_AUDIT.md:2370` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/nodes/node-util.ts:95' — 'extract: '提取','`
+- `docs/CHINESE_AUDIT.md:2371` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/nodes/node-util.ts:97' — 'script: '脚本','`
+- `docs/CHINESE_AUDIT.md:2372` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/nodes/node-util.ts:98' — 'if: '条件','`
+- `docs/CHINESE_AUDIT.md:2373` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/nodes/node-util.ts:99' — 'foreach: '循环','`
+- `docs/CHINESE_AUDIT.md:2374` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/nodes/node-util.ts:100' — 'assert: '断言','`
+- `docs/CHINESE_AUDIT.md:2375` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/nodes/node-util.ts:101' — 'key: '键盘','`
+- `docs/CHINESE_AUDIT.md:2376` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/nodes/node-util.ts:102' — 'drag: '拖拽','`
+- `docs/CHINESE_AUDIT.md:2377` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/nodes/node-util.ts:103' — 'dblclick: '双击','`
+- `docs/CHINESE_AUDIT.md:2378` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/nodes/node-util.ts:104' — 'openTab: '打开标签','`
+- `docs/CHINESE_AUDIT.md:2379` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/nodes/node-util.ts:105' — 'switchTab: '切换标签','`
+- `docs/CHINESE_AUDIT.md:2380` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/nodes/node-util.ts:106' — 'closeTab: '关闭标签','`
+- `docs/CHINESE_AUDIT.md:2381` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/nodes/node-util.ts:107' — 'delay: '延迟','`
+- `docs/CHINESE_AUDIT.md:2382` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/nodes/node-util.ts:108' — 'scroll: '滚动','`
+- `docs/CHINESE_AUDIT.md:2383` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/nodes/node-util.ts:109' — 'while: '循环','`
+- `docs/CHINESE_AUDIT.md:2384` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScreenshot.vue:4' — '<label class="form-label">元素选择器（可选）</label>'`
+- `docs/CHINESE_AUDIT.md:2385` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScreenshot.vue:8' — 'placeholder="为空则截取可视区或全页"'`
+- `docs/CHINESE_AUDIT.md:2386` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScreenshot.vue:13' — '><input type="checkbox" v-model="(node as any).config.fullPage" /> `
+- `docs/CHINESE_AUDIT.md:2387` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScreenshot.vue:17' — '<label class="form-label">保存为变量</label>'`
+- `docs/CHINESE_AUDIT.md:2388` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScreenshot.vue:21' — 'placeholder="变量名，例如 shot"'`
+- `docs/CHINESE_AUDIT.md:2389` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyExecuteFlow.vue:4' — '<label class="form-label">目标工作流</label>'`
+- `docs/CHINESE_AUDIT.md:2390` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyExecuteFlow.vue:6' — '<option value="">请选择</option>'`
+- `docs/CHINESE_AUDIT.md:2391` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyExecuteFlow.vue:13' — '内联执行（共享上下文变量）</label'`
+- `docs/CHINESE_AUDIT.md:2392` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyExecuteFlow.vue:17' — '<label class="form-label">传参 (JSON)</label>'`
+- `docs/CHINESE_AUDIT.md:2393` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyCloseTab.vue:4' — '<label class="form-label">按 URL 关闭（可选）</label>'`
+- `docs/CHINESE_AUDIT.md:2394` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyCloseTab.vue:5' — '<input class="form-input" v-model="(node as any).config.url" placehold`
+- `docs/CHINESE_AUDIT.md:2395` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyCloseTab.vue:8' — '<label class="form-label">Tab IDs（JSON 数组，可选）</label>'`
+- `docs/CHINESE_AUDIT.md:2396` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyWhile.vue:4' — '<label class="form-label">条件 (JSON)</label>'`
+- `docs/CHINESE_AUDIT.md:2397` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyWhile.vue:13' — '<label class="form-label">子流 ID</label>'`
+- `docs/CHINESE_AUDIT.md:2398` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyWhile.vue:17' — 'placeholder="选择或新建子流"'`
+- `docs/CHINESE_AUDIT.md:2399` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyWhile.vue:19' — '<button class="btn-sm" style="margin-top: 8px" @click="onCreateSubflow">`
+- `docs/CHINESE_AUDIT.md:2400` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyWhile.vue:22' — '<label class="form-label">最大迭代次数（可选）</label>'`
+- `docs/CHINESE_AUDIT.md:2401` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyWhile.vue:60' — 'const id = prompt('请输入新子流ID');'`
+- `docs/CHINESE_AUDIT.md:2402` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyExtract.vue:4' — '<label class="form-label">元素选择器（可选）</label>'`
+- `docs/CHINESE_AUDIT.md:2403` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyExtract.vue:5' — '<input class="form-input" v-model="(node as any).config.selector" place`
+- `docs/CHINESE_AUDIT.md:2404` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyExtract.vue:8' — '<label class="form-label">属性</label>'`
+- `docs/CHINESE_AUDIT.md:2405` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyExtract.vue:12' — 'placeholder="text/textContent 或属性名"'`
+- `docs/CHINESE_AUDIT.md:2406` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyExtract.vue:16' — '<label class="form-label">自定义 JS（返回值）</label>'`
+- `docs/CHINESE_AUDIT.md:2407` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyExtract.vue:25' — '<label class="form-label">保存为变量</label>'`
+- `docs/CHINESE_AUDIT.md:2408` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyExtract.vue:26' — '<input class="form-input" v-model="(node as any).config.saveAs" placeh`
+- `docs/CHINESE_AUDIT.md:2409` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScript.vue:4' — '<label class="form-label">代码</label>'`
+- `docs/CHINESE_AUDIT.md:2410` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScript.vue:13' — '<label class="form-label">执行环境</label>'`
+- `docs/CHINESE_AUDIT.md:2411` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScript.vue:20' — '<label class="form-label">执行时机</label>'`
+- `docs/CHINESE_AUDIT.md:2412` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScript.vue:27' — '<label class="form-label">保存为变量（可选）</label>'`
+- `docs/CHINESE_AUDIT.md:2413` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScript.vue:28' — '<input class="form-input" v-model="(node as any).config.saveAs" placeho`
+- `docs/CHINESE_AUDIT.md:2414` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScript.vue:31' — '<label class="form-label">结果字段映射</label>'`
+- `docs/CHINESE_AUDIT.md:2415` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySetAttribute.vue:6' — '<label class="form-label">属性名</label>'`
+- `docs/CHINESE_AUDIT.md:2416` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySetAttribute.vue:10' — 'placeholder="如 value/src/disabled 等"'`
+- `docs/CHINESE_AUDIT.md:2417` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySetAttribute.vue:14' — '<label class="form-label">属性值（留空并勾选删除则移除）</label>'`
+- `docs/CHINESE_AUDIT.md:2418` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySetAttribute.vue:15' — '<input class="form-input" v-model="(node as any).config.value" pl`
+- `docs/CHINESE_AUDIT.md:2419` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySetAttribute.vue:19' — '><input type="checkbox" v-model="(node as any).config.remove" /> `
+- `docs/CHINESE_AUDIT.md:2420` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyKey.vue:4' — '<label class="form-label">按键序列</label>'`
+- `docs/CHINESE_AUDIT.md:2421` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyKey.vue:8' — 'placeholder="如 Backspace Enter 或 cmd+a"'`
+- `docs/CHINESE_AUDIT.md:2422` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScroll.vue:4' — '<label class="form-label">模式</label>'`
+- `docs/CHINESE_AUDIT.md:2423` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScroll.vue:6' — '<option value="element">滚动到元素</option>'`
+- `docs/CHINESE_AUDIT.md:2424` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScroll.vue:7' — '<option value="offset">窗口偏移</option>'`
+- `docs/CHINESE_AUDIT.md:2425` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScroll.vue:8' — '<option value="container">容器偏移</option>'`
+- `docs/CHINESE_AUDIT.md:2426` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScroll.vue:13' — '<SelectorEditor :node="node" :allowPick="true" title="目标元素" targetKey="`
+- `docs/CHINESE_AUDIT.md:2427` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScroll.vue:18' — '<label class="form-label">偏移 X</label>'`
+- `docs/CHINESE_AUDIT.md:2428` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScroll.vue:22' — '<label class="form-label">偏移 Y</label>'`
+- `docs/CHINESE_AUDIT.md:2429` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScroll.vue:31' — '<SelectorEditor :node="node" :allowPick="true" title="容器选择器" targetKey=`
+- `docs/CHINESE_AUDIT.md:2430` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScroll.vue:32' — '<div class="hint"><small>容器需支持 scrollTo(top,left)</small></div>'`
+- `docs/CHINESE_AUDIT.md:2431` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyFormRenderer.vue:3' — '<div class="section-title">配置</div>'`
+- `docs/CHINESE_AUDIT.md:2432` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyFormRenderer.vue:16' — '<div class="error-title">⚠️ 配置错误</div>'`
+- `docs/CHINESE_AUDIT.md:2433` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyFormRenderer.vue:73' — 'if (f.required && (cfg[f.key] === undefined || cfg[f.key] === '')`
+- `docs/CHINESE_AUDIT.md:2434` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyFormRenderer.vue:195' — 'err.value = 'JSON 格式错误';'`
+- `docs/CHINESE_AUDIT.md:2435` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyFormRenderer.vue:203' — 'placeholder: '输入 JSON','`
+- `docs/CHINESE_AUDIT.md:2436` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyFormRenderer.vue:303' — 'h('button', { class: 'btn-mini', type: 'button', onClick: () => `
+- `docs/CHINESE_AUDIT.md:2437` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyFormRenderer.vue:306' — 'h('button', { class: 'btn', type: 'button', onClick: add }, '新增'`
+- `docs/CHINESE_AUDIT.md:2438` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyHttp.vue:4' — '<label class="form-label">请求方法</label>'`
+- `docs/CHINESE_AUDIT.md:2439` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyHttp.vue:14' — '<label class="form-label">URL 地址</label>'`
+- `docs/CHINESE_AUDIT.md:2440` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyHttp.vue:40' — '<label class="form-label">FormData (JSON，可选，提供时覆盖 Body)</label>'`
+- `docs/CHINESE_AUDIT.md:2441` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyHttp.vue:48' — '>支持简洁数组形式：[["file","url:https://...","a.png"],["metadata","value"]]</div'`
+- `docs/CHINESE_AUDIT.md:2442` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyNavigate.vue:4' — '<label class="form-label">URL 地址</label>'`
+- `docs/CHINESE_AUDIT.md:2443` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTriggerEvent.vue:6' — '<label class="form-label">事件类型</label>'`
+- `docs/CHINESE_AUDIT.md:2444` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTriggerEvent.vue:10' — 'placeholder="如 input/change/mouseover"'`
+- `docs/CHINESE_AUDIT.md:2445` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTriggerEvent.vue:15' — '><input type="checkbox" v-model="(node as any).config.bubbles" />`
+- `docs/CHINESE_AUDIT.md:2446` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTriggerEvent.vue:18' — '><input type="checkbox" v-model="(node as any).config.cancelable"`
+- `docs/CHINESE_AUDIT.md:2447` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyHandleDownload.vue:4' — '<label class="form-label">文件名包含（可选）</label>'`
+- `docs/CHINESE_AUDIT.md:2448` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyHandleDownload.vue:8' — 'placeholder="子串匹配文件名或URL"'`
+- `docs/CHINESE_AUDIT.md:2449` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyHandleDownload.vue:12' — '<label class="form-label">超时(ms)</label>'`
+- `docs/CHINESE_AUDIT.md:2450` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyHandleDownload.vue:13' — '<input class="form-input" v-model="(node as any).config.timeout`
+- `docs/CHINESE_AUDIT.md:2451` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyHandleDownload.vue:18' — '等待下载完成</label'`
+- `docs/CHINESE_AUDIT.md:2452` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyHandleDownload.vue:22' — '<label class="form-label">保存到变量</label>'`
+- `docs/CHINESE_AUDIT.md:2453` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyHandleDownload.vue:23' — '<input class="form-input" v-model="(node as any).config.saveAs"`
+- `docs/CHINESE_AUDIT.md:2454` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyDelay.vue:4' — '<label class="form-label">延迟 (ms)</label>'`
+- `docs/CHINESE_AUDIT.md:2455` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyLoopElements.vue:4' — '<label class="form-label">元素选择器</label>'`
+- `docs/CHINESE_AUDIT.md:2456` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyLoopElements.vue:5' — '<input class="form-input" v-model="(node as any).config.selector" `
+- `docs/CHINESE_AUDIT.md:2457` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyLoopElements.vue:8' — '<label class="form-label">列表变量名</label>'`
+- `docs/CHINESE_AUDIT.md:2458` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyLoopElements.vue:9' — '<input class="form-input" v-model="(node as any).config.saveAs" pl`
+- `docs/CHINESE_AUDIT.md:2459` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyLoopElements.vue:12' — '<label class="form-label">循环项变量名</label>'`
+- `docs/CHINESE_AUDIT.md:2460` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyLoopElements.vue:13' — '<input class="form-input" v-model="(node as any).config.itemVar" `
+- `docs/CHINESE_AUDIT.md:2461` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyLoopElements.vue:16' — '<label class="form-label">子流 ID</label>'`
+- `docs/CHINESE_AUDIT.md:2462` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyLoopElements.vue:20' — 'placeholder="选择或新建子流"'`
+- `docs/CHINESE_AUDIT.md:2463` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyLoopElements.vue:22' — '<button class="btn-sm" style="margin-top: 8px" @click="onCreateSu`
+- `docs/CHINESE_AUDIT.md:2464` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyLoopElements.vue:35' — 'const id = prompt('请输入新子流ID');'`
+- `docs/CHINESE_AUDIT.md:2465` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:5' — '><input type="checkbox" v-model="cfg.enabled" /> 启用触发器</label'`
+- `docs/CHINESE_AUDIT.md:2466` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:9' — '<label class="form-label">描述（可选）</label>'`
+- `docs/CHINESE_AUDIT.md:2467` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:10' — '<input class="form-input" v-model="cfg.description" placeholder="说明此触发`
+- `docs/CHINESE_AUDIT.md:2468` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:17' — '<div class="section-header"><span class="section-title">触发方式</span></d`
+- `docs/CHINESE_AUDIT.md:2469` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:20' — '><input type="checkbox" v-model="cfg.modes.manual" /> 手动</label'`
+- `docs/CHINESE_AUDIT.md:2470` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:23' — '><input type="checkbox" v-model="cfg.modes.url" /> 访问 URL</label'`
+- `docs/CHINESE_AUDIT.md:2471` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:26' — '><input type="checkbox" v-model="cfg.modes.contextMenu" /> 右键菜单</label`
+- `docs/CHINESE_AUDIT.md:2472` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:29' — '><input type="checkbox" v-model="cfg.modes.command" /> 快捷键</label'`
+- `docs/CHINESE_AUDIT.md:2473` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:32' — '><input type="checkbox" v-model="cfg.modes.dom" /> DOM 变化</label'`
+- `docs/CHINESE_AUDIT.md:2474` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:35' — '><input type="checkbox" v-model="cfg.modes.schedule" /> 定时</label'`
+- `docs/CHINESE_AUDIT.md:2475` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:41' — '<div class="section-title">访问 URL 匹配</div>'`
+- `docs/CHINESE_AUDIT.md:2476` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:45' — '<option value="url">前缀 URL</option>'`
+- `docs/CHINESE_AUDIT.md:2477` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:46' — '<option value="domain">域名包含</option>'`
+- `docs/CHINESE_AUDIT.md:2478` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:47' — '<option value="path">路径前缀</option>'`
+- `docs/CHINESE_AUDIT.md:2479` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:52' — 'placeholder="例如 https://example.com/app"'`
+- `docs/CHINESE_AUDIT.md:2480` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:64' — '<button class="btn-sm" @click="urlRules.push({ kind: 'url', value: '' `
+- `docs/CHINESE_AUDIT.md:2481` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:68' — '<div class="section-title">右键菜单</div>'`
+- `docs/CHINESE_AUDIT.md:2482` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:70' — '<label class="form-label">标题</label>'`
+- `docs/CHINESE_AUDIT.md:2483` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:71' — '<input class="form-input" v-model="cfg.contextMenu.title" placeholder=`
+- `docs/CHINESE_AUDIT.md:2484` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:74' — '<label class="form-label">作用范围</label>'`
+- `docs/CHINESE_AUDIT.md:2485` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:84' — '<div class="section-title">快捷键</div>'`
+- `docs/CHINESE_AUDIT.md:2486` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:86' — '<label class="form-label">命令键（需预先在 manifest commands 中声明）</label>'`
+- `docs/CHINESE_AUDIT.md:2487` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:90' — 'placeholder="例如 run_quick_trigger_1"'`
+- `docs/CHINESE_AUDIT.md:2488` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:94' — '>提示：Chrome 扩展快捷键需要在 manifest 里固定声明，无法运行时动态添加。</div'`
+- `docs/CHINESE_AUDIT.md:2489` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:99' — '<div class="section-title">DOM 变化</div>'`
+- `docs/CHINESE_AUDIT.md:2490` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:101' — '<label class="form-label">选择器</label>'`
+- `docs/CHINESE_AUDIT.md:2491` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:106' — '><input type="checkbox" v-model="cfg.dom.appear" /> 出现时触发</label'`
+- `docs/CHINESE_AUDIT.md:2492` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:109' — '><input type="checkbox" v-model="cfg.dom.once" /> 仅触发一次</label'`
+- `docs/CHINESE_AUDIT.md:2493` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:113' — '<label class="form-label">去抖(ms)</label>'`
+- `docs/CHINESE_AUDIT.md:2494` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:119' — '<div class="section-title">定时</div>'`
+- `docs/CHINESE_AUDIT.md:2495` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:123' — '<option value="interval">间隔(分钟)</option>'`
+- `docs/CHINESE_AUDIT.md:2496` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:124' — '<option value="daily">每天(HH:mm)</option>'`
+- `docs/CHINESE_AUDIT.md:2497` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:125' — '<option value="once">一次(ISO时间)</option>'`
+- `docs/CHINESE_AUDIT.md:2498` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:130' — 'placeholder="5 或 09:00 或 2025-01-01T10:00:00"'`
+- `docs/CHINESE_AUDIT.md:2499` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:132' — '<label class="checkbox-label"><input type="checkbox" v-model="s.enabl`
+- `docs/CHINESE_AUDIT.md:2500` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:144' — '>+ 添加定时</button'`
+- `docs/CHINESE_AUDIT.md:2501` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:151' — '>说明：'`
+- `docs/CHINESE_AUDIT.md:2502` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:152' — '触发器会在保存工作流时同步到后台触发表（URL/右键/快捷键/DOM）和计划任务（间隔/每天/一次）。'`
+- `docs/CHINESE_AUDIT.md:2503` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:178' — 'n.config.contextMenu = { title: '运行工作流', contexts: ['all'], enabled: `
+- `docs/CHINESE_AUDIT.md:2504` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyIf.vue:8' — '>使用表达式定义分支，支持变量与常见比较运算符。</div'`
+- `docs/CHINESE_AUDIT.md:2505` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyIf.vue:13' — '<input class="form-input-sm flex-1" v-model="c.name" placeholder="分支名称（可选）"`
+- `docs/CHINESE_AUDIT.md:2506` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyIf.vue:14' — '<button class="btn-icon-sm danger" @click="removeIfCase(i)" title="删除">×</b`
+- `docs/CHINESE_AUDIT.md:2507` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyIf.vue:29' — '<option value="" disabled>插入变量</option>'`
+- `docs/CHINESE_AUDIT.md:2508` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyIf.vue:37' — '<option value="" disabled>运算符</option>'`
+- `docs/CHINESE_AUDIT.md:2509` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyIf.vue:44' — '<div class="text-xs text-slate-500">Else 分支（无需表达式，将匹配以上条件都不成立时）</div>'`
+- `docs/CHINESE_AUDIT.md:2510` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyOpenTab.vue:4' — '<label class="form-label">URL 地址（可选）</label>'`
+- `docs/CHINESE_AUDIT.md:2511` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyOpenTab.vue:13' — '><input type="checkbox" v-model="(node as any).config.newWindow" /> 新窗`
+- `docs/CHINESE_AUDIT.md:2512` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyFromSpec.vue:4' — '<div class="section-title">未找到节点规范</div>'`
+- `docs/CHINESE_AUDIT.md:2513` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyFromSpec.vue:5' — '<div class="help">该节点尚未提供 NodeSpec，已回退到默认属性面板。</div>'`
+- `docs/CHINESE_AUDIT.md:2514` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyFromSpec.vue:7' — '<!-- 将通用字段留给外层 PropertyPanel 渲染（timeoutMs/screenshotOnFail等） -->'`
+- `docs/CHINESE_AUDIT.md:2515` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySwitchFrame.vue:4' — '<label class="form-label">按 URL 包含匹配（优先）</label>'`
+- `docs/CHINESE_AUDIT.md:2516` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySwitchFrame.vue:8' — 'placeholder="frame URL 包含的字符串"'`
+- `docs/CHINESE_AUDIT.md:2517` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySwitchFrame.vue:12' — '<label class="form-label">按索引匹配（从 0 起，仅子 frame）</label>'`
+- `docs/CHINESE_AUDIT.md:2518` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySwitchFrame.vue:13' — '<input class="form-input" v-model="(node as any).config.frame.inde`
+- `docs/CHINESE_AUDIT.md:2519` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySwitchFrame.vue:16' — '>同源/可注入 frame 可用；留空则回到顶级页面</div'`
+- `docs/CHINESE_AUDIT.md:2520` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyDrag.vue:3' — '<SelectorEditor :node="node" :allowPick="true" title="起点选择器" targetKey="st`
+- `docs/CHINESE_AUDIT.md:2521` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyDrag.vue:4' — '<SelectorEditor :node="node" :allowPick="true" title="终点选择器" targetKey="en`
+- `docs/CHINESE_AUDIT.md:2522` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyDrag.vue:6' — '<small>提示：路径（path）通常在录制时自动生成，手动创建时可留空。</small>'`
+- `docs/CHINESE_AUDIT.md:2523` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyWait.vue:4' — '<label class="form-label">等待条件 (JSON)</label>'`
+- `docs/CHINESE_AUDIT.md:2524` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/SelectorEditor.vue:4' — '<span class="section-title">{{ title || '选择器' }}</span>'`
+- `docs/CHINESE_AUDIT.md:2525` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/SelectorEditor.vue:5' — '<button v-if="allowPick" class="btn-sm btn-primary" @click="pickFromPage`
+- `docs/CHINESE_AUDIT.md:2526` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/SelectorEditor.vue:16' — '<input class="form-input-sm flex-1" v-model="c.value" placeholder="选择器值`
+- `docs/CHINESE_AUDIT.md:2527` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/SelectorEditor.vue:21' — '<button class="btn-sm" @click="add">+ 添加选择器</button>'`
+- `docs/CHINESE_AUDIT.md:2528` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySwitchTab.vue:4' — '<label class="form-label">Tab ID（可选）</label>'`
+- `docs/CHINESE_AUDIT.md:2529` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySwitchTab.vue:9' — 'placeholder="数字"'`
+- `docs/CHINESE_AUDIT.md:2530` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySwitchTab.vue:13' — '<label class="form-label">URL 包含（可选）</label>'`
+- `docs/CHINESE_AUDIT.md:2531` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySwitchTab.vue:14' — '<input class="form-input" v-model="(node as any).config.urlContains"`
+- `docs/CHINESE_AUDIT.md:2532` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySwitchTab.vue:17' — '<label class="form-label">标题包含（可选）</label>'`
+- `docs/CHINESE_AUDIT.md:2533` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySwitchTab.vue:21' — 'placeholder="子串匹配"'`
+- `docs/CHINESE_AUDIT.md:2534` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySwitchTab.vue:28' — '>需提供 tabId 或 URL/标题包含</div'`
+- `docs/CHINESE_AUDIT.md:2535` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyFill.vue:6' — '<label class="form-label">输入值</label>'`
+- `docs/CHINESE_AUDIT.md:2536` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyFill.vue:7' — '<VarInput v-model="value" :variables="variables" placeholder="支持 {变量名} 格式"`
+- `docs/CHINESE_AUDIT.md:2537` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyAssert.vue:4' — '<label class="form-label">断言条件 (JSON)</label>'`
+- `docs/CHINESE_AUDIT.md:2538` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyAssert.vue:13' — '<label class="form-label">失败策略</label>'`
+- `docs/CHINESE_AUDIT.md:2539` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyForeach.vue:4' — '<label class="form-label">列表变量</label>'`
+- `docs/CHINESE_AUDIT.md:2540` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyForeach.vue:12' — '<label class="form-label">循环项变量名</label>'`
+- `docs/CHINESE_AUDIT.md:2541` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyForeach.vue:13' — '<input class="form-input" v-model="(node as any).config.itemVar" place`
+- `docs/CHINESE_AUDIT.md:2542` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyForeach.vue:16' — '<label class="form-label">子流 ID</label>'`
+- `docs/CHINESE_AUDIT.md:2543` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyForeach.vue:20' — 'placeholder="选择或新建子流"'`
+- `docs/CHINESE_AUDIT.md:2544` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyForeach.vue:22' — '<button class="btn-sm" style="margin-top: 8px" @click="onCreateSubflow`
+- `docs/CHINESE_AUDIT.md:2545` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyForeach.vue:35' — 'const id = prompt('请输入新子流ID');'`
+- `docs/CHINESE_AUDIT.md:2546` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/index.ts:2' — '* @fileoverview Record-Replay V3 公共 API 入口'`
+- `docs/CHINESE_AUDIT.md:2547` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/index.ts:3' — '* @description 导出所有公共类型和接口'`
+- `docs/CHINESE_AUDIT.md:2548` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/index.ts:26' — '* 创建完整的 StoragePort 实现'`
+- `docs/CHINESE_AUDIT.md:2549` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/index.ts:41' — '/** V3 API 版本 */'`
+- `docs/CHINESE_AUDIT.md:2550` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/index.ts:44' — '/** 是否为 V3 API */'`
+- `docs/CHINESE_AUDIT.md:2551` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/bootstrap.ts:6' — '* 设计说明：'`
+- `docs/CHINESE_AUDIT.md:2552` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/bootstrap.ts:7' — '* - 必须先执行 recoverFromCrash() 再启动 scheduler.start()'`
+- `docs/CHINESE_AUDIT.md:2553` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/bootstrap.ts:8' — '* - 使用全局单例 keepalive-manager 避免多个控制器冲突'`
+- `docs/CHINESE_AUDIT.md:2554` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/bootstrap.ts:9' — '* - RunExecutor 使用 RunRunner 执行实际的 Flow'`
+- `docs/CHINESE_AUDIT.md:2555` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/bootstrap.ts:59' — '* V3 运行时句柄'`
+- `docs/CHINESE_AUDIT.md:2556` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/bootstrap.ts:119' — '* 解析运行 Run 所需的 Tab ID'`
+- `docs/CHINESE_AUDIT.md:2557` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/bootstrap.ts:120' — '* 优先级: run.tabId > queue.tabId > trigger.sourceTabId > 创建新 Tab'`
+- `docs/CHINESE_AUDIT.md:2558` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/bootstrap.ts:143' — '* 将 Run 标记为失败'`
+- `docs/CHINESE_AUDIT.md:2559` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/bootstrap.ts:144' — '* 注意：会重新读取最新的 RunRecord 以获取正确的 startedAt'`
+- `docs/CHINESE_AUDIT.md:2560` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/bootstrap.ts:153' — '// 重新获取最新的 run 记录以获取正确的 startedAt'`
+- `docs/CHINESE_AUDIT.md:2561` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/bootstrap.ts:188' — '* 创建默认的 RunExecutor'`
+- `docs/CHINESE_AUDIT.md:2562` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/bootstrap.ts:189' — '* 使用 RunRunner 执行 Flow'`
+- `docs/CHINESE_AUDIT.md:2563` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/bootstrap.ts:202' — '// 1. 获取 RunRecord'`
+- `docs/CHINESE_AUDIT.md:2564` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/bootstrap.ts:209' — '// 2. 获取 Flow'`
+- `docs/CHINESE_AUDIT.md:2565` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/bootstrap.ts:220' — '// 3. 解析 Tab ID'`
+- `docs/CHINESE_AUDIT.md:2566` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/bootstrap.ts:228' — '// 4. 同步 attempt 到 RunRecord'`
+- `docs/CHINESE_AUDIT.md:2567` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/bootstrap.ts:239' — '// 5. 执行 Run'`
+- `docs/CHINESE_AUDIT.md:2568` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/bootstrap.ts:250' — '// 注册到 RunnerRegistry，供 DebugController 和 RPC 使用'`
+- `docs/CHINESE_AUDIT.md:2569` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/bootstrap.ts:261' — '// 6. 注销 Runner'`
+- `docs/CHINESE_AUDIT.md:2570` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/bootstrap.ts:266' — '// 7. 清理临时 Tab'`
+- `docs/CHINESE_AUDIT.md:2571` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/bootstrap.ts:277' — '* 启动 RR-V3 运行时'`
+- `docs/CHINESE_AUDIT.md:2572` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/bootstrap.ts:278' — '* @returns 运行时句柄'`
+- `docs/CHINESE_AUDIT.md:2573` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/bootstrap.ts:458' — '* 获取当前运行时（如果已启动）'`
+- `docs/CHINESE_AUDIT.md:2574` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/bootstrap.ts:465' — '* 检查 V3 是否已启动'`
+- `docs/CHINESE_AUDIT.md:2575` — `- 'app/chrome-extension/entrypoints/background/record-replay/legacy-types.ts:136' — '// 失败策略：stop=失败即停（默认）、warn=仅告警并继续、retry=触发重试机制'`
+- `docs/CHINESE_AUDIT.md:2576` — `- 'app/chrome-extension/entrypoints/background/record-replay/index.ts:82' — '// rr_recorder_event 交由 ContentMessageHandler 处理'`
+- `docs/CHINESE_AUDIT.md:2577` — `- 'app/chrome-extension/entrypoints/background/record-replay/index.ts:402' — 'title: (t as any).title || '运行工作流','`
+- `docs/CHINESE_AUDIT.md:2578` — `- 'app/chrome-extension/entrypoints/background/record-replay/selector-engine.ts:86' — '// Minimal ARIA role+name parser like: "button[name=提交]" or "textbox[name=用户名]"'`
+- `docs/CHINESE_AUDIT.md:2579` — `- 'app/chrome-extension/entrypoints/background/web-editor/index.ts:680' — 'title: '切换网页编辑模式','`
+- `docs/CHINESE_AUDIT.md:2580` — `- 'app/chrome-extension/entrypoints/background/web-editor/index.ts:1502' — ''No Agent project selected. Open Side Panel → 智能助手 and select/create a project first.','`
+- `docs/CHINESE_AUDIT.md:2581` — `- 'app/chrome-extension/entrypoints/background/element-marker/index.ts:57' — 'title: '标注元素','`
+- `docs/CHINESE_AUDIT.md:2582` — `- 'app/chrome-extension/entrypoints/background/tools/browser/javascript.ts:235' — '// CDP 内置超时（毫秒），与外层 withTimeout 双重保障'`
+- `docs/CHINESE_AUDIT.md:2583` — `- 'app/chrome-extension/entrypoints/background/tools/browser/javascript.ts:239' — '// 外层超时稍长，给 CDP 一点余量处理超时响应'`
+- `docs/CHINESE_AUDIT.md:2584` — `- 'app/chrome-extension/entrypoints/background/tools/browser/console-buffer.ts:4' — '* ConsoleBuffer - 持久化的控制台日志缓冲管理器'`
+- `docs/CHINESE_AUDIT.md:2585` — `- 'app/chrome-extension/entrypoints/background/tools/browser/console-buffer.ts:6' — '* 为每个 tab 维护一个滚动缓冲区，持续收集控制台事件。'`
+- `docs/CHINESE_AUDIT.md:2586` — `- 'app/chrome-extension/entrypoints/background/tools/browser/console-buffer.ts:7' — '* 当 tab 导航到新域名时会自动清空缓冲，避免不同站点日志混淆。'`
+- `docs/CHINESE_AUDIT.md:2587` — `- 'app/chrome-extension/entrypoints/background/tools/browser/console-buffer.ts:107' — '* 从 CDP RemoteObject 提取安全的预览数据，丢弃 objectId 避免内存泄漏'`
+- `docs/CHINESE_AUDIT.md:2588` — `- 'app/chrome-extension/entrypoints/background/tools/browser/console-buffer.ts:113' — '// 只保留安全的字段，丢弃 objectId'`
+- `docs/CHINESE_AUDIT.md:2589` — `- 'app/chrome-extension/entrypoints/background/tools/browser/console-buffer.ts:160' — '* 检查指定 tab 是否正在进行 buffer 模式的捕获'`
+- `docs/CHINESE_AUDIT.md:2590` — `- 'app/chrome-extension/entrypoints/background/tools/browser/console-buffer.ts:167' — '* 确保指定 tab 的 buffer 捕获已启动'`
+- `docs/CHINESE_AUDIT.md:2591` — `- 'app/chrome-extension/entrypoints/background/tools/browser/console-buffer.ts:183' — '* 清空指定 tab 的缓冲区'`
+- `docs/CHINESE_AUDIT.md:2592` — `- 'app/chrome-extension/entrypoints/background/tools/browser/console-buffer.ts:210' — '* 读取指定 tab 的缓冲区内容'`
+- `docs/CHINESE_AUDIT.md:2593` — `- 'app/chrome-extension/entrypoints/background/tools/browser/console-buffer.ts:221' — '// 过滤消息'`
+- `docs/CHINESE_AUDIT.md:2594` — `- 'app/chrome-extension/entrypoints/background/tools/browser/console-buffer.ts:230' — '// 按时间排序'`
+- `docs/CHINESE_AUDIT.md:2595` — `- 'app/chrome-extension/entrypoints/background/tools/browser/console-buffer.ts:233' — '// 应用 limit'`
+- `docs/CHINESE_AUDIT.md:2596` — `- 'app/chrome-extension/entrypoints/background/tools/browser/console-buffer.ts:239' — '// 保留最新的消息'`
+- `docs/CHINESE_AUDIT.md:2597` — `- 'app/chrome-extension/entrypoints/background/tools/browser/console-buffer.ts:243' — '// 过滤异常'`
+- `docs/CHINESE_AUDIT.md:2598` — `- 'app/chrome-extension/entrypoints/background/tools/browser/console-buffer.ts:323' — '// 域名变化时清空缓冲'`
+- `docs/CHINESE_AUDIT.md:2599` — `- 'app/chrome-extension/entrypoints/background/tools/browser/console-buffer.ts:390' — '// 只存储安全的预览数据，避免内存泄漏'`
+- `docs/CHINESE_AUDIT.md:2600` — `- 'app/chrome-extension/entrypoints/background/tools/browser/console.ts:18' — '// 新增参数'`
+- `docs/CHINESE_AUDIT.md:2601` — `- 'app/chrome-extension/entrypoints/background/tools/browser/console.ts:20' — 'buffer?: boolean; // mode="buffer" 的别名'`
+- `docs/CHINESE_AUDIT.md:2602` — `- 'app/chrome-extension/entrypoints/background/tools/browser/console.ts:21' — 'clear?: boolean; // 读取前清空'`
+- `docs/CHINESE_AUDIT.md:2603` — `- 'app/chrome-extension/entrypoints/background/tools/browser/console.ts:22' — 'clearAfterRead?: boolean; // 读取后清空（mcp-tools.js 风格）'`
+- `docs/CHINESE_AUDIT.md:2604` — `- 'app/chrome-extension/entrypoints/background/tools/browser/console.ts:67' — '// 辅助函数'`
+- `docs/CHINESE_AUDIT.md:2605` — `- 'app/chrome-extension/entrypoints/background/tools/browser/console.ts:78' — '// 支持 /pattern/flags 语法'`
+- `docs/CHINESE_AUDIT.md:2606` — `- 'app/chrome-extension/entrypoints/background/tools/browser/console.ts:165' — '// 解析正则表达式'`
+- `docs/CHINESE_AUDIT.md:2607` — `- 'app/chrome-extension/entrypoints/background/tools/browser/console.ts:201' — '// 确定模式：buffer 参数是 mode="buffer" 的别名'`
+- `docs/CHINESE_AUDIT.md:2608` — `- 'app/chrome-extension/entrypoints/background/tools/browser/console.ts:205' — '// 计算有效的消息限制'`
+- `docs/CHINESE_AUDIT.md:2609` — `- 'app/chrome-extension/entrypoints/background/tools/browser/console.ts:212' — '// Buffer 模式'`
+- `docs/CHINESE_AUDIT.md:2610` — `- 'app/chrome-extension/entrypoints/background/tools/browser/console.ts:224' — '// 处理读取前清空请求'`
+- `docs/CHINESE_AUDIT.md:2611` — `- 'app/chrome-extension/entrypoints/background/tools/browser/console.ts:230' — '// 读取缓冲区'`
+- `docs/CHINESE_AUDIT.md:2612` — `- 'app/chrome-extension/entrypoints/background/tools/browser/console.ts:242' — '// 处理读取后清空请求（mcp-tools.js 风格，避免重复读取）'`
+- `docs/CHINESE_AUDIT.md:2613` — `- 'app/chrome-extension/entrypoints/background/tools/browser/console.ts:248' — '// 构建清空摘要'`
+- `docs/CHINESE_AUDIT.md:2614` — `- 'app/chrome-extension/entrypoints/background/tools/browser/console.ts:284' — '// Snapshot 模式（一次性捕获）'`
+- `docs/CHINESE_AUDIT.md:2615` — `- 'app/chrome-extension/entrypoints/background/tools/browser/console.ts:290' — '// 应用过滤器'`
+- `docs/CHINESE_AUDIT.md:2616` — `- 'app/chrome-extension/entrypoints/background/tools/browser/console.ts:575' — '// 如果 buffer 模式正在使用这个 tab，不要关闭 Runtime/Log 域'`
+- `docs/CHINESE_AUDIT.md:2617` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/errors.ts:2' — '* @fileoverview 错误类型定义'`
+- `docs/CHINESE_AUDIT.md:2618` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/errors.ts:3' — '* @description 定义 Record-Replay V3 中使用的错误码和错误类型'`
+- `docs/CHINESE_AUDIT.md:2619` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/errors.ts:8' — '/** 错误码常量 */'`
+- `docs/CHINESE_AUDIT.md:2620` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/errors.ts:10' — '// ===== 验证错误 ====='`
+- `docs/CHINESE_AUDIT.md:2621` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/errors.ts:11' — '/** 通用验证错误 */'`
+- `docs/CHINESE_AUDIT.md:2622` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/errors.ts:13' — '/** 不支持的节点类型 */'`
+- `docs/CHINESE_AUDIT.md:2623` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/errors.ts:15' — '/** DAG 结构无效 */'`
+- `docs/CHINESE_AUDIT.md:2624` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/errors.ts:17' — '/** DAG 存在循环 */'`
+- `docs/CHINESE_AUDIT.md:2625` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/errors.ts:20' — '// ===== 运行时错误 ====='`
+- `docs/CHINESE_AUDIT.md:2626` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/errors.ts:21' — '/** 操作超时 */'`
+- `docs/CHINESE_AUDIT.md:2627` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/errors.ts:23' — '/** Tab 未找到 */'`
+- `docs/CHINESE_AUDIT.md:2628` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/errors.ts:25' — '/** Frame 未找到 */'`
+- `docs/CHINESE_AUDIT.md:2629` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/errors.ts:27' — '/** 目标元素未找到 */'`
+- `docs/CHINESE_AUDIT.md:2630` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/errors.ts:29' — '/** 元素不可见 */'`
+- `docs/CHINESE_AUDIT.md:2631` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/errors.ts:31' — '/** 导航失败 */'`
+- `docs/CHINESE_AUDIT.md:2632` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/errors.ts:33' — '/** 网络请求失败 */'`
+- `docs/CHINESE_AUDIT.md:2633` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/errors.ts:36' — '// ===== 脚本/工具错误 ====='`
+- `docs/CHINESE_AUDIT.md:2634` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/errors.ts:37' — '/** 脚本执行失败 */'`
+- `docs/CHINESE_AUDIT.md:2635` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/errors.ts:39' — '/** 权限被拒绝 */'`
+- `docs/CHINESE_AUDIT.md:2636` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/errors.ts:41' — '/** 工具执行错误 */'`
+- `docs/CHINESE_AUDIT.md:2637` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/errors.ts:44' — '// ===== 控制错误 ====='`
+- `docs/CHINESE_AUDIT.md:2638` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/errors.ts:45' — '/** Run 被取消 */'`
+- `docs/CHINESE_AUDIT.md:2639` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/errors.ts:47' — '/** Run 被暂停 */'`
+- `docs/CHINESE_AUDIT.md:2640` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/errors.ts:50' — '// ===== 内部错误 ====='`
+- `docs/CHINESE_AUDIT.md:2641` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/errors.ts:51' — '/** 内部错误 */'`
+- `docs/CHINESE_AUDIT.md:2642` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/errors.ts:53' — '/** 不变量违规 */'`
+- `docs/CHINESE_AUDIT.md:2643` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/errors.ts:57' — '/** 错误码类型 */'`
+- `docs/CHINESE_AUDIT.md:2644` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/errors.ts:61' — '* Record-Replay 错误接口'`
+- `docs/CHINESE_AUDIT.md:2645` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/errors.ts:62' — '* @description 统一的错误表示，支持错误链和可重试标记'`
+- `docs/CHINESE_AUDIT.md:2646` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/errors.ts:65' — '/** 错误码 */'`
+- `docs/CHINESE_AUDIT.md:2647` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/errors.ts:67' — '/** 错误消息 */'`
+- `docs/CHINESE_AUDIT.md:2648` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/errors.ts:69' — '/** 附加数据 */'`
+- `docs/CHINESE_AUDIT.md:2649` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/errors.ts:71' — '/** 是否可重试 */'`
+- `docs/CHINESE_AUDIT.md:2650` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/errors.ts:73' — '/** 原因错误（错误链） */'`
+- `docs/CHINESE_AUDIT.md:2651` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/errors.ts:78' — '* 创建 RRError 的工厂函数'`
+- `docs/CHINESE_AUDIT.md:2652` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/flow.ts:2' — '* @fileoverview Flow 类型定义'`
+- `docs/CHINESE_AUDIT.md:2653` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/flow.ts:3' — '* @description 定义 Record-Replay V3 中的 Flow IR（中间表示）'`
+- `docs/CHINESE_AUDIT.md:2654` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/flow.ts:11' — '/** Flow Schema 版本 */'`
+- `docs/CHINESE_AUDIT.md:2655` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/flow.ts:16' — '* @description DAG 中的边，连接两个节点'`
+- `docs/CHINESE_AUDIT.md:2656` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/flow.ts:19' — '/** Edge 唯一标识符 */'`
+- `docs/CHINESE_AUDIT.md:2657` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/flow.ts:21' — '/** 源节点 ID */'`
+- `docs/CHINESE_AUDIT.md:2658` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/flow.ts:23' — '/** 目标节点 ID */'`
+- `docs/CHINESE_AUDIT.md:2659` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/flow.ts:25' — '/** 边标签（用于条件分支和错误处理） */'`
+- `docs/CHINESE_AUDIT.md:2660` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/flow.ts:29' — '/** 节点类型（可扩展） */'`
+- `docs/CHINESE_AUDIT.md:2661` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/flow.ts:34' — '* @description DAG 中的节点，代表一个可执行的操作'`
+- `docs/CHINESE_AUDIT.md:2662` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/flow.ts:37' — '/** Node 唯一标识符 */'`
+- `docs/CHINESE_AUDIT.md:2663` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/flow.ts:39' — '/** 节点类型 */'`
+- `docs/CHINESE_AUDIT.md:2664` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/flow.ts:41' — '/** 节点名称（用于显示） */'`
+- `docs/CHINESE_AUDIT.md:2665` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/flow.ts:43' — '/** 是否禁用 */'`
+- `docs/CHINESE_AUDIT.md:2666` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/flow.ts:45' — '/** 节点级策略 */'`
+- `docs/CHINESE_AUDIT.md:2667` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/flow.ts:47' — '/** 节点配置（类型由 kind 决定） */'`
+- `docs/CHINESE_AUDIT.md:2668` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/flow.ts:49' — '/** UI 布局信息 */'`
+- `docs/CHINESE_AUDIT.md:2669` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/flow.ts:54' — '* Flow 元数据绑定'`
+- `docs/CHINESE_AUDIT.md:2670` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/flow.ts:55' — '* @description 定义 Flow 与特定域名/路径/URL 的关联'`
+- `docs/CHINESE_AUDIT.md:2671` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/flow.ts:64' — '* @description 完整的 Flow 定义，包含节点、边和配置'`
+- `docs/CHINESE_AUDIT.md:2672` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/flow.ts:67' — '/** Schema 版本 */'`
+- `docs/CHINESE_AUDIT.md:2673` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/flow.ts:69' — '/** Flow 唯一标识符 */'`
+- `docs/CHINESE_AUDIT.md:2674` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/flow.ts:71' — '/** Flow 名称 */'`
+- `docs/CHINESE_AUDIT.md:2675` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/flow.ts:73' — '/** Flow 描述 */'`
+- `docs/CHINESE_AUDIT.md:2676` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/flow.ts:75' — '/** 创建时间 */'`
+- `docs/CHINESE_AUDIT.md:2677` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/flow.ts:77' — '/** 更新时间 */'`
+- `docs/CHINESE_AUDIT.md:2678` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/flow.ts:80' — '/** 入口节点 ID（显式指定，不依赖入度推断） */'`
+- `docs/CHINESE_AUDIT.md:2679` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/flow.ts:82' — '/** 节点列表 */'`
+- `docs/CHINESE_AUDIT.md:2680` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/flow.ts:84' — '/** 边列表 */'`
+- `docs/CHINESE_AUDIT.md:2681` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/flow.ts:87' — '/** 变量定义 */'`
+- `docs/CHINESE_AUDIT.md:2682` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/flow.ts:89' — '/** Flow 级策略 */'`
+- `docs/CHINESE_AUDIT.md:2683` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/flow.ts:91' — '/** 元数据 */'`
+- `docs/CHINESE_AUDIT.md:2684` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/flow.ts:93' — '/** 标签 */'`
+- `docs/CHINESE_AUDIT.md:2685` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/flow.ts:95' — '/** 绑定规则 */'`
+- `docs/CHINESE_AUDIT.md:2686` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/flow.ts:101' — '* 根据 ID 查找节点'`
+- `docs/CHINESE_AUDIT.md:2687` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/flow.ts:108' — '* 查找从指定节点出发的所有边'`
+- `docs/CHINESE_AUDIT.md:2688` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/flow.ts:115' — '* 查找指向指定节点的所有边'`
+- `docs/CHINESE_AUDIT.md:2689` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/index.ts:2' — '* @fileoverview Domain 层导出入口'`
+- `docs/CHINESE_AUDIT.md:2690` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/index.ts:3' — '* @description 导出所有 Domain 类型定义'`
+- `docs/CHINESE_AUDIT.md:2691` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/index.ts:6' — '// JSON 基础类型'`
+- `docs/CHINESE_AUDIT.md:2692` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/index.ts:9' — '// ID 类型'`
+- `docs/CHINESE_AUDIT.md:2693` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/index.ts:12' — '// 错误类型'`
+- `docs/CHINESE_AUDIT.md:2694` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/index.ts:15' — '// 策略类型'`
+- `docs/CHINESE_AUDIT.md:2695` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/index.ts:18' — '// 变量类型'`
+- `docs/CHINESE_AUDIT.md:2696` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/index.ts:21' — '// Flow 类型'`
+- `docs/CHINESE_AUDIT.md:2697` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/index.ts:24' — '// 事件类型'`
+- `docs/CHINESE_AUDIT.md:2698` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/index.ts:27' — '// 调试器类型'`
+- `docs/CHINESE_AUDIT.md:2699` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/index.ts:30' — '// 触发器类型'`
+- `docs/CHINESE_AUDIT.md:2700` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/ids.ts:2' — '* @fileoverview ID 类型定义'`
+- `docs/CHINESE_AUDIT.md:2701` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/ids.ts:3' — '* @description 定义 Record-Replay V3 中使用的各种 ID 类型'`
+- `docs/CHINESE_AUDIT.md:2702` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/ids.ts:6' — '/** Flow 唯一标识符 */'`
+- `docs/CHINESE_AUDIT.md:2703` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/ids.ts:9' — '/** Node 唯一标识符 */'`
+- `docs/CHINESE_AUDIT.md:2704` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/ids.ts:12' — '/** Edge 唯一标识符 */'`
+- `docs/CHINESE_AUDIT.md:2705` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/ids.ts:15' — '/** Run 唯一标识符 */'`
+- `docs/CHINESE_AUDIT.md:2706` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/ids.ts:18' — '/** Trigger 唯一标识符 */'`
+- `docs/CHINESE_AUDIT.md:2707` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/ids.ts:21' — '/** Edge 标签类型 */'`
+- `docs/CHINESE_AUDIT.md:2708` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/ids.ts:24' — '/** 预定义的 Edge 标签常量 */'`
+- `docs/CHINESE_AUDIT.md:2709` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/ids.ts:26' — '/** 默认边 */'`
+- `docs/CHINESE_AUDIT.md:2710` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/ids.ts:28' — '/** 错误处理边 */'`
+- `docs/CHINESE_AUDIT.md:2711` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/ids.ts:30' — '/** 条件为真时的边 */'`
+- `docs/CHINESE_AUDIT.md:2712` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/ids.ts:32' — '/** 条件为假时的边 */'`
+- `docs/CHINESE_AUDIT.md:2713` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/ids.ts:36' — '/** Edge 标签类型（从常量推导） */'`
+- `docs/CHINESE_AUDIT.md:2714` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/triggers.ts:2' — '* @fileoverview 触发器类型定义'`
+- `docs/CHINESE_AUDIT.md:2715` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/triggers.ts:3' — '* @description 定义 Record-Replay V3 中的触发器规范'`
+- `docs/CHINESE_AUDIT.md:2716` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/triggers.ts:9' — '/** 触发器类型 */'`
+- `docs/CHINESE_AUDIT.md:2717` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/triggers.ts:21' — '* 触发器基础接口'`
+- `docs/CHINESE_AUDIT.md:2718` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/triggers.ts:24' — '/** 触发器 ID */'`
+- `docs/CHINESE_AUDIT.md:2719` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/triggers.ts:26' — '/** 触发器类型 */'`
+- `docs/CHINESE_AUDIT.md:2720` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/triggers.ts:28' — '/** 是否启用 */'`
+- `docs/CHINESE_AUDIT.md:2721` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/triggers.ts:30' — '/** 关联的 Flow ID */'`
+- `docs/CHINESE_AUDIT.md:2722` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/triggers.ts:32' — '/** 传递给 Flow 的参数 */'`
+- `docs/CHINESE_AUDIT.md:2723` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/triggers.ts:37' — '* URL 匹配规则'`
+- `docs/CHINESE_AUDIT.md:2724` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/triggers.ts:45' — '* 触发器规范联合类型'`
+- `docs/CHINESE_AUDIT.md:2725` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/triggers.ts:48' — '// 手动触发'`
+- `docs/CHINESE_AUDIT.md:2726` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/triggers.ts:51' — '// URL 触发'`
+- `docs/CHINESE_AUDIT.md:2727` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/triggers.ts:57' — '// Cron 定时触发'`
+- `docs/CHINESE_AUDIT.md:2728` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/triggers.ts:64' — '// Interval 定时触发（固定间隔重复）'`
+- `docs/CHINESE_AUDIT.md:2729` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/triggers.ts:67' — '/** 间隔分钟数，最小为 1 */'`
+- `docs/CHINESE_AUDIT.md:2730` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/triggers.ts:71' — '// Once 定时触发（指定时间触发一次后自动禁用）'`
+- `docs/CHINESE_AUDIT.md:2731` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/triggers.ts:74' — '/** 触发时间戳 (Unix milliseconds) */'`
+- `docs/CHINESE_AUDIT.md:2732` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/triggers.ts:78' — '// 快捷键触发'`
+- `docs/CHINESE_AUDIT.md:2733` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/triggers.ts:84' — '// 右键菜单触发'`
+- `docs/CHINESE_AUDIT.md:2734` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/triggers.ts:91' — '// DOM 元素出现触发'`
+- `docs/CHINESE_AUDIT.md:2735` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/triggers.ts:101' — '* 触发器触发上下文'`
+- `docs/CHINESE_AUDIT.md:2736` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/triggers.ts:102' — '* @description 描述触发器被触发时的上下文信息'`
+- `docs/CHINESE_AUDIT.md:2737` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/triggers.ts:105' — '/** 触发器 ID */'`
+- `docs/CHINESE_AUDIT.md:2738` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/triggers.ts:107' — '/** 触发器类型 */'`
+- `docs/CHINESE_AUDIT.md:2739` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/triggers.ts:109' — '/** 触发时间 */'`
+- `docs/CHINESE_AUDIT.md:2740` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/triggers.ts:111' — '/** 来源 Tab ID */'`
+- `docs/CHINESE_AUDIT.md:2741` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/triggers.ts:113' — '/** 来源 URL */'`
+- `docs/CHINESE_AUDIT.md:2742` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/triggers.ts:118' — '* 根据触发器类型获取类型化的触发器规范'`
+- `docs/CHINESE_AUDIT.md:2743` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/triggers.ts:123' — '* 判断触发器是否启用'`
+- `docs/CHINESE_AUDIT.md:2744` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/triggers.ts:130' — '* 创建触发器触发上下文'`
+- `docs/CHINESE_AUDIT.md:2745` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/policy.ts:2' — '* @fileoverview 策略类型定义'`
+- `docs/CHINESE_AUDIT.md:2746` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/policy.ts:3' — '* @description 定义 Record-Replay V3 中使用的超时、重试、错误处理和工件策略'`
+- `docs/CHINESE_AUDIT.md:2747` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/policy.ts:11' — '* 超时策略'`
+- `docs/CHINESE_AUDIT.md:2748` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/policy.ts:12' — '* @description 定义操作的超时时间和作用范围'`
+- `docs/CHINESE_AUDIT.md:2749` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/policy.ts:15' — '/** 超时时间（毫秒） */'`
+- `docs/CHINESE_AUDIT.md:2750` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/policy.ts:17' — '/** 超时范围：attempt=每次尝试, node=整个节点执行 */'`
+- `docs/CHINESE_AUDIT.md:2751` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/policy.ts:22' — '* 重试策略'`
+- `docs/CHINESE_AUDIT.md:2752` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/policy.ts:23' — '* @description 定义失败后的重试行为'`
+- `docs/CHINESE_AUDIT.md:2753` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/policy.ts:26' — '/** 最大重试次数 */'`
+- `docs/CHINESE_AUDIT.md:2754` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/policy.ts:28' — '/** 重试间隔（毫秒） */'`
+- `docs/CHINESE_AUDIT.md:2755` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/policy.ts:30' — '/** 退避策略：none=固定间隔, exp=指数退避, linear=线性增长 */'`
+- `docs/CHINESE_AUDIT.md:2756` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/policy.ts:32' — '/** 最大重试间隔（毫秒） */'`
+- `docs/CHINESE_AUDIT.md:2757` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/policy.ts:34' — '/** 抖动策略：none=无抖动, full=完全随机 */'`
+- `docs/CHINESE_AUDIT.md:2758` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/policy.ts:36' — '/** 仅在这些错误码时重试 */'`
+- `docs/CHINESE_AUDIT.md:2759` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/policy.ts:41' — '* 错误处理策略'`
+- `docs/CHINESE_AUDIT.md:2760` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/policy.ts:42' — '* @description 定义节点执行失败后的处理方式'`
+- `docs/CHINESE_AUDIT.md:2761` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/policy.ts:54' — '* 工件策略'`
+- `docs/CHINESE_AUDIT.md:2762` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/policy.ts:55' — '* @description 定义截图和日志收集的行为'`
+- `docs/CHINESE_AUDIT.md:2763` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/policy.ts:58' — '/** 截图策略：never=从不, onFailure=失败时, always=总是 */'`
+- `docs/CHINESE_AUDIT.md:2764` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/policy.ts:60' — '/** 截图保存路径模板 */'`
+- `docs/CHINESE_AUDIT.md:2765` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/policy.ts:62' — '/** 是否包含控制台日志 */'`
+- `docs/CHINESE_AUDIT.md:2766` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/policy.ts:64' — '/** 是否包含网络请求 */'`
+- `docs/CHINESE_AUDIT.md:2767` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/policy.ts:69' — '* 节点级策略'`
+- `docs/CHINESE_AUDIT.md:2768` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/policy.ts:70' — '* @description 单个节点的执行策略配置'`
+- `docs/CHINESE_AUDIT.md:2769` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/policy.ts:73' — '/** 超时策略 */'`
+- `docs/CHINESE_AUDIT.md:2770` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/policy.ts:75' — '/** 重试策略 */'`
+- `docs/CHINESE_AUDIT.md:2771` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/policy.ts:77' — '/** 错误处理策略 */'`
+- `docs/CHINESE_AUDIT.md:2772` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/policy.ts:79' — '/** 工件策略 */'`
+- `docs/CHINESE_AUDIT.md:2773` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/policy.ts:84' — '* Flow 级策略'`
+- `docs/CHINESE_AUDIT.md:2774` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/policy.ts:85' — '* @description 整个 Flow 的执行策略配置'`
+- `docs/CHINESE_AUDIT.md:2775` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/policy.ts:88' — '/** 默认节点策略 */'`
+- `docs/CHINESE_AUDIT.md:2776` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/policy.ts:90' — '/** 不支持节点的处理策略 */'`
+- `docs/CHINESE_AUDIT.md:2777` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/policy.ts:92' — '/** Run 总超时时间（毫秒） */'`
+- `docs/CHINESE_AUDIT.md:2778` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/policy.ts:97' — '* 合并节点策略'`
+- `docs/CHINESE_AUDIT.md:2779` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/policy.ts:98' — '* @description 将 Flow 级默认策略与节点级策略合并'`
+- `docs/CHINESE_AUDIT.md:2780` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/debug.ts:2' — '* @fileoverview 调试器类型定义'`
+- `docs/CHINESE_AUDIT.md:2781` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/debug.ts:3' — '* @description 定义 Record-Replay V3 中的调试器状态和协议'`
+- `docs/CHINESE_AUDIT.md:2782` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/debug.ts:11' — '* 断点定义'`
+- `docs/CHINESE_AUDIT.md:2783` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/debug.ts:14' — '/** 断点所在节点 ID */'`
+- `docs/CHINESE_AUDIT.md:2784` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/debug.ts:16' — '/** 是否启用 */'`
+- `docs/CHINESE_AUDIT.md:2785` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/debug.ts:21' — '* 调试器状态'`
+- `docs/CHINESE_AUDIT.md:2786` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/debug.ts:22' — '* @description 描述调试器当前的连接和执行状态'`
+- `docs/CHINESE_AUDIT.md:2787` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/debug.ts:25' — '/** 关联的 Run ID */'`
+- `docs/CHINESE_AUDIT.md:2788` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/debug.ts:27' — '/** 调试器连接状态 */'`
+- `docs/CHINESE_AUDIT.md:2789` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/debug.ts:29' — '/** 执行状态 */'`
+- `docs/CHINESE_AUDIT.md:2790` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/debug.ts:31' — '/** 暂停原因（仅当 execution='paused' 时有效） */'`
+- `docs/CHINESE_AUDIT.md:2791` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/debug.ts:33' — '/** 当前节点 ID */'`
+- `docs/CHINESE_AUDIT.md:2792` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/debug.ts:35' — '/** 断点列表 */'`
+- `docs/CHINESE_AUDIT.md:2793` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/debug.ts:37' — '/** 单步模式 */'`
+- `docs/CHINESE_AUDIT.md:2794` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/debug.ts:42' — '* 调试器命令'`
+- `docs/CHINESE_AUDIT.md:2795` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/debug.ts:43' — '* @description 客户端发送给调试器的命令'`
+- `docs/CHINESE_AUDIT.md:2796` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/debug.ts:46' — '// ===== 连接控制 ====='`
+- `docs/CHINESE_AUDIT.md:2797` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/debug.ts:50' — '// ===== 执行控制 ====='`
+- `docs/CHINESE_AUDIT.md:2798` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/debug.ts:55' — '// ===== 断点管理 ====='`
+- `docs/CHINESE_AUDIT.md:2799` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/debug.ts:60' — '// ===== 状态查询 ====='`
+- `docs/CHINESE_AUDIT.md:2800` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/debug.ts:63' — '// ===== 变量操作 ====='`
+- `docs/CHINESE_AUDIT.md:2801` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/debug.ts:67' — '/** 调试器命令类型（从联合类型提取） */'`
+- `docs/CHINESE_AUDIT.md:2802` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/debug.ts:71' — '* 调试器命令响应'`
+- `docs/CHINESE_AUDIT.md:2803` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/debug.ts:78' — '* 创建初始调试器状态'`
+- `docs/CHINESE_AUDIT.md:2804` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/events.ts:2' — '* @fileoverview 事件类型定义'`
+- `docs/CHINESE_AUDIT.md:2805` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/events.ts:3' — '* @description 定义 Record-Replay V3 中的运行事件和状态'`
+- `docs/CHINESE_AUDIT.md:2806` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/events.ts:11' — '/** 取消订阅函数类型 */'`
+- `docs/CHINESE_AUDIT.md:2807` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/events.ts:14' — '/** Run 状态 */'`
+- `docs/CHINESE_AUDIT.md:2808` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/events.ts:18' — '* 事件基础接口'`
+- `docs/CHINESE_AUDIT.md:2809` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/events.ts:19' — '* @description 所有事件的公共字段'`
+- `docs/CHINESE_AUDIT.md:2810` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/events.ts:22' — '/** 所属 Run ID */'`
+- `docs/CHINESE_AUDIT.md:2811` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/events.ts:24' — '/** 事件时间戳 */'`
+- `docs/CHINESE_AUDIT.md:2812` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/events.ts:26' — '/** 单调递增序列号 */'`
+- `docs/CHINESE_AUDIT.md:2813` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/events.ts:31' — '* 暂停原因'`
+- `docs/CHINESE_AUDIT.md:2814` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/events.ts:32' — '* @description 描述 Run 暂停的原因'`
+- `docs/CHINESE_AUDIT.md:2815` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/events.ts:40' — '/** 恢复原因 */'`
+- `docs/CHINESE_AUDIT.md:2816` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/events.ts:44' — '* Run 事件联合类型'`
+- `docs/CHINESE_AUDIT.md:2817` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/events.ts:45' — '* @description 所有可能的运行时事件'`
+- `docs/CHINESE_AUDIT.md:2818` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/events.ts:48' — '// ===== Run 生命周期事件 ====='`
+- `docs/CHINESE_AUDIT.md:2819` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/events.ts:55' — '/** 恢复原因 */'`
+- `docs/CHINESE_AUDIT.md:2820` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/events.ts:57' — '/** 恢复前状态 */'`
+- `docs/CHINESE_AUDIT.md:2821` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/events.ts:59' — '/** 恢复后状态 */'`
+- `docs/CHINESE_AUDIT.md:2822` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/events.ts:61' — '/** 原 ownerId（用于审计） */'`
+- `docs/CHINESE_AUDIT.md:2823` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/events.ts:68' — '// ===== Node 执行事件 ====='`
+- `docs/CHINESE_AUDIT.md:2824` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/events.ts:86' — '// ===== 变量和日志事件 ====='`
+- `docs/CHINESE_AUDIT.md:2825` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/events.ts:99' — '/** Run 事件类型（从联合类型提取） */'`
+- `docs/CHINESE_AUDIT.md:2826` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/events.ts:103' — '* 分布式 Omit（保留联合类型）'`
+- `docs/CHINESE_AUDIT.md:2827` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/events.ts:108' — '* Run 事件输入类型'`
+- `docs/CHINESE_AUDIT.md:2828` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/events.ts:109' — '* @description seq 必须由 storage 层原子分配（通过 RunRecordV3.nextSeq）'`
+- `docs/CHINESE_AUDIT.md:2829` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/events.ts:110' — '* ts 可选，默认为 Date.now()'`
+- `docs/CHINESE_AUDIT.md:2830` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/events.ts:116' — '/** Run Schema 版本 */'`
+- `docs/CHINESE_AUDIT.md:2831` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/events.ts:120' — '* Run 记录 V3'`
+- `docs/CHINESE_AUDIT.md:2832` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/events.ts:121' — '* @description 存储在 IndexedDB 中的 Run 摘要记录'`
+- `docs/CHINESE_AUDIT.md:2833` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/events.ts:124' — '/** Schema 版本 */'`
+- `docs/CHINESE_AUDIT.md:2834` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/events.ts:126' — '/** Run 唯一标识符 */'`
+- `docs/CHINESE_AUDIT.md:2835` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/events.ts:128' — '/** 关联的 Flow ID */'`
+- `docs/CHINESE_AUDIT.md:2836` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/events.ts:131' — '/** 当前状态 */'`
+- `docs/CHINESE_AUDIT.md:2837` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/events.ts:133' — '/** 创建时间 */'`
+- `docs/CHINESE_AUDIT.md:2838` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/events.ts:135' — '/** 最后更新时间 */'`
+- `docs/CHINESE_AUDIT.md:2839` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/events.ts:138' — '/** 开始执行时间 */'`
+- `docs/CHINESE_AUDIT.md:2840` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/events.ts:140' — '/** 结束时间 */'`
+- `docs/CHINESE_AUDIT.md:2841` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/events.ts:142' — '/** 总耗时（毫秒） */'`
+- `docs/CHINESE_AUDIT.md:2842` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/events.ts:145' — '/** 绑定的 Tab ID（每 Run 独占） */'`
+- `docs/CHINESE_AUDIT.md:2843` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/events.ts:147' — '/** 起始节点 ID（如果不是默认入口） */'`
+- `docs/CHINESE_AUDIT.md:2844` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/events.ts:149' — '/** 当前执行节点 ID */'`
+- `docs/CHINESE_AUDIT.md:2845` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/events.ts:152' — '/** 当前尝试次数 */'`
+- `docs/CHINESE_AUDIT.md:2846` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/events.ts:154' — '/** 最大尝试次数 */'`
+- `docs/CHINESE_AUDIT.md:2847` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/events.ts:157' — '/** 运行参数 */'`
+- `docs/CHINESE_AUDIT.md:2848` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/events.ts:159' — '/** 触发器上下文 */'`
+- `docs/CHINESE_AUDIT.md:2849` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/events.ts:161' — '/** 调试配置 */'`
+- `docs/CHINESE_AUDIT.md:2850` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/events.ts:164' — '/** 错误信息（如果失败） */'`
+- `docs/CHINESE_AUDIT.md:2851` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/events.ts:166' — '/** 输出结果 */'`
+- `docs/CHINESE_AUDIT.md:2852` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/events.ts:169' — '/** 下一个事件序列号（缓存字段） */'`
+- `docs/CHINESE_AUDIT.md:2853` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/events.ts:174' — '* 判断 Run 是否已终止'`
+- `docs/CHINESE_AUDIT.md:2854` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/events.ts:181' — '* 判断 Run 是否正在执行'`
+- `docs/CHINESE_AUDIT.md:2855` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/variables.ts:2' — '* @fileoverview 变量类型定义'`
+- `docs/CHINESE_AUDIT.md:2856` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/variables.ts:3' — '* @description 定义 Record-Replay V3 中使用的变量指针和持久化变量'`
+- `docs/CHINESE_AUDIT.md:2857` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/variables.ts:8' — '/** 变量名称 */'`
+- `docs/CHINESE_AUDIT.md:2858` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/variables.ts:11' — '/** 持久化变量名称（以 $ 开头） */'`
+- `docs/CHINESE_AUDIT.md:2859` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/variables.ts:14' — '/** 变量作用域 */'`
+- `docs/CHINESE_AUDIT.md:2860` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/variables.ts:18' — '* 变量指针'`
+- `docs/CHINESE_AUDIT.md:2861` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/variables.ts:19' — '* @description 指向变量的引用，支持 JSON path 访问'`
+- `docs/CHINESE_AUDIT.md:2862` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/variables.ts:22' — '/** 变量作用域 */'`
+- `docs/CHINESE_AUDIT.md:2863` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/variables.ts:24' — '/** 变量名称 */'`
+- `docs/CHINESE_AUDIT.md:2864` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/variables.ts:26' — '/** JSON path（用于访问嵌套属性） */'`
+- `docs/CHINESE_AUDIT.md:2865` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/variables.ts:31' — '* 变量定义'`
+- `docs/CHINESE_AUDIT.md:2866` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/variables.ts:32' — '* @description Flow 中声明的变量'`
+- `docs/CHINESE_AUDIT.md:2867` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/variables.ts:35' — '/** 变量名称 */'`
+- `docs/CHINESE_AUDIT.md:2868` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/variables.ts:37' — '/** 显示标签 */'`
+- `docs/CHINESE_AUDIT.md:2869` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/variables.ts:39' — '/** 描述 */'`
+- `docs/CHINESE_AUDIT.md:2870` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/variables.ts:41' — '/** 是否敏感（不显示/导出） */'`
+- `docs/CHINESE_AUDIT.md:2871` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/variables.ts:43' — '/** 是否必需 */'`
+- `docs/CHINESE_AUDIT.md:2872` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/variables.ts:45' — '/** 默认值 */'`
+- `docs/CHINESE_AUDIT.md:2873` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/variables.ts:47' — '/** 作用域（不含 persistent，persistent 通过 $ 前缀判断） */'`
+- `docs/CHINESE_AUDIT.md:2874` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/variables.ts:52' — '* 持久化变量记录'`
+- `docs/CHINESE_AUDIT.md:2875` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/variables.ts:53' — '* @description 存储在 IndexedDB 中的持久化变量'`
+- `docs/CHINESE_AUDIT.md:2876` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/variables.ts:56' — '/** 变量键（以 $ 开头） */'`
+- `docs/CHINESE_AUDIT.md:2877` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/variables.ts:58' — '/** 变量值 */'`
+- `docs/CHINESE_AUDIT.md:2878` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/variables.ts:60' — '/** 最后更新时间 */'`
+- `docs/CHINESE_AUDIT.md:2879` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/variables.ts:62' — '/** 版本号（单调递增，用于 LWW 和调试） */'`
+- `docs/CHINESE_AUDIT.md:2880` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/variables.ts:67' — '* 判断变量名是否为持久化变量'`
+- `docs/CHINESE_AUDIT.md:2881` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/variables.ts:74' — '* 解析变量指针字符串'`
+- `docs/CHINESE_AUDIT.md:2882` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/variables.ts:92' — '// 默认为 run 作用域'`
+- `docs/CHINESE_AUDIT.md:2883` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/json.ts:2' — '* @fileoverview JSON 基础类型定义'`
+- `docs/CHINESE_AUDIT.md:2884` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/json.ts:3' — '* @description 定义 Record-Replay V3 中使用的 JSON 相关类型'`
+- `docs/CHINESE_AUDIT.md:2885` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/json.ts:6' — '/** JSON 原始类型 */'`
+- `docs/CHINESE_AUDIT.md:2886` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/json.ts:9' — '/** JSON 对象类型 */'`
+- `docs/CHINESE_AUDIT.md:2887` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/json.ts:14' — '/** JSON 数组类型 */'`
+- `docs/CHINESE_AUDIT.md:2888` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/json.ts:17' — '/** 任意 JSON 值类型 */'`
+- `docs/CHINESE_AUDIT.md:2889` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/json.ts:20' — '/** ISO 8601 日期时间字符串 */'`
+- `docs/CHINESE_AUDIT.md:2890` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/domain/json.ts:23' — '/** Unix 毫秒时间戳 */'`
+- `docs/CHINESE_AUDIT.md:2891` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/index.ts:2' — '* @fileoverview Storage 层导出入口'`
+- `docs/CHINESE_AUDIT.md:2892` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/queue.ts:2' — '* @fileoverview RunQueue 持久化'`
+- `docs/CHINESE_AUDIT.md:2893` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/queue.ts:3' — '* @description 实现队列的 CRUD 操作和原子 claim'`
+- `docs/CHINESE_AUDIT.md:2894` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/queue.ts:27' — '* 创建 RunQueue 持久化实现'`
+- `docs/CHINESE_AUDIT.md:2895` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/queue.ts:28' — '* @description 实现队列持久化，包括 Phase 3 原子 claim'`
+- `docs/CHINESE_AUDIT.md:2896` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/queue.ts:303' — '* 扫描并回收孤儿 running 项'`
+- `docs/CHINESE_AUDIT.md:2897` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/queue.ts:305' — '* - 孤儿定义：无租约或 lease.ownerId !== currentOwnerId'`
+- `docs/CHINESE_AUDIT.md:2898` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/queue.ts:306' — '* - 回收策略：status -> queued，清除 lease，保留 attempt'`
+- `docs/CHINESE_AUDIT.md:2899` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/queue.ts:322' — '// 非孤儿：lease 存在且属于当前 ownerId'`
+- `docs/CHINESE_AUDIT.md:2900` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/queue.ts:329' — '// 回收：移除 lease，状态改为 queued'`
+- `docs/CHINESE_AUDIT.md:2901` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/queue.ts:350' — '* 扫描并接管孤儿 paused 项'`
+- `docs/CHINESE_AUDIT.md:2902` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/queue.ts:352' — '* - 孤儿定义：无租约或 lease.ownerId !== currentOwnerId'`
+- `docs/CHINESE_AUDIT.md:2903` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/queue.ts:353' — '* - 接管策略：保持 status=paused，更新 lease.ownerId 为新 ownerId，续约 TTL'`
+- `docs/CHINESE_AUDIT.md:2904` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/queue.ts:369' — '// 非孤儿：lease 存在且属于当前 ownerId'`
+- `docs/CHINESE_AUDIT.md:2905` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/queue.ts:376' — '// 接管：更新 lease 为新 ownerId，续约 TTL'`
+- `docs/CHINESE_AUDIT.md:2906` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/queue.ts:398' — '// 顺序执行：先处理 running，再处理 paused'`
+- `docs/CHINESE_AUDIT.md:2907` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/queue.ts:488' — '// 从队列中删除'`
+- `docs/CHINESE_AUDIT.md:2908` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/queue.ts:508' — '// 使用索引查询'`
+- `docs/CHINESE_AUDIT.md:2909` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/queue.ts:517' — '// 获取所有'`
+- `docs/CHINESE_AUDIT.md:2910` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/triggers.ts:2' — '* @fileoverview 触发器存储'`
+- `docs/CHINESE_AUDIT.md:2911` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/triggers.ts:3' — '* @description 实现触发器的 CRUD 操作（Phase 4 完整实现）'`
+- `docs/CHINESE_AUDIT.md:2912` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/triggers.ts:12' — '* 创建 TriggersStore 实现'`
+- `docs/CHINESE_AUDIT.md:2913` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/persistent-vars.ts:2' — '* @fileoverview 持久化变量存储'`
+- `docs/CHINESE_AUDIT.md:2914` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/persistent-vars.ts:3' — '* @description 实现 $ 前缀变量的持久化，使用 LWW（Last-Write-Wins）策略'`
+- `docs/CHINESE_AUDIT.md:2915` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/persistent-vars.ts:12' — '* 创建 PersistentVarsStore 实现'`
+- `docs/CHINESE_AUDIT.md:2916` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/persistent-vars.ts:31' — '// 先读取现有记录（用于 version 递增）'`
+- `docs/CHINESE_AUDIT.md:2917` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/persistent-vars.ts:76' — '// 如果指定了前缀，过滤结果'`
+- `docs/CHINESE_AUDIT.md:2918` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/db.ts:2' — '* @fileoverview V3 IndexedDB 数据库定义'`
+- `docs/CHINESE_AUDIT.md:2919` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/db.ts:3' — '* @description 定义 rr_v3 数据库的 schema 和初始化逻辑'`
+- `docs/CHINESE_AUDIT.md:2920` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/db.ts:6' — '/** 数据库名称 */'`
+- `docs/CHINESE_AUDIT.md:2921` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/db.ts:9' — '/** 数据库版本 */'`
+- `docs/CHINESE_AUDIT.md:2922` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/db.ts:13' — '* Store 名称常量'`
+- `docs/CHINESE_AUDIT.md:2923` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/db.ts:25' — '* Store 配置'`
+- `docs/CHINESE_AUDIT.md:2924` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/db.ts:38' — '* V3 Store Schema 定义'`
+- `docs/CHINESE_AUDIT.md:2925` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/db.ts:39' — '* @description 包含 Phase 1-3 所需的所有索引，避免后续升级'`
+- `docs/CHINESE_AUDIT.md:2926` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/db.ts:99' — '* 数据库升级处理器'`
+- `docs/CHINESE_AUDIT.md:2927` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/db.ts:102' — '// Version 0 -> 1: 创建所有 stores'`
+- `docs/CHINESE_AUDIT.md:2928` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/db.ts:110' — '// 创建索引'`
+- `docs/CHINESE_AUDIT.md:2929` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/db.ts:120' — '/** 全局数据库实例 */'`
+- `docs/CHINESE_AUDIT.md:2930` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/db.ts:125' — '* 打开 V3 数据库'`
+- `docs/CHINESE_AUDIT.md:2931` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/db.ts:126' — '* @description 单例模式，确保只有一个数据库连接'`
+- `docs/CHINESE_AUDIT.md:2932` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/db.ts:148' — '// 处理版本变更（其他 tab 升级了数据库）'`
+- `docs/CHINESE_AUDIT.md:2933` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/db.ts:170' — '* 关闭数据库连接'`
+- `docs/CHINESE_AUDIT.md:2934` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/db.ts:171' — '* @description 主要用于测试'`
+- `docs/CHINESE_AUDIT.md:2935` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/db.ts:182' — '* 删除数据库'`
+- `docs/CHINESE_AUDIT.md:2936` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/db.ts:183' — '* @description 主要用于测试'`
+- `docs/CHINESE_AUDIT.md:2937` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/db.ts:196' — '* 执行事务'`
+- `docs/CHINESE_AUDIT.md:2938` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/db.ts:197' — '* @param storeNames Store 名称（单个或多个）'`
+- `docs/CHINESE_AUDIT.md:2939` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/db.ts:198' — '* @param mode 事务模式'`
+- `docs/CHINESE_AUDIT.md:2940` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/db.ts:199' — '* @param callback 事务回调'`
+- `docs/CHINESE_AUDIT.md:2941` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/events.ts:2' — '* @fileoverview RunEvent 持久化'`
+- `docs/CHINESE_AUDIT.md:2942` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/events.ts:3' — '* @description 实现事件的原子 seq 分配和存储'`
+- `docs/CHINESE_AUDIT.md:2943` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/events.ts:31' — '* 创建 EventsStore 实现'`
+- `docs/CHINESE_AUDIT.md:2944` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/events.ts:33' — '* - append() 在单个事务中原子分配 seq'`
+- `docs/CHINESE_AUDIT.md:2945` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/events.ts:34' — '* - seq 由 RunRecordV3.nextSeq 作为单一事实来源'`
+- `docs/CHINESE_AUDIT.md:2946` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/events.ts:39' — '* 追加事件并原子分配 seq'`
+- `docs/CHINESE_AUDIT.md:2947` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/events.ts:40' — '* @description 在单个事务中：读取 RunRecordV3.nextSeq -> 写入事件 -> 递增 nextSeq'`
+- `docs/CHINESE_AUDIT.md:2948` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/events.ts:101' — '* 列出事件'`
+- `docs/CHINESE_AUDIT.md:2949` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/events.ts:102' — '* @description 利用复合主键 [runId, seq] 实现高效范围查询'`
+- `docs/CHINESE_AUDIT.md:2950` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/runs.ts:2' — '* @fileoverview RunRecordV3 持久化'`
+- `docs/CHINESE_AUDIT.md:2951` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/runs.ts:3' — '* @description 实现 Run 记录的 CRUD 操作'`
+- `docs/CHINESE_AUDIT.md:2952` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/runs.ts:14' — '* 校验 Run 记录结构'`
+- `docs/CHINESE_AUDIT.md:2953` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/runs.ts:17' — '// 校验 schema 版本'`
+- `docs/CHINESE_AUDIT.md:2954` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/runs.ts:25' — '// 校验必填字段'`
+- `docs/CHINESE_AUDIT.md:2955` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/runs.ts:38' — '* 创建 RunsStore 实现'`
+- `docs/CHINESE_AUDIT.md:2956` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/runs.ts:65' — '// 校验'`
+- `docs/CHINESE_AUDIT.md:2957` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/runs.ts:82' — '// 先读取现有记录'`
+- `docs/CHINESE_AUDIT.md:2958` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/runs.ts:93' — '// 合并并更新'`
+- `docs/CHINESE_AUDIT.md:2959` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/runs.ts:97' — 'id: existing.id, // 确保 id 不变'`
+- `docs/CHINESE_AUDIT.md:2960` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/runs.ts:98' — 'schemaVersion: existing.schemaVersion, // 确保版本不变'`
+- `docs/CHINESE_AUDIT.md:2961` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/flows.ts:2' — '* @fileoverview FlowV3 持久化'`
+- `docs/CHINESE_AUDIT.md:2962` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/flows.ts:3' — '* @description 实现 Flow 的 CRUD 操作'`
+- `docs/CHINESE_AUDIT.md:2963` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/flows.ts:14' — '* 校验 Flow 结构'`
+- `docs/CHINESE_AUDIT.md:2964` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/flows.ts:17' — '// 校验 schema 版本'`
+- `docs/CHINESE_AUDIT.md:2965` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/flows.ts:25' — '// 校验必填字段'`
+- `docs/CHINESE_AUDIT.md:2966` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/flows.ts:36' — '// 校验 entryNodeId 存在'`
+- `docs/CHINESE_AUDIT.md:2967` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/flows.ts:45' — '// 校验边引用'`
+- `docs/CHINESE_AUDIT.md:2968` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/flows.ts:63' — '* 创建 FlowsStore 实现'`
+- `docs/CHINESE_AUDIT.md:2969` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/flows.ts:90' — '// 校验'`
+- `docs/CHINESE_AUDIT.md:2970` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/index.ts:2' — '* @fileoverview Engine 层导出入口'`
+- `docs/CHINESE_AUDIT.md:2971` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/import/index.ts:2' — '* @fileoverview Import 模块导出入口'`
+- `docs/CHINESE_AUDIT.md:2972` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/import/v2-reader.ts:2' — '* @fileoverview V2 数据读取器'`
+- `docs/CHINESE_AUDIT.md:2973` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/import/v2-reader.ts:3' — '* @description 读取 V2 格式的数据（占位实现）'`
+- `docs/CHINESE_AUDIT.md:2974` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/import/v2-reader.ts:7' — '* V2 数据读取器接口'`
+- `docs/CHINESE_AUDIT.md:2975` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/import/v2-reader.ts:8' — '* @description Phase 5+ 实现'`
+- `docs/CHINESE_AUDIT.md:2976` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/import/v2-reader.ts:11' — '/** 读取 V2 Flows */'`
+- `docs/CHINESE_AUDIT.md:2977` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/import/v2-reader.ts:13' — '/** 读取 V2 Runs */'`
+- `docs/CHINESE_AUDIT.md:2978` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/import/v2-reader.ts:15' — '/** 读取 V2 Triggers */'`
+- `docs/CHINESE_AUDIT.md:2979` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/import/v2-reader.ts:17' — '/** 读取 V2 Schedules */'`
+- `docs/CHINESE_AUDIT.md:2980` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/import/v2-reader.ts:22' — '* 创建 NotImplemented 的 V2Reader'`
+- `docs/CHINESE_AUDIT.md:2981` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/import/v2-to-v3.ts:2' — '* @fileoverview V2 到 V3 数据转换器'`
+- `docs/CHINESE_AUDIT.md:2982` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/import/v2-to-v3.ts:3' — '* @description 将 V2 格式数据转换为 V3 格式，支持双向转换'`
+- `docs/CHINESE_AUDIT.md:2983` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/import/v2-to-v3.ts:82' — '* 将 V2 Flow 转换为 V3 Flow'`
+- `docs/CHINESE_AUDIT.md:2984` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/import/v2-to-v3.ts:83' — '* @param v2Flow V2 格式的 Flow'`
+- `docs/CHINESE_AUDIT.md:2985` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/import/v2-to-v3.ts:84' — '* @returns 转换结果，包含成功/失败状态、数据和错误/警告信息'`
+- `docs/CHINESE_AUDIT.md:2986` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/import/v2-to-v3.ts:90' — '// 1. 基础字段验证'`
+- `docs/CHINESE_AUDIT.md:2987` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/import/v2-to-v3.ts:101' — '// 2. 检查不支持的特性'`
+- `docs/CHINESE_AUDIT.md:2988` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/import/v2-to-v3.ts:109' — '// 检查 foreach/while 节点'`
+- `docs/CHINESE_AUDIT.md:2989` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/import/v2-to-v3.ts:120' — '// 如果有致命错误，直接返回'`
+- `docs/CHINESE_AUDIT.md:2990` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/import/v2-to-v3.ts:125' — '// 3. 转换节点'`
+- `docs/CHINESE_AUDIT.md:2991` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/import/v2-to-v3.ts:136' — '// 4. 转换边'`
+- `docs/CHINESE_AUDIT.md:2992` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/import/v2-to-v3.ts:147' — '// 5. 计算 entryNodeId'`
+- `docs/CHINESE_AUDIT.md:2993` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/import/v2-to-v3.ts:156' — '// 6. 转换变量'`
+- `docs/CHINESE_AUDIT.md:2994` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/import/v2-to-v3.ts:159' — '// 7. 转换元数据'`
+- `docs/CHINESE_AUDIT.md:2995` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/import/v2-to-v3.ts:162' — '// 8. 构建 V3 Flow'`
+- `docs/CHINESE_AUDIT.md:2996` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/import/v2-to-v3.ts:175' — '// 可选字段'`
+- `docs/CHINESE_AUDIT.md:2997` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/import/v2-to-v3.ts:190' — '* 转换单个 V2 Node 为 V3 Node'`
+- `docs/CHINESE_AUDIT.md:2998` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/import/v2-to-v3.ts:203' — '// 可选字段'`
+- `docs/CHINESE_AUDIT.md:2999` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/import/v2-to-v3.ts:218' — '* 转换单个 V2 Edge 为 V3 Edge'`
+- `docs/CHINESE_AUDIT.md:3000` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/import/v2-to-v3.ts:231' — '// label 直接传递'`
+- `docs/CHINESE_AUDIT.md:3001` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/import/v2-to-v3.ts:239' — '/** entryNodeId 计算结果 */'`
+- `docs/CHINESE_AUDIT.md:3002` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/import/v2-to-v3.ts:246' — '* 找到入口节点 ID'`
+- `docs/CHINESE_AUDIT.md:3003` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/import/v2-to-v3.ts:248' — '* 规则：'`
+- `docs/CHINESE_AUDIT.md:3004` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/import/v2-to-v3.ts:249' — '* 1. 排除 trigger 类型节点（这些是 UI 节点，不参与执行）'`
+- `docs/CHINESE_AUDIT.md:3005` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/import/v2-to-v3.ts:250' — '* 2. 只统计「可执行节点 -> 可执行节点」的边来计算入度（忽略 trigger 指出的边）'`
+- `docs/CHINESE_AUDIT.md:3006` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/import/v2-to-v3.ts:251' — '* 3. 找到入度为 0 的节点作为候选'`
+- `docs/CHINESE_AUDIT.md:3007` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/import/v2-to-v3.ts:252' — '* 4. 如果有多个候选，使用稳定选择规则：'`
+- `docs/CHINESE_AUDIT.md:3008` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/import/v2-to-v3.ts:253' — '*    - 优先选择 UI 坐标最靠左上的节点（按 x 升序，x 相同按 y 升序）'`
+- `docs/CHINESE_AUDIT.md:3009` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/import/v2-to-v3.ts:254' — '*    - 如果无 UI 坐标，按 ID 字典序取第一个'`
+- `docs/CHINESE_AUDIT.md:3010` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/import/v2-to-v3.ts:259' — '// 1. 排除 trigger 节点，获取可执行节点'`
+- `docs/CHINESE_AUDIT.md:3011` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/import/v2-to-v3.ts:268' — '// 2. 计算入度（只统计可执行节点之间的边）'`
+- `docs/CHINESE_AUDIT.md:3012` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/import/v2-to-v3.ts:274' — '// 忽略从非可执行节点（如 trigger）指出的边'`
+- `docs/CHINESE_AUDIT.md:3013` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/import/v2-to-v3.ts:278' — '// 忽略指向非可执行节点的边'`
+- `docs/CHINESE_AUDIT.md:3014` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/import/v2-to-v3.ts:285' — '// 3. 找入度为 0 的节点'`
+- `docs/CHINESE_AUDIT.md:3015` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/import/v2-to-v3.ts:289' — '// 没有入度为 0 的节点，说明图中存在环，使用稳定选择器选择 fallback'`
+- `docs/CHINESE_AUDIT.md:3016` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/import/v2-to-v3.ts:298' — '// 4. 单个根节点，直接返回'`
+- `docs/CHINESE_AUDIT.md:3017` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/import/v2-to-v3.ts:303' — '// 5. 多个根节点，使用稳定选择规则'`
+- `docs/CHINESE_AUDIT.md:3018` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/import/v2-to-v3.ts:317' — '/** 稳定选择结果 */'`
+- `docs/CHINESE_AUDIT.md:3019` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/import/v2-to-v3.ts:324' — '* 从多个根节点中选择一个稳定的入口节点'`
+- `docs/CHINESE_AUDIT.md:3020` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/import/v2-to-v3.ts:325' — '* 优先按 UI 坐标（左上角优先），其次按 ID 字典序'`
+- `docs/CHINESE_AUDIT.md:3021` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/import/v2-to-v3.ts:328' — '// 检查节点是否有有效的 UI 坐标'`
+- `docs/CHINESE_AUDIT.md:3022` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/import/v2-to-v3.ts:335' — '// 按 UI 坐标排序：x 升序 -> y 升序 -> id 字典序（作为 tie-breaker）'`
+- `docs/CHINESE_AUDIT.md:3023` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/import/v2-to-v3.ts:348' — '// 无 UI 坐标，按 ID 字典序'`
+- `docs/CHINESE_AUDIT.md:3024` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/import/v2-to-v3.ts:354' — '* 转换变量定义'`
+- `docs/CHINESE_AUDIT.md:3025` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/import/v2-to-v3.ts:382' — '* 转换元数据'`
+- `docs/CHINESE_AUDIT.md:3026` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/import/v2-to-v3.ts:400' — '// 如果 meta 为空对象，返回 undefined'`
+- `docs/CHINESE_AUDIT.md:3027` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/import/v2-to-v3.ts:411' — '* 将 V3 Flow 转换为 V2 Flow（用于在 V2 Builder 中编辑）'`
+- `docs/CHINESE_AUDIT.md:3028` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/import/v2-to-v3.ts:412' — '* @param v3Flow V3 格式的 Flow'`
+- `docs/CHINESE_AUDIT.md:3029` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/import/v2-to-v3.ts:413' — '* @returns 转换结果'`
+- `docs/CHINESE_AUDIT.md:3030` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/import/v2-to-v3.ts:419' — '// 1. 转换节点'`
+- `docs/CHINESE_AUDIT.md:3031` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/import/v2-to-v3.ts:429' — '// 2. 转换边'`
+- `docs/CHINESE_AUDIT.md:3032` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/import/v2-to-v3.ts:437' — '// 3. 转换变量'`
+- `docs/CHINESE_AUDIT.md:3033` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/import/v2-to-v3.ts:446' — '// 4. 转换元数据'`
+- `docs/CHINESE_AUDIT.md:3034` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/import/v2-to-v3.ts:463' — '// 5. 构建 V2 Flow'`
+- `docs/CHINESE_AUDIT.md:3035` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/import/v2-to-v3.ts:468' — 'version: 2, // V2 版本'`
+- `docs/CHINESE_AUDIT.md:3036` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/import/v2-to-v3.ts:480' — '/** V2 Trigger 定义 */'`
+- `docs/CHINESE_AUDIT.md:3037` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/import/v2-to-v3.ts:502' — '* 将 V2 Trigger 转换为 V3 TriggerSpec'`
+- `docs/CHINESE_AUDIT.md:3038` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/import/v2-to-v3.ts:503' — '* @param v2Trigger V2 格式的 Trigger'`
+- `docs/CHINESE_AUDIT.md:3039` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/import/v2-to-v3.ts:504' — '* @returns 转换结果'`
+- `docs/CHINESE_AUDIT.md:3040` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/import/v2-to-v3.ts:524' — '// 根据 type 构建不同的 TriggerSpec'`
+- `docs/CHINESE_AUDIT.md:3041` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/import/v2-to-v3.ts:557' — 'case 'schedule': { // 将 V2 schedule 转换为 cron 表达式'`
+- `docs/CHINESE_AUDIT.md:3042` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/import/v2-to-v3.ts:592' — '* 将 V2 schedule 配置转换为 cron 表达式'`
+- `docs/CHINESE_AUDIT.md:3043` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/import/v2-to-v3.ts:598' — 'case 'interval': { // 将间隔转换为近似 cron（每 N 分钟）'`
+- `docs/CHINESE_AUDIT.md:3044` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/import/v2-to-v3.ts:609' — '// 每天指定时间'`
+- `docs/CHINESE_AUDIT.md:3045` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/import/v2-to-v3.ts:614' — 'return '0 0 * * *'; // 默认每天 0:00'`
+- `docs/CHINESE_AUDIT.md:3046` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/import/v2-to-v3.ts:616' — 'case 'weekly': { // 每周指定天数和时间'`
+- `docs/CHINESE_AUDIT.md:3047` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/import/v2-to-v3.ts:633' — '* V2 到 V3 转换器接口'`
+- `docs/CHINESE_AUDIT.md:3048` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/import/v2-to-v3.ts:636' — '/** 转换 Flow */'`
+- `docs/CHINESE_AUDIT.md:3049` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/import/v2-to-v3.ts:638' — '/** 转换 Trigger */'`
+- `docs/CHINESE_AUDIT.md:3050` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/import/v2-to-v3.ts:643' — '* 创建 V2ToV3Converter 实例'`
+- `docs/CHINESE_AUDIT.md:3051` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/import/v2-to-v3.ts:666' — '* 创建 NotImplemented 的 V2ToV3Converter（向后兼容）'`
+- `docs/CHINESE_AUDIT.md:3052` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/storage/import/v2-to-v3.ts:667' — '* @deprecated 使用 createV2ToV3Converter() 替代'`
+- `docs/CHINESE_AUDIT.md:3053` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/plugins/registry.ts:2' — '* @fileoverview 插件注册表'`
+- `docs/CHINESE_AUDIT.md:3054` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/plugins/registry.ts:3' — '* @description 管理节点和触发器插件的注册和查询'`
+- `docs/CHINESE_AUDIT.md:3055` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/plugins/registry.ts:17' — '* 插件注册表'`
+- `docs/CHINESE_AUDIT.md:3056` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/plugins/registry.ts:18' — '* @description 单例模式，管理所有已注册的节点和触发器'`
+- `docs/CHINESE_AUDIT.md:3057` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/plugins/registry.ts:25' — '* 注册节点定义'`
+- `docs/CHINESE_AUDIT.md:3058` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/plugins/registry.ts:26' — '* @description 如果已存在同名节点，会覆盖'`
+- `docs/CHINESE_AUDIT.md:3059` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/plugins/registry.ts:33' — '* 注册触发器定义'`
+- `docs/CHINESE_AUDIT.md:3060` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/plugins/registry.ts:34' — '* @description 如果已存在同名触发器，会覆盖'`
+- `docs/CHINESE_AUDIT.md:3061` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/plugins/registry.ts:41' — '* 获取节点定义'`
+- `docs/CHINESE_AUDIT.md:3062` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/plugins/registry.ts:42' — '* @returns 节点定义或 undefined'`
+- `docs/CHINESE_AUDIT.md:3063` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/plugins/registry.ts:49' — '* 获取节点定义（必须存在）'`
+- `docs/CHINESE_AUDIT.md:3064` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/plugins/registry.ts:50' — '* @throws RRError 如果节点未注册'`
+- `docs/CHINESE_AUDIT.md:3065` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/plugins/registry.ts:61' — '* 获取触发器定义'`
+- `docs/CHINESE_AUDIT.md:3066` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/plugins/registry.ts:62' — '* @returns 触发器定义或 undefined'`
+- `docs/CHINESE_AUDIT.md:3067` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/plugins/registry.ts:69' — '* 获取触发器定义（必须存在）'`
+- `docs/CHINESE_AUDIT.md:3068` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/plugins/registry.ts:70' — '* @throws RRError 如果触发器未注册'`
+- `docs/CHINESE_AUDIT.md:3069` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/plugins/registry.ts:84' — '* 检查节点是否已注册'`
+- `docs/CHINESE_AUDIT.md:3070` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/plugins/registry.ts:91' — '* 检查触发器是否已注册'`
+- `docs/CHINESE_AUDIT.md:3071` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/plugins/registry.ts:98' — '* 获取所有已注册的节点类型'`
+- `docs/CHINESE_AUDIT.md:3072` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/plugins/registry.ts:105' — '* 获取所有已注册的触发器类型'`
+- `docs/CHINESE_AUDIT.md:3073` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/plugins/registry.ts:112' — '* 注册插件'`
+- `docs/CHINESE_AUDIT.md:3074` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/plugins/registry.ts:113' — '* @description 调用插件的 register 方法'`
+- `docs/CHINESE_AUDIT.md:3075` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/plugins/registry.ts:120' — '* 批量注册插件'`
+- `docs/CHINESE_AUDIT.md:3076` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/plugins/registry.ts:129' — '* 清空所有注册'`
+- `docs/CHINESE_AUDIT.md:3077` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/plugins/registry.ts:130' — '* @description 主要用于测试'`
+- `docs/CHINESE_AUDIT.md:3078` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/plugins/registry.ts:138' — '/** 全局插件注册表实例 */'`
+- `docs/CHINESE_AUDIT.md:3079` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/plugins/registry.ts:142' — '* 获取全局插件注册表'`
+- `docs/CHINESE_AUDIT.md:3080` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/plugins/registry.ts:152' — '* 重置全局插件注册表'`
+- `docs/CHINESE_AUDIT.md:3081` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/plugins/registry.ts:153' — '* @description 主要用于测试'`
+- `docs/CHINESE_AUDIT.md:3082` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/plugins/index.ts:2' — '* @fileoverview 插件系统导出入口'`
+- `docs/CHINESE_AUDIT.md:3083` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/plugins/types.ts:2' — '* @fileoverview 插件类型定义'`
+- `docs/CHINESE_AUDIT.md:3084` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/plugins/types.ts:3' — '* @description 定义 Record-Replay V3 中的节点和触发器插件接口'`
+- `docs/CHINESE_AUDIT.md:3085` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/plugins/types.ts:17' — '* Schema 类型'`
+- `docs/CHINESE_AUDIT.md:3086` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/plugins/types.ts:18' — '* @description 使用 Zod 进行配置校验'`
+- `docs/CHINESE_AUDIT.md:3087` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/plugins/types.ts:23' — '* 节点执行上下文'`
+- `docs/CHINESE_AUDIT.md:3088` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/plugins/types.ts:24' — '* @description 提供给节点执行器的运行时上下文'`
+- `docs/CHINESE_AUDIT.md:3089` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/plugins/types.ts:29' — '/** Flow 定义（快照） */'`
+- `docs/CHINESE_AUDIT.md:3090` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/plugins/types.ts:31' — '/** 当前节点 ID */'`
+- `docs/CHINESE_AUDIT.md:3091` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/plugins/types.ts:34' — '/** 绑定的 Tab ID（每 Run 独占） */'`
+- `docs/CHINESE_AUDIT.md:3092` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/plugins/types.ts:36' — '/** Frame ID（默认 0 为主框架） */'`
+- `docs/CHINESE_AUDIT.md:3093` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/plugins/types.ts:39' — '/** 当前变量表 */'`
+- `docs/CHINESE_AUDIT.md:3094` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/plugins/types.ts:43' — '* 日志记录'`
+- `docs/CHINESE_AUDIT.md:3095` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/plugins/types.ts:48' — '* 选择下一个边'`
+- `docs/CHINESE_AUDIT.md:3096` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/plugins/types.ts:49' — '* @description 用于条件分支节点'`
+- `docs/CHINESE_AUDIT.md:3097` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/plugins/types.ts:54' — '* 工件操作'`
+- `docs/CHINESE_AUDIT.md:3098` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/plugins/types.ts:57' — '/** 截取当前页面截图 */'`
+- `docs/CHINESE_AUDIT.md:3099` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/plugins/types.ts:62' — '* 持久化变量操作'`
+- `docs/CHINESE_AUDIT.md:3100` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/plugins/types.ts:65' — '/** 获取持久化变量 */'`
+- `docs/CHINESE_AUDIT.md:3101` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/plugins/types.ts:67' — '/** 设置持久化变量 */'`
+- `docs/CHINESE_AUDIT.md:3102` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/plugins/types.ts:69' — '/** 删除持久化变量 */'`
+- `docs/CHINESE_AUDIT.md:3103` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/plugins/types.ts:75' — '* 变量补丁操作'`
+- `docs/CHINESE_AUDIT.md:3104` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/plugins/types.ts:84' — '* 节点执行结果'`
+- `docs/CHINESE_AUDIT.md:3105` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/plugins/types.ts:89' — '/** 下一步执行方向 */'`
+- `docs/CHINESE_AUDIT.md:3106` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/plugins/types.ts:91' — '/** 输出结果 */'`
+- `docs/CHINESE_AUDIT.md:3107` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/plugins/types.ts:93' — '/** 变量修改 */'`
+- `docs/CHINESE_AUDIT.md:3108` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/plugins/types.ts:99' — '* 节点定义'`
+- `docs/CHINESE_AUDIT.md:3109` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/plugins/types.ts:100' — '* @description 定义一种节点类型的执行逻辑'`
+- `docs/CHINESE_AUDIT.md:3110` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/plugins/types.ts:106' — '/** 节点类型标识 */'`
+- `docs/CHINESE_AUDIT.md:3111` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/plugins/types.ts:108' — '/** 配置校验 Schema */'`
+- `docs/CHINESE_AUDIT.md:3112` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/plugins/types.ts:110' — '/** 默认策略 */'`
+- `docs/CHINESE_AUDIT.md:3113` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/plugins/types.ts:113' — '* 执行节点'`
+- `docs/CHINESE_AUDIT.md:3114` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/plugins/types.ts:114' — '* @param ctx 执行上下文'`
+- `docs/CHINESE_AUDIT.md:3115` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/plugins/types.ts:115' — '* @param node 节点定义（含配置）'`
+- `docs/CHINESE_AUDIT.md:3116` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/plugins/types.ts:124' — '* 触发器安装上下文'`
+- `docs/CHINESE_AUDIT.md:3117` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/plugins/types.ts:130' — '/** 触发器 ID */'`
+- `docs/CHINESE_AUDIT.md:3118` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/plugins/types.ts:132' — '/** 触发器类型 */'`
+- `docs/CHINESE_AUDIT.md:3119` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/plugins/types.ts:134' — '/** 是否启用 */'`
+- `docs/CHINESE_AUDIT.md:3120` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/plugins/types.ts:136' — '/** 关联的 Flow ID */'`
+- `docs/CHINESE_AUDIT.md:3121` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/plugins/types.ts:138' — '/** 触发器配置 */'`
+- `docs/CHINESE_AUDIT.md:3122` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/plugins/types.ts:140' — '/** 传递给 Flow 的参数 */'`
+- `docs/CHINESE_AUDIT.md:3123` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/plugins/types.ts:145' — '* 触发器定义'`
+- `docs/CHINESE_AUDIT.md:3124` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/plugins/types.ts:146' — '* @description 定义一种触发器类型的安装和卸载逻辑'`
+- `docs/CHINESE_AUDIT.md:3125` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/plugins/types.ts:152' — '/** 触发器类型标识 */'`
+- `docs/CHINESE_AUDIT.md:3126` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/plugins/types.ts:154' — '/** 配置校验 Schema */'`
+- `docs/CHINESE_AUDIT.md:3127` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/plugins/types.ts:156' — '/** 安装触发器 */'`
+- `docs/CHINESE_AUDIT.md:3128` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/plugins/types.ts:158' — '/** 卸载触发器 */'`
+- `docs/CHINESE_AUDIT.md:3129` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/plugins/types.ts:163' — '* 插件注册上下文'`
+- `docs/CHINESE_AUDIT.md:3130` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/plugins/types.ts:166' — '/** 注册节点定义 */'`
+- `docs/CHINESE_AUDIT.md:3131` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/plugins/types.ts:168' — '/** 注册触发器定义 */'`
+- `docs/CHINESE_AUDIT.md:3132` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/plugins/types.ts:173' — '* 插件接口'`
+- `docs/CHINESE_AUDIT.md:3133` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/plugins/types.ts:174' — '* @description Record-Replay 插件的标准接口'`
+- `docs/CHINESE_AUDIT.md:3134` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/plugins/types.ts:177' — '/** 插件名称 */'`
+- `docs/CHINESE_AUDIT.md:3135` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/plugins/types.ts:179' — '/** 注册插件内容 */'`
+- `docs/CHINESE_AUDIT.md:3136` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/recovery/index.ts:3' — '* @description 崩溃恢复模块导出'`
+- `docs/CHINESE_AUDIT.md:3137` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/recovery/recovery-coordinator.ts:2' — '* @fileoverview 崩溃恢复协调器 (P3-06)'`
+- `docs/CHINESE_AUDIT.md:3138` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/recovery/recovery-coordinator.ts:4' — '* MV3 Service Worker 可能随时被终止。此协调器在 SW 启动时协调队列状态和 Run 记录，'`
+- `docs/CHINESE_AUDIT.md:3139` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/recovery/recovery-coordinator.ts:5' — '* 使中断的 Run 能够被恢复执行。'`
+- `docs/CHINESE_AUDIT.md:3140` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/recovery/recovery-coordinator.ts:7' — '* 恢复策略：'`
+- `docs/CHINESE_AUDIT.md:3141` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/recovery/recovery-coordinator.ts:8' — '* - 孤儿 running 项：回收为 queued，等待重新调度（从头重跑）'`
+- `docs/CHINESE_AUDIT.md:3142` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/recovery/recovery-coordinator.ts:9' — '* - 孤儿 paused 项：接管 lease，保持 paused 状态'`
+- `docs/CHINESE_AUDIT.md:3143` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/recovery/recovery-coordinator.ts:10' — '* - 已终态 Run 的队列残留：清理'`
+- `docs/CHINESE_AUDIT.md:3144` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/recovery/recovery-coordinator.ts:12' — '* 调用时机：'`
+- `docs/CHINESE_AUDIT.md:3145` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/recovery/recovery-coordinator.ts:13' — '* - 必须在 scheduler.start() 之前调用'`
+- `docs/CHINESE_AUDIT.md:3146` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/recovery/recovery-coordinator.ts:14' — '* - 通常在 SW 启动时调用一次'`
+- `docs/CHINESE_AUDIT.md:3147` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/recovery/recovery-coordinator.ts:26' — '* 恢复结果'`
+- `docs/CHINESE_AUDIT.md:3148` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/recovery/recovery-coordinator.ts:29' — '/** 被回收为 queued 的 running Run ID */'`
+- `docs/CHINESE_AUDIT.md:3149` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/recovery/recovery-coordinator.ts:31' — '/** 被接管的 paused Run ID */'`
+- `docs/CHINESE_AUDIT.md:3150` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/recovery/recovery-coordinator.ts:33' — '/** 被清理的已终态 Run ID */'`
+- `docs/CHINESE_AUDIT.md:3151` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/recovery/recovery-coordinator.ts:38' — '* 恢复协调器依赖'`
+- `docs/CHINESE_AUDIT.md:3152` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/recovery/recovery-coordinator.ts:41' — '/** 存储层 */'`
+- `docs/CHINESE_AUDIT.md:3153` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/recovery/recovery-coordinator.ts:43' — '/** 事件总线 */'`
+- `docs/CHINESE_AUDIT.md:3154` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/recovery/recovery-coordinator.ts:45' — '/** 当前 Service Worker 的 ownerId */'`
+- `docs/CHINESE_AUDIT.md:3155` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/recovery/recovery-coordinator.ts:47' — '/** 时间源 */'`
+- `docs/CHINESE_AUDIT.md:3156` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/recovery/recovery-coordinator.ts:49' — '/** 日志器 */'`
+- `docs/CHINESE_AUDIT.md:3157` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/recovery/recovery-coordinator.ts:56' — '* 执行崩溃恢复'`
+- `docs/CHINESE_AUDIT.md:3158` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/recovery/recovery-coordinator.ts:58' — '* 在 SW 启动时调用，协调队列状态和 Run 记录。'`
+- `docs/CHINESE_AUDIT.md:3159` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/recovery/recovery-coordinator.ts:60' — '* 执行顺序：'`
+- `docs/CHINESE_AUDIT.md:3160` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/recovery/recovery-coordinator.ts:61' — '* 1. 预清理：检查队列中的所有项，清理已终态或无对应 RunRecord 的残留'`
+- `docs/CHINESE_AUDIT.md:3161` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/recovery/recovery-coordinator.ts:62' — '* 2. 恢复孤儿租约：回收 running，接管 paused'`
+- `docs/CHINESE_AUDIT.md:3162` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/recovery/recovery-coordinator.ts:63' — '* 3. 同步 RunRecord 状态：确保 RunRecord 与队列状态一致'`
+- `docs/CHINESE_AUDIT.md:3163` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/recovery/recovery-coordinator.ts:64' — '* 4. 发送恢复事件：为 requeued running 项发送 run.recovered 事件'`
+- `docs/CHINESE_AUDIT.md:3164` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/recovery/recovery-coordinator.ts:75' — '// 设计理由：恢复过程必须"先清理后接管/回收"，否则可能把已经终态的 Run 重新排队执行'`
+- `docs/CHINESE_AUDIT.md:3165` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/recovery/recovery-coordinator.ts:78' — '// ==================== Step 1: 预清理 ===================='`
+- `docs/CHINESE_AUDIT.md:3166` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/recovery/recovery-coordinator.ts:79' — '// 检查队列中的所有项，清理已终态或无对应 RunRecord 的残留'`
+- `docs/CHINESE_AUDIT.md:3167` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/recovery/recovery-coordinator.ts:86' — '// 防御性清理：无 RunRecord 的队列项无法执行'`
+- `docs/CHINESE_AUDIT.md:3168` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/recovery/recovery-coordinator.ts:98' — '// 清理已终态的 Run（SW 可能在 runner 完成后、scheduler markDone 前崩溃）'`
+- `docs/CHINESE_AUDIT.md:3169` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/recovery/recovery-coordinator.ts:113' — '// ==================== Step 2: 恢复孤儿租约 ===================='`
+- `docs/CHINESE_AUDIT.md:3170` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/recovery/recovery-coordinator.ts:114' — '// Best-effort：即使失败也不应该阻止启动'`
+- `docs/CHINESE_AUDIT.md:3171` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/recovery/recovery-coordinator.ts:123' — '// 继续执行，不阻止启动'`
+- `docs/CHINESE_AUDIT.md:3172` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/recovery/recovery-coordinator.ts:126' — '// ==================== Step 3: 同步 RunRecord 状态 ====================`
+- `docs/CHINESE_AUDIT.md:3173` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/recovery/recovery-coordinator.ts:132' — '// 跳过在 Step 1 中已清理的项'`
+- `docs/CHINESE_AUDIT.md:3174` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/recovery/recovery-coordinator.ts:140' — '// RunRecord 不存在，清理队列项（防御性）'`
+- `docs/CHINESE_AUDIT.md:3175` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/recovery/recovery-coordinator.ts:154' — '// 跳过已终态的 Run（可能在恢复过程中被其他逻辑更新）'`
+- `docs/CHINESE_AUDIT.md:3176` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/recovery/recovery-coordinator.ts:155' — '// 同时清理队列项，防止残留'`
+- `docs/CHINESE_AUDIT.md:3177` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/recovery/recovery-coordinator.ts:169' — '// 更新 RunRecord 状态为 queued'`
+- `docs/CHINESE_AUDIT.md:3178` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/recovery/recovery-coordinator.ts:172' — '// 发送恢复事件（best-effort，失败不影响恢复流程）'`
+- `docs/CHINESE_AUDIT.md:3179` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/recovery/recovery-coordinator.ts:187' — '// 继续执行，不影响恢复流程'`
+- `docs/CHINESE_AUDIT.md:3180` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/recovery/recovery-coordinator.ts:194' — '// ==================== Step 4: 同步 adopted paused 的 RunRecord ======`
+- `docs/CHINESE_AUDIT.md:3181` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/recovery/recovery-coordinator.ts:200' — '// 跳过在 Step 1 中已清理的项'`
+- `docs/CHINESE_AUDIT.md:3182` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/recovery/recovery-coordinator.ts:208' — '// RunRecord 不存在，清理队列项（防御性）'`
+- `docs/CHINESE_AUDIT.md:3183` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/recovery/recovery-coordinator.ts:222' — '// 跳过已终态的 Run，同时清理队列项'`
+- `docs/CHINESE_AUDIT.md:3184` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/recovery/recovery-coordinator.ts:236' — '// 如果 RunRecord 状态不是 paused，同步更新'`
+- `docs/CHINESE_AUDIT.md:3185` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/storage/index.ts:2' — '* @fileoverview Engine Storage 模块导出入口'`
+- `docs/CHINESE_AUDIT.md:3186` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/storage/storage-port.ts:2' — '* @fileoverview StoragePort 接口定义'`
+- `docs/CHINESE_AUDIT.md:3187` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/storage/storage-port.ts:3' — '* @description 定义 Storage 层的抽象接口，用于依赖注入'`
+- `docs/CHINESE_AUDIT.md:3188` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/storage/storage-port.ts:14' — '* FlowsStore 接口'`
+- `docs/CHINESE_AUDIT.md:3189` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/storage/storage-port.ts:17' — '/** 列出所有 Flow */'`
+- `docs/CHINESE_AUDIT.md:3190` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/storage/storage-port.ts:19' — '/** 获取单个 Flow */'`
+- `docs/CHINESE_AUDIT.md:3191` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/storage/storage-port.ts:21' — '/** 保存 Flow */'`
+- `docs/CHINESE_AUDIT.md:3192` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/storage/storage-port.ts:23' — '/** 删除 Flow */'`
+- `docs/CHINESE_AUDIT.md:3193` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/storage/storage-port.ts:28' — '* RunsStore 接口'`
+- `docs/CHINESE_AUDIT.md:3194` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/storage/storage-port.ts:31' — '/** 列出所有 Run 记录 */'`
+- `docs/CHINESE_AUDIT.md:3195` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/storage/storage-port.ts:33' — '/** 获取单个 Run 记录 */'`
+- `docs/CHINESE_AUDIT.md:3196` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/storage/storage-port.ts:35' — '/** 保存 Run 记录 */'`
+- `docs/CHINESE_AUDIT.md:3197` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/storage/storage-port.ts:37' — '/** 部分更新 Run 记录 */'`
+- `docs/CHINESE_AUDIT.md:3198` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/storage/storage-port.ts:42' — '* EventsStore 接口'`
+- `docs/CHINESE_AUDIT.md:3199` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/storage/storage-port.ts:43' — '* @description seq 分配必须由 append() 内部原子完成'`
+- `docs/CHINESE_AUDIT.md:3200` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/storage/storage-port.ts:47' — '* 追加事件并原子分配 seq'`
+- `docs/CHINESE_AUDIT.md:3201` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/storage/storage-port.ts:48' — '* @description 在单个事务中：读取 RunRecordV3.nextSeq -> 写入事件 -> 递增 nextSeq'`
+- `docs/CHINESE_AUDIT.md:3202` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/storage/storage-port.ts:49' — '* @param event 事件输入（不含 seq）'`
+- `docs/CHINESE_AUDIT.md:3203` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/storage/storage-port.ts:50' — '* @returns 完整事件（含分配的 seq 和 ts）'`
+- `docs/CHINESE_AUDIT.md:3204` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/storage/storage-port.ts:55' — '* 列出事件'`
+- `docs/CHINESE_AUDIT.md:3205` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/storage/storage-port.ts:57' — '* @param opts 查询选项'`
+- `docs/CHINESE_AUDIT.md:3206` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/storage/storage-port.ts:63' — '* PersistentVarsStore 接口'`
+- `docs/CHINESE_AUDIT.md:3207` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/storage/storage-port.ts:66' — '/** 获取持久化变量 */'`
+- `docs/CHINESE_AUDIT.md:3208` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/storage/storage-port.ts:68' — '/** 设置持久化变量 */'`
+- `docs/CHINESE_AUDIT.md:3209` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/storage/storage-port.ts:73' — '/** 删除持久化变量 */'`
+- `docs/CHINESE_AUDIT.md:3210` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/storage/storage-port.ts:75' — '/** 列出持久化变量 */'`
+- `docs/CHINESE_AUDIT.md:3211` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/storage/storage-port.ts:80' — '* TriggersStore 接口'`
+- `docs/CHINESE_AUDIT.md:3212` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/storage/storage-port.ts:83' — '/** 列出所有触发器 */'`
+- `docs/CHINESE_AUDIT.md:3213` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/storage/storage-port.ts:85' — '/** 获取单个触发器 */'`
+- `docs/CHINESE_AUDIT.md:3214` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/storage/storage-port.ts:87' — '/** 保存触发器 */'`
+- `docs/CHINESE_AUDIT.md:3215` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/storage/storage-port.ts:89' — '/** 删除触发器 */'`
+- `docs/CHINESE_AUDIT.md:3216` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/storage/storage-port.ts:94' — '* StoragePort 接口'`
+- `docs/CHINESE_AUDIT.md:3217` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/storage/storage-port.ts:95' — '* @description 聚合所有存储接口，用于依赖注入'`
+- `docs/CHINESE_AUDIT.md:3218` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/storage/storage-port.ts:98' — '/** Flows 存储 */'`
+- `docs/CHINESE_AUDIT.md:3219` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/storage/storage-port.ts:100' — '/** Runs 存储 */'`
+- `docs/CHINESE_AUDIT.md:3220` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/storage/storage-port.ts:102' — '/** Events 存储 */'`
+- `docs/CHINESE_AUDIT.md:3221` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/storage/storage-port.ts:104' — '/** Queue 存储 */'`
+- `docs/CHINESE_AUDIT.md:3222` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/storage/storage-port.ts:106' — '/** 持久化变量存储 */'`
+- `docs/CHINESE_AUDIT.md:3223` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/storage/storage-port.ts:108' — '/** 触发器存储 */'`
+- `docs/CHINESE_AUDIT.md:3224` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/storage/storage-port.ts:113' — '* 创建 NotImplemented 的 Store'`
+- `docs/CHINESE_AUDIT.md:3225` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/storage/storage-port.ts:114' — '* @description 避免 Proxy 生成 'then' 导致 thenable 行为'`
+- `docs/CHINESE_AUDIT.md:3226` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/storage/storage-port.ts:132' — '* 创建 NotImplemented 的 StoragePort'`
+- `docs/CHINESE_AUDIT.md:3227` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/storage/storage-port.ts:133' — '* @description Phase 0 占位实现'`
+- `docs/CHINESE_AUDIT.md:3228` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/keepalive/index.ts:2' — '* @fileoverview Keepalive 模块导出入口'`
+- `docs/CHINESE_AUDIT.md:3229` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/traversal.ts:2' — '* @fileoverview DAG 遍历和校验'`
+- `docs/CHINESE_AUDIT.md:3230` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/traversal.ts:3' — '* @description 提供 Flow DAG 的校验、遍历和下一节点查找功能'`
+- `docs/CHINESE_AUDIT.md:3231` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/traversal.ts:12' — '* DAG 校验结果'`
+- `docs/CHINESE_AUDIT.md:3232` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/traversal.ts:17' — '* 校验 Flow DAG 结构'`
+- `docs/CHINESE_AUDIT.md:3233` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/traversal.ts:18' — '* @param flow Flow 定义'`
+- `docs/CHINESE_AUDIT.md:3234` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/traversal.ts:19' — '* @returns 校验结果'`
+- `docs/CHINESE_AUDIT.md:3235` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/traversal.ts:25' — '// 检查 entryNodeId 是否存在'`
+- `docs/CHINESE_AUDIT.md:3236` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/traversal.ts:35' — '// 检查边引用的节点是否存在'`
+- `docs/CHINESE_AUDIT.md:3237` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/traversal.ts:55' — '// 检查循环'`
+- `docs/CHINESE_AUDIT.md:3238` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/traversal.ts:67' — '* 检测 DAG 中的循环'`
+- `docs/CHINESE_AUDIT.md:3239` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/traversal.ts:68' — '* @param flow Flow 定义'`
+- `docs/CHINESE_AUDIT.md:3240` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/traversal.ts:69' — '* @returns 循环路径（如果存在）或 null'`
+- `docs/CHINESE_AUDIT.md:3241` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/traversal.ts:89' — '// 找到循环'`
+- `docs/CHINESE_AUDIT.md:3242` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/traversal.ts:91' — 'path.push(neighbor); // 闭合循环'`
+- `docs/CHINESE_AUDIT.md:3243` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/traversal.ts:92' — 'path.splice(0, cycleStart); // 移除循环前的节点'`
+- `docs/CHINESE_AUDIT.md:3244` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/traversal.ts:114' — '* 查找下一个节点'`
+- `docs/CHINESE_AUDIT.md:3245` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/traversal.ts:115' — '* @param flow Flow 定义'`
+- `docs/CHINESE_AUDIT.md:3246` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/traversal.ts:116' — '* @param currentNodeId 当前节点 ID'`
+- `docs/CHINESE_AUDIT.md:3247` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/traversal.ts:117' — '* @param label 边标签（可选，默认使用 default）'`
+- `docs/CHINESE_AUDIT.md:3248` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/traversal.ts:118' — '* @returns 下一个节点 ID 或 null（如果没有后续节点）'`
+- `docs/CHINESE_AUDIT.md:3249` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/traversal.ts:131' — '// 如果指定了 label，优先匹配'`
+- `docs/CHINESE_AUDIT.md:3250` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/traversal.ts:139' — '// 否则使用 default 边'`
+- `docs/CHINESE_AUDIT.md:3251` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/traversal.ts:147' — '// 如果只有一条边，使用它'`
+- `docs/CHINESE_AUDIT.md:3252` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/traversal.ts:156' — '* 查找指定标签的边'`
+- `docs/CHINESE_AUDIT.md:3253` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/traversal.ts:167' — '* 获取节点的所有出边'`
+- `docs/CHINESE_AUDIT.md:3254` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/traversal.ts:174' — '* 获取节点的所有入边'`
+- `docs/CHINESE_AUDIT.md:3255` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/traversal.ts:181' — '* 构建邻接表'`
+- `docs/CHINESE_AUDIT.md:3256` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/traversal.ts:201' — '* 获取从入口节点可达的所有节点'`
+- `docs/CHINESE_AUDIT.md:3257` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/traversal.ts:222' — '* 检查节点是否可达'`
+- `docs/CHINESE_AUDIT.md:3258` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/artifacts.ts:2' — '* @fileoverview 工件（Artifacts）接口'`
+- `docs/CHINESE_AUDIT.md:3259` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/artifacts.ts:3' — '* @description 定义截图等工件的获取和存储接口'`
+- `docs/CHINESE_AUDIT.md:3260` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/artifacts.ts:11' — '* 截图结果'`
+- `docs/CHINESE_AUDIT.md:3261` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/artifacts.ts:16' — '* 工件服务接口'`
+- `docs/CHINESE_AUDIT.md:3262` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/artifacts.ts:17' — '* @description 提供工件获取和存储功能'`
+- `docs/CHINESE_AUDIT.md:3263` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/artifacts.ts:21' — '* 截取页面截图'`
+- `docs/CHINESE_AUDIT.md:3264` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/artifacts.ts:23' — '* @param options 截图选项'`
+- `docs/CHINESE_AUDIT.md:3265` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/artifacts.ts:34' — '* 保存截图'`
+- `docs/CHINESE_AUDIT.md:3266` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/artifacts.ts:37' — '* @param base64 截图数据'`
+- `docs/CHINESE_AUDIT.md:3267` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/artifacts.ts:38' — '* @param filename 文件名（可选）'`
+- `docs/CHINESE_AUDIT.md:3268` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/artifacts.ts:49' — '* 创建 NotImplemented 的 ArtifactService'`
+- `docs/CHINESE_AUDIT.md:3269` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/artifacts.ts:50' — '* @description Phase 0-1 占位实现'`
+- `docs/CHINESE_AUDIT.md:3270` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/artifacts.ts:68' — '* 创建基于 chrome.tabs.captureVisibleTab 的 ArtifactService'`
+- `docs/CHINESE_AUDIT.md:3271` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/artifacts.ts:69' — '* @description 使用 Chrome API 截取可见标签页'`
+- `docs/CHINESE_AUDIT.md:3272` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/artifacts.ts:136' — '* 工件策略执行器'`
+- `docs/CHINESE_AUDIT.md:3273` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/artifacts.ts:137' — '* @description 根据策略配置决定是否获取工件'`
+- `docs/CHINESE_AUDIT.md:3274` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/artifacts.ts:141' — '* 执行截图策略'`
+- `docs/CHINESE_AUDIT.md:3275` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/artifacts.ts:142' — '* @param policy 截图策略'`
+- `docs/CHINESE_AUDIT.md:3276` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/artifacts.ts:143' — '* @param context 上下文'`
+- `docs/CHINESE_AUDIT.md:3277` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/artifacts.ts:158' — '* 创建默认的工件策略执行器'`
+- `docs/CHINESE_AUDIT.md:3278` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/artifacts.ts:163' — '// 根据策略决定是否截图'`
+- `docs/CHINESE_AUDIT.md:3279` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/artifacts.ts:170' — '// 截图'`
+- `docs/CHINESE_AUDIT.md:3280` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/artifacts.ts:176' — '// 保存（如果指定了文件名）'`
+- `docs/CHINESE_AUDIT.md:3281` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/index.ts:2' — '* @fileoverview Kernel 模块导出入口'`
+- `docs/CHINESE_AUDIT.md:3282` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/runner.ts:2' — '* @fileoverview RunRunner 接口和实现'`
+- `docs/CHINESE_AUDIT.md:3283` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/runner.ts:3' — '* @description 定义和实现单个 Run 的顺序执行器'`
+- `docs/CHINESE_AUDIT.md:3284` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/runner.ts:38' — '* RunRunner 运行时状态'`
+- `docs/CHINESE_AUDIT.md:3285` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/runner.ts:43' — '/** 当前节点 ID */'`
+- `docs/CHINESE_AUDIT.md:3286` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/runner.ts:45' — '/** 当前尝试次数 */'`
+- `docs/CHINESE_AUDIT.md:3287` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/runner.ts:47' — '/** 变量表 */'`
+- `docs/CHINESE_AUDIT.md:3288` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/runner.ts:49' — '/** 是否暂停 */'`
+- `docs/CHINESE_AUDIT.md:3289` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/runner.ts:51' — '/** 是否取消 */'`
+- `docs/CHINESE_AUDIT.md:3290` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/runner.ts:56' — '* RunRunner 配置'`
+- `docs/CHINESE_AUDIT.md:3291` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/runner.ts:59' — '/** Flow 快照 */'`
+- `docs/CHINESE_AUDIT.md:3292` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/runner.ts:63' — '/** 初始参数 */'`
+- `docs/CHINESE_AUDIT.md:3293` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/runner.ts:65' — '/** 起始节点 ID */'`
+- `docs/CHINESE_AUDIT.md:3294` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/runner.ts:67' — '/** 调试配置 */'`
+- `docs/CHINESE_AUDIT.md:3295` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/runner.ts:72' — '* RunRunner 接口'`
+- `docs/CHINESE_AUDIT.md:3296` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/runner.ts:77' — '/** 当前状态 */'`
+- `docs/CHINESE_AUDIT.md:3297` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/runner.ts:79' — '/** 订阅事件 */'`
+- `docs/CHINESE_AUDIT.md:3298` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/runner.ts:81' — '/** 开始执行 */'`
+- `docs/CHINESE_AUDIT.md:3299` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/runner.ts:83' — '/** 暂停执行 */'`
+- `docs/CHINESE_AUDIT.md:3300` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/runner.ts:85' — '/** 恢复执行 */'`
+- `docs/CHINESE_AUDIT.md:3301` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/runner.ts:87' — '/** 取消执行 */'`
+- `docs/CHINESE_AUDIT.md:3302` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/runner.ts:89' — '/** 获取变量值 */'`
+- `docs/CHINESE_AUDIT.md:3303` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/runner.ts:91' — '/** 设置变量值 */'`
+- `docs/CHINESE_AUDIT.md:3304` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/runner.ts:96' — '* RunRunner 工厂接口'`
+- `docs/CHINESE_AUDIT.md:3305` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/runner.ts:103' — '* RunRunner 工厂依赖'`
+- `docs/CHINESE_AUDIT.md:3306` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/runner.ts:228' — '* 创建 NotImplemented 的 RunRunnerFactory'`
+- `docs/CHINESE_AUDIT.md:3307` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/runner.ts:239' — '* 创建 RunRunner 工厂'`
+- `docs/CHINESE_AUDIT.md:3308` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/breakpoints.ts:2' — '* @fileoverview 断点管理器'`
+- `docs/CHINESE_AUDIT.md:3309` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/breakpoints.ts:3' — '* @description 管理调试断点的添加、删除和命中检测'`
+- `docs/CHINESE_AUDIT.md:3310` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/breakpoints.ts:10' — '* 断点管理器'`
+- `docs/CHINESE_AUDIT.md:3311` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/breakpoints.ts:11' — '* @description 管理单个 Run 的断点'`
+- `docs/CHINESE_AUDIT.md:3312` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/breakpoints.ts:26' — '* 添加断点'`
+- `docs/CHINESE_AUDIT.md:3313` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/breakpoints.ts:33' — '* 删除断点'`
+- `docs/CHINESE_AUDIT.md:3314` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/breakpoints.ts:40' — '* 设置断点列表（替换所有现有断点）'`
+- `docs/CHINESE_AUDIT.md:3315` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/breakpoints.ts:50' — '* 启用断点'`
+- `docs/CHINESE_AUDIT.md:3316` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/breakpoints.ts:60' — '* 禁用断点'`
+- `docs/CHINESE_AUDIT.md:3317` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/breakpoints.ts:70' — '* 检查节点是否有启用的断点'`
+- `docs/CHINESE_AUDIT.md:3318` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/breakpoints.ts:78' — '* 检查是否应该在节点处暂停'`
+- `docs/CHINESE_AUDIT.md:3319` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/breakpoints.ts:79' — '* @description 考虑断点和单步模式'`
+- `docs/CHINESE_AUDIT.md:3320` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/breakpoints.ts:82' — '// 如果在单步模式，总是暂停'`
+- `docs/CHINESE_AUDIT.md:3321` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/breakpoints.ts:86' — '// 否则检查断点'`
+- `docs/CHINESE_AUDIT.md:3322` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/breakpoints.ts:91' — '* 获取所有断点'`
+- `docs/CHINESE_AUDIT.md:3323` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/breakpoints.ts:98' — '* 获取启用的断点'`
+- `docs/CHINESE_AUDIT.md:3324` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/breakpoints.ts:105' — '* 设置单步模式'`
+- `docs/CHINESE_AUDIT.md:3325` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/breakpoints.ts:112' — '* 获取单步模式'`
+- `docs/CHINESE_AUDIT.md:3326` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/breakpoints.ts:119' — '* 清除所有断点'`
+- `docs/CHINESE_AUDIT.md:3327` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/breakpoints.ts:128' — '* 断点管理器注册表'`
+- `docs/CHINESE_AUDIT.md:3328` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/breakpoints.ts:129' — '* @description 管理多个 Run 的断点管理器'`
+- `docs/CHINESE_AUDIT.md:3329` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/breakpoints.ts:135' — '* 获取或创建断点管理器'`
+- `docs/CHINESE_AUDIT.md:3330` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/breakpoints.ts:147' — '* 获取断点管理器'`
+- `docs/CHINESE_AUDIT.md:3331` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/breakpoints.ts:154' — '* 删除断点管理器'`
+- `docs/CHINESE_AUDIT.md:3332` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/breakpoints.ts:161' — '* 清空所有'`
+- `docs/CHINESE_AUDIT.md:3333` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/breakpoints.ts:168' — '/** 全局断点注册表 */'`
+- `docs/CHINESE_AUDIT.md:3334` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/breakpoints.ts:172' — '* 获取全局断点注册表'`
+- `docs/CHINESE_AUDIT.md:3335` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/breakpoints.ts:182' — '* 重置全局断点注册表'`
+- `docs/CHINESE_AUDIT.md:3336` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/breakpoints.ts:183' — '* @description 主要用于测试'`
+- `docs/CHINESE_AUDIT.md:3337` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/recovery-kernel.ts:2' — '* @fileoverview 支持崩溃恢复的 ExecutionKernel 实现 (P3-06)'`
+- `docs/CHINESE_AUDIT.md:3338` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/recovery-kernel.ts:4' — '* 提供 ExecutionKernel 的恢复增强实现，支持 'recover()' 方法。'`
+- `docs/CHINESE_AUDIT.md:3339` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/recovery-kernel.ts:5' — '* 通过委托给 RecoveryCoordinator 实现崩溃恢复。'`
+- `docs/CHINESE_AUDIT.md:3340` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/recovery-kernel.ts:7' — '* 其他执行方法（startRun, pauseRun 等）暂未实现，将在后续阶段完成。'`
+- `docs/CHINESE_AUDIT.md:3341` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/recovery-kernel.ts:23' — '* 支持恢复的 Kernel 依赖'`
+- `docs/CHINESE_AUDIT.md:3342` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/recovery-kernel.ts:26' — '/** 存储层 */'`
+- `docs/CHINESE_AUDIT.md:3343` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/recovery-kernel.ts:28' — '/** 事件总线 */'`
+- `docs/CHINESE_AUDIT.md:3344` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/recovery-kernel.ts:30' — '/** 当前 Service Worker 的 ownerId */'`
+- `docs/CHINESE_AUDIT.md:3345` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/recovery-kernel.ts:32' — '/** 时间源 */'`
+- `docs/CHINESE_AUDIT.md:3346` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/recovery-kernel.ts:34' — '/** 日志器 */'`
+- `docs/CHINESE_AUDIT.md:3347` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/recovery-kernel.ts:41' — '* 创建支持恢复的 ExecutionKernel'`
+- `docs/CHINESE_AUDIT.md:3348` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/recovery-kernel.ts:43' — '* 此实现仅支持 'recover()' 和 'getRunStatus()' 方法。'`
+- `docs/CHINESE_AUDIT.md:3349` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/recovery-kernel.ts:44' — '* 其他执行方法暂未实现，将在后续阶段完成。'`
+- `docs/CHINESE_AUDIT.md:3350` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/kernel.ts:2' — '* @fileoverview ExecutionKernel 接口定义'`
+- `docs/CHINESE_AUDIT.md:3351` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/kernel.ts:3' — '* @description 定义 Record-Replay V3 的核心执行引擎接口'`
+- `docs/CHINESE_AUDIT.md:3352` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/kernel.ts:14' — '* Run 启动请求'`
+- `docs/CHINESE_AUDIT.md:3353` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/kernel.ts:17' — '/** Run ID（由调用方生成） */'`
+- `docs/CHINESE_AUDIT.md:3354` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/kernel.ts:21' — '/** Flow 快照（执行时使用的完整 Flow 定义） */'`
+- `docs/CHINESE_AUDIT.md:3355` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/kernel.ts:23' — '/** 运行参数 */'`
+- `docs/CHINESE_AUDIT.md:3356` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/kernel.ts:25' — '/** 起始节点 ID（默认为 Flow 的 entryNodeId） */'`
+- `docs/CHINESE_AUDIT.md:3357` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/kernel.ts:27' — '/** Tab ID（必须由调用方分配，每 Run 独占） */'`
+- `docs/CHINESE_AUDIT.md:3358` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/kernel.ts:29' — '/** 调试配置 */'`
+- `docs/CHINESE_AUDIT.md:3359` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/kernel.ts:34' — '* Run 执行结果'`
+- `docs/CHINESE_AUDIT.md:3360` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/kernel.ts:39' — '/** 最终状态 */'`
+- `docs/CHINESE_AUDIT.md:3361` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/kernel.ts:41' — '/** 总耗时（毫秒） */'`
+- `docs/CHINESE_AUDIT.md:3362` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/kernel.ts:43' — '/** 错误信息（如果失败） */'`
+- `docs/CHINESE_AUDIT.md:3363` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/kernel.ts:45' — '/** 输出结果 */'`
+- `docs/CHINESE_AUDIT.md:3364` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/kernel.ts:50' — '* Run 状态查询结果'`
+- `docs/CHINESE_AUDIT.md:3365` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/kernel.ts:53' — '/** 当前状态 */'`
+- `docs/CHINESE_AUDIT.md:3366` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/kernel.ts:55' — '/** 当前节点 ID */'`
+- `docs/CHINESE_AUDIT.md:3367` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/kernel.ts:57' — '/** 开始时间 */'`
+- `docs/CHINESE_AUDIT.md:3368` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/kernel.ts:59' — '/** 最后更新时间 */'`
+- `docs/CHINESE_AUDIT.md:3369` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/kernel.ts:66' — '* ExecutionKernel 接口'`
+- `docs/CHINESE_AUDIT.md:3370` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/kernel.ts:67' — '* @description Record-Replay V3 的核心执行引擎'`
+- `docs/CHINESE_AUDIT.md:3371` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/kernel.ts:71' — '* 订阅事件流'`
+- `docs/CHINESE_AUDIT.md:3372` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/kernel.ts:72' — '* @param listener 事件监听器'`
+- `docs/CHINESE_AUDIT.md:3373` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/kernel.ts:73' — '* @returns 取消订阅函数'`
+- `docs/CHINESE_AUDIT.md:3374` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/kernel.ts:78' — '* 启动 Run'`
+- `docs/CHINESE_AUDIT.md:3375` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/kernel.ts:79' — '* @description 将 Run 加入队列并开始执行'`
+- `docs/CHINESE_AUDIT.md:3376` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/kernel.ts:84' — '* 暂停 Run'`
+- `docs/CHINESE_AUDIT.md:3377` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/kernel.ts:86' — '* @param reason 暂停原因'`
+- `docs/CHINESE_AUDIT.md:3378` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/kernel.ts:91' — '* 恢复 Run'`
+- `docs/CHINESE_AUDIT.md:3379` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/kernel.ts:97' — '* 取消 Run'`
+- `docs/CHINESE_AUDIT.md:3380` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/kernel.ts:99' — '* @param reason 取消原因'`
+- `docs/CHINESE_AUDIT.md:3381` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/kernel.ts:104' — '* 执行调试命令'`
+- `docs/CHINESE_AUDIT.md:3382` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/kernel.ts:106' — '* @param cmd 调试命令'`
+- `docs/CHINESE_AUDIT.md:3383` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/kernel.ts:114' — '* 获取 Run 状态'`
+- `docs/CHINESE_AUDIT.md:3384` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/kernel.ts:116' — '* @returns Run 状态信息或 null（如果不存在）'`
+- `docs/CHINESE_AUDIT.md:3385` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/kernel.ts:121' — '* 恢复执行'`
+- `docs/CHINESE_AUDIT.md:3386` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/kernel.ts:122' — '* @description 在 Service Worker 重启后调用，恢复中断的 Run'`
+- `docs/CHINESE_AUDIT.md:3387` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/kernel.ts:128' — '* 创建 NotImplemented 的 ExecutionKernel'`
+- `docs/CHINESE_AUDIT.md:3388` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/kernel.ts:129' — '* @description Phase 0 占位实现'`
+- `docs/CHINESE_AUDIT.md:3389` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc.ts:2' — '* @fileoverview Port RPC 协议定义'`
+- `docs/CHINESE_AUDIT.md:3390` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc.ts:3' — '* @description 定义通过 chrome.runtime.Port 进行通信的协议类型'`
+- `docs/CHINESE_AUDIT.md:3391` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc.ts:10' — '/** Port 名称 */'`
+- `docs/CHINESE_AUDIT.md:3392` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc.ts:14' — '* RPC 方法名称'`
+- `docs/CHINESE_AUDIT.md:3393` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc.ts:17' — '// 查询方法'`
+- `docs/CHINESE_AUDIT.md:3394` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc.ts:21' — '// Flow 管理方法'`
+- `docs/CHINESE_AUDIT.md:3395` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc.ts:26' — '// 触发器管理方法'`
+- `docs/CHINESE_AUDIT.md:3396` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc.ts:35' — '// 队列管理方法'`
+- `docs/CHINESE_AUDIT.md:3397` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc.ts:39' — '// 控制方法'`
+- `docs/CHINESE_AUDIT.md:3398` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc.ts:44' — '// 调试方法'`
+- `docs/CHINESE_AUDIT.md:3399` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc.ts:46' — '// 订阅方法'`
+- `docs/CHINESE_AUDIT.md:3400` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc.ts:51' — '* RPC 请求消息'`
+- `docs/CHINESE_AUDIT.md:3401` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc.ts:55' — '/** 请求 ID（用于匹配响应） */'`
+- `docs/CHINESE_AUDIT.md:3402` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc.ts:57' — '/** 方法名 */'`
+- `docs/CHINESE_AUDIT.md:3403` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc.ts:59' — '/** 参数 */'`
+- `docs/CHINESE_AUDIT.md:3404` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc.ts:64' — '* RPC 成功响应'`
+- `docs/CHINESE_AUDIT.md:3405` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc.ts:68' — '/** 对应的请求 ID */'`
+- `docs/CHINESE_AUDIT.md:3406` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc.ts:71' — '/** 返回结果 */'`
+- `docs/CHINESE_AUDIT.md:3407` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc.ts:76' — '* RPC 错误响应'`
+- `docs/CHINESE_AUDIT.md:3408` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc.ts:80' — '/** 对应的请求 ID */'`
+- `docs/CHINESE_AUDIT.md:3409` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc.ts:83' — '/** 错误信息 */'`
+- `docs/CHINESE_AUDIT.md:3410` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc.ts:88' — '* RPC 响应'`
+- `docs/CHINESE_AUDIT.md:3411` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc.ts:93' — '* RPC 事件推送'`
+- `docs/CHINESE_AUDIT.md:3412` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc.ts:97' — '/** 事件数据 */'`
+- `docs/CHINESE_AUDIT.md:3413` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc.ts:102' — '* RPC 订阅确认'`
+- `docs/CHINESE_AUDIT.md:3414` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc.ts:106' — '/** 订阅的 Run ID（可选，null 表示订阅所有） */'`
+- `docs/CHINESE_AUDIT.md:3415` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc.ts:111' — '* 所有 RPC 消息类型'`
+- `docs/CHINESE_AUDIT.md:3416` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc.ts:121' — '* 生成唯一的请求 ID'`
+- `docs/CHINESE_AUDIT.md:3417` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc.ts:128' — '* 判断消息是否为 RPC 请求'`
+- `docs/CHINESE_AUDIT.md:3418` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc.ts:135' — '* 判断消息是否为 RPC 响应'`
+- `docs/CHINESE_AUDIT.md:3419` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc.ts:142' — '* 判断消息是否为 RPC 事件'`
+- `docs/CHINESE_AUDIT.md:3420` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc.ts:149' — '* 创建 RPC 请求'`
+- `docs/CHINESE_AUDIT.md:3421` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc.ts:161' — '* 创建成功响应'`
+- `docs/CHINESE_AUDIT.md:3422` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc.ts:173' — '* 创建错误响应'`
+- `docs/CHINESE_AUDIT.md:3423` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc.ts:185' — '* 创建事件消息'`
+- `docs/CHINESE_AUDIT.md:3424` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/index.ts:2' — '* @fileoverview Transport 模块导出入口'`
+- `docs/CHINESE_AUDIT.md:3425` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc-server.ts:31' — '* RPC Server 配置'`
+- `docs/CHINESE_AUDIT.md:3426` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc-server.ts:40' — '/** ID 生成器（用于测试注入） */'`
+- `docs/CHINESE_AUDIT.md:3427` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc-server.ts:42' — '/** 时间源（用于测试注入） */'`
+- `docs/CHINESE_AUDIT.md:3428` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc-server.ts:47' — '* 活跃的 Port 连接'`
+- `docs/CHINESE_AUDIT.md:3429` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc-server.ts:55' — '* 默认 RunId 生成器'`
+- `docs/CHINESE_AUDIT.md:3430` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc-server.ts:63' — '* @description 处理来自 UI 的 RPC 请求'`
+- `docs/CHINESE_AUDIT.md:3431` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc-server.ts:89' — '* 启动 RPC Server'`
+- `docs/CHINESE_AUDIT.md:3432` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc-server.ts:101' — '* 停止 RPC Server'`
+- `docs/CHINESE_AUDIT.md:3433` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc-server.ts:119' — '* 处理新连接'`
+- `docs/CHINESE_AUDIT.md:3434` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc-server.ts:137' — '* 处理消息'`
+- `docs/CHINESE_AUDIT.md:3435` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc-server.ts:155' — '* 处理断开连接'`
+- `docs/CHINESE_AUDIT.md:3436` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc-server.ts:162' — '* 广播事件'`
+- `docs/CHINESE_AUDIT.md:3437` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc-server.ts:184' — '* 处理 enqueueRun 请求'`
+- `docs/CHINESE_AUDIT.md:3438` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc-server.ts:185' — '* @description 委托给共享的 enqueueRun 服务'`
+- `docs/CHINESE_AUDIT.md:3439` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc-server.ts:210' — '* 处理 listQueue 请求'`
+- `docs/CHINESE_AUDIT.md:3440` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc-server.ts:211' — '* @description 列出队列项，按 priority DESC + createdAt ASC 排序'`
+- `docs/CHINESE_AUDIT.md:3441` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc-server.ts:216' — '// 校验 status 白名单'`
+- `docs/CHINESE_AUDIT.md:3442` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc-server.ts:227' — '// 按 priority DESC + createdAt ASC 排序'`
+- `docs/CHINESE_AUDIT.md:3443` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc-server.ts:239' — '* 处理 cancelQueueItem 请求'`
+- `docs/CHINESE_AUDIT.md:3444` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc-server.ts:240' — '* @description 取消排队中的队列项，更新 Run 状态，发布 run.canceled 事件'`
+- `docs/CHINESE_AUDIT.md:3445` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc-server.ts:241' — '* @note 仅允许取消 status=queued 的项；running/paused 需使用 rr_v3.cancelRun'`
+- `docs/CHINESE_AUDIT.md:3446` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc-server.ts:250' — '// 1. 检查队列项存在'`
+- `docs/CHINESE_AUDIT.md:3447` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc-server.ts:256' — '// 2. 仅允许取消 queued 状态（running/paused 需使用 rr_v3.cancelRun）'`
+- `docs/CHINESE_AUDIT.md:3448` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc-server.ts:263' — '// 3. 从队列移除'`
+- `docs/CHINESE_AUDIT.md:3449` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc-server.ts:266' — '// 4. 更新 Run 记录状态'`
+- `docs/CHINESE_AUDIT.md:3450` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc-server.ts:273' — '// 5. 发布 run.canceled 事件（通过 EventsBus 以确保广播）'`
+- `docs/CHINESE_AUDIT.md:3451` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc-server.ts:284' — '* 处理 RPC 请求'`
+- `docs/CHINESE_AUDIT.md:3452` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc-server.ts:418' — '* 处理 saveFlow 请求'`
+- `docs/CHINESE_AUDIT.md:3453` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc-server.ts:419' — '* @description 保存或更新 Flow，执行完整的结构验证'`
+- `docs/CHINESE_AUDIT.md:3454` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc-server.ts:427' — '// 检查是否为更新现有 flow（使用 trim 后的 ID 查询）'`
+- `docs/CHINESE_AUDIT.md:3455` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc-server.ts:434' — '// 规范化 flow，传入 existingFlow 以继承 createdAt'`
+- `docs/CHINESE_AUDIT.md:3456` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc-server.ts:437' — '// 保存到存储（存储层会执行二次验证）'`
+- `docs/CHINESE_AUDIT.md:3457` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc-server.ts:444' — '* 处理 deleteFlow 请求'`
+- `docs/CHINESE_AUDIT.md:3458` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc-server.ts:445' — '* @description 删除 Flow，先检查是否有关联的 Trigger 和 queued runs'`
+- `docs/CHINESE_AUDIT.md:3459` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc-server.ts:451' — '// 检查 Flow 是否存在'`
+- `docs/CHINESE_AUDIT.md:3460` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc-server.ts:457' — '// 检查是否有关联的 Trigger'`
+- `docs/CHINESE_AUDIT.md:3461` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc-server.ts:468' — '// 检查是否有 queued runs（未执行的 runs 删除后会失败）'`
+- `docs/CHINESE_AUDIT.md:3462` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc-server.ts:479' — '// 删除 Flow'`
+- `docs/CHINESE_AUDIT.md:3463` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc-server.ts:486' — '* 规范化 FlowV3 输入'`
+- `docs/CHINESE_AUDIT.md:3464` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc-server.ts:487' — '* @description 验证并转换输入为完整的 FlowV3 结构'`
+- `docs/CHINESE_AUDIT.md:3465` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc-server.ts:488' — '* @param value 原始输入'`
+- `docs/CHINESE_AUDIT.md:3466` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc-server.ts:489' — '* @param existingFlow 已存在的 flow（用于继承 createdAt）'`
+- `docs/CHINESE_AUDIT.md:3467` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc-server.ts:497' — '// id 校验与生成'`
+- `docs/CHINESE_AUDIT.md:3468` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc-server.ts:508' — '// name 校验'`
+- `docs/CHINESE_AUDIT.md:3469` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc-server.ts:514' — '// description 校验'`
+- `docs/CHINESE_AUDIT.md:3470` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc-server.ts:523' — '// entryNodeId 校验'`
+- `docs/CHINESE_AUDIT.md:3471` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc-server.ts:529' — '// nodes 校验'`
+- `docs/CHINESE_AUDIT.md:3472` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc-server.ts:535' — '// 验证 node ID 唯一性'`
+- `docs/CHINESE_AUDIT.md:3473` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc-server.ts:544' — '// edges 校验'`
+- `docs/CHINESE_AUDIT.md:3474` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc-server.ts:553' — '// 验证 edge ID 唯一性'`
+- `docs/CHINESE_AUDIT.md:3475` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc-server.ts:562' — '// 验证 entryNodeId 存在'`
+- `docs/CHINESE_AUDIT.md:3476` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc-server.ts:567' — '// 验证边引用'`
+- `docs/CHINESE_AUDIT.md:3477` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc-server.ts:577' — '// 时间戳：更新时继承 existingFlow.createdAt，新建时用当前时间'`
+- `docs/CHINESE_AUDIT.md:3478` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc-server.ts:582' — '// 构建完整的 FlowV3'`
+- `docs/CHINESE_AUDIT.md:3479` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc-server.ts:594' — '// 可选字段'`
+- `docs/CHINESE_AUDIT.md:3480` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc-server.ts:599' — '// variables 验证：每项必须是 object 且有 name 字段'`
+- `docs/CHINESE_AUDIT.md:3481` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc-server.ts:620' — '// 使用 trim 后的 name'`
+- `docs/CHINESE_AUDIT.md:3482` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc-server.ts:645' — '* 规范化 Node 输入'`
+- `docs/CHINESE_AUDIT.md:3483` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc-server.ts:653' — '// id 校验（非空 + trim）'`
+- `docs/CHINESE_AUDIT.md:3484` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc-server.ts:659' — '// kind 校验（非空 + trim）'`
+- `docs/CHINESE_AUDIT.md:3485` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc-server.ts:665' — '// config 校验'`
+- `docs/CHINESE_AUDIT.md:3486` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc-server.ts:678' — '// 可选字段'`
+- `docs/CHINESE_AUDIT.md:3487` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc-server.ts:708' — '* 规范化 Edge 输入'`
+- `docs/CHINESE_AUDIT.md:3488` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc-server.ts:716' — '// id 校验或生成（非空 + trim）'`
+- `docs/CHINESE_AUDIT.md:3489` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc-server.ts:727' — '// from 校验（非空 + trim）'`
+- `docs/CHINESE_AUDIT.md:3490` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc-server.ts:733' — '// to 校验（非空 + trim）'`
+- `docs/CHINESE_AUDIT.md:3491` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc-server.ts:745' — '// label 可选'`
+- `docs/CHINESE_AUDIT.md:3492` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc-server.ts:901' — '* 规范化 TriggerSpec 输入'`
+- `docs/CHINESE_AUDIT.md:3493` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc-server.ts:909' — '// kind 校验'`
+- `docs/CHINESE_AUDIT.md:3494` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc-server.ts:915' — '// flowId 校验'`
+- `docs/CHINESE_AUDIT.md:3495` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc-server.ts:921' — '// id 校验'`
+- `docs/CHINESE_AUDIT.md:3496` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc-server.ts:935' — '// enabled 校验'`
+- `docs/CHINESE_AUDIT.md:3497` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc-server.ts:944' — '// args 校验'`
+- `docs/CHINESE_AUDIT.md:3498` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc-server.ts:953' — '// 基础字段'`
+- `docs/CHINESE_AUDIT.md:3499` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc-server.ts:956' — '// 根据 kind 添加特定字段'`
+- `docs/CHINESE_AUDIT.md:3500` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc-server.ts:1162' — '* 创建并启动 RPC Server'`
+- `docs/CHINESE_AUDIT.md:3501` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/trigger-manager.ts:2' — '* @fileoverview 触发器管理器'`
+- `docs/CHINESE_AUDIT.md:3502` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/trigger-manager.ts:4' — '* TriggerManager 负责管理所有触发器 Handler 的生命周期：'`
+- `docs/CHINESE_AUDIT.md:3503` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/trigger-manager.ts:5' — '* - 从 TriggerStore 加载触发器并安装'`
+- `docs/CHINESE_AUDIT.md:3504` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/trigger-manager.ts:6' — '* - 处理触发器触发事件，调用 enqueueRun'`
+- `docs/CHINESE_AUDIT.md:3505` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/trigger-manager.ts:7' — '* - 提供防风暴机制 (cooldown + maxQueued)'`
+- `docs/CHINESE_AUDIT.md:3506` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/trigger-manager.ts:9' — '* 设计理由：'`
+- `docs/CHINESE_AUDIT.md:3507` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/trigger-manager.ts:10' — '* - Orchestrator 模式：TriggerManager 不直接实现各类触发器逻辑，而是委托给 per-kind Handler'`
+- `docs/CHINESE_AUDIT.md:3508` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/trigger-manager.ts:11' — '* - Handler 工厂模式：TriggerManager 在构造时创建 Handler 实例，注入 fireCallback'`
+- `docs/CHINESE_AUDIT.md:3509` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/trigger-manager.ts:12' — '* - 防风暴：cooldown (per-trigger) + maxQueued (global best-effort)'`
+- `docs/CHINESE_AUDIT.md:3510` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/trigger-manager.ts:27' — '* Handler 工厂映射'`
+- `docs/CHINESE_AUDIT.md:3511` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/trigger-manager.ts:34' — '* 防风暴配置'`
+- `docs/CHINESE_AUDIT.md:3512` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/trigger-manager.ts:38' — '* 同一触发器两次触发之间的最小间隔 (ms)'`
+- `docs/CHINESE_AUDIT.md:3513` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/trigger-manager.ts:39' — '* - 0 或 undefined 表示禁用冷却'`
+- `docs/CHINESE_AUDIT.md:3514` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/trigger-manager.ts:44' — '* 全局最大排队 Run 数量'`
+- `docs/CHINESE_AUDIT.md:3515` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/trigger-manager.ts:45' — '* - 达到上限时拒绝新的触发'`
+- `docs/CHINESE_AUDIT.md:3516` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/trigger-manager.ts:46' — '* - undefined 表示禁用上限检查'`
+- `docs/CHINESE_AUDIT.md:3517` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/trigger-manager.ts:47' — '* - 注意：这是 best-effort 检查，非原子性'`
+- `docs/CHINESE_AUDIT.md:3518` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/trigger-manager.ts:53' — '* TriggerManager 依赖'`
+- `docs/CHINESE_AUDIT.md:3519` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/trigger-manager.ts:56' — '/** 存储层 */'`
+- `docs/CHINESE_AUDIT.md:3520` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/trigger-manager.ts:58' — '/** 事件总线 */'`
+- `docs/CHINESE_AUDIT.md:3521` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/trigger-manager.ts:60' — '/** 调度器 (可选) */'`
+- `docs/CHINESE_AUDIT.md:3522` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/trigger-manager.ts:62' — '/** Handler 工厂映射 */'`
+- `docs/CHINESE_AUDIT.md:3523` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/trigger-manager.ts:64' — '/** 防风暴配置 */'`
+- `docs/CHINESE_AUDIT.md:3524` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/trigger-manager.ts:66' — '/** RunId 生成器 (用于测试注入) */'`
+- `docs/CHINESE_AUDIT.md:3525` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/trigger-manager.ts:68' — '/** 时间源 (用于测试注入) */'`
+- `docs/CHINESE_AUDIT.md:3526` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/trigger-manager.ts:70' — '/** 日志器 */'`
+- `docs/CHINESE_AUDIT.md:3527` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/trigger-manager.ts:75' — '* TriggerManager 状态'`
+- `docs/CHINESE_AUDIT.md:3528` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/trigger-manager.ts:78' — '/** 是否已启动 */'`
+- `docs/CHINESE_AUDIT.md:3529` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/trigger-manager.ts:80' — '/** 已安装的触发器 ID 列表 */'`
+- `docs/CHINESE_AUDIT.md:3530` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/trigger-manager.ts:85' — '* TriggerManager 接口'`
+- `docs/CHINESE_AUDIT.md:3531` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/trigger-manager.ts:88' — '/** 启动管理器，加载并安装所有启用的触发器 */'`
+- `docs/CHINESE_AUDIT.md:3532` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/trigger-manager.ts:90' — '/** 停止管理器，卸载所有触发器 */'`
+- `docs/CHINESE_AUDIT.md:3533` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/trigger-manager.ts:92' — '/** 刷新触发器，重新从存储加载并安装 */'`
+- `docs/CHINESE_AUDIT.md:3534` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/trigger-manager.ts:95' — '* 手动触发一个触发器'`
+- `docs/CHINESE_AUDIT.md:3535` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/trigger-manager.ts:96' — '* @description 仅供 RPC/UI 调用，用于 manual 触发器'`
+- `docs/CHINESE_AUDIT.md:3536` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/trigger-manager.ts:102' — '/** 销毁管理器 */'`
+- `docs/CHINESE_AUDIT.md:3537` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/trigger-manager.ts:104' — '/** 获取当前状态 */'`
+- `docs/CHINESE_AUDIT.md:3538` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/trigger-manager.ts:111' — '* 校验非负整数'`
+- `docs/CHINESE_AUDIT.md:3539` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/trigger-manager.ts:122' — '* 校验正整数'`
+- `docs/CHINESE_AUDIT.md:3540` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/trigger-manager.ts:138' — '* 创建 TriggerManager'`
+- `docs/CHINESE_AUDIT.md:3541` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/trigger-manager.ts:144' — '// 防风暴参数'`
+- `docs/CHINESE_AUDIT.md:3542` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/trigger-manager.ts:151' — '// 状态'`
+- `docs/CHINESE_AUDIT.md:3543` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/trigger-manager.ts:157' — '// 防止 refresh 重入'`
+- `docs/CHINESE_AUDIT.md:3544` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/trigger-manager.ts:161' — '// Handler 实例'`
+- `docs/CHINESE_AUDIT.md:3545` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/trigger-manager.ts:164' — '// 触发回调'`
+- `docs/CHINESE_AUDIT.md:3546` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/trigger-manager.ts:167' — '// 捕获所有异常，避免抛入 chrome API 监听器'`
+- `docs/CHINESE_AUDIT.md:3547` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/trigger-manager.ts:176' — '// 初始化 Handler 实例'`
+- `docs/CHINESE_AUDIT.md:3548` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/trigger-manager.ts:192' — '* 处理触发器触发（内部方法）'`
+- `docs/CHINESE_AUDIT.md:3549` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/trigger-manager.ts:193' — '* @param throwOnDrop 如果为 true，则在 cooldown/maxQueued 等情况下抛出错误'`
+- `docs/CHINESE_AUDIT.md:3550` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/trigger-manager.ts:194' — '* @returns EnqueueRunResult 或 null（静默丢弃）'`
+- `docs/CHINESE_AUDIT.md:3551` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/trigger-manager.ts:218' — '// Per-trigger cooldown 检查'`
+- `docs/CHINESE_AUDIT.md:3552` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/trigger-manager.ts:228' — '// Global maxQueued 检查 (best-effort)'`
+- `docs/CHINESE_AUDIT.md:3553` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/trigger-manager.ts:229' — '// 注意：在 cooldown 设置前检查，避免因 maxQueued drop 而误设 cooldown'`
+- `docs/CHINESE_AUDIT.md:3554` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/trigger-manager.ts:243' — '// 设置 lastFireAt 以抑制并发触发（在 maxQueued 检查通过后）'`
+- `docs/CHINESE_AUDIT.md:3555` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/trigger-manager.ts:248' — '// 构建触发上下文'`
+- `docs/CHINESE_AUDIT.md:3556` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/trigger-manager.ts:275' — '// 入队失败时回滚 cooldown 标记'`
+- `docs/CHINESE_AUDIT.md:3557` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/trigger-manager.ts:295' — '* 手动触发一个触发器（对外暴露）'`
+- `docs/CHINESE_AUDIT.md:3558` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/trigger-manager.ts:296' — '* @description 用于 RPC/UI 调用，会抛出错误而不是静默丢弃'`
+- `docs/CHINESE_AUDIT.md:3559` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/trigger-manager.ts:310' — '* 执行刷新'`
+- `docs/CHINESE_AUDIT.md:3560` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/trigger-manager.ts:316' — '// 先卸载所有，再重新安装 (简单策略，保证一致性)'`
+- `docs/CHINESE_AUDIT.md:3561` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/trigger-manager.ts:317' — '// Best-effort: 单个 handler 卸载失败不影响其他'`
+- `docs/CHINESE_AUDIT.md:3562` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/trigger-manager.ts:327' — '// 安装启用的触发器'`
+- `docs/CHINESE_AUDIT.md:3563` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/trigger-manager.ts:348' — '* 刷新触发器 (合并并发调用)'`
+- `docs/CHINESE_AUDIT.md:3564` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/trigger-manager.ts:371' — '* 启动管理器'`
+- `docs/CHINESE_AUDIT.md:3565` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/trigger-manager.ts:380' — '* 停止管理器'`
+- `docs/CHINESE_AUDIT.md:3566` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/trigger-manager.ts:388' — '// 等待进行中的 refresh 完成'`
+- `docs/CHINESE_AUDIT.md:3567` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/trigger-manager.ts:393' — '// 忽略 refresh 错误'`
+- `docs/CHINESE_AUDIT.md:3568` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/trigger-manager.ts:397' — '// 卸载所有触发器'`
+- `docs/CHINESE_AUDIT.md:3569` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/trigger-manager.ts:410' — '* 销毁管理器'`
+- `docs/CHINESE_AUDIT.md:3570` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/trigger-manager.ts:417' — '* 获取状态'`
+- `docs/CHINESE_AUDIT.md:3571` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/interval-trigger.ts:4' — '* 使用 chrome.alarms 的 periodInMinutes 实现固定间隔触发。'`
+- `docs/CHINESE_AUDIT.md:3572` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/interval-trigger.ts:6' — '* 策略：'`
+- `docs/CHINESE_AUDIT.md:3573` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/interval-trigger.ts:7' — '* - 每个触发器对应一个重复 alarm'`
+- `docs/CHINESE_AUDIT.md:3574` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/interval-trigger.ts:8' — '* - 使用 delayInMinutes 使首次触发在配置的间隔后'`
+- `docs/CHINESE_AUDIT.md:3575` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/interval-trigger.ts:36' — '* 校验并规范化 periodMinutes'`
+- `docs/CHINESE_AUDIT.md:3576` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/interval-trigger.ts:49' — '* 生成 alarm 名称'`
+- `docs/CHINESE_AUDIT.md:3577` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/interval-trigger.ts:56' — '* 从 alarm 名称解析 triggerId'`
+- `docs/CHINESE_AUDIT.md:3578` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/interval-trigger.ts:67' — '* 创建 interval 触发器处理器工厂'`
+- `docs/CHINESE_AUDIT.md:3579` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/interval-trigger.ts:76' — '* 创建 interval 触发器处理器'`
+- `docs/CHINESE_AUDIT.md:3580` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/interval-trigger.ts:89' — '* 递增版本号以使挂起的操作失效'`
+- `docs/CHINESE_AUDIT.md:3581` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/interval-trigger.ts:98' — '* 清除指定 alarm'`
+- `docs/CHINESE_AUDIT.md:3582` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/interval-trigger.ts:110' — '* 清除所有 interval alarms'`
+- `docs/CHINESE_AUDIT.md:3583` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/interval-trigger.ts:126' — '* 调度 alarm'`
+- `docs/CHINESE_AUDIT.md:3584` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/interval-trigger.ts:141' — '// 使用 delayInMinutes 和 periodInMinutes 创建重复 alarm'`
+- `docs/CHINESE_AUDIT.md:3585` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/interval-trigger.ts:142' — '// 首次触发在 periodInMinutes 后，之后每隔 periodInMinutes 触发'`
+- `docs/CHINESE_AUDIT.md:3586` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/interval-trigger.ts:155' — '* Alarm 事件处理'`
+- `docs/CHINESE_AUDIT.md:3587` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/interval-trigger.ts:164' — '// 触发回调'`
+- `docs/CHINESE_AUDIT.md:3588` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/interval-trigger.ts:176' — '* 确保正在监听 alarm 事件'`
+- `docs/CHINESE_AUDIT.md:3589` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/interval-trigger.ts:189' — '* 停止监听 alarm 事件'`
+- `docs/CHINESE_AUDIT.md:3590` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/index.ts:2' — '* @fileoverview Triggers 模块导出入口'`
+- `docs/CHINESE_AUDIT.md:3591` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/trigger-handler.ts:2' — '* @fileoverview 触发器处理器接口定义'`
+- `docs/CHINESE_AUDIT.md:3592` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/trigger-handler.ts:3' — '* @description 定义各类触发器的统一接口'`
+- `docs/CHINESE_AUDIT.md:3593` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/trigger-handler.ts:9' — '* 触发器处理器接口'`
+- `docs/CHINESE_AUDIT.md:3594` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/trigger-handler.ts:10' — '* @description 每种触发器类型需要实现此接口'`
+- `docs/CHINESE_AUDIT.md:3595` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/trigger-handler.ts:13' — '/** 触发器类型 */'`
+- `docs/CHINESE_AUDIT.md:3596` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/trigger-handler.ts:17' — '* 安装触发器'`
+- `docs/CHINESE_AUDIT.md:3597` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/trigger-handler.ts:18' — '* @description 注册 chrome API 监听器等'`
+- `docs/CHINESE_AUDIT.md:3598` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/trigger-handler.ts:19' — '* @param trigger 触发器规范'`
+- `docs/CHINESE_AUDIT.md:3599` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/trigger-handler.ts:24' — '* 卸载触发器'`
+- `docs/CHINESE_AUDIT.md:3600` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/trigger-handler.ts:25' — '* @description 移除 chrome API 监听器等'`
+- `docs/CHINESE_AUDIT.md:3601` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/trigger-handler.ts:26' — '* @param triggerId 触发器 ID'`
+- `docs/CHINESE_AUDIT.md:3602` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/trigger-handler.ts:31' — '* 卸载所有触发器'`
+- `docs/CHINESE_AUDIT.md:3603` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/trigger-handler.ts:32' — '* @description 清理所有此类型的触发器'`
+- `docs/CHINESE_AUDIT.md:3604` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/trigger-handler.ts:37' — '* 获取已安装的触发器 ID 列表'`
+- `docs/CHINESE_AUDIT.md:3605` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/trigger-handler.ts:43' — '* 触发器触发回调'`
+- `docs/CHINESE_AUDIT.md:3606` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/trigger-handler.ts:44' — '* @description TriggerManager 注入给各 Handler 的回调'`
+- `docs/CHINESE_AUDIT.md:3607` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/trigger-handler.ts:48' — '* 触发器被触发时调用'`
+- `docs/CHINESE_AUDIT.md:3608` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/trigger-handler.ts:49' — '* @param triggerId 触发器 ID'`
+- `docs/CHINESE_AUDIT.md:3609` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/trigger-handler.ts:50' — '* @param context 触发上下文'`
+- `docs/CHINESE_AUDIT.md:3610` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/trigger-handler.ts:62' — '* 触发器处理器工厂'`
+- `docs/CHINESE_AUDIT.md:3611` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/once-trigger.ts:4' — '* 使用 chrome.alarms 的 when 参数实现一次性定时触发。'`
+- `docs/CHINESE_AUDIT.md:3612` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/once-trigger.ts:6' — '* 行为：'`
+- `docs/CHINESE_AUDIT.md:3613` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/once-trigger.ts:7' — '* - 每个触发器对应一个一次性 alarm'`
+- `docs/CHINESE_AUDIT.md:3614` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/once-trigger.ts:8' — '* - 触发后自动将触发器禁用 (enabled=false) 并卸载'`
+- `docs/CHINESE_AUDIT.md:3615` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/once-trigger.ts:24' — '* 可选：自定义禁用触发器的方法'`
+- `docs/CHINESE_AUDIT.md:3616` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/once-trigger.ts:25' — '* 如果未提供，将直接更新 TriggerStore'`
+- `docs/CHINESE_AUDIT.md:3617` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/once-trigger.ts:43' — '* 校验并规范化 whenMs'`
+- `docs/CHINESE_AUDIT.md:3618` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/once-trigger.ts:53' — '* 生成 alarm 名称'`
+- `docs/CHINESE_AUDIT.md:3619` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/once-trigger.ts:60' — '* 从 alarm 名称解析 triggerId'`
+- `docs/CHINESE_AUDIT.md:3620` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/once-trigger.ts:71' — '* 创建 once 触发器处理器工厂'`
+- `docs/CHINESE_AUDIT.md:3621` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/once-trigger.ts:80' — '* 创建 once 触发器处理器'`
+- `docs/CHINESE_AUDIT.md:3622` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/once-trigger.ts:88' — '// 延迟创建 store，避免在测试环境中出问题'`
+- `docs/CHINESE_AUDIT.md:3623` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/once-trigger.ts:112' — '* 递增版本号以使挂起的操作失效'`
+- `docs/CHINESE_AUDIT.md:3624` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/once-trigger.ts:121' — '* 清除指定 alarm'`
+- `docs/CHINESE_AUDIT.md:3625` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/once-trigger.ts:133' — '* 清除所有 once alarms'`
+- `docs/CHINESE_AUDIT.md:3626` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/once-trigger.ts:149' — '* 调度 alarm'`
+- `docs/CHINESE_AUDIT.md:3627` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/once-trigger.ts:170' — '* 内部卸载逻辑（不触发外部 uninstall）'`
+- `docs/CHINESE_AUDIT.md:3628` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/once-trigger.ts:183' — '* Alarm 事件处理'`
+- `docs/CHINESE_AUDIT.md:3629` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/once-trigger.ts:203' — '// 检查版本是否仍然有效'`
+- `docs/CHINESE_AUDIT.md:3630` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/once-trigger.ts:205' — '// 禁用触发器'`
+- `docs/CHINESE_AUDIT.md:3631` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/once-trigger.ts:215' — '// 卸载触发器'`
+- `docs/CHINESE_AUDIT.md:3632` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/once-trigger.ts:230' — '* 确保正在监听 alarm 事件'`
+- `docs/CHINESE_AUDIT.md:3633` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/once-trigger.ts:243' — '* 停止监听 alarm 事件'`
+- `docs/CHINESE_AUDIT.md:3634` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/leasing.ts:2' — '* @fileoverview 租约管理'`
+- `docs/CHINESE_AUDIT.md:3635` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/leasing.ts:3' — '* @description 管理 Run 的租约续约和过期回收'`
+- `docs/CHINESE_AUDIT.md:3636` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/leasing.ts:11' — '* 租约管理器'`
+- `docs/CHINESE_AUDIT.md:3637` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/leasing.ts:12' — '* @description 管理租约续约和过期检测'`
+- `docs/CHINESE_AUDIT.md:3638` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/leasing.ts:16' — '* 开始心跳'`
+- `docs/CHINESE_AUDIT.md:3639` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/leasing.ts:17' — '* @param ownerId 持有者 ID'`
+- `docs/CHINESE_AUDIT.md:3640` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/leasing.ts:22' — '* 停止心跳'`
+- `docs/CHINESE_AUDIT.md:3641` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/leasing.ts:23' — '* @param ownerId 持有者 ID'`
+- `docs/CHINESE_AUDIT.md:3642` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/leasing.ts:28' — '* 检查并回收过期租约'`
+- `docs/CHINESE_AUDIT.md:3643` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/leasing.ts:29' — '* @param now 当前时间'`
+- `docs/CHINESE_AUDIT.md:3644` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/leasing.ts:30' — '* @returns 被回收的 Run ID 列表'`
+- `docs/CHINESE_AUDIT.md:3645` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/leasing.ts:35' — '* 判断租约是否过期'`
+- `docs/CHINESE_AUDIT.md:3646` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/leasing.ts:40' — '* 创建新租约'`
+- `docs/CHINESE_AUDIT.md:3647` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/leasing.ts:45' — '* 停止所有心跳'`
+- `docs/CHINESE_AUDIT.md:3648` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/leasing.ts:51' — '* 创建租约管理器'`
+- `docs/CHINESE_AUDIT.md:3649` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/leasing.ts:58' — '// 如果已有定时器，先停止'`
+- `docs/CHINESE_AUDIT.md:3650` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/leasing.ts:61' — '// 创建新的心跳定时器'`
+- `docs/CHINESE_AUDIT.md:3651` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/leasing.ts:108' — '* 生成唯一的 owner ID'`
+- `docs/CHINESE_AUDIT.md:3652` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/leasing.ts:109' — '* @description 用于标识当前 Service Worker 实例'`
+- `docs/CHINESE_AUDIT.md:3653` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/index.ts:2' — '* @fileoverview Queue 模块导出入口'`
+- `docs/CHINESE_AUDIT.md:3654` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/queue.ts:2' — '* @fileoverview RunQueue 接口定义'`
+- `docs/CHINESE_AUDIT.md:3655` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/queue.ts:3' — '* @description 定义 Run 队列的管理接口'`
+- `docs/CHINESE_AUDIT.md:3656` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/queue.ts:11' — '* RunQueue 配置'`
+- `docs/CHINESE_AUDIT.md:3657` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/queue.ts:14' — '/** 最大并行 Run 数量 */'`
+- `docs/CHINESE_AUDIT.md:3658` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/queue.ts:16' — '/** 租约 TTL（毫秒） */'`
+- `docs/CHINESE_AUDIT.md:3659` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/queue.ts:18' — '/** 心跳间隔（毫秒） */'`
+- `docs/CHINESE_AUDIT.md:3660` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/queue.ts:23' — '* 默认队列配置'`
+- `docs/CHINESE_AUDIT.md:3661` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/queue.ts:32' — '* 队列项状态'`
+- `docs/CHINESE_AUDIT.md:3662` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/queue.ts:37' — '* 租约信息'`
+- `docs/CHINESE_AUDIT.md:3663` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/queue.ts:40' — '/** 持有者 ID */'`
+- `docs/CHINESE_AUDIT.md:3664` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/queue.ts:42' — '/** 过期时间 */'`
+- `docs/CHINESE_AUDIT.md:3665` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/queue.ts:47' — '* RunQueue 队列项'`
+- `docs/CHINESE_AUDIT.md:3666` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/queue.ts:54' — '/** 状态 */'`
+- `docs/CHINESE_AUDIT.md:3667` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/queue.ts:56' — '/** 创建时间 */'`
+- `docs/CHINESE_AUDIT.md:3668` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/queue.ts:58' — '/** 更新时间 */'`
+- `docs/CHINESE_AUDIT.md:3669` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/queue.ts:60' — '/** 优先级（数字越大优先级越高） */'`
+- `docs/CHINESE_AUDIT.md:3670` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/queue.ts:62' — '/** 当前尝试次数 */'`
+- `docs/CHINESE_AUDIT.md:3671` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/queue.ts:64' — '/** 最大尝试次数 */'`
+- `docs/CHINESE_AUDIT.md:3672` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/queue.ts:68' — '/** 运行参数 */'`
+- `docs/CHINESE_AUDIT.md:3673` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/queue.ts:70' — '/** 触发器上下文 */'`
+- `docs/CHINESE_AUDIT.md:3674` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/queue.ts:72' — '/** 租约信息 */'`
+- `docs/CHINESE_AUDIT.md:3675` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/queue.ts:74' — '/** 调试配置 */'`
+- `docs/CHINESE_AUDIT.md:3676` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/queue.ts:79' — '* 入队请求（不含自动生成的字段）'`
+- `docs/CHINESE_AUDIT.md:3677` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/queue.ts:80' — '* - priority 默认为 0'`
+- `docs/CHINESE_AUDIT.md:3678` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/queue.ts:81' — '* - maxAttempts 默认为 1'`
+- `docs/CHINESE_AUDIT.md:3679` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/queue.ts:88' — '/** 优先级（数字越大优先级越高，默认 0） */'`
+- `docs/CHINESE_AUDIT.md:3680` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/queue.ts:90' — '/** 最大尝试次数（默认 1） */'`
+- `docs/CHINESE_AUDIT.md:3681` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/queue.ts:95' — '* RunQueue 接口'`
+- `docs/CHINESE_AUDIT.md:3682` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/queue.ts:96' — '* @description 管理 Run 的队列和调度'`
+- `docs/CHINESE_AUDIT.md:3683` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/queue.ts:100' — '* 入队'`
+- `docs/CHINESE_AUDIT.md:3684` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/queue.ts:101' — '* @param input 入队请求'`
+- `docs/CHINESE_AUDIT.md:3685` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/queue.ts:102' — '* @returns 队列项'`
+- `docs/CHINESE_AUDIT.md:3686` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/queue.ts:107' — '* 领取下一个可执行的 Run'`
+- `docs/CHINESE_AUDIT.md:3687` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/queue.ts:108' — '* @param ownerId 领取者 ID'`
+- `docs/CHINESE_AUDIT.md:3688` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/queue.ts:109' — '* @param now 当前时间'`
+- `docs/CHINESE_AUDIT.md:3689` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/queue.ts:110' — '* @returns 队列项或 null'`
+- `docs/CHINESE_AUDIT.md:3690` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/queue.ts:115' — '* 续约心跳'`
+- `docs/CHINESE_AUDIT.md:3691` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/queue.ts:116' — '* @param ownerId 领取者 ID'`
+- `docs/CHINESE_AUDIT.md:3692` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/queue.ts:117' — '* @param now 当前时间'`
+- `docs/CHINESE_AUDIT.md:3693` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/queue.ts:122' — '* 回收过期租约'`
+- `docs/CHINESE_AUDIT.md:3694` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/queue.ts:123' — '* @description 将 lease.expiresAt < now 的 running/paused 项回收为 queued'`
+- `docs/CHINESE_AUDIT.md:3695` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/queue.ts:124' — '* @param now 当前时间'`
+- `docs/CHINESE_AUDIT.md:3696` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/queue.ts:125' — '* @returns 被回收的 Run ID 列表'`
+- `docs/CHINESE_AUDIT.md:3697` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/queue.ts:130' — '* 恢复孤儿租约（SW 重启后调用）'`
+- `docs/CHINESE_AUDIT.md:3698` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/queue.ts:132' — '* - 将孤儿 running 项回收为 queued（status -> queued，租约清除）'`
+- `docs/CHINESE_AUDIT.md:3699` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/queue.ts:133' — '* - 将孤儿 paused 项接管（保持 status=paused，租约 ownerId 更新为新 ownerId）'`
+- `docs/CHINESE_AUDIT.md:3700` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/queue.ts:134' — '* @param ownerId 新的 ownerId（当前 Service Worker 实例）'`
+- `docs/CHINESE_AUDIT.md:3701` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/queue.ts:135' — '* @param now 当前时间'`
+- `docs/CHINESE_AUDIT.md:3702` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/queue.ts:136' — '* @returns 受影响的 runId 列表（含原 ownerId 用于审计）'`
+- `docs/CHINESE_AUDIT.md:3703` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/queue.ts:147' — '* 标记为 running'`
+- `docs/CHINESE_AUDIT.md:3704` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/queue.ts:152' — '* 标记为 paused'`
+- `docs/CHINESE_AUDIT.md:3705` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/queue.ts:157' — '* 标记为完成（从队列移除）'`
+- `docs/CHINESE_AUDIT.md:3706` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/queue.ts:162' — '* 取消 Run'`
+- `docs/CHINESE_AUDIT.md:3707` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/queue.ts:167' — '* 获取队列项'`
+- `docs/CHINESE_AUDIT.md:3708` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/queue.ts:172' — '* 列出队列项'`
+- `docs/CHINESE_AUDIT.md:3709` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/queue.ts:178' — '* 创建 NotImplemented 的 RunQueue'`
+- `docs/CHINESE_AUDIT.md:3710` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/queue.ts:179' — '* @description Phase 0 占位实现'`
+- `docs/CHINESE_AUDIT.md:3711` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/enqueue-run.ts:2' — '* @fileoverview 共享入队服务'`
+- `docs/CHINESE_AUDIT.md:3712` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/enqueue-run.ts:4' — '* 提供统一的 Run 入队逻辑，供 RPC Server 和 TriggerManager 共用。'`
+- `docs/CHINESE_AUDIT.md:3713` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/enqueue-run.ts:6' — '* 设计理由：'`
+- `docs/CHINESE_AUDIT.md:3714` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/enqueue-run.ts:7' — '* - 将原本位于 RpcServer 的入队逻辑抽离为独立服务'`
+- `docs/CHINESE_AUDIT.md:3715` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/enqueue-run.ts:8' — '* - 避免 RPC 和 TriggerManager 之间的行为漂移'`
+- `docs/CHINESE_AUDIT.md:3716` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/enqueue-run.ts:9' — '* - 统一参数校验、Run 创建、队列入队、事件发布流程'`
+- `docs/CHINESE_AUDIT.md:3717` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/enqueue-run.ts:23' — '* 入队服务依赖'`
+- `docs/CHINESE_AUDIT.md:3718` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/enqueue-run.ts:26' — '/** 存储层 (仅需 flows/runs/queue) */'`
+- `docs/CHINESE_AUDIT.md:3719` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/enqueue-run.ts:28' — '/** 事件总线 */'`
+- `docs/CHINESE_AUDIT.md:3720` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/enqueue-run.ts:30' — '/** 调度器 (可选) */'`
+- `docs/CHINESE_AUDIT.md:3721` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/enqueue-run.ts:32' — '/** RunId 生成器 (用于测试注入) */'`
+- `docs/CHINESE_AUDIT.md:3722` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/enqueue-run.ts:34' — '/** 时间源 (用于测试注入) */'`
+- `docs/CHINESE_AUDIT.md:3723` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/enqueue-run.ts:39' — '* 入队请求参数'`
+- `docs/CHINESE_AUDIT.md:3724` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/enqueue-run.ts:42' — '/** Flow ID (必选) */'`
+- `docs/CHINESE_AUDIT.md:3725` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/enqueue-run.ts:44' — '/** 起始节点 ID (可选，默认使用 Flow 的 entryNodeId) */'`
+- `docs/CHINESE_AUDIT.md:3726` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/enqueue-run.ts:46' — '/** 优先级 (默认 0) */'`
+- `docs/CHINESE_AUDIT.md:3727` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/enqueue-run.ts:48' — '/** 最大尝试次数 (默认 1) */'`
+- `docs/CHINESE_AUDIT.md:3728` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/enqueue-run.ts:50' — '/** 传递给 Flow 的参数 */'`
+- `docs/CHINESE_AUDIT.md:3729` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/enqueue-run.ts:52' — '/** 触发上下文 (由 TriggerManager 设置) */'`
+- `docs/CHINESE_AUDIT.md:3730` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/enqueue-run.ts:54' — '/** 调试选项 */'`
+- `docs/CHINESE_AUDIT.md:3731` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/enqueue-run.ts:62' — '* 入队结果'`
+- `docs/CHINESE_AUDIT.md:3732` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/enqueue-run.ts:65' — '/** 新创建的 Run ID */'`
+- `docs/CHINESE_AUDIT.md:3733` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/enqueue-run.ts:67' — '/** 在队列中的位置 (1-based) */'`
+- `docs/CHINESE_AUDIT.md:3734` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/enqueue-run.ts:74' — '* 默认 RunId 生成器'`
+- `docs/CHINESE_AUDIT.md:3735` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/enqueue-run.ts:81' — '* 校验整数参数'`
+- `docs/CHINESE_AUDIT.md:3736` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/enqueue-run.ts:106' — '* 计算 Run 在队列中的位置'`
+- `docs/CHINESE_AUDIT.md:3737` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/enqueue-run.ts:107' — '* @description 按调度顺序: priority DESC + createdAt ASC'`
+- `docs/CHINESE_AUDIT.md:3738` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/enqueue-run.ts:130' — '* 入队执行一个 Run'`
+- `docs/CHINESE_AUDIT.md:3739` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/enqueue-run.ts:132' — '* 执行步骤：'`
+- `docs/CHINESE_AUDIT.md:3740` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/enqueue-run.ts:133' — '* 1. 参数校验'`
+- `docs/CHINESE_AUDIT.md:3741` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/enqueue-run.ts:134' — '* 2. 验证 Flow 存在'`
+- `docs/CHINESE_AUDIT.md:3742` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/enqueue-run.ts:135' — '* 3. 创建 RunRecordV3 (status=queued)'`
+- `docs/CHINESE_AUDIT.md:3743` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/enqueue-run.ts:136' — '* 4. 入队到 RunQueue'`
+- `docs/CHINESE_AUDIT.md:3744` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/enqueue-run.ts:137' — '* 5. 发布 run.queued 事件'`
+- `docs/CHINESE_AUDIT.md:3745` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/enqueue-run.ts:138' — '* 6. 触发调度 (best-effort)'`
+- `docs/CHINESE_AUDIT.md:3746` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/enqueue-run.ts:139' — '* 7. 计算队列位置'`
+- `docs/CHINESE_AUDIT.md:3747` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/enqueue-run.ts:153' — '// 参数校验'`
+- `docs/CHINESE_AUDIT.md:3748` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/enqueue-run.ts:157' — '// 验证 Flow 存在'`
+- `docs/CHINESE_AUDIT.md:3749` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/enqueue-run.ts:163' — '// 验证 startNodeId 存在于 Flow 中'`
+- `docs/CHINESE_AUDIT.md:3750` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/enqueue-run.ts:174' — '// 1. 创建 RunRecordV3'`
+- `docs/CHINESE_AUDIT.md:3751` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/enqueue-run.ts:192' — '// 2. 入队'`
+- `docs/CHINESE_AUDIT.md:3752` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/enqueue-run.ts:203' — '// 3. 发布 run.queued 事件'`
+- `docs/CHINESE_AUDIT.md:3753` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/enqueue-run.ts:210' — '// 4. 计算队列位置 (在 kick 之前计算，减少竞态条件导致 position=-1 的概率)'`
+- `docs/CHINESE_AUDIT.md:3754` — `- 'app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/enqueue-run.ts:213' — '// 5. 触发调度 (best-effort, 不阻塞返回)'`
+- `docs/CHINESE_AUDIT.md:3755` — `- 'app/chrome-extension/entrypoints/background/record-replay/nodes/fill.ts:11' — 'return ok ? { ok } : { ok, errors: ['缺少目标选择器候选或输入值'] };'`
+- `docs/CHINESE_AUDIT.md:3756` — `- 'app/chrome-extension/entrypoints/background/record-replay/nodes/click.ts:11' — 'return ok ? { ok } : { ok, errors: ['缺少目标选择器候选'] };'`
+- `docs/CHINESE_AUDIT.md:3757` — `- 'app/chrome-extension/entrypoints/background/record-replay/nodes/download-screenshot-attr-event-frame-loop.ts:47' — 'return ok ? { ok } : { ok, errors: ['缺少目标选择器或事件类型'] };'`
+- `docs/CHINESE_AUDIT.md:3758` — `- 'app/chrome-extension/entrypoints/background/record-replay/nodes/download-screenshot-attr-event-frame-loop.ts:102' — 'return ok ? { ok } : { ok, errors: ['需提供目标选择器与属性名'] };'`
+- `docs/CHINESE_AUDIT.md:3759` — `- 'app/chrome-extension/entrypoints/background/record-replay/nodes/download-screenshot-attr-event-frame-loop.ts:193' — 'return ok ? { ok } : { ok, errors: ['需提供 selector 与 subflowI`
+- `docs/CHINESE_AUDIT.md:3760` — `- 'app/chrome-extension/entrypoints/background/record-replay/nodes/conditional.ts:9' — 'return ok ? { ok } : { ok, errors: ['缺少条件或分支'] };'`
+- `docs/CHINESE_AUDIT.md:3761` — `- 'app/chrome-extension/entrypoints/background/record-replay/nodes/assert.ts:14' — 'return { ok: false, errors: ['assert.attribute: 需提供 selector 与 name'] };'`
+- `docs/CHINESE_AUDIT.md:3762` — `- 'app/chrome-extension/entrypoints/background/record-replay/nodes/assert.ts:16' — 'return ok ? { ok } : { ok, errors: ['缺少断言条件'] };'`
+- `docs/CHINESE_AUDIT.md:3763` — `- 'app/chrome-extension/entrypoints/background/record-replay/nodes/loops.ts:9' — 'return ok ? { ok } : { ok, errors: ['foreach: 需提供 listVar 与 subflowId'] };'`
+- `docs/CHINESE_AUDIT.md:3764` — `- 'app/chrome-extension/entrypoints/background/record-replay/nodes/loops.ts:33' — 'return ok ? { ok } : { ok, errors: ['while: 需提供 condition 与 subflowId'] };'`
+- `docs/CHINESE_AUDIT.md:3765` — `- 'app/chrome-extension/entrypoints/background/record-replay/nodes/navigate.ts:9' — 'return ok ? { ok } : { ok, errors: ['缺少 URL'] };'`
+- `docs/CHINESE_AUDIT.md:3766` — `- 'app/chrome-extension/entrypoints/background/record-replay/nodes/execute-flow.ts:7' — 'return ok ? { ok } : { ok, errors: ['需提供 flowId'] };'`
+- `docs/CHINESE_AUDIT.md:3767` — `- 'app/chrome-extension/entrypoints/background/record-replay/nodes/wait.ts:9' — 'return ok ? { ok } : { ok, errors: ['缺少等待条件'] };'`
+- `docs/CHINESE_AUDIT.md:3768` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/registry.ts:2' — '* Action Registry - Action 执行器注册表和执行管道'`
+- `docs/CHINESE_AUDIT.md:3769` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/registry.ts:4' — '* 特性：'`
+- `docs/CHINESE_AUDIT.md:3770` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/registry.ts:5' — '* - 动态注册/注销 handler'`
+- `docs/CHINESE_AUDIT.md:3771` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/registry.ts:6' — '* - 中间件/钩子机制 (beforeExecute, afterExecute)'`
+- `docs/CHINESE_AUDIT.md:3772` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/registry.ts:7' — '* - 重试和超时策略'`
+- `docs/CHINESE_AUDIT.md:3773` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/registry.ts:8' — '* - 类型安全'`
+- `docs/CHINESE_AUDIT.md:3774` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/registry.ts:36' — '// 类型定义'`
+- `docs/CHINESE_AUDIT.md:3775` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/registry.ts:73' — '// 工具函数'`
+- `docs/CHINESE_AUDIT.md:3776` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/registry.ts:138' — '// Resolvable 解析器'`
+- `docs/CHINESE_AUDIT.md:3777` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/registry.ts:301' — '// 重试和超时逻辑'`
+- `docs/CHINESE_AUDIT.md:3778` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/registry.ts:360' — '// ActionRegistry 类'`
+- `docs/CHINESE_AUDIT.md:3779` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/registry.ts:369' — '* 注册 action handler'`
+- `docs/CHINESE_AUDIT.md:3780` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/registry.ts:386' — '* 注销 action handler'`
+- `docs/CHINESE_AUDIT.md:3781` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/registry.ts:395' — '* 获取 handler'`
+- `docs/CHINESE_AUDIT.md:3782` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/registry.ts:402' — '* 检查是否存在 handler'`
+- `docs/CHINESE_AUDIT.md:3783` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/registry.ts:409' — '* 列出所有已注册的 handler'`
+- `docs/CHINESE_AUDIT.md:3784` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/registry.ts:419' — '* 注册 beforeExecute 钩子'`
+- `docs/CHINESE_AUDIT.md:3785` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/registry.ts:430' — '* 注册 afterExecute 钩子'`
+- `docs/CHINESE_AUDIT.md:3786` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/registry.ts:441' — '* 批量注册钩子'`
+- `docs/CHINESE_AUDIT.md:3787` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/registry.ts:453' — '* 验证 action 配置'`
+- `docs/CHINESE_AUDIT.md:3788` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/registry.ts:463' — '* 执行 action'`
+- `docs/CHINESE_AUDIT.md:3789` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/registry.ts:471' — '// 跳过禁用的 action'`
+- `docs/CHINESE_AUDIT.md:3790` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/registry.ts:476' — '// 获取 handler'`
+- `docs/CHINESE_AUDIT.md:3791` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/registry.ts:489' — '// 验证'`
+- `docs/CHINESE_AUDIT.md:3792` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/registry.ts:497' — '// 调用 afterExecute 钩子'`
+- `docs/CHINESE_AUDIT.md:3793` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/registry.ts:515' — '// 计算重试和超时参数'`
+- `docs/CHINESE_AUDIT.md:3794` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/registry.ts:530' — '// 执行循环（支持重试）'`
+- `docs/CHINESE_AUDIT.md:3795` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/registry.ts:544' — '// beforeExecute 钩子（可以短路）'`
+- `docs/CHINESE_AUDIT.md:3796` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/registry.ts:562' — '// 执行 handler'`
+- `docs/CHINESE_AUDIT.md:3797` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/registry.ts:578' — '// afterExecute 钩子（可以替换结果）'`
+- `docs/CHINESE_AUDIT.md:3798` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/registry.ts:594' — '// 成功则退出'`
+- `docs/CHINESE_AUDIT.md:3799` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/registry.ts:597' — '// 判断是否重试'`
+- `docs/CHINESE_AUDIT.md:3800` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/registry.ts:632' — '// 导出工厂函数'`
+- `docs/CHINESE_AUDIT.md:3801` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/registry.ts:636' — '* 创建默认的 ActionRegistry 实例'`
+- `docs/CHINESE_AUDIT.md:3802` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/index.ts:2' — '* Action System - 导出模块'`
+- `docs/CHINESE_AUDIT.md:3803` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/index.ts:5' — '// 类型导出'`
+- `docs/CHINESE_AUDIT.md:3804` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/index.ts:8' — '// 注册表导出'`
+- `docs/CHINESE_AUDIT.md:3805` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/index.ts:26' — '// 适配器导出'`
+- `docs/CHINESE_AUDIT.md:3806` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/index.ts:37' — '// Handler 工厂导出'`
+- `docs/CHINESE_AUDIT.md:3807` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/types.ts:3' — '* 商业级录制回放的核心类型定义'`
+- `docs/CHINESE_AUDIT.md:3808` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/types.ts:5' — '* 设计原则：'`
+- `docs/CHINESE_AUDIT.md:3809` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/types.ts:6' — '* - 类型安全，无 any'`
+- `docs/CHINESE_AUDIT.md:3810` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/types.ts:7' — '* - 支持所有操作类型'`
+- `docs/CHINESE_AUDIT.md:3811` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/types.ts:8' — '* - 支持重试、超时、错误处理策略'`
+- `docs/CHINESE_AUDIT.md:3812` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/types.ts:9' — '* - 支持选择器候选列表和稳定性评分'`
+- `docs/CHINESE_AUDIT.md:3813` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/types.ts:10' — '* - 支持变量系统'`
+- `docs/CHINESE_AUDIT.md:3814` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/types.ts:11' — '* - 符合 SOLID 原则（接口可通过声明合并扩展）'`
+- `docs/CHINESE_AUDIT.md:3815` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/types.ts:15' — '// 基础类型'`
+- `docs/CHINESE_AUDIT.md:3816` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/types.ts:22' — '// JSON 类型'`
+- `docs/CHINESE_AUDIT.md:3817` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/types.ts:30' — '// ID 类型'`
+- `docs/CHINESE_AUDIT.md:3818` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/types.ts:52' — '// 错误处理'`
+- `docs/CHINESE_AUDIT.md:3819` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/types.ts:76' — '// 执行策略'`
+- `docs/CHINESE_AUDIT.md:3820` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/types.ts:81' — '/** 'attempt' = 每次尝试独立计时, 'action' = 整个 action 总计时 */'`
+- `docs/CHINESE_AUDIT.md:3821` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/types.ts:88' — '/** 重试次数（不含首次尝试） */'`
+- `docs/CHINESE_AUDIT.md:3822` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/types.ts:90' — '/** 重试间隔 */'`
+- `docs/CHINESE_AUDIT.md:3823` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/types.ts:92' — '/** 退避策略 */'`
+- `docs/CHINESE_AUDIT.md:3824` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/types.ts:94' — '/** 最大间隔（用于 exp/linear） */'`
+- `docs/CHINESE_AUDIT.md:3825` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/types.ts:96' — '/** 抖动策略 */'`
+- `docs/CHINESE_AUDIT.md:3826` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/types.ts:98' — '/** 仅在这些错误码时重试 */'`
+- `docs/CHINESE_AUDIT.md:3827` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/types.ts:122' — '// 变量系统'`
+- `docs/CHINESE_AUDIT.md:3828` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/types.ts:187' — '// 表达式和模板'`
+- `docs/CHINESE_AUDIT.md:3829` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/types.ts:230' — '// 条件表达式'`
+- `docs/CHINESE_AUDIT.md:3830` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/types.ts:264' — '// 选择器系统'`
+- `docs/CHINESE_AUDIT.md:3831` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/types.ts:270' — '/** 稳定性评分 0-1 */'`
+- `docs/CHINESE_AUDIT.md:3832` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/types.ts:324' — '/** 临时引用（快速路径） */'`
+- `docs/CHINESE_AUDIT.md:3833` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/types.ts:334' — '// Action 参数定义'`
+- `docs/CHINESE_AUDIT.md:3834` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/types.ts:339' — '// --- 页面交互 ---'`
+- `docs/CHINESE_AUDIT.md:3835` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/types.ts:384' — '// --- 导航 ---'`
+- `docs/CHINESE_AUDIT.md:3836` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/types.ts:391' — '// --- 等待和断言 ---'`
+- `docs/CHINESE_AUDIT.md:3837` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/types.ts:423' — '// --- 数据和脚本 ---'`
+- `docs/CHINESE_AUDIT.md:3838` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/types.ts:482' — '// --- DOM 工具 ---'`
+- `docs/CHINESE_AUDIT.md:3839` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/types.ts:509' — '// --- 标签页管理 ---'`
+- `docs/CHINESE_AUDIT.md:3840` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/types.ts:533' — '// --- 控制流 ---'`
+- `docs/CHINESE_AUDIT.md:3841` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/types.ts:577' — '// --- 触发器 ---'`
+- `docs/CHINESE_AUDIT.md:3842` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/types.ts:638' — '// Action 核心定义'`
+- `docs/CHINESE_AUDIT.md:3843` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/types.ts:642' — '* ActionParamsByType 使用 interface 声明'`
+- `docs/CHINESE_AUDIT.md:3844` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/types.ts:643' — '* 允许外部模块通过声明合并扩展 Action 类型（符合 OCP 原则）'`
+- `docs/CHINESE_AUDIT.md:3845` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/types.ts:646' — '// UI/构建时'`
+- `docs/CHINESE_AUDIT.md:3846` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/types.ts:650' — '// 页面交互'`
+- `docs/CHINESE_AUDIT.md:3847` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/types.ts:658' — '// 同步和验证'`
+- `docs/CHINESE_AUDIT.md:3848` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/types.ts:662' — '// 数据和脚本'`
+- `docs/CHINESE_AUDIT.md:3849` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/types.ts:668' — '// DOM 工具'`
+- `docs/CHINESE_AUDIT.md:3850` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/types.ts:672' — '// 帧和循环'`
+- `docs/CHINESE_AUDIT.md:3851` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/types.ts:676' — '// 控制流'`
+- `docs/CHINESE_AUDIT.md:3852` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/types.ts:682' — '// 标签页'`
+- `docs/CHINESE_AUDIT.md:3853` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/types.ts:712' — '// Action 输出'`
+- `docs/CHINESE_AUDIT.md:3854` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/types.ts:733' — '* Action 输出类型映射（可通过声明合并扩展）'`
+- `docs/CHINESE_AUDIT.md:3855` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/types.ts:749' — '// 执行接口'`
+- `docs/CHINESE_AUDIT.md:3856` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/types.ts:771' — '/** 日志记录函数 */'`
+- `docs/CHINESE_AUDIT.md:3857` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/types.ts:773' — '/** 截图函数 */'`
+- `docs/CHINESE_AUDIT.md:3858` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/types.ts:806' — '/** 下一个边的 label（用于条件分支） */'`
+- `docs/CHINESE_AUDIT.md:3859` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/types.ts:808' — '/** 控制流指令（foreach/while） */'`
+- `docs/CHINESE_AUDIT.md:3860` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/types.ts:810' — '/** 执行耗时 */'`
+- `docs/CHINESE_AUDIT.md:3861` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/types.ts:820' — '* Action 执行器接口'`
+- `docs/CHINESE_AUDIT.md:3862` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/types.ts:824' — '/** 验证 action 配置 */'`
+- `docs/CHINESE_AUDIT.md:3863` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/types.ts:826' — '/** 执行 action */'`
+- `docs/CHINESE_AUDIT.md:3864` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/types.ts:828' — '/** 生成 action 描述（用于 UI 显示） */'`
+- `docs/CHINESE_AUDIT.md:3865` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/types.ts:833' — '// Flow 图结构'`
+- `docs/CHINESE_AUDIT.md:3866` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/types.ts:866' — '/** DAG 节点 */'`
+- `docs/CHINESE_AUDIT.md:3867` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/types.ts:868' — '/** DAG 边 */'`
+- `docs/CHINESE_AUDIT.md:3868` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/types.ts:870' — '/** 子流程（用于 foreach/while/loopElements） */'`
+- `docs/CHINESE_AUDIT.md:3869` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/types.ts:878' — '// Action 规格（用于 UI）'`
+- `docs/CHINESE_AUDIT.md:3870` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/types.ts:904' — '/** 需要进行模板替换的字段路径 */'`
+- `docs/CHINESE_AUDIT.md:3871` — `- 'app/chrome-extension/entrypoints/background/record-replay/actions/types.ts:909' — '// 常量导出'`
+- `docs/CHINESE_AUDIT.md:3872` — `- 'app/chrome-extension/_locales/ja/messages.json:6' — '"message": "自身のChromeブラウザの機能を外部に公開します"'`
+- `docs/CHINESE_AUDIT.md:3873` — `- 'app/chrome-extension/_locales/ja/messages.json:9' — '"message": "ネイティブサーバー設定"'`
+- `docs/CHINESE_AUDIT.md:3874` — `- 'app/chrome-extension/_locales/ja/messages.json:15' — '"message": "埋め込みモデル"'`
+- `docs/CHINESE_AUDIT.md:3875` — `- 'app/chrome-extension/_locales/ja/messages.json:18' — '"message": "インデックスデータ管理"'`
+- `docs/CHINESE_AUDIT.md:3876` — `- 'app/chrome-extension/_locales/ja/messages.json:21' — '"message": "モデルキャッシュ管理"'`
+- `docs/CHINESE_AUDIT.md:3877` — `- 'app/chrome-extension/_locales/ja/messages.json:27' — '"message": "実行ステータス"'`
+- `docs/CHINESE_AUDIT.md:3878` — `- 'app/chrome-extension/_locales/ja/messages.json:30' — '"message": "接続ステータス"'`
+- `docs/CHINESE_AUDIT.md:3879` — `- 'app/chrome-extension/_locales/ja/messages.json:33' — '"message": "最終更新:"'`
+- `docs/CHINESE_AUDIT.md:3880` — `- 'app/chrome-extension/_locales/ja/messages.json:36' — '"message": "接続"'`
+- `docs/CHINESE_AUDIT.md:3881` — `- 'app/chrome-extension/_locales/ja/messages.json:39' — '"message": "切断"'`
+- `docs/CHINESE_AUDIT.md:3882` — `- 'app/chrome-extension/_locales/ja/messages.json:42' — '"message": "接続中..."'`
+- `docs/CHINESE_AUDIT.md:3883` — `- 'app/chrome-extension/_locales/ja/messages.json:45' — '"message": "接続済み"'`
+- `docs/CHINESE_AUDIT.md:3884` — `- 'app/chrome-extension/_locales/ja/messages.json:48' — '"message": "未接続"'`
+- `docs/CHINESE_AUDIT.md:3885` — `- 'app/chrome-extension/_locales/ja/messages.json:51' — '"message": "検出中..."'`
+- `docs/CHINESE_AUDIT.md:3886` — `- 'app/chrome-extension/_locales/ja/messages.json:54' — '"message": "サービス実行中 (ポート: $1)",'`
+- `docs/CHINESE_AUDIT.md:3887` — `- 'app/chrome-extension/_locales/ja/messages.json:63' — '"message": "サービス未接続"'`
+- `docs/CHINESE_AUDIT.md:3888` — `- 'app/chrome-extension/_locales/ja/messages.json:66' — '"message": "接続済み、サービス未起動"'`
+- `docs/CHINESE_AUDIT.md:3889` — `- 'app/chrome-extension/_locales/ja/messages.json:69' — '"message": "MCPサーバー設定"'`
+- `docs/CHINESE_AUDIT.md:3890` — `- 'app/chrome-extension/_locales/ja/messages.json:72' — '"message": "接続ポート"'`
+- `docs/CHINESE_AUDIT.md:3891` — `- 'app/chrome-extension/_locales/ja/messages.json:75' — '"message": "ステータス更新"'`
+- `docs/CHINESE_AUDIT.md:3892` — `- 'app/chrome-extension/_locales/ja/messages.json:78' — '"message": "設定をコピー"'`
+- `docs/CHINESE_AUDIT.md:3893` — `- 'app/chrome-extension/_locales/ja/messages.json:81' — '"message": "再試行"'`
+- `docs/CHINESE_AUDIT.md:3894` — `- 'app/chrome-extension/_locales/ja/messages.json:87' — '"message": "確認"'`
+- `docs/CHINESE_AUDIT.md:3895` — `- 'app/chrome-extension/_locales/ja/messages.json:90' — '"message": "保存"'`
+- `docs/CHINESE_AUDIT.md:3896` — `- 'app/chrome-extension/_locales/ja/messages.json:93' — '"message": "閉じる"'`
+- `docs/CHINESE_AUDIT.md:3897` — `- 'app/chrome-extension/_locales/ja/messages.json:99' — '"message": "初期化中..."'`
+- `docs/CHINESE_AUDIT.md:3898` — `- 'app/chrome-extension/_locales/ja/messages.json:102' — '"message": "処理中..."'`
+- `docs/CHINESE_AUDIT.md:3899` — `- 'app/chrome-extension/_locales/ja/messages.json:105' — '"message": "読み込み中..."'`
+- `docs/CHINESE_AUDIT.md:3900` — `- 'app/chrome-extension/_locales/ja/messages.json:108' — '"message": "クリア中..."'`
+- `docs/CHINESE_AUDIT.md:3901` — `- 'app/chrome-extension/_locales/ja/messages.json:111' — '"message": "クリーンアップ中..."'`
+- `docs/CHINESE_AUDIT.md:3902` — `- 'app/chrome-extension/_locales/ja/messages.json:114' — '"message": "ダウンロード中..."'`
+- `docs/CHINESE_AUDIT.md:3903` — `- 'app/chrome-extension/_locales/ja/messages.json:117' — '"message": "セマンティックエンジン準備完了"'`
+- `docs/CHINESE_AUDIT.md:3904` — `- 'app/chrome-extension/_locales/ja/messages.json:120' — '"message": "セマンティックエンジン初期化中..."'`
+- `docs/CHINESE_AUDIT.md:3905` — `- 'app/chrome-extension/_locales/ja/messages.json:123' — '"message": "セマンティックエンジンの初期化に失敗しました"'`
+- `docs/CHINESE_AUDIT.md:3906` — `- 'app/chrome-extension/_locales/ja/messages.json:126' — '"message": "セマンティックエンジン未初期化"'`
+- `docs/CHINESE_AUDIT.md:3907` — `- 'app/chrome-extension/_locales/ja/messages.json:129' — '"message": "セマンティックエンジンを初期化"'`
+- `docs/CHINESE_AUDIT.md:3908` — `- 'app/chrome-extension/_locales/ja/messages.json:132' — '"message": "再初期化"'`
+- `docs/CHINESE_AUDIT.md:3909` — `- 'app/chrome-extension/_locales/ja/messages.json:135' — '"message": "モデルをダウンロード中... $1%",'`
+- `docs/CHINESE_AUDIT.md:3910` — `- 'app/chrome-extension/_locales/ja/messages.json:144' — '"message": "モデルを切り替え中..."'`
+- `docs/CHINESE_AUDIT.md:3911` — `- 'app/chrome-extension/_locales/ja/messages.json:147' — '"message": "モデル読み込み完了"'`
+- `docs/CHINESE_AUDIT.md:3912` — `- 'app/chrome-extension/_locales/ja/messages.json:150' — '"message": "モデルの読み込みに失敗しました"'`
+- `docs/CHINESE_AUDIT.md:3913` — `- 'app/chrome-extension/_locales/ja/messages.json:153' — '"message": "軽量多言語モデル"'`
+- `docs/CHINESE_AUDIT.md:3914` — `- 'app/chrome-extension/_locales/ja/messages.json:156' — '"message": "e5-smallよりわずかに大きいが、性能は向上"'`
+- `docs/CHINESE_AUDIT.md:3915` — `- 'app/chrome-extension/_locales/ja/messages.json:159' — '"message": "多言語対応セマンティックモデル"'`
+- `docs/CHINESE_AUDIT.md:3916` — `- 'app/chrome-extension/_locales/ja/messages.json:162' — '"message": "高速"'`
+- `docs/CHINESE_AUDIT.md:3917` — `- 'app/chrome-extension/_locales/ja/messages.json:168' — '"message": "高精度"'`
+- `docs/CHINESE_AUDIT.md:3918` — `- 'app/chrome-extension/_locales/ja/messages.json:171' — '"message": "ネットワーク接続エラーです。ネットワークを確認して再試行してください"'`
+- `docs/CHINESE_AUDIT.md:3919` — `- 'app/chrome-extension/_locales/ja/messages.json:174' — '"message": "モデルファイルが破損しているか不完全です。再ダウンロードしてください"'`
+- `docs/CHINESE_AUDIT.md:3920` — `- 'app/chrome-extension/_locales/ja/messages.json:177' — '"message": "不明なエラーです。ネットワークがHuggingFaceにアクセスできるか確認してください"'`
+- `docs/CHINESE_AUDIT.md:3921` — `- 'app/chrome-extension/_locales/ja/messages.json:180' — '"message": "権限が拒否されました"'`
+- `docs/CHINESE_AUDIT.md:3922` — `- 'app/chrome-extension/_locales/ja/messages.json:183' — '"message": "操作がタイムアウトしました"'`
+- `docs/CHINESE_AUDIT.md:3923` — `- 'app/chrome-extension/_locales/ja/messages.json:186' — '"message": "インデックス化されたページ"'`
+- `docs/CHINESE_AUDIT.md:3924` — `- 'app/chrome-extension/_locales/ja/messages.json:204' — '"message": "全データをクリア"'`
+- `docs/CHINESE_AUDIT.md:3925` — `- 'app/chrome-extension/_locales/ja/messages.json:207' — '"message": "全キャッシュをクリア"'`
+- `docs/CHINESE_AUDIT.md:3926` — `- 'app/chrome-extension/_locales/ja/messages.json:210' — '"message": "期限切れキャッシュをクリーンアップ"'`
+- `docs/CHINESE_AUDIT.md:3927` — `- 'app/chrome-extension/_locales/ja/messages.json:219' — '"message": "データクリアの確認"'`
+- `docs/CHINESE_AUDIT.md:3928` — `- 'app/chrome-extension/_locales/ja/messages.json:222' — '"message": "設定"'`
+- `docs/CHINESE_AUDIT.md:3929` — `- 'app/chrome-extension/_locales/ja/messages.json:225' — '"message": "情報"'`
+- `docs/CHINESE_AUDIT.md:3930` — `- 'app/chrome-extension/_locales/ja/messages.json:231' — '"message": "この操作は、インデックス化されたすべてのウェブページコンテンツとベクトルデータをクリアします。これには以下が含まれます："'`
+- `docs/CHINESE_AUDIT.md:3931` — `- 'app/chrome-extension/_locales/ja/messages.json:237' — '"message": "ベクトル埋め込みデータ"'`
+- `docs/CHINESE_AUDIT.md:3932` — `- 'app/chrome-extension/_locales/ja/messages.json:240' — '"message": "検索履歴とキャッシュ"'`
+- `docs/CHINESE_AUDIT.md:3933` — `- 'app/chrome-extension/_locales/ja/messages.json:243' — '"message": "この操作は元に戻せません！クリア後、再度ウェブページを閲覧してインデックスを再構築する必要があります。"'`
+- `docs/CHINESE_AUDIT.md:3934` — `- 'app/chrome-extension/_locales/ja/messages.json:246' — '"message": "クリアを確認"'`
+- `docs/CHINESE_AUDIT.md:3935` — `- 'app/chrome-extension/_locales/ja/messages.json:249' — '"message": "キャッシュ詳細"'`
+- `docs/CHINESE_AUDIT.md:3936` — `- 'app/chrome-extension/_locales/ja/messages.json:255' — '"message": "キャッシュ情報を読み込み中..."'`
+- `docs/CHINESE_AUDIT.md:3937` — `- 'app/chrome-extension/_locales/ja/messages.json:258' — '"message": "キャッシュを処理中..."'`
+- `docs/CHINESE_AUDIT.md:3938` — `- 'app/chrome-extension/_locales/ja/messages.json:261' — '"message": "期限切れ"'`
+- `docs/CHINESE_AUDIT.md:3939` — `- 'app/chrome-extension/_locales/ja/messages.json:267' — '"message": "新しいタブ"'`
+- `docs/CHINESE_AUDIT.md:3940` — `- 'app/chrome-extension/_locales/ja/messages.json:270' — '"message": "現在のページ"'`
+- `docs/CHINESE_AUDIT.md:3941` — `- 'app/chrome-extension/_locales/ja/messages.json:282' — '"message": "言語"'`
+- `docs/CHINESE_AUDIT.md:3942` — `- 'app/chrome-extension/_locales/ja/messages.json:294' — '"message": "自動"'`
+- `docs/CHINESE_AUDIT.md:3943` — `- 'app/chrome-extension/_locales/ja/messages.json:297' — '"message": "詳細設定"'`
+- `docs/CHINESE_AUDIT.md:3944` — `- 'app/chrome-extension/_locales/ja/messages.json:303' — '"message": "詳細ロギング"'`
+- `docs/CHINESE_AUDIT.md:3945` — `- 'app/chrome-extension/_locales/ja/messages.json:306' — '"message": "操作が正常に完了しました"'`
+- `docs/CHINESE_AUDIT.md:3946` — `- 'app/chrome-extension/_locales/ja/messages.json:309' — '"message": "警告：続行する前に確認してください"'`
+- `docs/CHINESE_AUDIT.md:3947` — `- 'app/chrome-extension/_locales/ja/messages.json:312' — '"message": "情報"'`
+- `docs/CHINESE_AUDIT.md:3948` — `- 'app/chrome-extension/_locales/ja/messages.json:315' — '"message": "設定がクリップボードにコピーされました"'`
+- `docs/CHINESE_AUDIT.md:3949` — `- 'app/chrome-extension/_locales/ja/messages.json:318' — '"message": "データが正常にクリアされました"'`
+- `docs/CHINESE_AUDIT.md:3950` — `- 'app/chrome-extension/_locales/ja/messages.json:333' — '"message": "項目"'`
+- `docs/CHINESE_AUDIT.md:3951` — `- 'app/native-server/src/mcp/register-tools.ts:120' — '// 发送请求到Chrome扩展并等待响应'`
+- `docs/CHINESE_AUDIT.md:3952` — `- 'app/native-server/src/mcp/register-tools.ts:127' — '120000, // 延长到 120 秒，避免性能分析等长任务超时'`
+- `docs/CHINESE_AUDIT.md:3953` — `- 'app/native-server/src/util/logger.ts:5' — '// // 设置日志文件路径'`
+- `docs/CHINESE_AUDIT.md:3954` — `- 'app/native-server/src/util/logger.ts:9' — '// ); // 使用不同目录区分'`
+- `docs/CHINESE_AUDIT.md:3955` — `- 'app/native-server/src/util/logger.ts:14' — '// // 确保日志目录存在'`
+- `docs/CHINESE_AUDIT.md:3956` — `- 'app/native-server/src/util/logger.ts:19' — '//     stderr.write('[ERROR] 创建日志目录失败: ${err}\n');'`
+- `docs/CHINESE_AUDIT.md:3957` — `- 'app/native-server/src/util/logger.ts:23' — '// // 日志函数'`
+- `docs/CHINESE_AUDIT.md:3958` — `- 'app/native-server/src/util/logger.ts:28' — '//   // 写入到文件'`
+- `docs/CHINESE_AUDIT.md:3959` — `- 'app/native-server/src/util/logger.ts:32' — '//     stderr.write('[ERROR] 写入日志失败: ${err}\n');'`
+- `docs/CHINESE_AUDIT.md:3960` — `- 'app/native-server/src/util/logger.ts:35' — '//   // 同时输出到stderr（不影响native messaging协议）'`
+- `docs/CHINESE_AUDIT.md:3961` — `- 'app/native-server/src/util/logger.ts:39' — '// // 日志级别函数'`
+- `docs/CHINESE_AUDIT.md:3962` — `- 'app/native-server/src/server/server.test.ts:5' — 'describe('服务器测试', () => {'`
+- `docs/CHINESE_AUDIT.md:3963` — `- 'app/native-server/src/server/server.test.ts:6' — '// 启动服务器测试实例'`
+- `docs/CHINESE_AUDIT.md:3964` — `- 'app/native-server/src/server/server.test.ts:11' — '// 关闭服务器'`
+- `docs/CHINESE_AUDIT.md:3965` — `- 'app/native-server/src/server/server.test.ts:16' — 'test('GET /ping 应返回正确响应', async () => {'`
+- `docs/CHINESE_AUDIT.md:3966` — `- 'app/native-server/src/scripts/register.ts:7' — '* 主函数'`
+- `docs/CHINESE_AUDIT.md:3967` — `- 'app/native-server/src/scripts/register.ts:10' — 'console.log(colorText('正在注册 ${COMMAND_NAME} Native Messaging主机...', 'blue'));'`
+- `docs/CHINESE_AUDIT.md:3968` — `- 'app/native-server/src/scripts/register.ts:18' — 'colorText('注册成功！现在Chrome扩展可以通过Native Messaging与本地服务通信。', 'green'),'`
+- `docs/CHINESE_AUDIT.md:3969` — `- 'app/native-server/src/scripts/register.ts:21' — 'console.error(colorText('注册失败: ${error.message}', 'red'));'`
+- `docs/CHINESE_AUDIT.md:3970` — `- 'app/native-server/src/scripts/register.ts:26' — '// 执行主函数'`
+- `docs/CHINESE_AUDIT.md:3971` — `- 'app/native-server/src/scripts/postinstall.ts:77' — '* 确保执行权限（无论是否为全局安装）'`
+- `docs/CHINESE_AUDIT.md:3972` — `- 'app/native-server/src/scripts/postinstall.ts:81' — '// Windows 平台处理'`
+- `docs/CHINESE_AUDIT.md:3973` — `- 'app/native-server/src/scripts/postinstall.ts:86' — '// Unix/Linux 平台处理'`
+- `docs/CHINESE_AUDIT.md:3974` — `- 'app/native-server/src/scripts/postinstall.ts:115' — '* Windows 平台文件权限处理'`
+- `docs/CHINESE_AUDIT.md:3975` — `- 'app/native-server/src/scripts/postinstall.ts:127' — '// 检查文件是否为只读，如果是则移除只读属性'`
+- `docs/CHINESE_AUDIT.md:3976` — `- 'app/native-server/src/scripts/postinstall.ts:130' — '// 检查写权限'`
+- `docs/CHINESE_AUDIT.md:3977` — `- 'app/native-server/src/scripts/postinstall.ts:131' — '// 尝试移除只读属性'`
+- `docs/CHINESE_AUDIT.md:3978` — `- 'app/native-server/src/scripts/postinstall.ts:138' — '// 验证文件可读性'`
+- `docs/CHINESE_AUDIT.md:3979` — `- 'app/native-server/src/scripts/postinstall.ts:216' — ''注册过程中出现错误: ${error instanceof Error ? error.message : String(error)}','`
+- `docs/CHINESE_AUDIT.md:3980` — `- 'app/native-server/src/scripts/postinstall.ts:225' — '* 打印手动安装指南'`
+- `docs/CHINESE_AUDIT.md:3981` — `- 'app/native-server/src/scripts/postinstall.ts:280' — '* 主函数'`
+- `docs/CHINESE_AUDIT.md:3982` — `- 'app/native-server/src/scripts/build.ts:6' — '// 清理上次构建'`
+- `docs/CHINESE_AUDIT.md:3983` — `- 'app/native-server/src/scripts/build.ts:7' — 'console.log('清理上次构建...');'`
+- `docs/CHINESE_AUDIT.md:3984` — `- 'app/native-server/src/scripts/build.ts:11' — '// 忽略目录不存在的错误'`
+- `docs/CHINESE_AUDIT.md:3985` — `- 'app/native-server/src/scripts/build.ts:15' — '// 创建dist目录'`
+- `docs/CHINESE_AUDIT.md:3986` — `- 'app/native-server/src/scripts/build.ts:17' — 'fs.mkdirSync(path.join(distDir, 'logs'), { recursive: true }); // 创建logs目录'`
+- `docs/CHINESE_AUDIT.md:3987` — `- 'app/native-server/src/scripts/build.ts:18' — 'console.log('dist 和 dist/logs 目录已创建/确认存在');'`
+- `docs/CHINESE_AUDIT.md:3988` — `- 'app/native-server/src/scripts/build.ts:20' — '// 编译TypeScript'`
+- `docs/CHINESE_AUDIT.md:3989` — `- 'app/native-server/src/scripts/build.ts:21' — 'console.log('编译TypeScript...');'`
+- `docs/CHINESE_AUDIT.md:3990` — `- 'app/native-server/src/scripts/build.ts:24' — '// 复制配置文件'`
+- `docs/CHINESE_AUDIT.md:3991` — `- 'app/native-server/src/scripts/build.ts:25' — 'console.log('复制配置文件...');'`
+- `docs/CHINESE_AUDIT.md:3992` — `- 'app/native-server/src/scripts/build.ts:30' — '// 确保目标目录存在'`
+- `docs/CHINESE_AUDIT.md:3993` — `- 'app/native-server/src/scripts/build.ts:35' — 'console.log('已将 stdio-config.json 复制到 ${configDestPath}');'`
+- `docs/CHINESE_AUDIT.md:3994` — `- 'app/native-server/src/scripts/build.ts:37' — 'console.error('错误: 配置文件未找到: ${configSourcePath}');'`
+- `docs/CHINESE_AUDIT.md:3995` — `- 'app/native-server/src/scripts/build.ts:40' — 'console.error('复制配置文件时出错:', error);'`
+- `docs/CHINESE_AUDIT.md:3996` — `- 'app/native-server/src/scripts/build.ts:43' — '// 复制package.json并更新其内容'`
+- `docs/CHINESE_AUDIT.md:3997` — `- 'app/native-server/src/scripts/build.ts:44' — 'console.log('准备package.json...');'`
+- `docs/CHINESE_AUDIT.md:3998` — `- 'app/native-server/src/scripts/build.ts:47' — '// 创建安装说明'`
+- `docs/CHINESE_AUDIT.md:3999` — `- 'app/native-server/src/scripts/build.ts:50' — '本程序为Chrome扩展的Native Messaging主机端。'`
+- `docs/CHINESE_AUDIT.md:4000` — `- 'app/native-server/src/scripts/build.ts:52' — '## 安装说明'`
+- `docs/CHINESE_AUDIT.md:4001` — `- 'app/native-server/src/scripts/build.ts:54' — '1. 确保已安装Node.js'`
+- `docs/CHINESE_AUDIT.md:4002` — `- 'app/native-server/src/scripts/build.ts:55' — '2. 全局安装本程序:'`
+- `docs/CHINESE_AUDIT.md:4003` — `- 'app/native-server/src/scripts/build.ts:59' — '3. 注册Native Messaging主机:'`
+- `docs/CHINESE_AUDIT.md:4004` — `- 'app/native-server/src/scripts/build.ts:61' — '# 用户级别安装（推荐）'`
+- `docs/CHINESE_AUDIT.md:4005` — `- 'app/native-server/src/scripts/build.ts:64' — '# 如果用户级别安装失败，可以尝试系统级别安装'`
+- `docs/CHINESE_AUDIT.md:4006` — `- 'app/native-server/src/scripts/build.ts:66' — '# 或者使用管理员权限'`
+- `docs/CHINESE_AUDIT.md:4007` — `- 'app/native-server/src/scripts/build.ts:70' — '## 使用方法'`
+- `docs/CHINESE_AUDIT.md:4008` — `- 'app/native-server/src/scripts/build.ts:72' — '此应用程序由Chrome扩展自动启动，无需手动运行。'`
+- `docs/CHINESE_AUDIT.md:4009` — `- 'app/native-server/src/scripts/build.ts:77' — 'console.log('复制包装脚本...');'`
+- `docs/CHINESE_AUDIT.md:4010` — `- 'app/native-server/src/scripts/build.ts:88' — 'console.log('已将 ${macOsWrapperSourcePath} 复制到 ${macOsWrapperDestPath}');'`
+- `docs/CHINESE_AUDIT.md:4011` — `- 'app/native-server/src/scripts/build.ts:90' — 'console.error('错误: macOS 包装脚本源文件未找到: ${macOsWrapperSourcePath}');'`
+- `docs/CHINESE_AUDIT.md:4012` — `- 'app/native-server/src/scripts/build.ts:95' — 'console.log('已将 ${windowsWrapperSourcePath} 复制到 ${windowsWrapperDestPath}');'`
+- `docs/CHINESE_AUDIT.md:4013` — `- 'app/native-server/src/scripts/build.ts:97' — 'console.error('错误: Windows 包装脚本源文件未找到: ${windowsWrapperSourcePath}');'`
+- `docs/CHINESE_AUDIT.md:4014` — `- 'app/native-server/src/scripts/build.ts:100' — 'console.error('复制包装脚本时出错:', error);'`
+- `docs/CHINESE_AUDIT.md:4015` — `- 'app/native-server/src/scripts/build.ts:103' — '// 为关键JavaScript文件和macOS包装脚本添加可执行权限'`
+- `docs/CHINESE_AUDIT.md:4016` — `- 'app/native-server/src/scripts/build.ts:104' — 'console.log('添加可执行权限...');'`
+- `docs/CHINESE_AUDIT.md:4017` — `- 'app/native-server/src/scripts/build.ts:105' — 'const filesToMakeExecutable = ['index.js', 'cli.js', 'run_host.sh']; // cli.js 假设在 dist 根目录'`
+- `docs/CHINESE_AUDIT.md:4018` — `- 'app/native-server/src/scripts/build.ts:108' — 'const filePath = path.join(distDir, file); // filePath 现在是目标路径'`
+- `docs/CHINESE_AUDIT.md:4019` — `- 'app/native-server/src/scripts/build.ts:112' — 'console.log('已为 ${file} 添加可执行权限 (755)');'`
+- `docs/CHINESE_AUDIT.md:4020` — `- 'app/native-server/src/scripts/build.ts:114' — 'console.warn('警告: ${filePath} 不存在，无法添加可执行权限');'`
+- `docs/CHINESE_AUDIT.md:4021` — `- 'app/native-server/src/scripts/build.ts:117' — 'console.error('为 ${file} 添加可执行权限时出错:', error);'`
+- `docs/CHINESE_AUDIT.md:4022` — `- 'app/native-server/src/scripts/build.ts:124' — 'console.log('写入 node_path.txt...');'`
+- `docs/CHINESE_AUDIT.md:4023` — `- 'app/native-server/src/scripts/build.ts:127' — 'console.log('已写入 Node.js 路径: ${process.execPath}');'`
+- `docs/CHINESE_AUDIT.md:4024` — `- 'app/native-server/src/scripts/build.ts:129' — 'console.log('✅ 构建完成');'`
+- `docs/CHINESE_AUDIT.md:4025` — `- 'app/native-server/src/scripts/utils.ts:40' — '* 打印彩色文本'`
+- `docs/CHINESE_AUDIT.md:4026` — `- 'app/native-server/src/scripts/utils.ts:150' — '* 确保关键文件具有执行权限'`
+- `docs/CHINESE_AUDIT.md:4027` — `- 'app/native-server/src/scripts/utils.ts:157' — '// Windows 平台处理'`
+- `docs/CHINESE_AUDIT.md:4028` — `- 'app/native-server/src/scripts/utils.ts:162' — '// Unix/Linux 平台处理'`
+- `docs/CHINESE_AUDIT.md:4029` — `- 'app/native-server/src/scripts/utils.ts:194' — '* Windows 平台文件权限处理'`
+- `docs/CHINESE_AUDIT.md:4030` — `- 'app/native-server/src/scripts/utils.ts:206' — '// 检查文件是否为只读，如果是则移除只读属性'`
+- `docs/CHINESE_AUDIT.md:4031` — `- 'app/native-server/src/scripts/utils.ts:209' — '// 检查写权限'`
+- `docs/CHINESE_AUDIT.md:4032` — `- 'app/native-server/src/scripts/utils.ts:210' — '// 尝试移除只读属性'`
+- `docs/CHINESE_AUDIT.md:4033` — `- 'app/native-server/src/scripts/utils.ts:217' — '// 验证文件可读性'`
+- `docs/CHINESE_AUDIT.md:4034` — `- 'app/native-server/src/scripts/utils.ts:245' — 'path: mainPath, // Node.js可执行文件路径'`
+- `docs/CHINESE_AUDIT.md:4035` — `- 'app/native-server/src/scripts/utils.ts:252' — '* 验证Windows注册表项是否存在且指向正确路径'`
+- `docs/CHINESE_AUDIT.md:4036` — `- 'app/native-server/src/scripts/utils.ts:256' — 'return true; // 非Windows平台跳过验证'`
+- `docs/CHINESE_AUDIT.md:4037` — `- 'app/native-server/src/scripts/utils.ts:300' — '* 尝试注册用户级别的Native Messaging主机'`
+- `docs/CHINESE_AUDIT.md:4038` — `- 'app/native-server/src/scripts/utils.ts:306' — '// 1. 确保执行权限'`
+- `docs/CHINESE_AUDIT.md:4039` — `- 'app/native-server/src/scripts/utils.ts:309' — '// 2. 确定要注册的浏览器'`
+- `docs/CHINESE_AUDIT.md:4040` — `- 'app/native-server/src/scripts/utils.ts:312' — '// 如果没有检测到浏览器，默认注册Chrome和Chromium'`
+- `docs/CHINESE_AUDIT.md:4041` — `- 'app/native-server/src/scripts/utils.ts:321' — '// 3. 创建清单内容'`
+- `docs/CHINESE_AUDIT.md:4042` — `- 'app/native-server/src/scripts/utils.ts:327' — '// 4. 为每个浏览器注册'`
+- `docs/CHINESE_AUDIT.md:4043` — `- 'app/native-server/src/scripts/utils.ts:333' — '// 确保目录存在'`
+- `docs/CHINESE_AUDIT.md:4044` — `- 'app/native-server/src/scripts/utils.ts:336' — '// 写入清单文件'`
+- `docs/CHINESE_AUDIT.md:4045` — `- 'app/native-server/src/scripts/utils.ts:340' — '// Windows需要额外注册表项'`
+- `docs/CHINESE_AUDIT.md:4046` — `- 'app/native-server/src/scripts/utils.ts:343' — '// 注意：不需要手动双写反斜杠，reg 命令会正确处理 Windows 路径'`
+- `docs/CHINESE_AUDIT.md:4047` — `- 'app/native-server/src/scripts/utils.ts:368' — '// 5. 报告结果'`
+- `docs/CHINESE_AUDIT.md:4048` — `- 'app/native-server/src/scripts/utils.ts:390' — '// 导入is-admin包（仅在Windows平台使用）'`
+- `docs/CHINESE_AUDIT.md:4049` — `- 'app/native-server/src/scripts/utils.ts:396' — 'console.warn('缺少is-admin依赖，Windows平台下可能无法正确检测管理员权限');'`
+- `docs/CHINESE_AUDIT.md:4050` — `- 'app/native-server/src/scripts/utils.ts:402' — '* 使用提升权限注册系统级清单'`
+- `docs/CHINESE_AUDIT.md:4051` — `- 'app/native-server/src/scripts/utils.ts:408' — '// 1. 确保执行权限'`
+- `docs/CHINESE_AUDIT.md:4052` — `- 'app/native-server/src/scripts/utils.ts:411' — '// 2. 准备清单内容'`
+- `docs/CHINESE_AUDIT.md:4053` — `- 'app/native-server/src/scripts/utils.ts:414' — '// 3. 获取系统级清单路径'`
+- `docs/CHINESE_AUDIT.md:4054` — `- 'app/native-server/src/scripts/utils.ts:417' — '// 4. 创建临时清单文件'`
+- `docs/CHINESE_AUDIT.md:4055` — `- 'app/native-server/src/scripts/utils.ts:421' — '// 5. 检测是否已经有管理员权限'`
+- `docs/CHINESE_AUDIT.md:4056` — `- 'app/native-server/src/scripts/utils.ts:423' — 'const hasAdminRights = process.platform === 'win32' ? isAdmin() : false; // Windows平台检测管理员权限'`
+- `docs/CHINESE_AUDIT.md:4057` — `- 'app/native-server/src/scripts/utils.ts:426' — '// 准备命令'`
+- `docs/CHINESE_AUDIT.md:4058` — `- 'app/native-server/src/scripts/utils.ts:433' — '// 已经有管理员权限，直接执行命令'`
+- `docs/CHINESE_AUDIT.md:4059` — `- 'app/native-server/src/scripts/utils.ts:435' — '// 创建目录'`
+- `docs/CHINESE_AUDIT.md:4060` — `- 'app/native-server/src/scripts/utils.ts:440' — '// 复制文件'`
+- `docs/CHINESE_AUDIT.md:4061` — `- 'app/native-server/src/scripts/utils.ts:443' — '// 设置权限（非Windows平台）'`
+- `docs/CHINESE_AUDIT.md:4062` — `- 'app/native-server/src/scripts/utils.ts:456' — '// 没有管理员权限，打印手动操作提示'`
+- `docs/CHINESE_AUDIT.md:4063` — `- 'app/native-server/src/scripts/utils.ts:483' — '// 6. Windows特殊处理 - 设置系统级注册表'`
+- `docs/CHINESE_AUDIT.md:4064` — `- 'app/native-server/src/scripts/utils.ts:486' — '// 注意：不需要手动双写反斜杠，reg 命令会正确处理 Windows 路径'`
+- `docs/CHINESE_AUDIT.md:4065` — `- 'app/native-server/src/scripts/utils.ts:493' — '// 已经有管理员权限，直接执行注册表命令'`
+- `docs/CHINESE_AUDIT.md:4066` — `- 'app/native-server/src/scripts/utils.ts:497' — '// 验证注册表项是否创建成功'`
+- `docs/CHINESE_AUDIT.md:4067` — `- 'app/native-server/src/scripts/utils.ts:511' — '// 没有管理员权限，打印手动操作提示'`
+- `docs/CHINESE_AUDIT.md:4068` — `- 'app/native-server/src/scripts/utils.ts:532' — 'console.error(colorText('注册失败: ${error.message}', 'red'));'`
+- `docs/CHINESE_AUDIT.md:4069` — `- 'app/native-server/src/agent/chat-service.ts:33' — '* 中文说明：该服务负责会话级调度，不关心具体 CLI/SDK 实现细节。'`
+- `docs/CHINESE_AUDIT.md:4070` — `- 'app/native-server/src/agent/chat-service.ts:34' — '* 通过 Engine 接口实现依赖倒置，后续替换或新增引擎时无需修改 HTTP 路由层。'`
+- `docs/CHINESE_AUDIT.md:4071` — `- 'app/native-server/src/agent/tool-bridge.ts:34' — '* 中文说明：该桥接层负责将 CLI 上报的工具调用统一转为标准 MCP CallTool 请求，'`
+- `docs/CHINESE_AUDIT.md:4072` — `- 'app/native-server/src/agent/tool-bridge.ts:35' — '* 复用现有 /mcp HTTP server，而不是在本项目内自研额外协议。'`
+- `docs/CHINESE_AUDIT.md:4073` — `- 'app/native-server/src/agent/stream-manager.ts:15' — '* 中文说明：此实现参考 other/cweb 中的 StreamManager，但适配 Fastify/Node HTTP，'`
+- `docs/CHINESE_AUDIT.md:4074` — `- 'app/native-server/src/agent/stream-manager.ts:16' — '* 使用 ServerResponse 直接写入 SSE 数据，避免在 Node 环境中额外引入 Web Streams 依赖。'`
+- `docs/CHINESE_AUDIT.md:4075` — `- 'app/native-server/src/agent/engines/codex.ts:31' — '* 中文说明：该引擎基于 other/cweb 中 Codex 适配器的事件协议，完整处理'`
+- `docs/CHINESE_AUDIT.md:4076` — `- 'app/native-server/src/agent/engines/codex.ts:32' — '* item.started/item.delta/item.completed/item.failed/error 等事件，并'`
+- `docs/CHINESE_AUDIT.md:4077` — `- 'app/native-server/src/agent/engines/codex.ts:33' — '* 通过 AgentStreamManager 将编码后的 RealtimeEvent 推送给 sidepanel，'`
+- `docs/CHINESE_AUDIT.md:4078` — `- 'app/native-server/src/agent/engines/codex.ts:34' — '* 确保数据链路「Sidepanel → Native Server → Codex CLI → Sidepanel」闭环。'`
+- `docs/CHINESE_AUDIT.md:4079` — `- 'packages/wasm-simd/BUILD.md:1' — '# WASM SIMD 构建指南'`
+- `docs/CHINESE_AUDIT.md:4080` — `- 'packages/wasm-simd/BUILD.md:3' — '## 🚀 快速构建'`
+- `docs/CHINESE_AUDIT.md:4081` — `- 'packages/wasm-simd/BUILD.md:5' — '### 前置要求'`
+- `docs/CHINESE_AUDIT.md:4082` — `- 'packages/wasm-simd/BUILD.md:8' — '# 安装 Rust'`
+- `docs/CHINESE_AUDIT.md:4083` — `- 'packages/wasm-simd/BUILD.md:11' — '# 安装 wasm-pack'`
+- `docs/CHINESE_AUDIT.md:4084` — `- 'packages/wasm-simd/BUILD.md:15' — '### 构建选项'`
+- `docs/CHINESE_AUDIT.md:4085` — `- 'packages/wasm-simd/BUILD.md:17' — '1. **从项目根目录构建**（推荐）：'`
+- `docs/CHINESE_AUDIT.md:4086` — `- 'packages/wasm-simd/BUILD.md:20' — '# 构建 WASM 并自动复制到 Chrome 扩展'`
+- `docs/CHINESE_AUDIT.md:4087` — `- 'packages/wasm-simd/BUILD.md:24' — '2. **只构建 WASM 包**：'`
+- `docs/CHINESE_AUDIT.md:4088` — `- 'packages/wasm-simd/BUILD.md:27' — '# 从 packages/wasm-simd 目录'`
+- `docs/CHINESE_AUDIT.md:4089` — `- 'packages/wasm-simd/BUILD.md:30' — '# 或者从任何地方使用 pnpm filter'`
+- `docs/CHINESE_AUDIT.md:4090` — `- 'packages/wasm-simd/BUILD.md:34' — '3. **开发模式构建**：'`
+- `docs/CHINESE_AUDIT.md:4091` — `- 'packages/wasm-simd/BUILD.md:36' — 'npm run build:dev  # 未优化版本，构建更快'`
+- `docs/CHINESE_AUDIT.md:4092` — `- 'packages/wasm-simd/BUILD.md:39' — '### 构建产物'`
+- `docs/CHINESE_AUDIT.md:4093` — `- 'packages/wasm-simd/BUILD.md:41' — '构建完成后，在 'pkg/' 目录下会生成：'`
+- `docs/CHINESE_AUDIT.md:4094` — `- 'packages/wasm-simd/BUILD.md:43' — '- 'simd_math.js' - JavaScript 绑定'`
+- `docs/CHINESE_AUDIT.md:4095` — `- 'packages/wasm-simd/BUILD.md:44' — '- 'simd_math_bg.wasm' - WebAssembly 二进制文件'`
+- `docs/CHINESE_AUDIT.md:4096` — `- 'packages/wasm-simd/BUILD.md:45' — '- 'simd_math.d.ts' - TypeScript 类型定义'`
+- `docs/CHINESE_AUDIT.md:4097` — `- 'packages/wasm-simd/BUILD.md:46' — '- 'package.json' - NPM 包信息'`
+- `docs/CHINESE_AUDIT.md:4098` — `- 'packages/wasm-simd/BUILD.md:48' — '### 集成到 Chrome 扩展'`
+- `docs/CHINESE_AUDIT.md:4099` — `- 'packages/wasm-simd/BUILD.md:50' — 'WASM 文件会自动复制到 'app/chrome-extension/workers/' 目录，Chrome 扩展可以直接使用：'`
+- `docs/CHINESE_AUDIT.md:4100` — `- 'packages/wasm-simd/BUILD.md:53' — '// 在 Chrome 扩展中使用'`
+- `docs/CHINESE_AUDIT.md:4101` — `- 'packages/wasm-simd/BUILD.md:58' — '## 🔧 开发工作流'`
+- `docs/CHINESE_AUDIT.md:4102` — `- 'packages/wasm-simd/BUILD.md:60' — '1. 修改 'src/lib.rs' 中的 Rust 代码'`
+- `docs/CHINESE_AUDIT.md:4103` — `- 'packages/wasm-simd/BUILD.md:61' — '2. 运行 'npm run build' 重新构建'`
+- `docs/CHINESE_AUDIT.md:4104` — `- 'packages/wasm-simd/BUILD.md:62' — '3. Chrome 扩展会自动使用新的 WASM 文件'`
+- `docs/CHINESE_AUDIT.md:4105` — `- 'packages/wasm-simd/BUILD.md:64' — '## 📊 性能测试'`
+- `docs/CHINESE_AUDIT.md:4106` — `- 'packages/wasm-simd/BUILD.md:67' — '# 在 Chrome 扩展中运行基准测试'`
+- `docs/CHINESE_AUDIT.md:4107` — `- 'packages/shared/src/node-specs-builtin.ts:10' — 'display: { label: '导航', iconClass: 'icon-navigate', category: 'Actions' },'`
+- `docs/CHINESE_AUDIT.md:4108` — `- 'packages/shared/src/node-specs-builtin.ts:19' — 'help: '目标地址，支持变量模板 {var}','`
+- `docs/CHINESE_AUDIT.md:4109` — `- 'packages/shared/src/node-specs-builtin.ts:26' — 'if (!cfg || !cfg.url || String(cfg.url).trim() === '') errs.push('URL 必填');'`
+- `docs/CHINESE_AUDIT.md:4110` — `- 'packages/shared/src/node-specs-builtin.ts:36' — 'display: { label: '点击', iconClass: 'icon-click', category: 'Actions' },'`
+- `docs/CHINESE_AUDIT.md:4111` — `- 'packages/shared/src/node-specs-builtin.ts:41' — 'label: '目标','`
+- `docs/CHINESE_AUDIT.md:4112` — `- 'packages/shared/src/node-specs-builtin.ts:44' — 'help: '选择或输入元素选择器','`
+- `docs/CHINESE_AUDIT.md:4113` — `- 'packages/shared/src/node-specs-builtin.ts:48' — 'label: '执行前','`
+- `docs/CHINESE_AUDIT.md:4114` — `- 'packages/shared/src/node-specs-builtin.ts:51' — '{ key: 'scrollIntoView', label: '滚动到可见', type: 'boolean', default: true },'`
+- `docs/CHINESE_AUDIT.md:4115` — `- 'packages/shared/src/node-specs-builtin.ts:52' — '{ key: 'waitForSelector', label: '等待选择器', type: 'boolean', default: true },'`
+- `docs/CHINESE_AUDIT.md:4116` — `- 'packages/shared/src/node-specs-builtin.ts:57' — 'label: '执行后','`
+- `docs/CHINESE_AUDIT.md:4117` — `- 'packages/shared/src/node-specs-builtin.ts:60' — '{ key: 'waitForNavigation', label: '等待导航完成', type: 'boolean', default: false },'`
+- `docs/CHINESE_AUDIT.md:4118` — `- 'packages/shared/src/node-specs-builtin.ts:61' — '{ key: 'waitForNetworkIdle', label: '等待网络空闲', type: 'boolean', default: false },'`
+- `docs/CHINESE_AUDIT.md:4119` — `- 'packages/shared/src/node-specs-builtin.ts:70' — 'display: { label: '双击', iconClass: 'icon-click', category: 'Actions' },'`
+- `docs/CHINESE_AUDIT.md:4120` — `- 'packages/shared/src/node-specs-builtin.ts:73' — '{ key: 'target', label: '目标', type: 'json', widget: 'targetlocator' },'`
+- `docs/CHINESE_AUDIT.md:4121` — `- 'packages/shared/src/node-specs-builtin.ts:76' — 'label: '执行前','`
+- `docs/CHINESE_AUDIT.md:4122` — `- 'packages/shared/src/node-specs-builtin.ts:79' — '{ key: 'scrollIntoView', label: '滚动到可见', type: 'boolean', default: true },'`
+- `docs/CHINESE_AUDIT.md:4123` — `- 'packages/shared/src/node-specs-builtin.ts:80' — '{ key: 'waitForSelector', label: '等待选择器', type: 'boolean', default: true },'`
+- `docs/CHINESE_AUDIT.md:4124` — `- 'packages/shared/src/node-specs-builtin.ts:85' — 'label: '执行后','`
+- `docs/CHINESE_AUDIT.md:4125` — `- 'packages/shared/src/node-specs-builtin.ts:88' — '{ key: 'waitForNavigation', label: '等待导航完成', type: 'boolean', default: false },'`
+- `docs/CHINESE_AUDIT.md:4126` — `- 'packages/shared/src/node-specs-builtin.ts:89' — '{ key: 'waitForNetworkIdle', label: '等待网络空闲', type: 'boolean', default: false },'`
+- `docs/CHINESE_AUDIT.md:4127` — `- 'packages/shared/src/node-specs-builtin.ts:100' — 'display: { label: '填充', iconClass: 'icon-fill', category: 'Actions' },'`
+- `docs/CHINESE_AUDIT.md:4128` — `- 'packages/shared/src/node-specs-builtin.ts:103' — '{ key: 'target', label: '目标', type: 'json', widget: 'targetlocator' },'`
+- `docs/CHINESE_AUDIT.md:4129` — `- 'packages/shared/src/node-specs-builtin.ts:104' — '{ key: 'value', label: '输入值', type: 'string', required: true, help: '支持 {var} 模板' },'`
+- `docs/CHINESE_AUDIT.md:4130` — `- 'packages/shared/src/node-specs-builtin.ts:113' — 'display: { label: '键盘', iconClass: 'icon-key', category: 'Actions' },'`
+- `docs/CHINESE_AUDIT.md:4131` — `- 'packages/shared/src/node-specs-builtin.ts:118' — 'label: '按键序列','`
+- `docs/CHINESE_AUDIT.md:4132` — `- 'packages/shared/src/node-specs-builtin.ts:122' — 'help: '如 Backspace Enter 或 cmd+a','`
+- `docs/CHINESE_AUDIT.md:4133` — `- 'packages/shared/src/node-specs-builtin.ts:124' — '{ key: 'target', label: '焦点目标(可选)', type: 'json', widget: 'targetlocator' },'`
+- `docs/CHINESE_AUDIT.md:4134` — `- 'packages/shared/src/node-specs-builtin.ts:133' — 'display: { label: '滚动', iconClass: 'icon-scroll', category: 'Actions' },'`
+- `docs/CHINESE_AUDIT.md:4135` — `- 'packages/shared/src/node-specs-builtin.ts:138' — 'label: '模式','`
+- `docs/CHINESE_AUDIT.md:4136` — `- 'packages/shared/src/node-specs-builtin.ts:141' — '{ label: '元素', value: 'element' },'`
+- `docs/CHINESE_AUDIT.md:4137` — `- 'packages/shared/src/node-specs-builtin.ts:142' — '{ label: '偏移', value: 'offset' },'`
+- `docs/CHINESE_AUDIT.md:4138` — `- 'packages/shared/src/node-specs-builtin.ts:143' — '{ label: '容器', value: 'container' },'`
+- `docs/CHINESE_AUDIT.md:4139` — `- 'packages/shared/src/node-specs-builtin.ts:147' — '{ key: 'target', label: '目标(当元素/容器)', type: 'json', widget: 'targetlocator' },'`
+- `docs/CHINESE_AUDIT.md:4140` — `- 'packages/shared/src/node-specs-builtin.ts:150' — 'label: '偏移','`
+- `docs/CHINESE_AUDIT.md:4141` — `- 'packages/shared/src/node-specs-builtin.ts:165' — 'display: { label: '拖拽', iconClass: 'icon-drag', category: 'Actions' },'`
+- `docs/CHINESE_AUDIT.md:4142` — `- 'packages/shared/src/node-specs-builtin.ts:168' — '{ key: 'start', label: '起点', type: 'json', widget: 'targetlocator' },'`
+- `docs/CHINESE_AUDIT.md:4143` — `- 'packages/shared/src/node-specs-builtin.ts:169' — '{ key: 'end', label: '终点', type: 'json', widget: 'targetlocator' },'`
+- `docs/CHINESE_AUDIT.md:4144` — `- 'packages/shared/src/node-specs-builtin.ts:172' — 'label: '路径坐标','`
+- `docs/CHINESE_AUDIT.md:4145` — `- 'packages/shared/src/node-specs-builtin.ts:176' — 'label: '点','`
+- `docs/CHINESE_AUDIT.md:4146` — `- 'packages/shared/src/node-specs-builtin.ts:192' — 'display: { label: '等待', iconClass: 'icon-wait', category: 'Actions' },'`
+- `docs/CHINESE_AUDIT.md:4147` — `- 'packages/shared/src/node-specs-builtin.ts:197' — 'label: '条件(JSON)','`
+- `docs/CHINESE_AUDIT.md:4148` — `- 'packages/shared/src/node-specs-builtin.ts:199' — 'help: '如 {"sleep":1000} 或 {"text":"Hello","appear":true}','`
+- `docs/CHINESE_AUDIT.md:4149` — `- 'packages/shared/src/node-specs-builtin.ts:209' — 'display: { label: '断言', iconClass: 'icon-assert', category: 'Actions' },'`
+- `docs/CHINESE_AUDIT.md:4150` — `- 'packages/shared/src/node-specs-builtin.ts:214' — 'label: '断言(JSON)','`
+- `docs/CHINESE_AUDIT.md:4151` — `- 'packages/shared/src/node-specs-builtin.ts:216' — 'help: '如 {"exists":"#id"} / {"visible":".btn"}','`
+- `docs/CHINESE_AUDIT.md:4152` — `- 'packages/shared/src/node-specs-builtin.ts:220' — 'label: '失败策略','`
+- `docs/CHINESE_AUDIT.md:4153` — `- 'packages/shared/src/node-specs-builtin.ts:223' — '{ label: '停止', value: 'stop' },'`
+- `docs/CHINESE_AUDIT.md:4154` — `- 'packages/shared/src/node-specs-builtin.ts:224' — '{ label: '警告', value: 'warn' },'`
+- `docs/CHINESE_AUDIT.md:4155` — `- 'packages/shared/src/node-specs-builtin.ts:225' — '{ label: '重试', value: 'retry' },'`
+- `docs/CHINESE_AUDIT.md:4156` — `- 'packages/shared/src/node-specs-builtin.ts:242' — 'label: '方法','`
+- `docs/CHINESE_AUDIT.md:4157` — `- 'packages/shared/src/node-specs-builtin.ts:251' — '{ key: 'headers', label: '请求头(JSON)', type: 'json' },'`
+- `docs/CHINESE_AUDIT.md:4158` — `- 'packages/shared/src/node-specs-builtin.ts:252' — '{ key: 'body', label: '请求体(JSON)', type: 'json' },'`
+- `docs/CHINESE_AUDIT.md:4159` — `- 'packages/shared/src/node-specs-builtin.ts:253' — '{ key: 'formData', label: '表单(JSON)', type: 'json' },'`
+- `docs/CHINESE_AUDIT.md:4160` — `- 'packages/shared/src/node-specs-builtin.ts:254' — '{ key: 'saveAs', label: '保存为变量', type: 'string' },'`
+- `docs/CHINESE_AUDIT.md:4161` — `- 'packages/shared/src/node-specs-builtin.ts:255' — '{ key: 'assign', label: '映射(JSON)', type: 'json' },'`
+- `docs/CHINESE_AUDIT.md:4162` — `- 'packages/shared/src/node-specs-builtin.ts:264' — 'display: { label: '提取', iconClass: 'icon-extract', category: 'Tools' },'`
+- `docs/CHINESE_AUDIT.md:4163` — `- 'packages/shared/src/node-specs-builtin.ts:267' — '{ key: 'selector', label: '选择器', type: 'string', widget: 'selector' },'`
+- `docs/CHINESE_AUDIT.md:4164` — `- 'packages/shared/src/node-specs-builtin.ts:270' — 'label: '属性','`
+- `docs/CHINESE_AUDIT.md:4165` — `- 'packages/shared/src/node-specs-builtin.ts:273' — '{ label: '文本(text)', value: 'text' },'`
+- `docs/CHINESE_AUDIT.md:4166` — `- 'packages/shared/src/node-specs-builtin.ts:274' — '{ label: '文本(textContent)', value: 'textContent' },'`
+- `docs/CHINESE_AUDIT.md:4167` — `- 'packages/shared/src/node-specs-builtin.ts:275' — '{ label: '自定义属性名', value: 'attr' },'`
+- `docs/CHINESE_AUDIT.md:4168` — `- 'packages/shared/src/node-specs-builtin.ts:278' — '{ key: 'js', label: '自定义JS', type: 'string', help: '在页面中执行并返回值' },'`
+- `docs/CHINESE_AUDIT.md:4169` — `- 'packages/shared/src/node-specs-builtin.ts:279' — '{ key: 'saveAs', label: '保存变量', type: 'string', required: true },'`
+- `docs/CHINESE_AUDIT.md:4170` — `- 'packages/shared/src/node-specs-builtin.ts:288' — 'display: { label: '截图', iconClass: 'icon-screenshot', category: 'Tools' },'`
+- `docs/CHINESE_AUDIT.md:4171` — `- 'packages/shared/src/node-specs-builtin.ts:291' — '{ key: 'selector', label: '目标选择器', type: 'string' },'`
+- `docs/CHINESE_AUDIT.md:4172` — `- 'packages/shared/src/node-specs-builtin.ts:292' — '{ key: 'fullPage', label: '整页截图', type: 'boolean', default: false },'`
+- `docs/CHINESE_AUDIT.md:4173` — `- 'packages/shared/src/node-specs-builtin.ts:293' — '{ key: 'saveAs', label: '保存变量', type: 'string' },'`
+- `docs/CHINESE_AUDIT.md:4174` — `- 'packages/shared/src/node-specs-builtin.ts:302' — 'display: { label: '触发事件', iconClass: 'icon-trigger', category: 'Tools' },'`
+- `docs/CHINESE_AUDIT.md:4175` — `- 'packages/shared/src/node-specs-builtin.ts:305' — '{ key: 'target', label: '目标', type: 'json', widget: 'targetlocator' },'`
+- `docs/CHINESE_AUDIT.md:4176` — `- 'packages/shared/src/node-specs-builtin.ts:306' — '{ key: 'event', label: '事件类型', type: 'string', required: true },'`
+- `docs/CHINESE_AUDIT.md:4177` — `- 'packages/shared/src/node-specs-builtin.ts:307' — '{ key: 'bubbles', label: '冒泡', type: 'boolean', default: true },'`
+- `docs/CHINESE_AUDIT.md:4178` — `- 'packages/shared/src/node-specs-builtin.ts:308' — '{ key: 'cancelable', label: '可取消', type: 'boolean', default: false },'`
+- `docs/CHINESE_AUDIT.md:4179` — `- 'packages/shared/src/node-specs-builtin.ts:317' — 'display: { label: '设置属性', iconClass: 'icon-attr', category: 'Tools' },'`
+- `docs/CHINESE_AUDIT.md:4180` — `- 'packages/shared/src/node-specs-builtin.ts:320' — '{ key: 'target', label: '目标', type: 'json', widget: 'targetlocator' },'`
+- `docs/CHINESE_AUDIT.md:4181` — `- 'packages/shared/src/node-specs-builtin.ts:321' — '{ key: 'name', label: '属性名', type: 'string', required: true },'`
+- `docs/CHINESE_AUDIT.md:4182` — `- 'packages/shared/src/node-specs-builtin.ts:322' — '{ key: 'value', label: '属性值', type: 'string' },'`
+- `docs/CHINESE_AUDIT.md:4183` — `- 'packages/shared/src/node-specs-builtin.ts:323' — '{ key: 'remove', label: '移除属性', type: 'boolean', default: false },'`
+- `docs/CHINESE_AUDIT.md:4184` — `- 'packages/shared/src/node-specs-builtin.ts:332' — 'display: { label: '循环元素', iconClass: 'icon-loop', category: 'Tools' },'`
+- `docs/CHINESE_AUDIT.md:4185` — `- 'packages/shared/src/node-specs-builtin.ts:335' — '{ key: 'selector', label: '选择器', type: 'string', required: true },'`
+- `docs/CHINESE_AUDIT.md:4186` — `- 'packages/shared/src/node-specs-builtin.ts:336' — '{ key: 'saveAs', label: '列表变量名', type: 'string', default: 'elements' },'`
+- `docs/CHINESE_AUDIT.md:4187` — `- 'packages/shared/src/node-specs-builtin.ts:337' — '{ key: 'itemVar', label: '项变量名', type: 'string', default: 'item' },'`
+- `docs/CHINESE_AUDIT.md:4188` — `- 'packages/shared/src/node-specs-builtin.ts:338' — '{ key: 'subflowId', label: '子流程ID', type: 'string', required: true },'`
+- `docs/CHINESE_AUDIT.md:4189` — `- 'packages/shared/src/node-specs-builtin.ts:347' — 'display: { label: '切换Frame', iconClass: 'icon-frame', category: 'Tools' },'`
+- `docs/CHINESE_AUDIT.md:4190` — `- 'packages/shared/src/node-specs-builtin.ts:352' — 'label: 'frame定位','`
+- `docs/CHINESE_AUDIT.md:4191` — `- 'packages/shared/src/node-specs-builtin.ts:355' — '{ key: 'index', label: '索引', type: 'number' },'`
+- `docs/CHINESE_AUDIT.md:4192` — `- 'packages/shared/src/node-specs-builtin.ts:356' — '{ key: 'urlContains', label: 'URL包含', type: 'string' },'`
+- `docs/CHINESE_AUDIT.md:4193` — `- 'packages/shared/src/node-specs-builtin.ts:367' — 'display: { label: '下载处理', iconClass: 'icon-download', category: 'Tools' },'`
+- `docs/CHINESE_AUDIT.md:4194` — `- 'packages/shared/src/node-specs-builtin.ts:370' — '{ key: 'filenameContains', label: '文件名包含', type: 'string' },'`
+- `docs/CHINESE_AUDIT.md:4195` — `- 'packages/shared/src/node-specs-builtin.ts:371' — '{ key: 'waitForComplete', label: '等待完成', type: 'boolean', default: true },'`
+- `docs/CHINESE_AUDIT.md:4196` — `- 'packages/shared/src/node-specs-builtin.ts:372' — '{ key: 'timeoutMs', label: '超时(ms)', type: 'number', default: 60000 },'`
+- `docs/CHINESE_AUDIT.md:4197` — `- 'packages/shared/src/node-specs-builtin.ts:373' — '{ key: 'saveAs', label: '保存变量', type: 'string' },'`
+- `docs/CHINESE_AUDIT.md:4198` — `- 'packages/shared/src/node-specs-builtin.ts:382' — 'display: { label: '脚本', iconClass: 'icon-script', category: 'Tools' },'`
+- `docs/CHINESE_AUDIT.md:4199` — `- 'packages/shared/src/node-specs-builtin.ts:387' — 'label: '执行上下文','`
+- `docs/CHINESE_AUDIT.md:4200` — `- 'packages/shared/src/node-specs-builtin.ts:395' — '{ key: 'code', label: '脚本代码', type: 'string', widget: 'code', required: true },'`
+- `docs/CHINESE_AUDIT.md:4201` — `- 'packages/shared/src/node-specs-builtin.ts:398' — 'label: '执行时机','`
+- `docs/CHINESE_AUDIT.md:4202` — `- 'packages/shared/src/node-specs-builtin.ts:406' — '{ key: 'assign', label: '映射(JSON)', type: 'json' },'`
+- `docs/CHINESE_AUDIT.md:4203` — `- 'packages/shared/src/node-specs-builtin.ts:407' — '{ key: 'saveAs', label: '保存变量', type: 'string' },'`
+- `docs/CHINESE_AUDIT.md:4204` — `- 'packages/shared/src/node-specs-builtin.ts:416' — 'display: { label: '打开标签', iconClass: 'icon-openTab', category: 'Tabs' },'`
+- `docs/CHINESE_AUDIT.md:4205` — `- 'packages/shared/src/node-specs-builtin.ts:420' — '{ key: 'newWindow', label: '新窗口', type: 'boolean', default: false },'`
+- `docs/CHINESE_AUDIT.md:4206` — `- 'packages/shared/src/node-specs-builtin.ts:427' — 'display: { label: '执行子流程', iconClass: 'icon-exec', category: 'Flow' },'`
+- `docs/CHINESE_AUDIT.md:4207` — `- 'packages/shared/src/node-specs-builtin.ts:430' — '{ key: 'flowId', label: '流程ID', type: 'string', required: true },'`
+- `docs/CHINESE_AUDIT.md:4208` — `- 'packages/shared/src/node-specs-builtin.ts:431' — '{ key: 'inline', label: '内联执行', type: 'boolean', default: false },'`
+- `docs/CHINESE_AUDIT.md:4209` — `- 'packages/shared/src/node-specs-builtin.ts:432' — '{ key: 'args', label: '参数(JSON)', type: 'json' },'`
+- `docs/CHINESE_AUDIT.md:4210` — `- 'packages/shared/src/node-specs-builtin.ts:439' — 'display: { label: '切换标签', iconClass: 'icon-switchTab', category: 'Tabs' },'`
+- `docs/CHINESE_AUDIT.md:4211` — `- 'packages/shared/src/node-specs-builtin.ts:443' — '{ key: 'urlContains', label: 'URL包含', type: 'string' },'`
+- `docs/CHINESE_AUDIT.md:4212` — `- 'packages/shared/src/node-specs-builtin.ts:444' — '{ key: 'titleContains', label: '标题包含', type: 'string' },'`
+- `docs/CHINESE_AUDIT.md:4213` — `- 'packages/shared/src/node-specs-builtin.ts:451' — 'display: { label: '关闭标签', iconClass: 'icon-closeTab', category: 'Tabs' },'`
+- `docs/CHINESE_AUDIT.md:4214` — `- 'packages/shared/src/node-specs-builtin.ts:469' — 'display: { label: '条件', iconClass: 'icon-if', category: 'Logic' },'`
+- `docs/CHINESE_AUDIT.md:4215` — `- 'packages/shared/src/node-specs-builtin.ts:474' — 'label: '条件表达式(JSON)','`
+- `docs/CHINESE_AUDIT.md:4216` — `- 'packages/shared/src/node-specs-builtin.ts:476' — 'help: '如 {"expression":"vars.a>0"} 等','`
+- `docs/CHINESE_AUDIT.md:4217` — `- 'packages/shared/src/node-specs-builtin.ts:480' — 'label: '分支','`
+- `docs/CHINESE_AUDIT.md:4218` — `- 'packages/shared/src/node-specs-builtin.ts:488' — '{ key: 'name', label: '名称', type: 'string' },'`
+- `docs/CHINESE_AUDIT.md:4219` — `- 'packages/shared/src/node-specs-builtin.ts:489' — '{ key: 'expr', label: '表达式', type: 'string' },'`
+- `docs/CHINESE_AUDIT.md:4220` — `- 'packages/shared/src/node-specs-builtin.ts:493' — '{ key: 'else', label: '启用 else', type: 'boolean', default: true },'`
+- `docs/CHINESE_AUDIT.md:4221` — `- 'packages/shared/src/node-specs-builtin.ts:500' — 'display: { label: '循环', iconClass: 'icon-foreach', category: 'Logic' },'`
+- `docs/CHINESE_AUDIT.md:4222` — `- 'packages/shared/src/node-specs-builtin.ts:503' — '{ key: 'listVar', label: '列表变量', type: 'string', required: true },'`
+- `docs/CHINESE_AUDIT.md:4223` — `- 'packages/shared/src/node-specs-builtin.ts:504' — '{ key: 'itemVar', label: '项变量', type: 'string', default: 'item' },'`
+- `docs/CHINESE_AUDIT.md:4224` — `- 'packages/shared/src/node-specs-builtin.ts:505' — '{ key: 'subflowId', label: '子流程ID', type: 'string', required: true },'`
+- `docs/CHINESE_AUDIT.md:4225` — `- 'packages/shared/src/node-specs-builtin.ts:508' — 'label: '并发数','`
+- `docs/CHINESE_AUDIT.md:4226` — `- 'packages/shared/src/node-specs-builtin.ts:511' — 'help: '并发执行子流程（浅拷贝变量，不自动合并）','`
+- `docs/CHINESE_AUDIT.md:4227` — `- 'packages/shared/src/node-specs-builtin.ts:519' — 'display: { label: '循环', iconClass: 'icon-while', category: 'Logic' },'`
+- `docs/CHINESE_AUDIT.md:4228` — `- 'packages/shared/src/node-specs-builtin.ts:522' — '{ key: 'condition', label: '条件(JSON)', type: 'json' },'`
+- `docs/CHINESE_AUDIT.md:4229` — `- 'packages/shared/src/node-specs-builtin.ts:523' — '{ key: 'subflowId', label: '子流程ID', type: 'string', required: true },'`
+- `docs/CHINESE_AUDIT.md:4230` — `- 'packages/shared/src/node-specs-builtin.ts:524' — '{ key: 'maxIterations', label: '最大次数', type: 'number', default: 100 },'`
+- `docs/CHINESE_AUDIT.md:4231` — `- 'packages/shared/src/node-specs-builtin.ts:533' — 'display: { label: '延迟', iconClass: 'icon-delay', category: 'Actions' },'`
+- `docs/CHINESE_AUDIT.md:4232` — `- 'packages/shared/src/node-specs-builtin.ts:538' — 'label: '延迟','`
+- `docs/CHINESE_AUDIT.md:4233` — `- 'packages/shared/src/node-specs-builtin.ts:552' — 'display: { label: '触发器', iconClass: 'icon-trigger', category: 'Flow' },'`
+- `docs/CHINESE_AUDIT.md:4234` — `- 'packages/shared/src/node-specs-builtin.ts:555' — '{ key: 'enabled', label: '启用', type: 'boolean', default: true },'`
+- `docs/CHINESE_AUDIT.md:4235` — `- 'packages/shared/src/node-specs-builtin.ts:556' — '{ key: 'description', label: '描述', type: 'string' },'`
+- `docs/CHINESE_AUDIT.md:4236` — `- 'packages/shared/src/node-specs-builtin.ts:559' — 'label: '模式','`
+- `docs/CHINESE_AUDIT.md:4237` — `- 'packages/shared/src/node-specs-builtin.ts:562' — '{ key: 'manual', label: '手动', type: 'boolean', default: true },'`
+- `docs/CHINESE_AUDIT.md:4238` — `- 'packages/shared/src/node-specs-builtin.ts:563' — '{ key: 'url', label: 'URL 触发', type: 'boolean', default: false },'`
+- `docs/CHINESE_AUDIT.md:4239` — `- 'packages/shared/src/node-specs-builtin.ts:564' — '{ key: 'contextMenu', label: '右键菜单', type: 'boolean', default: false },'`
+- `docs/CHINESE_AUDIT.md:4240` — `- 'packages/shared/src/node-specs-builtin.ts:565' — '{ key: 'command', label: '快捷键', type: 'boolean', default: false },'`
+- `docs/CHINESE_AUDIT.md:4241` — `- 'packages/shared/src/node-specs-builtin.ts:566' — '{ key: 'dom', label: 'DOM 事件', type: 'boolean', default: false },'`
+- `docs/CHINESE_AUDIT.md:4242` — `- 'packages/shared/src/node-specs-builtin.ts:567' — '{ key: 'schedule', label: '定时', type: 'boolean', default: false },'`
+- `docs/CHINESE_AUDIT.md:4243` — `- 'packages/shared/src/node-specs-builtin.ts:572' — 'label: 'URL 规则','`
+- `docs/CHINESE_AUDIT.md:4244` — `- 'packages/shared/src/node-specs-builtin.ts:577' — 'label: '规则列表','`
+- `docs/CHINESE_AUDIT.md:4245` — `- 'packages/shared/src/node-specs-builtin.ts:581' — 'label: '规则','`
+- `docs/CHINESE_AUDIT.md:4246` — `- 'packages/shared/src/node-specs-builtin.ts:586' — 'label: '类型','`
+- `docs/CHINESE_AUDIT.md:4247` — `- 'packages/shared/src/node-specs-builtin.ts:590' — '{ label: '域名', value: 'domain' },'`
+- `docs/CHINESE_AUDIT.md:4248` — `- 'packages/shared/src/node-specs-builtin.ts:591' — '{ label: '路径', value: 'path' },'`
+- `docs/CHINESE_AUDIT.md:4249` — `- 'packages/shared/src/node-specs-builtin.ts:595' — '{ key: 'value', label: '值', type: 'string' },'`
+- `docs/CHINESE_AUDIT.md:4250` — `- 'packages/shared/src/node-specs-builtin.ts:603' — 'label: '右键菜单','`
+- `docs/CHINESE_AUDIT.md:4251` — `- 'packages/shared/src/node-specs-builtin.ts:606' — '{ key: 'title', label: '标题', type: 'string', default: '运行工作流' },'`
+- `docs/CHINESE_AUDIT.md:4252` — `- 'packages/shared/src/node-specs-builtin.ts:607' — '{ key: 'enabled', label: '启用', type: 'boolean', default: false },'`
+- `docs/CHINESE_AUDIT.md:4253` — `- 'packages/shared/src/node-specs-builtin.ts:612' — 'label: '快捷键','`
+- `docs/CHINESE_AUDIT.md:4254` — `- 'packages/shared/src/node-specs-builtin.ts:615' — '{ key: 'commandKey', label: '快捷键', type: 'string' },'`
+- `docs/CHINESE_AUDIT.md:4255` — `- 'packages/shared/src/node-specs-builtin.ts:616' — '{ key: 'enabled', label: '启用', type: 'boolean', default: false },'`
+- `docs/CHINESE_AUDIT.md:4256` — `- 'packages/shared/src/node-specs-builtin.ts:621' — 'label: 'DOM 事件','`
+- `docs/CHINESE_AUDIT.md:4257` — `- 'packages/shared/src/node-specs-builtin.ts:624' — '{ key: 'selector', label: '选择器', type: 'string' },'`
+- `docs/CHINESE_AUDIT.md:4258` — `- 'packages/shared/src/node-specs-builtin.ts:625' — '{ key: 'appear', label: '出现', type: 'boolean', default: true },'`
+- `docs/CHINESE_AUDIT.md:4259` — `- 'packages/shared/src/node-specs-builtin.ts:626' — '{ key: 'once', label: '一次', type: 'boolean', default: true },'`
+- `docs/CHINESE_AUDIT.md:4260` — `- 'packages/shared/src/node-specs-builtin.ts:627' — '{ key: 'debounceMs', label: '防抖(ms)', type: 'number', default: 800 },'`
+- `docs/CHINESE_AUDIT.md:4261` — `- 'packages/shared/src/node-specs-builtin.ts:628' — '{ key: 'enabled', label: '启用', type: 'boolean', default: false },'`
+- `docs/CHINESE_AUDIT.md:4262` — `- 'packages/shared/src/node-specs-builtin.ts:633' — 'label: '定时','`
+- `docs/CHINESE_AUDIT.md:4263` — `- 'packages/shared/src/node-specs-builtin.ts:637' — 'label: '计划','`
+- `docs/CHINESE_AUDIT.md:4264` — `- 'packages/shared/src/node-specs-builtin.ts:643' — 'label: '类型','`
+- `docs/CHINESE_AUDIT.md:4265` — `- 'packages/shared/src/node-specs-builtin.ts:646' — '{ label: '一次', value: 'once' },'`
+- `docs/CHINESE_AUDIT.md:4266` — `- 'packages/shared/src/node-specs-builtin.ts:647' — '{ label: '间隔', value: 'interval' },'`
+- `docs/CHINESE_AUDIT.md:4267` — `- 'packages/shared/src/node-specs-builtin.ts:648' — '{ label: '每日', value: 'daily' },'`
+- `docs/CHINESE_AUDIT.md:4268` — `- 'packages/shared/src/node-specs-builtin.ts:651' — '{ key: 'when', label: '时间(ISO/cron)', type: 'string' },'`
+- `docs/CHINESE_AUDIT.md:4269` — `- 'packages/shared/src/node-specs-builtin.ts:652' — '{ key: 'enabled', label: '启用', type: 'boolean', default: true },'`
 - `docs/ISSUE.md:1` — `# Issues 总览`
 - `docs/ISSUE.md:3` — `## 📊 统计信息`
 - `docs/ISSUE.md:5` — `- **总Issue数**: 183`
