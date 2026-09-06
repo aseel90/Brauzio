@@ -2,8 +2,8 @@
 
 Japanese and Korean Chrome locale files are excluded because they may legitimately contain Han characters.
 
-Remaining CJK-containing source/document lines: **3640**
-Files containing CJK text: **157**
+Remaining CJK-containing source/document lines: **3534**
+Files containing CJK text: **150**
 
 ## Files by hit count
 
@@ -11,7 +11,6 @@ Files containing CJK text: **157**
 - **213** — `app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md`
 - **168** — `app/native-server/install.md`
 - **109** — `prompt/excalidraw-prompt.md`
-- **90** — `docs/UI_CJK_PHRASES.json`
 - **88** — `app/chrome-extension/utils/semantic-similarity-engine.ts`
 - **76** — `app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc-server.ts`
 - **72** — `app/chrome-extension/entrypoints/background/record-replay-v3/storage/import/v2-to-v3.ts`
@@ -72,20 +71,20 @@ Files containing CJK text: **157**
 - **13** — `app/chrome-extension/entrypoints/popup/components/LocalModelPage.vue`
 - **13** — `app/chrome-extension/entrypoints/popup/components/builder/components/PropertyPanel.vue`
 - **13** — `app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/recovery-kernel.ts`
-- **11** — `docs/UI_CHINESE_STRINGS.md`
 - **11** — `app/chrome-extension/entrypoints/background/record-replay-v3/domain/index.ts`
 - **11** — `app/chrome-extension/entrypoints/background/record-replay-v3/storage/runs.ts`
 - **11** — `app/native-server/src/scripts/postinstall.ts`
 - **10** — `app/chrome-extension/inject-scripts/accessibility-tree-helper.js`
 - **9** — `app/chrome-extension/shared/selector/stability.ts`
 - **9** — `app/chrome-extension/entrypoints/popup/App.vue`
-- **9** — `app/chrome-extension/entrypoints/builder/App.vue`
 - **9** — `app/chrome-extension/entrypoints/background/record-replay-v3/storage/events.ts`
 - **9** — `app/chrome-extension/entrypoints/background/record-replay-v3/storage/flows.ts`
 - **9** — `app/chrome-extension/entrypoints/background/record-replay-v3/storage/import/v2-reader.ts`
 - **9** — `app/native-server/src/util/logger.ts`
+- **8** — `docs/UI_CJK_PHRASES.json`
 - **8** — `app/chrome-extension/entrypoints/background/record-replay-v3/domain/json.ts`
 - **7** — `app/chrome-extension/inject-scripts/element-marker.js`
+- **7** — `app/chrome-extension/entrypoints/builder/App.vue`
 - **6** — `app/chrome-extension/utils/vector-database.ts`
 - **6** — `app/chrome-extension/entrypoints/web-editor-v2/core/snap-engine.ts`
 - **6** — `app/chrome-extension/entrypoints/popup/components/builder/store/useBuilderStore.ts`
@@ -101,20 +100,17 @@ Files containing CJK text: **157**
 - **4** — `app/native-server/src/agent/engines/codex.ts`
 - **3** — `app/chrome-extension/inject-scripts/network-helper.js`
 - **3** — `app/chrome-extension/entrypoints/offscreen/main.ts`
-- **3** — `app/chrome-extension/entrypoints/sidepanel/components/SidepanelNavigator.vue`
 - **3** — `app/chrome-extension/entrypoints/popup/components/builder/model/validation.ts`
 - **3** — `app/chrome-extension/entrypoints/background/record-replay-v3/storage/triggers.ts`
 - **3** — `app/chrome-extension/entrypoints/background/record-replay/nodes/download-screenshot-attr-event-frame-loop.ts`
-- **3** — `packages/shared/src/node-specs-builtin.ts`
-- **2** — `README.md`
 - **2** — `app/chrome-extension/inject-scripts/web-fetcher-helper.js`
 - **2** — `app/chrome-extension/shared/selector/strategies/css-path.ts`
 - **2** — `app/chrome-extension/shared/selector/strategies/aria.ts`
 - **2** — `app/chrome-extension/tests/record-replay-v3/rpc-api.test.ts`
 - **2** — `app/chrome-extension/entrypoints/popup/main.ts`
 - **2** — `app/chrome-extension/entrypoints/sidepanel/styles/agent-chat.css`
+- **2** — `app/chrome-extension/entrypoints/sidepanel/components/SidepanelNavigator.vue`
 - **2** — `app/chrome-extension/entrypoints/popup/components/ConfirmDialog.vue`
-- **2** — `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySwitchFrame.vue`
 - **2** — `app/chrome-extension/entrypoints/background/record-replay/index.ts`
 - **2** — `app/chrome-extension/entrypoints/background/web-editor/index.ts`
 - **2** — `app/chrome-extension/entrypoints/background/tools/browser/javascript.ts`
@@ -139,11 +135,8 @@ Files containing CJK text: **157**
 - **1** — `app/chrome-extension/tests/record-replay-v3/v2-to-v3-conversion.test.ts`
 - **1** — `app/chrome-extension/tests/record-replay-v3/url-trigger.test.ts`
 - **1** — `app/chrome-extension/tests/record-replay-v3/spec-smoke.test.ts`
-- **1** — `app/chrome-extension/entrypoints/sidepanel/App.vue`
 - **1** — `app/chrome-extension/entrypoints/popup/components/ProgressIndicator.vue`
-- **1** — `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySetAttribute.vue`
 - **1** — `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyFromSpec.vue`
-- **1** — `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyDrag.vue`
 - **1** — `app/chrome-extension/entrypoints/background/record-replay/legacy-types.ts`
 - **1** — `app/chrome-extension/entrypoints/background/record-replay/selector-engine.ts`
 - **1** — `app/chrome-extension/entrypoints/background/element-marker/index.ts`
@@ -167,8 +160,6 @@ Files containing CJK text: **157**
 
 ## Matching lines
 
-- `README.md:11` — `**📖 Documentation**: [English](README.md) | [中文](README_zh.md)`
-- `README.md:143` — `<img width="494" alt="截屏2025-06-22 22 11 25" src="https://github.com/user-attachments/assets/48eefc0c-a257-4d3b-8bbe-d7ff716de2bf" />`
 - `prompt/modify-web.md:3` — `你是一名顶级的【浏览器自动化与扩展开发专家】。`
 - `prompt/modify-web.md:7` — `- **背景**: 超过10年的前端开发经验，尤其在Chrome/Firefox扩展开发、Content Scripts编写和DOM性能优化方面有深厚造诣。`
 - `prompt/modify-web.md:9` — `- **核心原则**:`
@@ -408,107 +399,14 @@ Files containing CJK text: **157**
 - `releases/README.md:58` — `3. 提交新的 Issue 并附上详细信息`
 - `releases/README.md:60` — `## ⚠️ 安全提醒`
 - `releases/README.md:62` — `- 此扩展具有较高权限，请确保从可信来源下载`
-- `docs/UI_CHINESE_STRINGS.md:5` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySetAttribute.vue:14' — '<label class="form-label">قيمة الخاصية（留فارغ并勾选حذف则移除）</label>'`
-- `docs/UI_CHINESE_STRINGS.md:6` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySwitchFrame.vue:4' — '<label class="form-label">按 URL يحتويمطابقة（优先）</label>'`
-- `docs/UI_CHINESE_STRINGS.md:7` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySwitchFrame.vue:16' — '>同源/可注入 frame 可用；留فارغ则回到顶级الصفحة</div'`
-- `docs/UI_CHINESE_STRINGS.md:8` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyDrag.vue:6' — '<small>ملاحظة: المسار（path）通常在录制时自动生成，يدويإنشاء时可留فارغ。</small>'`
-- `docs/UI_CHINESE_STRINGS.md:9` — `- 'app/chrome-extension/entrypoints/sidepanel/App.vue:611' — 'const confirmed = confirm('هل تريد حذف التحديد "${marker.name}" 吗?');'`
-- `docs/UI_CHINESE_STRINGS.md:10` — `- 'app/chrome-extension/entrypoints/sidepanel/components/SidepanelNavigator.vue:15' — 'title="تبديل الصفحة（可سحب وإفلات移动，نقر مزدوج重置位置）"'`
-- `docs/UI_CHINESE_STRINGS.md:11` — `- 'app/chrome-extension/entrypoints/builder/App.vue:634' — ''العقدة ${n.id} 的جدولة #${i + 1}: V3 暂不支持مرة واحدة性جدولة（once），تم التخطي','`
-- `docs/UI_CHINESE_STRINGS.md:12` — `- 'app/chrome-extension/entrypoints/builder/App.vue:639' — ''العقدة ${n.id} 的جدولة #${i + 1}: تعذر التحويل إلى cron（type=${scheduleType}），تم التخطي','`
-- `docs/UI_CHINESE_STRINGS.md:13` — `- 'packages/shared/src/node-specs-builtin.ts:370' — '{ key: 'filenameContains', label: '文件名يحتوي', type: 'string' },'`
-- `docs/UI_CHINESE_STRINGS.md:14` — `- 'packages/shared/src/node-specs-builtin.ts:626' — '{ key: 'once', label: '一次', type: 'boolean', default: true },'`
-- `docs/UI_CHINESE_STRINGS.md:15` — `- 'packages/shared/src/node-specs-builtin.ts:646' — '{ label: '一次', value: 'once' },'`
-- `docs/UI_CJK_PHRASES.json:3` — `"source": "إدخال值",`
-- `docs/UI_CJK_PHRASES.json:9` — `"source": "اختيارأو新建التدفق الفرعي",`
-- `docs/UI_CJK_PHRASES.json:17` — `"source": "استيرادفشل：غير موجودسير العمل数据",`
-- `docs/UI_CJK_PHRASES.json:23` — `"source": "اسم المتغير，例如 shot",`
-- `docs/UI_CJK_PHRASES.json:29` — `"source": "الخاصية值",`
-- `docs/UI_CJK_PHRASES.json:35` — `"source": "الخاصية值（留空并勾选حذف则移除）",`
-- `docs/UI_CJK_PHRASES.json:41` — `"source": "الخاصية名",`
-- `docs/UI_CJK_PHRASES.json:47` — `"source": "العقدة ${n.id} 的جدولة #${i + 1}: V3 暂不支持مرة واحدة性جدولة（once），تم跳过",`
-- `docs/UI_CJK_PHRASES.json:53` — `"source": "العقدة ${n.id} 的جدولة #${i + 1}: تعذر转换为 cron（type=${scheduleType}），تم跳过",`
-- `docs/UI_CJK_PHRASES.json:59` — `"source": "العنوان包含（اختياري）",`
-- `docs/UI_CJK_PHRASES.json:65` — `"source": "المحدد值",`
-- `docs/UI_CJK_PHRASES.json:71` — `"source": "النتيجة字段映射",`
-- `docs/UI_CJK_PHRASES.json:77` — `"source": "النطاق包含",`
-- `docs/UI_CJK_PHRASES.json:83` — `"source": "انتظار下载完成",`
-- `docs/UI_CJK_PHRASES.json:89` — `"source": "تحديدات （共 {{ markers.length }} 个，{{ groupedMarkers.length }} نطاقات）",`
-- `docs/UI_CJK_PHRASES.json:95` — `"source": "تشغيل中",`
-- `docs/UI_CJK_PHRASES.json:101` — `"source": "تشغيل时机",`
-- `docs/UI_CJK_PHRASES.json:107` — `"source": "تشغيل环境",`
-- `docs/UI_CJK_PHRASES.json:113` — `"source": "تكرار项اسم المتغير",`
-- `docs/UI_CJK_PHRASES.json:120` — `"source": "تمرير到العنصر",`
-- `docs/UI_CJK_PHRASES.json:126` — `"source": "تم取消",`
-- `docs/UI_CJK_PHRASES.json:132` — `"source": "تم应用回退建议：提升 {{ fallbackNotice.type }} الأولوية",`
-- `docs/UI_CJK_PHRASES.json:138` — `"source": "تم暂停",`
-- `docs/UI_CJK_PHRASES.json:144` — `"source": "توضيح: مشغّل会在حفظسير العمل时同步到后台触发表（URL/右键/اختصار لوحة المفاتيح/DOM）和جدول任务（间隔/يوميًا/مرة واحدة）。",`
-- `docs/UI_CJK_PHRASES.json:150` — `"source": "حاويةيجب支持 scrollTo(top,left)",`
-- `docs/UI_CJK_PHRASES.json:156` — `"source": "حفظ为المتغير",`
-- `docs/UI_CJK_PHRASES.json:163` — `"source": "حفظ为المتغير（اختياري）",`
-- `docs/UI_CJK_PHRASES.json:169` — `"source": "حفظ到المتغير",`
-- `docs/UI_CJK_PHRASES.json:175` — `"source": "سير العمل \"${q.flowId}\" غير موجود，تمإنشاء新سير العمل",`
-- `docs/UI_CJK_PHRASES.json:181` — `"source": "سير العملتعديل器",`
-- `docs/UI_CJK_PHRASES.json:188` — `"source": "سير العمل可视化编排",`
-- `docs/UI_CJK_PHRASES.json:194` — `"source": "غير موجودالعقدة规范",`
-- `docs/UI_CJK_PHRASES.json:200` — `"source": "غير موجودمطابقة的تحديد",`
-- `docs/UI_CJK_PHRASES.json:206` — `"source": "فشل策略",`
-- `docs/UI_CJK_PHRASES.json:212` — `"source": "ملاحظة: Chrome 扩展اختصار لوحة المفاتيحيحتاج在 manifest 里固定声明，تعذرتشغيل时动态إضافة。",`
-- `docs/UI_CJK_PHRASES.json:218` — `"source": "ملاحظة: المسار（path）通常在录制时自动生成，يدويإنشاء时可留空。",`
-- `docs/UI_CJK_PHRASES.json:224` — `"source": "例如 https://example.com/app",`
-- `docs/UI_CJK_PHRASES.json:230` — `"source": "例如 run_quick_trigger_1",`
-- `docs/UI_CJK_PHRASES.json:236` — `"source": "例如: 登录按钮",`
-- `docs/UI_CJK_PHRASES.json:242` — `"source": "共",`
-- `docs/UI_CJK_PHRASES.json:248` — `"source": "关闭标签",`
-- `docs/UI_CJK_PHRASES.json:254` — `"source": "内联تشغيل（共享上下文المتغير）",`
-- `docs/UI_CJK_PHRASES.json:260` — `"source": "冒泡",`
-- `docs/UI_CJK_PHRASES.json:266` — `"source": "切换الصفحة",`
-- `docs/UI_CJK_PHRASES.json:272` — `"source": "切换الصفحة（可سحب وإفلات移动，双击重置位置）",`
-- `docs/UI_CJK_PHRASES.json:278` — `"source": "切换标签",`
-- `docs/UI_CJK_PHRASES.json:284` — `"source": "列表اسم المتغير",`
-- `docs/UI_CJK_PHRASES.json:290` — `"source": "列表المتغير",`
-- `docs/UI_CJK_PHRASES.json:296` — `"source": "删",`
-- `docs/UI_CJK_PHRASES.json:302` — `"source": "双击",`
-- `docs/UI_CJK_PHRASES.json:308` — `"source": "取消",`
-- `docs/UI_CJK_PHRASES.json:314` — `"source": "可取消",`
-- `docs/UI_CJK_PHRASES.json:320` — `"source": "同源/可注入 frame 可用；留空则回到顶级الصفحة",`
-- `docs/UI_CJK_PHRASES.json:326` — `"source": "命令键（يجب预先在 manifest commands 中声明）",`
-- `docs/UI_CJK_PHRASES.json:332` — `"source": "回放فشل",`
-- `docs/UI_CJK_PHRASES.json:338` — `"source": "如 Backspace Enter أو cmd+a",`
-- `docs/UI_CJK_PHRASES.json:344` — `"source": "如 input/change/mouseover",`
-- `docs/UI_CJK_PHRASES.json:350` — `"source": "如 value/src/disabled 等",`
-- `docs/UI_CJK_PHRASES.json:356` — `"source": "子串مطابقة",`
-- `docs/UI_CJK_PHRASES.json:362` — `"source": "子串مطابقة URL",`
-- `docs/UI_CJK_PHRASES.json:368` — `"source": "子串مطابقة文件名أوURL",`
-- `docs/UI_CJK_PHRASES.json:374` — `"source": "打开标签",`
-- `docs/UI_CJK_PHRASES.json:380` — `"source": "按 URL 关闭（اختياري）",`
-- `docs/UI_CJK_PHRASES.json:386` — `"source": "按 URL 包含مطابقة（优先）",`
-- `docs/UI_CJK_PHRASES.json:392` — `"source": "按索引مطابقة（从 0 起，仅子 frame）",`
-- `docs/UI_CJK_PHRASES.json:398` — `"source": "插入المتغير",`
-- `docs/UI_CJK_PHRASES.json:404` — `"source": "搜索تحديدالاسم、المحدد...",`
-- `docs/UI_CJK_PHRASES.json:410` — `"source": "支持 {اسم المتغير} 格式",`
-- `docs/UI_CJK_PHRASES.json:416` — `"source": "支持简洁数组形式：[[\"file\",\"url:https://...\",\"a.png\"],[\"metadata\",\"value\"]]",`
-- `docs/UI_CJK_PHRASES.json:422` — `"source": "文件名包含（اختياري）",`
-- `docs/UI_CJK_PHRASES.json:428` — `"source": "新建التدفق الفرعي",`
-- `docs/UI_CJK_PHRASES.json:436` — `"source": "新建سير العمل",`
-- `docs/UI_CJK_PHRASES.json:442` — `"source": "是否切换到该项目？\\n\\n",`
-- `docs/UI_CJK_PHRASES.json:448` — `"source": "暂无تحديدالعنصر",`
-- `docs/UI_CJK_PHRASES.json:454` — `"source": "最大迭代次数（اختياري）",`
-- `docs/UI_CJK_PHRASES.json:460` — `"source": "清除搜索",`
-- `docs/UI_CJK_PHRASES.json:466` — `"source": "目录 \"${validation.absolute}\" تم存在对应的项目：${existingProject.name}\\n\\n",`
-- `docs/UI_CJK_PHRASES.json:472` — `"source": "目录 \"${validation.absolute}\" 不存在，是否إنشاء？\\n\\nThe directory \"${validation.absolute}\" does not exist. Create it?",`
-- `docs/UI_CJK_PHRASES.json:478` — `"source": "确定要حذفتحديد \"${marker.name}\" 吗?",`
-- `docs/UI_CJK_PHRASES.json:484` — `"source": "确认حذف该سير العمل？此操作不可恢复",`
-- `docs/UI_CJK_PHRASES.json:490` — `"source": "窗口إزاحة",`
-- `docs/UI_CJK_PHRASES.json:496` — `"source": "筛选出",`
-- `docs/UI_CJK_PHRASES.json:502` — `"source": "自定义 JS（رجوع值）",`
-- `docs/UI_CJK_PHRASES.json:508` — `"source": "菜单العنوان",`
-- `docs/UI_CJK_PHRASES.json:514` — `"source": "该العقدة尚未توفير NodeSpec，تم回退到افتراضيالخاصية面板。",`
-- `docs/UI_CJK_PHRASES.json:520` — `"source": "说明此مشغّل的用途",`
-- `docs/UI_CJK_PHRASES.json:526` — `"source": "请اختيار",`
-- `docs/UI_CJK_PHRASES.json:532` — `"source": "超时(ms)",`
-- `docs/UI_CJK_PHRASES.json:538` — `"source": "配置",`
-- `docs/UI_CJK_PHRASES.json:544` — `"source": "重命名سير العمل",`
+- `docs/UI_CJK_PHRASES.json:3` — `"source": "العقدة ${n.id} 的جدولة #${i + 1}: V3 暂不支持مرة واحدة性جدولة（once），تم التخطي",`
+- `docs/UI_CJK_PHRASES.json:9` — `"source": "العقدة ${n.id} 的جدولة #${i + 1}: تعذر التحويل إلى cron（type=${scheduleType}），تم التخطي",`
+- `docs/UI_CJK_PHRASES.json:15` — `"source": "تبديل الصفحة（可سحب وإفلات移动，نقر مزدوج重置位置）",`
+- `docs/UI_CJK_PHRASES.json:21` — `"source": "قيمة الخاصية（留فارغ并勾选حذف则移除）",`
+- `docs/UI_CJK_PHRASES.json:27` — `"source": "ملاحظة: المسار（path）通常在录制时自动生成，يدويإنشاء时可留فارغ。",`
+- `docs/UI_CJK_PHRASES.json:33` — `"source": "هل تريد حذف التحديد \"${marker.name}\" 吗?",`
+- `docs/UI_CJK_PHRASES.json:39` — `"source": "同源/可注入 frame 可用；留فارغ则回到顶级الصفحة",`
+- `docs/UI_CJK_PHRASES.json:45` — `"source": "按 URL يحتويمطابقة（优先）",`
 - `docs/ISSUE.md:1` — `# Issues 总览`
 - `docs/ISSUE.md:3` — `## 📊 统计信息`
 - `docs/ISSUE.md:5` — `- **总Issue数**: 183`
@@ -1887,7 +1785,6 @@ Files containing CJK text: **157**
 - `app/chrome-extension/tests/record-replay-v3/e2e.integration.test.ts:387` — `// 队列应该为空`
 - `app/chrome-extension/tests/record-replay-v3/url-trigger.test.ts:2` — `* @fileoverview URL Trigger Handler 测试 (P4-03)`
 - `app/chrome-extension/tests/record-replay-v3/spec-smoke.test.ts:3` — `* @description 验证 V3 类型定义和常量可正常导入使用`
-- `app/chrome-extension/entrypoints/sidepanel/App.vue:611` — `const confirmed = confirm('هل تريد حذف التحديد "${marker.name}" 吗?');`
 - `app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:1` — `# Property Panel UI 重构计划`
 - `app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:3` — `## 背景`
 - `app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:5` — `当前属性面板的 UI 实现与设计稿 'attr-ui.html' 存在较大差异。本文档详细规划了重构任务，按照优先级从高到低排列，目标是让属性面板的视觉效果和交互体验与设计稿一致。`
@@ -2137,8 +2034,6 @@ Files containing CJK text: **157**
 - `app/chrome-extension/entrypoints/builder/App.vue:558` — `// V3 cron 不支持 'once' مرة واحدة性جدولة`
 - `app/chrome-extension/entrypoints/builder/App.vue:563` — `* 从 trigger العقدةالإعداد同步مشغّل到 V3 存储`
 - `app/chrome-extension/entrypoints/builder/App.vue:564` — `* @description V2 schedules 会转换为 V3 cron triggers`
-- `app/chrome-extension/entrypoints/builder/App.vue:634` — `'العقدة ${n.id} 的جدولة #${i + 1}: V3 暂不支持مرة واحدة性جدولة（once），تم التخطي',`
-- `app/chrome-extension/entrypoints/builder/App.vue:639` — `'العقدة ${n.id} 的جدولة #${i + 1}: تعذر التحويل إلى cron（type=${scheduleType}），تم التخطي',`
 - `app/chrome-extension/entrypoints/offscreen/main.ts:11` — `// 初始化 RR V3 Keepalive`
 - `app/chrome-extension/entrypoints/offscreen/main.ts:290` — `resolve(); // 不阻塞其他数据库的清理`
 - `app/chrome-extension/entrypoints/offscreen/main.ts:294` — `resolve(); // 不阻塞其他数据库的清理`
@@ -2171,7 +2066,6 @@ Files containing CJK text: **157**
 - `app/chrome-extension/entrypoints/sidepanel/styles/agent-chat.css:699` — `/* 文案 shimmer 渐变动画 - 光从左到右扫过效果 */`
 - `app/chrome-extension/entrypoints/sidepanel/styles/agent-chat.css:728` — `/* 螺旋图标 - 笔迹重绘动画 */`
 - `app/chrome-extension/entrypoints/sidepanel/components/SidepanelNavigator.vue:8` — `<!-- 触发按钮（同时作为سحب وإفلات手柄） -->`
-- `app/chrome-extension/entrypoints/sidepanel/components/SidepanelNavigator.vue:15` — `title="تبديل الصفحة（可سحب وإفلات移动，نقر مزدوج重置位置）"`
 - `app/chrome-extension/entrypoints/sidepanel/components/SidepanelNavigator.vue:30` — `<!-- 浮层菜单 -->`
 - `app/chrome-extension/entrypoints/sidepanel/components/agent-chat/timeline/TimelineStatusStep.vue:3` — `<!-- 螺旋动画图标（仅 running/starting الحالة显示，且未被父组件隐藏时） -->`
 - `app/chrome-extension/entrypoints/sidepanel/components/agent-chat/timeline/TimelineStatusStep.vue:18` — `<!-- shimmer 文案（running الحالة）أو普通文案 -->`
@@ -2317,11 +2211,7 @@ Files containing CJK text: **157**
 - `app/chrome-extension/entrypoints/popup/components/builder/components/Canvas.vue:356` — `/* 图标颜色方案 - 参考图片风格 */`
 - `app/chrome-extension/entrypoints/popup/components/builder/components/Canvas.vue:450` — `/* العقدة主体 */`
 - `app/chrome-extension/entrypoints/popup/components/builder/components/Canvas.vue:523` — `/* 背景网格 */`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySetAttribute.vue:14` — `<label class="form-label">قيمة الخاصية（留فارغ并勾选حذف则移除）</label>`
 - `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyFromSpec.vue:7` — `<!-- 将通用字段留给外层 PropertyPanel 渲染（timeoutMs/screenshotOnFail等） -->`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySwitchFrame.vue:4` — `<label class="form-label">按 URL يحتويمطابقة（优先）</label>`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySwitchFrame.vue:16` — `>同源/可注入 frame 可用；留فارغ则回到顶级الصفحة</div`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyDrag.vue:6` — `<small>ملاحظة: المسار（path）通常在录制时自动生成，يدويإنشاء时可留فارغ。</small>`
 - `app/chrome-extension/entrypoints/background/record-replay-v3/index.ts:2` — `* @fileoverview Record-Replay V3 公共 API 入口`
 - `app/chrome-extension/entrypoints/background/record-replay-v3/index.ts:3` — `* @description 导出所有公共类型和接口`
 - `app/chrome-extension/entrypoints/background/record-replay-v3/index.ts:26` — `* 创建完整的 StoragePort 实现`
@@ -3804,6 +3694,3 @@ Files containing CJK text: **157**
 - `packages/wasm-simd/BUILD.md:62` — `3. Chrome 扩展会自动使用新的 WASM 文件`
 - `packages/wasm-simd/BUILD.md:64` — `## 📊 性能测试`
 - `packages/wasm-simd/BUILD.md:67` — `# 在 Chrome 扩展中运行基准测试`
-- `packages/shared/src/node-specs-builtin.ts:370` — `{ key: 'filenameContains', label: '文件名يحتوي', type: 'string' },`
-- `packages/shared/src/node-specs-builtin.ts:626` — `{ key: 'once', label: '一次', type: 'boolean', default: true },`
-- `packages/shared/src/node-specs-builtin.ts:646` — `{ label: '一次', value: 'once' },`
