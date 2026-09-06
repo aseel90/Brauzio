@@ -258,14 +258,14 @@ async function handleAuthorize(request: Request, env: Env): Promise<Response> {
   return Response.redirect(redirectTo, 302);
 }
 
-const mcpApiHandler: ExportedHandler<Env> = {
-  async fetch(request, env, ctx) {
+const mcpApiHandler = {
+  async fetch(request: Request, env: Env, ctx: ExecutionContext) {
     return createMcpHandler(() => createServer(env), {
       route: '/mcp',
       legacy: 'stateless',
     })(request, env, ctx);
   },
-};
+} satisfies ExportedHandler<Env>;
 
 const defaultHandler: ExportedHandler<Env> = {
   async fetch(request: Request, env: Env): Promise<Response> {
