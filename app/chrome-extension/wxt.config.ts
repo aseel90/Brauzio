@@ -7,7 +7,6 @@ config({ path: resolve(process.cwd(), '.env') });
 config({ path: resolve(process.cwd(), '.env.local') });
 
 const CHROME_EXTENSION_KEY = process.env.CHROME_EXTENSION_KEY;
-const IS_DEV = process.env.NODE_ENV !== 'production' && process.env.MODE !== 'production';
 
 export default defineConfig({
   modules: ['@wxt-dev/module-vue'],
@@ -52,27 +51,16 @@ export default defineConfig({
     },
     web_accessible_resources: [
       {
-        resources: ['/workers/*', '/inject-scripts/*'],
+        resources: ['/inject-scripts/*'],
         matches: ['<all_urls>'],
       },
     ],
-    ...(IS_DEV
-      ? {}
-      : {
-          cross_origin_embedder_policy: { value: 'require-corp' as const },
-          cross_origin_opener_policy: { value: 'same-origin' as const },
-          content_security_policy: {
-            extension_pages:
-              "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:;",
-          },
-        }),
   },
   vite: (env) => ({
     plugins: [
       viteStaticCopy({
         targets: [
           { src: 'inject-scripts/*.js', dest: 'inject-scripts' },
-          { src: ['workers/*'], dest: 'workers' },
           { src: '_locales/**/*', dest: '_locales' },
         ],
         hook: 'buildStart',
