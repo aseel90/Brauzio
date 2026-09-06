@@ -4,99 +4,45 @@
     <div v-show="currentView === 'home'" class="home-view">
       <div class="header">
         <div class="header-content">
-          <h1 class="header-title">Chrome MCP Server</h1>
+          <h1 class="header-title">Brauzio</h1>
         </div>
       </div>
       <div class="content">
-        <!-- 服务配置卡片 -->
+        <!-- اتصال Brauzio Cloud -->
         <div class="section">
-          <h2 class="section-title">{{ getMessage('nativeServerConfigLabel') }}</h2>
-          <div class="config-card">
-            <div class="status-section">
-              <div class="status-header">
-                <p class="status-label">{{ getMessage('runningStatusLabel') }}</p>
-                <button
-                  class="refresh-status-button"
-                  @click="refreshServerStatus"
-                  :title="getMessage('refreshStatusButton')"
-                >
-                  <RefreshIcon className="icon-small" />
-                </button>
-              </div>
-              <div class="status-info">
-                <span :class="['status-dot', getStatusClass()]"></span>
-                <span class="status-text">{{ getStatusText() }}</span>
-              </div>
-              <div v-if="serverStatus.lastUpdated" class="status-timestamp">
-                {{ getMessage('lastUpdatedLabel') }}
-                {{ new Date(serverStatus.lastUpdated).toLocaleTimeString() }}
-              </div>
-            </div>
-
-            <div v-if="showMcpConfig" class="mcp-config-section">
-              <div class="mcp-config-header">
-                <p class="mcp-config-label">{{ getMessage('mcpServerConfigLabel') }}</p>
-                <button class="copy-config-button" @click="copyMcpConfig">
-                  {{ copyButtonText }}
-                </button>
-              </div>
-              <div class="mcp-config-content">
-                <pre class="mcp-config-json">{{ mcpConfigJson }}</pre>
-              </div>
-            </div>
-            <div class="port-section">
-              <label for="port" class="port-label">{{ getMessage('connectionPortLabel') }}</label>
-              <input
-                type="text"
-                id="port"
-                :value="nativeServerPort"
-                @input="updatePort"
-                class="port-input"
-              />
-            </div>
-
-            <button class="connect-button" :disabled="isConnecting" @click="testNativeConnection">
-              <BoltIcon />
-              <span>{{
-                isConnecting
-                  ? getMessage('connectingStatus')
-                  : nativeConnectionStatus === 'connected'
-                    ? getMessage('disconnectButton')
-                    : getMessage('connectButton')
-              }}</span>
-            </button>
-          </div>
+          <RemoteConnectionCard />
         </div>
 
-        <!-- 快捷工具卡片 -->
+        <!-- الأدوات السريعة -->
+
         <div class="section">
-          <h2 class="section-title">快捷工具</h2>
+          <h2 class="section-title">الأدوات السريعة</h2>
           <div class="rr-icon-buttons">
             <button
               class="rr-icon-btn rr-icon-btn-record rr-icon-btn-coming-soon has-tooltip"
               @click="startRecording"
-              data-tooltip="录制功能开发中"
+              data-tooltip="ميزة التسجيل قيد التطوير"
             >
               <RecordIcon :recording="false" />
             </button>
             <button
               class="rr-icon-btn rr-icon-btn-stop rr-icon-btn-coming-soon has-tooltip"
               @click="stopRecording"
-              data-tooltip="录制功能开发中"
+              data-tooltip="ميزة التسجيل قيد التطوير"
             >
               <StopIcon />
             </button>
             <button
               class="rr-icon-btn rr-icon-btn-edit has-tooltip"
               @click="toggleWebEditor"
-              data-tooltip="开启页面编辑模式"
+              data-tooltip="تشغيل وضع تحرير الصفحة"
             >
               <EditIcon />
             </button>
             <button
               class="rr-icon-btn rr-icon-btn-marker has-tooltip"
               @click="toggleElementMarker"
-              data-tooltip="开启元素标注"
+              data-tooltip="تشغيل تحديد العناصر"
             >
               <MarkerIcon />
             </button>
@@ -105,7 +51,7 @@
 
         <!-- 管理入口卡片 -->
         <div class="section">
-          <h2 class="section-title">管理入口</h2>
+          <h2 class="section-title">الإدارة</h2>
           <div class="entry-card">
             <button class="entry-item" @click="openAgentSidepanel">
               <div class="entry-icon agent">
@@ -125,8 +71,8 @@
                 </svg>
               </div>
               <div class="entry-content">
-                <span class="entry-title">智能助手</span>
-                <span class="entry-desc">AI Agent 对话与任务</span>
+                <span class="entry-title">المساعد الذكي</span>
+                <span class="entry-desc">محادثات ومهام وكيل الذكاء الاصطناعي</span>
               </div>
               <svg
                 class="entry-arrow"
@@ -146,10 +92,10 @@
               </div>
               <div class="entry-content">
                 <span class="entry-title">
-                  工作流管理
-                  <span class="coming-soon-badge">Coming Soon</span>
+                  إدارة سير العمل
+                  <span class="coming-soon-badge">قريبًا</span>
                 </span>
-                <span class="entry-desc">录制与回放自动化流程</span>
+                <span class="entry-desc">تسجيل وتشغيل مهام الأتمتة</span>
               </div>
               <svg
                 class="entry-arrow"
@@ -181,8 +127,8 @@
                 </svg>
               </div>
               <div class="entry-content">
-                <span class="entry-title">元素标注管理</span>
-                <span class="entry-desc">管理页面元素标注</span>
+                <span class="entry-title">إدارة تحديد العناصر</span>
+                <span class="entry-desc">إدارة العناصر المحددة داخل الصفحات</span>
               </div>
               <svg
                 class="entry-arrow"
@@ -214,8 +160,8 @@
                 </svg>
               </div>
               <div class="entry-content">
-                <span class="entry-title">本地模型</span>
-                <span class="entry-desc">语义引擎与模型管理</span>
+                <span class="entry-title">النموذج المحلي</span>
+                <span class="entry-desc">إدارة المحرك الدلالي والنماذج</span>
               </div>
               <svg
                 class="entry-arrow"
@@ -258,7 +204,7 @@
             Docs
           </button>
         </div>
-        <p class="footer-text">chrome mcp server for ai</p>
+        <p class="footer-text">Brauzio — تحكم ذكي بالمتصفح عبر MCP</p>
       </div>
     </div>
 
@@ -325,7 +271,7 @@
           <circle cx="12" cy="12" r="10" />
           <path d="M12 6v6l4 2" stroke-linecap="round" stroke-linejoin="round" />
         </svg>
-        <span>{{ comingSoonToast.feature }} 功能开发中，敬请期待</span>
+        <span>{{ comingSoonToast.feature }} — الميزة قيد التطوير وستتوفر قريبًا</span>
       </div>
     </Transition>
   </div>
@@ -350,6 +296,7 @@ import ConfirmDialog from './components/ConfirmDialog.vue';
 import ProgressIndicator from './components/ProgressIndicator.vue';
 import ModelCacheManagement from './components/ModelCacheManagement.vue';
 import LocalModelPage from './components/LocalModelPage.vue';
+import RemoteConnectionCard from './components/RemoteConnectionCard.vue';
 import {
   DocumentIcon,
   DatabaseIcon,
@@ -433,7 +380,7 @@ function isFlowBoundToCurrent(flow: any) {
 // 运行记录与覆盖项在侧边栏页面查看
 const startRecording = async () => {
   // TODO: 录制回放功能开发中，暂时拦截
-  showComingSoonToast('录制回放');
+  showComingSoonToast('التسجيل وإعادة التشغيل');
   return;
   // if (rrRecording.value) return;
   // try {
@@ -450,7 +397,7 @@ const startRecording = async () => {
 
 const stopRecording = async () => {
   // TODO: 录制回放功能开发中，暂时拦截
-  showComingSoonToast('录制回放');
+  showComingSoonToast('التسجيل وإعادة التشغيل');
   return;
   // if (!rrRecording.value) return;
   // try {
@@ -635,7 +582,7 @@ async function openSidepanelAndClose(tab: string) {
 // Open sidepanel from popup for workflow management
 function openWorkflowSidepanel() {
   // TODO: 工作流功能开发中，暂时拦截
-  showComingSoonToast('工作流管理');
+  showComingSoonToast('إدارة سير العمل');
   // openSidepanelAndClose('workflows');
 }
 
@@ -1515,10 +1462,7 @@ const setupServerStatusListener = () => {
 onMounted(async () => {
   // 初始化主题
   await initTheme();
-  await loadPortPreference();
   await loadModelPreference();
-  await checkNativeConnection();
-  await checkServerStatus();
   await refreshStorageStats();
   await loadCacheStats();
   await loadFlows();
