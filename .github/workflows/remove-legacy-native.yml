@@ -1,0 +1,48 @@
+name: Remove legacy native server
+
+on:
+  push:
+    paths:
+      - '.github/workflows/remove-legacy-native.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  remove-native:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 8.15.9
+
+      - name: Remove legacy Node native server
+        shell: bash
+        run: rm -rf app/native-server
+
+      - name: Refresh lockfile for Brauzio workspace
+        run: pnpm install --lockfile-only --ignore-scripts --no-frozen-lockfile
+
+      - name: Commit native removal
+        shell: bash
+        run: |
+          git add -A app/native-server pnpm-lock.yaml
+          if git diff --cached --quiet; then
+            echo "Legacy native server already removed."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "refactor: remove legacy Node native server"
+          git fetch origin main
+          git rebase origin/main
+          git push origin HEAD:main
