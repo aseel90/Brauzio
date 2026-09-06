@@ -93,4 +93,5 @@ jobs:
             exit 0
           fi
           git commit -m 'cleanup: finalize Brauzio V2 legacy removal [skip ci]'
+          git pull --rebase origin main
           git push
