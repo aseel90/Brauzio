@@ -12,7 +12,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   build:
@@ -107,3 +107,26 @@ jobs:
           path: app/chrome-extension/.output/brauzio-chrome.zip
           if-no-files-found: error
           retention-days: 30
+
+      - name: Publish stable latest ZIP
+        if: github.ref == 'refs/heads/main'
+        shell: bash
+        run: |
+          set -euo pipefail
+          DEST_DIR='releases/chrome-extension/latest'
+          DEST_ZIP="$DEST_DIR/brauzio-chrome-latest.zip"
+          mkdir -p "$DEST_DIR"
+          rm -f "$DEST_DIR/chrome-mcp-server-lastest.zip"
+          cp app/chrome-extension/.output/brauzio-chrome.zip "$DEST_ZIP"
+
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add "$DEST_DIR"
+
+          if git diff --cached --quiet; then
+            echo 'Published ZIP is already current.'
+            exit 0
+          fi
+
+          git commit -m 'build: publish latest Brauzio Chrome extension [skip ci]'
+          git push
