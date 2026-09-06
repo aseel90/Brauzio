@@ -14,8 +14,7 @@
     "lint": "npx eslint .",
     "lint:fix": "npx eslint . --fix",
     "format": "npx prettier --write .",
-    "format:check": "npx prettier --check .",
-    "test": "vitest run"
+    "format:check": "npx prettier --check ."
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.11.0",
@@ -28,9 +27,7 @@
     "@types/chrome": "^0.0.318",
     "@wxt-dev/module-vue": "^1.0.2",
     "dotenv": "^16.5.0",
-    "jsdom": "^26.0.0",
     "vite-plugin-static-copy": "^3.0.0",
-    "vitest": "^2.1.8",
     "vue-tsc": "^2.2.8",
     "wxt": "^0.20.0"
   }

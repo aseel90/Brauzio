@@ -1,17 +1,6 @@
-import { createErrorResponse, ToolResult } from '@/common/tool-handler';
+import { createErrorResponse, type ToolResult } from '@/common/tool-handler';
 import { BaseBrowserToolExecutor } from '../base-browser';
 import { TOOL_NAMES } from 'brauzio-shared';
-import {
-  parseISO,
-  subDays,
-  subWeeks,
-  subMonths,
-  subYears,
-  startOfToday,
-  startOfYesterday,
-  isValid,
-  format,
-} from 'date-fns';
 
 interface HistoryToolParams {
   text?: string;
@@ -21,176 +10,69 @@ interface HistoryToolParams {
   excludeCurrentTabs?: boolean;
 }
 
-interface HistoryItem {
-  id: string;
-  url?: string;
-  title?: string;
-  lastVisitTime?: number; // Timestamp in milliseconds
-  visitCount?: number;
-  typedCount?: number;
-}
-
-interface HistoryResult {
-  items: HistoryItem[];
-  totalCount: number;
-  timeRange: {
-    startTime: number;
-    endTime: number;
-    startTimeFormatted: string;
-    endTimeFormatted: string;
-  };
-  query?: string;
-}
-
 class HistoryTool extends BaseBrowserToolExecutor {
   name = TOOL_NAMES.BROWSER.HISTORY;
-  private static readonly ONE_DAY_MS = 24 * 60 * 60 * 1000;
+  private static readonly DAY_MS = 24 * 60 * 60 * 1000;
 
-  /**
-   * Parse a date string into milliseconds since epoch.
-   * Returns null if the date string is invalid.
-   * Supports:
-   *  - ISO date strings (e.g., "2023-10-31", "2023-10-31T14:30:00.000Z")
-   *  - Relative times: "1 day ago", "2 weeks ago", "3 months ago", "1 year ago"
-   *  - Special keywords: "now", "today", "yesterday"
-   */
-  private parseDateString(dateStr: string | undefined | null): number | null {
-    if (!dateStr) {
-      // If an empty or null string is passed, it might mean "no specific date",
-      // depending on how you want to treat it. Returning null is safer.
-      return null;
-    }
-
-    const now = new Date();
-    const lowerDateStr = dateStr.toLowerCase().trim();
-
-    if (lowerDateStr === 'now') return now.getTime();
-    if (lowerDateStr === 'today') return startOfToday().getTime();
-    if (lowerDateStr === 'yesterday') return startOfYesterday().getTime();
-
-    const relativeMatch = lowerDateStr.match(
-      /^(\d+)\s+(day|days|week|weeks|month|months|year|years)\s+ago$/,
-    );
-    if (relativeMatch) {
-      const amount = parseInt(relativeMatch[1], 10);
-      const unit = relativeMatch[2];
-      let resultDate: Date;
-      if (unit.startsWith('day')) resultDate = subDays(now, amount);
-      else if (unit.startsWith('week')) resultDate = subWeeks(now, amount);
-      else if (unit.startsWith('month')) resultDate = subMonths(now, amount);
-      else if (unit.startsWith('year')) resultDate = subYears(now, amount);
-      else return null; // Should not happen with the regex
-      return resultDate.getTime();
-    }
-
-    // Try parsing as ISO or other common date string formats
-    // Native Date constructor can be unreliable for non-standard formats.
-    // date-fns' parseISO is good for ISO 8601.
-    // For other formats, date-fns' parse function is more flexible.
-    let parsedDate = parseISO(dateStr); // Handles "2023-10-31" or "2023-10-31T10:00:00"
-    if (isValid(parsedDate)) {
-      return parsedDate.getTime();
-    }
-
-    // Fallback to new Date() for other potential formats, but with caution
-    parsedDate = new Date(dateStr);
-    if (isValid(parsedDate) && dateStr.includes(parsedDate.getFullYear().toString())) {
-      return parsedDate.getTime();
-    }
-
-    console.warn(`Could not parse date string: ${dateStr}`);
-    return null;
+  private startOfDay(offsetDays = 0): number {
+    const d = new Date();
+    d.setHours(0, 0, 0, 0);
+    d.setDate(d.getDate() + offsetDays);
+    return d.getTime();
   }
 
-  /**
-   * Format a timestamp as a human-readable date string
-   */
+  private parseDateString(value?: string): number | null {
+    if (!value) return null;
+    const input = value.trim();
+    const lower = input.toLowerCase();
+    if (lower === 'now') return Date.now();
+    if (lower === 'today') return this.startOfDay(0);
+    if (lower === 'yesterday') return this.startOfDay(-1);
+
+    const relative = lower.match(/^(\d+)\s+(day|days|week|weeks|month|months|year|years)\s+ago$/);
+    if (relative) {
+      const amount = Number(relative[1]);
+      const unit = relative[2];
+      const d = new Date();
+      if (unit.startsWith('day')) d.setDate(d.getDate() - amount);
+      else if (unit.startsWith('week')) d.setDate(d.getDate() - amount * 7);
+      else if (unit.startsWith('month')) d.setMonth(d.getMonth() - amount);
+      else d.setFullYear(d.getFullYear() - amount);
+      return d.getTime();
+    }
+
+    const parsed = new Date(input);
+    const timestamp = parsed.getTime();
+    return Number.isFinite(timestamp) ? timestamp : null;
+  }
+
   private formatDate(timestamp: number): string {
-    // Using date-fns for consistent and potentially localized formatting
-    return format(timestamp, 'yyyy-MM-dd HH:mm:ss');
+    const d = new Date(timestamp);
+    const pad = (n: number) => String(n).padStart(2, '0');
+    return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
   }
 
   async execute(args: HistoryToolParams): Promise<ToolResult> {
     try {
-      console.log('Executing HistoryTool with args:', args);
-
-      const {
-        text = '',
-        maxResults = 100, // Default to 100 results
-        excludeCurrentTabs = false,
-      } = args;
-
+      const text = args?.text ?? '';
+      const maxResults = Math.max(1, Math.min(Number(args?.maxResults ?? 100), 1000));
       const now = Date.now();
-      let startTimeMs: number;
-      let endTimeMs: number;
+      const parsedStart = args?.startTime ? this.parseDateString(args.startTime) : now - HistoryTool.DAY_MS;
+      const parsedEnd = args?.endTime ? this.parseDateString(args.endTime) : now;
 
-      // Parse startTime
-      if (args.startTime) {
-        const parsedStart = this.parseDateString(args.startTime);
-        if (parsedStart === null) {
-          return createErrorResponse(
-            `Invalid format for start time: "${args.startTime}". Supported formats: ISO (YYYY-MM-DD), "today", "yesterday", "X days/weeks/months/years ago".`,
-          );
-        }
-        startTimeMs = parsedStart;
-      } else {
-        // Default to 24 hours ago if startTime is not provided
-        startTimeMs = now - HistoryTool.ONE_DAY_MS;
+      if (parsedStart === null) return createErrorResponse(`Invalid startTime: ${args.startTime}`);
+      if (parsedEnd === null) return createErrorResponse(`Invalid endTime: ${args.endTime}`);
+      if (parsedStart > parsedEnd) return createErrorResponse('Start time cannot be after end time.');
+
+      let items = await chrome.history.search({ text, startTime: parsedStart, endTime: parsedEnd, maxResults });
+
+      if (args?.excludeCurrentTabs && items.length) {
+        const openUrls = new Set((await chrome.tabs.query({})).map((tab) => tab.url).filter((url): url is string => !!url));
+        items = items.filter((item) => !item.url || !openUrls.has(item.url));
       }
 
-      // Parse endTime
-      if (args.endTime) {
-        const parsedEnd = this.parseDateString(args.endTime);
-        if (parsedEnd === null) {
-          return createErrorResponse(
-            `Invalid format for end time: "${args.endTime}". Supported formats: ISO (YYYY-MM-DD), "today", "yesterday", "X days/weeks/months/years ago".`,
-          );
-        }
-        endTimeMs = parsedEnd;
-      } else {
-        // Default to current time if endTime is not provided
-        endTimeMs = now;
-      }
-
-      // Validate time range
-      if (startTimeMs > endTimeMs) {
-        return createErrorResponse('Start time cannot be after end time.');
-      }
-
-      console.log(
-        `Searching history from ${this.formatDate(startTimeMs)} to ${this.formatDate(endTimeMs)} for query "${text}"`,
-      );
-
-      const historyItems = await chrome.history.search({
-        text,
-        startTime: startTimeMs,
-        endTime: endTimeMs,
-        maxResults,
-      });
-
-      console.log(`Found ${historyItems.length} history items before filtering current tabs.`);
-
-      let filteredItems = historyItems;
-      if (excludeCurrentTabs && historyItems.length > 0) {
-        const currentTabs = await chrome.tabs.query({});
-        const openUrls = new Set<string>();
-
-        currentTabs.forEach((tab) => {
-          if (tab.url) {
-            openUrls.add(tab.url);
-          }
-        });
-
-        if (openUrls.size > 0) {
-          filteredItems = historyItems.filter((item) => !(item.url && openUrls.has(item.url)));
-          console.log(
-            `Filtered out ${historyItems.length - filteredItems.length} items that are currently open. ${filteredItems.length} items remaining.`,
-          );
-        }
-      }
-
-      const result: HistoryResult = {
-        items: filteredItems.map((item) => ({
+      const result = {
+        items: items.map((item) => ({
           id: item.id,
           url: item.url,
           title: item.title,
@@ -198,33 +80,19 @@ class HistoryTool extends BaseBrowserToolExecutor {
           visitCount: item.visitCount,
           typedCount: item.typedCount,
         })),
-        totalCount: filteredItems.length,
+        totalCount: items.length,
         timeRange: {
-          startTime: startTimeMs,
-          endTime: endTimeMs,
-          startTimeFormatted: this.formatDate(startTimeMs),
-          endTimeFormatted: this.formatDate(endTimeMs),
+          startTime: parsedStart,
+          endTime: parsedEnd,
+          startTimeFormatted: this.formatDate(parsedStart),
+          endTimeFormatted: this.formatDate(parsedEnd),
         },
+        ...(text ? { query: text } : {}),
       };
 
-      if (text) {
-        result.query = text;
-      }
-
-      return {
-        content: [
-          {
-            type: 'text',
-            text: JSON.stringify(result, null, 2),
-          },
-        ],
-        isError: false,
-      };
+      return { content: [{ type: 'text', text: JSON.stringify(result, null, 2) }], isError: false };
     } catch (error) {
-      console.error('Error in HistoryTool.execute:', error);
-      return createErrorResponse(
-        `Error retrieving browsing history: ${error instanceof Error ? error.message : String(error)}`,
-      );
+      return createErrorResponse(`Error retrieving browsing history: ${error instanceof Error ? error.message : String(error)}`);
     }
   }
 }

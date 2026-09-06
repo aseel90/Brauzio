@@ -1,53 +1,75 @@
 # Brauzio Architecture
 
-## Product direction
+## Production path
 
-Brauzio is an Arabic-first Chrome MCP bridge. It is no longer treated as a branded copy of the upstream extension.
+```text
+ChatGPT Custom MCP
+        │ HTTPS /mcp
+        ▼
+Cloudflare Worker
+        │ Durable Object by device id
+        ▼
+BrowserSession Durable Object
+        │ authenticated WebSocket /ws
+        ▼
+Brauzio Chrome Extension
+        │ tool dispatcher
+        ├─ Chrome Extension APIs
+        └─ Chrome DevTools Protocol
+                ▼
+              Chrome
+```
 
-The supported production path is:
+## Cloudflare
 
-`ChatGPT Custom MCP -> Cloudflare Worker -> Durable Object -> WebSocket -> Brauzio Chrome Extension -> Browser tools`
+`app/cloudflare-mcp/src/index.ts` يستقبل MCP ويصادق الطلب ويحدد `deviceId` ثم يمرر الأداة إلى Durable Object.
 
-There is no local Node bridge, native messaging host, cloudflared dependency, local AI model, embedded agent chat, workflow builder, or web editor in the supported product surface.
+`app/cloudflare-mcp/src/browser-session.ts` يحتفظ باتصال WebSocket المصادق عليه، يرسل `tool_call` إلى الإضافة ويربط النتيجة بالطلب الأصلي.
 
-## Core extension entrypoints
+## Extension
 
-- `background/` — Cloudflare relay and browser-tool execution.
-- `popup/` — connection status, MCP URL, and Cloudflare/device settings.
-- `welcome/` — first-install setup guidance.
-- `offscreen/` — retained only for browser capabilities that require an offscreen document.
-- `element-picker.content.ts` — retained for explicit human-in-the-loop element selection.
+### Background
 
-## Deprecated upstream surfaces
+`remote-relay.ts` يدير WebSocket، hello/auth، heartbeat، reconnect، وتنفيذ استدعاءات الأدوات.
 
-The following features are removed from the Brauzio product and must not be reintroduced without an explicit product decision:
+`tools/` يحتوي أدوات Chrome فقط. لا يحتوي على Agent أو Workflow engine.
 
-- Local semantic/embedding models.
-- Vector tab search backed by local ML models.
-- Agent Chat / Quick Panel.
-- Workflow recorder, workflow builder, and record/replay runtime.
+### Popup
+
+واجهة عربية RTL لإدارة الاتصال فقط. ليست منصة AI ثانية داخل المتصفح.
+
+### Offscreen
+
+مخصص حاليًا لترميز GIF فقط.
+
+### Element Picker
+
+مسار Human-in-the-loop لاختيار عنصر من الصفحة عندما لا تكفي refs أو selectors أو الإحداثيات.
+
+## Virtual Mouse
+
+`chrome_computer` يدير مؤشراً مرئياً خاصاً بـBrauzio وأحداث CDP الحقيقية.
+
+عند `mouse_down` يبقى CDP session مملوكًا لحالة الضغط. `mouse_move` اللاحق يرسل الحركة مع زر مضغوط، ثم `mouse_up` يحرر الزر والجلسة. هذا مختلف عن drag التقليدي السريع ويتيح التعامل مع الألعاب والـCanvas.
+
+## Security
+
+لا يطبع Logging الأسرار. القيم التالية حساسة:
+
+- `BROWSER_SHARED_SECRET`
+- `MCP_SHARED_SECRET`
+- Device Token
+
+يسمح بتسجيل Device ID وtrace/request IDs لتتبع الطلب عبر الطبقات.
+
+## Removed architecture
+
+ليست جزءًا من Brauzio V2:
+
+- Native/local MCP bridge.
+- Record/Replay.
+- Workflow system.
+- Local AI/semantic/vector stack.
+- Quick Panel / Agent Chat.
 - Web Editor.
-- Side panel product UI.
-- Legacy local/native MCP bridge.
-- Chinese locale/branding or upstream product naming.
-
-## UX principles
-
-1. The popup exists to answer three questions: Is Brauzio connected? Which browser/device is connected? What MCP URL should be used in ChatGPT?
-2. Secrets are masked by default.
-3. Advanced connection settings stay collapsed during normal use.
-4. Browser automation is initiated from ChatGPT, not from a second AI interface embedded inside the extension.
-5. Diagnostic logging must never print device tokens or MCP secrets.
-
-## Change log
-
-### 2026-09-06 — Clean Core v1.1
-
-- Rebuilt popup UI from scratch.
-- Reduced the background runtime to the Brauzio Cloud relay.
-- Removed record/replay from the MCP execution map.
-- Removed vector-search tool implementation from the browser-tool execution map.
-- Removed options, side-panel and command declarations from the manifest.
-- Removed local-model and workflow UI dependencies from the extension package.
-- Reduced Arabic locale to the strings that belong to the current product.
-- Renamed the welcome page title to Brauzio.
+- Side Panel product UI.
