@@ -1,96 +1,125 @@
 <template>
-  <section class="cloud-card" dir="rtl">
-    <div class="cloud-card__header">
-      <div>
-        <p class="cloud-card__eyebrow">BRAUZIO CLOUD</p>
-        <h2>اتصال ChatGPT عبر Cloudflare</h2>
+  <section class="connection-card" dir="rtl">
+    <div class="connection-header">
+      <div class="connection-title">
+        <div class="connection-icon" :class="`connection-icon--${status.state}`" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M7.5 12a4.5 4.5 0 0 1 4.5-4.5h3a4.5 4.5 0 1 1 0 9h-3" />
+            <path d="M16.5 12A4.5 4.5 0 0 1 12 16.5H9a4.5 4.5 0 1 1 0-9h3" />
+          </svg>
+        </div>
+        <div>
+          <p class="eyebrow">CLOUD CONNECTION</p>
+          <h2>اتصال ChatGPT</h2>
+          <p class="connection-subtitle">Cloudflare Relay → Brauzio → Chrome</p>
+        </div>
       </div>
-      <div class="cloud-status" :class="`cloud-status--${status.state}`">
-        <span class="cloud-status__dot"></span>
-        <span>{{ statusLabel }}</span>
+
+      <div class="status-badge" :class="`status-badge--${status.state}`">
+        <span class="status-badge__dot"></span>
+        {{ statusLabel }}
       </div>
     </div>
 
-    <p class="cloud-card__hint">
-      لا يحتاج هذا الاتصال إلى cloudflared أو خادم Node محلي. الإضافة تتصل مباشرة بخدمة Brauzio السحابية.
-    </p>
-
-    <div class="cloud-field">
-      <label for="brauzio-relay-url">رابط Cloudflare Worker</label>
-      <input
-        id="brauzio-relay-url"
-        v-model.trim="form.relayUrl"
-        type="url"
-        autocomplete="off"
-        spellcheck="false"
-        placeholder="https://brauzio-mcp.example.workers.dev"
-      />
-      <small>يمكنك لصق رابط Worker أو رابط /mcp وسيتم ضبط WebSocket تلقائيًا.</small>
+    <div v-if="status.state === 'connected'" class="connected-summary">
+      <div class="connected-summary__main">
+        <strong>المتصفح متصل</strong>
+        <span>الجهاز: {{ form.deviceId || 'default' }}</span>
+      </div>
+      <button v-if="mcpUrl" type="button" class="copy-mcp-button" @click="copyMcpUrl">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <rect x="9" y="9" width="11" height="11" rx="2" />
+          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+        </svg>
+        {{ copyText }}
+      </button>
     </div>
 
-    <div class="cloud-grid">
-      <div class="cloud-field">
-        <label for="brauzio-device-id">معرف الجهاز</label>
-        <input
-          id="brauzio-device-id"
-          v-model.trim="form.deviceId"
-          type="text"
-          autocomplete="off"
-          placeholder="default"
-        />
-      </div>
+    <div v-if="status.state !== 'connected'" class="connection-callout">
+      <strong>{{ status.state === 'error' ? 'تعذر الاتصال' : 'لم يتم ربط المتصفح بعد' }}</strong>
+      <span>افتح الإعدادات المتقدمة وأدخل رابط Worker ورمز الجهاز.</span>
+    </div>
 
-      <div class="cloud-field">
-        <label for="brauzio-device-token">رمز ربط المتصفح</label>
-        <div class="secret-input">
+    <p v-if="status.lastError" class="connection-error">{{ status.lastError }}</p>
+
+    <details class="advanced-settings" :open="status.state !== 'connected'">
+      <summary>
+        <span>إعدادات الاتصال المتقدمة</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="m9 18 6-6-6-6" />
+        </svg>
+      </summary>
+
+      <div class="advanced-settings__body">
+        <label class="field field--full">
+          <span>رابط Cloudflare Worker</span>
           <input
-            id="brauzio-device-token"
-            v-model="form.deviceToken"
-            :type="showToken ? 'text' : 'password'"
-            autocomplete="new-password"
-            placeholder="رمز سري طويل"
+            v-model.trim="form.relayUrl"
+            type="url"
+            autocomplete="off"
+            spellcheck="false"
+            placeholder="https://brauzio-mcp.example.workers.dev"
           />
-          <button type="button" class="secret-toggle" @click="showToken = !showToken">
-            {{ showToken ? 'إخفاء' : 'إظهار' }}
+          <small>يقبل رابط Worker أو رابط /mcp ويضبط WebSocket تلقائيًا.</small>
+        </label>
+
+        <div class="field-grid">
+          <label class="field">
+            <span>معرف الجهاز</span>
+            <input v-model.trim="form.deviceId" type="text" autocomplete="off" placeholder="default" />
+          </label>
+
+          <label class="field">
+            <span>رمز ربط المتصفح</span>
+            <div class="secret-field">
+              <input
+                v-model="form.deviceToken"
+                :type="showToken ? 'text' : 'password'"
+                autocomplete="new-password"
+                placeholder="رمز سري طويل"
+              />
+              <button type="button" @click="showToken = !showToken">{{ showToken ? 'إخفاء' : 'إظهار' }}</button>
+            </div>
+          </label>
+        </div>
+
+        <label class="toggle-row">
+          <input v-model="form.autoConnect" type="checkbox" />
+          <span>
+            <strong>اتصال تلقائي</strong>
+            <small>إعادة الاتصال بخدمة Brauzio عند تشغيل Chrome.</small>
+          </span>
+        </label>
+
+        <div class="advanced-actions">
+          <button
+            type="button"
+            class="primary-button"
+            :disabled="busy || !canSave"
+            @click="saveAndConnect"
+          >
+            {{ busy ? 'جارٍ الاتصال…' : status.state === 'connected' ? 'حفظ التعديلات' : 'حفظ واتصال' }}
+          </button>
+
+          <button
+            v-if="status.state === 'connected' || status.state === 'connecting'"
+            type="button"
+            class="ghost-button"
+            :disabled="busy"
+            @click="disconnect"
+          >
+            قطع الاتصال
           </button>
         </div>
       </div>
-    </div>
+    </details>
 
-    <label class="auto-connect">
-      <input v-model="form.autoConnect" type="checkbox" />
-      <span>الاتصال تلقائيًا عند فتح Chrome</span>
-    </label>
-
-    <div v-if="mcpUrl" class="mcp-url-box">
-      <div>
-        <span class="mcp-url-box__label">رابط MCP الخاص لـ ChatGPT</span>
-        <code>{{ mcpUrl }}</code>
-      </div>
-      <button type="button" @click="copyMcpUrl">{{ copyText }}</button>
-    </div>
-    <p v-if="mcpUrl" class="mcp-secret-note">احتفظ بهذا الرابط سريًا لأنه يحتوي رمز الوصول.</p>
-
-    <p v-if="status.lastError" class="cloud-error">{{ status.lastError }}</p>
-
-    <div class="cloud-actions">
-      <button
-        type="button"
-        class="cloud-button cloud-button--primary"
-        :disabled="busy || !canSave"
-        @click="saveAndConnect"
-      >
-        {{ busy ? 'جارٍ الاتصال...' : 'حفظ واتصال' }}
-      </button>
-      <button
-        v-if="status.state === 'connected' || status.state === 'connecting'"
-        type="button"
-        class="cloud-button cloud-button--secondary"
-        :disabled="busy"
-        @click="disconnect"
-      >
-        قطع الاتصال
-      </button>
+    <div class="privacy-note">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+        <rect x="5" y="10" width="14" height="10" rx="2" />
+        <path d="M8 10V7a4 4 0 0 1 8 0v3" />
+      </svg>
+      <span>رمز الربط لا يظهر في واجهة الحالة ولا يدخل في بيانات التشخيص المنسوخة.</span>
     </div>
   </section>
 </template>
@@ -114,6 +143,10 @@ interface RelayStatus {
   lastError?: string;
 }
 
+const emit = defineEmits<{
+  (event: 'status-change', status: RelayStatus): void;
+}>();
+
 const form = reactive<RelayConfig>({
   relayUrl: '',
   deviceId: 'default',
@@ -129,7 +162,7 @@ const status = reactive<RelayStatus>({
 
 const busy = ref(false);
 const showToken = ref(false);
-const copyText = ref('نسخ');
+const copyText = ref('نسخ رابط MCP');
 
 const canSave = computed(() => form.relayUrl.length > 0 && form.deviceToken.length >= 16);
 
@@ -140,25 +173,21 @@ const statusLabel = computed(() => {
     case 'connecting':
       return 'جارٍ الاتصال';
     case 'disabled':
-      return 'الاتصال التلقائي متوقف';
+      return 'متوقف';
     case 'error':
-      return 'خطأ في الاتصال';
+      return 'خطأ';
     default:
       return 'غير متصل';
   }
 });
 
 const mcpUrl = computed(() => {
-  if (!form.relayUrl) return '';
+  if (!form.relayUrl || !form.deviceToken) return '';
   try {
-    const raw = /^https?:\/\//i.test(form.relayUrl)
-      ? form.relayUrl
-      : `https://${form.relayUrl}`;
+    const raw = /^https?:\/\//i.test(form.relayUrl) ? form.relayUrl : `https://${form.relayUrl}`;
     const url = new URL(raw);
     url.protocol = url.protocol === 'http:' ? 'http:' : 'https:';
-    if (!url.pathname || url.pathname === '/' || url.pathname.endsWith('/ws')) {
-      url.pathname = '/mcp';
-    }
+    if (!url.pathname || url.pathname === '/' || url.pathname.endsWith('/ws')) url.pathname = '/mcp';
     url.searchParams.set('device', form.deviceId || 'default');
     url.searchParams.set('key', form.deviceToken);
     return url.toString();
@@ -170,6 +199,7 @@ const mcpUrl = computed(() => {
 function applyStatus(next?: Partial<RelayStatus>) {
   if (!next) return;
   Object.assign(status, next);
+  emit('status-change', { ...status });
 }
 
 async function loadState() {
@@ -178,12 +208,8 @@ async function loadState() {
     chrome.runtime.sendMessage({ type: 'brauzio_relay_get_status' }),
   ]);
 
-  if (configResponse?.success && configResponse.config) {
-    Object.assign(form, configResponse.config);
-  }
-  if (statusResponse?.success && statusResponse.status) {
-    applyStatus(statusResponse.status);
-  }
+  if (configResponse?.success && configResponse.config) Object.assign(form, configResponse.config);
+  if (statusResponse?.success && statusResponse.status) applyStatus(statusResponse.status);
 }
 
 async function saveAndConnect() {
@@ -199,15 +225,14 @@ async function saveAndConnect() {
         autoConnect: form.autoConnect,
       },
     });
-    if (!response?.success) {
-      throw new Error(response?.error || 'تعذر حفظ إعدادات Brauzio Cloud');
-    }
+    if (!response?.success) throw new Error(response?.error || 'تعذر حفظ إعدادات الاتصال');
     if (response.status) applyStatus(response.status);
   } catch (error) {
     applyStatus({
       state: 'error',
       authenticated: false,
       lastError: error instanceof Error ? error.message : String(error),
+      lastUpdated: Date.now(),
     });
   } finally {
     busy.value = false;
@@ -230,14 +255,12 @@ async function copyMcpUrl() {
   await navigator.clipboard.writeText(mcpUrl.value);
   copyText.value = 'تم النسخ';
   window.setTimeout(() => {
-    copyText.value = 'نسخ';
+    copyText.value = 'نسخ رابط MCP';
   }, 1600);
 }
 
 const runtimeListener = (message: any) => {
-  if (message?.type === 'brauzio_relay_status_changed' && message.status) {
-    applyStatus(message.status);
-  }
+  if (message?.type === 'brauzio_relay_status_changed' && message.status) applyStatus(message.status);
 };
 
 onMounted(async () => {
@@ -249,6 +272,7 @@ onMounted(async () => {
       state: 'error',
       authenticated: false,
       lastError: error instanceof Error ? error.message : String(error),
+      lastUpdated: Date.now(),
     });
   }
 });
@@ -257,253 +281,3 @@ onBeforeUnmount(() => {
   chrome.runtime.onMessage.removeListener(runtimeListener);
 });
 </script>
-
-<style scoped>
-.cloud-card {
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
-  border-radius: 16px;
-  padding: 16px;
-  box-shadow: 0 8px 22px rgba(15, 23, 42, 0.06);
-  color: #0f172a;
-}
-
-.cloud-card__header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 12px;
-}
-
-.cloud-card__header h2 {
-  margin: 2px 0 0;
-  font-size: 16px;
-  font-weight: 700;
-}
-
-.cloud-card__eyebrow {
-  margin: 0;
-  font-size: 10px;
-  font-weight: 800;
-  letter-spacing: 0.11em;
-  color: #5b5bd6;
-}
-
-.cloud-card__hint {
-  margin: 12px 0 14px;
-  color: #64748b;
-  font-size: 12px;
-  line-height: 1.7;
-}
-
-.cloud-status {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  flex-shrink: 0;
-  border-radius: 999px;
-  padding: 6px 9px;
-  background: #f1f5f9;
-  color: #475569;
-  font-size: 11px;
-  font-weight: 700;
-}
-
-.cloud-status__dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: #94a3b8;
-}
-
-.cloud-status--connected {
-  background: #ecfdf5;
-  color: #047857;
-}
-.cloud-status--connected .cloud-status__dot { background: #10b981; }
-.cloud-status--connecting { background: #fffbeb; color: #b45309; }
-.cloud-status--connecting .cloud-status__dot { background: #f59e0b; }
-.cloud-status--error { background: #fef2f2; color: #b91c1c; }
-.cloud-status--error .cloud-status__dot { background: #ef4444; }
-
-.cloud-field {
-  margin-top: 12px;
-}
-
-.cloud-field label {
-  display: block;
-  margin-bottom: 6px;
-  font-size: 12px;
-  font-weight: 700;
-  color: #334155;
-}
-
-.cloud-field input {
-  width: 100%;
-  box-sizing: border-box;
-  border: 1px solid #cbd5e1;
-  border-radius: 10px;
-  padding: 9px 10px;
-  background: #f8fafc;
-  color: #0f172a;
-  font-size: 12px;
-  outline: none;
-}
-
-.cloud-field input:focus {
-  border-color: #5b5bd6;
-  box-shadow: 0 0 0 3px rgba(91, 91, 214, 0.12);
-}
-
-.cloud-field small {
-  display: block;
-  margin-top: 5px;
-  color: #94a3b8;
-  font-size: 10px;
-  line-height: 1.5;
-}
-
-.cloud-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-}
-
-.secret-input {
-  position: relative;
-}
-
-.secret-input input {
-  padding-left: 54px;
-}
-
-.secret-toggle {
-  position: absolute;
-  top: 50%;
-  left: 6px;
-  transform: translateY(-50%);
-  border: 0;
-  background: transparent;
-  color: #5b5bd6;
-  font-size: 10px;
-  font-weight: 700;
-  cursor: pointer;
-}
-
-.auto-connect {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-top: 13px;
-  color: #475569;
-  font-size: 11px;
-  cursor: pointer;
-}
-
-.auto-connect input {
-  accent-color: #5b5bd6;
-}
-
-.mcp-url-box {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  margin-top: 14px;
-  padding: 10px;
-  border: 1px dashed #c7d2fe;
-  border-radius: 10px;
-  background: #eef2ff;
-}
-
-.mcp-url-box > div {
-  min-width: 0;
-}
-
-.mcp-url-box__label {
-  display: block;
-  margin-bottom: 4px;
-  color: #4f46e5;
-  font-size: 10px;
-  font-weight: 700;
-}
-
-.mcp-url-box code {
-  display: block;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  direction: ltr;
-  text-align: left;
-  color: #334155;
-  font-size: 10px;
-}
-
-.mcp-url-box button {
-  border: 0;
-  border-radius: 8px;
-  padding: 7px 9px;
-  background: #e0e7ff;
-  color: #4f46e5;
-  font-size: 10px;
-  font-weight: 700;
-  cursor: pointer;
-}
-
-.mcp-secret-note {
-  margin: 6px 2px 0;
-  color: #64748b;
-  font-size: 9px;
-  line-height: 1.5;
-}
-
-.cloud-error {
-  margin: 10px 0 0;
-  padding: 8px 10px;
-  border-radius: 8px;
-  background: #fef2f2;
-  color: #b91c1c;
-  font-size: 11px;
-  line-height: 1.5;
-}
-
-.cloud-actions {
-  display: flex;
-  gap: 8px;
-  margin-top: 14px;
-}
-
-.cloud-button {
-  border: 0;
-  border-radius: 10px;
-  padding: 9px 13px;
-  font-size: 12px;
-  font-weight: 700;
-  cursor: pointer;
-}
-
-.cloud-button:disabled {
-  opacity: 0.55;
-  cursor: not-allowed;
-}
-
-.cloud-button--primary {
-  flex: 1;
-  background: #5b5bd6;
-  color: white;
-}
-
-.cloud-button--primary:hover:not(:disabled) {
-  background: #4f46e5;
-}
-
-.cloud-button--secondary {
-  background: #f1f5f9;
-  color: #475569;
-}
-
-@media (max-width: 420px) {
-  .cloud-grid { grid-template-columns: 1fr; }
-  .cloud-card__header { flex-direction: column; }
-}
-</style>
