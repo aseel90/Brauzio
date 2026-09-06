@@ -1,4 +1,4 @@
-Applied diagnostic type fix: explicit JSON-safe BrauzioToolSchema
+Applied diagnostic type fix: unified JSON-safe BrauzioToolSchema
 diff --git a/packages/shared/src/tools.ts b/packages/shared/src/tools.ts
 index 4c062cf..9bc0fa8 100644
 --- a/packages/shared/src/tools.ts
@@ -35,18 +35,36 @@ index 4c062cf..9bc0fa8 100644
    { name: TOOL_NAMES.BROWSER.GET_WINDOWS_AND_TABS, description: 'Get all currently open Chrome windows and tabs.', inputSchema: { type: 'object', properties: {}, required: [] } },
    { name: TOOL_NAMES.BROWSER.NAVIGATE, description: 'Navigate, refresh, go back/forward, or open a URL in Chrome. Can optionally verify URL, DOM/text, network, console, page load, and network-idle evidence.', inputSchema: { type: 'object', properties: { url: { type: 'string' }, refresh: { type: 'boolean' }, newWindow: { type: 'boolean' }, background: { type: 'boolean' }, verify: actionVerification, ...tabTarget }, required: [] } },
    { name: TOOL_NAMES.BROWSER.READ_PAGE, description: 'Read visible page content as an accessibility tree with stable element refs.', inputSchema: { type: 'object', properties: { filter: { type: 'string' }, depth: { type: 'number' }, refId: { type: 'string' }, ...tabTarget }, required: [] } },
+diff --git a/packages/shared/src/watch-tools.ts b/packages/shared/src/watch-tools.ts
+index 094983c..edf0ef4 100644
+--- a/packages/shared/src/watch-tools.ts
++++ b/packages/shared/src/watch-tools.ts
+@@ -1,4 +1,4 @@
+-import type { Tool } from '@modelcontextprotocol/sdk/types.js';
++import type { BrauzioToolSchema } from './tools';
+ 
+ export const WATCH_TOOL_NAMES = {
+   WATCH_START: 'chrome_watch_start',
+@@ -12,7 +12,7 @@ const tabTarget = {
+   windowId: { type: 'number', description: 'Target window ID when tabId is omitted.' },
+ };
+ 
+-export const WATCH_TOOL_SCHEMAS: Tool[] = [
++export const WATCH_TOOL_SCHEMAS: BrauzioToolSchema[] = [
+   {
+     name: WATCH_TOOL_NAMES.WATCH_START,
+     description:
 
 ===== install =====
 Scope: all 4 workspace projects
-Progress: resolved 0, reused 0, downloaded 1, added 0
-Progress: resolved 193, reused 0, downloaded 192, added 0
-Progress: resolved 494, reused 0, downloaded 442, added 0
-Progress: resolved 857, reused 0, downloaded 711, added 0
+Progress: resolved 1, reused 0, downloaded 0, added 0
+Progress: resolved 99, reused 0, downloaded 98, added 0
+Progress: resolved 326, reused 0, downloaded 304, added 0
+Progress: resolved 630, reused 0, downloaded 520, added 0
+Progress: resolved 838, reused 0, downloaded 691, added 0
+Progress: resolved 910, reused 0, downloaded 750, added 0
 Packages: +749
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-Progress: resolved 910, reused 0, downloaded 751, added 0
-Progress: resolved 910, reused 0, downloaded 751, added 748
-Progress: resolved 910, reused 0, downloaded 751, added 749
 Progress: resolved 910, reused 0, downloaded 751, added 749, done
 
 devDependencies:
@@ -72,14 +90,14 @@ app/chrome-extension
   └─┬ vite 7.2.7
     └── ✕ unmet peer @types/node@"^20.19.0 || >=22.12.0": found 18.19.130
 
-Done in 8.1s
+Done in 7.7s
 
 __EXIT_CODE__=0
 
 ===== wxt_prepare =====
 
 [log] [90mWXT[39m [90m[1m0.20.11[22m[39m
-[dotenv@17.2.3] injecting env (0) from .env.production.chrome.local,.env.production.chrome,.env.chrome.local,.env.chrome,.env.production.local,.env.production,.env.local,.env -- tip: ⚙️  write to custom object with { processEnv: myObject }
+[dotenv@17.2.3] injecting env (0) from .env.production.chrome.local,.env.production.chrome,.env.chrome.local,.env.chrome,.env.production.local,.env.production,.env.local,.env -- tip: ⚙️  load multiple .env files with { path: ['.env.local', '.env'] }
 [warn] `InlineConfig#runner` is deprecated, use `InlineConfig#webExt` instead. See https://wxt.dev/guide/resources/upgrading.html#v0-19-0-rarr-v0-20-0
 [info] Generating types...
 [warn] Duplicated imports "CDPRouter", the one from "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-router.ts" has been ignored and "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-session-manager.ts" is used
@@ -94,7 +112,7 @@ __EXIT_CODE__=0
 [warn] Duplicated imports "CdpEventEnvelope", the one from "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-router.ts" has been ignored and "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-session-manager.ts" is used
 [warn] Duplicated imports "CdpOwnerTag", the one from "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-router.ts" has been ignored and "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-session-manager.ts" is used
 [warn] Duplicated imports "CdpSessionSnapshot", the one from "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-router.ts" has been ignored and "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-session-manager.ts" is used
-[success] Finished in 557 ms
+[success] Finished in 714 ms
 
 __EXIT_CODE__=0
 
@@ -110,14 +128,14 @@ __EXIT_CODE__=0
 [34mCLI[39m Cleaning output folder
 [34mCJS[39m Build start
 [34mESM[39m Build start
-[32mCJS[39m [1mdist/index.js [22m[32m18.76 KB[39m
-[32mCJS[39m ⚡️ Build success in 19ms
 [32mESM[39m [1mdist/index.mjs [22m[32m17.67 KB[39m
-[32mESM[39m ⚡️ Build success in 20ms
+[32mESM[39m ⚡️ Build success in 26ms
+[32mCJS[39m [1mdist/index.js [22m[32m18.76 KB[39m
+[32mCJS[39m ⚡️ Build success in 26ms
 [34mDTS[39m Build start
-[32mDTS[39m ⚡️ Build success in 936ms
-[32mDTS[39m [1mdist/index.d.ts  [22m[32m5.10 KB[39m
-[32mDTS[39m [1mdist/index.d.mts [22m[32m5.10 KB[39m
+[32mDTS[39m ⚡️ Build success in 1195ms
+[32mDTS[39m [1mdist/index.d.ts  [22m[32m4.01 KB[39m
+[32mDTS[39m [1mdist/index.d.mts [22m[32m4.01 KB[39m
 
 __EXIT_CODE__=0
 
@@ -126,21 +144,41 @@ __EXIT_CODE__=0
 > brauzio-cloud-mcp@0.5.0 check /home/runner/work/Brauzio/Brauzio/app/cloudflare-mcp
 > tsc --noEmit
 
-src/index.ts(106,54): error TS2322: Type 'Promise<{ tools: (BrauzioToolSchema | { inputSchema: { [x: string]: unknown; type: "object"; properties?: { [x: string]: object; } | undefined; required?: string[] | undefined; }; name: string; ... 6 more ...; title?: string | undefined; })[]; }>' is not assignable to type '{ [x: string]: unknown; tools: { inputSchema: { [x: string]: unknown; type: "object"; properties?: { [x: string]: string | number | boolean | { [x: string]: string | number | boolean | ... | (string | number | boolean | ... | (string | ... 4 more ... | null)[] | null)[] | null; } | (string | ... 4 more ... | null)[]...'.
-  Type 'Promise<{ tools: (BrauzioToolSchema | { inputSchema: { [x: string]: unknown; type: "object"; properties?: { [x: string]: object; } | undefined; required?: string[] | undefined; }; name: string; ... 6 more ...; title?: string | undefined; })[]; }>' is not assignable to type 'Promise<{ [x: string]: unknown; tools: { inputSchema: { [x: string]: unknown; type: "object"; properties?: { [x: string]: string | number | boolean | { [x: string]: string | number | boolean | ... | (string | number | boolean | ... | (string | ... 4 more ... | null)[] | null)[] | null; } | (string | ... 4 more ... |...'.
-    Type '{ tools: (BrauzioToolSchema | { inputSchema: { [x: string]: unknown; type: "object"; properties?: { [x: string]: object; } | undefined; required?: string[] | undefined; }; ... 7 more ...; title?: string | undefined; })[]; }' is not assignable to type '{ [x: string]: unknown; tools: { inputSchema: { [x: string]: unknown; type: "object"; properties?: { [x: string]: string | number | boolean | { [x: string]: string | number | boolean | ... | (string | number | boolean | ... | (string | ... 4 more ... | null)[] | null)[] | null; } | (string | ... 4 more ... | null)[]...'.
-      Types of property 'tools' are incompatible.
-        Type '(BrauzioToolSchema | { inputSchema: { [x: string]: unknown; type: "object"; properties?: { [x: string]: object; } | undefined; required?: string[] | undefined; }; name: string; description?: string | undefined; ... 5 more ...; title?: string | undefined; })[]' is not assignable to type '{ inputSchema: { [x: string]: unknown; type: "object"; properties?: { [x: string]: string | number | boolean | { [x: string]: string | number | boolean | ... | (string | number | boolean | ... | (string | number | boolean | ... | (string | ... 4 more ... | null)[] | null)[] | null)[] | null; } | (string | ... 4 more...'.
-          Type 'BrauzioToolSchema | { inputSchema: { [x: string]: unknown; type: "object"; properties?: { [x: string]: object; } | undefined; required?: string[] | undefined; }; name: string; description?: string | undefined; ... 5 more ...; title?: string | undefined; }' is not assignable to type '{ inputSchema: { [x: string]: unknown; type: "object"; properties?: { [x: string]: string | number | boolean | { [x: string]: string | number | boolean | ... | (string | number | boolean | ... | (string | number | boolean | ... | (string | ... 4 more ... | null)[] | null)[] | null)[] | null; } | (string | ... 4 more...'.
-            Type '{ inputSchema: { [x: string]: unknown; type: "object"; properties?: { [x: string]: object; } | undefined; required?: string[] | undefined; }; name: string; description?: string | undefined; outputSchema?: { ...; } | undefined; ... 4 more ...; title?: string | undefined; }' is not assignable to type '{ inputSchema: { [x: string]: unknown; type: "object"; properties?: { [x: string]: string | number | boolean | { [x: string]: string | number | boolean | ... | (string | number | boolean | ... | (string | number | boolean | ... | (string | ... 4 more ... | null)[] | null)[] | null)[] | null; } | (string | ... 4 more...'.
-              The types of 'inputSchema.properties' are incompatible between these types.
-                Type '{ [x: string]: object; } | undefined' is not assignable to type '{ [x: string]: string | number | boolean | { [x: string]: string | number | boolean | ... | (string | number | boolean | ... | (string | number | boolean | ... | (string | number | boolean | ... | (string | ... 4 more ... | null)[] | null)[] | null)[] | null)[] | null; } | (string | ... 4 more ... | null)[] | null; ...'.
-                  Type '{ [x: string]: object; }' is not assignable to type '{ [x: string]: string | number | boolean | { [x: string]: string | number | boolean | ... | (string | number | boolean | ... | (string | number | boolean | ... | (string | number | boolean | ... | (string | ... 4 more ... | null)[] | null)[] | null)[] | null)[] | null; } | (string | ... 4 more ... | null)[] | null; }'.
-                    'string' index signatures are incompatible.
-                      Type 'object' is not assignable to type 'string | number | boolean | { [x: string]: string | number | boolean | ... | (string | number | boolean | ... | (string | number | boolean | ... | (string | number | boolean | ... | (string | ... 4 more ... | null)[] | null)[] | null)[] | null)[] | null; } | (string | ... 4 more ... | null)[] | null'.
-/home/runner/work/Brauzio/Brauzio/app/cloudflare-mcp:
- ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL  brauzio-cloud-mcp@0.5.0 check: `tsc --noEmit`
+
+__EXIT_CODE__=0
+
+===== cloud_build =====
+
+> brauzio-cloud-mcp@0.5.0 build /home/runner/work/Brauzio/Brauzio/app/cloudflare-mcp
+> wrangler deploy --dry-run --outdir dist
+
+
+ ⛅️ wrangler 4.129.0
+────────────────────
+Total Upload: 863.83 KiB / gzip: 174.59 KiB
+Your Worker has access to the following bindings:
+Binding                                                       Resource                  
+env.BROWSER_SESSIONS (BrowserSession)                         Durable Object            
+env.OAUTH_KV (00000000000000000000000000000000)               KV Namespace              
+env.DEFAULT_DEVICE_ID ("default")                             Environment Variable      
+
+--dry-run: exiting now.
+
+Cloudflare collects anonymous telemetry about your usage of Wrangler. Learn more at https://github.com/cloudflare/workers-sdk/tree/main/packages/wrangler/telemetry.md
+
+__EXIT_CODE__=0
+
+===== extension_compile =====
+
+> brauzio-extension@2.5.0 compile /home/runner/work/Brauzio/Brauzio/app/chrome-extension
+> vue-tsc --noEmit
+
+entrypoints/background/tools/browser/common.ts(380,13): error TS2322: Type 'Tab | undefined' is not assignable to type 'Tab'.
+  Type 'undefined' is not assignable to type 'Tab'.
+utils/action-verification.ts(29,24): error TS2694: Namespace 'chrome.tabs' has no exported member 'TabStatus'.
+/home/runner/work/Brauzio/Brauzio/app/chrome-extension:
+ ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL  brauzio-extension@2.5.0 compile: `vue-tsc --noEmit`
 Exit status 2
 
 __EXIT_CODE__=2
-__FAILED_STEP__=cloud_check
+__FAILED_STEP__=extension_compile
