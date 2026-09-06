@@ -6,8 +6,8 @@ import { BrowserSession } from './browser-session';
 
 export { BrowserSession };
 
-const BRAUZIO_RUNTIME_VERSION = '2.1.3';
-const BRAUZIO_SCHEMA_VERSION = 'v2.1.3-2026-09-06';
+const BRAUZIO_RUNTIME_VERSION = '2.1.4';
+const BRAUZIO_SCHEMA_VERSION = 'v2.1.4-2026-09-06';
 const BRAUZIO_ORIGIN = 'https://brauzio-mcp.aseelsalah266.workers.dev';
 const BRAUZIO_RESOURCE = `${BRAUZIO_ORIGIN}/mcp`;
 const BRAUZIO_SCOPE = 'brauzio:control';
@@ -45,6 +45,15 @@ function jsonError(message: string): CallToolResult {
 function normalizeDeviceId(value: unknown): string {
   const normalized = String(value || 'default').trim().slice(0, 128);
   return normalized || 'default';
+}
+
+async function oauthUserIdForDevice(deviceId: string): Promise<string> {
+  const bytes = new TextEncoder().encode(normalizeDeviceId(deviceId));
+  const digest = await crypto.subtle.digest('SHA-256', bytes);
+  const hex = Array.from(new Uint8Array(digest), (byte) => byte.toString(16).padStart(2, '0')).join('');
+  // workers-oauth-provider encodes authorization codes as userId:grantId:secret,
+  // so userId itself must never contain ':'. Keep the real deviceId in encrypted props.
+  return `device-${hex}`;
 }
 
 function deviceIdFromRequest(request: Request, env: Env): string {
@@ -285,9 +294,10 @@ async function handleAuthorize(request: Request, env: Env): Promise<Response> {
   }
 
   const grantedScopes = oauthRequest.scope.filter((scope) => scope === BRAUZIO_SCOPE);
+  const oauthUserId = await oauthUserIdForDevice(deviceId);
   const { redirectTo } = await env.OAUTH_PROVIDER.completeAuthorization({
     request: oauthRequest,
-    userId: `device:${deviceId}`,
+    userId: oauthUserId,
     metadata: { clientName, deviceId },
     scope: grantedScopes,
     props: { deviceId, authorizedAt: Date.now() } satisfies BrauzioAuthProps,
