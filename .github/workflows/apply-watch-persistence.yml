@@ -63,3 +63,5 @@ jobs:
           fi
           git commit -m 'Document and version Brauzio 2.3.0 runtime'
           git push
+
+      # Re-triggered after the 2.3.0 production deploy to synchronize health labels/docs.
