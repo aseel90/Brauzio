@@ -31,6 +31,7 @@ Brauzio لن ينسخ معمارية chrome-agent المحلية. سنأخذ ا�
 - [x] إضافة Virtual Cursor مرئي.
 - [x] إضافة `mouse_move` و`mouse_down` و`mouse_up` و`drag_hold`.
 - [x] توحيد traceId عبر Worker → Durable Object → Extension.
+- [x] استبدال MCP `?key=` بـOAuth 2.1 + Pairing Code مؤقت، وفصل Device Token عن MCP auth.
 - [x] فحص ZIP النهائي والتأكد من عدم وجود Runtime قديم.
 - [ ] تثبيت آخر ZIP على جهاز الاختبار.
 - [ ] اختبار Virtual Mouse فعليًا على Wreckmarch وCanvas وDrag & Drop وsliders.
