@@ -32,16 +32,15 @@ jobs:
 
           pnpm install --no-frozen-lockfile --ignore-scripts > /tmp/install.log 2>&1
           echo "install=$?" >> "$LOG"
-          tail -80 /tmp/install.log >> "$LOG"
+          tail -40 /tmp/install.log >> "$LOG"
 
-          python - <<'PY'
-          import re, base64, zlib
-          text=open('.github/workflows/validate-actor-observer-v27.yml', encoding='utf-8').read()
-          m=re.search(r'^\s*PATCH_ZB64:\s*(\S+)\s*$', text, re.M)
-          if not m: raise SystemExit('PATCH_ZB64 not found')
-          open('/tmp/actor.patch','wb').write(zlib.decompress(base64.b64decode(m.group(1))))
+          python - <<'PY' > /tmp/decode.log 2>&1
+          import base64, zlib
+          raw=open('scripts/actor-observer-v27.patch.zb64', encoding='utf-8').read().strip()
+          open('/tmp/actor.patch','wb').write(zlib.decompress(base64.b64decode(raw)))
           PY
           echo "decode=$?" >> "$LOG"
+          cat /tmp/decode.log >> "$LOG"
 
           git apply --check /tmp/actor.patch > /tmp/apply-check.log 2>&1
           echo "apply_check=$?" >> "$LOG"
@@ -55,7 +54,7 @@ jobs:
             "$@" > "/tmp/${name}.log" 2>&1
             code=$?
             echo "${name}=${code}" >> "$LOG"
-            tail -160 "/tmp/${name}.log" >> "$LOG"
+            tail -140 "/tmp/${name}.log" >> "$LOG"
           }
 
           run_stage shared_build pnpm --filter brauzio-shared build
@@ -70,5 +69,5 @@ jobs:
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add "$LOG"
-          git commit -m 'diagnostics: Actor Observer V27 [skip ci]' || true
+          git commit -m 'diagnostics: applied Actor Observer V27 [skip ci]' || true
           git push || true
