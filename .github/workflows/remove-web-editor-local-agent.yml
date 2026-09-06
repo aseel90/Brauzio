@@ -1,0 +1,51 @@
+name: Remove Web Editor local Agent
+
+on:
+  push:
+    paths:
+      - '.github/workflows/remove-web-editor-local-agent.yml'
+      - 'scripts/remove_web_editor_local_agent.py'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Remove localhost Agent transport from Web Editor
+        run: python scripts/remove_web_editor_local_agent.py
+
+      - name: Verify no local bridge references remain
+        shell: bash
+        run: |
+          set -euo pipefail
+          if grep -RInE \
+            --exclude-dir=node_modules \
+            --exclude-dir=.output \
+            --exclude='*.map' \
+            '127\.0\.0\.1|nativeServerPort|NATIVE_HOST|NATIVE_SERVER_PORT|NativeMessageType|connectNative|ENSURE_NATIVE|mcp-chrome-bridge' \
+            app/chrome-extension; then
+            echo 'Local/native bridge references still remain.' >&2
+            exit 1
+          fi
+
+      - name: Commit migration
+        shell: bash
+        run: |
+          git add app/chrome-extension/entrypoints/background/web-editor/index.ts
+          if git diff --cached --quiet; then
+            echo 'No Web Editor migration changes.'
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "refactor: remove Web Editor localhost Agent transport"
+          git fetch origin main
+          git rebase origin/main
+          git push origin HEAD:main
