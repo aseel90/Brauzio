@@ -1,0 +1,55 @@
+name: Brauzio V2 Diagnostic
+
+on:
+  push:
+    paths:
+      - '.github/workflows/v2-probe.yml'
+      - 'app/chrome-extension/CI_PROBE.md'
+
+permissions:
+  contents: write
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 8.15.9
+      - name: Run full diagnostic build
+        shell: bash
+        run: |
+          set +e
+          LOG=CI_PROBE_RESULT.txt
+          : > "$LOG"
+          run_step() {
+            echo "" | tee -a "$LOG"
+            echo "===== $1 =====" | tee -a "$LOG"
+            shift
+            "$@" 2>&1 | tee -a "$LOG"
+            rc=${PIPESTATUS[0]}
+            echo "EXIT_CODE=$rc" | tee -a "$LOG"
+            if [ "$rc" -ne 0 ]; then
+              echo "FAILED_STEP=$1" >> "$LOG"
+              return "$rc"
+            fi
+            return 0
+          }
+          run_step install pnpm install --no-frozen-lockfile --ignore-scripts || true
+          if ! grep -q 'EXIT_CODE=[1-9]' "$LOG"; then run_step wxt_prepare pnpm --filter brauzio-extension exec wxt prepare || true; fi
+          if ! grep -q 'EXIT_CODE=[1-9]' "$LOG"; then run_step shared_build pnpm --filter brauzio-shared build || true; fi
+          if ! grep -q 'EXIT_CODE=[1-9]' "$LOG"; then run_step cloud_check pnpm --filter brauzio-cloud-mcp check || true; fi
+          if ! grep -q 'EXIT_CODE=[1-9]' "$LOG"; then run_step cloud_build pnpm --filter brauzio-cloud-mcp build || true; fi
+          if ! grep -q 'EXIT_CODE=[1-9]' "$LOG"; then run_step extension_compile pnpm --filter brauzio-extension compile || true; fi
+          if ! grep -q 'EXIT_CODE=[1-9]' "$LOG"; then run_step extension_build pnpm --filter brauzio-extension build || true; fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add "$LOG"
+          git commit -m 'ci: capture V2 diagnostic result [skip ci]' || true
+          git push || true
