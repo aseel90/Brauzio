@@ -1,20 +1,73 @@
 # Brauzio V2
 
-Brauzio is now treated as an independent Chrome MCP product. The supported core is: Chrome extension -> Cloudflare relay -> ChatGPT Custom MCP -> browser tools.
+## الحالة
 
-## V2 priorities
+Brauzio V2 أصبح النواة المعتمدة للمشروع.
 
-1. Keep Cloudflare relay and browser-control tools stable.
-2. Replace the legacy product UI with a Brauzio-only Arabic-first interface.
-3. Add visible AI pointer feedback inside web pages.
-4. Add true mouse state controls for apps, canvases and virtual joysticks: `mouse_move`, `mouse_down`, `mouse_up`, and `drag_hold`.
-5. Remove legacy recorder/builder/local-agent/vector/editor/sidepanel surfaces after the V2 build is verified.
-6. Keep end-to-end relay tracing and the automatic `latest` ZIP publisher.
+في 2026-09-06 تم تشغيل عملية تنظيف موثقة على فرع اختبار، ثم نجح كل من:
 
-## Virtual mouse design
+```text
+brauzio-shared build       PASS
+brauzio-cloud-mcp check    PASS
+brauzio-extension compile  PASS
+brauzio-extension build    PASS
+```
 
-The pointer is rendered inside the target page with `pointer-events:none` and a maximum z-index. Browser input itself is still sent through Chrome DevTools Protocol, so the visual pointer never intercepts the real interaction. A small Brauzio badge distinguishes AI input from the user's physical pointer.
+نتيجة البناء الناجحة ثُبتت في commit:
 
-## Safety rule for cleanup
+`a1db67c33d9b1e071bbfdbf77136f48c48f02000`
 
-Legacy files are removed only after the replacement path builds and passes a real browser test. MCP relay, read-page, screenshot, console, JavaScript, network, element selection and browser interaction tools must not be removed merely because their UI surface is removed.
+## نطاق المنتج
+
+المسار الوحيد المدعوم:
+
+`ChatGPT → Cloudflare MCP → Durable Object → WebSocket → Brauzio Extension → Chrome`
+
+## واجهة V2
+
+الـPopup الجديد يعرض فقط ما يحتاجه المستخدم:
+
+1. حالة الاتصال.
+2. Worker URL.
+3. Device ID.
+4. Device Token بشكل مخفي.
+5. MCP URL للنسخ.
+6. الاتصال/الفصل.
+7. توضيح حالة الماوس الافتراضي.
+
+## Virtual Mouse
+
+أضيفت إلى `chrome_computer` العمليات:
+
+- `mouse_move`
+- `mouse_down`
+- `mouse_up`
+- `drag_hold`
+
+المؤشر المرئي يعرض حركة Brauzio داخل الصفحة، بينما أحداث الإدخال الفعلية ترسل عبر CDP. المؤشر نفسه يستخدم `pointer-events:none` حتى لا يعطل الصفحة.
+
+هذا يسمح باختبار:
+
+- Virtual Joysticks.
+- Canvas games.
+- Sliders.
+- Drag and drop.
+- عناصر تحتاج إبقاء زر الماوس مضغوطًا.
+
+## ما أزيل نهائيًا
+
+- Record/Replay v2 وv3.
+- Workflow Builder.
+- Agent Chat.
+- Quick Panel.
+- Local semantic models وembeddings.
+- Vector Database / Vector Search.
+- ONNX/SIMD runtime.
+- Web Editor.
+- Side Panel product UI.
+- خيارات وجسر MCP المحلي القديم.
+- اختبارات وملفات البناء المرتبطة بهذه الطبقات.
+
+## قاعدة التطوير
+
+لا يعاد إدخال أي من الطبقات أعلاه إلا بقرار منتج صريح. أي ميزة جديدة يجب أن تدعم الهدف الرئيسي: جعل ChatGPT يرى Chrome ويتحكم فيه بصورة قابلة للملاحظة والتشخيص.

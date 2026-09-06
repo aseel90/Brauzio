@@ -1,7 +1,25 @@
-# WXT + Vue 3
+# Brauzio Chrome Extension
 
-This template should help get you started developing with Vue 3 in WXT.
+إضافة Chrome الخاصة بـBrauzio V2.
 
-## Recommended IDE Setup
+وظيفتها الأساسية هي الاتصال بـBrauzio Cloud MCP عبر WebSocket، استقبال استدعاءات أدوات المتصفح من ChatGPT، تنفيذها باستخدام Chrome APIs وChrome DevTools Protocol، ثم إعادة النتيجة إلى Cloudflare.
 
-- [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar).
+## نقاط الدخول الحالية
+
+- `background/` — relay وأدوات المتصفح.
+- `popup/` — واجهة الاتصال والإعدادات.
+- `welcome/` — إعداد أول تشغيل.
+- `offscreen/` — ترميز GIF فقط.
+- `element-picker.content.ts` — اختيار عنصر يدوي عند الحاجة.
+
+لا توجد في V2 واجهة Agent داخلية أو Workflow Builder أو Record/Replay أو Local AI أو Web Editor أو Side Panel.
+
+## البناء
+
+من جذر المستودع:
+
+```bash
+pnpm --filter brauzio-extension exec wxt prepare
+pnpm --filter brauzio-extension compile
+pnpm --filter brauzio-extension build
+```
