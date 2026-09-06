@@ -1,0 +1,71 @@
+name: Brauzio CI Diagnose 260
+
+on:
+  push:
+    branches: [ci-diagnose-260]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 8.15.9
+
+      - name: Run Brauzio build diagnostics
+        id: diagnose
+        continue-on-error: true
+        shell: bash
+        run: |
+          set +e
+          mkdir -p diagnostics
+          LOG=diagnostics/ci-260.log
+          : > "$LOG"
+
+          run_step() {
+            label="$1"
+            shift
+            printf '\n===== %s =====\n' "$label" | tee -a "$LOG"
+            "$@" >>"$LOG" 2>&1
+            code=$?
+            printf '\n__EXIT_CODE__=%s\n' "$code" | tee -a "$LOG"
+            if [ "$code" -ne 0 ]; then
+              printf '__FAILED_STEP__=%s\n' "$label" | tee -a "$LOG"
+              exit "$code"
+            fi
+          }
+
+          run_step install pnpm install --no-frozen-lockfile --ignore-scripts
+          run_step wxt_prepare pnpm --filter brauzio-extension exec wxt prepare
+          run_step shared_build pnpm --filter brauzio-shared build
+          run_step cloud_check pnpm --filter brauzio-cloud-mcp check
+          run_step cloud_build pnpm --filter brauzio-cloud-mcp build
+          run_step extension_compile pnpm --filter brauzio-extension compile
+          run_step extension_build pnpm --filter brauzio-extension build
+
+      - name: Commit diagnostic log
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add diagnostics/ci-260.log || true
+          if git diff --cached --quiet; then
+            exit 0
+          fi
+          git commit -m 'diagnostics: capture Brauzio CI failure [skip ci]'
+          git push
