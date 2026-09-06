@@ -11,10 +11,8 @@ config({ path: resolve(process.cwd(), '.env') });
 config({ path: resolve(process.cwd(), '.env.local') });
 
 const CHROME_EXTENSION_KEY = process.env.CHROME_EXTENSION_KEY;
-// Detect dev mode early for manifest-level switches
 const IS_DEV = process.env.NODE_ENV !== 'production' && process.env.MODE !== 'production';
 
-// See https://wxt.dev/api/config.html
 export default defineConfig({
   modules: ['@wxt-dev/module-vue'],
   runner: {
@@ -30,7 +28,6 @@ export default defineConfig({
     // ],
   },
   manifest: {
-    // Use environment variable for the key, fallback to undefined if not set
     key: CHROME_EXTENSION_KEY,
     default_locale: 'ar',
     name: '__MSG_extensionName__',
@@ -50,7 +47,6 @@ export default defineConfig({
       'storage',
       'declarativeNetRequest',
       'alarms',
-      // Allow programmatic control of Chrome Side Panel
       'sidePanel',
     ],
     host_permissions: ['<all_urls>'],
@@ -62,29 +58,10 @@ export default defineConfig({
       default_popup: 'popup.html',
       default_title: 'Brauzio',
     },
-    // Chrome Side Panel entry for workflow management
-    // Ref: https://developer.chrome.com/docs/extensions/reference/api/sidePanel
     side_panel: {
       default_path: 'sidepanel.html',
     },
-    // Keyboard shortcuts for quick triggers
     commands: {
-      // run_quick_trigger_1: {
-      //   suggested_key: { default: 'Ctrl+Shift+1' },
-      //   description: 'Run quick trigger 1',
-      // },
-      // run_quick_trigger_2: {
-      //   suggested_key: { default: 'Ctrl+Shift+2' },
-      //   description: 'Run quick trigger 2',
-      // },
-      // run_quick_trigger_3: {
-      //   suggested_key: { default: 'Ctrl+Shift+3' },
-      //   description: 'Run quick trigger 3',
-      // },
-      // open_workflow_sidepanel: {
-      //   suggested_key: { default: 'Ctrl+Shift+O' },
-      //   description: 'Open workflow sidepanel',
-      // },
       toggle_web_editor: {
         suggested_key: { default: 'Ctrl+Shift+O', mac: 'Command+Shift+O' },
         description: 'Toggle Web Editor mode',
@@ -96,11 +73,7 @@ export default defineConfig({
     },
     web_accessible_resources: [
       {
-        resources: [
-          '/models/*', // 允许访问 public/models/ 下的所有文件
-          '/workers/*', // 允许访问 workers 文件
-          '/inject-scripts/*', // 允许内容脚本注入的助手文件
-        ],
+        resources: ['/models/*', '/workers/*', '/inject-scripts/*'],
         matches: ['<all_urls>'],
       },
     ],
@@ -110,7 +83,6 @@ export default defineConfig({
           cross_origin_embedder_policy: { value: 'require-corp' as const },
           cross_origin_opener_policy: { value: 'same-origin' as const },
           content_security_policy: {
-            // Allow inline styles injected by Vite (compiled CSS) and data images used in UI thumbnails
             extension_pages:
               "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:;",
           },
@@ -118,16 +90,14 @@ export default defineConfig({
   },
   vite: (env) => ({
     plugins: [
-      // TailwindCSS v4 Vite plugin – no PostCSS config required
       tailwindcss(),
-      // Auto-register SVG icons as Vue components; all icons are bundled locally
       Components({
         dts: false,
         resolvers: [IconsResolver({ prefix: 'i', enabledCollections: ['lucide', 'mdi', 'ri'] })],
       }) as any,
       Icons({ compiler: 'vue3', autoInstall: false }) as any,
-      // Ensure static assets are available as early as possible to avoid race conditions in dev
-      // Copy workers/_locales/inject-scripts into the build output before other steps
+      // WXT validates web_accessible_resources before Rollup's writeBundle phase.
+      // Copy these files at buildStart so they always exist before manifest validation.
       viteStaticCopy({
         targets: [
           {
@@ -143,13 +113,8 @@ export default defineConfig({
             dest: '_locales',
           },
         ],
-        // Use writeBundle so outDir exists for dev and prod
-        hook: 'writeBundle',
-        // Enable watch so changes to these files are reflected during dev
-        watch: {
-          // Use default patterns inferred from targets; explicit true enables watching
-          // Vite plugin will watch src patterns and re-copy on change
-        } as any,
+        hook: 'buildStart',
+        watch: {} as any,
       }) as any,
     ],
     build: {
