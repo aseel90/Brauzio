@@ -1,5 +1,20 @@
 # Brauzio Changelog
 
+## 2026-09-06 — Extension V2.2.0 CDP Core V3 + Event Watch Foundation
+
+- إضافة `CDPRouter` جديد فوق `chrome.debugger` مع ownership مرجعي صحيح لكل أداة أو مراقب.
+- إضافة Root Session snapshots و`forceDetach` وlazy recovery عند فقد debugger attachment.
+- إضافة Child CDP Sessions عبر `Target.attachToTarget(..., flatten: true)` مع `sendToChild` وownership وتنظيف مستقل.
+- إبقاء `cdpSessionManager` كطبقة توافق بحيث تنتقل الأدوات الحالية إلى V3 بدون إعادة كتابة جماعية.
+- إضافة Event Router داخلي فوق `chrome.debugger.onEvent`.
+- إضافة أدوات MCP الجديدة: `chrome_watch_start`, `chrome_watch_wait`, `chrome_watch_read`, `chrome_watch_stop`.
+- إضافة local ring buffer لكل Watch مع sequence numbers وTTL وbackpressure وحد أقصى للذاكرة.
+- دعم أحداث Navigation وNetwork وRuntime errors وLog وDialogs وLifecycle مع summaries آمنة لا تسجل headers/cookies/tokens.
+- `watch_wait` يعيد الحدث فورًا إذا كان حدث قبل استدعائه، بدل الاعتماد على sleep ثابت.
+- تنظيف الـWatches وإطلاق CDP ownership تلقائيًا عند tab close أو Relay disconnect/error.
+- تقوية Virtual Mouse fail-safe: تحرير أي Mouse Down عالق عند navigation/tab close/Relay disconnect وتنظيف CDP stale state.
+- ما يزال Durable Object watch persistence وربط traceId الكامل وSmart Wait ضمن المراحل التالية؛ لا تعتبر هذه العناصر مكتملة في 2.2.0.
+
 ## 2026-09-06 — V2.1.2 OAuth Form CSP Fix
 
 - أصلحنا منع متصفح OAuth لإرسال نموذج `/authorize` بسبب `Content-Security-Policy: form-action 'self'`.
