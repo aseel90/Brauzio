@@ -1,0 +1,88 @@
+name: Brauzio v2 Validate
+
+on:
+  push:
+    branches:
+      - brauzio-v2-clean-ui
+    paths:
+      - '.github/workflows/brauzio-v2-validate.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  validate:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: brauzio-v2-clean-ui
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 8.15.9
+
+      - name: Build and capture result
+        shell: bash
+        run: |
+          set +e
+          LOG=/tmp/brauzio-v2-build.log
+          {
+            echo '=== install ==='
+            pnpm install --no-frozen-lockfile --ignore-scripts
+            echo '=== prepare ==='
+            pnpm --filter brauzio-extension exec wxt prepare
+            echo '=== shared ==='
+            pnpm --filter brauzio-shared build
+            echo '=== cloud check ==='
+            pnpm --filter brauzio-cloud-mcp check
+            echo '=== extension build ==='
+            pnpm --filter brauzio-extension build
+          } >"$LOG" 2>&1
+          STATUS=$?
+          set -e
+
+          mkdir -p docs
+          if [ "$STATUS" -eq 0 ]; then
+            cd app/chrome-extension/.output/chrome-mv3
+            zip -qr ../brauzio-v2-validation.zip .
+            cd ../../../..
+            SIZE=$(du -h app/chrome-extension/.output/brauzio-v2-validation.zip | cut -f1)
+            cat > docs/V2_BUILD_STATUS.md <<EOF
+          # Brauzio v2 Build Status
+
+          **Status:** PASS
+
+          Clean Chrome extension build completed successfully.
+
+          **Validation ZIP size:** ${SIZE}
+
+          Validated commit before status marker: $(git rev-parse HEAD)
+          EOF
+          else
+            {
+              echo '# Brauzio v2 Build Status'
+              echo
+              echo '**Status:** FAIL'
+              echo
+              echo 'The clean extension build failed. Last build output:'
+              echo
+              echo '```text'
+              tail -n 120 "$LOG"
+              echo '```'
+            } > docs/V2_BUILD_STATUS.md
+          fi
+
+          cat "$LOG"
+
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add docs/V2_BUILD_STATUS.md
+          git commit -m "v2: record clean build validation (${STATUS}) [skip ci]"
+          git push origin HEAD:brauzio-v2-clean-ui
