@@ -1,95 +1,99 @@
-# 🚀 Installation and Connection Issues
+# استكشاف أخطاء Brauzio
 
-## Quick Diagnosis
+هذه الصفحة خاصة بإصدار **Brauzio Cloud MCP**. لا تستخدم تعليمات `localhost:12306` أو `mcp-chrome-bridge` الخاصة بالمشروع الأصلي.
 
-Run the diagnostic tool to identify common issues:
+## الإضافة تظهر «غير متصل»
 
-```bash
-mcp-chrome-bridge doctor
+تحقق من التالي:
+
+1. رابط Worker يبدأ بـ `https://` ويشير إلى Worker المنشور فعليًا.
+2. `BROWSER_SHARED_SECRET` مضبوط في إعدادات Cloudflare Worker.
+3. رمز الاتصال داخل الإضافة يطابق `BROWSER_SHARED_SECRET` حرفيًا.
+4. معرّف الجهاز ليس فارغًا؛ للاستخدام الفردي استخدم `default`.
+5. Chrome إصدار 116 أو أحدث.
+
+يمكن فتح:
+
+```text
+https://<worker>/health
 ```
 
-To automatically fix common issues:
+يجب أن يستجيب Worker بدل خطأ 404 أو 5xx.
 
-```bash
-mcp-chrome-bridge doctor --fix
+## Worker يعمل لكن ChatGPT لا يجد المتصفح
+
+تحقق من حالة الجهاز:
+
+```text
+https://<worker>/browser-status?device=default&key=<MCP_SECRET>
 ```
 
-## Export Report for GitHub Issues
+إذا كان Worker يعمل لكن الجهاز غير متصل، فالمشكلة بين إضافة Chrome وWebSocket وليست في MCP نفسه.
 
-If you need to open an issue, export a diagnostic report:
+## ChatGPT يرفض رابط MCP
 
-```bash
-# Print Markdown report to terminal (copy/paste into GitHub Issue)
-mcp-chrome-bridge report
+رابط نسخة الاستخدام الفردي الحالية يكون بالشكل:
 
-# Write to a file
-mcp-chrome-bridge report --output mcp-report.md
-
-# Copy directly to clipboard
-mcp-chrome-bridge report --copy
+```text
+https://<worker>/mcp?device=default&key=<MCP_SECRET>
 ```
 
-By default, usernames, paths, and tokens are redacted. Use `--no-redact` if you're comfortable sharing full paths.
+تحقق من:
 
-## If Connection Fails After Clicking the Connect Button on the Extension
+- استخدام HTTPS وليس `ws://` أو `wss://` في إعداد MCP.
+- وجود `/mcp` في المسار.
+- أن `device` يطابق معرّف الجهاز في الإضافة.
+- أن `key` يطابق `MCP_SHARED_SECRET` إن كان مضبوطًا، وإلا السر المشترك المستخدم للمتصفح.
 
-1. **Run the diagnostic tool first**
+> رابط MCP يحتوي سرًا في نسخة MVP؛ لا تنشره أو تشاركه علنًا.
 
-```bash
-mcp-chrome-bridge doctor
+## WebSocket يفصل بعد فترة
+
+Brauzio يرسل heartbeat دوريًا من Service Worker. إذا استمر الفصل:
+
+- تأكد أن Chrome 116+.
+- تأكد أن Worker المنشور هو الإصدار الحالي الذي يستخدم Durable Object.
+- افحص سجلات Worker في Cloudflare لمعرفة إن كان الاتصال يُرفض بسبب المصادقة.
+- أعد حفظ إعدادات الاتصال من popup ثم اضغط اتصال.
+
+## الأدوات تظهر لكن تنفيذها يفشل
+
+ابدأ بهذه الأدوات البسيطة بالتسلسل:
+
+1. `get_windows_and_tabs`
+2. `chrome_read_page`
+3. `chrome_screenshot`
+4. `chrome_navigate`
+5. `chrome_click_element` أو `chrome_computer`
+
+إذا نجحت الأدوات الأساسية وفشلت أداة متقدمة فقط، فالمشكلة غالبًا في تلك الأداة وليس في Cloudflare relay.
+
+## صلاحيات Chrome
+
+Brauzio يحتاج صلاحيات Browser APIs الموضحة في Manifest. إذا نزعت صلاحية من صفحة الإضافات فقد تفشل أداة محددة بينما يبقى اتصال MCP سليمًا.
+
+## لا تستخدم هذه الخطوات القديمة
+
+هذه التعليمات تخص upstream القديم وليست مطلوبة في Brauzio Cloud:
+
+```text
+npm install -g mcp-chrome-bridge
+mcp-chrome-bridge register
+http://127.0.0.1:12306/mcp
+cloudflared tunnel ...
 ```
 
-This will check installation, manifest, permissions, and Node.js path.
+## فحص البناء
 
-2. **Check if mcp-chrome-bridge is installed successfully**, ensure it's globally installed
+إذا كنت مطورًا، راجع GitHub Actions. Workflow باسم **Brauzio CI** يبني:
 
-```bash
-mcp-chrome-bridge -V
-```
+- shared MCP schemas
+- Cloudflare MCP Worker
+- Chrome extension
+- ZIP جاهز للإضافة
 
-<img width="612" alt="Screenshot 2025-06-11 15 09 57" src="https://github.com/user-attachments/assets/59458532-e6e1-457c-8c82-3756a5dbb28e" />
+فشل CI يعني أن الإصدار الحالي لا يجب اعتباره إصدارًا جاهزًا للتثبيت حتى يتم إصلاحه.
 
-2. **Check if the manifest file is in the correct directory**
+## مرجع معماري
 
-Windows path: C:\Users\xxx\AppData\Roaming\Google\Chrome\NativeMessagingHosts
-
-Mac path: /Users/xxx/Library/Application\ Support/Google/Chrome/NativeMessagingHosts
-
-If the npm package is installed correctly, a file named `com.chromemcp.nativehost.json` should be generated in this directory
-
-3. **Check logs**
-   Logs are now stored in user-writable directories:
-
-- **macOS**: `~/Library/Logs/mcp-chrome-bridge/`
-- **Windows**: `%LOCALAPPDATA%\mcp-chrome-bridge\logs\`
-- **Linux**: `~/.local/state/mcp-chrome-bridge/logs/`
-
-<img width="804" alt="Screenshot 2025-06-11 15 09 41" src="https://github.com/user-attachments/assets/ce7b7c94-7c84-409a-8210-c9317823aae1" />
-
-4. **Check if you have execution permissions**
-   You need to check your installation path (if unclear, open the manifest file in step 2, the path field shows the installation directory). For example, if the Mac installation path is as follows:
-
-`xxx/node_modules/mcp-chrome-bridge/dist/run_host.sh`
-
-Check if this script has execution permissions. Run to fix:
-
-```bash
-mcp-chrome-bridge fix-permissions
-```
-
-5. **Node.js not found**
-   If you use a Node version manager (nvm, volta, asdf, fnm), the wrapper script may not find Node.js. Set the `CHROME_MCP_NODE_PATH` environment variable:
-
-```bash
-export CHROME_MCP_NODE_PATH=/path/to/your/node
-```
-
-Or run `mcp-chrome-bridge doctor --fix` to write the current Node path.
-
-## Log Locations
-
-Wrapper logs are now stored in user-writable locations:
-
-- **macOS**: `~/Library/Logs/mcp-chrome-bridge/`
-- **Windows**: `%LOCALAPPDATA%\mcp-chrome-bridge\logs\`
-- **Linux**: `~/.local/state/mcp-chrome-bridge/logs/`
+راجع [`BRAUZIO_ARCHITECTURE.md`](BRAUZIO_ARCHITECTURE.md) لفهم مسار ChatGPT → Cloudflare → WebSocket → Chrome Extension.
