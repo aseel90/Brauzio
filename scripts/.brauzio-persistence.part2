@@ -1,0 +1,180 @@
+    (event) => event.sequence > after && (!method || event.method === method),
+    );
+    if (existing) {
+      return Response.json({
+        result: this.toolResult({ watchId, event: existing, source: 'durable_object' }),
+      });
+    }
+    if (record.stopped) {
+      return Response.json({
+        result: this.toolResult({ watchId, stopped: true, reason: record.stopReason || 'stopped', source: 'durable_object' }),
+      });
+    }
+
+    const timeoutMs = Math.max(50, Math.min(Number(args.timeoutMs || 10_000), WATCH_WAIT_MAX_MS));
+    return await new Promise<Response>((resolve) => {
+      const id = ++this.watchWaiterSerial;
+      const timer = setTimeout(() => {
+        const waiters = this.watchWaiters.get(watchId);
+        waiters?.delete(id);
+        if (waiters && !waiters.size) this.watchWaiters.delete(watchId);
+        resolve(Response.json({
+          result: this.toolResult({ watchId, timedOut: true, reason: 'timeout', source: 'durable_object' }),
+        }));
+      }, timeoutMs);
+      const waiters = this.watchWaiters.get(watchId) || new Map<number, PersistentWatchWaiter>();
+      waiters.set(id, { id, afterSequence: after, method: method || undefined, resolve, timer });
+      this.watchWaiters.set(watchId, waiters);
+    });
+  }
+
+  private async handleWatchStop(watchId: string): Promise<Response> {
+    const record = await this.getWatch(watchId);
+    if (!record) return Response.json({ error: `Watch not found: ${watchId}` }, { status: 404 });
+    await this.persistWatchStopped(watchId, 'explicit_stop');
+    const browser = this.authenticatedSockets()[0];
+    if (browser) {
+      try {
+        browser.send(JSON.stringify({ type: 'watch_stop', watchId }));
+      } catch {}
+    }
+    return Response.json({
+      result: this.toolResult({
+        watchId,
+        tabId: record.tabId,
+        stopped: true,
+        reason: 'explicit_stop',
+        finalSequence: record.nextSequence,
+        source: 'durable_object',
+      }),
+    });
+  }
+
+'''
+assert needle in s
+s=s.replace(needle, methods+needle)
+
+p.write_text(s)
+
+# --- next file ---
+
+p=Path('app/chrome-extension/entrypoints/background/tools/browser/watch.ts')
+s=p.read_text()
+
+s=s.replace("type WatchCategory = 'navigation' | 'network' | 'errors' | 'dialogs' | 'lifecycle';", "export type WatchCategory = 'navigation' | 'network' | 'errors' | 'dialogs' | 'lifecycle';")
+s=s.replace("type WatchEvent = {", "export type WatchEvent = {")
+
+needle="""type WatchWaitResult = {\n"""
+addition="""export type PersistentWatchDescriptor = {
+  watchId: string;
+  tabId: number;
+  createdAt: number;
+  expiresAt: number;
+  maxEvents: number;
+  nextSequence: number;
+  categories?: WatchCategory[];
+  methods?: string[];
+  urlIncludes?: string;
+};
+
+type WatchPersistenceSink = {
+  started?: (watch: PersistentWatchDescriptor) => void | Promise<void>;
+  event?: (event: WatchEvent) => void | Promise<void>;
+  stopped?: (watchId: string, reason: string) => void | Promise<void>;
+};
+
+let persistenceSink: WatchPersistenceSink = {};
+
+export function configureWatchPersistenceSink(sink: WatchPersistenceSink): void {
+  persistenceSink = sink || {};
+}
+
+function emitPersistence(task: void | Promise<void> | undefined): void {
+  if (!task) return;
+  void Promise.resolve(task).catch(() => {});
+}
+
+"""
+assert needle in s
+s=s.replace(needle,addition+needle)
+
+# state categories
+s=s.replace("""  nextSequence: number;\n  methods: Set<string>;\n  urlIncludes?: string;\n""", """  nextSequence: number;\n  categories: WatchCategory[];\n  customMethods: string[];\n  methods: Set<string>;\n  urlIncludes?: string;\n""")
+
+# add safe URL helper before eventUrl
+needle="""function eventUrl(method: string, params?: object): string {\n"""
+helper="""function safeEventUrl(value: unknown): string {
+  const raw = String(value || '');
+  if (!raw) return '';
+  try {
+    const url = new URL(raw);
+    url.username = '';
+    url.password = '';
+    url.search = '';
+    url.hash = '';
+    return url.toString();
+  } catch {
+    return raw.split('?')[0].split('#')[0].slice(0, 4096);
+  }
+}
+
+"""
+assert needle in s
+s=s.replace(needle,helper+needle)
+
+# eventUrl returns safe values
+s=s.replace("return String(asRecord(p.frame).url || '');", "return safeEventUrl(asRecord(p.frame).url);")
+s=s.replace("return String(asRecord(p.request).url || p.documentURL || '');", "return safeEventUrl(asRecord(p.request).url || p.documentURL);")
+s=s.replace("return String(asRecord(p.response).url || '');", "return safeEventUrl(asRecord(p.response).url);")
+s=s.replace("return String(asRecord(p.exceptionDetails).url || '');", "return safeEventUrl(asRecord(p.exceptionDetails).url);")
+s=s.replace("return String(asRecord(p.entry).url || '');", "return safeEventUrl(asRecord(p.entry).url);")
+s=s.replace("return String(p.url || '');", "return safeEventUrl(p.url);")
+
+# summarize URL fields specific replacements
+s=s.replace("url: frame.url,", "url: safeEventUrl(frame.url),")
+s=s.replace("documentURL: p.documentURL,", "documentURL: safeEventUrl(p.documentURL),")
+s=s.replace("url: request.url,", "url: safeEventUrl(request.url),")
+s=s.replace("url: response.url,", "url: safeEventUrl(response.url),")
+s=s.replace("url: details.url,", "url: safeEventUrl(details.url),")
+s=s.replace("url: entry.url,", "url: safeEventUrl(entry.url),")
+s=s.replace("return { url: p.url, message: p.message, type: p.type, hasBrowserHandler: p.hasBrowserHandler };", "return { url: safeEventUrl(p.url), message: p.message, type: p.type, hasBrowserHandler: p.hasBrowserHandler };")
+
+# constructor stop behavior
+s=s.replace("void this.stopAll('tab_closed', tabId);", "void this.stopAll('tab_closed', tabId, true);")
+s=s.replace("void this.stopAll('service_worker_suspend');", "void this.stopAll('service_worker_suspend', undefined, false);")
+
+# record emit persistence after buffer trim
+needle="""    if (state.events.length > state.maxEvents) {\n      state.events.splice(0, state.events.length - state.maxEvents);\n    }\n\n    for (const [id, waiter] of state.waiters) {\n"""
+replacement="""    if (state.events.length > state.maxEvents) {
+      state.events.splice(0, state.events.length - state.maxEvents);
+    }
+    emitPersistence(persistenceSink.event?.(item));
+
+    for (const [id, waiter] of state.waiters) {
+"""
+assert needle in s
+s=s.replace(needle,replacement)
+
+# Replace start method block until read method
+start=s.index("  async start(options: {")
+end=s.index("\n  read(watchId: string", start)
+new_start=r'''  async start(options: {
+    tabId: number;
+    categories?: WatchCategory[];
+    methods?: string[];
+    urlIncludes?: string;
+    maxEvents?: number;
+    ttlMs?: number;
+    watchId?: string;
+    createdAt?: number;
+    expiresAt?: number;
+    nextSequence?: number;
+  }) {
+    const id = options.watchId ? String(options.watchId) : crypto.randomUUID();
+    const existing = this.watches.get(id);
+    if (existing) {
+      return {
+        watchId: existing.id,
+        tabId: existing.tabId,
+        enabledDomains: [],
+        methods: [...existing.met
