@@ -18,7 +18,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Remove localhost Agent transport from Web Editor
+      - name: Remove localhost Agent transport
         run: python scripts/remove_web_editor_local_agent.py
 
       - name: Verify no local bridge references remain
@@ -38,14 +38,16 @@ jobs:
       - name: Commit migration
         shell: bash
         run: |
-          git add app/chrome-extension/entrypoints/background/web-editor/index.ts
+          git add -A \
+            app/chrome-extension/entrypoints/background/web-editor \
+            app/chrome-extension/entrypoints/sidepanel
           if git diff --cached --quiet; then
-            echo 'No Web Editor migration changes.'
+            echo 'No local Agent migration changes.'
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git commit -m "refactor: remove Web Editor localhost Agent transport"
+          git commit -m "refactor: remove legacy localhost Agent subsystem"
           git fetch origin main
           git rebase origin/main
           git push origin HEAD:main
