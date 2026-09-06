@@ -1,11 +1,0 @@
-Brauzio OAuth live verification
-UTC: 2026-09-06T17:22:09Z
-HEALTH={"service":"Brauzio MCP","ok":true,"version":"2.1.0","schemaVersion":"v2.1-2026-09-06","auth":"oauth2.1-pairing","toolCount":27,"computerActions":["mouse_move","mouse_down","mouse_up","drag_hold"]}
-PROTECTED_STATUS=200
-PROTECTED_BODY={"resource":"https://brauzio-mcp.aseelsalah266.workers.dev","authorization_servers":["https://brauzio-mcp.aseelsalah266.workers.dev"],"scopes_supported":["brauzio:control"],"bearer_methods_supported":["header"],"resource_name":"Brauzio Chrome Control"}
-AUTH_SERVER_STATUS=200
-AUTH_SERVER_BODY={"issuer":"https://brauzio-mcp.aseelsalah266.workers.dev","authorization_endpoint":"https://brauzio-mcp.aseelsalah266.workers.dev/authorize","token_endpoint":"https://brauzio-mcp.aseelsalah266.workers.dev/oauth/token","registration_endpoint":"https://brauzio-mcp.aseelsalah266.workers.dev/oauth/register","scopes_supported":["brauzio:control"],"response_types_supported":["code"],"response_modes_supported":["query"],"grant_types_supported":["authorization_code","refresh_token"],"token_endpoint_auth_methods_supported":["client_secret_basic","client_secret_post","none"],"revocation_endpoint":"https://brauzio-mcp.aseelsalah266.workers.dev/oauth/token","code_challenge_methods_supported":["S256"],"authorization_response_iss_parameter_supported":true,"client_id_metadata_document_supported":true}
-MCP_UNAUTH_STATUS=401
-MCP_WWW_AUTH=www-authenticate: Bearer realm="OAuth", resource_metadata="https://brauzio-mcp.aseelsalah266.workers.dev/.well-known/oauth-protected-resource/mcp", scope="brauzio:control" 
-MCP_BODY=
-RESULT=PASS
