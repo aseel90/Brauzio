@@ -65,16 +65,22 @@ jobs:
         run: pnpm --filter chrome-mcp-server build
 
       - name: Package Chrome extension ZIP
-        run: pnpm --filter chrome-mcp-server zip
-
-      - name: Show generated packages
         shell: bash
-        run: find app/chrome-extension/.output -maxdepth 2 -type f -name '*.zip' -print
+        run: |
+          set -euo pipefail
+          cd app/chrome-extension/.output/chrome-mv3
+          zip -qr ../brauzio-chrome.zip .
+
+      - name: Show generated package
+        shell: bash
+        run: |
+          ls -lh app/chrome-extension/.output/brauzio-chrome.zip
+          unzip -t app/chrome-extension/.output/brauzio-chrome.zip >/dev/null
 
       - name: Upload installable Brauzio ZIP
         uses: actions/upload-artifact@v4
         with:
           name: Brauzio-Chrome-Extension
-          path: app/chrome-extension/.output/*.zip
+          path: app/chrome-extension/.output/brauzio-chrome.zip
           if-no-files-found: error
           retention-days: 30
