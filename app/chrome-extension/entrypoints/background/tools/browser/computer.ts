@@ -7,6 +7,12 @@ import { keyboardTool } from './keyboard';
 import { screenshotTool } from './screenshot';
 import { screenshotContextManager, scaleCoordinates } from '@/utils/screenshot-context';
 import { cdpSessionManager } from '@/utils/cdp-session-manager';
+import {
+  beginMouseHold,
+  isMouseHeld,
+  releaseMouseHold,
+  updateMouseHoldPoint,
+} from '@/utils/mouse-hold-safety';
 
 type Point = { x: number; y: number };
 type MouseState = 'move' | 'down' | 'up';
@@ -34,9 +40,6 @@ type ComputerParams = {
   height?: number;
   region?: { x0: number; y0: number; x1: number; y1: number };
 };
-
-const HELD_OWNER = 'brauzio-mouse-hold';
-const heldMouseTabs = new Set<number>();
 
 function ok(payload: Record<string, unknown>): ToolResult {
   return { content: [{ type: 'text', text: JSON.stringify({ success: true, ...payload }) }], isError: false };
@@ -124,23 +127,34 @@ class ComputerTool extends BaseBrowserToolExecutor {
 
   private async drag(tabId: number, start: Point, end: Point, holdMs: number) {
     await cdpSessionManager.attach(tabId, 'brauzio-drag');
+    let pressed = false;
+    let lastPoint = start;
     try {
       await this.mouse(tabId, 'mouseMoved', start, { button: 'none', buttons: 0 });
       await showCursor(tabId, start, 'move');
       await this.mouse(tabId, 'mousePressed', start, { button: 'left', buttons: 1, clickCount: 1 });
+      pressed = true;
       await showCursor(tabId, start, 'down');
       const steps = 16;
       for (let i = 1; i <= steps; i++) {
         const t = i / steps;
         const p = { x: start.x + (end.x - start.x) * t, y: start.y + (end.y - start.y) * t };
+        lastPoint = p;
         await this.mouse(tabId, 'mouseMoved', p, { button: 'left', buttons: 1 });
         await showCursor(tabId, p, 'down');
         await new Promise((r) => setTimeout(r, 18));
       }
       if (holdMs > 0) await new Promise((r) => setTimeout(r, holdMs));
       await this.mouse(tabId, 'mouseReleased', end, { button: 'left', buttons: 0, clickCount: 1 });
+      pressed = false;
       await showCursor(tabId, end, 'up');
     } finally {
+      if (pressed) {
+        try {
+          await this.mouse(tabId, 'mouseReleased', lastPoint, { button: 'left', buttons: 0, clickCount: 1 });
+          await showCursor(tabId, lastPoint, 'up');
+        } catch {}
+      }
       await cdpSessionManager.detach(tabId, 'brauzio-drag');
     }
   }
@@ -151,7 +165,8 @@ class ComputerTool extends BaseBrowserToolExecutor {
       case 'mouse_move': {
         const point = await this.resolvePoint(tabId, args);
         if (!point) return createErrorResponse('Provide coordinates/ref/selector for mouse_move');
-        const held = heldMouseTabs.has(tabId);
+        const held = isMouseHeld(tabId);
+        if (held) updateMouseHoldPoint(tabId, point);
         await this.mouse(tabId, 'mouseMoved', point, { button: held ? 'left' : 'none', buttons: held ? 1 : 0 });
         await showCursor(tabId, point, held ? 'down' : 'move');
         return ok({ action: 'mouse_move', coordinates: point, held });
@@ -159,18 +174,29 @@ class ComputerTool extends BaseBrowserToolExecutor {
       case 'mouse_down': {
         const point = await this.resolvePoint(tabId, args);
         if (!point) return createErrorResponse('Provide coordinates/ref/selector for mouse_down');
-        if (!heldMouseTabs.has(tabId)) { await cdpSessionManager.attach(tabId, HELD_OWNER); heldMouseTabs.add(tabId); }
-        await this.mouse(tabId, 'mouseMoved', point, { button: 'none', buttons: 0 });
-        await this.mouse(tabId, 'mousePressed', point, { button: 'left', buttons: 1, clickCount: 1 });
-        await showCursor(tabId, point, 'down');
-        return ok({ action: 'mouse_down', coordinates: point, held: true });
+        if (isMouseHeld(tabId)) {
+          updateMouseHoldPoint(tabId, point);
+          await this.mouse(tabId, 'mouseMoved', point, { button: 'left', buttons: 1 });
+          await showCursor(tabId, point, 'down');
+          return ok({ action: 'mouse_down', coordinates: point, held: true, alreadyHeld: true });
+        }
+        await beginMouseHold(tabId, point);
+        try {
+          await this.mouse(tabId, 'mouseMoved', point, { button: 'none', buttons: 0 });
+          await this.mouse(tabId, 'mousePressed', point, { button: 'left', buttons: 1, clickCount: 1 });
+          await showCursor(tabId, point, 'down');
+        } catch (error) {
+          await releaseMouseHold(tabId, { point, reason: 'mouse_down_failed', force: true });
+          throw error;
+        }
+        return ok({ action: 'mouse_down', coordinates: point, held: true, alreadyHeld: false });
       }
       case 'mouse_up': {
         const point = await this.resolvePoint(tabId, args);
         if (!point) return createErrorResponse('Provide coordinates/ref/selector for mouse_up');
-        try { await this.mouse(tabId, 'mouseReleased', point, { button: 'left', buttons: 0, clickCount: 1 }); await showCursor(tabId, point, 'up'); }
-        finally { if (heldMouseTabs.delete(tabId)) await cdpSessionManager.detach(tabId, HELD_OWNER); }
-        return ok({ action: 'mouse_up', coordinates: point, held: false });
+        const release = await releaseMouseHold(tabId, { point, reason: 'explicit_mouse_up', force: true });
+        await showCursor(tabId, point, 'up');
+        return ok({ action: 'mouse_up', coordinates: point, held: false, releaseDispatched: release.dispatched });
       }
       case 'left_click': case 'right_click': case 'double_click': case 'triple_click': {
         const point = await this.resolvePoint(tabId, args);
