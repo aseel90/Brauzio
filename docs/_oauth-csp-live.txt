@@ -1,0 +1,4 @@
+health={"service":"Brauzio MCP","ok":true,"version":"2.1.2","schemaVersion":"v2.1.2-2026-09-06","auth":"oauth2.1-pairing","toolCount":27,"computerActions":["mouse_move","mouse_down","mouse_up","drag_hold"]}
+content-security-policy: default-src 'none'; style-src 'unsafe-inline'; form-action https://brauzio-mcp.aseelsalah266.workers.dev; base-uri 'none'; frame-ancestors 'none'
+action="https://brauzio-mcp.aseelsalah266.workers.dev/authorize?response_type=code&amp;client_id=https%3A%2F%2Fchatgpt.com%2Foauth%2Fclient.json&amp;redirect_uri=https%3A%2F%2Fchatgpt.com%2Fconnector_platform_oauth_redirect&amp;scope=brauzio%3Acontrol&amp;code_challenge=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&amp;code_challenge_method=S256&amp;resource=https%3A%2F%2Fbrauzio-mcp.aseelsalah266.workers.dev%2Fmcp&amp;state=brauzio_live_check&amp;ui_locales=ar"
+RESULT=PASS
