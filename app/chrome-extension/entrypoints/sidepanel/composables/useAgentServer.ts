@@ -20,9 +20,9 @@ export interface UseAgentServerOptions {
 }
 
 /**
- * Compatibility composable for UI originally built around the upstream local Agent Server.
- * Brauzio Cloud has no localhost/native Agent process; this adapter reports Cloudflare relay
- * readiness so existing UI components can degrade cleanly without reconnecting to localhost.
+ * Compatibility composable for UI originally built around the upstream embedded Agent Server.
+ * Brauzio Cloud uses the Cloudflare relay directly; this adapter reports relay readiness while
+ * preserving the old component-facing API until those components are simplified further.
  */
 export function useAgentServer(options: UseAgentServerOptions = {}) {
   const serverPort = ref<number | null>(null);
@@ -90,7 +90,7 @@ export function useAgentServer(options: UseAgentServerOptions = {}) {
   }
 
   /**
-   * Embedded AI engines belonged to the removed local Agent Server.
+   * Embedded AI engines belonged to the removed Agent Server.
    * Browser automation is now driven by ChatGPT through Remote MCP.
    */
   async function fetchEngines(): Promise<void> {
@@ -102,7 +102,7 @@ export function useAgentServer(options: UseAgentServerOptions = {}) {
   }
 
   function openEventSource(): void {
-    // No localhost SSE stream exists in the cloud-only Brauzio build.
+    // No embedded Agent event stream exists in the cloud-only Brauzio build.
   }
 
   function closeEventSource(): void {
