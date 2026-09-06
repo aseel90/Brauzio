@@ -1,12 +1,12 @@
-// Brauzio Cloud connection compatibility adapter.
+// محول توافق اتصال Brauzio Cloud.
 export { useAgentServer } from './useAgentServer';
 export type { UseAgentServerOptions } from './useAgentServer';
 
-// Shared theme used by popup, welcome screen, and sidepanel.
+// السمة المشتركة المستخدمة في النافذة المنبثقة وشاشة الترحيب واللوحة الجانبية.
 export { useAgentTheme, preloadAgentTheme, THEME_LABELS } from './useAgentTheme';
 export type { AgentThemeId, UseAgentTheme } from './useAgentTheme';
 
-// Web Editor state remains browser-local and does not require a native server.
+// حالة Web Editor محلية داخل المتصفح ولا تحتاج إلى خدمة خارجية على الجهاز.
 export { useWebEditorTxState, WEB_EDITOR_TX_STATE_INJECTION_KEY } from './useWebEditorTxState';
 export type { UseWebEditorTxStateOptions, WebEditorTxStateReturn } from './useWebEditorTxState';
 
@@ -16,7 +16,7 @@ export { useRRV3Debugger } from './useRRV3Debugger';
 export type { UseRRV3Rpc, UseRRV3RpcOptions, RpcRequestOptions } from './useRRV3Rpc';
 export type { UseRRV3Debugger, UseRRV3DebuggerOptions } from './useRRV3Debugger';
 
-// UI helpers retained for non-native surfaces.
+// أدوات واجهة مستخدم للأسطح المتبقية.
 export { useTextareaAutoResize } from './useTextareaAutoResize';
 export type {
   UseTextareaAutoResizeOptions,
