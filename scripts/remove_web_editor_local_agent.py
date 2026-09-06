@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from pathlib import Path
 import re
+import shutil
 
 ROOT = Path(__file__).resolve().parents[1]
 PATH = ROOT / 'app/chrome-extension/entrypoints/background/web-editor/index.ts'
@@ -85,7 +86,26 @@ for name, count in counts.items():
         raise SystemExit(f'Expected one {name} handler, changed {count}')
 
 if text == original:
-    raise SystemExit('No changes made')
+    raise SystemExit('No Web Editor changes made')
 
 PATH.write_text(text, encoding='utf-8')
-print('Web Editor local Agent transport removed successfully')
+
+# Remove the upstream localhost AgentChat implementation. Brauzio now uses ChatGPT
+# through the Cloudflare MCP relay; AgentChat.vue itself is a cloud status panel.
+legacy_files = [
+    ROOT / 'app/chrome-extension/entrypoints/sidepanel/composables/useAgentChat.ts',
+    ROOT / 'app/chrome-extension/entrypoints/sidepanel/composables/useAgentProjects.ts',
+    ROOT / 'app/chrome-extension/entrypoints/sidepanel/composables/useAgentSessions.ts',
+    ROOT / 'app/chrome-extension/entrypoints/sidepanel/composables/useOpenProjectPreference.ts',
+]
+for path in legacy_files:
+    if path.exists():
+        path.unlink()
+        print(f'Removed {path.relative_to(ROOT)}')
+
+legacy_components = ROOT / 'app/chrome-extension/entrypoints/sidepanel/components/agent-chat'
+if legacy_components.exists():
+    shutil.rmtree(legacy_components)
+    print(f'Removed {legacy_components.relative_to(ROOT)}')
+
+print('Web Editor and sidepanel localhost Agent transport removed successfully')
