@@ -1,0 +1,74 @@
+name: Diagnose Actor Observer V27
+
+on:
+  push:
+    paths:
+      - '.github/workflows/diagnose-actor-observer-v27.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 8.15.9
+
+      - name: Diagnose patch and builds
+        shell: bash
+        run: |
+          set +e
+          LOG=ACTOR_OBSERVER_DIAG.txt
+          : > "$LOG"
+          echo "branch=$(git branch --show-current)" >> "$LOG"
+          echo "head=$(git rev-parse HEAD)" >> "$LOG"
+
+          pnpm install --no-frozen-lockfile --ignore-scripts > /tmp/install.log 2>&1
+          echo "install=$?" >> "$LOG"
+          tail -80 /tmp/install.log >> "$LOG"
+
+          python - <<'PY'
+          import re, base64, zlib
+          text=open('.github/workflows/validate-actor-observer-v27.yml', encoding='utf-8').read()
+          m=re.search(r'^\s*PATCH_ZB64:\s*(\S+)\s*$', text, re.M)
+          if not m: raise SystemExit('PATCH_ZB64 not found')
+          open('/tmp/actor.patch','wb').write(zlib.decompress(base64.b64decode(m.group(1))))
+          PY
+          echo "decode=$?" >> "$LOG"
+
+          git apply --check /tmp/actor.patch > /tmp/apply-check.log 2>&1
+          echo "apply_check=$?" >> "$LOG"
+          cat /tmp/apply-check.log >> "$LOG"
+          git apply /tmp/actor.patch > /tmp/apply.log 2>&1
+          echo "apply=$?" >> "$LOG"
+          cat /tmp/apply.log >> "$LOG"
+
+          run_stage() {
+            name="$1"; shift
+            "$@" > "/tmp/${name}.log" 2>&1
+            code=$?
+            echo "${name}=${code}" >> "$LOG"
+            tail -160 "/tmp/${name}.log" >> "$LOG"
+          }
+
+          run_stage shared_build pnpm --filter brauzio-shared build
+          run_stage cloud_check pnpm --filter brauzio-cloud-mcp check
+          run_stage cloud_build pnpm --filter brauzio-cloud-mcp build
+          run_stage wxt_prepare pnpm --filter brauzio-extension exec wxt prepare
+          run_stage extension_compile pnpm --filter brauzio-extension compile
+          run_stage extension_build pnpm --filter brauzio-extension build
+
+          git reset --hard HEAD
+          git clean -fd -e "$LOG"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add "$LOG"
+          git commit -m 'diagnostics: Actor Observer V27 [skip ci]' || true
+          git push || true
