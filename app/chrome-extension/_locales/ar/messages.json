@@ -1,10 +1,10 @@
 {
   "extensionName": {
     "message": "Brauzio",
-    "description": "اسم إضافة Brauzio"
+    "description": "اسم الإضافة"
   },
   "extensionDescription": {
-    "message": "تحكم بمتصفح Chrome عبر ChatGPT وMCP باستخدام Brauzio Cloud",
-    "description": "وصف إضافة Brauzio"
+    "message": "تحكم ذكي وآمن في Chrome عبر ChatGPT وCloudflare MCP",
+    "description": "وصف الإضافة"
   }
 }
