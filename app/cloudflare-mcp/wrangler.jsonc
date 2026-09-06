@@ -1,0 +1,23 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "brauzio-mcp",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-08-25",
+  "durable_objects": {
+    "bindings": [
+      {
+        "name": "BROWSER_SESSIONS",
+        "class_name": "BrowserSession"
+      }
+    ]
+  },
+  "migrations": [
+    {
+      "tag": "v1",
+      "new_sqlite_classes": ["BrowserSession"]
+    }
+  ],
+  "vars": {
+    "DEFAULT_DEVICE_ID": "default"
+  }
+}
