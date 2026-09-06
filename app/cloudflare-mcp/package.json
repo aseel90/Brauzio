@@ -1,6 +1,7 @@
 {
   "name": "brauzio-cloud-mcp",
   "version": "0.2.0",
+  "description": "Brauzio Cloud MCP relay with OAuth pairing",
   "private": true,
   "type": "module",
   "scripts": {
