@@ -1,5 +1,6 @@
 name: Brauzio v2 Validate
 
+# validation-run: 2
 on:
   push:
     branches:
