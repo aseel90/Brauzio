@@ -6,8 +6,8 @@ import { BrowserSession } from './browser-session';
 
 export { BrowserSession };
 
-const BRAUZIO_RUNTIME_VERSION = '2.1.1';
-const BRAUZIO_SCHEMA_VERSION = 'v2.1.1-2026-09-06';
+const BRAUZIO_RUNTIME_VERSION = '2.1.2';
+const BRAUZIO_SCHEMA_VERSION = 'v2.1.2-2026-09-06';
 const BRAUZIO_SCOPE = 'brauzio:control';
 const BRAUZIO_COMPUTER_ACTIONS = [
   'mouse_move',
@@ -157,6 +157,7 @@ function authorizationPage(options: {
 }): Response {
   const { requestUrl, clientName, defaultDeviceId, error } = options;
   const action = new URL(requestUrl);
+  const formOrigin = action.origin;
   const body = `<!doctype html>
 <html lang="ar" dir="rtl">
 <head>
@@ -175,7 +176,7 @@ function authorizationPage(options: {
   <p class="lead">افتح إضافة Brauzio، وأنشئ رمز ربط مؤقت، ثم أدخله هنا. الرمز يستخدم مرة واحدة وينتهي تلقائيًا.</p>
   <div class="client"><span>التطبيق الذي يطلب الوصول</span><strong>${htmlEscape(clientName)}</strong></div>
   ${error ? `<div class="error">${htmlEscape(error)}</div>` : ''}
-  <form method="post" action="${htmlEscape(action.pathname + action.search)}">
+  <form method="post" action="${htmlEscape(action.toString())}">
     <label class="field"><span>معرف الجهاز</span><input name="device" value="${htmlEscape(defaultDeviceId)}" maxlength="128" autocomplete="off" /></label>
     <label class="field"><span>رمز الربط المؤقت</span><input class="code" name="pairing_code" inputmode="text" maxlength="12" placeholder="ABCD-EFGH" autocomplete="one-time-code" required autofocus /></label>
     <p class="hint">لن تُرسل كلمة سر الجهاز إلى ChatGPT، ولن توضع أي كلمة سر داخل رابط MCP.</p>
@@ -191,7 +192,7 @@ function authorizationPage(options: {
     headers: {
       'content-type': 'text/html; charset=utf-8',
       'cache-control': 'no-store',
-      'content-security-policy': "default-src 'none'; style-src 'unsafe-inline'; form-action 'self'; base-uri 'none'; frame-ancestors 'none'",
+      'content-security-policy': `default-src 'none'; style-src 'unsafe-inline'; form-action ${formOrigin}; base-uri 'none'; frame-ancestors 'none'`,
       'referrer-policy': 'no-referrer',
       'x-content-type-options': 'nosniff',
     },
