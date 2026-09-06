@@ -44,3 +44,5 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git commit -m "chore: import hangwin/mcp-chrome upstream"
           git push origin HEAD:main
+
+# Brauzio bootstrap trigger
