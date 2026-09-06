@@ -157,7 +157,6 @@ function authorizationPage(options: {
 }): Response {
   const { requestUrl, clientName, defaultDeviceId, error } = options;
   const action = new URL(requestUrl);
-  const formOrigin = action.origin;
   const body = `<!doctype html>
 <html lang="ar" dir="rtl">
 <head>
@@ -188,11 +187,13 @@ function authorizationPage(options: {
 </html>`;
 
   return new Response(body, {
-    status: error ? 401 : 200,
+    // Pairing validation errors are part of the interactive OAuth page, not HTTP auth failures.
+    // Returning 200 avoids browsers/clients treating a retryable form validation error as a failed OAuth endpoint.
+    status: 200,
     headers: {
       'content-type': 'text/html; charset=utf-8',
       'cache-control': 'no-store',
-      'content-security-policy': `default-src 'none'; style-src 'unsafe-inline'; form-action ${formOrigin}; base-uri 'none'; frame-ancestors 'none'`,
+      'content-security-policy': `default-src 'none'; style-src 'unsafe-inline'; form-action 'self'; base-uri 'none'; frame-ancestors 'none'`,
       'referrer-policy': 'no-referrer',
       'x-content-type-options': 'nosniff',
     },
