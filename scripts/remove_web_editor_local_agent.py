@@ -19,10 +19,14 @@ text, count_sse = re.subn(
 )
 
 
-def replace_handler(name: str, body: str) -> int:
+def replace_handler(name: str, body: str, final: bool = False) -> int:
     global text
+    if final:
+        lookahead = r"(?=\n    \} catch \(error\) \{)"
+    else:
+        lookahead = r"(?=\n      if \(message\?\.type === BACKGROUND_MESSAGE_TYPES\.)"
     pattern = re.compile(
-        rf"      if \(message\?\.type === BACKGROUND_MESSAGE_TYPES\.{re.escape(name)}\) \{{.*?(?=\n      if \(message\?\.type === BACKGROUND_MESSAGE_TYPES\.)",
+        rf"      if \(message\?\.type === BACKGROUND_MESSAGE_TYPES\.{re.escape(name)}\) \{{.*?{lookahead}",
         re.S,
     )
     text, count = pattern.subn(body.rstrip(), text, count=1)
@@ -56,7 +60,12 @@ replacements = {
         return false;
       }
 """,
-    'WEB_EDITOR_CANCEL_EXECUTION': """      if (message?.type === BACKGROUND_MESSAGE_TYPES.WEB_EDITOR_CANCEL_EXECUTION) {
+}
+
+counts = {name: replace_handler(name, body) for name, body in replacements.items()}
+counts['WEB_EDITOR_CANCEL_EXECUTION'] = replace_handler(
+    'WEB_EDITOR_CANCEL_EXECUTION',
+    """      if (message?.type === BACKGROUND_MESSAGE_TYPES.WEB_EDITOR_CANCEL_EXECUTION) {
         const payload = message.payload as WebEditorCancelExecutionPayload | undefined;
         const requestId = payload?.requestId?.trim();
         if (requestId) {
@@ -66,9 +75,8 @@ replacements = {
         return false;
       }
 """,
-}
-
-counts = {name: replace_handler(name, body) for name, body in replacements.items()}
+    final=True,
+)
 
 if count_sse != 1:
     raise SystemExit(f'Expected one SSE block, changed {count_sse}')
