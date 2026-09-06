@@ -1,0 +1,40 @@
+name: Brauzio Arabic UI pass
+
+on:
+  push:
+    paths:
+      - '.github/workflows/arabicize-ui.yml'
+      - 'scripts/arabicize_ui.py'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  translate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Arabicize Builder and Side Panel
+        run: python scripts/arabicize_ui.py
+
+      - name: Re-audit user-facing UI
+        run: python scripts/audit_ui_chinese.py
+
+      - name: Commit translated UI
+        shell: bash
+        run: |
+          git add app/chrome-extension/entrypoints docs/UI_CHINESE_STRINGS.md scripts/arabicize_ui.py
+          if git diff --cached --quiet; then
+            echo "No UI translation changes."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "feat: Arabicize Brauzio Builder and Side Panel"
+          git fetch origin main
+          git rebase origin/main
+          git push origin HEAD:main
