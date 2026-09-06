@@ -1,0 +1,107 @@
+
+===== install =====
+Scope: all 4 workspace projects
+Progress: resolved 1, reused 0, downloaded 0, added 0
+Progress: resolved 187, reused 0, downloaded 186, added 0
+Progress: resolved 460, reused 0, downloaded 406, added 0
+Progress: resolved 818, reused 0, downloaded 672, added 0
+Packages: +749
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Progress: resolved 910, reused 0, downloaded 750, added 0
+Progress: resolved 910, reused 0, downloaded 751, added 748
+Progress: resolved 910, reused 0, downloaded 751, added 749, done
+
+devDependencies:
++ @commitlint/cli 19.8.1
++ @commitlint/config-conventional 19.8.1
++ @eslint/js 9.39.2
++ @typescript-eslint/eslint-plugin 8.49.0
++ @typescript-eslint/parser 8.49.0
++ eslint 9.39.2 (10.10.0 is available)
++ eslint-config-prettier 10.1.8
++ eslint-plugin-vue 10.6.2
++ globals 16.5.0
++ husky 9.1.7
++ lint-staged 15.5.2
++ prettier 3.7.4
++ typescript 5.9.3 (7.0.2 is available)
++ typescript-eslint 8.49.0
++ vue-eslint-parser 10.2.0
+
+ WARN  Issues with peer dependencies found
+app/chrome-extension
+└─┬ wxt 0.20.11
+  └─┬ vite 7.2.7
+    └── ✕ unmet peer @types/node@"^20.19.0 || >=22.12.0": found 18.19.130
+
+Done in 7.5s
+
+__EXIT_CODE__=0
+
+===== wxt_prepare =====
+
+[log] [90mWXT[39m [90m[1m0.20.11[22m[39m
+[dotenv@17.2.3] injecting env (0) from .env.production.chrome.local,.env.production.chrome,.env.chrome.local,.env.chrome,.env.production.local,.env.production,.env.local,.env -- tip: ⚙️  load multiple .env files with { path: ['.env.local', '.env'] }
+[warn] `InlineConfig#runner` is deprecated, use `InlineConfig#webExt` instead. See https://wxt.dev/guide/resources/upgrading.html#v0-19-0-rarr-v0-20-0
+[info] Generating types...
+[warn] Duplicated imports "CDPRouter", the one from "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-router.ts" has been ignored and "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-session-manager.ts" is used
+[warn] Duplicated imports "cdpRouter", the one from "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-router.ts" has been ignored and "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-session-manager.ts" is used
+[warn] Duplicated imports "CdpChildSessionSnapshot", the one from "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-router.ts" has been ignored and "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-session-manager.ts" is used
+[warn] Duplicated imports "CdpEventEnvelope", the one from "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-router.ts" has been ignored and "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-session-manager.ts" is used
+[warn] Duplicated imports "CdpOwnerTag", the one from "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-router.ts" has been ignored and "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-session-manager.ts" is used
+[warn] Duplicated imports "CdpSessionSnapshot", the one from "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-router.ts" has been ignored and "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-session-manager.ts" is used
+[warn] Duplicated imports "CDPRouter", the one from "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-router.ts" has been ignored and "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-session-manager.ts" is used
+[warn] Duplicated imports "cdpRouter", the one from "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-router.ts" has been ignored and "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-session-manager.ts" is used
+[warn] Duplicated imports "CdpChildSessionSnapshot", the one from "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-router.ts" has been ignored and "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-session-manager.ts" is used
+[warn] Duplicated imports "CdpEventEnvelope", the one from "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-router.ts" has been ignored and "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-session-manager.ts" is used
+[warn] Duplicated imports "CdpOwnerTag", the one from "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-router.ts" has been ignored and "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-session-manager.ts" is used
+[warn] Duplicated imports "CdpSessionSnapshot", the one from "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-router.ts" has been ignored and "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-session-manager.ts" is used
+[success] Finished in 641 ms
+
+__EXIT_CODE__=0
+
+===== shared_build =====
+
+> brauzio-shared@1.0.1 build /home/runner/work/Brauzio/Brauzio/packages/shared
+> tsup src/index.ts --format cjs,esm --dts --clean
+
+[34mCLI[39m Building entry: src/index.ts
+[34mCLI[39m Using tsconfig: tsconfig.json
+[34mCLI[39m tsup v8.5.1
+[34mCLI[39m Target: es2020
+[34mCLI[39m Cleaning output folder
+[34mCJS[39m Build start
+[34mESM[39m Build start
+[32mCJS[39m [1mdist/index.js [22m[32m18.76 KB[39m
+[32mCJS[39m ⚡️ Build success in 21ms
+[32mESM[39m [1mdist/index.mjs [22m[32m17.67 KB[39m
+[32mESM[39m ⚡️ Build success in 21ms
+[34mDTS[39m Build start
+[32mDTS[39m ⚡️ Build success in 1109ms
+[32mDTS[39m [1mdist/index.d.ts  [22m[32m4.73 KB[39m
+[32mDTS[39m [1mdist/index.d.mts [22m[32m4.73 KB[39m
+
+__EXIT_CODE__=0
+
+===== cloud_check =====
+
+> brauzio-cloud-mcp@0.5.0 check /home/runner/work/Brauzio/Brauzio/app/cloudflare-mcp
+> tsc --noEmit
+
+src/index.ts(106,54): error TS2322: Type 'Promise<{ tools: { inputSchema: { [x: string]: unknown; type: "object"; properties?: { [x: string]: object; } | undefined; required?: string[] | undefined; }; name: string; description?: string | undefined; outputSchema?: { ...; } | undefined; ... 4 more ...; title?: string | undefined; }[]; }>' is not assignable to type '{ [x: string]: unknown; tools: { inputSchema: { [x: string]: unknown; type: "object"; properties?: { [x: string]: string | number | boolean | { [x: string]: string | number | boolean | ... | (string | number | boolean | ... | (string | ... 4 more ... | null)[] | null)[] | null; } | (string | ... 4 more ... | null)[]...'.
+  Type 'Promise<{ tools: { inputSchema: { [x: string]: unknown; type: "object"; properties?: { [x: string]: object; } | undefined; required?: string[] | undefined; }; name: string; description?: string | undefined; outputSchema?: { ...; } | undefined; ... 4 more ...; title?: string | undefined; }[]; }>' is not assignable to type 'Promise<{ [x: string]: unknown; tools: { inputSchema: { [x: string]: unknown; type: "object"; properties?: { [x: string]: string | number | boolean | { [x: string]: string | number | boolean | ... | (string | number | boolean | ... | (string | ... 4 more ... | null)[] | null)[] | null; } | (string | ... 4 more ... |...'.
+    Type '{ tools: { inputSchema: { [x: string]: unknown; type: "object"; properties?: { [x: string]: object; } | undefined; required?: string[] | undefined; }; ... 7 more ...; title?: string | undefined; }[]; }' is not assignable to type '{ [x: string]: unknown; tools: { inputSchema: { [x: string]: unknown; type: "object"; properties?: { [x: string]: string | number | boolean | { [x: string]: string | number | boolean | ... | (string | number | boolean | ... | (string | ... 4 more ... | null)[] | null)[] | null; } | (string | ... 4 more ... | null)[]...'.
+      Types of property 'tools' are incompatible.
+        Type '{ inputSchema: { [x: string]: unknown; type: "object"; properties?: { [x: string]: object; } | undefined; required?: string[] | undefined; }; name: string; description?: string | undefined; outputSchema?: { ...; } | undefined; ... 4 more ...; title?: string | undefined; }[]' is not assignable to type '{ inputSchema: { [x: string]: unknown; type: "object"; properties?: { [x: string]: string | number | boolean | { [x: string]: string | number | boolean | ... | (string | number | boolean | ... | (string | number | boolean | ... | (string | ... 4 more ... | null)[] | null)[] | null)[] | null; } | (string | ... 4 more...'.
+          Type '{ inputSchema: { [x: string]: unknown; type: "object"; properties?: { [x: string]: object; } | undefined; required?: string[] | undefined; }; name: string; description?: string | undefined; outputSchema?: { ...; } | undefined; ... 4 more ...; title?: string | undefined; }' is not assignable to type '{ inputSchema: { [x: string]: unknown; type: "object"; properties?: { [x: string]: string | number | boolean | { [x: string]: string | number | boolean | ... | (string | number | boolean | ... | (string | number | boolean | ... | (string | ... 4 more ... | null)[] | null)[] | null)[] | null; } | (string | ... 4 more...'.
+            The types of 'inputSchema.properties' are incompatible between these types.
+              Type '{ [x: string]: object; } | undefined' is not assignable to type '{ [x: string]: string | number | boolean | { [x: string]: string | number | boolean | ... | (string | number | boolean | ... | (string | number | boolean | ... | (string | number | boolean | ... | (string | ... 4 more ... | null)[] | null)[] | null)[] | null)[] | null; } | (string | ... 4 more ... | null)[] | null; ...'.
+                Type '{ [x: string]: object; }' is not assignable to type '{ [x: string]: string | number | boolean | { [x: string]: string | number | boolean | ... | (string | number | boolean | ... | (string | number | boolean | ... | (string | number | boolean | ... | (string | ... 4 more ... | null)[] | null)[] | null)[] | null)[] | null; } | (string | ... 4 more ... | null)[] | null; }'.
+                  'string' index signatures are incompatible.
+                    Type 'object' is not assignable to type 'string | number | boolean | { [x: string]: string | number | boolean | ... | (string | number | boolean | ... | (string | number | boolean | ... | (string | number | boolean | ... | (string | ... 4 more ... | null)[] | null)[] | null)[] | null)[] | null; } | (string | ... 4 more ... | null)[] | null'.
+/home/runner/work/Brauzio/Brauzio/app/cloudflare-mcp:
+ ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL  brauzio-cloud-mcp@0.5.0 check: `tsc --noEmit`
+Exit status 2
+
+__EXIT_CODE__=2
+__FAILED_STEP__=cloud_check
