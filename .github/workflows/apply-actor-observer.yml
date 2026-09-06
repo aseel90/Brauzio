@@ -1,0 +1,144 @@
+name: Apply Brauzio Actor Observer Foundation
+
+on:
+  push:
+    paths:
+      - '.github/workflows/apply-actor-observer.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 8.15.9
+      - run: pnpm install --no-frozen-lockfile --ignore-scripts
+
+      - name: Apply Actor Observer foundation
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+
+          # Cloud MCP: derive an internal, non-user-controlled caller identity and fix
+          # the internal Durable Object route/body contract at the same time.
+          index = Path('app/cloudflare-mcp/src/index.ts')
+          s = index.read_text(encoding='utf-8')
+
+          old_sig = """async function callBrowserTool(\n  env: Env,\n  deviceId: string,\n  name: string,\n  args: Record<string, unknown>,\n): Promise<CallToolResult> {\n  const requestUrl = new URL('https://brauzio-browser.internal/tool-call');\n"""
+          new_sig = """async function callBrowserTool(\n  env: Env,\n  deviceId: string,\n  name: string,\n  args: Record<string, unknown>,\n  callerId: string,\n): Promise<CallToolResult> {\n  const requestUrl = new URL('https://brauzio-browser.internal/call');\n"""
+          if old_sig not in s:
+              raise SystemExit('callBrowserTool signature marker not found')
+          s = s.replace(old_sig, new_sig, 1)
+          old_body = "body: JSON.stringify({ name, arguments: args }),"
+          if old_body not in s:
+              raise SystemExit('callBrowserTool body marker not found')
+          s = s.replace(old_body, "body: JSON.stringify({ name, args, callerId }),", 1)
+
+          marker = """function createServer(env: Env) {\n"""
+          helper = """async function callerLeaseId(ctx: {\n  sessionId?: string;\n  http?: { authInfo?: { clientId?: string; token?: string } };\n}): Promise<string> {\n  const auth = getMcpAuthContext();\n  const props = (auth?.props || {}) as Partial<BrauzioAuthProps>;\n  const clientId = String(ctx.http?.authInfo?.clientId || 'unknown').slice(0, 256);\n  const sessionId = String(ctx.sessionId || '').trim().slice(0, 256);\n  const token = String(ctx.http?.authInfo?.token || '');\n  const material = sessionId\n    ? `session|${clientId}|${sessionId}`\n    : token\n      ? `token|${clientId}|${token}`\n      : `grant|${clientId}|${String(props.authorizedAt || 0)}|${normalizeDeviceId(props.deviceId || 'default')}`;\n  const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(material));\n  const hex = Array.from(new Uint8Array(digest), (byte) => byte.toString(16).padStart(2, '0')).join('');\n  return `caller-${hex.slice(0, 32)}`;\n}\n\n"""
+          if marker not in s:
+              raise SystemExit('createServer marker not found')
+          s = s.replace(marker, helper + marker, 1)
+
+          old_handler = """  server.setRequestHandler('tools/call', async (request) => {\n    const name = request.params.name;\n    const args = (request.params.arguments || {}) as Record<string, unknown>;\n    return await callBrowserTool(env, deviceIdFromAuth(env), name, args);\n  });\n"""
+          new_handler = """  server.setRequestHandler('tools/call', async (request, ctx) => {\n    const name = request.params.name;\n    const args = (request.params.arguments || {}) as Record<string, unknown>;\n    const callerId = await callerLeaseId(ctx);\n    return await callBrowserTool(env, deviceIdFromAuth(env), name, args, callerId);\n  });\n"""
+          if old_handler not in s:
+              raise SystemExit('tools/call handler marker not found')
+          s = s.replace(old_handler, new_handler, 1)
+          index.write_text(s, encoding='utf-8')
+
+          session = Path('app/cloudflare-mcp/src/browser-session.ts')
+          b = session.read_text(encoding='utf-8')
+
+          b = b.replace("""  actor: boolean;\n}\n\ninterface ControlStateRecord {\n""", """  actor: boolean;\n  callerId: string;\n}\n\ninterface ActorLeaseRecord {\n  ownerId: string;\n  acquiredAt: number;\n  lastSeenAt: number;\n  expiresAt: number;\n}\n\ninterface ObserverSessionRecord {\n  lastSeenAt: number;\n  expiresAt: number;\n}\n\ninterface ControlStateRecord {\n""", 1)
+
+          b = b.replace("""const CONTROL_STORAGE_KEY = 'control-state-v1';\nconst WATCH_STORAGE_PREFIX = 'watch-v1:';\n""", """const CONTROL_STORAGE_KEY = 'control-state-v1';\nconst ACTOR_LEASE_STORAGE_KEY = 'actor-lease-v1';\nconst OBSERVER_STORAGE_PREFIX = 'observer-session-v1:';\nconst ACTOR_LEASE_TTL_MS = 60_000;\nconst OBSERVER_SESSION_TTL_MS = 5 * 60_000;\nconst WATCH_STORAGE_PREFIX = 'watch-v1:';\n""", 1)
+
+          trace_marker = """function normalizeControlState(value: unknown): ControlStateRecord {\n"""
+          caller_helper = """function normalizeCallerId(value: unknown): string {\n  const candidate = String(value || '').trim().toLowerCase();\n  return /^caller-[0-9a-f]{32}$/.test(candidate) ? candidate : 'caller-legacy';\n}\n\n"""
+          if trace_marker not in b:
+              raise SystemExit('normalizeControlState marker not found')
+          b = b.replace(trace_marker, caller_helper + trace_marker, 1)
+
+          old_status = """      const activeWatches = (await this.listActiveWatches()).length;\n      const controlState = await this.getControlState();\n      return Response.json({\n        connected: sockets.length > 0,\n        connections: sockets.length,\n        activeWatches,\n        controlPaused: controlState.paused,\n        controlReason: controlState.reason,\n        controlSince: controlState.since,\n      });\n"""
+          new_status = """      const activeWatches = (await this.listActiveWatches()).length;\n      const controlState = await this.getControlState();\n      const actorLease = await this.getActorLease();\n      const observerSessions = await this.listObserverSessions();\n      return Response.json({\n        connected: sockets.length > 0,\n        connections: sockets.length,\n        activeWatches,\n        controlPaused: controlState.paused,\n        controlReason: controlState.reason,\n        controlSince: controlState.since,\n        actorLeaseActive: Boolean(actorLease),\n        actorLeaseExpiresAt: actorLease?.expiresAt || null,\n        observerSessions: observerSessions.length,\n      });\n"""
+          if old_status not in b:
+              raise SystemExit('status marker not found')
+          b = b.replace(old_status, new_status, 1)
+
+          old_route = """    if (url.pathname === '/call' && request.method === 'POST') {\n      const body = (await request.json()) as {\n        name?: string;\n        args?: Record<string, unknown>;\n        timeoutMs?: number;\n        traceId?: string;\n      };\n      if (!body.name) return Response.json({ error: 'Missing tool name' }, { status: 400 });\n\n      if (body.name === 'chrome_watch_read') {\n        const watchId = String(body.args?.watchId || '');\n        if (watchId && (await this.getWatch(watchId))) return await this.handleWatchRead(body.args || {});\n      }\n      if (body.name === 'chrome_watch_wait') {\n        const watchId = String(body.args?.watchId || '');\n        if (watchId && (await this.getWatch(watchId))) return await this.handleWatchWait(body.args || {});\n      }\n      if (body.name === 'chrome_watch_stop') {\n        const watchId = String(body.args?.watchId || '');\n        if (watchId && (await this.getWatch(watchId))) return await this.handleWatchStop(watchId);\n      }\n\n      return await this.forwardToolCall(body);\n    }\n"""
+          new_route = """    if ((url.pathname === '/call' || url.pathname === '/tool-call') && request.method === 'POST') {\n      const body = (await request.json()) as {\n        name?: string;\n        args?: Record<string, unknown>;\n        arguments?: Record<string, unknown>;\n        callerId?: string;\n        timeoutMs?: number;\n        traceId?: string;\n      };\n      if (!body.name) return Response.json({ error: 'Missing tool name' }, { status: 400 });\n      const args = body.args || body.arguments || {};\n      const normalizedBody = { ...body, args, callerId: normalizeCallerId(body.callerId) };\n\n      if (body.name === 'chrome_watch_read') {\n        const watchId = String(args.watchId || '');\n        if (watchId && (await this.getWatch(watchId))) return await this.handleWatchRead(args);\n      }\n      if (body.name === 'chrome_watch_wait') {\n        const watchId = String(args.watchId || '');\n        if (watchId && (await this.getWatch(watchId))) return await this.handleWatchWait(args);\n      }\n      if (body.name === 'chrome_watch_stop') {\n        const watchId = String(args.watchId || '');\n        if (watchId && (await this.getWatch(watchId))) return await this.handleWatchStop(watchId);\n      }\n\n      return await this.forwardToolCall(normalizedBody);\n    }\n"""
+          if old_route not in b:
+              raise SystemExit('internal call route marker not found')
+          b = b.replace(old_route, new_route, 1)
+
+          b = b.replace("""    if (payload.type === 'tool_result' && payload.requestId) this.finishToolCall(payload as ToolResultMessage);\n""", """    if (payload.type === 'tool_result' && payload.requestId) await this.finishToolCall(payload as ToolResultMessage);\n""", 1)
+
+          b = b.replace("""  webSocketClose(): void {\n    sessionLog('WS_CLOSE', { authenticatedSockets: this.authenticatedSockets().length });\n    if (this.authenticatedSockets().length === 0) this.failPending('Brauzio extension disconnected during tool execution');\n  }\n\n  webSocketError(): void {\n    sessionLog('WS_ERROR', { authenticatedSockets: this.authenticatedSockets().length });\n    if (this.authenticatedSockets().length === 0) this.failPending('Brauzio WebSocket connection failed');\n  }\n""", """  webSocketClose(): void {\n    sessionLog('WS_CLOSE', { authenticatedSockets: this.authenticatedSockets().length });\n    if (this.authenticatedSockets().length === 0) {\n      this.failPending('Brauzio extension disconnected during tool execution');\n      void this.revokeActorLease('browser_disconnected');\n    }\n  }\n\n  webSocketError(): void {\n    sessionLog('WS_ERROR', { authenticatedSockets: this.authenticatedSockets().length });\n    if (this.authenticatedSockets().length === 0) {\n      this.failPending('Brauzio WebSocket connection failed');\n      void this.revokeActorLease('browser_websocket_error');\n    }\n  }\n""", 1)
+
+          old_forward_sig = """  private async forwardToolCall(body: { name?: string; args?: Record<string, unknown>; timeoutMs?: number; traceId?: string }): Promise<Response> {\n    const actor = isActorTool(String(body.name || ''), body.args || {});\n"""
+          new_forward_sig = """  private async forwardToolCall(body: { name?: string; args?: Record<string, unknown>; callerId?: string; timeoutMs?: number; traceId?: string }): Promise<Response> {\n    const actor = isActorTool(String(body.name || ''), body.args || {});\n    const callerId = normalizeCallerId(body.callerId);\n"""
+          if old_forward_sig not in b:
+              raise SystemExit('forwardToolCall signature marker not found')
+          b = b.replace(old_forward_sig, new_forward_sig, 1)
+
+          old_browser = """    const browser = this.authenticatedSockets()[0];\n    if (!browser) return Response.json({ error: 'Brauzio extension is not connected to Cloudflare' }, { status: 503 });\n\n    const requestId = validTraceId(body.traceId) || crypto.randomUUID();\n    const startedAt = Date.now();\n    sessionLog('CALL_RECEIVED', { requestId, name: body.name, actor, authenticatedSockets: this.authenticatedSockets().length });\n    const timeoutMs = Math.min(Math.max(Number(body.timeoutMs || 120_000), 1_000), 180_000);\n"""
+          new_browser = """    const browser = this.authenticatedSockets()[0];\n    if (!browser) return Response.json({ error: 'Brauzio extension is not connected to Cloudflare' }, { status: 503 });\n\n    const timeoutMs = Math.min(Math.max(Number(body.timeoutMs || 120_000), 1_000), 180_000);\n    if (actor) {\n      const leaseResult = await this.acquireActorLease(callerId, timeoutMs);\n      if (!leaseResult.ok) {\n        const retryAfterMs = Math.max(0, leaseResult.lease.expiresAt - Date.now());\n        sessionLog('ACTOR_LEASE_CONFLICT', { name: body.name, retryAfterMs });\n        return Response.json({\n          error: 'Another Brauzio actor session currently holds control.',\n          code: 'ACTOR_LEASE_CONFLICT',\n          retryAfterMs,\n          actorLeaseExpiresAt: leaseResult.lease.expiresAt,\n        }, { status: 409 });\n      }\n    } else {\n      await this.touchObserverSession(callerId);\n    }\n\n    const requestId = validTraceId(body.traceId) || crypto.randomUUID();\n    const startedAt = Date.now();\n    sessionLog('CALL_RECEIVED', { requestId, name: body.name, actor, authenticatedSockets: this.authenticatedSockets().length });\n"""
+          if old_browser not in b:
+              raise SystemExit('browser/timeout marker not found')
+          b = b.replace(old_browser, new_browser, 1)
+
+          b = b.replace("""        this.pending.delete(requestId);\n        sessionLog('CALL_TIMEOUT', { requestId, name: body.name, timeoutMs, durationMs: Date.now() - startedAt });\n        resolve(Response.json({ error: `Tool call timed out after ${timeoutMs}ms (traceId: ${requestId})` }, { status: 504 }));\n""", """        this.pending.delete(requestId);\n        if (actor) void this.settleActorLease(callerId);\n        sessionLog('CALL_TIMEOUT', { requestId, name: body.name, timeoutMs, durationMs: Date.now() - startedAt });\n        resolve(Response.json({ error: `Tool call timed out after ${timeoutMs}ms (traceId: ${requestId})` }, { status: 504 }));\n""", 1)
+          b = b.replace("""      this.pending.set(requestId, { resolve, timer, name: body.name!, startedAt, actor });\n""", """      this.pending.set(requestId, { resolve, timer, name: body.name!, startedAt, actor, callerId });\n""", 1)
+          b = b.replace("""        clearTimeout(timer);\n        this.pending.delete(requestId);\n        resolve(Response.json({ error: error instanceof Error ? error.message : String(error) }, { status: 502 }));\n""", """        clearTimeout(timer);\n        this.pending.delete(requestId);\n        if (actor) void this.settleActorLease(callerId);\n        resolve(Response.json({ error: error instanceof Error ? error.message : String(error) }, { status: 502 }));\n""", 1)
+
+          control_marker = """  private async getControlState(): Promise<ControlStateRecord> {\n"""
+          lease_methods = """  private observerKey(callerId: string): string { return `${OBSERVER_STORAGE_PREFIX}${callerId}`; }\n\n  private async getActorLease(): Promise<ActorLeaseRecord | null> {\n    const lease = await this.ctx.storage.get<ActorLeaseRecord>(ACTOR_LEASE_STORAGE_KEY);\n    if (!lease) return null;\n    if (lease.expiresAt <= Date.now()) {\n      await this.ctx.storage.delete(ACTOR_LEASE_STORAGE_KEY);\n      return null;\n    }\n    return lease;\n  }\n\n  private async acquireActorLease(ownerId: string, executionTimeoutMs: number): Promise<{ ok: true; lease: ActorLeaseRecord } | { ok: false; lease: ActorLeaseRecord }> {\n    return await this.ctx.storage.transaction(async (txn) => {\n      const now = Date.now();\n      const current = await txn.get<ActorLeaseRecord>(ACTOR_LEASE_STORAGE_KEY);\n      if (current && current.expiresAt > now && current.ownerId !== ownerId) {\n        return { ok: false as const, lease: current };\n      }\n      const executionHoldMs = Math.min(Math.max(executionTimeoutMs + 5_000, ACTOR_LEASE_TTL_MS), 185_000);\n      const next: ActorLeaseRecord = {\n        ownerId,\n        acquiredAt: current?.ownerId === ownerId ? current.acquiredAt : now,\n        lastSeenAt: now,\n        expiresAt: now + executionHoldMs,\n      };\n      await txn.put(ACTOR_LEASE_STORAGE_KEY, next);\n      return { ok: true as const, lease: next };\n    });\n  }\n\n  private async settleActorLease(ownerId: string): Promise<void> {\n    await this.ctx.storage.transaction(async (txn) => {\n      const current = await txn.get<ActorLeaseRecord>(ACTOR_LEASE_STORAGE_KEY);\n      if (!current || current.ownerId !== ownerId) return;\n      const now = Date.now();\n      await txn.put(ACTOR_LEASE_STORAGE_KEY, { ...current, lastSeenAt: now, expiresAt: now + ACTOR_LEASE_TTL_MS });\n    });\n  }\n\n  private async revokeActorLease(reason: string): Promise<void> {\n    const current = await this.ctx.storage.get<ActorLeaseRecord>(ACTOR_LEASE_STORAGE_KEY);\n    if (!current) return;\n    await this.ctx.storage.delete(ACTOR_LEASE_STORAGE_KEY);\n    sessionLog('ACTOR_LEASE_REVOKED', { reason });\n  }\n\n  private async touchObserverSession(callerId: string): Promise<void> {\n    const now = Date.now();\n    await this.ctx.storage.put(this.observerKey(callerId), { lastSeenAt: now, expiresAt: now + OBSERVER_SESSION_TTL_MS } satisfies ObserverSessionRecord);\n  }\n\n  private async listObserverSessions(): Promise<ObserverSessionRecord[]> {\n    const stored = await this.ctx.storage.list<ObserverSessionRecord>({ prefix: OBSERVER_STORAGE_PREFIX });\n    const now = Date.now();\n    const active: ObserverSessionRecord[] = [];\n    const expired: string[] = [];\n    for (const [key, record] of stored) {\n      if (!record || record.expiresAt <= now) expired.push(key);\n      else active.push(record);\n    }\n    if (expired.length) await this.ctx.storage.delete(expired);\n    return active;\n  }\n\n"""
+          if control_marker not in b:
+              raise SystemExit('getControlState marker not found')
+          b = b.replace(control_marker, lease_methods + control_marker, 1)
+
+          old_persist = """    await this.ctx.storage.put(CONTROL_STORAGE_KEY, next);\n    sessionLog('CONTROL_STATE_UPDATED', { paused: next.paused, reason: next.reason, source: next.source, since: next.since });\n    if (next.paused) this.failPendingActors(next);\n"""
+          new_persist = """    await this.ctx.storage.put(CONTROL_STORAGE_KEY, next);\n    sessionLog('CONTROL_STATE_UPDATED', { paused: next.paused, reason: next.reason, source: next.source, since: next.since });\n    if (next.paused) {\n      await this.revokeActorLease(next.reason || 'control_paused');\n      this.failPendingActors(next);\n    }\n"""
+          if old_persist not in b:
+              raise SystemExit('persistControlState marker not found')
+          b = b.replace(old_persist, new_persist, 1)
+
+          old_finish = """  private finishToolCall(message: ToolResultMessage): void {\n    const pending = this.pending.get(message.requestId);\n    if (!pending) return;\n    clearTimeout(pending.timer);\n    sessionLog(message.error ? 'RESULT_ERROR' : 'RESULT_OK', { requestId: message.requestId, name: pending.name, durationMs: Date.now() - pending.startedAt, error: message.error || undefined });\n    this.pending.delete(message.requestId);\n    if (message.error) { pending.resolve(Response.json({ error: message.error }, { status: 500 })); return; }\n    pending.resolve(Response.json({ result: message.result }));\n  }\n"""
+          new_finish = """  private async finishToolCall(message: ToolResultMessage): Promise<void> {\n    const pending = this.pending.get(message.requestId);\n    if (!pending) return;\n    clearTimeout(pending.timer);\n    sessionLog(message.error ? 'RESULT_ERROR' : 'RESULT_OK', { requestId: message.requestId, name: pending.name, durationMs: Date.now() - pending.startedAt, error: message.error || undefined });\n    this.pending.delete(message.requestId);\n    if (pending.actor) await this.settleActorLease(pending.callerId);\n    if (message.error) { pending.resolve(Response.json({ error: message.error }, { status: 500 })); return; }\n    pending.resolve(Response.json({ result: message.result }));\n  }\n"""
+          if old_finish not in b:
+              raise SystemExit('finishToolCall marker not found')
+          b = b.replace(old_finish, new_finish, 1)
+
+          session.write_text(b, encoding='utf-8')
+          PY
+
+      - name: Validate full Brauzio build
+        run: |
+          pnpm --filter brauzio-shared build
+          pnpm --filter brauzio-cloud-mcp check
+          pnpm --filter brauzio-cloud-mcp build
+          pnpm --filter brauzio-extension exec wxt prepare
+          pnpm --filter brauzio-extension compile
+          pnpm --filter brauzio-extension build
+
+      - name: Commit validated foundation
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add app/cloudflare-mcp/src/index.ts app/cloudflare-mcp/src/browser-session.ts
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m 'Add Actor Observer lease foundation [skip ci]'
+          git push
