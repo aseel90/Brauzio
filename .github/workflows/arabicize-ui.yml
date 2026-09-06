@@ -6,6 +6,7 @@ on:
       - '.github/workflows/arabicize-ui.yml'
       - 'scripts/arabicize_runtime_ui.py'
       - 'scripts/arabicize_ui_pass2.py'
+      - 'scripts/arabicize_runtime_ui_pass2.py'
   workflow_dispatch:
 
 permissions:
@@ -25,6 +26,9 @@ jobs:
       - name: Clean mixed Arabic-Chinese phrases
         run: python scripts/arabicize_ui_pass2.py
 
+      - name: Final targeted cleanup
+        run: python scripts/arabicize_runtime_ui_pass2.py
+
       - name: Re-audit user-facing UI
         run: python scripts/audit_ui_chinese.py
 
@@ -38,7 +42,7 @@ jobs:
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git commit -m "feat: finish Arabic Brauzio runtime UI pass"
+          git commit -m "feat: finish Arabic Brauzio runtime UI"
           git fetch origin main
           git rebase origin/main
           git push origin HEAD:main
