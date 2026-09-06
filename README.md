@@ -2,19 +2,19 @@
 
 **Brauzio** إضافة Chrome مفتوحة المصدر تربط متصفحك مباشرةً مع عملاء **Model Context Protocol (MCP)** مثل ChatGPT، مع الحفاظ على جلسة Chrome الحالية والتبويبات وتسجيلات الدخول الموجودة في المتصفح.
 
-Brauzio مبني على المشروع الأصلي [`hangwin/mcp-chrome`](https://github.com/hangwin/mcp-chrome) ويحتفظ بترخيص MIT وإشعار الحقوق الأصلي، مع إعادة تصميم مسار الاتصال ليعمل عبر **Cloudflare Remote MCP** بدل الاعتماد على `localhost` وNative Messaging في الاستخدام اليومي.
+Brauzio مبني على المشروع الأصلي [`hangwin/mcp-chrome`](https://github.com/hangwin/mcp-chrome) ويحتفظ بترخيص MIT وإشعار الحقوق الأصلي، مع إعادة تصميم مسار الاتصال ليعمل عبر **Cloudflare Remote MCP** بدل `localhost` وNative Messaging.
 
 ## ما الذي تغيّر في Brauzio؟
 
 - واجهة عربية افتراضيًا مع دعم RTL.
 - إزالة اللغتين الصينية المبسطة والتقليدية من الإضافة.
-- إزالة `nativeMessaging` من Manifest الخاص بإصدار Brauzio السحابي.
+- إزالة `nativeMessaging` ومسار الـ Native Host المحلي.
 - لا يوجد منفذ محلي `12306` ولا حاجة إلى `cloudflared`.
-- لا يحتاج المستخدم النهائي إلى تثبيت Node.js أو `mcp-chrome-bridge` لتشغيل الاتصال السحابي.
+- لا يحتاج المستخدم النهائي إلى Node.js أو `mcp-chrome-bridge`.
 - اتصال الإضافة بالخادم عبر WebSocket آمن.
 - اتصال ChatGPT بالخادم عبر Remote MCP على HTTPS.
 - استخدام Durable Objects في Cloudflare للحفاظ على جلسة كل متصفح وربط طلبات MCP بالإضافة الصحيحة.
-- أدوات المتصفح الأصلية ما زالت تُنفّذ داخل الإضافة باستخدام نفس طبقة `handleCallTool()`.
+- أدوات المتصفح الأصلية تُنفّذ داخل الإضافة باستخدام طبقة `handleCallTool()`.
 
 ## البنية
 
@@ -45,78 +45,83 @@ Chrome APIs + أدوات المتصفح
 /browser-status  Browser session status
 ```
 
-## المتطلبات للمستخدم النهائي
+## النشر الحالي
 
-- Google Chrome أو Chromium بإصدار **116 أو أحدث**.
-- إضافة Brauzio المبنية مسبقًا.
-- رابط Cloudflare Worker الخاص بك.
-- رمز اتصال سري بين الإضافة وCloudflare.
-
-**لا تحتاج إلى:** Node.js أو pnpm أو npm أو cloudflared أو تشغيل خادم محلي على جهازك.
-
-## إعداد Cloudflare بدون تنزيل cloudflared
-
-أفضل مسار للمستخدم الذي لا يريد تثبيت أدوات محلية هو ربط هذا المستودع مباشرةً مع Cloudflare Workers من لوحة Cloudflare، وجعل Cloudflare يبني وينشر مجلد:
+تم نشر Worker الفعلي على Cloudflare بنجاح بتاريخ 2026-09-06:
 
 ```text
-app/cloudflare-mcp
+https://brauzio-mcp.aseelsalah266.workers.dev
 ```
 
-اسم Worker الافتراضي في الإعداد الحالي:
-
-```text
-brauzio-mcp
-```
-
-يحتاج Worker إلى أسرار، ولا يجب وضعها داخل GitHub أو داخل الكود:
-
-```text
-BROWSER_SHARED_SECRET   رمز اتصال الإضافة بالـ Worker
-MCP_SHARED_SECRET       رمز وصول MCP (اختياري؛ إن لم يوضع يمكن استخدام BROWSER_SHARED_SECRET)
-```
-
-كما يوجد متغير غير سري افتراضي:
+الإصدار المنشور يستخدم Durable Object باسم `BrowserSession` ومتغير الجهاز الافتراضي:
 
 ```text
 DEFAULT_DEVICE_ID=default
 ```
 
-يمكن ضبط الأسرار من إعدادات Worker في لوحة Cloudflare بعد إنشاء المشروع.
+أسرار التشغيل محفوظة داخل Cloudflare/GitHub Actions ولا يجب وضعها داخل الكود:
+
+```text
+BROWSER_SHARED_SECRET
+MCP_SHARED_SECRET
+```
+
+النشر يتم تلقائيًا من GitHub عبر:
+
+```text
+.github/workflows/deploy-cloudflare.yml
+```
+
+ويعمل عند تغييرات كود Cloudflare أو الـ shared schemas، ويمكن تشغيله يدويًا أيضًا.
+
+## المتطلبات للمستخدم النهائي
+
+- Google Chrome أو Chromium بإصدار **116 أو أحدث**.
+- إضافة Brauzio المبنية مسبقًا.
+- رابط Cloudflare Worker.
+- رمز اتصال سري بين الإضافة وCloudflare.
+
+**لا تحتاج إلى:** Node.js أو pnpm أو npm أو cloudflared أو خادم محلي.
 
 ## ربط إضافة Brauzio بـ Cloudflare
 
-بعد نشر Worker:
-
 1. افتح نافذة Brauzio في Chrome.
-2. في قسم **اتصال Brauzio Cloud** أدخل رابط Worker، مثل:
+2. في قسم **اتصال Brauzio Cloud** أدخل:
 
 ```text
-https://brauzio-mcp.<account>.workers.dev
+https://brauzio-mcp.aseelsalah266.workers.dev
 ```
 
-3. ضع **معرّف الجهاز**، ويمكن تركه `default` لجهاز واحد.
-4. ضع **رمز الاتصال** المطابق لـ `BROWSER_SHARED_SECRET`.
+3. ضع **معرّف الجهاز**:
+
+```text
+default
+```
+
+4. ضع **رمز الاتصال** المطابق لقيمة `BROWSER_SHARED_SECRET` المحفوظة في GitHub/Cloudflare.
 5. فعّل إعادة الاتصال التلقائي واحفظ الإعدادات.
 6. عند نجاح الاتصال ستظهر الحالة **متصل**.
 
 ## ربط ChatGPT Custom MCP
 
-لنفس الجهاز، يكون رابط MCP بالشكل التالي في الإصدار الفردي الحالي:
+لنفس الجهاز، يكون رابط MCP في نسخة الاستخدام الفردي الحالية:
 
 ```text
-https://brauzio-mcp.<account>.workers.dev/mcp?device=default&key=<MCP_SECRET>
+https://brauzio-mcp.aseelsalah266.workers.dev/mcp?device=default&key=<MCP_SHARED_SECRET>
 ```
 
 حيث:
 
 - `device` هو معرّف الجهاز المسجل في الإضافة.
-- `key` هو `MCP_SHARED_SECRET`، أو `BROWSER_SHARED_SECRET` إذا لم يتم تعريف سر MCP منفصل.
+- `key` هو قيمة `MCP_SHARED_SECRET`.
 
-> **تنبيه أمني:** معامل `key` في الرابط مناسب لنسخة الاستخدام الفردي/MVP فقط. اعتبر رابط MCP كاملًا سرًا ولا تنشره أو تضعه داخل الكود. قبل تحويل Brauzio إلى خدمة عامة متعددة المستخدمين يجب استبدال هذا الأسلوب بمصادقة OAuth مناسبة.
+يمكن أيضًا استخدام `Authorization: Bearer <MCP_SHARED_SECRET>` مع عميل يدعم ترويسة Authorization.
+
+> **تنبيه أمني:** معامل `key` في الرابط مناسب للاستخدام الفردي/MVP فقط. اعتبر رابط MCP كاملًا سرًا ولا تنشره. قبل إطلاق Brauzio كخدمة عامة متعددة المستخدمين يجب استبدال هذا الأسلوب بمصادقة OAuth وهوية مستقلة لكل مستخدم/جهاز.
 
 ## الأدوات
 
-Brauzio يعيد استخدام مجموعة أدوات `mcp-chrome` الأصلية، ومنها أدوات مثل:
+Brauzio يعيد استخدام مجموعة أدوات `mcp-chrome` الأصلية، ومنها:
 
 - قراءة الصفحة والعناصر القابلة للتفاعل.
 - النقر والكتابة والتمرير ولوحة المفاتيح.
@@ -128,13 +133,11 @@ Brauzio يعيد استخدام مجموعة أدوات `mcp-chrome` الأصل�
 - تنفيذ JavaScript.
 - Record & Replay وسير العمل حيث تكون الوظيفة مدعومة داخل الإضافة.
 
-بعض الوظائف القديمة التي كانت تعتمد مباشرةً على Native Host قد تحتاج إعادة تنفيذ سحابية مستقلة قبل حذف مصدر `app/native-server` نهائيًا، لذلك بقي المصدر في المستودع مؤقتًا كمرجع توافق وليس كمتطلب تشغيل للمستخدم النهائي.
+تم حذف مسار Native Server المحلي القديم من Brauzio، وأصبح مسار MCP الأساسي Cloud-only.
 
 ## التطوير والبناء
 
 هذه الخطوات للمطورين فقط، وليست مطلوبة لمستخدم Brauzio النهائي.
-
-المشروع Monorepo ويستخدم pnpm أثناء التطوير والبناء. البناء يتم التحقق منه آليًا عبر GitHub Actions.
 
 ```bash
 pnpm install --ignore-scripts
@@ -145,15 +148,12 @@ pnpm --filter brauzio-cloud-mcp build
 pnpm --filter chrome-mcp-server build
 ```
 
-استخدام `--ignore-scripts` مقصود حتى لا يتم تشغيل `postinstall` الخاص بالـ Native Server القديم أثناء بناء إصدار Brauzio السحابي.
-
 ## هيكل المشروع
 
 ```text
 app/
 ├── chrome-extension/   إضافة Brauzio
-├── cloudflare-mcp/     Remote MCP + WebSocket relay على Cloudflare
-└── native-server/      كود upstream قديم محفوظ مؤقتًا للتوافق والمرجعية
+└── cloudflare-mcp/     Remote MCP + WebSocket relay على Cloudflare
 
 packages/
 └── shared/             مخططات وأسماء أدوات MCP المشتركة
@@ -168,14 +168,15 @@ docs/
 - [x] إعادة الهوية إلى Brauzio.
 - [x] العربية وRTL افتراضيًا.
 - [x] إزالة zh_CN وzh_TW من الإضافة.
-- [x] إزالة Native Messaging من Manifest السحابي.
+- [x] إزالة Native Messaging والـ Native Host المحلي.
 - [x] WebSocket relay داخل الإضافة.
 - [x] Cloudflare Worker + Durable Object.
 - [x] Remote MCP `/mcp`.
 - [x] شاشة إعداد Brauzio Cloud.
 - [x] CI لبناء الإضافة وCloud MCP.
-- [ ] نشر Worker على حساب Cloudflare الفعلي.
-- [ ] اختبار end-to-end مع ChatGPT على Worker المنشور.
+- [x] نشر Worker على حساب Cloudflare الفعلي.
+- [x] إعداد نشر تلقائي عبر GitHub Actions.
+- [ ] اختبار end-to-end من ChatGPT إلى Chrome الفعلي.
 - [ ] استبدال مصادقة MVP بـ OAuth قبل أي إطلاق عام متعدد المستخدمين.
 
 ## الأصل والترخيص
