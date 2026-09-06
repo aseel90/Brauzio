@@ -36,22 +36,29 @@ jobs:
 
           python - <<'PY'
           from pathlib import Path
-          path = Path('packages/shared/src/tools.ts')
-          text = path.read_text(encoding='utf-8')
+
+          tools = Path('packages/shared/src/tools.ts')
+          text = tools.read_text(encoding='utf-8')
           old_import = "import type { Tool } from '@modelcontextprotocol/sdk/types.js';\n\n"
           new_types = """export type BrauzioJsonValue =\n  | string\n  | number\n  | boolean\n  | null\n  | BrauzioJsonValue[]\n  | { [key: string]: BrauzioJsonValue };\n\nexport interface BrauzioToolSchema {\n  name: string;\n  description?: string;\n  inputSchema: {\n    type: 'object';\n    properties?: Record<string, BrauzioJsonValue>;\n    required?: string[];\n    [key: string]: unknown;\n  };\n}\n\n"""
           if old_import not in text:
-              raise SystemExit('legacy Tool import marker not found')
+              raise SystemExit('base Tool import marker not found')
           text = text.replace(old_import, new_types, 1)
-          old_decl = 'export const TOOL_SCHEMAS: Tool[] = ['
-          if old_decl not in text:
-              raise SystemExit('TOOL_SCHEMAS declaration marker not found')
-          text = text.replace(old_decl, 'export const TOOL_SCHEMAS: BrauzioToolSchema[] = [', 1)
-          path.write_text(text, encoding='utf-8')
+          text = text.replace('export const TOOL_SCHEMAS: Tool[] = [', 'export const TOOL_SCHEMAS: BrauzioToolSchema[] = [', 1)
+          tools.write_text(text, encoding='utf-8')
+
+          watch = Path('packages/shared/src/watch-tools.ts')
+          watch_text = watch.read_text(encoding='utf-8')
+          old_watch_import = "import type { Tool } from '@modelcontextprotocol/sdk/types.js';"
+          if old_watch_import not in watch_text:
+              raise SystemExit('watch Tool import marker not found')
+          watch_text = watch_text.replace(old_watch_import, "import type { BrauzioToolSchema } from './tools';", 1)
+          watch_text = watch_text.replace('export const WATCH_TOOL_SCHEMAS: Tool[] = [', 'export const WATCH_TOOL_SCHEMAS: BrauzioToolSchema[] = [', 1)
+          watch.write_text(watch_text, encoding='utf-8')
           PY
 
-          printf 'Applied diagnostic type fix: explicit JSON-safe BrauzioToolSchema\n' >> "$LOG"
-          git diff -- packages/shared/src/tools.ts >> "$LOG"
+          printf 'Applied diagnostic type fix: unified JSON-safe BrauzioToolSchema\n' >> "$LOG"
+          git diff -- packages/shared/src/tools.ts packages/shared/src/watch-tools.ts >> "$LOG"
 
           run_step() {
             label="$1"
@@ -80,12 +87,12 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          git restore packages/shared/src/tools.ts || true
+          git restore packages/shared/src/tools.ts packages/shared/src/watch-tools.ts || true
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add -f CI_DIAGNOSE_260.txt
           if git diff --cached --quiet; then
             exit 0
           fi
-          git commit -m 'diagnostics: capture JSON-safe schema validation [skip ci]'
+          git commit -m 'diagnostics: capture unified schema validation [skip ci]'
           git push
