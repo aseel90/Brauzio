@@ -1,0 +1,207 @@
+from pathlib import Path
+
+p=Path('app/cloudflare-mcp/src/browser-session.ts')
+s=p.read_text()
+
+insert_after="""interface ToolResultMessage {\n  type: 'tool_result';\n  requestId: string;\n  result?: unknown;\n  error?: string;\n}\n"""
+addition="""
+
+interface PersistentWatchDescriptor {
+  watchId: string;
+  tabId: number;
+  createdAt: number;
+  expiresAt: number;
+  maxEvents: number;
+  nextSequence: number;
+  categories?: string[];
+  methods?: string[];
+  urlIncludes?: string;
+}
+
+interface PersistentWatchEvent {
+  sequence: number;
+  watchId: string;
+  tabId: number;
+  sessionId?: string;
+  method: string;
+  timestamp: number;
+  data: Record<string, unknown>;
+}
+
+interface PersistentWatchRecord extends PersistentWatchDescriptor {
+  events: PersistentWatchEvent[];
+  stopped?: boolean;
+  stopReason?: string;
+}
+
+interface PersistentWatchWaiter {
+  id: number;
+  afterSequence: number;
+  method?: string;
+  resolve: (response: Response) => void;
+  timer: ReturnType<typeof setTimeout>;
+}
+"""
+assert insert_after in s
+s=s.replace(insert_after, insert_after+addition)
+
+s=s.replace("const PAIRING_STORAGE_KEY = 'oauth-pairing-v1';", "const PAIRING_STORAGE_KEY = 'oauth-pairing-v1';\nconst WATCH_STORAGE_PREFIX = 'watch-v1:';\nconst WATCH_WAIT_MAX_MS = 115_000;")
+
+old="""export class BrowserSession extends DurableObject<Env> {\n  private pending = new Map<string, PendingCall>();\n"""
+new="""export class BrowserSession extends DurableObject<Env> {\n  private pending = new Map<string, PendingCall>();\n  private watchWaiters = new Map<string, Map<number, PersistentWatchWaiter>>();\n  private watchWaiterSerial = 0;\n"""
+assert old in s
+s=s.replace(old,new)
+
+old_status="""    if (url.pathname === '/status') {\n      const sockets = this.authenticatedSockets();\n      return Response.json({ connected: sockets.length > 0, connections: sockets.length });\n    }\n"""
+new_status="""    if (url.pathname === '/status') {\n      const sockets = this.authenticatedSockets();\n      const activeWatches = (await this.listActiveWatches()).length;\n      return Response.json({\n        connected: sockets.length > 0,\n        connections: sockets.length,\n        activeWatches,\n      });\n    }\n"""
+assert old_status in s
+s=s.replace(old_status,new_status)
+
+start=s.index("    if (url.pathname === '/call' && request.method === 'POST') {")
+end=s.index("\n    return new Response('Not found'", start)
+old_call=s[start:end]
+new_call="""    if (url.pathname === '/call' && request.method === 'POST') {
+      const body = (await request.json()) as {
+        name?: string;
+        args?: Record<string, unknown>;
+        timeoutMs?: number;
+        traceId?: string;
+      };
+      if (!body.name) return Response.json({ error: 'Missing tool name' }, { status: 400 });
+
+      if (body.name === 'chrome_watch_read') {
+        const watchId = String(body.args?.watchId || '');
+        if (watchId && (await this.getWatch(watchId))) {
+          return await this.handleWatchRead(body.args || {});
+        }
+      }
+
+      if (body.name === 'chrome_watch_wait') {
+        const watchId = String(body.args?.watchId || '');
+        if (watchId && (await this.getWatch(watchId))) {
+          return await this.handleWatchWait(body.args || {});
+        }
+      }
+
+      if (body.name === 'chrome_watch_stop') {
+        const watchId = String(body.args?.watchId || '');
+        if (watchId && (await this.getWatch(watchId))) {
+          return await this.handleWatchStop(watchId);
+        }
+      }
+
+      return await this.forwardToolCall(body);
+    }
+"""
+s=s[:start]+new_call+s[end:]
+
+# hello ack block: send restore after auth ack
+needle="""      ws.send(\n        JSON.stringify({\n          type: 'hello_ack',\n          authenticated,\n          deviceId: attachment.deviceId,\n        }),\n      );\n\n      if (!authenticated) {\n"""
+replacement="""      ws.send(
+        JSON.stringify({
+          type: 'hello_ack',
+          authenticated,
+          deviceId: attachment.deviceId,
+        }),
+      );
+
+      if (authenticated) {
+        await this.sendWatchRestore(ws);
+      }
+
+      if (!authenticated) {
+"""
+assert needle in s
+s=s.replace(needle,replacement)
+
+# Add ws message handlers before pairing_create
+needle="""    if (payload.type === 'pairing_create') {\n"""
+handlers="""    if (payload.type === 'watch_started' && payload.watch) {
+      await this.persistWatchStarted(payload.watch as PersistentWatchDescriptor);
+      return;
+    }
+
+    if (payload.type === 'watch_event' && payload.event) {
+      await this.persistWatchEvent(payload.event as PersistentWatchEvent);
+      return;
+    }
+
+    if (payload.type === 'watch_stopped' && payload.watchId) {
+      await this.persistWatchStopped(String(payload.watchId), String(payload.reason || 'browser_stopped'));
+      return;
+    }
+
+"""
+assert needle in s
+s=s.replace(needle,handlers+needle)
+
+# Insert methods before authenticatedSockets
+needle="""  private authenticatedSockets(): WebSocket[] {\n"""
+methods=r'''  private watchKey(watchId: string): string {
+    return `${WATCH_STORAGE_PREFIX}${watchId}`;
+  }
+
+  private toolResult(payload: Record<string, unknown>) {
+    return {
+      content: [{ type: 'text', text: JSON.stringify({ success: true, ...payload }) }],
+      isError: false,
+    };
+  }
+
+  private async forwardToolCall(body: {
+    name?: string;
+    args?: Record<string, unknown>;
+    timeoutMs?: number;
+    traceId?: string;
+  }): Promise<Response> {
+    const browser = this.authenticatedSockets()[0];
+    if (!browser) {
+      return Response.json(
+        { error: 'Brauzio extension is not connected to Cloudflare' },
+        { status: 503 },
+      );
+    }
+
+    const requestId = validTraceId(body.traceId) || crypto.randomUUID();
+    const startedAt = Date.now();
+    sessionLog('CALL_RECEIVED', {
+      requestId,
+      name: body.name,
+      authenticatedSockets: this.authenticatedSockets().length,
+    });
+    const timeoutMs = Math.min(Math.max(Number(body.timeoutMs || 120_000), 1_000), 180_000);
+
+    return new Promise<Response>((resolve) => {
+      const timer = setTimeout(() => {
+        this.pending.delete(requestId);
+        sessionLog('CALL_TIMEOUT', {
+          requestId,
+          name: body.name,
+          timeoutMs,
+          durationMs: Date.now() - startedAt,
+        });
+        resolve(
+          Response.json(
+            { error: `Tool call timed out after ${timeoutMs}ms (traceId: ${requestId})` },
+            { status: 504 },
+          ),
+        );
+      }, timeoutMs);
+
+      this.pending.set(requestId, { resolve, timer, name: body.name!, startedAt });
+
+      try {
+        browser.send(
+          JSON.stringify({
+            type: 'tool_call',
+            requestId,
+            name: body.name,
+            args: body.args || {},
+          }),
+        );
+        sessionLog('CALL_SENT_TO_BROWSER', { requestId, name: body.name });
+      } catch (error) {
+        sessionLog('CALL_SEND_FAILED', {
+          requestId,
+          name: body.name,
+          error: error instanc
