@@ -11,6 +11,10 @@ on:
       - 'pnpm-lock.yaml'
   workflow_dispatch:
 
+concurrency:
+  group: brauzio-ci-${{ github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: write
 
