@@ -57,7 +57,7 @@ jobs:
         run: pnpm install --frozen-lockfile --ignore-scripts
 
       - name: Build shared schemas
-        run: pnpm --filter chrome-mcp-shared build
+        run: pnpm --filter brauzio-shared build
 
       - name: Typecheck Cloud MCP
         run: pnpm --filter brauzio-cloud-mcp check
