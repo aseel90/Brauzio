@@ -1,0 +1,37 @@
+name: Finalize Brauzio Cloud i18n
+
+on:
+  push:
+    paths:
+      - '.github/workflows/finalize-cloud-i18n.yml'
+      - 'scripts/finalize_cloud_i18n.py'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  finalize:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Remove legacy native localization and generate Arabic fallback
+        run: python scripts/finalize_cloud_i18n.py
+
+      - name: Commit final localization
+        shell: bash
+        run: |
+          git add app/chrome-extension/_locales app/chrome-extension/utils/i18n.ts
+          if git diff --cached --quiet; then
+            echo 'Localization is already finalized.'
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "refactor: finalize cloud-only Brauzio localization"
+          git fetch origin main
+          git rebase origin/main
+          git push origin HEAD:main
