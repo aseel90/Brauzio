@@ -101,7 +101,10 @@ function cleanState(value: unknown): BrauzioControlState {
     lastHumanInputType: raw.lastHumanInputType
       ? String(raw.lastHumanInputType).slice(0, 64)
       : undefined,
-    lastHumanTabId: Number.isFinite(raw.lastHumanTabId) ? Number(raw.lastHumanTabId) : undefined,
+    lastHumanTabId:
+      typeof raw.lastHumanTabId === 'number' && Number.isFinite(raw.lastHumanTabId)
+        ? raw.lastHumanTabId
+        : undefined,
   };
 }
 
@@ -123,6 +126,12 @@ async function ensureStateLoaded(): Promise<void> {
 async function persistAndBroadcast(): Promise<void> {
   state.lastUpdated = Date.now();
   await chrome.storage.local.set({ [STORAGE_KEY]: state });
+  try {
+    await chrome.action.setBadgeText({ text: state.paused ? 'STOP' : '' });
+    if (state.paused) await chrome.action.setBadgeBackgroundColor({ color: '#c84a58' });
+  } catch {
+    // Badge is a visual hint only; never weaken the underlying safety state.
+  }
   chrome.runtime
     .sendMessage({ type: 'brauzio_control_state_changed', state: { ...state } })
     .catch(() => {});
