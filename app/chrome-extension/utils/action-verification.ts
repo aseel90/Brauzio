@@ -26,7 +26,7 @@ export interface ActionSnapshot {
   tabId: number;
   url: string;
   title: string;
-  status?: chrome.tabs.TabStatus;
+  status?: chrome.tabs.Tab['status'];
 }
 
 export interface ActionVerificationCheck {

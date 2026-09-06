@@ -1,4 +1,4 @@
-import type { Tool } from '@modelcontextprotocol/sdk/types.js';
+import type { BrauzioToolSchema } from './tools';
 
 export const WATCH_TOOL_NAMES = {
   WATCH_START: 'chrome_watch_start',
@@ -12,7 +12,7 @@ const tabTarget = {
   windowId: { type: 'number', description: 'Target window ID when tabId is omitted.' },
 };
 
-export const WATCH_TOOL_SCHEMAS: Tool[] = [
+export const WATCH_TOOL_SCHEMAS: BrauzioToolSchema[] = [
   {
     name: WATCH_TOOL_NAMES.WATCH_START,
     description:

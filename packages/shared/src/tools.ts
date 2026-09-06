@@ -1,4 +1,21 @@
-import type { Tool } from '@modelcontextprotocol/sdk/types.js';
+export type BrauzioJsonValue =
+  | string
+  | number
+  | boolean
+  | null
+  | BrauzioJsonValue[]
+  | { [key: string]: BrauzioJsonValue };
+
+export interface BrauzioToolSchema {
+  name: string;
+  description?: string;
+  inputSchema: {
+    type: 'object';
+    properties?: Record<string, BrauzioJsonValue>;
+    required?: string[];
+    [key: string]: unknown;
+  };
+}
 
 export const TOOL_NAMES = {
   BROWSER: {
@@ -86,7 +103,7 @@ const actionVerification = {
   },
 };
 
-export const TOOL_SCHEMAS: Tool[] = [
+export const TOOL_SCHEMAS: BrauzioToolSchema[] = [
   { name: TOOL_NAMES.BROWSER.GET_WINDOWS_AND_TABS, description: 'Get all currently open Chrome windows and tabs.', inputSchema: { type: 'object', properties: {}, required: [] } },
   { name: TOOL_NAMES.BROWSER.NAVIGATE, description: 'Navigate, refresh, go back/forward, or open a URL in Chrome. Can optionally verify URL, DOM/text, network, console, page load, and network-idle evidence.', inputSchema: { type: 'object', properties: { url: { type: 'string' }, refresh: { type: 'boolean' }, newWindow: { type: 'boolean' }, background: { type: 'boolean' }, verify: actionVerification, ...tabTarget }, required: [] } },
   { name: TOOL_NAMES.BROWSER.READ_PAGE, description: 'Read visible page content as an accessibility tree with stable element refs.', inputSchema: { type: 'object', properties: { filter: { type: 'string' }, depth: { type: 'number' }, refId: { type: 'string' }, ...tabTarget }, required: [] } },

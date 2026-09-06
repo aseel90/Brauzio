@@ -377,7 +377,11 @@ class NavigateTool extends BaseBrowserToolExecutor {
           }
           if (newTab.id && shouldVerify) {
             await armVerification(newTab.id);
-            newTab = await chrome.tabs.update(newTab.id, { url });
+            const updatedTab = await chrome.tabs.update(newTab.id, { url });
+            if (!updatedTab) {
+              return createErrorResponse('Tab closed before navigation could start');
+            }
+            newTab = updatedTab;
           }
 
           console.log(
