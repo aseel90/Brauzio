@@ -1,7 +1,7 @@
 <template>
   <div class="form-section">
     <div class="form-group">
-      <label class="form-label">URL 地址（可选）</label>
+      <label class="form-label">عنوان URL (اختياري)</label>
       <input
         class="form-input"
         v-model="(node as any).config.url"

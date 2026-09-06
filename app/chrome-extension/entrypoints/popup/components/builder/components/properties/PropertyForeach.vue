@@ -1,7 +1,7 @@
 <template>
   <div class="form-section">
     <div class="form-group">
-      <label class="form-label">列表变量</label>
+      <label class="form-label">列表المتغير</label>
       <input
         class="form-input"
         v-model="(node as any).config.listVar"
@@ -9,17 +9,17 @@
       />
     </div>
     <div class="form-group">
-      <label class="form-label">循环项变量名</label>
-      <input class="form-input" v-model="(node as any).config.itemVar" placeholder="默认 item" />
+      <label class="form-label">تكرار项اسم المتغير</label>
+      <input class="form-input" v-model="(node as any).config.itemVar" placeholder="افتراضي item" />
     </div>
     <div class="form-group">
-      <label class="form-label">子流 ID</label>
+      <label class="form-label">التدفق الفرعي ID</label>
       <input
         class="form-input"
         v-model="(node as any).config.subflowId"
-        placeholder="选择或新建子流"
+        placeholder="اختيار或新建التدفق الفرعي"
       />
-      <button class="btn-sm" style="margin-top: 8px" @click="onCreateSubflow">新建子流</button>
+      <button class="btn-sm" style="margin-top: 8px" @click="onCreateSubflow">新建التدفق الفرعي</button>
     </div>
   </div>
 </template>
@@ -32,7 +32,7 @@ const props = defineProps<{ node: NodeBase }>();
 const emit = defineEmits<{ (e: 'create-subflow', id: string): void }>();
 
 function onCreateSubflow() {
-  const id = prompt('请输入新子流ID');
+  const id = prompt('أدخل معرف التدفق الفرعي الجديد');
   if (!id) return;
   emit('create-subflow', id);
   const n = props.node as any;

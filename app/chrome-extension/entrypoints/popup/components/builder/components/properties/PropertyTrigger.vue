@@ -2,12 +2,12 @@
   <div class="form-section">
     <div class="form-group checkbox-group">
       <label class="checkbox-label"
-        ><input type="checkbox" v-model="cfg.enabled" /> 启用触发器</label
+        ><input type="checkbox" v-model="cfg.enabled" /> تفعيلمشغّل</label
       >
     </div>
     <div class="form-group">
-      <label class="form-label">描述（可选）</label>
-      <input class="form-input" v-model="cfg.description" placeholder="说明此触发器的用途" />
+      <label class="form-label">描述（اختياري）</label>
+      <input class="form-input" v-model="cfg.description" placeholder="说明此مشغّل的用途" />
     </div>
   </div>
 
@@ -29,7 +29,7 @@
         ><input type="checkbox" v-model="cfg.modes.command" /> 快捷键</label
       >
       <label class="checkbox-label"
-        ><input type="checkbox" v-model="cfg.modes.dom" /> DOM 变化</label
+        ><input type="checkbox" v-model="cfg.modes.dom" /> تغير DOM</label
       >
       <label class="checkbox-label"
         ><input type="checkbox" v-model="cfg.modes.schedule" /> 定时</label
@@ -38,13 +38,13 @@
   </div>
 
   <div v-if="cfg.modes.url" class="form-section">
-    <div class="section-title">访问 URL 匹配</div>
+    <div class="section-title">访问 URL مطابقة</div>
     <div class="selector-list">
       <div v-for="(r, i) in urlRules" :key="i" class="selector-item">
         <select class="form-select-sm" v-model="r.kind">
-          <option value="url">前缀 URL</option>
-          <option value="domain">域名包含</option>
-          <option value="path">路径前缀</option>
+          <option value="url">بادئة URL</option>
+          <option value="domain">النطاق包含</option>
+          <option value="path">بادئة المسار</option>
         </select>
         <input
           class="form-input-sm flex-1"
@@ -61,17 +61,17 @@
         <button class="btn-icon-sm danger" @click="urlRules.splice(i, 1)">×</button>
       </div>
     </div>
-    <button class="btn-sm" @click="urlRules.push({ kind: 'url', value: '' })">+ 添加匹配</button>
+    <button class="btn-sm" @click="urlRules.push({ kind: 'url', value: '' })">+ إضافة مطابقة</button>
   </div>
 
   <div v-if="cfg.modes.contextMenu" class="form-section">
     <div class="section-title">右键菜单</div>
     <div class="form-group">
-      <label class="form-label">标题</label>
-      <input class="form-input" v-model="cfg.contextMenu.title" placeholder="菜单标题" />
+      <label class="form-label">العنوان</label>
+      <input class="form-input" v-model="cfg.contextMenu.title" placeholder="菜单العنوان" />
     </div>
     <div class="form-group">
-      <label class="form-label">作用范围</label>
+      <label class="form-label">نطاق التطبيق</label>
       <div class="checkbox-group">
         <label class="checkbox-label" v-for="c in menuContexts" :key="c">
           <input type="checkbox" :value="c" v-model="cfg.contextMenu.contexts" /> {{ c }}
@@ -83,7 +83,7 @@
   <div v-if="cfg.modes.command" class="form-section">
     <div class="section-title">快捷键</div>
     <div class="form-group">
-      <label class="form-label">命令键（需预先在 manifest commands 中声明）</label>
+      <label class="form-label">命令键（يجب预先在 manifest commands 中声明）</label>
       <input
         class="form-input"
         v-model="cfg.command.commandKey"
@@ -91,14 +91,14 @@
       />
     </div>
     <div class="text-xs text-slate-500" style="padding: 0 20px"
-      >提示：Chrome 扩展快捷键需要在 manifest 里固定声明，无法运行时动态添加。</div
+      >提示：Chrome 扩展快捷键يحتاج在 manifest 里固定声明，تعذرتشغيل时动态إضافة。</div
     >
   </div>
 
   <div v-if="cfg.modes.dom" class="form-section">
-    <div class="section-title">DOM 变化</div>
+    <div class="section-title">تغير DOM</div>
     <div class="form-group">
-      <label class="form-label">选择器</label>
+      <label class="form-label">المحدد</label>
       <input class="form-input" v-model="cfg.dom.selector" placeholder="#app .item" />
     </div>
     <div class="form-group checkbox-group">
@@ -106,7 +106,7 @@
         ><input type="checkbox" v-model="cfg.dom.appear" /> 出现时触发</label
       >
       <label class="checkbox-label"
-        ><input type="checkbox" v-model="cfg.dom.once" /> 仅触发一次</label
+        ><input type="checkbox" v-model="cfg.dom.once" /> تشغيل مرة واحدة فقط</label
       >
     </div>
     <div class="form-group">
@@ -120,16 +120,16 @@
     <div class="selector-list">
       <div v-for="(s, i) in schedules" :key="i" class="selector-item">
         <select class="form-select-sm" v-model="s.type">
-          <option value="interval">间隔(分钟)</option>
-          <option value="daily">每天(HH:mm)</option>
-          <option value="once">一次(ISO时间)</option>
+          <option value="interval">الفاصل (بالدقائق)</option>
+          <option value="daily">يوميًا(HH:mm)</option>
+          <option value="once">مرة واحدة (وقت ISO)</option>
         </select>
         <input
           class="form-input-sm flex-1"
           v-model="s.when"
           placeholder="5 或 09:00 或 2025-01-01T10:00:00"
         />
-        <label class="checkbox-label"><input type="checkbox" v-model="s.enabled" /> 启用</label>
+        <label class="checkbox-label"><input type="checkbox" v-model="s.enabled" /> تفعيل</label>
         <button class="btn-icon-sm" @click="move(schedules, i, -1)" :disabled="i === 0">↑</button>
         <button
           class="btn-icon-sm"
@@ -141,7 +141,7 @@
       </div>
     </div>
     <button class="btn-sm" @click="schedules.push({ type: 'interval', when: '5', enabled: true })"
-      >+ 添加定时</button
+      >+ إضافة جدولة</button
     >
   </div>
 
@@ -149,7 +149,7 @@
   <div class="form-section">
     <div class="text-xs text-slate-500" style="padding: 0 20px"
       >说明：
-      触发器会在保存工作流时同步到后台触发表（URL/右键/快捷键/DOM）和计划任务（间隔/每天/一次）。
+      مشغّل会在حفظسير العمل时同步到后台触发表（URL/右键/快捷键/DOM）和جدول任务（间隔/يوميًا/مرة واحدة）。
     </div>
   </div>
 </template>
@@ -175,7 +175,7 @@ function ensure() {
     };
   if (!n.config.url) n.config.url = { rules: [] };
   if (!n.config.contextMenu)
-    n.config.contextMenu = { title: '运行工作流', contexts: ['all'], enabled: false };
+    n.config.contextMenu = { title: 'تشغيلسير العمل', contexts: ['all'], enabled: false };
   if (!n.config.command) n.config.command = { commandKey: '', enabled: false };
   if (!n.config.dom)
     n.config.dom = { selector: '', appear: true, once: true, debounceMs: 800, enabled: false };

@@ -87,26 +87,26 @@ export function iconComp(t?: string) {
 
 export function getTypeLabel(type?: string) {
   const labels: Record<string, string> = {
-    trigger: '触发器',
-    click: '点击',
-    fill: '填充',
-    navigate: '导航',
-    wait: '等待',
-    extract: '提取',
+    trigger: 'مشغّل',
+    click: 'نقر',
+    fill: 'تعبئة',
+    navigate: 'انتقال',
+    wait: 'انتظار',
+    extract: 'استخراج',
     http: 'HTTP',
-    script: '脚本',
-    if: '条件',
-    foreach: '循环',
+    script: 'سكربت',
+    if: 'الشرط',
+    foreach: 'تكرار',
     assert: '断言',
     key: '键盘',
-    drag: '拖拽',
+    drag: 'سحب وإفلات',
     dblclick: '双击',
     openTab: '打开标签',
     switchTab: '切换标签',
     closeTab: '关闭标签',
     delay: '延迟',
     scroll: '滚动',
-    while: '循环',
+    while: 'تكرار',
   };
   return labels[String(type || '')] || type || '';
 }

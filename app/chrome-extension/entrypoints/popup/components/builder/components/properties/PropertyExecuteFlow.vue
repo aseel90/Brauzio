@@ -1,20 +1,20 @@
 <template>
   <div class="form-section">
     <div class="form-group">
-      <label class="form-label">目标工作流</label>
+      <label class="form-label">الهدفسير العمل</label>
       <select class="form-select" v-model="(node as any).config.flowId">
-        <option value="">请选择</option>
+        <option value="">请اختيار</option>
         <option v-for="f in flows" :key="f.id" :value="f.id">{{ f.name || f.id }}</option>
       </select>
     </div>
     <div class="form-group checkbox-group">
       <label class="checkbox-label"
         ><input type="checkbox" v-model="(node as any).config.inline" />
-        内联执行（共享上下文变量）</label
+        内联تشغيل（共享上下文المتغير）</label
       >
     </div>
     <div class="form-group">
-      <label class="form-label">传参 (JSON)</label>
+      <label class="form-label">المعاملات (JSON)</label>
       <textarea
         class="form-textarea"
         v-model="execArgsJson"

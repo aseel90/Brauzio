@@ -212,7 +212,7 @@ export function useBuilderStore(initial?: FlowV2 | null) {
     const n = nodes.find((n) => n.id === id);
     if (!n) return;
     n.ui = { x: Math.round(x), y: Math.round(y) };
-    // 不计入历史栈，避免频繁记录；由用户触发操作（连接/新增/删除等）记录。
+    // 不计入历史栈，避免频繁记录；由用户触发操作（连接/إضافة/حذف等）记录。
   }
 
   function connectFrom(id: string, label: string = 'default') {
@@ -223,7 +223,7 @@ export function useBuilderStore(initial?: FlowV2 | null) {
   function onConnect(sourceId: string, targetId: string, label: string = 'default') {
     // prevent self-loop
     if (sourceId === targetId) {
-      toast('不能连接到自身', 'warn');
+      toast('لا يمكن توصيل العقدة بنفسها', 'warn');
       return;
     }
     // IO constraints
@@ -236,19 +236,19 @@ export function useBuilderStore(initial?: FlowV2 | null) {
       // Inputs: respect numeric maximum; 'any' means unlimited
       const incoming = edges.filter((e) => e.to === targetId).length;
       if (dstIo.inputs !== 'any' && incoming >= (dstIo.inputs as number)) {
-        toast(`该节点最多允许 ${dstIo.inputs} 条入边`, 'warn');
+        toast(`الحد الأقصى المسموح لهذه العقدة ${dstIo.inputs} اتصالات داخلة`, 'warn');
         return;
       }
       // Outputs: respect numeric maximum when defined
       if (srcIo.outputs !== 'any') {
         const outgoing = edges.filter((e) => e.from === sourceId).length;
         if (outgoing >= (srcIo.outputs as number)) {
-          toast(`该节点最多允许 ${srcIo.outputs} 条出边`, 'warn');
+          toast(`الحد الأقصى المسموح لهذه العقدة ${srcIo.outputs} اتصالات خارجة`, 'warn');
           return;
         }
       }
     } catch {}
-    // 单一同标签出边：删除同源 + 同标签的已有边
+    // 单一同标签出边：حذف同源 + 同标签的تم有边
     for (let i = edges.length - 1; i >= 0; i--) {
       const e = edges[i];
       const lab = e.label || 'default';
@@ -520,7 +520,7 @@ export function useBuilderStore(initial?: FlowV2 | null) {
 
   // 自动排版（ELK 优先）：
   // - 动态引入 elkjs，避免常驻体积
-  // - 失败则回退到 layoutFallback()
+  // - فشل则回退到 layoutFallback()
   async function layoutAuto() {
     try {
       // Dynamic import of bundled build to avoid 'web-worker' resolution issues
@@ -571,7 +571,7 @@ export function useBuilderStore(initial?: FlowV2 | null) {
       // Fallback without dependency
       try {
         layoutFallback();
-        toast('ELK 自动布局不可用，已使用备用布局', 'warn');
+        toast('التخطيط التلقائي ELK غير متاح؛ تم استخدام التخطيط البديل', 'warn');
       } catch {}
     }
   }

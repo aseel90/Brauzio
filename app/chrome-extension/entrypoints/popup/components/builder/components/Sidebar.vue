@@ -216,14 +216,14 @@ const filtered = computed(() => {
   box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.06);
 }
 
-/* 节点区域 */
+/* العقدة区域 */
 .nodes-section {
   display: flex;
   flex-direction: column;
   gap: 6px;
 }
 
-/* 节点按钮 */
+/* العقدة按钮 */
 .node-btn {
   display: flex;
   align-items: center;
@@ -246,7 +246,7 @@ const filtered = computed(() => {
   transform: scale(0.98);
 }
 
-/* 节点图标 - 彩色圆形 */
+/* العقدة图标 - 彩色圆形 */
 .btn-icon {
   width: 30px;
   height: 30px;
@@ -346,7 +346,7 @@ const filtered = computed(() => {
   background: transparent !important;
 }
 
-/* 节点标签 */
+/* العقدة标签 */
 .btn-label {
   font-size: 13px;
   font-weight: 500;

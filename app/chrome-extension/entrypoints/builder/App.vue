@@ -2,7 +2,7 @@
   <!-- rr-theme container provides CSS variables; data-theme for light/dark -->
   <div class="builder-page rr-theme" :data-theme="theme">
     <div v-if="fallbackNotice" class="notice-top">
-      <span>已应用回退建议：提升 {{ fallbackNotice.type }} 优先级</span>
+      <span>تم应用回退建议：提升 {{ fallbackNotice.type }} 优先级</span>
       <button class="mini" @click="undoFallbackPromotion">撤销</button>
     </div>
 
@@ -26,7 +26,7 @@
       <div class="topbar rr-topbar backdrop-blur">
         <div class="left">
           <strong class="text-[var(--rr-text)]">{{ title }}</strong>
-          <span class="tip">工作流可视化编排</span>
+          <span class="tip">سير العمل可视化编排</span>
         </div>
         <div class="right">
           <button class="top-btn" @click="exportFlow" title="导出 JSON">
@@ -56,7 +56,7 @@
             导入
             <input type="file" accept="application/json" @change="onImport" />
           </label>
-          <button class="top-btn" @click="openRename" title="重命名工作流">
+          <button class="top-btn" @click="openRename" title="重命名سير العمل">
             <svg
               width="14"
               height="14"
@@ -74,7 +74,7 @@
             class="top-btn"
             :class="{ active: triggerPanelVisible }"
             @click="triggerPanelVisible = !triggerPanelVisible"
-            title="管理触发器"
+            title="إدارةمشغّل"
           >
             <svg
               width="14"
@@ -93,7 +93,7 @@
             class="top-btn"
             :disabled="!selectedId"
             @click="runFromSelected"
-            title="从选中节点回放"
+            title="إعادة التشغيل من العقدة المحددة"
           >
             <svg
               width="14"
@@ -105,9 +105,9 @@
             >
               <polygon points="5 3 19 12 5 21 5 3" />
             </svg>
-            从选中运行
+            تشغيل من المحدد
           </button>
-          <button class="top-btn primary" @click="runAll" title="从头回放整流">
+          <button class="top-btn primary" @click="runAll" title="إعادة التشغيل من البداية">
             <svg
               width="14"
               height="14"
@@ -118,7 +118,7 @@
             >
               <polygon points="5 3 19 12 5 21 5 3" />
             </svg>
-            运行
+            تشغيل
           </button>
           <span class="divider-vert" />
           <span class="status" :data-state="saveState">{{ saveLabel }}</span>
@@ -136,7 +136,7 @@
               <polyline points="17 21 17 13 7 13 7 21" />
               <polyline points="7 3 7 8 15 8" />
             </svg>
-            保存
+            حفظ
           </button>
         </div>
       </div>
@@ -248,21 +248,21 @@
   <div v-if="renameVisible" class="rr-modal">
     <div class="rr-dialog small">
       <div class="rr-header">
-        <div class="title">重命名工作流</div>
+        <div class="title">重命名سير العمل</div>
         <button class="close" @click="renameVisible = false">✕</button>
       </div>
       <div class="rr-body">
         <div class="row">
-          <label>名称</label>
-          <input v-model="renameName" placeholder="工作流名称" />
+          <label>الاسم</label>
+          <input v-model="renameName" placeholder="سير العملالاسم" />
         </div>
         <div class="row">
           <label>描述</label>
-          <textarea v-model="renameDesc" placeholder="可选描述"></textarea>
+          <textarea v-model="renameDesc" placeholder="اختياري描述"></textarea>
         </div>
       </div>
       <div class="rr-footer">
-        <button class="primary" @click="applyRename">保存</button>
+        <button class="primary" @click="applyRename">حفظ</button>
       </div>
     </div>
   </div>
@@ -296,7 +296,7 @@ import PropertyPanel from '@/entrypoints/popup/components/builder/components/Pro
 import EdgePropertyPanel from '@/entrypoints/popup/components/builder/components/EdgePropertyPanel.vue';
 import TriggerPanel from '@/entrypoints/popup/components/builder/components/TriggerPanel.vue';
 
-const title = ref('工作流编辑器');
+const title = ref('سير العملتعديل器');
 // theme state: persisted in localStorage and default to system preference
 const theme = ref<'light' | 'dark'>(
   (localStorage.getItem('rr-theme') as 'light' | 'dark' | null) ||
@@ -359,7 +359,7 @@ async function bootstrap() {
         const { flow: flowV2, warnings } = flowV3ToV2ForBuilder(flowV3);
         warnings.forEach((w) => pushToast(w, 'warn'));
         store.initFromFlow(flowV2);
-        title.value = `编辑：${flowV2.name || flowV2.id}`;
+        title.value = `تعديل：${flowV2.name || flowV2.id}`;
 
         if (q.focus) {
           setTimeout(() => {
@@ -372,11 +372,11 @@ async function bootstrap() {
         }
       } else {
         // Flow not found - notify user and initialize empty flow
-        pushToast(`工作流 "${q.flowId}" 未找到，已创建新工作流`, 'warn');
+        pushToast(`سير العمل "${q.flowId}" غير موجود，تمإنشاء新سير العمل`, 'warn');
         initEmptyFlow();
       }
     } catch (e) {
-      pushToast(`加载工作流失败：${e instanceof Error ? e.message : String(e)}`, 'error');
+      pushToast(`تحميلسير العملفشل：${e instanceof Error ? e.message : String(e)}`, 'error');
       initEmptyFlow();
     }
   } else if (q.new === '1') {
@@ -385,13 +385,13 @@ async function bootstrap() {
 }
 
 /**
- * 初始化一个空的工作流
+ * 初始化一个空的سير العمل
  */
 function initEmptyFlow() {
   const now = Date.now();
   const empty: FlowV2 = {
     id: `flow_${now}`,
-    name: '新建工作流',
+    name: '新建سير العمل',
     version: 1,
     steps: [],
     variables: [],
@@ -401,7 +401,7 @@ function initEmptyFlow() {
     } as any,
   } as any;
   store.initFromFlow(empty);
-  title.value = '新建工作流';
+  title.value = '新建سير العمل';
 }
 
 // Builder helpers mostly ported from modal component
@@ -476,8 +476,8 @@ function applyRename() {
 }
 
 /**
- * 保存 Flow 到 V3 RPC
- * @returns 保存成功返回 FlowV3，失败返回 null
+ * حفظ Flow 到 V3 RPC
+ * @returns حفظنجحرجوع FlowV3，فشلرجوع null
  */
 async function save(): Promise<FlowV3 | null> {
   try {
@@ -511,7 +511,7 @@ async function save(): Promise<FlowV3 | null> {
 
     return saved;
   } catch (e) {
-    pushToast(`保存失败：${e instanceof Error ? e.message : String(e)}`, 'error');
+    pushToast(`حفظفشل：${e instanceof Error ? e.message : String(e)}`, 'error');
     return null;
   }
 }
@@ -527,8 +527,8 @@ function schId(flowId: string, nodeId: string, idx: number): TriggerId {
 }
 
 /**
- * 将 V2 schedule 配置转换为 cron 表达式
- * @returns cron 表达式或 null（如果无法转换）
+ * 将 V2 schedule 配置转换为 cron التعبير
+ * @returns cron التعبير或 null（如果تعذر转换）
  */
 function scheduleToCron(schedule: { type?: string; when?: string }): string | null {
   if (!schedule) return null;
@@ -555,12 +555,12 @@ function scheduleToCron(schedule: { type?: string; when?: string }): string | nu
     return `${minute} ${hour} * * *`;
   }
 
-  // V3 cron 不支持 'once' 一次性定时
+  // V3 cron 不支持 'once' مرة واحدة性定时
   return null;
 }
 
 /**
- * 从 trigger 节点配置同步触发器到 V3 存储
+ * 从 trigger العقدة配置同步مشغّل到 V3 存储
  * @description V2 schedules 会转换为 V3 cron triggers
  */
 async function syncTriggersAndSchedules(flowId: string, nodes: unknown[]) {
@@ -631,12 +631,12 @@ async function syncTriggersAndSchedules(flowId: string, nodes: unknown[]) {
           const scheduleType = String(s?.type || 'unknown');
           if (scheduleType === 'once') {
             pushToast(
-              `节点 ${n.id} 的定时 #${i + 1}: V3 暂不支持一次性定时（once），已跳过`,
+              `العقدة ${n.id} 的定时 #${i + 1}: V3 暂不支持مرة واحدة性定时（once），تم跳过`,
               'warn',
             );
           } else {
             pushToast(
-              `节点 ${n.id} 的定时 #${i + 1}: 无法转换为 cron（type=${scheduleType}），已跳过`,
+              `العقدة ${n.id} 的定时 #${i + 1}: تعذر转换为 cron（type=${scheduleType}），تم跳过`,
               'warn',
             );
           }
@@ -710,7 +710,7 @@ async function exportFlow() {
     } as chrome.downloads.DownloadOptions);
     URL.revokeObjectURL(url);
   } catch (e) {
-    pushToast(`导出失败：${e instanceof Error ? e.message : String(e)}`, 'error');
+    pushToast(`导出فشل：${e instanceof Error ? e.message : String(e)}`, 'error');
   }
 }
 
@@ -725,7 +725,7 @@ async function onImport(e: Event) {
     const candidates = extractFlowCandidates(parsed);
 
     if (!candidates.length) {
-      pushToast('导入失败：未找到工作流数据', 'error');
+      pushToast('导入فشل：غير موجودسير العمل数据', 'error');
       return;
     }
 
@@ -741,7 +741,7 @@ async function onImport(e: Event) {
       const { flow: flowV2, warnings } = flowV3ToV2ForBuilder(saved);
       warnings.forEach((w) => pushToast(w, 'warn'));
       store.initFromFlow(flowV2);
-      title.value = `编辑：${flowV2.name || flowV2.id}`;
+      title.value = `تعديل：${flowV2.name || flowV2.id}`;
 
       // Sync triggers
       try {
@@ -759,11 +759,11 @@ async function onImport(e: Event) {
         store.importFromSteps();
       }
 
-      title.value = `编辑：${store.flowLocal.name || store.flowLocal.id}`;
+      title.value = `تعديل：${store.flowLocal.name || store.flowLocal.id}`;
       await save(); // Convert and save as V3
     }
   } catch (e) {
-    pushToast(`导入失败：${e instanceof Error ? e.message : String(e)}`, 'error');
+    pushToast(`导入فشل：${e instanceof Error ? e.message : String(e)}`, 'error');
   } finally {
     input.value = '';
   }
@@ -787,7 +787,7 @@ async function runFromSelected() {
       ...(startNodeId ? { startNodeId: startNodeId as NodeId } : {}),
     });
   } catch (e) {
-    pushToast(`运行失败：${e instanceof Error ? e.message : String(e)}`, 'error');
+    pushToast(`تشغيلفشل：${e instanceof Error ? e.message : String(e)}`, 'error');
   }
 }
 
@@ -801,7 +801,7 @@ async function runAll() {
     await rpc.ensureConnected();
     await rpc.request('rr_v3.enqueueRun', { flowId: saved.id as FlowId });
   } catch (e) {
-    pushToast(`运行失败：${e instanceof Error ? e.message : String(e)}`, 'error');
+    pushToast(`تشغيلفشل：${e instanceof Error ? e.message : String(e)}`, 'error');
   }
 }
 
@@ -849,7 +849,7 @@ onUnmounted(() => document.removeEventListener('keydown', onKey));
 // Auto save debounced
 const saveState = ref<'idle' | 'saving' | 'saved'>('idle');
 const saveLabel = computed(() =>
-  saveState.value === 'saving' ? '保存中…' : saveState.value === 'saved' ? '已保存' : '',
+  saveState.value === 'saving' ? 'جارٍ الحفظ…' : saveState.value === 'saved' ? 'تم الحفظ' : '',
 );
 let saveTimer: ReturnType<typeof setTimeout> | null = null;
 let statusTimer: ReturnType<typeof setTimeout> | null = null;

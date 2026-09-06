@@ -1,7 +1,7 @@
 <template>
   <div class="form-section">
     <div class="form-group">
-      <label class="form-label">Tab ID（可选）</label>
+      <label class="form-label">معرف علامة التبويب (اختياري)</label>
       <input
         class="form-input"
         type="number"
@@ -10,22 +10,22 @@
       />
     </div>
     <div class="form-group" :class="{ invalid: needOne && !hasAny }">
-      <label class="form-label">URL 包含（可选）</label>
-      <input class="form-input" v-model="(node as any).config.urlContains" placeholder="子串匹配" />
+      <label class="form-label">يحتوي URL على (اختياري)</label>
+      <input class="form-input" v-model="(node as any).config.urlContains" placeholder="子串مطابقة" />
     </div>
     <div class="form-group" :class="{ invalid: needOne && !hasAny }">
-      <label class="form-label">标题包含（可选）</label>
+      <label class="form-label">العنوان包含（اختياري）</label>
       <input
         class="form-input"
         v-model="(node as any).config.titleContains"
-        placeholder="子串匹配"
+        placeholder="子串مطابقة"
       />
     </div>
     <div
       v-if="needOne && !hasAny"
       class="text-xs text-slate-500"
       style="padding: 0 20px; color: var(--rr-danger)"
-      >需提供 tabId 或 URL/标题包含</div
+      >يجب توفير tabId أو مطابقة URL/العنوان</div
     >
   </div>
 </template>

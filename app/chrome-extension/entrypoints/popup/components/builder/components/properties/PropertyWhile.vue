@@ -1,7 +1,7 @@
 <template>
   <div class="form-section">
     <div class="form-group">
-      <label class="form-label">条件 (JSON)</label>
+      <label class="form-label">الشرط (JSON)</label>
       <textarea
         class="form-textarea"
         v-model="whileJson"
@@ -10,16 +10,16 @@
       ></textarea>
     </div>
     <div class="form-group">
-      <label class="form-label">子流 ID</label>
+      <label class="form-label">التدفق الفرعي ID</label>
       <input
         class="form-input"
         v-model="(node as any).config.subflowId"
-        placeholder="选择或新建子流"
+        placeholder="اختيار或新建التدفق الفرعي"
       />
-      <button class="btn-sm" style="margin-top: 8px" @click="onCreateSubflow">新建子流</button>
+      <button class="btn-sm" style="margin-top: 8px" @click="onCreateSubflow">新建التدفق الفرعي</button>
     </div>
     <div class="form-group">
-      <label class="form-label">最大迭代次数（可选）</label>
+      <label class="form-label">最大迭代次数（اختياري）</label>
       <input
         class="form-input"
         type="number"
@@ -57,7 +57,7 @@ const whileJson = computed({
 });
 
 function onCreateSubflow() {
-  const id = prompt('请输入新子流ID');
+  const id = prompt('أدخل معرف التدفق الفرعي الجديد');
   if (!id) return;
   emit('create-subflow', id);
   const n = props.node as any;

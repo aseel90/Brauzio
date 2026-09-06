@@ -10,74 +10,74 @@ export function validateNode(n: NodeBase): string[] {
     case STEP_TYPES.DBLCLICK:
     case 'fill': {
       const hasCandidate = !!c?.target?.candidates?.length;
-      if (!hasCandidate) errs.push('缺少目标选择器候选');
-      if (n.type === 'fill' && (!('value' in c) || c.value === undefined)) errs.push('缺少输入值');
+      if (!hasCandidate) errs.push('لا يوجد محدد هدف');
+      if (n.type === 'fill' && (!('value' in c) || c.value === undefined)) errs.push('قيمة الإدخال مفقودة');
       break;
     }
     case STEP_TYPES.WAIT: {
-      if (!c?.condition) errs.push('缺少等待条件');
+      if (!c?.condition) errs.push('شرط الانتظار مفقود');
       break;
     }
     case STEP_TYPES.ASSERT: {
-      if (!c?.assert) errs.push('缺少断言条件');
+      if (!c?.assert) errs.push('شرط التحقق مفقود');
       break;
     }
     case STEP_TYPES.NAVIGATE: {
-      if (!c?.url) errs.push('缺少 URL');
+      if (!c?.url) errs.push('عنوان URL مفقود');
       break;
     }
     case STEP_TYPES.HTTP: {
-      if (!c?.url) errs.push('HTTP: 缺少 URL');
+      if (!c?.url) errs.push('HTTP: عنوان URL مفقود');
       if (c?.assign && typeof c.assign === 'object') {
         const pathRe = /^[A-Za-z0-9_]+(?:\.[A-Za-z0-9_]+|\[\d+\])*$/;
         for (const v of Object.values(c.assign)) {
           const s = String(v);
-          if (!pathRe.test(s)) errs.push(`Assign: 路径非法 ${s}`);
+          if (!pathRe.test(s)) errs.push(`Assign: مسار غير صالح ${s}`);
         }
       }
       break;
     }
     case STEP_TYPES.HANDLE_DOWNLOAD: {
-      // filenameContains 可选
+      // filenameContains اختياري
       break;
     }
     case STEP_TYPES.EXTRACT: {
-      if (!c?.saveAs) errs.push('Extract: 需填写保存变量名');
-      if (!c?.selector && !c?.js) errs.push('Extract: 需提供 selector 或 js');
+      if (!c?.saveAs) errs.push('Extract: يجب إدخال اسم متغير الحفظ');
+      if (!c?.selector && !c?.js) errs.push('Extract: يجب توفير selector أو js');
       break;
     }
     case STEP_TYPES.SWITCH_TAB: {
       if (!c?.tabId && !c?.urlContains && !c?.titleContains)
-        errs.push('SwitchTab: 需提供 tabId 或 URL/标题包含');
+        errs.push('SwitchTab: يجب توفير tabId أو مطابقة URL/العنوان');
       break;
     }
     case STEP_TYPES.SCREENSHOT: {
-      // selector 可空（全页/可视区），不强制
+      // selector 可空（الصفحة كاملة/المنطقة المرئية），不强制
       break;
     }
     case STEP_TYPES.TRIGGER_EVENT: {
       const hasCandidate = !!c?.target?.candidates?.length;
-      if (!hasCandidate) errs.push('缺少目标选择器候选');
-      if (!String(c?.event || '').trim()) errs.push('需提供事件类型');
+      if (!hasCandidate) errs.push('لا يوجد محدد هدف');
+      if (!String(c?.event || '').trim()) errs.push('يجب تحديد نوع الحدث');
       break;
     }
     case STEP_TYPES.IF: {
       const arr = Array.isArray(c?.branches) ? c.branches : [];
-      if (arr.length === 0) errs.push('需添加至少一个条件分支');
+      if (arr.length === 0) errs.push('يجب إضافة فرع شرطي واحد على الأقل');
       for (let i = 0; i < arr.length; i++) {
-        if (!String(arr[i]?.expr || '').trim()) errs.push(`分支${i + 1}: 需填写条件表达式`);
+        if (!String(arr[i]?.expr || '').trim()) errs.push(`فرع${i + 1}: يجب إدخال تعبير الشرط`);
       }
       break;
     }
     case STEP_TYPES.SET_ATTRIBUTE: {
       const hasCandidate = !!c?.target?.candidates?.length;
-      if (!hasCandidate) errs.push('缺少目标选择器候选');
-      if (!String(c?.name || '').trim()) errs.push('需提供属性名');
+      if (!hasCandidate) errs.push('لا يوجد محدد هدف');
+      if (!String(c?.name || '').trim()) errs.push('يجب إدخال اسم الخاصية');
       break;
     }
     case STEP_TYPES.LOOP_ELEMENTS: {
-      if (!String(c?.selector || '').trim()) errs.push('需提供元素选择器');
-      if (!String(c?.subflowId || '').trim()) errs.push('需提供子流 ID');
+      if (!String(c?.selector || '').trim()) errs.push('يجب توفير محدد العنصر');
+      if (!String(c?.subflowId || '').trim()) errs.push('يجب توفير معرف التدفق الفرعي');
       break;
     }
     case STEP_TYPES.SWITCH_FRAME: {
@@ -85,23 +85,23 @@ export function validateNode(n: NodeBase): string[] {
       break;
     }
     case STEP_TYPES.EXECUTE_FLOW: {
-      if (!String(c?.flowId || '').trim()) errs.push('需选择要执行的工作流');
+      if (!String(c?.flowId || '').trim()) errs.push('يجب اختيار سير العمل المراد تشغيله');
       break;
     }
     case STEP_TYPES.CLOSE_TAB: {
-      // 允许空（关闭当前标签页），不强制
+      // 允许空（关闭الحالي标签页），不强制
       break;
     }
     case STEP_TYPES.SCRIPT: {
-      // 若配置了 saveAs/assign，应提供 code
+      // 若配置了 saveAs/assign，应توفير code
       const hasAssign = c?.assign && Object.keys(c.assign).length > 0;
       if ((c?.saveAs || hasAssign) && !String(c?.code || '').trim())
-        errs.push('Script: 配置了保存/映射但缺少代码');
+        errs.push('Script: تم إعداد الحفظ/الربط لكن الكود مفقود');
       if (hasAssign) {
         const pathRe = /^[A-Za-z0-9_]+(?:\.[A-Za-z0-9_]+|\[\d+\])*$/;
         for (const v of Object.values(c.assign || {})) {
           const s = String(v);
-          if (!pathRe.test(s)) errs.push(`Assign: 路径非法 ${s}`);
+          if (!pathRe.test(s)) errs.push(`Assign: مسار غير صالح ${s}`);
         }
       }
       break;

@@ -2164,7 +2164,7 @@ onUnmounted(() => {
   color: #991b1b;
 }
 
-/* 编辑按钮 - 蓝色 */
+/* تعديل按钮 - 蓝色 */
 .rr-icon-btn-edit {
   background: rgba(37, 99, 235, 0.1);
   color: #2563eb;
@@ -2175,7 +2175,7 @@ onUnmounted(() => {
   color: #1d4ed8;
 }
 
-/* 标注按钮 - 绿色 */
+/* تحديد按钮 - 绿色 */
 .rr-icon-btn-marker {
   background: rgba(16, 185, 129, 0.1);
   color: #10b981;
@@ -2256,7 +2256,7 @@ onUnmounted(() => {
   height: 100%;
 }
 
-/* 管理入口卡片样式 */
+/* إدارة入口卡片样式 */
 .entry-card {
   background: var(--ac-surface, white);
   border-radius: var(--ac-radius-card, 12px);

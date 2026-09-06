@@ -3,7 +3,7 @@
     <SelectorEditor :node="node" :allowPick="true" />
     <div class="form-section">
       <div class="form-group">
-        <label class="form-label">属性名</label>
+        <label class="form-label">الخاصية名</label>
         <input
           class="form-input"
           v-model="(node as any).config.name"
@@ -11,12 +11,12 @@
         />
       </div>
       <div class="form-group">
-        <label class="form-label">属性值（留空并勾选删除则移除）</label>
-        <input class="form-input" v-model="(node as any).config.value" placeholder="属性值" />
+        <label class="form-label">الخاصية值（留空并勾选حذف则移除）</label>
+        <input class="form-input" v-model="(node as any).config.value" placeholder="الخاصية值" />
       </div>
       <div class="form-group checkbox-group">
         <label class="checkbox-label"
-          ><input type="checkbox" v-model="(node as any).config.remove" /> 删除属性</label
+          ><input type="checkbox" v-model="(node as any).config.remove" /> حذفالخاصية</label
         >
       </div>
     </div>

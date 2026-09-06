@@ -247,7 +247,7 @@
                       <div class="flex items-center gap-2">
                         <span>状态: {{ getRunStatusText(run) }}</span>
                         <span v-if="run.finishedAt"
-                          >• 耗时:
+                          >• المدة:
                           {{
                             Math.round(
                               (new Date(run.finishedAt).getTime() -
@@ -522,16 +522,16 @@ function getRunStatusText(run: RunLite): string {
   if (run.status) {
     const statusMap: Record<string, string> = {
       queued: '排队中',
-      running: '运行中',
-      paused: '已暂停',
-      succeeded: '成功',
-      failed: '失败',
-      canceled: '已取消',
+      running: 'تشغيل中',
+      paused: 'تم暂停',
+      succeeded: 'نجح',
+      failed: 'فشل',
+      canceled: 'تم取消',
     };
     return statusMap[run.status] || run.status;
   }
   // V2 fallback
-  return run.success ? '成功' : '失败';
+  return run.success ? 'نجح' : 'فشل';
 }
 
 function formatTime(dateStr: string): string {

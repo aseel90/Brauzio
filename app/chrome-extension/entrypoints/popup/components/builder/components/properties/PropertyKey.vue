@@ -5,7 +5,7 @@
       <input
         class="form-input"
         v-model="(node as any).config.keys"
-        placeholder="如 Backspace Enter 或 cmd+a"
+        placeholder="如 Backspace Enter أو cmd+a"
       />
     </div>
   </div>

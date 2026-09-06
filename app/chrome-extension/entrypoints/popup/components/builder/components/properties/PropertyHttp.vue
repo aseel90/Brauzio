@@ -11,7 +11,7 @@
       </select>
     </div>
     <div class="form-group" :class="{ invalid: !(node as any).config?.url }" data-field="http.url">
-      <label class="form-label">URL 地址</label>
+      <label class="form-label">عنوان URL</label>
       <input
         class="form-input"
         v-model="(node as any).config.url"
@@ -37,7 +37,7 @@
       ></textarea>
     </div>
     <div class="form-group">
-      <label class="form-label">FormData (JSON，可选，提供时覆盖 Body)</label>
+      <label class="form-label">FormData (JSON، اختياري، ويستبدل Body عند توفيره)</label>
       <textarea
         class="form-textarea"
         v-model="formDataJson"

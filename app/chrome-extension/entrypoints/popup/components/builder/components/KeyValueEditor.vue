@@ -1,13 +1,13 @@
 <template>
   <div class="kve">
     <div v-for="(item, i) in rows" :key="i" class="kve-row">
-      <input class="kve-key" v-model="item.k" placeholder="变量名" />
-      <input class="kve-val" v-model="item.v" placeholder="结果路径（如 data.items[0].id）" />
+      <input class="kve-key" v-model="item.k" placeholder="اسم المتغير" />
+      <input class="kve-val" v-model="item.v" placeholder="مسار النتيجة (مثل data.items[0].id)" />
       <button class="mini" @click="move(i, -1)" :disabled="i === 0">↑</button>
       <button class="mini" @click="move(i, 1)" :disabled="i === rows.length - 1">↓</button>
       <button class="mini danger" @click="remove(i)">删</button>
     </div>
-    <button class="mini" @click="add">添加映射</button>
+    <button class="mini" @click="add">إضافة ربط</button>
   </div>
 </template>
 

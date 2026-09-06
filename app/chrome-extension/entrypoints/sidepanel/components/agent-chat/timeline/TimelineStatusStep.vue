@@ -37,7 +37,7 @@ const props = defineProps<{
   hideIcon?: boolean;
 }>();
 
-// 是否处于运行状态
+// 是否处于تشغيل状态
 const isRunning = computed(
   () => props.item.status === 'running' || props.item.status === 'starting',
 );
@@ -45,16 +45,16 @@ const isRunning = computed(
 // 随机文案（仅 running 状态使用）
 const randomText = ref(getRandomLoadingText());
 
-// 定时更新文案的 timeout ID
+// 定时تحديث文案的 timeout ID
 let timeoutId: ReturnType<typeof setTimeout> | null = null;
 
-// 记录上一次的运行状态，用于判断状态变化
+// 记录上مرة واحدة的تشغيل状态，用于判断状态变化
 let wasRunning = false;
 
 // 启动定时器
 function startInterval(): void {
   if (timeoutId) return;
-  // 5-8 秒随机间隔更新文案
+  // 5-8 秒随机间隔تحديث文案
   const scheduleNext = () => {
     timeoutId = setTimeout(
       () => {
@@ -75,9 +75,9 @@ function stopInterval(): void {
   }
 }
 
-// 监听运行状态变化 - 只在状态真正变化时才处理
+// 监听تشغيل状态变化 - 只在状态真正变化时才处理
 watch(isRunning, (running) => {
-  // 只在从非运行变为运行时，才重新生成文案并启动定时器
+  // 只在从非تشغيل变为تشغيل时，才重新生成文案并启动定时器
   if (running && !wasRunning) {
     randomText.value = getRandomLoadingText();
     startInterval();
@@ -99,7 +99,7 @@ onUnmounted(() => {
   stopInterval();
 });
 
-// 非运行状态的默认文案
+// 非تشغيل状态的افتراضي文案
 const defaultText = computed(() => {
   switch (props.item.status) {
     case 'completed':

@@ -1,8 +1,8 @@
 <template>
   <div class="local-model-page">
-    <!-- 返回按钮 -->
+    <!-- رجوع按钮 -->
     <div class="page-header">
-      <button class="back-button" @click="$emit('back')" title="返回首页">
+      <button class="back-button" @click="$emit('back')" title="العودة للرئيسية">
         <svg
           viewBox="0 0 24 24"
           width="20"
@@ -13,9 +13,9 @@
         >
           <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
         </svg>
-        <span>返回</span>
+        <span>رجوع</span>
       </button>
-      <h2 class="page-title">本地模型</h2>
+      <h2 class="page-title">النموذج المحلي</h2>
     </div>
 
     <div class="page-content">
@@ -52,7 +52,7 @@
         </div>
       </div>
 
-      <!-- Embedding模型选择 -->
+      <!-- Embedding模型اختيار -->
       <div class="section">
         <h3 class="section-title">{{ getMessage('embeddingModelLabel') }}</h3>
 
@@ -117,7 +117,7 @@
         </div>
       </div>
 
-      <!-- 索引数据管理 -->
+      <!-- 索引数据إدارة -->
       <div class="section">
         <h3 class="section-title">{{ getMessage('indexDataManagementLabel') }}</h3>
         <div class="stats-grid">
@@ -181,7 +181,7 @@
         </button>
       </div>
 
-      <!-- 模型缓存管理 -->
+      <!-- 模型缓存إدارة -->
       <ModelCacheManagement
         :cache-stats="cacheStats"
         :is-managing-cache="isManagingCache"
@@ -254,7 +254,7 @@ defineEmits<{
   (e: 'clearAllCache'): void;
 }>();
 
-// 计算属性
+// 计算الخاصية
 const getSemanticEngineStatusClass = () => {
   switch (props.semanticEngineStatus) {
     case 'ready':
@@ -669,7 +669,7 @@ const formatIndexSize = () => {
   margin: 0;
 }
 
-/* 错误卡片 */
+/* خطأ卡片 */
 .error-card {
   background: #fef2f2;
   border: 1px solid #fecaca;

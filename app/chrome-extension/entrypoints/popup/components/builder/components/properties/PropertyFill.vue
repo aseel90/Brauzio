@@ -3,8 +3,8 @@
     <SelectorEditor :node="node" :allowPick="true" />
     <div class="form-section">
       <div class="form-group" data-field="fill.value">
-        <label class="form-label">输入值</label>
-        <VarInput v-model="value" :variables="variables" placeholder="支持 {变量名} 格式" />
+        <label class="form-label">إدخال值</label>
+        <VarInput v-model="value" :variables="variables" placeholder="支持 {اسم المتغير} 格式" />
       </div>
     </div>
   </div>
