@@ -9,7 +9,7 @@
       />
     </div>
     <div class="form-group">
-      <label class="form-label">按索引مطابقة（从 0 起，仅子 frame）</label>
+      <label class="form-label">المطابقة بالفهرس (يبدأ من 0، للإطارات الفرعية فقط)</label>
       <input class="form-input" v-model="(node as any).config.frame.index" placeholder="رقم الفهرس" />
     </div>
     <div class="text-xs text-slate-500" style="padding: 0 20px"

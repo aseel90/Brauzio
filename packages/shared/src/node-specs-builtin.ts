@@ -221,7 +221,7 @@ export function registerBuiltinSpecs() {
         type: 'select',
         options: [
           { label: 'إيقاف', value: 'stop' },
-          { label: '警告', value: 'warn' },
+          { label: 'تحذير', value: 'warn' },
           { label: 'إعادة المحاولة', value: 'retry' },
         ] as any,
         default: 'stop',
@@ -248,11 +248,11 @@ export function registerBuiltinSpecs() {
         default: 'GET',
       },
       { key: 'url', label: 'URL', type: 'string', required: true },
-      { key: 'headers', label: 'طلب头(JSON)', type: 'json' },
-      { key: 'body', label: 'طلب体(JSON)', type: 'json' },
-      { key: 'formData', label: '表单(JSON)', type: 'json' },
-      { key: 'saveAs', label: 'حفظ为变量', type: 'string' },
-      { key: 'assign', label: '映射(JSON)', type: 'json' },
+      { key: 'headers', label: 'رؤوس الطلب (JSON)', type: 'json' },
+      { key: 'body', label: 'جسم الطلب (JSON)', type: 'json' },
+      { key: 'formData', label: 'بيانات النموذج (JSON)', type: 'json' },
+      { key: 'saveAs', label: 'الحفظ في متغير', type: 'string' },
+      { key: 'assign', label: 'الربط (JSON)', type: 'json' },
     ],
     defaults: { method: 'GET' },
   });
@@ -270,13 +270,13 @@ export function registerBuiltinSpecs() {
         label: 'خاصية',
         type: 'select',
         options: [
-          { label: '文本(text)', value: 'text' },
-          { label: '文本(textContent)', value: 'textContent' },
-          { label: '自定义اسم الخاصية', value: 'attr' },
+          { label: 'النص (text)', value: 'text' },
+          { label: 'النص (textContent)', value: 'textContent' },
+          { label: 'خاصية مخصصة', value: 'attr' },
         ] as any,
       },
-      { key: 'js', label: '自定义JS', type: 'string', help: '在页面中执行并رجوع值' },
-      { key: 'saveAs', label: 'حفظ变量', type: 'string', required: true },
+      { key: 'js', label: 'JavaScript مخصص', type: 'string', help: 'يُنفذ داخل الصفحة ويُرجع قيمة' },
+      { key: 'saveAs', label: 'متغير الحفظ', type: 'string', required: true },
     ],
     defaults: { saveAs: '' },
   });
@@ -289,8 +289,8 @@ export function registerBuiltinSpecs() {
     ports: { inputs: 1, outputs: [{ label: 'default' }] },
     schema: [
       { key: 'selector', label: 'الهدفالمحدد', type: 'string' },
-      { key: 'fullPage', label: '整页لقطة شاشة', type: 'boolean', default: false },
-      { key: 'saveAs', label: 'حفظ变量', type: 'string' },
+      { key: 'fullPage', label: 'لقطة شاشة للصفحة كاملة', type: 'boolean', default: false },
+      { key: 'saveAs', label: 'متغير الحفظ', type: 'string' },
     ],
     defaults: { fullPage: false },
   });
@@ -299,7 +299,7 @@ export function registerBuiltinSpecs() {
   registerNodeSpec({
     type: STEP_TYPES.TRIGGER_EVENT,
     version: 1,
-    display: { label: '触发حدث', iconClass: 'icon-trigger', category: 'Tools' },
+    display: { label: 'تشغيل حدث', iconClass: 'icon-trigger', category: 'Tools' },
     ports: { inputs: 1, outputs: [{ label: 'default' }] },
     schema: [
       { key: 'target', label: 'الهدف', type: 'json', widget: 'targetlocator' },
@@ -314,13 +314,13 @@ export function registerBuiltinSpecs() {
   registerNodeSpec({
     type: STEP_TYPES.SET_ATTRIBUTE,
     version: 1,
-    display: { label: '设置خاصية', iconClass: 'icon-attr', category: 'Tools' },
+    display: { label: 'تعيين خاصية', iconClass: 'icon-attr', category: 'Tools' },
     ports: { inputs: 1, outputs: [{ label: 'default' }] },
     schema: [
       { key: 'target', label: 'الهدف', type: 'json', widget: 'targetlocator' },
       { key: 'name', label: 'اسم الخاصية', type: 'string', required: true },
       { key: 'value', label: 'قيمة الخاصية', type: 'string' },
-      { key: 'remove', label: '移除خاصية', type: 'boolean', default: false },
+      { key: 'remove', label: 'إزالة خاصية', type: 'boolean', default: false },
     ],
     defaults: { remove: false },
   });
@@ -334,8 +334,8 @@ export function registerBuiltinSpecs() {
     schema: [
       { key: 'selector', label: 'المحدد', type: 'string', required: true },
       { key: 'saveAs', label: 'اسم متغير القائمة', type: 'string', default: 'elements' },
-      { key: 'itemVar', label: '项اسم المتغير', type: 'string', default: 'item' },
-      { key: 'subflowId', label: 'سير عمل فرعي程ID', type: 'string', required: true },
+      { key: 'itemVar', label: 'اسم متغير العنصر', type: 'string', default: 'item' },
+      { key: 'subflowId', label: 'معرّف سير العمل الفرعي', type: 'string', required: true },
     ],
     defaults: { saveAs: 'elements', itemVar: 'item' },
   });
@@ -344,15 +344,15 @@ export function registerBuiltinSpecs() {
   registerNodeSpec({
     type: STEP_TYPES.SWITCH_FRAME,
     version: 1,
-    display: { label: '切换Frame', iconClass: 'icon-frame', category: 'Tools' },
+    display: { label: 'تبديل Frame', iconClass: 'icon-frame', category: 'Tools' },
     ports: { inputs: 1, outputs: [{ label: 'default' }] },
     schema: [
       {
         key: 'frame',
-        label: 'frame定位',
+        label: 'تحديد Frame',
         type: 'object',
         fields: [
-          { key: 'index', label: '索引', type: 'number' },
+          { key: 'index', label: 'الفهرس', type: 'number' },
           { key: 'urlContains', label: 'URLيحتوي', type: 'string' },
         ],
       },
@@ -364,13 +364,13 @@ export function registerBuiltinSpecs() {
   registerNodeSpec({
     type: STEP_TYPES.HANDLE_DOWNLOAD,
     version: 1,
-    display: { label: '下载处理', iconClass: 'icon-download', category: 'Tools' },
+    display: { label: 'معالجة التنزيل', iconClass: 'icon-download', category: 'Tools' },
     ports: { inputs: 1, outputs: [{ label: 'default' }] },
     schema: [
       { key: 'filenameContains', label: '文件名يحتوي', type: 'string' },
-      { key: 'waitForComplete', label: 'انتظار完成', type: 'boolean', default: true },
-      { key: 'timeoutMs', label: '超时(ms)', type: 'number', default: 60000 },
-      { key: 'saveAs', label: 'حفظ变量', type: 'string' },
+      { key: 'waitForComplete', label: 'انتظار الاكتمال', type: 'boolean', default: true },
+      { key: 'timeoutMs', label: 'المهلة (ms)', type: 'number', default: 60000 },
+      { key: 'saveAs', label: 'متغير الحفظ', type: 'string' },
     ],
     defaults: { waitForComplete: true, timeoutMs: 60000 },
   });
@@ -384,7 +384,7 @@ export function registerBuiltinSpecs() {
     schema: [
       {
         key: 'world',
-        label: '执行上下文',
+        label: 'سياق التنفيذ',
         type: 'select',
         options: [
           { label: 'ISOLATED', value: 'ISOLATED' },
@@ -392,7 +392,7 @@ export function registerBuiltinSpecs() {
         ] as any,
         default: 'ISOLATED',
       },
-      { key: 'code', label: 'سكربت代码', type: 'string', widget: 'code', required: true },
+      { key: 'code', label: 'كود السكربت', type: 'string', widget: 'code', required: true },
       {
         key: 'when',
         label: 'توقيت التنفيذ',
@@ -403,8 +403,8 @@ export function registerBuiltinSpecs() {
         ] as any,
         default: 'after',
       },
-      { key: 'assign', label: '映射(JSON)', type: 'json' },
-      { key: 'saveAs', label: 'حفظ变量', type: 'string' },
+      { key: 'assign', label: 'الربط (JSON)', type: 'json' },
+      { key: 'saveAs', label: 'متغير الحفظ', type: 'string' },
     ],
     defaults: { world: 'ISOLATED', when: 'after' },
   });
@@ -424,11 +424,11 @@ export function registerBuiltinSpecs() {
   registerNodeSpec({
     type: 'executeFlow' as any,
     version: 1,
-    display: { label: '执行سير عمل فرعي程', iconClass: 'icon-exec', category: 'Flow' },
+    display: { label: 'تشغيل سير عمل فرعي', iconClass: 'icon-exec', category: 'Flow' },
     ports: { inputs: 1, outputs: [{ label: 'default' }] },
     schema: [
-      { key: 'flowId', label: '流程ID', type: 'string', required: true },
-      { key: 'inline', label: '内联执行', type: 'boolean', default: false },
+      { key: 'flowId', label: 'معرّف سير العمل', type: 'string', required: true },
+      { key: 'inline', label: 'تشغيل مضمّن', type: 'boolean', default: false },
       { key: 'args', label: 'المعاملات (JSON)', type: 'json' },
     ],
     defaults: { inline: false },
@@ -471,7 +471,7 @@ export function registerBuiltinSpecs() {
     schema: [
       {
         key: 'condition',
-        label: 'الشرط表达式(JSON)',
+        label: 'تعبير الشرط (JSON)',
         type: 'json',
         help: 'مثل {"expression":"vars.a>0"} وغيرها',
       },
@@ -486,7 +486,7 @@ export function registerBuiltinSpecs() {
           fields: [
             { key: 'id', label: 'ID', type: 'string' },
             { key: 'name', label: 'الاسم', type: 'string' },
-            { key: 'expr', label: '表达式', type: 'string' },
+            { key: 'expr', label: 'التعبير', type: 'string' },
           ],
         } as any,
       },
@@ -500,15 +500,15 @@ export function registerBuiltinSpecs() {
     display: { label: 'تكرار', iconClass: 'icon-foreach', category: 'Logic' },
     ports: { inputs: 1, outputs: [{ label: 'default' }] },
     schema: [
-      { key: 'listVar', label: '列表变量', type: 'string', required: true },
-      { key: 'itemVar', label: '项变量', type: 'string', default: 'item' },
-      { key: 'subflowId', label: 'سير عمل فرعي程ID', type: 'string', required: true },
+      { key: 'listVar', label: 'متغير القائمة', type: 'string', required: true },
+      { key: 'itemVar', label: 'متغير العنصر', type: 'string', default: 'item' },
+      { key: 'subflowId', label: 'معرّف سير العمل الفرعي', type: 'string', required: true },
       {
         key: 'concurrency',
-        label: '并发数',
+        label: 'عدد العمليات المتزامنة',
         type: 'number',
         default: 1,
-        help: '并发执行سير عمل فرعي程（浅拷贝变量，不自动合并）',
+        help: 'تشغيل سير العمل الفرعي بالتوازي (نسخة سطحية من المتغيرات دون دمج تلقائي)',
       },
     ],
     defaults: { itemVar: 'item' },
@@ -520,7 +520,7 @@ export function registerBuiltinSpecs() {
     ports: { inputs: 1, outputs: [{ label: 'default' }] },
     schema: [
       { key: 'condition', label: 'الشرط (JSON)', type: 'json' },
-      { key: 'subflowId', label: 'سير عمل فرعي程ID', type: 'string', required: true },
+      { key: 'subflowId', label: 'معرّف سير العمل الفرعي', type: 'string', required: true },
       { key: 'maxIterations', label: 'الحد الأقصى للمرات', type: 'number', default: 100 },
     ],
     defaults: { maxIterations: 100 },
@@ -560,25 +560,25 @@ export function registerBuiltinSpecs() {
         type: 'object',
         fields: [
           { key: 'manual', label: 'يدوي', type: 'boolean', default: true },
-          { key: 'url', label: 'URL 触发', type: 'boolean', default: false },
+          { key: 'url', label: 'تشغيل عبر URL', type: 'boolean', default: false },
           { key: 'contextMenu', label: 'القائمة السياقية', type: 'boolean', default: false },
           { key: 'command', label: 'اختصار لوحة المفاتيح', type: 'boolean', default: false },
-          { key: 'dom', label: 'DOM حدث', type: 'boolean', default: false },
+          { key: 'dom', label: 'حدث DOM', type: 'boolean', default: false },
           { key: 'schedule', label: 'جدولة', type: 'boolean', default: false },
         ],
       },
       {
         key: 'url',
-        label: 'URL 规则',
+        label: 'قواعد URL',
         type: 'object',
         fields: [
           {
             key: 'rules',
-            label: '规则列表',
+            label: 'قائمة القواعد',
             type: 'array',
             item: {
               key: 'rule',
-              label: '规则',
+              label: 'قاعدة',
               type: 'object',
               fields: [
                 {
@@ -588,11 +588,11 @@ export function registerBuiltinSpecs() {
                   options: [
                     { label: 'URL', value: 'url' },
                     { label: 'النطاق', value: 'domain' },
-                    { label: '路径', value: 'path' },
+                    { label: 'المسار', value: 'path' },
                   ] as any,
                   default: 'url',
                 },
-                { key: 'value', label: '值', type: 'string' },
+                { key: 'value', label: 'القيمة', type: 'string' },
               ],
             } as any,
           },
@@ -618,13 +618,13 @@ export function registerBuiltinSpecs() {
       },
       {
         key: 'dom',
-        label: 'DOM حدث',
+        label: 'حدث DOM',
         type: 'object',
         fields: [
           { key: 'selector', label: 'المحدد', type: 'string' },
-          { key: 'appear', label: '出现', type: 'boolean', default: true },
+          { key: 'appear', label: 'عند الظهور', type: 'boolean', default: true },
           { key: 'once', label: '一次', type: 'boolean', default: true },
-          { key: 'debounceMs', label: '防抖(ms)', type: 'number', default: 800 },
+          { key: 'debounceMs', label: 'مهلة debounce (ms)', type: 'number', default: 800 },
           { key: 'enabled', label: 'تفعيل', type: 'boolean', default: false },
         ],
       },
@@ -634,7 +634,7 @@ export function registerBuiltinSpecs() {
         type: 'array',
         item: {
           key: 'sched',
-          label: '计划',
+          label: 'جدولة',
           type: 'object',
           fields: [
             { key: 'id', label: 'ID', type: 'string' },
@@ -644,11 +644,11 @@ export function registerBuiltinSpecs() {
               type: 'select',
               options: [
                 { label: '一次', value: 'once' },
-                { label: '间隔', value: 'interval' },
-                { label: '每日', value: 'daily' },
+                { label: 'فاصل', value: 'interval' },
+                { label: 'يومي', value: 'daily' },
               ] as any,
             },
-            { key: 'when', label: '时间(ISO/cron)', type: 'string' },
+            { key: 'when', label: 'الوقت (ISO/cron)', type: 'string' },
             { key: 'enabled', label: 'تفعيل', type: 'boolean', default: true },
           ],
         } as any,

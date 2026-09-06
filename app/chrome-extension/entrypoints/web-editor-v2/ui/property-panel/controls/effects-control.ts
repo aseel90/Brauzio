@@ -1633,7 +1633,7 @@ export function createEffectsControl(options: EffectsControlOptions): DesignCont
     for (const view of views.values()) view.setOpen(false);
 
     // 关闭后同步一次，确保 currentItems 与真实 inline 一致
-    // 避免浏览器归一化/修正值后产生不一致
+    // 避免浏览器归一化/修正القيمة后产生不一致
     if (wasOpen && !rollback) {
       syncFromTarget(true);
     }

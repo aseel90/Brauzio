@@ -13,7 +13,7 @@
           <option value="text">Text</option>
           <option value="xpath">XPath</option>
         </select>
-        <input class="form-input-sm flex-1" v-model="c.value" placeholder="المحدد值" />
+        <input class="form-input-sm flex-1" v-model="c.value" placeholder="قيمة المحدد" />
         <button class="btn-icon-sm" @click="move(i, -1)" :disabled="i === 0">↑</button>
         <button class="btn-icon-sm" @click="move(i, 1)" :disabled="i === list.length - 1">↓</button>
         <button class="btn-icon-sm danger" @click="remove(i)">×</button>

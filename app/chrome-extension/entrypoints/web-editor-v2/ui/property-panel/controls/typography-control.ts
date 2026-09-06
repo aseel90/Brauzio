@@ -140,7 +140,7 @@ function createTextAlignIcon(value: TextAlignValue): SVGElement {
   container.setAttribute('fill', 'none');
   container.setAttribute('opacity', '0.5');
 
-  // 文本行的位置配置：每行的 [xالبداية, 宽度]
+  // 文本行的位置الإعداد：每行的 [xالبداية, 宽度]
   const lineConfigs: Record<TextAlignValue, Array<[number, number]>> = {
     left: [
       [3.5, 8], // 长行

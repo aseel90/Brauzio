@@ -117,7 +117,7 @@
         </div>
       </div>
 
-      <!-- 索引数据إدارة -->
+      <!-- الفهرس数据إدارة -->
       <div class="section">
         <h3 class="section-title">{{ getMessage('indexDataManagementLabel') }}</h3>
         <div class="stats-grid">

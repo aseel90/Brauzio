@@ -11,14 +11,14 @@
     </div>
     <div class="form-group" :class="{ invalid: needOne && !hasAny }">
       <label class="form-label">يحتوي URL على (اختياري)</label>
-      <input class="form-input" v-model="(node as any).config.urlContains" placeholder="子串مطابقة" />
+      <input class="form-input" v-model="(node as any).config.urlContains" placeholder="مطابقة جزء من النص" />
     </div>
     <div class="form-group" :class="{ invalid: needOne && !hasAny }">
       <label class="form-label">العنوانيحتوي（اختياري）</label>
       <input
         class="form-input"
         v-model="(node as any).config.titleContains"
-        placeholder="子串مطابقة"
+        placeholder="مطابقة جزء من النص"
       />
     </div>
     <div

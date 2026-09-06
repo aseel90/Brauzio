@@ -157,10 +157,10 @@
             <span class="em-stats-text">
               <template v-if="markerSearch">
                 تمت تصفية <strong>{{ filteredMarkers.length }}</strong> تحديدات （الإجمالي
-                {{ markers.length }} 个，{{ groupedMarkers.length }} نطاقات）
+                {{ markers.length }}، {{ groupedMarkers.length }} نطاقات）
               </template>
               <template v-else>
-                الإجمالي <strong>{{ markers.length }}</strong> تحديدات，
+                الإجمالي <strong>{{ markers.length }}</strong> تحديد، 
                 <strong>{{ groupedMarkers.length }}</strong> نطاقات
               </template>
             </span>

@@ -3,8 +3,8 @@
     <div class="form-row">
       <label class="form-label">الوضع</label>
       <select v-model="cfg.mode" class="form-select-sm">
-        <option value="element">تمرير到العنصر</option>
-        <option value="offset">窗口إزاحة</option>
+        <option value="element">التمرير إلى العنصر</option>
+        <option value="offset">إزاحة النافذة</option>
         <option value="container">حاويةإزاحة</option>
       </select>
     </div>
@@ -29,7 +29,7 @@
       </div>
       <div v-if="cfg.mode === 'container'" class="mt-2">
         <SelectorEditor :node="node" :allowPick="true" title="حاويةالمحدد" targetKey="target" />
-        <div class="hint"><small>حاويةيجب支持 scrollTo(top,left)</small></div>
+        <div class="hint"><small>يجب أن تدعم الحاوية scrollTo(top,left)</small></div>
       </div>
     </div>
   </div>

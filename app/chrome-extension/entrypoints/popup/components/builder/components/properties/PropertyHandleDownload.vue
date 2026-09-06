@@ -5,11 +5,11 @@
       <input
         class="form-input"
         v-model="(node as any).config.filenameContains"
-        placeholder="子串مطابقة文件名أوURL"
+        placeholder="مطابقة جزء من اسم الملف أو URL"
       />
     </div>
     <div class="form-group">
-      <label class="form-label">超时(ms)</label>
+      <label class="form-label">المهلة (ms)</label>
       <input class="form-input" v-model="(node as any).config.timeoutMs" placeholder="افتراضي 60000" />
     </div>
     <div class="form-group checkbox-group">

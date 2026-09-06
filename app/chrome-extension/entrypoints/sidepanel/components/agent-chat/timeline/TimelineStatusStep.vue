@@ -54,7 +54,7 @@ let wasRunning = false;
 // 启动جدولة器
 function startInterval(): void {
   if (timeoutId) return;
-  // 5-8 秒随机间隔تحديث文案
+  // 5-8 秒随机فاصلتحديث文案
   const scheduleNext = () => {
     timeoutId = setTimeout(
       () => {

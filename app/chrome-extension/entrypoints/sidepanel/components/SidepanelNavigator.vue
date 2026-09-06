@@ -12,7 +12,7 @@
       :class="{ 'navigator-trigger-active': isOpen }"
       @click="handleTriggerClick"
       @dblclick="resetToDefault"
-      title="切换الصفحة（可سحب وإفلات移动，نقر مزدوج重置位置）"
+      title="تبديل الصفحة（可سحب وإفلات移动，نقر مزدوج重置位置）"
     >
       <svg
         class="navigator-icon"
@@ -32,7 +32,7 @@
       <div v-if="isOpen" class="navigator-overlay" @click="closeMenu">
         <div class="navigator-menu" :style="menuStyle" @click.stop>
           <div class="navigator-header">
-            <span class="navigator-title">切换الصفحة</span>
+            <span class="navigator-title">تبديل الصفحة</span>
             <button class="navigator-close" @click="closeMenu">
               <svg
                 viewBox="0 0 24 24"
