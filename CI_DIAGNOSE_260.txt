@@ -1,14 +1,34 @@
+Applied diagnostic type fix: TOOL_SCHEMAS uses satisfies Tool[]
+diff --git a/packages/shared/src/tools.ts b/packages/shared/src/tools.ts
+index 4c062cf..3f5c985 100644
+--- a/packages/shared/src/tools.ts
++++ b/packages/shared/src/tools.ts
+@@ -86,7 +86,7 @@ const actionVerification = {
+   },
+ };
+ 
+-export const TOOL_SCHEMAS: Tool[] = [
++export const TOOL_SCHEMAS = [
+   { name: TOOL_NAMES.BROWSER.GET_WINDOWS_AND_TABS, description: 'Get all currently open Chrome windows and tabs.', inputSchema: { type: 'object', properties: {}, required: [] } },
+   { name: TOOL_NAMES.BROWSER.NAVIGATE, description: 'Navigate, refresh, go back/forward, or open a URL in Chrome. Can optionally verify URL, DOM/text, network, console, page load, and network-idle evidence.', inputSchema: { type: 'object', properties: { url: { type: 'string' }, refresh: { type: 'boolean' }, newWindow: { type: 'boolean' }, background: { type: 'boolean' }, verify: actionVerification, ...tabTarget }, required: [] } },
+   { name: TOOL_NAMES.BROWSER.READ_PAGE, description: 'Read visible page content as an accessibility tree with stable element refs.', inputSchema: { type: 'object', properties: { filter: { type: 'string' }, depth: { type: 'number' }, refId: { type: 'string' }, ...tabTarget }, required: [] } },
+@@ -115,4 +115,4 @@ export const TOOL_SCHEMAS: Tool[] = [
+   { name: TOOL_NAMES.BROWSER.PERFORMANCE_STOP_TRACE, description: 'Stop the active performance trace.', inputSchema: { type: 'object', properties: { saveToDownloads: { type: 'boolean' }, filenamePrefix: { type: 'string' }, ...tabTarget }, required: [] } },
+   { name: TOOL_NAMES.BROWSER.PERFORMANCE_ANALYZE_INSIGHT, description: 'Summarize the last performance trace.', inputSchema: { type: 'object', properties: { insightName: { type: 'string' }, timeoutMs: { type: 'number' } }, required: [] } },
+   { name: TOOL_NAMES.BROWSER.GIF_RECORDER, description: 'Record browser activity as an animated GIF.', inputSchema: { type: 'object', properties: { action: { type: 'string', enum: ['start', 'stop', 'status', 'auto_start', 'capture', 'clear', 'export'] }, tabId: { type: 'number' }, fps: { type: 'number' }, durationMs: { type: 'number' }, maxFrames: { type: 'number' }, width: { type: 'number' }, height: { type: 'number' }, filename: { type: 'string' }, annotation: { type: 'string' }, download: { type: 'boolean' } }, required: ['action'] } },
+-];
++] satisfies Tool[];
 
 ===== install =====
 Scope: all 4 workspace projects
 Progress: resolved 1, reused 0, downloaded 0, added 0
-Progress: resolved 187, reused 0, downloaded 186, added 0
-Progress: resolved 460, reused 0, downloaded 406, added 0
-Progress: resolved 818, reused 0, downloaded 672, added 0
+Progress: resolved 151, reused 0, downloaded 150, added 0
+Progress: resolved 413, reused 0, downloaded 360, added 0
+Progress: resolved 706, reused 0, downloaded 553, added 0
+Progress: resolved 888, reused 0, downloaded 736, added 0
 Packages: +749
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-Progress: resolved 910, reused 0, downloaded 750, added 0
-Progress: resolved 910, reused 0, downloaded 751, added 748
+Progress: resolved 910, reused 0, downloaded 751, added 635
 Progress: resolved 910, reused 0, downloaded 751, added 749, done
 
 devDependencies:
@@ -34,7 +54,7 @@ app/chrome-extension
   └─┬ vite 7.2.7
     └── ✕ unmet peer @types/node@"^20.19.0 || >=22.12.0": found 18.19.130
 
-Done in 7.5s
+Done in 7.1s
 
 __EXIT_CODE__=0
 
@@ -56,7 +76,7 @@ __EXIT_CODE__=0
 [warn] Duplicated imports "CdpEventEnvelope", the one from "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-router.ts" has been ignored and "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-session-manager.ts" is used
 [warn] Duplicated imports "CdpOwnerTag", the one from "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-router.ts" has been ignored and "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-session-manager.ts" is used
 [warn] Duplicated imports "CdpSessionSnapshot", the one from "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-router.ts" has been ignored and "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-session-manager.ts" is used
-[success] Finished in 641 ms
+[success] Finished in 746 ms
 
 __EXIT_CODE__=0
 
@@ -72,14 +92,14 @@ __EXIT_CODE__=0
 [34mCLI[39m Cleaning output folder
 [34mCJS[39m Build start
 [34mESM[39m Build start
-[32mCJS[39m [1mdist/index.js [22m[32m18.76 KB[39m
-[32mCJS[39m ⚡️ Build success in 21ms
 [32mESM[39m [1mdist/index.mjs [22m[32m17.67 KB[39m
-[32mESM[39m ⚡️ Build success in 21ms
+[32mESM[39m ⚡️ Build success in 26ms
+[32mCJS[39m [1mdist/index.js [22m[32m18.76 KB[39m
+[32mCJS[39m ⚡️ Build success in 27ms
 [34mDTS[39m Build start
-[32mDTS[39m ⚡️ Build success in 1109ms
-[32mDTS[39m [1mdist/index.d.ts  [22m[32m4.73 KB[39m
-[32mDTS[39m [1mdist/index.d.mts [22m[32m4.73 KB[39m
+[32mDTS[39m ⚡️ Build success in 1500ms
+[32mDTS[39m [1mdist/index.d.ts  [22m[32m51.14 KB[39m
+[32mDTS[39m [1mdist/index.d.mts [22m[32m51.14 KB[39m
 
 __EXIT_CODE__=0
 
@@ -88,17 +108,18 @@ __EXIT_CODE__=0
 > brauzio-cloud-mcp@0.5.0 check /home/runner/work/Brauzio/Brauzio/app/cloudflare-mcp
 > tsc --noEmit
 
-src/index.ts(106,54): error TS2322: Type 'Promise<{ tools: { inputSchema: { [x: string]: unknown; type: "object"; properties?: { [x: string]: object; } | undefined; required?: string[] | undefined; }; name: string; description?: string | undefined; outputSchema?: { ...; } | undefined; ... 4 more ...; title?: string | undefined; }[]; }>' is not assignable to type '{ [x: string]: unknown; tools: { inputSchema: { [x: string]: unknown; type: "object"; properties?: { [x: string]: string | number | boolean | { [x: string]: string | number | boolean | ... | (string | number | boolean | ... | (string | ... 4 more ... | null)[] | null)[] | null; } | (string | ... 4 more ... | null)[]...'.
-  Type 'Promise<{ tools: { inputSchema: { [x: string]: unknown; type: "object"; properties?: { [x: string]: object; } | undefined; required?: string[] | undefined; }; name: string; description?: string | undefined; outputSchema?: { ...; } | undefined; ... 4 more ...; title?: string | undefined; }[]; }>' is not assignable to type 'Promise<{ [x: string]: unknown; tools: { inputSchema: { [x: string]: unknown; type: "object"; properties?: { [x: string]: string | number | boolean | { [x: string]: string | number | boolean | ... | (string | number | boolean | ... | (string | ... 4 more ... | null)[] | null)[] | null; } | (string | ... 4 more ... |...'.
-    Type '{ tools: { inputSchema: { [x: string]: unknown; type: "object"; properties?: { [x: string]: object; } | undefined; required?: string[] | undefined; }; ... 7 more ...; title?: string | undefined; }[]; }' is not assignable to type '{ [x: string]: unknown; tools: { inputSchema: { [x: string]: unknown; type: "object"; properties?: { [x: string]: string | number | boolean | { [x: string]: string | number | boolean | ... | (string | number | boolean | ... | (string | ... 4 more ... | null)[] | null)[] | null; } | (string | ... 4 more ... | null)[]...'.
+src/index.ts(106,54): error TS2322: Type 'Promise<{ tools: ({ inputSchema: { [x: string]: unknown; type: "object"; properties?: { [x: string]: object; } | undefined; required?: string[] | undefined; }; name: string; description?: string | undefined; ... 5 more ...; title?: string | undefined; } | ... 27 more ... | { ...; })[]; }>' is not assignable to type '{ [x: string]: unknown; tools: { inputSchema: { [x: string]: unknown; type: "object"; properties?: { [x: string]: string | number | boolean | { [x: string]: string | number | boolean | ... | (string | number | boolean | ... | (string | ... 4 more ... | null)[] | null)[] | null; } | (string | ... 4 more ... | null)[]...'.
+  Type 'Promise<{ tools: ({ inputSchema: { [x: string]: unknown; type: "object"; properties?: { [x: string]: object; } | undefined; required?: string[] | undefined; }; name: string; description?: string | undefined; ... 5 more ...; title?: string | undefined; } | ... 27 more ... | { ...; })[]; }>' is not assignable to type 'Promise<{ [x: string]: unknown; tools: { inputSchema: { [x: string]: unknown; type: "object"; properties?: { [x: string]: string | number | boolean | { [x: string]: string | number | boolean | ... | (string | number | boolean | ... | (string | ... 4 more ... | null)[] | null)[] | null; } | (string | ... 4 more ... |...'.
+    Type '{ tools: ({ inputSchema: { [x: string]: unknown; type: "object"; properties?: { [x: string]: object; } | undefined; required?: string[] | undefined; }; ... 7 more ...; title?: string | undefined; } | ... 27 more ... | { ...; })[]; }' is not assignable to type '{ [x: string]: unknown; tools: { inputSchema: { [x: string]: unknown; type: "object"; properties?: { [x: string]: string | number | boolean | { [x: string]: string | number | boolean | ... | (string | number | boolean | ... | (string | ... 4 more ... | null)[] | null)[] | null; } | (string | ... 4 more ... | null)[]...'.
       Types of property 'tools' are incompatible.
-        Type '{ inputSchema: { [x: string]: unknown; type: "object"; properties?: { [x: string]: object; } | undefined; required?: string[] | undefined; }; name: string; description?: string | undefined; outputSchema?: { ...; } | undefined; ... 4 more ...; title?: string | undefined; }[]' is not assignable to type '{ inputSchema: { [x: string]: unknown; type: "object"; properties?: { [x: string]: string | number | boolean | { [x: string]: string | number | boolean | ... | (string | number | boolean | ... | (string | number | boolean | ... | (string | ... 4 more ... | null)[] | null)[] | null)[] | null; } | (string | ... 4 more...'.
-          Type '{ inputSchema: { [x: string]: unknown; type: "object"; properties?: { [x: string]: object; } | undefined; required?: string[] | undefined; }; name: string; description?: string | undefined; outputSchema?: { ...; } | undefined; ... 4 more ...; title?: string | undefined; }' is not assignable to type '{ inputSchema: { [x: string]: unknown; type: "object"; properties?: { [x: string]: string | number | boolean | { [x: string]: string | number | boolean | ... | (string | number | boolean | ... | (string | number | boolean | ... | (string | ... 4 more ... | null)[] | null)[] | null)[] | null; } | (string | ... 4 more...'.
-            The types of 'inputSchema.properties' are incompatible between these types.
-              Type '{ [x: string]: object; } | undefined' is not assignable to type '{ [x: string]: string | number | boolean | { [x: string]: string | number | boolean | ... | (string | number | boolean | ... | (string | number | boolean | ... | (string | number | boolean | ... | (string | ... 4 more ... | null)[] | null)[] | null)[] | null)[] | null; } | (string | ... 4 more ... | null)[] | null; ...'.
-                Type '{ [x: string]: object; }' is not assignable to type '{ [x: string]: string | number | boolean | { [x: string]: string | number | boolean | ... | (string | number | boolean | ... | (string | number | boolean | ... | (string | number | boolean | ... | (string | ... 4 more ... | null)[] | null)[] | null)[] | null)[] | null; } | (string | ... 4 more ... | null)[] | null; }'.
-                  'string' index signatures are incompatible.
-                    Type 'object' is not assignable to type 'string | number | boolean | { [x: string]: string | number | boolean | ... | (string | number | boolean | ... | (string | number | boolean | ... | (string | number | boolean | ... | (string | ... 4 more ... | null)[] | null)[] | null)[] | null)[] | null; } | (string | ... 4 more ... | null)[] | null'.
+        Type '({ inputSchema: { [x: string]: unknown; type: "object"; properties?: { [x: string]: object; } | undefined; required?: string[] | undefined; }; name: string; description?: string | undefined; outputSchema?: { ...; } | undefined; ... 4 more ...; title?: string | undefined; } | ... 27 more ... | { ...; })[]' is not assignable to type '{ inputSchema: { [x: string]: unknown; type: "object"; properties?: { [x: string]: string | number | boolean | { [x: string]: string | number | boolean | ... | (string | number | boolean | ... | (string | number | boolean | ... | (string | ... 4 more ... | null)[] | null)[] | null)[] | null; } | (string | ... 4 more...'.
+          Type '{ inputSchema: { [x: string]: unknown; type: "object"; properties?: { [x: string]: object; } | undefined; required?: string[] | undefined; }; name: string; description?: string | undefined; outputSchema?: { ...; } | undefined; ... 4 more ...; title?: string | undefined; } | ... 27 more ... | { ...; }' is not assignable to type '{ inputSchema: { [x: string]: unknown; type: "object"; properties?: { [x: string]: string | number | boolean | { [x: string]: string | number | boolean | ... | (string | number | boolean | ... | (string | number | boolean | ... | (string | ... 4 more ... | null)[] | null)[] | null)[] | null; } | (string | ... 4 more...'.
+            Type '{ inputSchema: { [x: string]: unknown; type: "object"; properties?: { [x: string]: object; } | undefined; required?: string[] | undefined; }; name: string; description?: string | undefined; outputSchema?: { ...; } | undefined; ... 4 more ...; title?: string | undefined; }' is not assignable to type '{ inputSchema: { [x: string]: unknown; type: "object"; properties?: { [x: string]: string | number | boolean | { [x: string]: string | number | boolean | ... | (string | number | boolean | ... | (string | number | boolean | ... | (string | ... 4 more ... | null)[] | null)[] | null)[] | null; } | (string | ... 4 more...'.
+              The types of 'inputSchema.properties' are incompatible between these types.
+                Type '{ [x: string]: object; } | undefined' is not assignable to type '{ [x: string]: string | number | boolean | { [x: string]: string | number | boolean | ... | (string | number | boolean | ... | (string | number | boolean | ... | (string | number | boolean | ... | (string | ... 4 more ... | null)[] | null)[] | null)[] | null)[] | null; } | (string | ... 4 more ... | null)[] | null; ...'.
+                  Type '{ [x: string]: object; }' is not assignable to type '{ [x: string]: string | number | boolean | { [x: string]: string | number | boolean | ... | (string | number | boolean | ... | (string | number | boolean | ... | (string | number | boolean | ... | (string | ... 4 more ... | null)[] | null)[] | null)[] | null)[] | null; } | (string | ... 4 more ... | null)[] | null; }'.
+                    'string' index signatures are incompatible.
+                      Type 'object' is not assignable to type 'string | number | boolean | { [x: string]: string | number | boolean | ... | (string | number | boolean | ... | (string | number | boolean | ... | (string | number | boolean | ... | (string | ... 4 more ... | null)[] | null)[] | null)[] | null)[] | null; } | (string | ... 4 more ... | null)[] | null'.
 /home/runner/work/Brauzio/Brauzio/app/cloudflare-mcp:
  ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL  brauzio-cloud-mcp@0.5.0 check: `tsc --noEmit`
 Exit status 2
