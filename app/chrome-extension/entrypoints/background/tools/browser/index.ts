@@ -26,3 +26,4 @@ export {
   performanceAnalyzeInsightTool,
 } from './performance';
 export { gifRecorderTool } from './gif-recorder';
+export { watchStartTool, watchWaitTool, watchReadTool, watchStopTool } from './watch';
