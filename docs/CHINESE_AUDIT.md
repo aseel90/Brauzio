@@ -2,7 +2,7 @@
 
 Japanese and Korean Chrome locale files are excluded because they may legitimately contain Han characters.
 
-Remaining CJK-containing source/document lines: **4164**
+Remaining CJK-containing source/document lines: **4120**
 Files containing CJK text: **195**
 
 ## Files by hit count
@@ -18,7 +18,6 @@ Files containing CJK text: **195**
 - **70** — `app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/trigger-manager.ts`
 - **65** — `app/chrome-extension/entrypoints/background/record-replay/actions/types.ts`
 - **57** — `app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/queue.ts`
-- **54** — `app/chrome-extension/entrypoints/popup/App.vue`
 - **53** — `app/chrome-extension/entrypoints/background/record-replay-v3/engine/plugins/types.ts`
 - **51** — `app/chrome-extension/entrypoints/background/record-replay-v3/domain/events.ts`
 - **49** — `app/chrome-extension/entrypoints/builder/App.vue`
@@ -85,6 +84,7 @@ Files containing CJK text: **195**
 - **11** — `app/chrome-extension/entrypoints/background/record-replay-v3/storage/runs.ts`
 - **11** — `app/native-server/src/scripts/postinstall.ts`
 - **10** — `app/chrome-extension/inject-scripts/accessibility-tree-helper.js`
+- **10** — `app/chrome-extension/entrypoints/popup/App.vue`
 - **10** — `app/chrome-extension/entrypoints/sidepanel/components/SidepanelNavigator.vue`
 - **10** — `app/chrome-extension/entrypoints/popup/components/builder/store/useBuilderStore.ts`
 - **10** — `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyLoopElements.vue`
@@ -1215,9 +1215,9 @@ Files containing CJK text: **195**
 - `docs/ISSUE.md:1185` — `- [Windows安装指南](WINDOWS_INSTALL_zh.md)`
 - `docs/ISSUE.md:1189` — `**最后更新**: 2025-10-11`
 - `docs/ISSUE.md:1190` — `**统计数据来源**: GitHub Issues API`
-- `app/chrome-extension/wxt.config.ts:101` — `'/models/*', // 允许访问 public/models/ 下的所有文件`
-- `app/chrome-extension/wxt.config.ts:102` — `'/workers/*', // 允许访问 workers 文件`
-- `app/chrome-extension/wxt.config.ts:103` — `'/inject-scripts/*', // 允许内容脚本注入的助手文件`
+- `app/chrome-extension/wxt.config.ts:100` — `'/models/*', // 允许访问 public/models/ 下的所有文件`
+- `app/chrome-extension/wxt.config.ts:101` — `'/workers/*', // 允许访问 workers 文件`
+- `app/chrome-extension/wxt.config.ts:102` — `'/inject-scripts/*', // 允许内容脚本注入的助手文件`
 - `app/native-server/install.md:1` — `# Chrome MCP Bridge 安装指南`
 - `app/native-server/install.md:3` — `本文档详细说明了 Chrome MCP Bridge 的安装和注册流程。`
 - `app/native-server/install.md:5` — `## 安装流程概述`
@@ -2078,60 +2078,16 @@ Files containing CJK text: **195**
 - `app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:383` — `4. **性能考虑**：新增组件需考虑渲染性能，避免不必要的 DOM 操作`
 - `app/chrome-extension/entrypoints/popup/main.ts:4` — `// 引入AgentChat主题样式`
 - `app/chrome-extension/entrypoints/popup/main.ts:9` — `// 在Vue挂载前预加载主题，防止主题闪烁`
-- `app/chrome-extension/entrypoints/popup/App.vue:3` — `<!-- 首页 -->`
-- `app/chrome-extension/entrypoints/popup/App.vue:52` — `<!-- 管理入口卡片 -->`
-- `app/chrome-extension/entrypoints/popup/App.vue:211` — `<!-- 本地模型二级页面 -->`
-- `app/chrome-extension/entrypoints/popup/App.vue:259` — `<!-- 侧边栏承担工作流管理；编辑器在独立窗口中打开 -->`
-- `app/chrome-extension/entrypoints/popup/App.vue:316` — `// AgentChat theme - 从preload中获取，保持与sidepanel一致`
-- `app/chrome-extension/entrypoints/popup/App.vue:319` — `// 当前视图状态：首页 or 本地模型页`
-- `app/chrome-extension/entrypoints/popup/App.vue:352` — `// Flow editor在独立窗口中打开；在popup不再展示繁杂列表`
-- `app/chrome-extension/entrypoints/popup/App.vue:380` — `// 运行记录与覆盖项在侧边栏页面查看`
-- `app/chrome-extension/entrypoints/popup/App.vue:382` — `// TODO: 录制回放功能开发中，暂时拦截`
-- `app/chrome-extension/entrypoints/popup/App.vue:389` — `//     meta: { name: '新录制' },`
-- `app/chrome-extension/entrypoints/popup/App.vue:393` — `//   console.error('开始录制失败:', e);`
-- `app/chrome-extension/entrypoints/popup/App.vue:399` — `// TODO: 录制回放功能开发中，暂时拦截`
-- `app/chrome-extension/entrypoints/popup/App.vue:410` — `//   console.error('停止录制失败:', e);`
-- `app/chrome-extension/entrypoints/popup/App.vue:435` — `console.warn('回放失败');`
-- `app/chrome-extension/entrypoints/popup/App.vue:445` — `// 打开独立编辑窗口并定位失败节点`
-- `app/chrome-extension/entrypoints/popup/App.vue:456` — `console.error('回放失败:', e);`
-- `app/chrome-extension/entrypoints/popup/App.vue:460` — `// 旧的“克隆/发布/定时/覆盖项”在侧边栏或编辑器中处理`
-- `app/chrome-extension/entrypoints/popup/App.vue:584` — `// TODO: 工作流功能开发中，暂时拦截`
-- `app/chrome-extension/entrypoints/popup/App.vue:603` — `console.warn('切换网页编辑模式失败:', error);`
-- `app/chrome-extension/entrypoints/popup/App.vue:609` — `// 获取当前活动tab`
-- `app/chrome-extension/entrypoints/popup/App.vue:612` — `console.warn('无法获取当前tab');`
-- `app/chrome-extension/entrypoints/popup/App.vue:616` — `// 向background发送消息，启动元素标注`
-- `app/chrome-extension/entrypoints/popup/App.vue:622` — `console.warn('开启元素标注失败:', error);`
-- `app/chrome-extension/entrypoints/popup/App.vue:810` — `console.error('保存语义引擎状态失败:', error);`
-- `app/chrome-extension/entrypoints/popup/App.vue:947` — `console.error('检测 Native 连接状态失败:', error);`
-- `app/chrome-extension/entrypoints/popup/App.vue:966` — `console.error('检测服务器状态失败:', error);`
-- `app/chrome-extension/entrypoints/popup/App.vue:984` — `console.error('刷新服务器状态失败:', error);`
-- `app/chrome-extension/entrypoints/popup/App.vue:997` — `console.error('复制配置失败:', error);`
-- `app/chrome-extension/entrypoints/popup/App.vue:1015` — `console.log('尝试连接到端口: ${nativeServerPort.value}');`
-- `app/chrome-extension/entrypoints/popup/App.vue:1023` — `console.log('连接成功:', response);`
-- `app/chrome-extension/entrypoints/popup/App.vue:1027` — `console.error('连接失败:', response);`
-- `app/chrome-extension/entrypoints/popup/App.vue:1031` — `console.error('测试连接失败:', error);`
-- `app/chrome-extension/entrypoints/popup/App.vue:1108` — `console.error('❌ 加载模型偏好失败:', error);`
-- `app/chrome-extension/entrypoints/popup/App.vue:1117` — `console.error('保存模型偏好失败:', error);`
-- `app/chrome-extension/entrypoints/popup/App.vue:1126` — `console.error('保存版本偏好失败:', error);`
-- `app/chrome-extension/entrypoints/popup/App.vue:1134` — `console.log('端口偏好已保存: ${port}');`
-- `app/chrome-extension/entrypoints/popup/App.vue:1136` — `console.error('保存端口偏好失败:', error);`
-- `app/chrome-extension/entrypoints/popup/App.vue:1146` — `console.log('端口偏好已加载: ${result.nativeServerPort}');`
-- `app/chrome-extension/entrypoints/popup/App.vue:1149` — `console.error('加载端口偏好失败:', error);`
-- `app/chrome-extension/entrypoints/popup/App.vue:1164` — `console.error('保存模型状态失败:', error);`
-- `app/chrome-extension/entrypoints/popup/App.vue:1204` — `console.error('获取模型状态失败:', error);`
-- `app/chrome-extension/entrypoints/popup/App.vue:1390` — `'模型切换成功:',`
-- `app/chrome-extension/entrypoints/popup/App.vue:1408` — `console.error('模型切换失败:', error);`
-- `app/chrome-extension/entrypoints/popup/App.vue:1414` — `const errorMessage = error?.message || '未知错误';`
-- `app/chrome-extension/entrypoints/popup/App.vue:1463` — `// 初始化主题`
-- `app/chrome-extension/entrypoints/popup/App.vue:2306` — `/* 快捷工具icon按钮样式 */`
-- `app/chrome-extension/entrypoints/popup/App.vue:2346` — `/* 录制按钮 - 红色 */`
-- `app/chrome-extension/entrypoints/popup/App.vue:2357` — `/* 录制中状态 - 脉冲动画 */`
-- `app/chrome-extension/entrypoints/popup/App.vue:2372` — `/* 停止按钮 - 深红色 */`
-- `app/chrome-extension/entrypoints/popup/App.vue:2383` — `/* 编辑按钮 - 蓝色 */`
-- `app/chrome-extension/entrypoints/popup/App.vue:2394` — `/* 标注按钮 - 绿色 */`
-- `app/chrome-extension/entrypoints/popup/App.vue:2405` — `/* Coming Soon 按钮样式 */`
-- `app/chrome-extension/entrypoints/popup/App.vue:2468` — `/* 首页视图 */`
-- `app/chrome-extension/entrypoints/popup/App.vue:2475` — `/* 管理入口卡片样式 */`
+- `app/chrome-extension/entrypoints/popup/App.vue:1370` — `'模型切换成功:',`
+- `app/chrome-extension/entrypoints/popup/App.vue:2285` — `/* 快捷工具icon按钮样式 */`
+- `app/chrome-extension/entrypoints/popup/App.vue:2325` — `/* 录制按钮 - 红色 */`
+- `app/chrome-extension/entrypoints/popup/App.vue:2336` — `/* 录制中状态 - 脉冲动画 */`
+- `app/chrome-extension/entrypoints/popup/App.vue:2351` — `/* 停止按钮 - 深红色 */`
+- `app/chrome-extension/entrypoints/popup/App.vue:2362` — `/* 编辑按钮 - 蓝色 */`
+- `app/chrome-extension/entrypoints/popup/App.vue:2373` — `/* 标注按钮 - 绿色 */`
+- `app/chrome-extension/entrypoints/popup/App.vue:2384` — `/* Coming Soon 按钮样式 */`
+- `app/chrome-extension/entrypoints/popup/App.vue:2447` — `/* 首页视图 */`
+- `app/chrome-extension/entrypoints/popup/App.vue:2454` — `/* 管理入口卡片样式 */`
 - `app/chrome-extension/entrypoints/popup/style.css:1` — `/* 现代化全局样式 */`
 - `app/chrome-extension/entrypoints/popup/style.css:3` — `/* 字体系统 */`
 - `app/chrome-extension/entrypoints/popup/style.css:9` — `/* 颜色系统 */`
