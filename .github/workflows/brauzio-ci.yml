@@ -5,11 +5,10 @@ on:
     paths:
       - '.github/workflows/brauzio-ci.yml'
       - 'app/cloudflare-mcp/**'
-      - 'app/chrome-extension/entrypoints/background/remote-relay.ts'
-      - 'app/chrome-extension/entrypoints/background/index.ts'
-      - 'app/chrome-extension/entrypoints/popup/**'
-      - 'app/chrome-extension/wxt.config.ts'
+      - 'app/chrome-extension/**'
       - 'packages/shared/**'
+      - 'pnpm-workspace.yaml'
+      - 'pnpm-lock.yaml'
   workflow_dispatch:
 
 permissions:
@@ -34,13 +33,11 @@ jobs:
         with:
           version: 8.15.9
 
-      - name: Install Brauzio runtime/build dependencies only
-        run: >-
-          pnpm
-          --filter chrome-mcp-shared
-          --filter chrome-mcp-server
-          --filter brauzio-cloud-mcp
-          install --no-frozen-lockfile
+      - name: Install dependencies without legacy lifecycle scripts
+        run: pnpm install --no-frozen-lockfile --ignore-scripts
+
+      - name: Prepare WXT extension types
+        run: pnpm --filter chrome-mcp-server exec wxt prepare
 
       - name: Build shared schemas
         run: pnpm --filter chrome-mcp-shared build
@@ -66,5 +63,3 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git commit -m "chore: update lockfile for Brauzio Cloud MCP"
           git push origin HEAD:main
-
-# Brauzio CI validates the cloud path without starting the legacy native host.
