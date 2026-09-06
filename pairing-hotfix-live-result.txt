@@ -1,0 +1,1 @@
+{"service":"Brauzio MCP","ok":true,"version":"2.1.1","schemaVersion":"v2.1.1-2026-09-06","auth":"oauth2.1-pairing","toolCount":27,"computerActions":["mouse_move","mouse_down","mouse_up","drag_hold"]}
