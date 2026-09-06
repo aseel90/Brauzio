@@ -14,7 +14,6 @@ import { openAgentChatSidepanel } from '../utils/sidepanel';
 
 const CONTEXT_MENU_ID = 'web_editor_toggle';
 const COMMAND_KEY = 'toggle_web_editor';
-const DEFAULT_NATIVE_SERVER_PORT = 12306;
 
 /** Storage key prefix for TX change session data (per-tab isolation) */
 const WEB_EDITOR_TX_CHANGED_SESSION_KEY_PREFIX = 'web-editor-v2-tx-changed-';
@@ -67,136 +66,6 @@ function getExecutionStatus(requestId: string): ExecutionStatusEntry | undefined
   return executionStatusCache.get(requestId);
 }
 
-// SSE connections for status updates (per sessionId)
-const sseConnections = new Map<string, { abort: AbortController; lastRequestId: string }>();
-
-/**
- * Start SSE subscription for a session to receive status updates
- */
-async function subscribeToSessionStatus(
-  sessionId: string,
-  requestId: string,
-  port: number,
-): Promise<void> {
-  // Close existing connection for this session if any
-  const existing = sseConnections.get(sessionId);
-  if (existing) {
-    existing.abort.abort();
-    sseConnections.delete(sessionId);
-  }
-
-  const abortController = new AbortController();
-  sseConnections.set(sessionId, { abort: abortController, lastRequestId: requestId });
-
-  // Set initial status
-  setExecutionStatus(requestId, 'starting', 'Connecting to Agent...');
-
-  const sseUrl = `http://127.0.0.1:${port}/agent/chat/${encodeURIComponent(sessionId)}/stream`;
-
-  try {
-    const response = await fetch(sseUrl, {
-      method: 'GET',
-      headers: { Accept: 'text/event-stream' },
-      signal: abortController.signal,
-    });
-
-    if (!response.ok || !response.body) {
-      setExecutionStatus(requestId, 'running', 'Agent processing...');
-      return;
-    }
-
-    const reader = response.body.getReader();
-    const decoder = new TextDecoder();
-    let buffer = '';
-
-    setExecutionStatus(requestId, 'running', 'Agent processing...');
-
-    // Read SSE stream
-
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) break;
-
-      buffer += decoder.decode(value, { stream: true });
-      const lines = buffer.split('\n');
-      buffer = lines.pop() ?? '';
-
-      for (const line of lines) {
-        if (line.startsWith('data:')) {
-          try {
-            const data = JSON.parse(line.slice(5).trim());
-            handleSseEvent(requestId, data);
-          } catch {
-            // Ignore parse errors
-          }
-        }
-      }
-    }
-  } catch (err) {
-    if (err instanceof Error && err.name === 'AbortError') {
-      // Intentionally aborted, not an error
-      return;
-    }
-    // Connection error - mark as unknown but not failed (Agent may still be running)
-    const cached = getExecutionStatus(requestId);
-    if (cached && !['completed', 'failed', 'cancelled'].includes(cached.status)) {
-      setExecutionStatus(requestId, 'running', 'Agent processing (connection lost)...');
-    }
-  } finally {
-    sseConnections.delete(sessionId);
-  }
-}
-
-/**
- * Handle SSE event from Agent stream
- */
-function handleSseEvent(requestId: string, event: unknown): void {
-  if (!event || typeof event !== 'object') return;
-  const e = event as Record<string, unknown>;
-  const type = e.type;
-  const data = e.data as Record<string, unknown> | undefined;
-
-  // Check if this event is for our request
-  const eventRequestId = data?.requestId as string | undefined;
-  if (eventRequestId && eventRequestId !== requestId) return;
-
-  if (type === 'status' && data) {
-    const status = data.status as string;
-    const message = data.message as string | undefined;
-
-    // Map Agent status to our status
-    // - 'ready' -> 'running' (ready is a running sub-state)
-    // - 'error' -> 'failed' (normalize server 'error' to UI 'failed')
-    let mappedStatus = status;
-    if (status === 'ready') mappedStatus = 'running';
-    if (status === 'error') mappedStatus = 'failed';
-
-    setExecutionStatus(requestId, mappedStatus, message);
-  } else if (type === 'message' && data) {
-    // Update status to show we're receiving messages
-    const cached = getExecutionStatus(requestId);
-    if (cached && cached.status === 'starting') {
-      setExecutionStatus(requestId, 'running', 'Agent is working...');
-    }
-
-    // Check for completion indicators in message content
-    const role = data.role as string | undefined;
-    const isFinal = data.isFinal as boolean | undefined;
-    if (role === 'assistant' && isFinal) {
-      const content = data.content as string | undefined;
-      setExecutionStatus(requestId, 'completed', 'Completed', {
-        success: true,
-        summary: content?.slice(0, 200),
-      });
-    }
-  } else if (type === 'error') {
-    const errorMsg = (e.error as string) || 'Unknown error';
-    setExecutionStatus(requestId, 'failed', errorMsg, {
-      success: false,
-      error: errorMsg,
-    });
-  }
-}
 
 /**
  * Web Editor version configuration
@@ -991,82 +860,13 @@ export function initWebEditorListeners(): void {
       // WEB_EDITOR_OPEN_SOURCE: Open component source file in VSCode
       // =====================================================================
       if (message?.type === BACKGROUND_MESSAGE_TYPES.WEB_EDITOR_OPEN_SOURCE) {
-        (async () => {
-          try {
-            const payload = message.payload as { debugSource?: unknown } | undefined;
-            const debugSource = payload?.debugSource;
-
-            if (!debugSource || typeof debugSource !== 'object') {
-              return sendResponse({ success: false, error: 'debugSource is required' });
-            }
-
-            const rec = debugSource as Record<string, unknown>;
-            const file = typeof rec.file === 'string' ? rec.file.trim() : '';
-            if (!file) {
-              return sendResponse({ success: false, error: 'debugSource.file is required' });
-            }
-
-            // Read server port and selected project
-            const stored = await chrome.storage.local.get([
-              'nativeServerPort',
-              'agent-selected-project-id',
-            ]);
-            const portRaw = stored.nativeServerPort;
-            const port = Number.isFinite(Number(portRaw))
-              ? Number(portRaw)
-              : DEFAULT_NATIVE_SERVER_PORT;
-            const projectId = stored['agent-selected-project-id'];
-
-            if (!projectId || typeof projectId !== 'string') {
-              return sendResponse({
-                success: false,
-                error: 'No project selected. Please select a project in AgentChat first.',
-              });
-            }
-
-            // Prepare line/column
-            const lineRaw = Number(rec.line);
-            const columnRaw = Number(rec.column);
-            const line = Number.isFinite(lineRaw) && lineRaw > 0 ? lineRaw : undefined;
-            const column = Number.isFinite(columnRaw) && columnRaw > 0 ? columnRaw : undefined;
-
-            // Call native-server to open file (server will validate project and path)
-            const openResp = await fetch(
-              `http://127.0.0.1:${port}/agent/projects/${encodeURIComponent(projectId)}/open-file`,
-              {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                  filePath: file,
-                  line,
-                  column,
-                }),
-              },
-            );
-
-            // Try to parse JSON response for detailed error
-            let result: { success: boolean; error?: string };
-            try {
-              result = await openResp.json();
-            } catch {
-              const text = await openResp.text().catch(() => '');
-              result = {
-                success: false,
-                error: text || `HTTP ${openResp.status}`,
-              };
-            }
-
-            sendResponse(result);
-          } catch (err) {
-            sendResponse({
-              success: false,
-              error: err instanceof Error ? err.message : String(err),
-            });
-          }
-        })();
-        return true; // Async response
+        sendResponse({
+          success: false,
+          error:
+            'فتح ملف المصدر في VS Code كان يعتمد على الخادم المحلي، وهو غير مستخدم في Brauzio Cloud.',
+        });
+        return false;
       }
-
       if (message?.type === BACKGROUND_MESSAGE_TYPES.WEB_EDITOR_TOGGLE) {
         getActiveTabId()
           .then(async (tabId) => {
@@ -1220,137 +1020,13 @@ export function initWebEditorListeners(): void {
       // Phase 1.5: Handle APPLY_BATCH from web-editor toolbar
       // =======================================================================
       if (message?.type === BACKGROUND_MESSAGE_TYPES.WEB_EDITOR_APPLY_BATCH) {
-        const payload = normalizeApplyBatchPayload(message.payload);
-        (async () => {
-          const senderTabId = (_sender as chrome.runtime.MessageSender)?.tab?.id;
-          const senderWindowId = (_sender as chrome.runtime.MessageSender)?.tab?.windowId;
-
-          // Read storage for server port and selected session
-          const stored = await chrome.storage.local.get([
-            'nativeServerPort',
-            STORAGE_KEY_SELECTED_SESSION,
-          ]);
-
-          const portRaw = stored?.nativeServerPort;
-          const port = Number.isFinite(Number(portRaw))
-            ? Number(portRaw)
-            : DEFAULT_NATIVE_SERVER_PORT;
-
-          const sessionId = normalizeString(stored?.[STORAGE_KEY_SELECTED_SESSION]).trim();
-
-          // Best-effort: open AgentChat sidepanel so user can see the session
-          // Pass sessionId for deep linking directly to chat view
-          if (typeof senderTabId === 'number') {
-            openAgentChatSidepanel(senderTabId, senderWindowId, sessionId || undefined).catch(
-              () => {},
-            );
-          }
-
-          if (!sessionId) {
-            // No session selected - sidepanel is already being opened (best-effort)
-            // User needs to select or create a session manually
-            sendResponse({
-              success: false,
-              error:
-                'No Agent session selected. Please select or create a session in AgentChat, then try Apply again.',
-            });
-            return;
-          }
-
-          // Hydrate payload with tabId
-          const hydratedPayload: WebEditorApplyBatchPayload =
-            typeof senderTabId === 'number' ? { ...payload, tabId: senderTabId } : payload;
-
-          // Read excluded keys from session storage (per-tab, managed by sidepanel)
-          let sessionExcludedKeys: string[] = [];
-          if (typeof senderTabId === 'number') {
-            const excludedSessionKey = `${WEB_EDITOR_EXCLUDED_KEYS_SESSION_KEY_PREFIX}${senderTabId}`;
-            try {
-              if (chrome.storage?.session?.get) {
-                const stored = (await chrome.storage.session.get(excludedSessionKey)) as Record<
-                  string,
-                  unknown
-                >;
-                const raw = stored?.[excludedSessionKey];
-                sessionExcludedKeys = Array.isArray(raw)
-                  ? raw.map((k) => normalizeString(k).trim()).filter(Boolean)
-                  : [];
-              }
-            } catch {
-              // Best-effort: ignore session storage failures
-            }
-          }
-
-          // Filter out excluded elements (union: payload excludedKeys + session excludedKeys)
-          const excluded = new Set([...hydratedPayload.excludedKeys, ...sessionExcludedKeys]);
-          const elements = hydratedPayload.elements.filter((e) => !excluded.has(e.elementKey));
-          if (elements.length === 0) {
-            sendResponse({ success: false, error: 'No elements selected to apply.' });
-            return;
-          }
-
-          // Build page URL from payload or sender tab
-          const pageUrl =
-            normalizeString(hydratedPayload.pageUrl).trim() ||
-            normalizeString((_sender as chrome.runtime.MessageSender)?.tab?.url).trim() ||
-            'unknown';
-
-          // Build batch prompt and send to agent
-          const instruction = buildAgentPromptBatch(elements, pageUrl);
-          const url = `http://127.0.0.1:${port}/agent/chat/${encodeURIComponent(sessionId)}/act`;
-
-          // Extract element labels for compact display
-          const elementLabels = elements.slice(0, 5).map((e) => e.label);
-
-          const resp = await fetch(url, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              instruction,
-              // Pass dbSessionId so backend loads session-level configuration (engine, model, options)
-              dbSessionId: sessionId,
-              // Display text for UI (compact representation)
-              displayText: `Apply ${elements.length} change${elements.length === 1 ? '' : 's'}`,
-              // Client metadata for special message rendering
-              clientMeta: {
-                kind: 'web_editor_apply_batch',
-                pageUrl,
-                elementCount: elements.length,
-                elementLabels,
-              },
-            }),
-          });
-
-          if (!resp.ok) {
-            const text = await resp.text().catch(() => '');
-            sendResponse({
-              success: false,
-              error: text || `HTTP ${resp.status}`,
-            });
-            return;
-          }
-
-          const json: any = await resp.json().catch(() => ({}));
-          const requestId = json?.requestId as string | undefined;
-
-          if (requestId) {
-            // Start SSE subscription for status updates (fire and forget)
-            subscribeToSessionStatus(sessionId, requestId, port).catch(() => {});
-          }
-
-          sendResponse({ success: true, requestId, sessionId });
-        })().catch((error) => {
-          sendResponse({
-            success: false,
-            error: String(error instanceof Error ? error.message : error),
-          });
+        sendResponse({
+          success: false,
+          error:
+            'تطبيق التغييرات عبر وكيل AI المحلي غير مستخدم في Brauzio Cloud. استخدم ChatGPT المتصل بـ Brauzio MCP لتنفيذ التعديلات المطلوبة.',
         });
-        return true;
+        return false;
       }
-
-      // =======================================================================
-      // Phase 1.8: Handle HIGHLIGHT_ELEMENT from sidepanel chips hover
-      // =======================================================================
       if (message?.type === BACKGROUND_MESSAGE_TYPES.WEB_EDITOR_HIGHLIGHT_ELEMENT) {
         const payload = message.payload as WebEditorHighlightElementPayload | undefined;
         (async () => {
@@ -1478,67 +1154,12 @@ export function initWebEditorListeners(): void {
       }
 
       if (message?.type === BACKGROUND_MESSAGE_TYPES.WEB_EDITOR_APPLY) {
-        const payload = normalizeApplyPayload(message.payload);
-        (async () => {
-          const senderTabId = (_sender as any)?.tab?.id;
-          const sessionId =
-            typeof senderTabId === 'number' ? `web-editor-${senderTabId}` : 'web-editor';
-
-          const stored = await chrome.storage.local.get([
-            'nativeServerPort',
-            'agent-selected-project-id',
-          ]);
-          const portRaw = stored?.nativeServerPort;
-          const port = Number.isFinite(Number(portRaw))
-            ? Number(portRaw)
-            : DEFAULT_NATIVE_SERVER_PORT;
-
-          const projectId = normalizeString(stored?.['agent-selected-project-id']).trim() || '';
-
-          if (!projectId) {
-            return sendResponse({
-              success: false,
-              error:
-                'No Agent project selected. Open Side Panel → المساعد الذكي and select/create a project first.',
-            });
-          }
-
-          const instruction = buildAgentPrompt(payload);
-          const url = `http://127.0.0.1:${port}/agent/chat/${encodeURIComponent(sessionId)}/act`;
-
-          const resp = await fetch(url, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              instruction,
-              projectId,
-            }),
-          });
-
-          if (!resp.ok) {
-            const text = await resp.text().catch(() => '');
-            return sendResponse({
-              success: false,
-              error: text || `HTTP ${resp.status}`,
-            });
-          }
-
-          const json: any = await resp.json().catch(() => ({}));
-          const requestId = json?.requestId as string | undefined;
-
-          if (requestId) {
-            // Start SSE subscription for status updates (fire and forget)
-            subscribeToSessionStatus(sessionId, requestId, port).catch(() => {});
-          }
-
-          return sendResponse({ success: true, requestId, sessionId });
-        })().catch((error) => {
-          sendResponse({
-            success: false,
-            error: String(error instanceof Error ? error.message : error),
-          });
+        sendResponse({
+          success: false,
+          error:
+            'وكيل Web Editor المحلي غير مستخدم في Brauzio Cloud. استخدم ChatGPT عبر Brauzio MCP بدلًا منه.',
         });
-        return true;
+        return false;
       }
       if (message?.type === BACKGROUND_MESSAGE_TYPES.WEB_EDITOR_STATUS_QUERY) {
         const { requestId } = message;
@@ -1567,68 +1188,12 @@ export function initWebEditorListeners(): void {
       // =======================================================================
       if (message?.type === BACKGROUND_MESSAGE_TYPES.WEB_EDITOR_CANCEL_EXECUTION) {
         const payload = message.payload as WebEditorCancelExecutionPayload | undefined;
-        (async () => {
-          // Validate payload
-          const sessionId = payload?.sessionId?.trim();
-          const requestId = payload?.requestId?.trim();
-
-          if (!sessionId) {
-            sendResponse({
-              success: false,
-              error: 'sessionId is required',
-            } as WebEditorCancelExecutionResponse);
-            return;
-          }
-          if (!requestId) {
-            sendResponse({
-              success: false,
-              error: 'requestId is required',
-            } as WebEditorCancelExecutionResponse);
-            return;
-          }
-
-          // Get server port
-          const stored = await chrome.storage.local.get(['nativeServerPort']);
-          const port = stored.nativeServerPort || DEFAULT_NATIVE_SERVER_PORT;
-
-          try {
-            // Call cancel API
-            const cancelUrl = `http://127.0.0.1:${port}/agent/chat/${encodeURIComponent(sessionId)}/cancel/${encodeURIComponent(requestId)}`;
-            const response = await fetch(cancelUrl, { method: 'DELETE' });
-
-            if (!response.ok) {
-              const errorText = await response.text().catch(() => `HTTP ${response.status}`);
-              sendResponse({
-                success: false,
-                error: errorText,
-              } as WebEditorCancelExecutionResponse);
-              return;
-            }
-
-            // Update local execution status cache
-            setExecutionStatus(requestId, 'cancelled', 'Execution cancelled by user');
-
-            // Abort SSE connection for this session
-            const sseConnection = sseConnections.get(sessionId);
-            if (sseConnection && sseConnection.lastRequestId === requestId) {
-              sseConnection.abort.abort();
-              sseConnections.delete(sessionId);
-            }
-
-            sendResponse({ success: true } as WebEditorCancelExecutionResponse);
-          } catch (error) {
-            sendResponse({
-              success: false,
-              error: String(error instanceof Error ? error.message : error),
-            } as WebEditorCancelExecutionResponse);
-          }
-        })().catch((error) => {
-          sendResponse({
-            success: false,
-            error: String(error instanceof Error ? error.message : error),
-          } as WebEditorCancelExecutionResponse);
-        });
-        return true; // Will respond asynchronously
+        const requestId = payload?.requestId?.trim();
+        if (requestId) {
+          setExecutionStatus(requestId, 'cancelled', 'تم إلغاء التنفيذ.');
+        }
+        sendResponse({ success: true } as WebEditorCancelExecutionResponse);
+        return false;
       }
     } catch (error) {
       sendResponse({
