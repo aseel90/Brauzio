@@ -68,6 +68,20 @@ pnpm build:extension
 - [x] نجاح TypeScript compile وChrome extension build بعد التنظيف
 - [ ] إعادة اختبار النسخة المثبتة النهائية بعد نشر ZIP الجديد
 
+## اتجاه V3
+
+خطة V3 تركز على تحويل Brauzio من Browser MCP إلى Browser Agent Platform بدون إضافة طبقات محلية جديدة. أهم المراحل القادمة:
+
+- CDP Core مع جلسات معزولة.
+- Event Engine وSmart Wait بدل الانتظار الثابت.
+- Raw CDP Advanced Tool بدل تضخيم عدد الأدوات.
+- Sense → Act → Verify.
+- Human Takeover وEmergency Stop.
+- Actor / Observer sessions.
+- Diagnostics + Self Test.
+
+الخريطة التنفيذية الكاملة موجودة في `docs/ROADMAP.md`.
+
 ## الأمان
 
 لا تسجل أو ترفع إلى GitHub أيًا من:
@@ -82,6 +96,7 @@ Brauzio مبني تاريخيًا على مشروع `hangwin/mcp-chrome` مفت�
 
 راجع:
 
+- `docs/ROADMAP.md`
 - `docs/BRAUZIO_ARCHITECTURE.md`
 - `docs/BRAUZIO_V2.md`
 - `docs/TOOLS.md`
