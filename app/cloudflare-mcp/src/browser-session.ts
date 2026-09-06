@@ -22,6 +22,15 @@ interface PendingCall {
   timer: ReturnType<typeof setTimeout>;
   name: string;
   startedAt: number;
+  actor: boolean;
+}
+
+interface ControlStateRecord {
+  paused: boolean;
+  reason: string;
+  source: string;
+  since: number | null;
+  lastUpdated: number;
 }
 
 function sessionLog(event: string, details: Record<string, unknown> = {}) {
@@ -34,7 +43,6 @@ interface ToolResultMessage {
   result?: unknown;
   error?: string;
 }
-
 
 interface PersistentWatchDescriptor {
   watchId: string;
@@ -73,6 +81,7 @@ interface PersistentWatchWaiter {
 }
 
 const PAIRING_STORAGE_KEY = 'oauth-pairing-v1';
+const CONTROL_STORAGE_KEY = 'control-state-v1';
 const WATCH_STORAGE_PREFIX = 'watch-v1:';
 const WATCH_WAIT_MAX_MS = 115_000;
 const PAIRING_TTL_MS = 5 * 60 * 1000;
@@ -117,6 +126,50 @@ function validTraceId(value: unknown): string | null {
     : null;
 }
 
+function normalizeControlState(value: unknown): ControlStateRecord {
+  const raw = (value || {}) as Partial<ControlStateRecord>;
+  return {
+    paused: raw.paused === true,
+    reason: String(raw.reason || '').slice(0, 128),
+    source: String(raw.source || 'extension').slice(0, 64),
+    since: raw.since ? Number(raw.since) : null,
+    lastUpdated: Number(raw.lastUpdated || Date.now()),
+  };
+}
+
+function isActorTool(name: string, args: Record<string, unknown> = {}): boolean {
+  const observers = new Set([
+    'get_windows_and_tabs',
+    'chrome_read_page',
+    'chrome_screenshot',
+    'chrome_console',
+    'chrome_get_web_content',
+    'chrome_history',
+    'chrome_bookmark_search',
+    'chrome_network_capture',
+    'chrome_network_capture_start',
+    'chrome_network_capture_stop',
+    'chrome_network_debugger_start',
+    'chrome_network_debugger_stop',
+    'performance_start_trace',
+    'performance_stop_trace',
+    'performance_analyze_insight',
+    'chrome_gif_recorder',
+    'chrome_watch_start',
+    'chrome_watch_wait',
+    'chrome_watch_read',
+    'chrome_watch_stop',
+  ]);
+  if (observers.has(name)) return false;
+  if (name === 'chrome_computer') {
+    return !new Set(['wait', 'wait_for', 'screenshot']).has(String(args.action || ''));
+  }
+  if (name === 'chrome_cdp') {
+    return !new Set(['list_allowed', 'sessions']).has(String(args.action || 'command'));
+  }
+  return true;
+}
+
 export class BrowserSession extends DurableObject<Env> {
   private pending = new Map<string, PendingCall>();
   private watchWaiters = new Map<string, Map<number, PersistentWatchWaiter>>();
@@ -154,10 +207,14 @@ export class BrowserSession extends DurableObject<Env> {
     if (url.pathname === '/status') {
       const sockets = this.authenticatedSockets();
       const activeWatches = (await this.listActiveWatches()).length;
+      const controlState = await this.getControlState();
       return Response.json({
         connected: sockets.length > 0,
         connections: sockets.length,
         activeWatches,
+        controlPaused: controlState.paused,
+        controlReason: controlState.reason,
+        controlSince: controlState.since,
       });
     }
 
@@ -167,9 +224,6 @@ export class BrowserSession extends DurableObject<Env> {
       const record = await this.ctx.storage.get<PairingRecord>(PAIRING_STORAGE_KEY);
       const connectedSockets = this.authenticatedSockets().length;
 
-      // A pairing code is proof that the user approved from the authenticated extension.
-      // Do not invalidate it just because the MV3 WebSocket reconnects between creation
-      // and OAuth form submission. It remains one-time, short-lived and rate-limited.
       if (!record) {
         sessionLog('PAIRING_REJECTED', { reason: 'not_found', connectedSockets });
         return Response.json({ error: 'No active pairing code', code: 'PAIRING_NOT_FOUND' }, { status: 404 });
@@ -209,23 +263,15 @@ export class BrowserSession extends DurableObject<Env> {
 
       if (body.name === 'chrome_watch_read') {
         const watchId = String(body.args?.watchId || '');
-        if (watchId && (await this.getWatch(watchId))) {
-          return await this.handleWatchRead(body.args || {});
-        }
+        if (watchId && (await this.getWatch(watchId))) return await this.handleWatchRead(body.args || {});
       }
-
       if (body.name === 'chrome_watch_wait') {
         const watchId = String(body.args?.watchId || '');
-        if (watchId && (await this.getWatch(watchId))) {
-          return await this.handleWatchWait(body.args || {});
-        }
+        if (watchId && (await this.getWatch(watchId))) return await this.handleWatchWait(body.args || {});
       }
-
       if (body.name === 'chrome_watch_stop') {
         const watchId = String(body.args?.watchId || '');
-        if (watchId && (await this.getWatch(watchId))) {
-          return await this.handleWatchStop(watchId);
-        }
+        if (watchId && (await this.getWatch(watchId))) return await this.handleWatchStop(watchId);
       }
 
       return await this.forwardToolCall(body);
@@ -236,7 +282,6 @@ export class BrowserSession extends DurableObject<Env> {
 
   async webSocketMessage(ws: WebSocket, message: string | ArrayBuffer): Promise<void> {
     if (typeof message !== 'string') return;
-
     let payload: any;
     try {
       payload = JSON.parse(message);
@@ -256,9 +301,7 @@ export class BrowserSession extends DurableObject<Env> {
       const receivedSecret = String(payload.token || '');
       const claimedDeviceId = normalizeDeviceId(payload.deviceId);
       const deviceMatches = claimedDeviceId === attachment.deviceId;
-      const authenticated =
-        expectedSecret.length >= 16 && receivedSecret === expectedSecret && deviceMatches;
-
+      const authenticated = expectedSecret.length >= 16 && receivedSecret === expectedSecret && deviceMatches;
       const next: SocketAttachment = {
         authenticated,
         deviceId: attachment.deviceId,
@@ -266,26 +309,11 @@ export class BrowserSession extends DurableObject<Env> {
         connectedAt: attachment.connectedAt || Date.now(),
       };
       ws.serializeAttachment(next);
-      sessionLog('HELLO', {
-        deviceId: attachment.deviceId,
-        authenticated,
-        extensionVersion: next.extensionVersion || '',
-      });
-      ws.send(
-        JSON.stringify({
-          type: 'hello_ack',
-          authenticated,
-          deviceId: attachment.deviceId,
-        }),
-      );
-
-      if (authenticated) {
-        await this.sendWatchRestore(ws);
-      }
-
-      if (!authenticated) {
-        ws.close(1008, deviceMatches ? 'Authentication failed' : 'Device mismatch');
-      }
+      sessionLog('HELLO', { deviceId: attachment.deviceId, authenticated, extensionVersion: next.extensionVersion || '' });
+      const controlState = await this.getControlState();
+      ws.send(JSON.stringify({ type: 'hello_ack', authenticated, deviceId: attachment.deviceId, controlState }));
+      if (authenticated) await this.sendWatchRestore(ws);
+      if (!authenticated) ws.close(1008, deviceMatches ? 'Authentication failed' : 'Device mismatch');
       return;
     }
 
@@ -295,21 +323,22 @@ export class BrowserSession extends DurableObject<Env> {
       return;
     }
 
+    if (payload.type === 'control_state' && payload.state) {
+      await this.persistControlState(payload.state);
+      return;
+    }
     if (payload.type === 'watch_started' && payload.watch) {
       await this.persistWatchStarted(payload.watch as PersistentWatchDescriptor);
       return;
     }
-
     if (payload.type === 'watch_event' && payload.event) {
       await this.persistWatchEvent(payload.event as PersistentWatchEvent);
       return;
     }
-
     if (payload.type === 'watch_stopped' && payload.watchId) {
       await this.persistWatchStopped(String(payload.watchId), String(payload.reason || 'browser_stopped'));
       return;
     }
-
     if (payload.type === 'pairing_create') {
       const code = createPairingCode();
       const expiresAt = Date.now() + PAIRING_TTL_MS;
@@ -319,105 +348,81 @@ export class BrowserSession extends DurableObject<Env> {
       ws.send(JSON.stringify({ type: 'pairing_code', code, expiresAt, deviceId: attachment.deviceId }));
       return;
     }
-
-    if (payload.type === 'tool_result' && payload.requestId) {
-      this.finishToolCall(payload as ToolResultMessage);
-    }
+    if (payload.type === 'tool_result' && payload.requestId) this.finishToolCall(payload as ToolResultMessage);
   }
 
   webSocketClose(): void {
     sessionLog('WS_CLOSE', { authenticatedSockets: this.authenticatedSockets().length });
-    if (this.authenticatedSockets().length === 0) {
-      this.failPending('Brauzio extension disconnected during tool execution');
-    }
+    if (this.authenticatedSockets().length === 0) this.failPending('Brauzio extension disconnected during tool execution');
   }
 
   webSocketError(): void {
     sessionLog('WS_ERROR', { authenticatedSockets: this.authenticatedSockets().length });
-    if (this.authenticatedSockets().length === 0) {
-      this.failPending('Brauzio WebSocket connection failed');
-    }
+    if (this.authenticatedSockets().length === 0) this.failPending('Brauzio WebSocket connection failed');
   }
 
-  private watchKey(watchId: string): string {
-    return `${WATCH_STORAGE_PREFIX}${watchId}`;
-  }
+  private watchKey(watchId: string): string { return `${WATCH_STORAGE_PREFIX}${watchId}`; }
 
   private toolResult(payload: Record<string, unknown>) {
-    return {
-      content: [{ type: 'text', text: JSON.stringify({ success: true, ...payload }) }],
-      isError: false,
-    };
+    return { content: [{ type: 'text', text: JSON.stringify({ success: true, ...payload }) }], isError: false };
   }
 
-  private async forwardToolCall(body: {
-    name?: string;
-    args?: Record<string, unknown>;
-    timeoutMs?: number;
-    traceId?: string;
-  }): Promise<Response> {
-    const browser = this.authenticatedSockets()[0];
-    if (!browser) {
-      return Response.json(
-        { error: 'Brauzio extension is not connected to Cloudflare' },
-        { status: 503 },
-      );
+  private async forwardToolCall(body: { name?: string; args?: Record<string, unknown>; timeoutMs?: number; traceId?: string }): Promise<Response> {
+    const actor = isActorTool(String(body.name || ''), body.args || {});
+    if (actor) {
+      const controlState = await this.getControlState();
+      if (controlState.paused) {
+        sessionLog('CALL_BLOCKED_CONTROL_PAUSED', { name: body.name, reason: controlState.reason, source: controlState.source });
+        return Response.json({ error: `Brauzio actor control is paused (${controlState.reason || 'paused'}). Resume control from the Brauzio extension.`, controlPaused: true, controlState }, { status: 423 });
+      }
     }
+
+    const browser = this.authenticatedSockets()[0];
+    if (!browser) return Response.json({ error: 'Brauzio extension is not connected to Cloudflare' }, { status: 503 });
 
     const requestId = validTraceId(body.traceId) || crypto.randomUUID();
     const startedAt = Date.now();
-    sessionLog('CALL_RECEIVED', {
-      requestId,
-      name: body.name,
-      authenticatedSockets: this.authenticatedSockets().length,
-    });
+    sessionLog('CALL_RECEIVED', { requestId, name: body.name, actor, authenticatedSockets: this.authenticatedSockets().length });
     const timeoutMs = Math.min(Math.max(Number(body.timeoutMs || 120_000), 1_000), 180_000);
 
     return new Promise<Response>((resolve) => {
       const timer = setTimeout(() => {
         this.pending.delete(requestId);
-        sessionLog('CALL_TIMEOUT', {
-          requestId,
-          name: body.name,
-          timeoutMs,
-          durationMs: Date.now() - startedAt,
-        });
-        resolve(
-          Response.json(
-            { error: `Tool call timed out after ${timeoutMs}ms (traceId: ${requestId})` },
-            { status: 504 },
-          ),
-        );
+        sessionLog('CALL_TIMEOUT', { requestId, name: body.name, timeoutMs, durationMs: Date.now() - startedAt });
+        resolve(Response.json({ error: `Tool call timed out after ${timeoutMs}ms (traceId: ${requestId})` }, { status: 504 }));
       }, timeoutMs);
-
-      this.pending.set(requestId, { resolve, timer, name: body.name!, startedAt });
-
+      this.pending.set(requestId, { resolve, timer, name: body.name!, startedAt, actor });
       try {
-        browser.send(
-          JSON.stringify({
-            type: 'tool_call',
-            requestId,
-            name: body.name,
-            args: body.args || {},
-          }),
-        );
-        sessionLog('CALL_SENT_TO_BROWSER', { requestId, name: body.name });
+        browser.send(JSON.stringify({ type: 'tool_call', requestId, name: body.name, args: body.args || {} }));
+        sessionLog('CALL_SENT_TO_BROWSER', { requestId, name: body.name, actor });
       } catch (error) {
-        sessionLog('CALL_SEND_FAILED', {
-          requestId,
-          name: body.name,
-          error: error instanceof Error ? error.message : String(error),
-        });
         clearTimeout(timer);
         this.pending.delete(requestId);
-        resolve(
-          Response.json(
-            { error: error instanceof Error ? error.message : String(error) },
-            { status: 502 },
-          ),
-        );
+        resolve(Response.json({ error: error instanceof Error ? error.message : String(error) }, { status: 502 }));
       }
     });
+  }
+
+  private async getControlState(): Promise<ControlStateRecord> {
+    const stored = await this.ctx.storage.get<ControlStateRecord>(CONTROL_STORAGE_KEY);
+    return stored ? normalizeControlState(stored) : { paused: false, reason: '', source: 'none', since: null, lastUpdated: 0 };
+  }
+
+  private async persistControlState(value: unknown): Promise<void> {
+    const next = normalizeControlState(value);
+    await this.ctx.storage.put(CONTROL_STORAGE_KEY, next);
+    sessionLog('CONTROL_STATE_UPDATED', { paused: next.paused, reason: next.reason, source: next.source, since: next.since });
+    if (next.paused) this.failPendingActors(next);
+  }
+
+  private failPendingActors(controlState: ControlStateRecord): void {
+    for (const [requestId, pending] of this.pending) {
+      if (!pending.actor) continue;
+      clearTimeout(pending.timer);
+      this.pending.delete(requestId);
+      pending.resolve(Response.json({ error: `Brauzio actor control paused during tool execution (${controlState.reason || 'paused'}).`, controlPaused: true, controlState }, { status: 423 }));
+      sessionLog('CALL_INTERRUPTED_CONTROL_PAUSED', { requestId, name: pending.name });
+    }
   }
 
   private async getWatch(watchId: string): Promise<PersistentWatchRecord | null> {
@@ -437,10 +442,7 @@ export class BrowserSession extends DurableObject<Env> {
     const expired: string[] = [];
     const now = Date.now();
     for (const [key, record] of stored) {
-      if (!record || record.expiresAt <= now) {
-        expired.push(key);
-        continue;
-      }
+      if (!record || record.expiresAt <= now) { expired.push(key); continue; }
       if (!record.stopped) active.push(record);
     }
     if (expired.length) await this.ctx.storage.delete(expired);
@@ -450,27 +452,14 @@ export class BrowserSession extends DurableObject<Env> {
   private async sendWatchRestore(ws: WebSocket): Promise<void> {
     const watches = await this.listActiveWatches();
     if (!watches.length) return;
-    ws.send(
-      JSON.stringify({
-        type: 'watch_restore',
-        watches: watches.map(({ events: _events, stopped: _stopped, stopReason: _stopReason, ...watch }) => watch),
-      }),
-    );
+    ws.send(JSON.stringify({ type: 'watch_restore', watches: watches.map(({ events: _events, stopped: _stopped, stopReason: _stopReason, ...watch }) => watch) }));
     sessionLog('WATCH_RESTORE_SENT', { count: watches.length });
   }
 
   private normalizeWatchDescriptor(value: PersistentWatchDescriptor): PersistentWatchDescriptor {
     const now = Date.now();
     return {
-      watchId: String(value.watchId || '').slice(0, 128),
-      tabId: Number(value.tabId),
-      createdAt: Number(value.createdAt || now),
-      expiresAt: Number(value.expiresAt || now),
-      maxEvents: Math.max(10, Math.min(Number(value.maxEvents || 100), 500)),
-      nextSequence: Math.max(0, Number(value.nextSequence || 0)),
-      categories: Array.isArray(value.categories) ? value.categories.map(String).slice(0, 10) : undefined,
-      methods: Array.isArray(value.methods) ? value.methods.map(String).slice(0, 50) : undefined,
-      urlIncludes: value.urlIncludes ? String(value.urlIncludes).slice(0, 2048) : undefined,
+      watchId: String(value.watchId || '').slice(0, 128), tabId: Number(value.tabId), createdAt: Number(value.createdAt || now), expiresAt: Number(value.expiresAt || now), maxEvents: Math.max(10, Math.min(Number(value.maxEvents || 100), 500)), nextSequence: Math.max(0, Number(value.nextSequence || 0)), categories: Array.isArray(value.categories) ? value.categories.map(String).slice(0, 10) : undefined, methods: Array.isArray(value.methods) ? value.methods.map(String).slice(0, 50) : undefined, urlIncludes: value.urlIncludes ? String(value.urlIncludes).slice(0, 2048) : undefined,
     };
   }
 
@@ -478,13 +467,7 @@ export class BrowserSession extends DurableObject<Env> {
     const watch = this.normalizeWatchDescriptor(value);
     if (!watch.watchId || !Number.isFinite(watch.tabId) || watch.expiresAt <= Date.now()) return;
     const existing = await this.ctx.storage.get<PersistentWatchRecord>(this.watchKey(watch.watchId));
-    const record: PersistentWatchRecord = {
-      ...watch,
-      nextSequence: Math.max(watch.nextSequence, existing?.nextSequence || 0),
-      events: existing?.events || [],
-      stopped: false,
-      stopReason: undefined,
-    };
+    const record: PersistentWatchRecord = { ...watch, nextSequence: Math.max(watch.nextSequence, existing?.nextSequence || 0), events: existing?.events || [], stopped: false, stopReason: undefined };
     await this.ctx.storage.put(this.watchKey(watch.watchId), record);
     sessionLog('WATCH_PERSISTED', { watchId: watch.watchId, tabId: watch.tabId, nextSequence: record.nextSequence });
   }
@@ -496,21 +479,10 @@ export class BrowserSession extends DurableObject<Env> {
     if (!record || record.stopped) return;
     const sequence = Math.max(1, Number(event.sequence || 0));
     if (sequence <= record.nextSequence) return;
-
-    const normalized: PersistentWatchEvent = {
-      sequence,
-      watchId,
-      tabId: Number(event.tabId || record.tabId),
-      sessionId: event.sessionId ? String(event.sessionId).slice(0, 256) : undefined,
-      method: String(event.method || '').slice(0, 256),
-      timestamp: Number(event.timestamp || Date.now()),
-      data: event.data && typeof event.data === 'object' ? event.data : {},
-    };
+    const normalized: PersistentWatchEvent = { sequence, watchId, tabId: Number(event.tabId || record.tabId), sessionId: event.sessionId ? String(event.sessionId).slice(0, 256) : undefined, method: String(event.method || '').slice(0, 256), timestamp: Number(event.timestamp || Date.now()), data: event.data && typeof event.data === 'object' ? event.data : {} };
     record.nextSequence = sequence;
     record.events.push(normalized);
-    if (record.events.length > record.maxEvents) {
-      record.events.splice(0, record.events.length - record.maxEvents);
-    }
+    if (record.events.length > record.maxEvents) record.events.splice(0, record.events.length - record.maxEvents);
     await this.ctx.storage.put(this.watchKey(watchId), record);
     this.resolveWatchWaiters(watchId, { event: normalized });
   }
@@ -525,10 +497,7 @@ export class BrowserSession extends DurableObject<Env> {
     sessionLog('WATCH_STOPPED', { watchId, reason: record.stopReason });
   }
 
-  private resolveWatchWaiters(
-    watchId: string,
-    result: { event?: PersistentWatchEvent; stopped?: boolean; reason?: string },
-  ): void {
+  private resolveWatchWaiters(watchId: string, result: { event?: PersistentWatchEvent; stopped?: boolean; reason?: string }): void {
     const waiters = this.watchWaiters.get(watchId);
     if (!waiters) return;
     for (const [id, waiter] of waiters) {
@@ -550,22 +519,8 @@ export class BrowserSession extends DurableObject<Env> {
     const after = Math.max(0, Number(args.afterSequence || 0));
     const limit = Math.max(1, Math.min(Number(args.limit || 50), 200));
     const method = args.method ? String(args.method) : '';
-    const events = record.events
-      .filter((event) => event.sequence > after && (!method || event.method === method))
-      .slice(0, limit);
-    return Response.json({
-      result: this.toolResult({
-        watchId,
-        tabId: record.tabId,
-        events,
-        nextSequence: record.nextSequence,
-        buffered: record.events.length,
-        expiresAt: record.expiresAt,
-        stopped: Boolean(record.stopped),
-        stopReason: record.stopReason,
-        source: 'durable_object',
-      }),
-    });
+    const events = record.events.filter((event) => event.sequence > after && (!method || event.method === method)).slice(0, limit);
+    return Response.json({ result: this.toolResult({ watchId, tabId: record.tabId, events, nextSequence: record.nextSequence, buffered: record.events.length, expiresAt: record.expiresAt, stopped: Boolean(record.stopped), stopReason: record.stopReason, source: 'durable_object' }) });
   }
 
   private async handleWatchWait(args: Record<string, unknown>): Promise<Response> {
@@ -574,20 +529,9 @@ export class BrowserSession extends DurableObject<Env> {
     if (!record) return Response.json({ error: `Watch not found: ${watchId}` }, { status: 404 });
     const after = Math.max(0, Number(args.afterSequence || 0));
     const method = args.method ? String(args.method) : '';
-    const existing = record.events.find(
-      (event) => event.sequence > after && (!method || event.method === method),
-    );
-    if (existing) {
-      return Response.json({
-        result: this.toolResult({ watchId, event: existing, source: 'durable_object' }),
-      });
-    }
-    if (record.stopped) {
-      return Response.json({
-        result: this.toolResult({ watchId, stopped: true, reason: record.stopReason || 'stopped', source: 'durable_object' }),
-      });
-    }
-
+    const existing = record.events.find((event) => event.sequence > after && (!method || event.method === method));
+    if (existing) return Response.json({ result: this.toolResult({ watchId, event: existing, source: 'durable_object' }) });
+    if (record.stopped) return Response.json({ result: this.toolResult({ watchId, stopped: true, reason: record.stopReason || 'stopped', source: 'durable_object' }) });
     const timeoutMs = Math.max(50, Math.min(Number(args.timeoutMs || 10_000), WATCH_WAIT_MAX_MS));
     return await new Promise<Response>((resolve) => {
       const id = ++this.watchWaiterSerial;
@@ -595,9 +539,7 @@ export class BrowserSession extends DurableObject<Env> {
         const waiters = this.watchWaiters.get(watchId);
         waiters?.delete(id);
         if (waiters && !waiters.size) this.watchWaiters.delete(watchId);
-        resolve(Response.json({
-          result: this.toolResult({ watchId, timedOut: true, reason: 'timeout', source: 'durable_object' }),
-        }));
+        resolve(Response.json({ result: this.toolResult({ watchId, timedOut: true, reason: 'timeout', source: 'durable_object' }) }));
       }, timeoutMs);
       const waiters = this.watchWaiters.get(watchId) || new Map<number, PersistentWatchWaiter>();
       waiters.set(id, { id, afterSequence: after, method: method || undefined, resolve, timer });
@@ -610,21 +552,8 @@ export class BrowserSession extends DurableObject<Env> {
     if (!record) return Response.json({ error: `Watch not found: ${watchId}` }, { status: 404 });
     await this.persistWatchStopped(watchId, 'explicit_stop');
     const browser = this.authenticatedSockets()[0];
-    if (browser) {
-      try {
-        browser.send(JSON.stringify({ type: 'watch_stop', watchId }));
-      } catch {}
-    }
-    return Response.json({
-      result: this.toolResult({
-        watchId,
-        tabId: record.tabId,
-        stopped: true,
-        reason: 'explicit_stop',
-        finalSequence: record.nextSequence,
-        source: 'durable_object',
-      }),
-    });
+    if (browser) { try { browser.send(JSON.stringify({ type: 'watch_stop', watchId })); } catch {} }
+    return Response.json({ result: this.toolResult({ watchId, tabId: record.tabId, stopped: true, reason: 'explicit_stop', finalSequence: record.nextSequence, source: 'durable_object' }) });
   }
 
   private authenticatedSockets(): WebSocket[] {
@@ -632,30 +561,17 @@ export class BrowserSession extends DurableObject<Env> {
       try {
         const attachment = ws.deserializeAttachment() as SocketAttachment | null;
         return attachment?.authenticated === true && ws.readyState === WebSocket.OPEN;
-      } catch {
-        return false;
-      }
+      } catch { return false; }
     });
   }
 
   private finishToolCall(message: ToolResultMessage) {
     const pending = this.pending.get(message.requestId);
     if (!pending) return;
-
     clearTimeout(pending.timer);
-    sessionLog(message.error ? 'RESULT_ERROR' : 'RESULT_OK', {
-      requestId: message.requestId,
-      name: pending.name,
-      durationMs: Date.now() - pending.startedAt,
-      error: message.error || undefined,
-    });
+    sessionLog(message.error ? 'RESULT_ERROR' : 'RESULT_OK', { requestId: message.requestId, name: pending.name, durationMs: Date.now() - pending.startedAt, error: message.error || undefined });
     this.pending.delete(message.requestId);
-
-    if (message.error) {
-      pending.resolve(Response.json({ error: message.error }, { status: 500 }));
-      return;
-    }
-
+    if (message.error) { pending.resolve(Response.json({ error: message.error }, { status: 500 })); return; }
     pending.resolve(Response.json({ result: message.result }));
   }
 

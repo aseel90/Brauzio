@@ -8,6 +8,17 @@ import {
   type WatchEvent,
 } from './tools/browser/watch';
 import { releaseAllMouseHolds } from '@/utils/mouse-hold-safety';
+import {
+  beginAgentToolExecution,
+  configureControlStateSink,
+  enforceRemotePause,
+  getControlState,
+  handleHumanInput,
+  pauseAgentControl,
+  resumeAgentControl,
+  type BrauzioControlState,
+  type AgentExecutionGuard,
+} from '@/utils/control-safety';
 
 const LOG_PREFIX = '[BrauzioRelay]';
 const HEARTBEAT_MS = 20_000;
@@ -39,7 +50,7 @@ export interface BrauzioRelayStatus {
 }
 
 type RelayInboundMessage =
-  | { type: 'hello_ack'; authenticated?: boolean }
+  | { type: 'hello_ack'; authenticated?: boolean; controlState?: Partial<BrauzioControlState> }
   | { type: 'pairing_code'; code: string; expiresAt: number; deviceId?: string }
   | { type: 'tool_call'; requestId: string; name: string; args?: Record<string, unknown> }
   | { type: 'watch_restore'; watches?: PersistentWatchDescriptor[] }
@@ -132,6 +143,28 @@ function releaseMouseSafety(reason: string) {
     });
 }
 
+function sendControlStateMessage(state: BrauzioControlState): void {
+  if (!socket || socket.readyState !== WebSocket.OPEN || !currentStatus.authenticated) return;
+  try {
+    socket.send(
+      JSON.stringify({
+        type: 'control_state',
+        state: {
+          paused: state.paused,
+          reason: state.reason,
+          source: state.source,
+          since: state.since,
+          lastUpdated: state.lastUpdated,
+        },
+      }),
+    );
+  } catch (error) {
+    relayLog('CONTROL_STATE_SEND_FAILED', {
+      error: error instanceof Error ? error.message : String(error),
+    });
+  }
+}
+
 function sendWatchPersistenceMessage(payload: Record<string, unknown>): void {
   if (!socket || socket.readyState !== WebSocket.OPEN || !currentStatus.authenticated) return;
   try {
@@ -186,12 +219,23 @@ async function executeToolCall(message: Extract<RelayInboundMessage, { type: 'to
   }
 
   const startedAt = Date.now();
+  const args = message.args || {};
+  let guard: AgentExecutionGuard | undefined;
   relayLog('TOOL_RECEIVED', { requestId: message.requestId, name: message.name });
+
   try {
-    const result = await handleCallTool({
-      name: message.name,
-      args: message.args || {},
-    });
+    guard = await beginAgentToolExecution(message.name, args);
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    relayLog('TOOL_BLOCKED_CONTROL_PAUSED', { requestId: message.requestId, name: message.name, error: errorMessage });
+    try {
+      activeSocket.send(JSON.stringify({ type: 'tool_result', requestId: message.requestId, error: errorMessage }));
+    } catch {}
+    return;
+  }
+
+  try {
+    const result = await handleCallTool({ name: message.name, args });
     activeSocket.send(
       JSON.stringify({
         type: 'tool_result',
@@ -199,16 +243,20 @@ async function executeToolCall(message: Extract<RelayInboundMessage, { type: 'to
         result,
       }),
     );
-    relayLog('TOOL_FINISHED', { requestId: message.requestId, name: message.name, durationMs: Date.now() - startedAt });
+    relayLog('TOOL_FINISHED', { requestId: message.requestId, name: message.name, actor: guard.actor, durationMs: Date.now() - startedAt });
   } catch (error) {
     relayLog('TOOL_FAILED', { requestId: message.requestId, name: message.name, durationMs: Date.now() - startedAt, error: error instanceof Error ? error.message : String(error) });
-    activeSocket.send(
-      JSON.stringify({
-        type: 'tool_result',
-        requestId: message.requestId,
-        error: error instanceof Error ? error.message : String(error),
-      }),
-    );
+    try {
+      activeSocket.send(
+        JSON.stringify({
+          type: 'tool_result',
+          requestId: message.requestId,
+          error: error instanceof Error ? error.message : String(error),
+        }),
+      );
+    } catch {}
+  } finally {
+    await guard.finish().catch(() => {});
   }
 }
 
@@ -229,6 +277,9 @@ async function onRelayMessage(event: MessageEvent) {
     if (message.authenticated) {
       reconnectAttempt = 0;
       updateStatus({ state: 'connected', authenticated: true, lastError: undefined });
+      await enforceRemotePause(message.controlState);
+      const localControlState = await getControlState();
+      sendControlStateMessage(localControlState);
     } else {
       updateStatus({ state: 'error', authenticated: false, lastError: 'Authentication failed' });
       manualDisconnect = true;
@@ -379,6 +430,10 @@ export async function disconnectRelay() {
 }
 
 export function initRemoteRelayListener() {
+  configureControlStateSink((state) => {
+    sendControlStateMessage(state);
+  });
+
   configureWatchPersistenceSink({
     started(watch) {
       sendWatchPersistenceMessage({ type: 'watch_started', watch });
@@ -433,6 +488,38 @@ export function initRemoteRelayListener() {
       socket.send(JSON.stringify({ type: 'pairing_create' }));
       sendResponse({ success: true });
       return false;
+    }
+
+    if (message.type === 'brauzio_human_input') {
+      const tabId = typeof _sender.tab?.id === 'number' ? _sender.tab.id : undefined;
+      void handleHumanInput(tabId, {
+        eventType: String(message.eventType || 'input'),
+        at: Number(message.at || Date.now()),
+      })
+        .then((result) => sendResponse({ success: true, ...result }))
+        .catch((error) => sendResponse({ success: false, error: String(error) }));
+      return true;
+    }
+
+    if (message.type === 'brauzio_control_get_state') {
+      void getControlState()
+        .then((state) => sendResponse({ success: true, state }))
+        .catch((error) => sendResponse({ success: false, error: String(error) }));
+      return true;
+    }
+
+    if (message.type === 'brauzio_control_pause') {
+      void pauseAgentControl(String(message.reason || 'emergency_stop'), 'manual')
+        .then((state) => sendResponse({ success: true, state }))
+        .catch((error) => sendResponse({ success: false, error: String(error) }));
+      return true;
+    }
+
+    if (message.type === 'brauzio_control_resume') {
+      void resumeAgentControl('manual')
+        .then((state) => sendResponse({ success: true, state }))
+        .catch((error) => sendResponse({ success: false, error: String(error) }));
+      return true;
     }
 
     if (message.type === 'brauzio_relay_connect') {
