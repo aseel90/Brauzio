@@ -1,7 +1,6 @@
 import { createErrorResponse, ToolResult } from '@/common/tool-handler';
 import { BaseBrowserToolExecutor } from '../base-browser';
 import { TOOL_NAMES } from 'brauzio-shared';
-import { captureFrameOnAction, isAutoCaptureActive } from './gif-recorder';
 
 // Default window dimensions
 const DEFAULT_WINDOW_WIDTH = 1280;
@@ -24,19 +23,6 @@ interface NavigateToolParams {
 class NavigateTool extends BaseBrowserToolExecutor {
   name = TOOL_NAMES.BROWSER.NAVIGATE;
 
-  /**
-   * Trigger GIF auto-capture after successful navigation
-   */
-  private async triggerAutoCapture(tabId: number, url?: string): Promise<void> {
-    if (!isAutoCaptureActive(tabId)) {
-      return;
-    }
-    try {
-      await captureFrameOnAction(tabId, { type: 'navigate', url });
-    } catch (error) {
-      console.warn('[NavigateTool] Auto-capture failed:', error);
-    }
-  }
 
   async execute(args: NavigateToolParams): Promise<ToolResult> {
     const {
@@ -69,9 +55,6 @@ class NavigateTool extends BaseBrowserToolExecutor {
 
         // Get updated tab information
         const updatedTab = await chrome.tabs.get(targetTab.id);
-
-        // Trigger auto-capture on refresh
-        await this.triggerAutoCapture(updatedTab.id!, updatedTab.url);
 
         return {
           content: [
@@ -118,9 +101,6 @@ class NavigateTool extends BaseBrowserToolExecutor {
         }
 
         const updatedTab = await chrome.tabs.get(targetTab.id);
-
-        // Trigger auto-capture on history navigation
-        await this.triggerAutoCapture(updatedTab.id!, updatedTab.url);
 
         return {
           content: [
@@ -270,9 +250,6 @@ class NavigateTool extends BaseBrowserToolExecutor {
         // Get updated tab information and return it
         const updatedTab = await chrome.tabs.get(existingTab.id);
 
-        // Trigger auto-capture on existing tab activation
-        await this.triggerAutoCapture(updatedTab.id!, updatedTab.url);
-
         return {
           content: [
             {
@@ -310,7 +287,6 @@ class NavigateTool extends BaseBrowserToolExecutor {
           // Trigger auto-capture if the new window has a tab
           const firstTab = newWindow.tabs?.[0];
           if (firstTab?.id) {
-            await this.triggerAutoCapture(firstTab.id, firstTab.url);
           }
 
           return {
@@ -362,7 +338,6 @@ class NavigateTool extends BaseBrowserToolExecutor {
 
           // Trigger auto-capture on new tab
           if (newTab.id) {
-            await this.triggerAutoCapture(newTab.id, newTab.url);
           }
 
           return {
@@ -398,7 +373,6 @@ class NavigateTool extends BaseBrowserToolExecutor {
             // Trigger auto-capture if fallback window has a tab
             const firstTab = fallbackWindow.tabs?.[0];
             if (firstTab?.id) {
-              await this.triggerAutoCapture(firstTab.id, firstTab.url);
             }
 
             return {
