@@ -1,6 +1,6 @@
 # Brauzio user-facing Chinese audit
 
-Potential user-facing CJK lines: **406**
+Potential user-facing CJK lines: **549**
 
 - `app/chrome-extension/entrypoints/popup/components/ElementMarkerManagement.vue:3` — `<h2 class="section-title">元素标注管理</h2>`
 - `app/chrome-extension/entrypoints/popup/components/ElementMarkerManagement.vue:7` — `<p class="status-label">当前页面</p>`
@@ -408,3 +408,146 @@ Potential user-facing CJK lines: **406**
 - `app/chrome-extension/entrypoints/builder/App.vue:790` — `pushToast('运行失败：${e instanceof Error ? e.message : String(e)}', 'error');`
 - `app/chrome-extension/entrypoints/builder/App.vue:852` — `saveState.value === 'saving' ? '保存中…' : saveState.value === 'saved' ? '已保存' : '',`
 - `app/chrome-extension/entrypoints/builder/index.html:6` — `<title>工作流编辑器</title>`
+- `packages/shared/src/node-specs-builtin.ts:10` — `display: { label: '导航', iconClass: 'icon-navigate', category: 'Actions' },`
+- `packages/shared/src/node-specs-builtin.ts:19` — `help: '目标地址，支持变量模板 {var}',`
+- `packages/shared/src/node-specs-builtin.ts:26` — `if (!cfg || !cfg.url || String(cfg.url).trim() === '') errs.push('URL 必填');`
+- `packages/shared/src/node-specs-builtin.ts:36` — `display: { label: '点击', iconClass: 'icon-click', category: 'Actions' },`
+- `packages/shared/src/node-specs-builtin.ts:41` — `label: '目标',`
+- `packages/shared/src/node-specs-builtin.ts:44` — `help: '选择或输入元素选择器',`
+- `packages/shared/src/node-specs-builtin.ts:48` — `label: '执行前',`
+- `packages/shared/src/node-specs-builtin.ts:51` — `{ key: 'scrollIntoView', label: '滚动到可见', type: 'boolean', default: true },`
+- `packages/shared/src/node-specs-builtin.ts:52` — `{ key: 'waitForSelector', label: '等待选择器', type: 'boolean', default: true },`
+- `packages/shared/src/node-specs-builtin.ts:57` — `label: '执行后',`
+- `packages/shared/src/node-specs-builtin.ts:60` — `{ key: 'waitForNavigation', label: '等待导航完成', type: 'boolean', default: false },`
+- `packages/shared/src/node-specs-builtin.ts:61` — `{ key: 'waitForNetworkIdle', label: '等待网络空闲', type: 'boolean', default: false },`
+- `packages/shared/src/node-specs-builtin.ts:70` — `display: { label: '双击', iconClass: 'icon-click', category: 'Actions' },`
+- `packages/shared/src/node-specs-builtin.ts:73` — `{ key: 'target', label: '目标', type: 'json', widget: 'targetlocator' },`
+- `packages/shared/src/node-specs-builtin.ts:100` — `display: { label: '填充', iconClass: 'icon-fill', category: 'Actions' },`
+- `packages/shared/src/node-specs-builtin.ts:104` — `{ key: 'value', label: '输入值', type: 'string', required: true, help: '支持 {var} 模板' },`
+- `packages/shared/src/node-specs-builtin.ts:113` — `display: { label: '键盘', iconClass: 'icon-key', category: 'Actions' },`
+- `packages/shared/src/node-specs-builtin.ts:118` — `label: '按键序列',`
+- `packages/shared/src/node-specs-builtin.ts:122` — `help: '如 Backspace Enter 或 cmd+a',`
+- `packages/shared/src/node-specs-builtin.ts:124` — `{ key: 'target', label: '焦点目标(可选)', type: 'json', widget: 'targetlocator' },`
+- `packages/shared/src/node-specs-builtin.ts:133` — `display: { label: '滚动', iconClass: 'icon-scroll', category: 'Actions' },`
+- `packages/shared/src/node-specs-builtin.ts:138` — `label: '模式',`
+- `packages/shared/src/node-specs-builtin.ts:141` — `{ label: '元素', value: 'element' },`
+- `packages/shared/src/node-specs-builtin.ts:142` — `{ label: '偏移', value: 'offset' },`
+- `packages/shared/src/node-specs-builtin.ts:143` — `{ label: '容器', value: 'container' },`
+- `packages/shared/src/node-specs-builtin.ts:147` — `{ key: 'target', label: '目标(当元素/容器)', type: 'json', widget: 'targetlocator' },`
+- `packages/shared/src/node-specs-builtin.ts:150` — `label: '偏移',`
+- `packages/shared/src/node-specs-builtin.ts:165` — `display: { label: '拖拽', iconClass: 'icon-drag', category: 'Actions' },`
+- `packages/shared/src/node-specs-builtin.ts:168` — `{ key: 'start', label: '起点', type: 'json', widget: 'targetlocator' },`
+- `packages/shared/src/node-specs-builtin.ts:169` — `{ key: 'end', label: '终点', type: 'json', widget: 'targetlocator' },`
+- `packages/shared/src/node-specs-builtin.ts:172` — `label: '路径坐标',`
+- `packages/shared/src/node-specs-builtin.ts:176` — `label: '点',`
+- `packages/shared/src/node-specs-builtin.ts:192` — `display: { label: '等待', iconClass: 'icon-wait', category: 'Actions' },`
+- `packages/shared/src/node-specs-builtin.ts:197` — `label: '条件(JSON)',`
+- `packages/shared/src/node-specs-builtin.ts:199` — `help: '如 {"sleep":1000} 或 {"text":"Hello","appear":true}',`
+- `packages/shared/src/node-specs-builtin.ts:209` — `display: { label: '断言', iconClass: 'icon-assert', category: 'Actions' },`
+- `packages/shared/src/node-specs-builtin.ts:214` — `label: '断言(JSON)',`
+- `packages/shared/src/node-specs-builtin.ts:216` — `help: '如 {"exists":"#id"} / {"visible":".btn"}',`
+- `packages/shared/src/node-specs-builtin.ts:220` — `label: '失败策略',`
+- `packages/shared/src/node-specs-builtin.ts:223` — `{ label: '停止', value: 'stop' },`
+- `packages/shared/src/node-specs-builtin.ts:224` — `{ label: '警告', value: 'warn' },`
+- `packages/shared/src/node-specs-builtin.ts:225` — `{ label: '重试', value: 'retry' },`
+- `packages/shared/src/node-specs-builtin.ts:242` — `label: '方法',`
+- `packages/shared/src/node-specs-builtin.ts:251` — `{ key: 'headers', label: '请求头(JSON)', type: 'json' },`
+- `packages/shared/src/node-specs-builtin.ts:252` — `{ key: 'body', label: '请求体(JSON)', type: 'json' },`
+- `packages/shared/src/node-specs-builtin.ts:253` — `{ key: 'formData', label: '表单(JSON)', type: 'json' },`
+- `packages/shared/src/node-specs-builtin.ts:254` — `{ key: 'saveAs', label: '保存为变量', type: 'string' },`
+- `packages/shared/src/node-specs-builtin.ts:255` — `{ key: 'assign', label: '映射(JSON)', type: 'json' },`
+- `packages/shared/src/node-specs-builtin.ts:264` — `display: { label: '提取', iconClass: 'icon-extract', category: 'Tools' },`
+- `packages/shared/src/node-specs-builtin.ts:267` — `{ key: 'selector', label: '选择器', type: 'string', widget: 'selector' },`
+- `packages/shared/src/node-specs-builtin.ts:270` — `label: '属性',`
+- `packages/shared/src/node-specs-builtin.ts:273` — `{ label: '文本(text)', value: 'text' },`
+- `packages/shared/src/node-specs-builtin.ts:274` — `{ label: '文本(textContent)', value: 'textContent' },`
+- `packages/shared/src/node-specs-builtin.ts:275` — `{ label: '自定义属性名', value: 'attr' },`
+- `packages/shared/src/node-specs-builtin.ts:278` — `{ key: 'js', label: '自定义JS', type: 'string', help: '在页面中执行并返回值' },`
+- `packages/shared/src/node-specs-builtin.ts:279` — `{ key: 'saveAs', label: '保存变量', type: 'string', required: true },`
+- `packages/shared/src/node-specs-builtin.ts:288` — `display: { label: '截图', iconClass: 'icon-screenshot', category: 'Tools' },`
+- `packages/shared/src/node-specs-builtin.ts:291` — `{ key: 'selector', label: '目标选择器', type: 'string' },`
+- `packages/shared/src/node-specs-builtin.ts:292` — `{ key: 'fullPage', label: '整页截图', type: 'boolean', default: false },`
+- `packages/shared/src/node-specs-builtin.ts:293` — `{ key: 'saveAs', label: '保存变量', type: 'string' },`
+- `packages/shared/src/node-specs-builtin.ts:302` — `display: { label: '触发事件', iconClass: 'icon-trigger', category: 'Tools' },`
+- `packages/shared/src/node-specs-builtin.ts:306` — `{ key: 'event', label: '事件类型', type: 'string', required: true },`
+- `packages/shared/src/node-specs-builtin.ts:307` — `{ key: 'bubbles', label: '冒泡', type: 'boolean', default: true },`
+- `packages/shared/src/node-specs-builtin.ts:308` — `{ key: 'cancelable', label: '可取消', type: 'boolean', default: false },`
+- `packages/shared/src/node-specs-builtin.ts:317` — `display: { label: '设置属性', iconClass: 'icon-attr', category: 'Tools' },`
+- `packages/shared/src/node-specs-builtin.ts:321` — `{ key: 'name', label: '属性名', type: 'string', required: true },`
+- `packages/shared/src/node-specs-builtin.ts:322` — `{ key: 'value', label: '属性值', type: 'string' },`
+- `packages/shared/src/node-specs-builtin.ts:323` — `{ key: 'remove', label: '移除属性', type: 'boolean', default: false },`
+- `packages/shared/src/node-specs-builtin.ts:332` — `display: { label: '循环元素', iconClass: 'icon-loop', category: 'Tools' },`
+- `packages/shared/src/node-specs-builtin.ts:335` — `{ key: 'selector', label: '选择器', type: 'string', required: true },`
+- `packages/shared/src/node-specs-builtin.ts:336` — `{ key: 'saveAs', label: '列表变量名', type: 'string', default: 'elements' },`
+- `packages/shared/src/node-specs-builtin.ts:337` — `{ key: 'itemVar', label: '项变量名', type: 'string', default: 'item' },`
+- `packages/shared/src/node-specs-builtin.ts:338` — `{ key: 'subflowId', label: '子流程ID', type: 'string', required: true },`
+- `packages/shared/src/node-specs-builtin.ts:347` — `display: { label: '切换Frame', iconClass: 'icon-frame', category: 'Tools' },`
+- `packages/shared/src/node-specs-builtin.ts:352` — `label: 'frame定位',`
+- `packages/shared/src/node-specs-builtin.ts:355` — `{ key: 'index', label: '索引', type: 'number' },`
+- `packages/shared/src/node-specs-builtin.ts:356` — `{ key: 'urlContains', label: 'URL包含', type: 'string' },`
+- `packages/shared/src/node-specs-builtin.ts:367` — `display: { label: '下载处理', iconClass: 'icon-download', category: 'Tools' },`
+- `packages/shared/src/node-specs-builtin.ts:370` — `{ key: 'filenameContains', label: '文件名包含', type: 'string' },`
+- `packages/shared/src/node-specs-builtin.ts:371` — `{ key: 'waitForComplete', label: '等待完成', type: 'boolean', default: true },`
+- `packages/shared/src/node-specs-builtin.ts:372` — `{ key: 'timeoutMs', label: '超时(ms)', type: 'number', default: 60000 },`
+- `packages/shared/src/node-specs-builtin.ts:382` — `display: { label: '脚本', iconClass: 'icon-script', category: 'Tools' },`
+- `packages/shared/src/node-specs-builtin.ts:387` — `label: '执行上下文',`
+- `packages/shared/src/node-specs-builtin.ts:395` — `{ key: 'code', label: '脚本代码', type: 'string', widget: 'code', required: true },`
+- `packages/shared/src/node-specs-builtin.ts:398` — `label: '执行时机',`
+- `packages/shared/src/node-specs-builtin.ts:416` — `display: { label: '打开标签', iconClass: 'icon-openTab', category: 'Tabs' },`
+- `packages/shared/src/node-specs-builtin.ts:420` — `{ key: 'newWindow', label: '新窗口', type: 'boolean', default: false },`
+- `packages/shared/src/node-specs-builtin.ts:427` — `display: { label: '执行子流程', iconClass: 'icon-exec', category: 'Flow' },`
+- `packages/shared/src/node-specs-builtin.ts:430` — `{ key: 'flowId', label: '流程ID', type: 'string', required: true },`
+- `packages/shared/src/node-specs-builtin.ts:431` — `{ key: 'inline', label: '内联执行', type: 'boolean', default: false },`
+- `packages/shared/src/node-specs-builtin.ts:432` — `{ key: 'args', label: '参数(JSON)', type: 'json' },`
+- `packages/shared/src/node-specs-builtin.ts:439` — `display: { label: '切换标签', iconClass: 'icon-switchTab', category: 'Tabs' },`
+- `packages/shared/src/node-specs-builtin.ts:444` — `{ key: 'titleContains', label: '标题包含', type: 'string' },`
+- `packages/shared/src/node-specs-builtin.ts:451` — `display: { label: '关闭标签', iconClass: 'icon-closeTab', category: 'Tabs' },`
+- `packages/shared/src/node-specs-builtin.ts:469` — `display: { label: '条件', iconClass: 'icon-if', category: 'Logic' },`
+- `packages/shared/src/node-specs-builtin.ts:474` — `label: '条件表达式(JSON)',`
+- `packages/shared/src/node-specs-builtin.ts:476` — `help: '如 {"expression":"vars.a>0"} 等',`
+- `packages/shared/src/node-specs-builtin.ts:480` — `label: '分支',`
+- `packages/shared/src/node-specs-builtin.ts:488` — `{ key: 'name', label: '名称', type: 'string' },`
+- `packages/shared/src/node-specs-builtin.ts:489` — `{ key: 'expr', label: '表达式', type: 'string' },`
+- `packages/shared/src/node-specs-builtin.ts:493` — `{ key: 'else', label: '启用 else', type: 'boolean', default: true },`
+- `packages/shared/src/node-specs-builtin.ts:500` — `display: { label: '循环', iconClass: 'icon-foreach', category: 'Logic' },`
+- `packages/shared/src/node-specs-builtin.ts:503` — `{ key: 'listVar', label: '列表变量', type: 'string', required: true },`
+- `packages/shared/src/node-specs-builtin.ts:504` — `{ key: 'itemVar', label: '项变量', type: 'string', default: 'item' },`
+- `packages/shared/src/node-specs-builtin.ts:508` — `label: '并发数',`
+- `packages/shared/src/node-specs-builtin.ts:511` — `help: '并发执行子流程（浅拷贝变量，不自动合并）',`
+- `packages/shared/src/node-specs-builtin.ts:519` — `display: { label: '循环', iconClass: 'icon-while', category: 'Logic' },`
+- `packages/shared/src/node-specs-builtin.ts:522` — `{ key: 'condition', label: '条件(JSON)', type: 'json' },`
+- `packages/shared/src/node-specs-builtin.ts:524` — `{ key: 'maxIterations', label: '最大次数', type: 'number', default: 100 },`
+- `packages/shared/src/node-specs-builtin.ts:533` — `display: { label: '延迟', iconClass: 'icon-delay', category: 'Actions' },`
+- `packages/shared/src/node-specs-builtin.ts:538` — `label: '延迟',`
+- `packages/shared/src/node-specs-builtin.ts:552` — `display: { label: '触发器', iconClass: 'icon-trigger', category: 'Flow' },`
+- `packages/shared/src/node-specs-builtin.ts:555` — `{ key: 'enabled', label: '启用', type: 'boolean', default: true },`
+- `packages/shared/src/node-specs-builtin.ts:556` — `{ key: 'description', label: '描述', type: 'string' },`
+- `packages/shared/src/node-specs-builtin.ts:562` — `{ key: 'manual', label: '手动', type: 'boolean', default: true },`
+- `packages/shared/src/node-specs-builtin.ts:563` — `{ key: 'url', label: 'URL 触发', type: 'boolean', default: false },`
+- `packages/shared/src/node-specs-builtin.ts:564` — `{ key: 'contextMenu', label: '右键菜单', type: 'boolean', default: false },`
+- `packages/shared/src/node-specs-builtin.ts:565` — `{ key: 'command', label: '快捷键', type: 'boolean', default: false },`
+- `packages/shared/src/node-specs-builtin.ts:566` — `{ key: 'dom', label: 'DOM 事件', type: 'boolean', default: false },`
+- `packages/shared/src/node-specs-builtin.ts:567` — `{ key: 'schedule', label: '定时', type: 'boolean', default: false },`
+- `packages/shared/src/node-specs-builtin.ts:572` — `label: 'URL 规则',`
+- `packages/shared/src/node-specs-builtin.ts:577` — `label: '规则列表',`
+- `packages/shared/src/node-specs-builtin.ts:581` — `label: '规则',`
+- `packages/shared/src/node-specs-builtin.ts:586` — `label: '类型',`
+- `packages/shared/src/node-specs-builtin.ts:590` — `{ label: '域名', value: 'domain' },`
+- `packages/shared/src/node-specs-builtin.ts:591` — `{ label: '路径', value: 'path' },`
+- `packages/shared/src/node-specs-builtin.ts:595` — `{ key: 'value', label: '值', type: 'string' },`
+- `packages/shared/src/node-specs-builtin.ts:603` — `label: '右键菜单',`
+- `packages/shared/src/node-specs-builtin.ts:606` — `{ key: 'title', label: '标题', type: 'string', default: '运行工作流' },`
+- `packages/shared/src/node-specs-builtin.ts:607` — `{ key: 'enabled', label: '启用', type: 'boolean', default: false },`
+- `packages/shared/src/node-specs-builtin.ts:612` — `label: '快捷键',`
+- `packages/shared/src/node-specs-builtin.ts:615` — `{ key: 'commandKey', label: '快捷键', type: 'string' },`
+- `packages/shared/src/node-specs-builtin.ts:621` — `label: 'DOM 事件',`
+- `packages/shared/src/node-specs-builtin.ts:624` — `{ key: 'selector', label: '选择器', type: 'string' },`
+- `packages/shared/src/node-specs-builtin.ts:625` — `{ key: 'appear', label: '出现', type: 'boolean', default: true },`
+- `packages/shared/src/node-specs-builtin.ts:626` — `{ key: 'once', label: '一次', type: 'boolean', default: true },`
+- `packages/shared/src/node-specs-builtin.ts:627` — `{ key: 'debounceMs', label: '防抖(ms)', type: 'number', default: 800 },`
+- `packages/shared/src/node-specs-builtin.ts:633` — `label: '定时',`
+- `packages/shared/src/node-specs-builtin.ts:637` — `label: '计划',`
+- `packages/shared/src/node-specs-builtin.ts:646` — `{ label: '一次', value: 'once' },`
+- `packages/shared/src/node-specs-builtin.ts:647` — `{ label: '间隔', value: 'interval' },`
+- `packages/shared/src/node-specs-builtin.ts:648` — `{ label: '每日', value: 'daily' },`
+- `packages/shared/src/node-specs-builtin.ts:651` — `{ key: 'when', label: '时间(ISO/cron)', type: 'string' },`
