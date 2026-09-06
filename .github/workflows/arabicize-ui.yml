@@ -4,7 +4,7 @@ on:
   push:
     paths:
       - '.github/workflows/arabicize-ui.yml'
-      - 'scripts/arabicize_ui.py'
+      - 'scripts/arabicize_runtime_ui.py'
   workflow_dispatch:
 
 permissions:
@@ -18,8 +18,8 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Arabicize Builder and Side Panel
-        run: python scripts/arabicize_ui.py
+      - name: Arabicize all runtime UI surfaces
+        run: python scripts/arabicize_runtime_ui.py
 
       - name: Re-audit user-facing UI
         run: python scripts/audit_ui_chinese.py
@@ -27,14 +27,14 @@ jobs:
       - name: Commit translated UI
         shell: bash
         run: |
-          git add app/chrome-extension/entrypoints docs/UI_CHINESE_STRINGS.md scripts/arabicize_ui.py
+          git add app/chrome-extension/entrypoints packages/shared/src/node-specs-builtin.ts docs/UI_CHINESE_STRINGS.md
           if git diff --cached --quiet; then
             echo "No UI translation changes."
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git commit -m "feat: Arabicize Brauzio Builder and Side Panel"
+          git commit -m "feat: Arabicize remaining Brauzio runtime UI"
           git fetch origin main
           git rebase origin/main
           git push origin HEAD:main
