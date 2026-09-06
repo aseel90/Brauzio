@@ -165,8 +165,8 @@ if (window.__WEB_FETCHER_HELPER_INITIALIZED__) {
       jsonLdArticleTypes:
         /^Article|AdvertiserContentArticle|NewsArticle|AnalysisNewsArticle|AskPublicNewsArticle|BackgroundNewsArticle|OpinionNewsArticle|ReportageNewsArticle|ReviewNewsArticle|Report|SatiricalArticle|ScholarlyArticle|MedicalScholarlyArticle|SocialMediaPosting|BlogPosting|LiveBlogPosting|DiscussionForumPosting|TechArticle|APIReference$/,
       // used to see if a node's content matches words commonly used for ad blocks or loading indicators
-      adWords: /^(ad(vertising|vertisement)?|pub(licité)?|werb(ung)?|广告|Реклама|Anuncio)$/iu,
-      loadingWords: /^((loading|正在加载|Загрузка|chargement|cargando)(…|\.\.\.)?)$/iu,
+      adWords: /^(ad(vertising|vertisement)?|pub(licité)?|werb(ung)?|Реклама|Anuncio)$/iu,
+      loadingWords: /^((loading|Загрузка|chargement|cargando)(…|\.\.\.)?)$/iu,
     },
 
     UNLIKELY_ROLES: [

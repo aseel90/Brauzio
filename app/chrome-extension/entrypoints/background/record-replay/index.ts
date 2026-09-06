@@ -399,7 +399,7 @@ async function refreshContextMenus(triggers: FlowTrigger[]) {
     try {
       await chrome.contextMenus.create({
         id,
-        title: (t as any).title || '运行工作流',
+        title: (t as any).title || 'تشغيل سير العمل',
         contexts: (t as any).contexts || ['all'],
       });
       rrContextMenuIds.add(id);

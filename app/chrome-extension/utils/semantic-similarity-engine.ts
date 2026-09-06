@@ -1606,15 +1606,15 @@ export class SemanticSimilarityEngine {
     const warmupTexts = [
       // Brauzio internal note.
       'Hello',
-      '你好',
+      'مرحبًا',
       'Test',
       // Brauzio internal note.
       'Hello world, this is a test.',
-      '你好世界，这是一个测试。',
+      'مرحبًا بالعالم، هذا اختبار.',
       'The quick brown fox jumps over the lazy dog.',
       // Brauzio internal note.
       'This is a longer text that contains multiple sentences. It helps warm up the model for various text lengths.',
-      '这是一个包含多个句子的较长文本。它有助于为各种文本长度预热模型。',
+      'هذا نص أطول يحتوي على عدة جمل. يساعد على تهيئة النموذج لأطوال نصية متنوعة.',
     ];
 
     try {
@@ -2241,17 +2241,17 @@ export class SemanticSimilarityEngine {
 
   public validateInput(text1: string, text2: string | 'valid_dummy'): void {
     if (typeof text1 !== 'string' || (text2 !== 'valid_dummy' && typeof text2 !== 'string')) {
-      throw new Error('输入必须是字符串');
+      throw new Error('يجب أن يكون الإدخال نصًا');
     }
     if (text1.trim().length === 0 || (text2 !== 'valid_dummy' && text2.trim().length === 0)) {
-      throw new Error('输入文本不能为空');
+      throw new Error('لا يمكن أن يكون نص الإدخال فارغًا');
     }
     const roughCharLimit = this.config.maxLength * 5;
     if (
       text1.length > roughCharLimit ||
       (text2 !== 'valid_dummy' && text2.length > roughCharLimit)
     ) {
-      console.warn('输入文本可能过长，将由分词器截断。');
+      console.warn('قد يكون نص الإدخال طويلًا جدًا وسيتم اقتطاعه بواسطة محلل الرموز.');
     }
   }
 
