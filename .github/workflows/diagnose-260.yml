@@ -34,6 +34,24 @@ jobs:
           LOG=CI_DIAGNOSE_260.txt
           : > "$LOG"
 
+          python - <<'PY'
+          from pathlib import Path
+          path = Path('packages/shared/src/tools.ts')
+          text = path.read_text(encoding='utf-8')
+          old = 'export const TOOL_SCHEMAS: Tool[] = ['
+          if old not in text:
+              raise SystemExit('TOOL_SCHEMAS declaration marker not found')
+          text = text.replace(old, 'export const TOOL_SCHEMAS = [', 1)
+          stripped = text.rstrip()
+          if not stripped.endswith('];'):
+              raise SystemExit('TOOL_SCHEMAS closing marker not found')
+          stripped = stripped[:-2] + '] satisfies Tool[];'
+          path.write_text(stripped + '\n', encoding='utf-8')
+          PY
+
+          printf 'Applied diagnostic type fix: TOOL_SCHEMAS uses satisfies Tool[]\n' >> "$LOG"
+          git diff -- packages/shared/src/tools.ts >> "$LOG"
+
           run_step() {
             label="$1"
             shift
@@ -54,17 +72,19 @@ jobs:
           run_step cloud_build pnpm --filter brauzio-cloud-mcp build
           run_step extension_compile pnpm --filter brauzio-extension compile
           run_step extension_build pnpm --filter brauzio-extension build
+          printf '\n__DIAGNOSTIC_RESULT__=SUCCESS\n' >> "$LOG"
 
       - name: Commit diagnostic output
         if: always()
         shell: bash
         run: |
           set -euo pipefail
+          git restore packages/shared/src/tools.ts || true
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add -f CI_DIAGNOSE_260.txt
           if git diff --cached --quiet; then
             exit 0
           fi
-          git commit -m 'diagnostics: capture Brauzio CI failure [skip ci]'
+          git commit -m 'diagnostics: capture Brauzio type-fix validation [skip ci]'
           git push
