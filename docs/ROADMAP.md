@@ -130,7 +130,7 @@ chrome_watch_stop
 
 ## متبقٍ قبل إغلاق المرحلة
 
-- [ ] Durable Object ring buffer أو مزامنة event state مع Cloudflare كي لا تضيع الحالة عند Service Worker restart/suspend.
+- [x] Durable Object ring buffer + مزامنة watch state/events مع Cloudflare، مع restore تلقائي بعد Relay/Service Worker restart.
 - [ ] ربط traceId الكامل بسياق Watch وكل event.
 - [ ] download events ضمن Event Engine الموحد.
 - [ ] اختبار Watch فعليًا على ZIP المثبت: start → action → navigation/network event → wait/read → stop.
@@ -150,19 +150,31 @@ chrome_watch_stop
 
 الشروط المخطط لها:
 
-- [ ] `document_ready`
-- [ ] `selector_exists`
-- [ ] `selector_removed`
-- [ ] `text_appears`
-- [ ] `text_disappears`
-- [ ] `url_matches`
-- [ ] `network_idle`
-- [ ] `request_finished`
+- [x] `page_loaded`
+- [x] `selector_exists`
+- [x] `selector_hidden`
+- [x] `text_appears`
+- [x] `text_disappears`
+- [x] `url_matches`
+- [x] `network_idle`
+- [x] `request_finished`
 - [ ] `download_started`
 - [ ] `console_error`
 - [ ] `dialog_opened`
 
 المبدأ: إذا تحقق الشرط بعد 280ms فلا ننتظر 5 ثوانٍ.
+
+## مكتمل في 2.3.0+
+
+- [x] `chrome_computer` يدعم `action: wait_for` بدون إضافة Tool جديدة.
+- [x] DOM waits مبنية على `MutationObserver` بدل polling.
+- [x] URL waits مبنية على `chrome.tabs.onUpdated`.
+- [x] Network waits مبنية على CDP Core V3 مع inflight request tracking.
+- [x] `network_idle` يدعم quiet window ويستثني WebSocket/EventSource/Media.
+- [x] `request_finished` ينتظر اكتمال أو فشل request المطابق.
+- [x] `wait` القديم عند انتظار النص يستخدم Smart Wait مع backward compatibility.
+- [ ] `download_started`, `console_error`, `dialog_opened` كـSmart Wait conditions مباشرة.
+- [ ] E2E على ZIP المثبت لكل condition وtimeout/cancel.
 
 ---
 
@@ -176,11 +188,16 @@ chrome_watch_stop
 chrome_cdp
 ```
 
-- [ ] allowlist للـDomains الآمنة.
-- [ ] validation للـmethod والparams.
-- [ ] حدود output وحماية من payloads كبيرة.
-- [ ] trace logging بدون أسرار.
-- [ ] Advanced Mode فقط؛ لا تستخدم بدل الأدوات اليومية البسيطة.
+- [x] allowlist للـDomains الآمنة.
+- [x] validation للـmethod والparams.
+- [x] حدود output وحماية من payloads كبيرة.
+- [ ] trace logging موحد بدون أسرار.
+- [x] Advanced Mode منطقيًا عبر allowlist؛ الأدوات اليومية تبقى المسار المفضل.
+- [x] `list_allowed` يعرض capability surface المسموح.
+- [x] `sessions` يعرض root/child CDP snapshots.
+- [x] دعم إرسال command إلى root أو child session معروف.
+- [x] حظر cookies، browser contexts، إنشاء/إغلاق targets، وnavigation الخام افتراضيًا.
+- [ ] E2E على ZIP 2.4.0 المثبت.
 
 ---
 
@@ -342,9 +359,9 @@ B⌨     TYPE
 |---:|---|---|---|
 | 1 | اعتماد Virtual Mouse V2 على ZIP النهائي | P0 | الكود مكتمل، الاختبار النهائي متبقٍ |
 | 2 | CDP Core V3 | P0 | Foundation + child sessions مكتملة، العزل/E2E متبقٍ |
-| 3 | Event Engine | P0 | Extension engine مكتمل، Cloud persistence/E2E متبقٍ |
-| 4 | Smart Wait | P0 | التالي بعد تثبيت Event persistence |
-| 5 | Raw `chrome_cdp` | P1 | لاحقًا |
+| 3 | Event Engine | P0 | Extension + Durable persistence مكتملة، E2E/trace/download متبقٍ |
+| 4 | Smart Wait | P0 | Foundation مكتملة، E2E وشروط إضافية متبقية |
+| 5 | Raw `chrome_cdp` | P1 | allowlisted implementation مكتمل، E2E/trace متبقٍ |
 | 6 | Sense → Act → Verify | P1 | لاحقًا |
 | 7 | Human Takeover + Emergency Stop | P1 | لاحقًا |
 | 8 | Actor / Observer Sessions | P1 | لاحقًا |

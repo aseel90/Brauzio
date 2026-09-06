@@ -1,5 +1,27 @@
 # Brauzio Changelog
 
+## 2026-09-06 — Extension V2.4.0 Allowlisted Raw CDP
+
+- إضافة `chrome_cdp` كواجهة CDP متقدمة واحدة بدل تضخيم Brauzio بعشرات الأدوات المتخصصة.
+- إضافة `command`, `list_allowed`, و`sessions`.
+- allowlist محددة لـAccessibility/CSS/DOM/DOMSnapshot/Emulation/Log/Network/Page/Performance/Runtime/Schema/Target.
+- حظر صريح لأوامر cookies، browser contexts، إنشاء/إغلاق targets، `Target.attachToTarget` الخام، و`Page.navigate` الخام.
+- حد params يبلغ 128 KiB، وحد output أقصى 256 KiB، وtimeout أقصى 120 ثانية.
+- النتائج تمر عبر output sanitizer وتدعم root وBrauzio child CDP sessions.
+- رفع Extension إلى `2.4.0` وCloud runtime/schema إلى `2.4.0` / `v2.4.0-2026-09-06`.
+
+## 2026-09-06 — Extension V2.3.0 Durable Watch Persistence + Smart Wait
+
+- إضافة Durable Object persistence لـ`chrome_watch_*` مع حفظ تعريفات الـWatch وring-buffer events في Cloudflare.
+- استعادة الـWatches تلقائيًا بعد Relay/Service Worker reconnect مع نفس `watchId` و`nextSequence`.
+- `watch_read` و`watch_wait` يمكنهما استخدام Durable Object state، و`watch_stop` يزامن التوقف مع الإضافة.
+- تنظيف URLs قبل persistence بإزالة credentials/query/hash لتقليل تخزين الأسرار.
+- إضافة `activeWatches` إلى BrowserSession status.
+- إضافة `action: wait_for` داخل `chrome_computer` بدل Tool جديدة.
+- Smart Wait يدعم `selector_exists`, `selector_hidden`, `text_appears`, `text_disappears`, `url_matches`, `network_idle`, `request_finished`, `page_loaded`.
+- DOM عبر MutationObserver، URL عبر tab events، Network عبر CDP Core V3.
+- مسار `wait` القديم للنص أصبح يستخدم Smart Wait مع backward compatibility.
+
 ## 2026-09-06 — Extension V2.2.0 CDP Core V3 + Event Watch Foundation
 
 - إضافة `CDPRouter` جديد فوق `chrome.debugger` مع ownership مرجعي صحيح لكل أداة أو مراقب.
