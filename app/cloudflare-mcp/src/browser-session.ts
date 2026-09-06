@@ -6,7 +6,7 @@ interface Env {
 
 interface SocketAttachment {
   authenticated: boolean;
-  deviceId?: string;
+  deviceId: string;
   extensionVersion?: string;
   connectedAt: number;
 }
@@ -21,6 +21,11 @@ interface ToolResultMessage {
   requestId: string;
   result?: unknown;
   error?: string;
+}
+
+function normalizeDeviceId(value: unknown): string {
+  const normalized = String(value || 'default').trim().slice(0, 128);
+  return normalized || 'default';
 }
 
 export class BrowserSession extends DurableObject<Env> {
@@ -39,6 +44,7 @@ export class BrowserSession extends DurableObject<Env> {
         return new Response('Expected WebSocket upgrade', { status: 426 });
       }
 
+      const expectedDeviceId = normalizeDeviceId(url.searchParams.get('device'));
       const pair = new WebSocketPair();
       const client = pair[0];
       const server = pair[1];
@@ -46,6 +52,7 @@ export class BrowserSession extends DurableObject<Env> {
       this.ctx.acceptWebSocket(server, ['browser']);
       server.serializeAttachment({
         authenticated: false,
+        deviceId: expectedDeviceId,
         connectedAt: Date.now(),
       } satisfies SocketAttachment);
 
@@ -122,25 +129,35 @@ export class BrowserSession extends DurableObject<Env> {
 
     const attachment = (ws.deserializeAttachment() || {
       authenticated: false,
+      deviceId: 'default',
       connectedAt: Date.now(),
     }) as SocketAttachment;
 
     if (payload.type === 'hello') {
-      const expected = String(this.env.BROWSER_SHARED_SECRET || '');
-      const received = String(payload.token || '');
-      const authenticated = expected.length >= 16 && received === expected;
+      const expectedSecret = String(this.env.BROWSER_SHARED_SECRET || '');
+      const receivedSecret = String(payload.token || '');
+      const claimedDeviceId = normalizeDeviceId(payload.deviceId);
+      const deviceMatches = claimedDeviceId === attachment.deviceId;
+      const authenticated =
+        expectedSecret.length >= 16 && receivedSecret === expectedSecret && deviceMatches;
 
       const next: SocketAttachment = {
         authenticated,
-        deviceId: String(payload.deviceId || 'default'),
+        deviceId: attachment.deviceId,
         extensionVersion: String(payload.extensionVersion || ''),
         connectedAt: attachment.connectedAt || Date.now(),
       };
       ws.serializeAttachment(next);
-      ws.send(JSON.stringify({ type: 'hello_ack', authenticated }));
+      ws.send(
+        JSON.stringify({
+          type: 'hello_ack',
+          authenticated,
+          deviceId: attachment.deviceId,
+        }),
+      );
 
       if (!authenticated) {
-        ws.close(1008, 'Authentication failed');
+        ws.close(1008, deviceMatches ? 'Authentication failed' : 'Device mismatch');
       }
       return;
     }
