@@ -27,10 +27,10 @@ jobs:
           node-version: 22
           cache: pnpm
 
-      - name: Remove legacy product layers
+      - name: Purge, diagnose, and persist result
         shell: bash
         run: |
-          set -euo pipefail
+          set -u
 
           rm -rf \
             app/chrome-extension/entrypoints/background/element-marker \
@@ -65,34 +65,43 @@ jobs:
             app/chrome-extension/utils/text-chunker.ts \
             app/chrome-extension/utils/vector-database.ts
 
-      - name: Install dependencies
-        run: pnpm install --no-frozen-lockfile
+          LOG=PURGE_RESULT.txt
+          : > "$LOG"
+          FAIL=0
 
-      - name: Prepare extension types
-        run: pnpm --filter brauzio-extension exec wxt prepare
+          run_step() {
+            NAME="$1"
+            shift
+            echo "===== $NAME =====" | tee -a "$LOG"
+            "$@" >> "$LOG" 2>&1
+            CODE=$?
+            echo "EXIT_CODE=$CODE" | tee -a "$LOG"
+            echo >> "$LOG"
+            if [ "$CODE" -ne 0 ]; then FAIL="$CODE"; fi
+            return 0
+          }
 
-      - name: Build shared MCP schemas
-        run: pnpm --filter brauzio-shared build
+          run_step install pnpm install --no-frozen-lockfile
+          run_step prepare pnpm --filter brauzio-extension exec wxt prepare
+          run_step shared_build pnpm --filter brauzio-shared build
+          run_step cloud_check pnpm --filter brauzio-cloud-mcp check
+          run_step extension_compile pnpm --filter brauzio-extension compile
 
-      - name: Check Cloudflare MCP
-        run: pnpm --filter brauzio-cloud-mcp check
+          if [ "$FAIL" -eq 0 ]; then
+            run_step extension_build pnpm --filter brauzio-extension build
+          else
+            echo "===== extension_build =====" >> "$LOG"
+            echo "SKIPPED_DUE_TO_PREVIOUS_FAILURE=1" >> "$LOG"
+          fi
 
-      - name: Compile extension
-        run: pnpm --filter brauzio-extension compile
+          echo "FINAL_EXIT_CODE=$FAIL" >> "$LOG"
 
-      - name: Build extension
-        run: pnpm --filter brauzio-extension build
-
-      - name: Commit verified purge
-        shell: bash
-        run: |
-          set -euo pipefail
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add -A
-          if git diff --cached --quiet; then
-            echo 'Nothing to commit.'
-            exit 0
+          if ! git diff --cached --quiet; then
+            git commit -m 'cleanup: persist Brauzio V2 purge diagnostics [skip ci]'
+            git push origin HEAD:v2-ci-probe
           fi
-          git commit -m 'cleanup: remove verified legacy Brauzio layers [skip ci]'
-          git push origin HEAD:v2-ci-probe
+
+          exit "$FAIL"
