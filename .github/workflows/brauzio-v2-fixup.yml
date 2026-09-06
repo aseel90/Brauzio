@@ -1,0 +1,59 @@
+name: Brauzio v2 Fixup
+
+on:
+  push:
+    branches:
+      - brauzio-v2-clean-ui
+    paths:
+      - '.github/workflows/brauzio-v2-fixup.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  fix:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: brauzio-v2-clean-ui
+          fetch-depth: 0
+
+      - name: Remove legacy GIF auto-capture hooks
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+
+          p = Path('app/chrome-extension/entrypoints/background/tools/browser/common.ts')
+          text = p.read_text(encoding='utf-8')
+          text = text.replace("import { captureFrameOnAction, isAutoCaptureActive } from './gif-recorder';\n", '')
+
+          text = re.sub(
+              r"\n  /\*\*\n   \* Trigger GIF auto-capture after successful navigation\n   \*/\n  private async triggerAutoCapture\(tabId: number, url\?: string\): Promise<void> \{.*?\n  \}\n",
+              "\n",
+              text,
+              count=1,
+              flags=re.S,
+          )
+
+          text = re.sub(
+              r"\n\s*// Trigger auto-capture[^\n]*\n\s*await this\.triggerAutoCapture\([^\n]*\);",
+              "",
+              text,
+          )
+          text = re.sub(r"\n\s*await this\.triggerAutoCapture\([^\n]*\);", "", text)
+
+          if 'gif-recorder' in text or 'triggerAutoCapture' in text or 'Auto-capture' in text:
+              raise RuntimeError('Legacy GIF references still remain in common.ts')
+
+          p.write_text(text, encoding='utf-8')
+          PY
+
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add app/chrome-extension/entrypoints/background/tools/browser/common.ts
+          git commit -m 'v2: remove legacy GIF auto-capture hooks [skip ci]'
+          git push origin HEAD:brauzio-v2-clean-ui
