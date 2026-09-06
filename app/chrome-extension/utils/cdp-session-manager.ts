@@ -5,4 +5,9 @@ import { cdpRouter } from './cdp-router';
 export const cdpSessionManager = cdpRouter;
 
 export { CDPRouter, cdpRouter } from './cdp-router';
-export type { CdpEventEnvelope, CdpOwnerTag, CdpSessionSnapshot } from './cdp-router';
+export type {
+  CdpChildSessionSnapshot,
+  CdpEventEnvelope,
+  CdpOwnerTag,
+  CdpSessionSnapshot,
+} from './cdp-router';
