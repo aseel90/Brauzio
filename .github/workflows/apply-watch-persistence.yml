@@ -1,4 +1,4 @@
-name: Apply Brauzio Watch Persistence
+name: Apply Brauzio Smart Wait
 
 on:
   push:
@@ -18,16 +18,11 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Rebuild persistence patch
+      - name: Apply Smart Wait wiring
         shell: bash
         run: |
           set -euo pipefail
-          cat scripts/.brauzio-persistence.part0 \
-              scripts/.brauzio-persistence.part1 \
-              scripts/.brauzio-persistence.part2 \
-              scripts/.brauzio-persistence.part3 \
-              scripts/.brauzio-persistence.part4 > /tmp/apply-watch-persistence.py
-          python /tmp/apply-watch-persistence.py
+          python scripts/.brauzio-smartwait.py
           git diff --check
 
       - name: Setup Node
@@ -55,19 +50,18 @@ jobs:
       - name: Build extension
         run: pnpm --filter brauzio-extension build
 
-      - name: Commit validated persistence layer
+      - name: Commit validated Smart Wait wiring
         shell: bash
         run: |
           set -euo pipefail
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add \
-            app/cloudflare-mcp/src/browser-session.ts \
-            app/chrome-extension/entrypoints/background/tools/browser/watch.ts \
-            app/chrome-extension/entrypoints/background/remote-relay.ts
+            app/chrome-extension/entrypoints/background/tools/browser/computer.ts \
+            packages/shared/src/tools.ts
           if git diff --cached --quiet; then
-            echo 'Persistence patch already applied.'
+            echo 'Smart Wait wiring already applied.'
             exit 0
           fi
-          git commit -m 'Persist Brauzio event watches across relay restarts'
+          git commit -m 'Wire Smart Wait into chrome_computer'
           git push
