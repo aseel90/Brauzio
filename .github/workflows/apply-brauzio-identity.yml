@@ -46,6 +46,9 @@ jobs:
           set -euo pipefail
           git config user.name 'aseel-salah'
           git config user.email 'salahabujaafar@gmail.com'
+          # Workflow files are maintained explicitly through the GitHub connector.
+          # Keep this automation focused on product/source identity assets.
+          git restore .github/workflows || true
           git add -A
           if git diff --cached --quiet; then
             echo 'No identity changes to commit.'
