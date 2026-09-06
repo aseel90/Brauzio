@@ -34,6 +34,13 @@ function normalizeDeviceId(value: unknown): string {
   return normalized || 'default';
 }
 
+function validTraceId(value: unknown): string | null {
+  const candidate = typeof value === 'string' ? value.trim() : '';
+  return /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(candidate)
+    ? candidate
+    : null;
+}
+
 export class BrowserSession extends DurableObject<Env> {
   private pending = new Map<string, PendingCall>();
 
@@ -84,19 +91,34 @@ export class BrowserSession extends DurableObject<Env> {
         name?: string;
         args?: Record<string, unknown>;
         timeoutMs?: number;
+        traceId?: string;
       };
       if (!body.name) return Response.json({ error: 'Missing tool name' }, { status: 400 });
 
-      const requestId = crypto.randomUUID();
+      const requestId = validTraceId(body.traceId) || crypto.randomUUID();
       const startedAt = Date.now();
-      sessionLog('CALL_RECEIVED', { requestId, name: body.name, authenticatedSockets: this.authenticatedSockets().length });
+      sessionLog('CALL_RECEIVED', {
+        requestId,
+        name: body.name,
+        authenticatedSockets: this.authenticatedSockets().length,
+      });
       const timeoutMs = Math.min(Math.max(Number(body.timeoutMs || 120_000), 1_000), 180_000);
 
       return new Promise<Response>((resolve) => {
         const timer = setTimeout(() => {
           this.pending.delete(requestId);
-          sessionLog('CALL_TIMEOUT', { requestId, name: body.name, timeoutMs, durationMs: Date.now() - startedAt });
-          resolve(Response.json({ error: `Tool call timed out after ${timeoutMs}ms (traceId: ${requestId})` }, { status: 504 }));
+          sessionLog('CALL_TIMEOUT', {
+            requestId,
+            name: body.name,
+            timeoutMs,
+            durationMs: Date.now() - startedAt,
+          });
+          resolve(
+            Response.json(
+              { error: `Tool call timed out after ${timeoutMs}ms (traceId: ${requestId})` },
+              { status: 504 },
+            ),
+          );
         }, timeoutMs);
 
         this.pending.set(requestId, { resolve, timer, name: body.name!, startedAt });
@@ -112,7 +134,11 @@ export class BrowserSession extends DurableObject<Env> {
           );
           sessionLog('CALL_SENT_TO_BROWSER', { requestId, name: body.name });
         } catch (error) {
-          sessionLog('CALL_SEND_FAILED', { requestId, name: body.name, error: error instanceof Error ? error.message : String(error) });
+          sessionLog('CALL_SEND_FAILED', {
+            requestId,
+            name: body.name,
+            error: error instanceof Error ? error.message : String(error),
+          });
           clearTimeout(timer);
           this.pending.delete(requestId);
           resolve(
@@ -160,7 +186,11 @@ export class BrowserSession extends DurableObject<Env> {
         connectedAt: attachment.connectedAt || Date.now(),
       };
       ws.serializeAttachment(next);
-      sessionLog('HELLO', { deviceId: attachment.deviceId, authenticated, extensionVersion: next.extensionVersion || '' });
+      sessionLog('HELLO', {
+        deviceId: attachment.deviceId,
+        authenticated,
+        extensionVersion: next.extensionVersion || '',
+      });
       ws.send(
         JSON.stringify({
           type: 'hello_ack',
@@ -216,7 +246,12 @@ export class BrowserSession extends DurableObject<Env> {
     if (!pending) return;
 
     clearTimeout(pending.timer);
-    sessionLog(message.error ? 'RESULT_ERROR' : 'RESULT_OK', { requestId: message.requestId, name: pending.name, durationMs: Date.now() - pending.startedAt, error: message.error || undefined });
+    sessionLog(message.error ? 'RESULT_ERROR' : 'RESULT_OK', {
+      requestId: message.requestId,
+      name: pending.name,
+      durationMs: Date.now() - pending.startedAt,
+      error: message.error || undefined,
+    });
     this.pending.delete(message.requestId);
 
     if (message.error) {
