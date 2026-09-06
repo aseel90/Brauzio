@@ -97,3 +97,7 @@ mcp-chrome-bridge
 Native Messaging bridge
 cloudflared tunnel
 ```
+
+### خطأ `form-action 'self'` في صفحة OAuth
+
+إذا ظهرت رسالة Console تقول إن إرسال `/authorize?...` محظور بواسطة `Content-Security-Policy`، فهذا كان خطأ في Brauzio Cloud 2.1.1 وليس في Pairing Code. تم إصلاحه في Cloud 2.1.2 بجعل نموذج التفويض و`form-action` يشيران صراحةً إلى نفس أصل Worker. لا تحتاج إعادة تثبيت الإضافة.
