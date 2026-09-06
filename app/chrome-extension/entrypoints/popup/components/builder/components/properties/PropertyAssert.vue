@@ -10,7 +10,7 @@
       ></textarea>
     </div>
     <div class="form-group">
-      <label class="form-label">فشل策略</label>
+      <label class="form-label">سياسة الفشل</label>
       <select class="form-select" v-model="(node as any).config.failStrategy">
         <option value="stop">stop</option>
         <option value="warn">warn</option>

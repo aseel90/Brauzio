@@ -12,7 +12,7 @@
       :class="{ 'navigator-trigger-active': isOpen }"
       @click="handleTriggerClick"
       @dblclick="resetToDefault"
-      title="切换الصفحة（可سحب وإفلات移动，双击重置位置）"
+      title="切换الصفحة（可سحب وإفلات移动，نقر مزدوج重置位置）"
     >
       <svg
         class="navigator-icon"

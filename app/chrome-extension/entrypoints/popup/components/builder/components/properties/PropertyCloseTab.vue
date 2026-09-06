@@ -1,8 +1,8 @@
 <template>
   <div class="form-section">
     <div class="form-group">
-      <label class="form-label">按 URL 关闭（اختياري）</label>
-      <input class="form-input" v-model="(node as any).config.url" placeholder="子串مطابقة URL" />
+      <label class="form-label">إغلاق حسب URL (اختياري)</label>
+      <input class="form-input" v-model="(node as any).config.url" placeholder="مطابقة جزء من URL" />
     </div>
     <div class="form-group">
       <label class="form-label">معرفات علامات التبويب (مصفوفة JSON، اختياري)</label>

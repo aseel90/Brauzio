@@ -522,11 +522,11 @@ function getRunStatusText(run: RunLite): string {
   if (run.status) {
     const statusMap: Record<string, string> = {
       queued: 'في قائمة الانتظار',
-      running: 'تشغيل中',
-      paused: 'تم暂停',
+      running: 'قيد التشغيل',
+      paused: 'متوقف مؤقتًا',
       succeeded: 'نجح',
       failed: 'فشل',
-      canceled: 'تم取消',
+      canceled: 'ملغي',
     };
     return statusMap[run.status] || run.status;
   }

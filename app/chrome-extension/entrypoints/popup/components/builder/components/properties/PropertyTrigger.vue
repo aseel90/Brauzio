@@ -7,7 +7,7 @@
     </div>
     <div class="form-group">
       <label class="form-label">الوصف（اختياري）</label>
-      <input class="form-input" v-model="cfg.description" placeholder="说明此مشغّل的用途" />
+      <input class="form-input" v-model="cfg.description" placeholder="اشرح وظيفة هذا المشغّل" />
     </div>
   </div>
 
@@ -43,13 +43,13 @@
       <div v-for="(r, i) in urlRules" :key="i" class="selector-item">
         <select class="form-select-sm" v-model="r.kind">
           <option value="url">بادئة URL</option>
-          <option value="domain">النطاق包含</option>
+          <option value="domain">يحتوي النطاق على</option>
           <option value="path">بادئة المسار</option>
         </select>
         <input
           class="form-input-sm flex-1"
           v-model="r.value"
-          placeholder="例如 https://example.com/app"
+          placeholder="مثال: https://example.com/app"
         />
         <button class="btn-icon-sm" @click="move(urlRules, i, -1)" :disabled="i === 0">↑</button>
         <button
@@ -68,7 +68,7 @@
     <div class="section-title">القائمة السياقية</div>
     <div class="form-group">
       <label class="form-label">العنوان</label>
-      <input class="form-input" v-model="cfg.contextMenu.title" placeholder="菜单العنوان" />
+      <input class="form-input" v-model="cfg.contextMenu.title" placeholder="عنوان القائمة" />
     </div>
     <div class="form-group">
       <label class="form-label">نطاق التطبيق</label>
@@ -83,11 +83,11 @@
   <div v-if="cfg.modes.command" class="form-section">
     <div class="section-title">اختصار لوحة المفاتيح</div>
     <div class="form-group">
-      <label class="form-label">命令键（يجب预先在 manifest commands 中声明）</label>
+      <label class="form-label">مفتاح الأمر (يجب تعريفه مسبقًا في manifest commands)</label>
       <input
         class="form-input"
         v-model="cfg.command.commandKey"
-        placeholder="例如 run_quick_trigger_1"
+        placeholder="مثال: run_quick_trigger_1"
       />
     </div>
     <div class="text-xs text-slate-500" style="padding: 0 20px"

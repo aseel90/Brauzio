@@ -75,7 +75,7 @@ function stopInterval(): void {
   }
 }
 
-// 监听تشغيلالحالة变化 - 只在الحالة真正变化时才处理
+// 监听تشغيلالحالة变化 - 只在الحالةصحيح正变化时才处理
 watch(isRunning, (running) => {
   // 只在从非تشغيل变为تشغيل时，才重新生成文案并启动جدولة器
   if (running && !wasRunning) {

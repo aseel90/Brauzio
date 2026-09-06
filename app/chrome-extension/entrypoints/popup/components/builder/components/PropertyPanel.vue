@@ -796,7 +796,7 @@ watch(
   margin: 4px 0;
 }
 
-/* 空الحالة */
+/* فارغالحالة */
 .panel-empty {
   flex: 1;
   display: flex;

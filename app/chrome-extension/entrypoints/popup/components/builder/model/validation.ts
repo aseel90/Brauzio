@@ -52,7 +52,7 @@ export function validateNode(n: NodeBase): string[] {
       break;
     }
     case STEP_TYPES.SCREENSHOT: {
-      // selector 可空（الصفحة كاملة/المنطقة المرئية），不强制
+      // selector 可فارغ（الصفحة كاملة/المنطقة المرئية），不强制
       break;
     }
     case STEP_TYPES.TRIGGER_EVENT: {
@@ -89,11 +89,11 @@ export function validateNode(n: NodeBase): string[] {
       break;
     }
     case STEP_TYPES.CLOSE_TAB: {
-      // 允许空（关闭الحالي标签页），不强制
+      // 允许فارغ（关闭الحالي标签页），不强制
       break;
     }
     case STEP_TYPES.SCRIPT: {
-      // 若配置了 saveAs/assign，应توفير code
+      // 若الإعداد了 saveAs/assign，应توفير code
       const hasAssign = c?.assign && Object.keys(c.assign).length > 0;
       if ((c?.saveAs || hasAssign) && !String(c?.code || '').trim())
         errs.push('Script: تم إعداد الحفظ/الربط لكن الكود مفقود');

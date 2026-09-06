@@ -1,6 +1,6 @@
 <template>
   <div class="form-section">
-    <div class="section-title">配置</div>
+    <div class="section-title">الإعداد</div>
     <div v-for="field in schema" :key="field.key" class="form-group" :data-field="field.key">
       <label class="form-label">{{ field.label }}</label>
       <component

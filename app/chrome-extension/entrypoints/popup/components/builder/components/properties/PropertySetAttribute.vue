@@ -3,16 +3,16 @@
     <SelectorEditor :node="node" :allowPick="true" />
     <div class="form-section">
       <div class="form-group">
-        <label class="form-label">الخاصية名</label>
+        <label class="form-label">اسم الخاصية</label>
         <input
           class="form-input"
           v-model="(node as any).config.name"
-          placeholder="如 value/src/disabled 等"
+          placeholder="مثل value/src/disabled وغيرها"
         />
       </div>
       <div class="form-group">
-        <label class="form-label">الخاصية值（留空并勾选حذف则移除）</label>
-        <input class="form-input" v-model="(node as any).config.value" placeholder="الخاصية值" />
+        <label class="form-label">قيمة الخاصية（留فارغ并勾选حذف则移除）</label>
+        <input class="form-input" v-model="(node as any).config.value" placeholder="قيمة الخاصية" />
       </div>
       <div class="form-group checkbox-group">
         <label class="checkbox-label"

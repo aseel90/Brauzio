@@ -10,25 +10,25 @@
       ></textarea>
     </div>
     <div class="form-group">
-      <label class="form-label">تشغيل环境</label>
+      <label class="form-label">بيئة التنفيذ</label>
       <select class="form-select" v-model="(node as any).config.world">
         <option value="ISOLATED">ISOLATED</option>
         <option value="MAIN">MAIN</option>
       </select>
     </div>
     <div class="form-group">
-      <label class="form-label">تشغيل时机</label>
+      <label class="form-label">توقيت التنفيذ</label>
       <select class="form-select" v-model="(node as any).config.when">
         <option value="before">before</option>
         <option value="after">after</option>
       </select>
     </div>
     <div class="form-group">
-      <label class="form-label">حفظ为المتغير（اختياري）</label>
+      <label class="form-label">حفظ في متغير（اختياري）</label>
       <input class="form-input" v-model="(node as any).config.saveAs" placeholder="اسم المتغير" />
     </div>
     <div class="form-group">
-      <label class="form-label">النتيجة字段映射</label>
+      <label class="form-label">ربط حقول النتيجة</label>
       <KeyValueEditor v-model="(node as any).config.assign" />
     </div>
   </div>

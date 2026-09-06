@@ -26,7 +26,7 @@
               @change="(e: any) => insertVar(e.target.value, i)"
               :value="''"
             >
-              <option value="" disabled>插入المتغير</option>
+              <option value="" disabled>إدراج متغير</option>
               <option v-for="v in variables" :key="v.key" :value="v.key">{{ v.key }}</option>
             </select>
             <select

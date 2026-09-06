@@ -223,7 +223,7 @@ defineEmits<Emits>();
   box-shadow: none;
 }
 
-/* 响应式设计 */
+/* الاستجابة式设计 */
 @media (max-width: 420px) {
   .dialog-content {
     padding: 20px;

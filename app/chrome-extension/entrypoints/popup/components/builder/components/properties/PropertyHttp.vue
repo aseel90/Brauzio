@@ -45,7 +45,7 @@
         placeholder='{"fields":{"k":"v"},"files":[{"name":"file","fileUrl":"https://...","filename":"a.png"}]}'
       ></textarea>
       <div class="text-xs text-slate-500" style="margin-top: 6px"
-        >支持简洁数组形式：[["file","url:https://...","a.png"],["metadata","value"]]</div
+        >يدعم صيغة المصفوفة المختصرة: [["file","url:https://...","a.png"],["metadata","value"]]</div
       >
     </div>
   </div>

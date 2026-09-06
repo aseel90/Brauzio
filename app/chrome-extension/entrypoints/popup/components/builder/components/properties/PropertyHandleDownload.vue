@@ -1,7 +1,7 @@
 <template>
   <div class="form-section">
     <div class="form-group">
-      <label class="form-label">文件名包含（اختياري）</label>
+      <label class="form-label">يحتوي اسم الملف على (اختياري)</label>
       <input
         class="form-input"
         v-model="(node as any).config.filenameContains"
@@ -15,11 +15,11 @@
     <div class="form-group checkbox-group">
       <label class="checkbox-label"
         ><input type="checkbox" v-model="(node as any).config.waitForComplete" />
-        انتظار下载完成</label
+        انتظار اكتمال التنزيل</label
       >
     </div>
     <div class="form-group">
-      <label class="form-label">حفظ到المتغير</label>
+      <label class="form-label">حفظ في متغير</label>
       <input class="form-input" v-model="(node as any).config.saveAs" placeholder="افتراضي download" />
     </div>
   </div>

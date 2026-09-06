@@ -1,7 +1,7 @@
 <template>
   <div class="form-section">
     <div class="form-group">
-      <label class="form-label">列表المتغير</label>
+      <label class="form-label">متغير القائمة</label>
       <input
         class="form-input"
         v-model="(node as any).config.listVar"
@@ -9,7 +9,7 @@
       />
     </div>
     <div class="form-group">
-      <label class="form-label">تكرار项اسم المتغير</label>
+      <label class="form-label">اسم متغير عنصر التكرار</label>
       <input class="form-input" v-model="(node as any).config.itemVar" placeholder="افتراضي item" />
     </div>
     <div class="form-group">
@@ -17,9 +17,9 @@
       <input
         class="form-input"
         v-model="(node as any).config.subflowId"
-        placeholder="اختيارأو新建التدفق الفرعي"
+        placeholder="اختيارأوإنشاء تدفق فرعي"
       />
-      <button class="btn-sm" style="margin-top: 8px" @click="onCreateSubflow">新建التدفق الفرعي</button>
+      <button class="btn-sm" style="margin-top: 8px" @click="onCreateSubflow">إنشاء تدفق فرعي</button>
     </div>
   </div>
 </template>

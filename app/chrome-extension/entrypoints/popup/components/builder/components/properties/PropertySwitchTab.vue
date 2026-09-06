@@ -14,7 +14,7 @@
       <input class="form-input" v-model="(node as any).config.urlContains" placeholder="子串مطابقة" />
     </div>
     <div class="form-group" :class="{ invalid: needOne && !hasAny }">
-      <label class="form-label">العنوان包含（اختياري）</label>
+      <label class="form-label">العنوانيحتوي（اختياري）</label>
       <input
         class="form-input"
         v-model="(node as any).config.titleContains"

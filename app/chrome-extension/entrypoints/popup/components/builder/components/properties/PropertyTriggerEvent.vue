@@ -7,15 +7,15 @@
         <input
           class="form-input"
           v-model="(node as any).config.event"
-          placeholder="如 input/change/mouseover"
+          placeholder="مثل input/change/mouseover"
         />
       </div>
       <div class="form-group checkbox-group">
         <label class="checkbox-label"
-          ><input type="checkbox" v-model="(node as any).config.bubbles" /> 冒泡</label
+          ><input type="checkbox" v-model="(node as any).config.bubbles" /> Bubbling</label
         >
         <label class="checkbox-label"
-          ><input type="checkbox" v-model="(node as any).config.cancelable" /> 可取消</label
+          ><input type="checkbox" v-model="(node as any).config.cancelable" /> قابل للإلغاء</label
         >
       </div>
     </div>

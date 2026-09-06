@@ -1,8 +1,8 @@
 <template>
   <PropertyFormRenderer v-if="node && hasSpec" :node="node" :variables="variables" />
   <div v-else class="form-section">
-    <div class="section-title">غير موجودالعقدة规范</div>
-    <div class="help">该العقدة尚未توفير NodeSpec，تم回退到افتراضيالخاصية面板。</div>
+    <div class="section-title">لم يتم العثور على مواصفات العقدة</div>
+    <div class="help">لا يتوفر NodeSpec لهذه العقدة؛ تم استخدام لوحة الخصائص الافتراضية.</div>
   </div>
   <!-- 将通用字段留给外层 PropertyPanel 渲染（timeoutMs/screenshotOnFail等） -->
 </template>

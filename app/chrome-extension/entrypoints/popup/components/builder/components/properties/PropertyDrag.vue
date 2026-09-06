@@ -3,7 +3,7 @@
     <SelectorEditor :node="node" :allowPick="true" title="البدايةالمحدد" targetKey="start" />
     <SelectorEditor :node="node" :allowPick="true" title="النهايةالمحدد" targetKey="end" />
     <div class="hint">
-      <small>ملاحظة: المسار（path）通常在录制时自动生成，يدويإنشاء时可留空。</small>
+      <small>ملاحظة: المسار（path）通常在录制时自动生成，يدويإنشاء时可留فارغ。</small>
     </div>
   </div>
 </template>

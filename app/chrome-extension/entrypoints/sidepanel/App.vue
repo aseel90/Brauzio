@@ -49,7 +49,7 @@
             <input
               v-model="markerSearch"
               class="em-search-input"
-              placeholder="搜索تحديدالاسم、المحدد..."
+              placeholder="ابحث باسم التحديد أو المحدد..."
               type="text"
             />
             <button
@@ -97,7 +97,7 @@
                   <input
                     v-model="markerForm.name"
                     class="em-input"
-                    placeholder="例如: 登录按钮"
+                    placeholder="مثال:: زر تسجيل الدخول"
                     required
                   />
                 </div>
@@ -140,7 +140,7 @@
 
               <div class="em-modal-actions">
                 <button type="button" class="em-btn em-btn-ghost" @click="closeMarkerEditor">
-                  取消
+                  إلغاء
                 </button>
                 <button type="submit" class="em-btn em-btn-primary">
                   {{ editingMarkerId ? 'تحديث' : 'حفظ' }}
@@ -156,11 +156,11 @@
           <div class="em-stats-bar">
             <span class="em-stats-text">
               <template v-if="markerSearch">
-                筛选出 <strong>{{ filteredMarkers.length }}</strong> تحديدات （共
+                تمت تصفية <strong>{{ filteredMarkers.length }}</strong> تحديدات （الإجمالي
                 {{ markers.length }} 个，{{ groupedMarkers.length }} نطاقات）
               </template>
               <template v-else>
-                共 <strong>{{ markers.length }}</strong> تحديدات，
+                الإجمالي <strong>{{ markers.length }}</strong> تحديدات，
                 <strong>{{ groupedMarkers.length }}</strong> نطاقات
               </template>
             </span>
@@ -268,15 +268,15 @@
 
         <!-- No search results -->
         <div v-else-if="markers.length > 0 && filteredMarkers.length === 0" class="em-empty">
-          <p>غير موجودمطابقة的تحديد</p>
+          <p>لا توجد تحديدات مطابقة</p>
           <button class="em-btn em-btn-ghost em-empty-btn" @click="markerSearch = ''">
-            清除搜索
+            مسح البحث
           </button>
         </div>
 
         <!-- Empty state -->
         <div v-else class="em-empty">
-          <p>暂无تحديدالعنصر</p>
+          <p>لا توجد عناصر محددة حاليًا</p>
           <button class="em-btn em-btn-primary em-empty-btn" @click="openMarkerEditor()">
             إضافة تحديد
           </button>
@@ -456,7 +456,7 @@ function toggleRun(id: string) {
 async function run(id: string) {
   try {
     const result = await workflowsV3.runFlow(id);
-    if (!result) console.warn('回放فشل');
+    if (!result) console.warn('فشل إعادة التشغيل');
   } catch {}
 }
 
@@ -474,7 +474,7 @@ function createFlow() {
 
 async function remove(id: string) {
   try {
-    const ok = confirm('确认حذف该سير العمل？此操作不可恢复');
+    const ok = confirm('هل تريد حذف سير العمل؟ لا يمكن التراجع عن هذا الإجراء');
     if (!ok) return;
     await workflowsV3.deleteFlow(id);
   } catch {}
@@ -608,7 +608,7 @@ function cancelEdit() {
 
 async function deleteMarker(marker: ElementMarker) {
   try {
-    const confirmed = confirm(`确定要حذفتحديد "${marker.name}" 吗?`);
+    const confirmed = confirm(`هل تريد حذف التحديد "${marker.name}" 吗?`);
     if (!confirmed) return;
 
     const res: any = await chrome.runtime.sendMessage({

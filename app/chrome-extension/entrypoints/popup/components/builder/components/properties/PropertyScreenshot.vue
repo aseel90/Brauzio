@@ -14,11 +14,11 @@
       >
     </div>
     <div class="form-group">
-      <label class="form-label">حفظ为المتغير</label>
+      <label class="form-label">حفظ في متغير</label>
       <input
         class="form-input"
         v-model="(node as any).config.saveAs"
-        placeholder="اسم المتغير，例如 shot"
+        placeholder="اسم المتغير，مثال: shot"
       />
     </div>
   </div>

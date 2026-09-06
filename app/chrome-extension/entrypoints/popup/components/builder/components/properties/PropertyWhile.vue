@@ -14,12 +14,12 @@
       <input
         class="form-input"
         v-model="(node as any).config.subflowId"
-        placeholder="اختيارأو新建التدفق الفرعي"
+        placeholder="اختيارأوإنشاء تدفق فرعي"
       />
-      <button class="btn-sm" style="margin-top: 8px" @click="onCreateSubflow">新建التدفق الفرعي</button>
+      <button class="btn-sm" style="margin-top: 8px" @click="onCreateSubflow">إنشاء تدفق فرعي</button>
     </div>
     <div class="form-group">
-      <label class="form-label">最大迭代次数（اختياري）</label>
+      <label class="form-label">الحد الأقصى للتكرارات (اختياري)</label>
       <input
         class="form-input"
         type="number"

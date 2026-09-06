@@ -5,7 +5,7 @@
       <input class="kve-val" v-model="item.v" placeholder="مسار النتيجة (مثل data.items[0].id)" />
       <button class="mini" @click="move(i, -1)" :disabled="i === 0">↑</button>
       <button class="mini" @click="move(i, 1)" :disabled="i === rows.length - 1">↓</button>
-      <button class="mini danger" @click="remove(i)">删</button>
+      <button class="mini danger" @click="remove(i)">حذف</button>
     </div>
     <button class="mini" @click="add">إضافة ربط</button>
   </div>

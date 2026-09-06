@@ -67,7 +67,7 @@ export function registerBuiltinSpecs() {
   registerNodeSpec({
     type: STEP_TYPES.DBLCLICK,
     version: 1,
-    display: { label: '双击', iconClass: 'icon-click', category: 'Actions' },
+    display: { label: 'نقر مزدوج', iconClass: 'icon-click', category: 'Actions' },
     ports: { inputs: 1, outputs: [{ label: 'default' }] },
     schema: [
       { key: 'target', label: 'الهدف', type: 'json', widget: 'targetlocator' },
@@ -239,7 +239,7 @@ export function registerBuiltinSpecs() {
     schema: [
       {
         key: 'method',
-        label: '方法',
+        label: 'الطريقة',
         type: 'select',
         options: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'].map((m) => ({
           label: m,
@@ -304,8 +304,8 @@ export function registerBuiltinSpecs() {
     schema: [
       { key: 'target', label: 'الهدف', type: 'json', widget: 'targetlocator' },
       { key: 'event', label: 'نوع الحدث', type: 'string', required: true },
-      { key: 'bubbles', label: '冒泡', type: 'boolean', default: true },
-      { key: 'cancelable', label: '可取消', type: 'boolean', default: false },
+      { key: 'bubbles', label: 'Bubbling', type: 'boolean', default: true },
+      { key: 'cancelable', label: 'قابل للإلغاء', type: 'boolean', default: false },
     ],
     defaults: { event: '' },
   });
@@ -353,7 +353,7 @@ export function registerBuiltinSpecs() {
         type: 'object',
         fields: [
           { key: 'index', label: '索引', type: 'number' },
-          { key: 'urlContains', label: 'URL包含', type: 'string' },
+          { key: 'urlContains', label: 'URLيحتوي', type: 'string' },
         ],
       },
     ],
@@ -367,7 +367,7 @@ export function registerBuiltinSpecs() {
     display: { label: '下载处理', iconClass: 'icon-download', category: 'Tools' },
     ports: { inputs: 1, outputs: [{ label: 'default' }] },
     schema: [
-      { key: 'filenameContains', label: '文件名包含', type: 'string' },
+      { key: 'filenameContains', label: '文件名يحتوي', type: 'string' },
       { key: 'waitForComplete', label: 'انتظار完成', type: 'boolean', default: true },
       { key: 'timeoutMs', label: '超时(ms)', type: 'number', default: 60000 },
       { key: 'saveAs', label: 'حفظ变量', type: 'string' },
@@ -395,7 +395,7 @@ export function registerBuiltinSpecs() {
       { key: 'code', label: 'سكربت代码', type: 'string', widget: 'code', required: true },
       {
         key: 'when',
-        label: '执行时机',
+        label: 'توقيت التنفيذ',
         type: 'select',
         options: [
           { label: 'before', value: 'before' },
@@ -413,7 +413,7 @@ export function registerBuiltinSpecs() {
   registerNodeSpec({
     type: STEP_TYPES.OPEN_TAB,
     version: 1,
-    display: { label: '打开标签', iconClass: 'icon-openTab', category: 'Tabs' },
+    display: { label: 'فتح علامة تبويب', iconClass: 'icon-openTab', category: 'Tabs' },
     ports: { inputs: 1, outputs: [{ label: 'default' }] },
     schema: [
       { key: 'url', label: 'URL', type: 'string' },
@@ -436,19 +436,19 @@ export function registerBuiltinSpecs() {
   registerNodeSpec({
     type: STEP_TYPES.SWITCH_TAB,
     version: 1,
-    display: { label: '切换标签', iconClass: 'icon-switchTab', category: 'Tabs' },
+    display: { label: 'تبديل علامة التبويب', iconClass: 'icon-switchTab', category: 'Tabs' },
     ports: { inputs: 1, outputs: [{ label: 'default' }] },
     schema: [
       { key: 'tabId', label: 'TabId', type: 'number' },
-      { key: 'urlContains', label: 'URL包含', type: 'string' },
-      { key: 'titleContains', label: 'العنوان包含', type: 'string' },
+      { key: 'urlContains', label: 'URLيحتوي', type: 'string' },
+      { key: 'titleContains', label: 'العنوانيحتوي', type: 'string' },
     ],
     defaults: {},
   });
   registerNodeSpec({
     type: STEP_TYPES.CLOSE_TAB,
     version: 1,
-    display: { label: '关闭标签', iconClass: 'icon-closeTab', category: 'Tabs' },
+    display: { label: 'إغلاق علامة التبويب', iconClass: 'icon-closeTab', category: 'Tabs' },
     ports: { inputs: 1, outputs: [{ label: 'default' }] },
     schema: [
       {
@@ -473,7 +473,7 @@ export function registerBuiltinSpecs() {
         key: 'condition',
         label: 'الشرط表达式(JSON)',
         type: 'json',
-        help: '如 {"expression":"vars.a>0"} 等',
+        help: 'مثل {"expression":"vars.a>0"} وغيرها',
       },
       {
         key: 'branches',
@@ -521,7 +521,7 @@ export function registerBuiltinSpecs() {
     schema: [
       { key: 'condition', label: 'الشرط (JSON)', type: 'json' },
       { key: 'subflowId', label: 'سير عمل فرعي程ID', type: 'string', required: true },
-      { key: 'maxIterations', label: '最大次数', type: 'number', default: 100 },
+      { key: 'maxIterations', label: 'الحد الأقصى للمرات', type: 'number', default: 100 },
     ],
     defaults: { maxIterations: 100 },
   });

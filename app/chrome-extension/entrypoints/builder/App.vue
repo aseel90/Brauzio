@@ -2,7 +2,7 @@
   <!-- rr-theme container provides CSS variables; data-theme for light/dark -->
   <div class="builder-page rr-theme" :data-theme="theme">
     <div v-if="fallbackNotice" class="notice-top">
-      <span>تم应用回退建议：提升 {{ fallbackNotice.type }} الأولوية</span>
+      <span>تم تطبيق اقتراح الاسترداد: رفع أولوية {{ fallbackNotice.type }} الأولوية</span>
       <button class="mini" @click="undoFallbackPromotion">تراجع</button>
     </div>
 
@@ -26,7 +26,7 @@
       <div class="topbar rr-topbar backdrop-blur">
         <div class="left">
           <strong class="text-[var(--rr-text)]">{{ title }}</strong>
-          <span class="tip">سير العمل可视化编排</span>
+          <span class="tip">محرر مرئي لسير العمل</span>
         </div>
         <div class="right">
           <button class="top-btn" @click="exportFlow" title="تصدير JSON">
@@ -56,7 +56,7 @@
             استيراد
             <input type="file" accept="application/json" @change="onImport" />
           </label>
-          <button class="top-btn" @click="openRename" title="重命名سير العمل">
+          <button class="top-btn" @click="openRename" title="إعادة تسمية سير العمل">
             <svg
               width="14"
               height="14"
@@ -248,7 +248,7 @@
   <div v-if="renameVisible" class="rr-modal">
     <div class="rr-dialog small">
       <div class="rr-header">
-        <div class="title">重命名سير العمل</div>
+        <div class="title">إعادة تسمية سير العمل</div>
         <button class="close" @click="renameVisible = false">✕</button>
       </div>
       <div class="rr-body">
@@ -296,7 +296,7 @@ import PropertyPanel from '@/entrypoints/popup/components/builder/components/Pro
 import EdgePropertyPanel from '@/entrypoints/popup/components/builder/components/EdgePropertyPanel.vue';
 import TriggerPanel from '@/entrypoints/popup/components/builder/components/TriggerPanel.vue';
 
-const title = ref('سير العملتعديل器');
+const title = ref('محرر سير العمل');
 // theme state: persisted in localStorage and default to system preference
 const theme = ref<'light' | 'dark'>(
   (localStorage.getItem('rr-theme') as 'light' | 'dark' | null) ||
@@ -372,7 +372,7 @@ async function bootstrap() {
         }
       } else {
         // Flow not found - notify user and initialize empty flow
-        pushToast(`سير العمل "${q.flowId}" غير موجود，تمإنشاء新سير العمل`, 'warn');
+        pushToast(`سير العمل "${q.flowId}" غير موجود؛ تم إنشاء سير عمل جديد`, 'warn');
         initEmptyFlow();
       }
     } catch (e) {
@@ -385,13 +385,13 @@ async function bootstrap() {
 }
 
 /**
- * 初始化一个空的سير العمل
+ * 初始化一个فارغ的سير العمل
  */
 function initEmptyFlow() {
   const now = Date.now();
   const empty: FlowV2 = {
     id: `flow_${now}`,
-    name: '新建سير العمل',
+    name: 'سير عمل جديد',
     version: 1,
     steps: [],
     variables: [],
@@ -401,7 +401,7 @@ function initEmptyFlow() {
     } as any,
   } as any;
   store.initFromFlow(empty);
-  title.value = '新建سير العمل';
+  title.value = 'سير عمل جديد';
 }
 
 // Builder helpers mostly ported from modal component
@@ -527,7 +527,7 @@ function schId(flowId: string, nodeId: string, idx: number): TriggerId {
 }
 
 /**
- * 将 V2 schedule 配置转换为 cron التعبير
+ * 将 V2 schedule الإعداد转换为 cron التعبير
  * @returns cron التعبيرأو null（如果تعذر转换）
  */
 function scheduleToCron(schedule: { type?: string; when?: string }): string | null {
@@ -560,7 +560,7 @@ function scheduleToCron(schedule: { type?: string; when?: string }): string | nu
 }
 
 /**
- * 从 trigger العقدة配置同步مشغّل到 V3 存储
+ * 从 trigger العقدةالإعداد同步مشغّل到 V3 存储
  * @description V2 schedules 会转换为 V3 cron triggers
  */
 async function syncTriggersAndSchedules(flowId: string, nodes: unknown[]) {
@@ -631,12 +631,12 @@ async function syncTriggersAndSchedules(flowId: string, nodes: unknown[]) {
           const scheduleType = String(s?.type || 'unknown');
           if (scheduleType === 'once') {
             pushToast(
-              `العقدة ${n.id} 的جدولة #${i + 1}: V3 暂不支持مرة واحدة性جدولة（once），تم跳过`,
+              `العقدة ${n.id} 的جدولة #${i + 1}: V3 暂不支持مرة واحدة性جدولة（once），تم التخطي`,
               'warn',
             );
           } else {
             pushToast(
-              `العقدة ${n.id} 的جدولة #${i + 1}: تعذر转换为 cron（type=${scheduleType}），تم跳过`,
+              `العقدة ${n.id} 的جدولة #${i + 1}: تعذر التحويل إلى cron（type=${scheduleType}），تم التخطي`,
               'warn',
             );
           }
@@ -725,7 +725,7 @@ async function onImport(e: Event) {
     const candidates = extractFlowCandidates(parsed);
 
     if (!candidates.length) {
-      pushToast('استيرادفشل：غير موجودسير العمل数据', 'error');
+      pushToast('استيرادفشل：لم يتم العثور على بيانات سير العمل', 'error');
       return;
     }
 

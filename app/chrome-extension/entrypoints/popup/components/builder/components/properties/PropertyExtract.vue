@@ -13,7 +13,7 @@
       />
     </div>
     <div class="form-group">
-      <label class="form-label">自定义 JS（رجوع值）</label>
+      <label class="form-label">JavaScript مخصص (قيمة الإرجاع)</label>
       <textarea
         class="form-textarea"
         v-model="(node as any).config.js"
@@ -22,7 +22,7 @@
       ></textarea>
     </div>
     <div class="form-group" :class="{ invalid: !(node as any).config?.saveAs }">
-      <label class="form-label">حفظ为المتغير</label>
+      <label class="form-label">حفظ في متغير</label>
       <input class="form-input" v-model="(node as any).config.saveAs" placeholder="اسم المتغير" />
     </div>
   </div>
