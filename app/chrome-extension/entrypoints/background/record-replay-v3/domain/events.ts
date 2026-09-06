@@ -1,6 +1,6 @@
 /**
- * @fileoverview 事件类型定义
- * @description 定义 Record-Replay V3 中的运行事件和状态
+  * Brauzio internal note.
+  * Brauzio internal note.
  */
 
 import type { JsonObject, JsonValue, UnixMillis } from './json';
@@ -8,28 +8,28 @@ import type { EdgeLabel, FlowId, NodeId, RunId } from './ids';
 import type { RRError } from './errors';
 import type { TriggerFireContext } from './triggers';
 
-/** 取消订阅函数类型 */
+/* Brauzio internal note. */
 export type Unsubscribe = () => void;
 
-/** Run 状态 */
+/* Brauzio internal note. */
 export type RunStatus = 'queued' | 'running' | 'paused' | 'succeeded' | 'failed' | 'canceled';
 
 /**
- * 事件基础接口
- * @description 所有事件的公共字段
+  * Brauzio internal note.
+  * Brauzio internal note.
  */
 export interface EventBase {
-  /** 所属 Run ID */
+  /* Brauzio internal note. */
   runId: RunId;
-  /** 事件时间戳 */
+  /* Brauzio internal note. */
   ts: UnixMillis;
-  /** 单调递增序列号 */
+  /* Brauzio internal note. */
   seq: number;
 }
 
 /**
- * 暂停原因
- * @description 描述 Run 暂停的原因
+  * Brauzio internal note.
+  * Brauzio internal note.
  */
 export type PauseReason =
   | { kind: 'breakpoint'; nodeId: NodeId }
@@ -37,35 +37,35 @@ export type PauseReason =
   | { kind: 'command' }
   | { kind: 'policy'; nodeId: NodeId; reason: string };
 
-/** 恢复原因 */
+/* Brauzio internal note. */
 export type RecoveryReason = 'sw_restart' | 'lease_expired';
 
 /**
- * Run 事件联合类型
- * @description 所有可能的运行时事件
+  * Brauzio internal note.
+  * Brauzio internal note.
  */
 export type RunEvent =
-  // ===== Run 生命周期事件 =====
+  // Brauzio internal note.
   | (EventBase & { type: 'run.queued'; flowId: FlowId })
   | (EventBase & { type: 'run.started'; flowId: FlowId; tabId: number })
   | (EventBase & { type: 'run.paused'; reason: PauseReason; nodeId?: NodeId })
   | (EventBase & { type: 'run.resumed' })
   | (EventBase & {
       type: 'run.recovered';
-      /** 恢复原因 */
+      /* Brauzio internal note. */
       reason: RecoveryReason;
-      /** 恢复前状态 */
+      /* Brauzio internal note. */
       fromStatus: 'running' | 'paused';
-      /** 恢复后状态 */
+      /* Brauzio internal note. */
       toStatus: 'queued';
-      /** 原 ownerId（用于审计） */
+      /* Brauzio internal note. */
       prevOwnerId?: string;
     })
   | (EventBase & { type: 'run.canceled'; reason?: string })
   | (EventBase & { type: 'run.succeeded'; tookMs: number; outputs?: JsonObject })
   | (EventBase & { type: 'run.failed'; error: RRError; nodeId?: NodeId })
 
-  // ===== Node 执行事件 =====
+  // Brauzio internal note.
   | (EventBase & { type: 'node.queued'; nodeId: NodeId })
   | (EventBase & { type: 'node.started'; nodeId: NodeId; attempt: number })
   | (EventBase & {
@@ -83,7 +83,7 @@ export type RunEvent =
     })
   | (EventBase & { type: 'node.skipped'; nodeId: NodeId; reason: 'disabled' | 'unreachable' })
 
-  // ===== 变量和日志事件 =====
+  // Brauzio internal note.
   | (EventBase & {
       type: 'vars.patch';
       patch: Array<{ op: 'set' | 'delete'; name: string; value?: JsonValue }>;
@@ -96,89 +96,89 @@ export type RunEvent =
       data?: JsonValue;
     });
 
-/** Run 事件类型（从联合类型提取） */
+/* Brauzio internal note. */
 export type RunEventType = RunEvent['type'];
 
 /**
- * 分布式 Omit（保留联合类型）
+  * Brauzio internal note.
  */
 type DistributiveOmit<T, K extends keyof T> = T extends unknown ? Omit<T, K> : never;
 
 /**
- * Run 事件输入类型
- * @description seq 必须由 storage 层原子分配（通过 RunRecordV3.nextSeq）
- * ts 可选，默认为 Date.now()
+  * Brauzio internal note.
+  * Brauzio internal note.
+  * Brauzio internal note.
  */
 export type RunEventInput = DistributiveOmit<RunEvent, 'seq' | 'ts'> & {
   ts?: UnixMillis;
 };
 
-/** Run Schema 版本 */
+/* Brauzio internal note. */
 export const RUN_SCHEMA_VERSION = 3 as const;
 
 /**
- * Run 记录 V3
- * @description 存储在 IndexedDB 中的 Run 摘要记录
+  * Brauzio internal note.
+  * Brauzio internal note.
  */
 export interface RunRecordV3 {
-  /** Schema 版本 */
+  /* Brauzio internal note. */
   schemaVersion: typeof RUN_SCHEMA_VERSION;
-  /** Run 唯一标识符 */
+  /* Brauzio internal note. */
   id: RunId;
-  /** 关联的 Flow ID */
+  /* Brauzio internal note. */
   flowId: FlowId;
 
-  /** 当前状态 */
+  /* Brauzio internal note. */
   status: RunStatus;
-  /** 创建时间 */
+  /* Brauzio internal note. */
   createdAt: UnixMillis;
-  /** 最后更新时间 */
+  /* Brauzio internal note. */
   updatedAt: UnixMillis;
 
-  /** 开始执行时间 */
+  /* Brauzio internal note. */
   startedAt?: UnixMillis;
-  /** 结束时间 */
+  /* Brauzio internal note. */
   finishedAt?: UnixMillis;
-  /** 总耗时（毫秒） */
+  /* Brauzio internal note. */
   tookMs?: number;
 
-  /** 绑定的 Tab ID（每 Run 独占） */
+  /* Brauzio internal note. */
   tabId?: number;
-  /** 起始节点 ID（如果不是默认入口） */
+  /* Brauzio internal note. */
   startNodeId?: NodeId;
-  /** 当前执行节点 ID */
+  /* Brauzio internal note. */
   currentNodeId?: NodeId;
 
-  /** 当前尝试次数 */
+  /* Brauzio internal note. */
   attempt: number;
-  /** 最大尝试次数 */
+  /* Brauzio internal note. */
   maxAttempts: number;
 
-  /** 运行参数 */
+  /* Brauzio internal note. */
   args?: JsonObject;
-  /** 触发器上下文 */
+  /* Brauzio internal note. */
   trigger?: TriggerFireContext;
-  /** 调试配置 */
+  /* Brauzio internal note. */
   debug?: { breakpoints?: NodeId[]; pauseOnStart?: boolean };
 
-  /** 错误信息（如果失败） */
+  /* Brauzio internal note. */
   error?: RRError;
-  /** 输出结果 */
+  /* Brauzio internal note. */
   outputs?: JsonObject;
 
-  /** 下一个事件序列号（缓存字段） */
+  /* Brauzio internal note. */
   nextSeq: number;
 }
 
 /**
- * 判断 Run 是否已终止
+  * Brauzio internal note.
  */
 export function isTerminalStatus(status: RunStatus): boolean {
   return status === 'succeeded' || status === 'failed' || status === 'canceled';
 }
 
 /**
- * 判断 Run 是否正在执行
+  * Brauzio internal note.
  */
 export function isActiveStatus(status: RunStatus): boolean {
   return status === 'running' || status === 'paused';

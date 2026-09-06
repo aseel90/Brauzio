@@ -1,6 +1,6 @@
 /**
- * Selector Locator - 元素定位器
- * 使用选择器候选列表定位 DOM 元素
+  * Brauzio internal note.
+  * Brauzio internal note.
  */
 
 import { TOOL_MESSAGE_TYPES } from '../../common/message-types';
@@ -17,7 +17,7 @@ import {
 import { compareSelectorCandidates, withStability } from './stability';
 
 // ================================
-// 消息类型定义
+// Brauzio internal note.
 // ================================
 
 interface EnsureRefForSelectorRequest {
@@ -59,7 +59,7 @@ type VerifyFingerprintResponse =
   | { success: false; error?: string };
 
 // ================================
-// 传输层接口
+// Brauzio internal note.
 // ================================
 
 export interface SelectorLocatorTransport {
@@ -72,7 +72,7 @@ export interface SelectorLocatorTransport {
 }
 
 // ================================
-// 工具函数
+// Brauzio internal note.
 // ================================
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -213,7 +213,7 @@ function ariaToCssSelectors(role: string | undefined, name: string | undefined):
 }
 
 // ================================
-// SelectorLocator 类
+// Brauzio internal note.
 // ================================
 
 export class SelectorLocator {
@@ -262,7 +262,7 @@ export class SelectorLocator {
   }
 
   /**
-   * 验证元素是否匹配给定的指纹
+    * Brauzio internal note.
    */
   private async verifyElementFingerprint(
     tabId: number,
@@ -287,7 +287,7 @@ export class SelectorLocator {
   }
 
   /**
-   * 定位元素
+    * Brauzio internal note.
    */
   async locate(
     tabId: number,
@@ -297,13 +297,13 @@ export class SelectorLocator {
     const frameSelector = deriveFrameSelector(target);
     const allowMultiple = options.allowMultiple ?? false;
 
-    // 提取指纹验证配置
+    // Brauzio internal note.
     const fingerprintToVerify =
       options.verifyFingerprint === true && typeof target.fingerprint === 'string'
         ? target.fingerprint.trim()
         : undefined;
 
-    // 优先尝试 ref
+    // Brauzio internal note.
     if (options.preferRef && target.ref) {
       const byRef = await this.resolveRef(tabId, target.ref, options.frameId);
       if (byRef) return byRef;
@@ -321,7 +321,7 @@ export class SelectorLocator {
         const mappedFrameId = await this.mapHrefToFrameId(tabId, ensured.href);
         const resolvedFrameId = mappedFrameId ?? options.frameId;
 
-        // 指纹验证：不匹配则跳过，继续尝试其他候选
+        // Brauzio internal note.
         const fingerprintOk =
           !fingerprintToVerify ||
           (await this.verifyElementFingerprint(
@@ -340,7 +340,7 @@ export class SelectorLocator {
             selectorUsed: sel,
           };
         }
-        // 指纹不匹配，继续尝试候选选择器
+        // Brauzio internal note.
       }
     }
 
@@ -358,7 +358,7 @@ export class SelectorLocator {
       );
       if (!resolved) continue;
 
-      // 指纹验证
+      // Brauzio internal note.
       if (fingerprintToVerify) {
         const isMatch = await this.verifyElementFingerprint(
           tabId,
@@ -515,11 +515,11 @@ export class SelectorLocator {
 }
 
 // ================================
-// 工厂函数
+// Brauzio internal note.
 // ================================
 
 /**
- * 创建 Chrome 扩展的传输层
+  * Brauzio internal note.
  */
 export function createChromeSelectorLocatorTransport(): SelectorLocatorTransport {
   return {
@@ -537,7 +537,7 @@ export function createChromeSelectorLocatorTransport(): SelectorLocatorTransport
 }
 
 /**
- * 创建 Chrome 扩展的选择器定位器
+  * Brauzio internal note.
  */
 export function createChromeSelectorLocator(): SelectorLocator {
   return new SelectorLocator(createChromeSelectorLocatorTransport());

@@ -1,5 +1,5 @@
 /**
- * @fileoverview URL Trigger Handler 测试 (P4-03)
+  * Brauzio internal note.
  * @description
  * Tests for:
  * - URL matching semantics (domain, path, url prefix)

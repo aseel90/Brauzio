@@ -248,8 +248,8 @@ function createEmptyAnchors(): SnapAnchors {
  * 5. Take nearest N elements
  * 6. Extract left/center/right and top/middle/bottom anchors
  *
- * 中文说明：使用双向扫描策略，从 target 位置向两侧扩展，
- * 避免当 target 在 children 后半部分时完全扫描不到附近元素。
+  * Brauzio internal note.
+  * Brauzio internal note.
  */
 export function collectSiblingAnchors(target: Element): SnapAnchors {
   const parent = target.parentElement;
@@ -821,10 +821,10 @@ function clamp(value: number, min: number, max: number): number {
  *   - Edge align shows the corresponding margin; if filtered, fallback to opposite side
  *   - Center align shows both margins (may yield 2 labels)
  *
- * 中文说明：
- * - 当发生对齐时，显示"另一个方向"的间距
- * - lockX 是垂直对齐线，所以显示 Y 方向的间距
- * - lockY 是水平对齐线，所以显示 X 方向的间距
+  * Brauzio internal note.
+  * Brauzio internal note.
+  * Brauzio internal note.
+  * Brauzio internal note.
  */
 export function computeDistanceLabels(params: ComputeDistanceLabelsParams): DistanceLabel[] {
   const { rect, lockX, lockY, viewport, minGapPx } = params;

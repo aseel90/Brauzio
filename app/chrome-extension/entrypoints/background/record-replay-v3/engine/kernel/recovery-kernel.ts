@@ -1,10 +1,10 @@
 /**
- * @fileoverview 支持崩溃恢复的 ExecutionKernel 实现 (P3-06)
+  * Brauzio internal note.
  * @description
- * 提供 ExecutionKernel 的恢复增强实现，支持 `recover()` 方法。
- * 通过委托给 RecoveryCoordinator 实现崩溃恢复。
+  * Brauzio internal note.
+  * Brauzio internal note.
  *
- * 其他执行方法（startRun, pauseRun 等）暂未实现，将在后续阶段完成。
+  * Brauzio internal note.
  */
 
 import type { UnixMillis } from '../../domain/json';
@@ -20,28 +20,28 @@ import type { ExecutionKernel, RunStartRequest, RunStatusInfo } from './kernel';
 // ==================== Types ====================
 
 /**
- * 支持恢复的 Kernel 依赖
+  * Brauzio internal note.
  */
 export interface RecoveryEnabledKernelDeps {
-  /** 存储层 */
+  /* Brauzio internal note. */
   storage: StoragePort;
-  /** 事件总线 */
+  /* Brauzio internal note. */
   events: EventsBus;
-  /** 当前 Service Worker 的 ownerId */
+  /* Brauzio internal note. */
   ownerId: string;
-  /** 时间源 */
+  /* Brauzio internal note. */
   now?: () => UnixMillis;
-  /** 日志器 */
+  /* Brauzio internal note. */
   logger?: Pick<Console, 'debug' | 'info' | 'warn' | 'error'>;
 }
 
 // ==================== Factory ====================
 
 /**
- * 创建支持恢复的 ExecutionKernel
+  * Brauzio internal note.
  * @description
- * 此实现仅支持 `recover()` 和 `getRunStatus()` 方法。
- * 其他执行方法暂未实现，将在后续阶段完成。
+  * Brauzio internal note.
+  * Brauzio internal note.
  */
 export function createRecoveryEnabledKernel(deps: RecoveryEnabledKernelDeps): ExecutionKernel {
   const logger = deps.logger ?? console;

@@ -1,10 +1,10 @@
 /**
- * Output Sanitizer - 输出脱敏和限长工具
+  * Brauzio internal note.
  *
- * 提供对 JavaScript 执行结果的安全处理：
- * 1. 敏感信息脱敏（cookie/token/password 等）
- * 2. 输出长度限制（默认 50KB）
- * 3. 深度对象序列化
+  * Brauzio internal note.
+  * Brauzio internal note.
+  * Brauzio internal note.
+  * Brauzio internal note.
  */
 
 export const DEFAULT_MAX_OUTPUT_BYTES = 50 * 1024;
@@ -29,8 +29,8 @@ const DEFAULT_MAX_ARRAY_LENGTH = 200;
 const DEFAULT_MAX_OBJECT_KEYS = 200;
 const DEFAULT_MAX_STRING_LENGTH = 10_000;
 
-// 敏感 key 标识符（会被脱敏）
-// 参考 mcp-tools.js 的敏感 key 列表
+// Brauzio internal note.
+// Brauzio internal note.
 const SENSITIVE_KEY_MARKERS = [
   'cookie',
   'setcookie',
@@ -52,7 +52,7 @@ const SENSITIVE_KEY_MARKERS = [
   'sid',
   'csrf',
   'xsrf',
-  // 补充 mcp-tools.js 中的敏感 key
+  // Brauzio internal note.
   'credential',
   'privatekey',
   'accesskey',
@@ -61,7 +61,7 @@ const SENSITIVE_KEY_MARKERS = [
 ] as const;
 
 /**
- * 对任意值进行脱敏和限长处理
+  * Brauzio internal note.
  */
 export function sanitizeAndLimitOutput(
   value: unknown,
@@ -92,8 +92,8 @@ export function sanitizeAndLimitOutput(
 }
 
 /**
- * 对字符串进行敏感信息脱敏
- * 参考 mcp-tools.js 的脱敏逻辑，增加 Base64/Hex/cookie-query 识别
+  * Brauzio internal note.
+  * Brauzio internal note.
  */
 export function sanitizeText(text: string): { text: string; redacted: boolean } {
   let out = text;
@@ -110,25 +110,25 @@ export function sanitizeText(text: string): { text: string; redacted: boolean } 
     }
   };
 
-  // 1. 整体字符串检测（mcp-tools.js 风格）
-  // Cookie/query string 形态检测（包含 = 和 ; 或 &）
+  // Brauzio internal note.
+  // Brauzio internal note.
   if (out.includes('=') && (out.includes(';') || out.includes('&'))) {
-    // 检测 cookie 字符串
+    // Brauzio internal note.
     if (looksLikeCookieString(out)) {
       return { text: '[BLOCKED: Cookie/query string data]', redacted: true };
     }
-    // 检测 query string (key=value&key2=value2 形态)
+    // Brauzio internal note.
     if (looksLikeQueryString(out)) {
       return { text: '[BLOCKED: Cookie/query string data]', redacted: true };
     }
   }
 
-  // Base64 编码数据检测（20+ 字符的 Base64 字符串）
+  // Brauzio internal note.
   if (/^[A-Za-z0-9+/]{20,}={0,2}$/.test(out)) {
     return { text: '[BLOCKED: Base64 encoded data]', redacted: true };
   }
 
-  // Hex credential 检测（32+ 字符的纯十六进制）
+  // Brauzio internal note.
   if (/^[a-f0-9]{32,}$/i.test(out)) {
     return { text: '[BLOCKED: Hex credential]', redacted: true };
   }
@@ -136,32 +136,32 @@ export function sanitizeText(text: string): { text: string; redacted: boolean } 
   // 2. Bearer token
   replace(/\bBearer\s+([A-Za-z0-9._~+/=-]+)\b/gi, 'Bearer <redacted>');
 
-  // 3. JWT (三段式)
+  // Brauzio internal note.
   replace(/\b[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}\b/g, '<redacted_jwt>');
 
-  // 4. URL query 参数中的敏感值
+  // Brauzio internal note.
   replace(
     /(^|[?&])(access_token|refresh_token|id_token|token|api_key|apikey|password|passwd|pwd|secret|session|sid|credential|auth|oauth)=([^&#\s]+)/gi,
     (_m, p1, p2) => `${p1}${p2}=<redacted>`,
   );
 
-  // 5. Header-like 键值对
+  // Brauzio internal note.
   replace(
     /\b(authorization|cookie|set-cookie|x-api-key|api_key|apikey|password|passwd|pwd|secret|token|access_token|refresh_token|id_token|session|sid|credential|private_key|oauth)\b\s*[:=]\s*([^\s,;"']+)/gi,
     (_m, key) => `${key}=<redacted>`,
   );
 
-  // 6. 内嵌的 Base64 数据（在混合内容中）
+  // Brauzio internal note.
   replace(/\b[A-Za-z0-9+/]{40,}={0,2}\b/g, '<redacted_base64>');
 
-  // 7. 内嵌的长 Hex 字符串（可能是 API key、hash 等）
+  // Brauzio internal note.
   replace(/\b[a-f0-9]{40,}\b/gi, '<redacted_hex>');
 
   return { text: out, redacted };
 }
 
 /**
- * 检测字符串是否像 query string (key=value&key2=value2)
+  * Brauzio internal note.
  */
 function looksLikeQueryString(text: string): boolean {
   const s = (text || '').trim();
@@ -266,7 +266,7 @@ function normalizeKey(key: string): string {
 }
 
 /**
- * 检测字符串是否像 cookie 字符串 (key=value; key2=value2)
+  * Brauzio internal note.
  */
 function looksLikeCookieString(text: string): boolean {
   const s = (text || '').trim();
@@ -322,7 +322,7 @@ function truncateTextBytes(
   const suffixBytes = byteLength(suffix);
   const budget = Math.max(0, maxBytes - suffixBytes);
 
-  // 二分查找合适的截断点
+  // Brauzio internal note.
   let lo = 0;
   let hi = text.length;
 

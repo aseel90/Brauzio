@@ -1,5 +1,5 @@
 /**
- * @fileoverview 并行调度集成测试 (P3-07)
+  * Brauzio internal note.
  * @description
  * End-to-end tests for Scheduler + Queue + LeaseManager + Recovery
  * Uses real IndexedDB storage (fake-indexeddb) to verify integration.

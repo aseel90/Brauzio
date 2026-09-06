@@ -1,10 +1,10 @@
 /**
- * Element Fingerprint - 元素指纹生成和验证
+  * Brauzio internal note.
  *
- * 指纹用于元素的模糊匹配和验证，特别是在以下场景：
- * - 选择器匹配到元素后，验证是否是期望的元素
- * - HMR 后元素恢复
- * - 防止"相同选择器不同元素"的误匹配
+  * Brauzio internal note.
+  * Brauzio internal note.
+  * Brauzio internal note.
+  * Brauzio internal note.
  */
 
 // =============================================================================
@@ -37,7 +37,7 @@ export interface FingerprintOptions {
 // =============================================================================
 
 /**
- * 标准化文本内容：合并空白字符并截取
+  * Brauzio internal note.
  */
 function normalizeText(text: string, maxLength: number): string {
   return text.replace(/\s+/g, ' ').trim().slice(0, maxLength);
@@ -48,9 +48,9 @@ function normalizeText(text: string, maxLength: number): string {
 // =============================================================================
 
 /**
- * 为 DOM 元素计算结构化指纹
+  * Brauzio internal note.
  *
- * 指纹格式: `tag|id=xxx|class=a.b.c|text=xxx`
+  * Brauzio internal note.
  *
  * @example
  * ```ts
@@ -64,23 +64,23 @@ export function computeFingerprint(element: Element, options?: FingerprintOption
 
   const parts: string[] = [];
 
-  // 1. Tag name (必须)
+  // Brauzio internal note.
   const tag = element.tagName?.toLowerCase() ?? 'unknown';
   parts.push(tag);
 
-  // 2. ID (如果存在)
+  // Brauzio internal note.
   const id = element.id?.trim();
   if (id) {
     parts.push(`id=${id}`);
   }
 
-  // 3. Class names (最多 maxClasses 个)
+  // Brauzio internal note.
   const classes = Array.from(element.classList).slice(0, maxClasses);
   if (classes.length > 0) {
     parts.push(`class=${classes.join('.')}`);
   }
 
-  // 4. Text content hint (标准化后截取)
+  // Brauzio internal note.
   const text = normalizeText(element.textContent ?? '', textMaxLength);
   if (text) {
     parts.push(`text=${text}`);
@@ -90,7 +90,7 @@ export function computeFingerprint(element: Element, options?: FingerprintOption
 }
 
 /**
- * 解析指纹字符串为结构化对象
+  * Brauzio internal note.
  *
  * @example
  * ```ts
@@ -120,17 +120,17 @@ export function parseFingerprint(fingerprint: string): ElementFingerprint {
 }
 
 /**
- * 验证元素是否匹配给定的指纹
+  * Brauzio internal note.
  *
- * 验证规则：
- * - tag 必须完全匹配
- * - 如果存储的指纹有 id，当前元素的 id 必须匹配
- * - class 和 text 不强制匹配（用于计算相似度）
+  * Brauzio internal note.
+  * Brauzio internal note.
+  * Brauzio internal note.
+  * Brauzio internal note.
  *
  * @example
  * ```ts
  * const stored = computeFingerprint(element);
- * // ... 页面变化后
+  * Brauzio internal note.
  * const stillMatches = verifyFingerprint(element, stored);
  * ```
  */
@@ -138,12 +138,12 @@ export function verifyFingerprint(element: Element, fingerprint: string): boolea
   const stored = parseFingerprint(fingerprint);
   const currentTag = element.tagName?.toLowerCase() ?? 'unknown';
 
-  // Tag 必须匹配
+  // Brauzio internal note.
   if (stored.tag !== currentTag) {
     return false;
   }
 
-  // 如果存储的指纹有 id，当前元素必须有相同的 id
+  // Brauzio internal note.
   if (stored.id) {
     const currentId = element.id?.trim();
     if (stored.id !== currentId) {
@@ -155,15 +155,15 @@ export function verifyFingerprint(element: Element, fingerprint: string): boolea
 }
 
 /**
- * 计算两个指纹之间的相似度
+  * Brauzio internal note.
  *
- * @returns 相似度分数 0-1，1 表示完全匹配
+  * Brauzio internal note.
  *
  * @example
  * ```ts
  * const score = fingerprintSimilarity(fpA, fpB);
  * if (score > 0.8) {
- *   // 高度相似，可能是同一个元素
+  * Brauzio internal note.
  * }
  * ```
  */
@@ -174,17 +174,17 @@ export function fingerprintSimilarity(a: string, b: string): number {
   let score = 0;
   let weights = 0;
 
-  // Tag 匹配 (权重 0.4)
+  // Brauzio internal note.
   const tagWeight = 0.4;
   weights += tagWeight;
   if (fpA.tag === fpB.tag) {
     score += tagWeight;
   } else {
-    // Tag 不匹配，直接返回 0
+    // Brauzio internal note.
     return 0;
   }
 
-  // ID 匹配 (权重 0.3)
+  // Brauzio internal note.
   const idWeight = 0.3;
   if (fpA.id || fpB.id) {
     weights += idWeight;
@@ -193,7 +193,7 @@ export function fingerprintSimilarity(a: string, b: string): number {
     }
   }
 
-  // Class 匹配 (权重 0.2) - 使用 Jaccard 相似度
+  // Brauzio internal note.
   const classWeight = 0.2;
   if ((fpA.classes?.length ?? 0) > 0 || (fpB.classes?.length ?? 0) > 0) {
     weights += classWeight;
@@ -206,12 +206,12 @@ export function fingerprintSimilarity(a: string, b: string): number {
     }
   }
 
-  // Text 匹配 (权重 0.1) - 简单包含检查
+  // Brauzio internal note.
   const textWeight = 0.1;
   if (fpA.text || fpB.text) {
     weights += textWeight;
     if (fpA.text && fpB.text) {
-      // 检查是否有重叠
+      // Brauzio internal note.
       const textA = fpA.text.toLowerCase();
       const textB = fpB.text.toLowerCase();
       if (textA === textB) {
@@ -226,9 +226,9 @@ export function fingerprintSimilarity(a: string, b: string): number {
 }
 
 /**
- * 检查两个指纹是否表示同一个元素
+  * Brauzio internal note.
  *
- * 基于相似度阈值判断，默认阈值 0.7
+  * Brauzio internal note.
  */
 export function fingerprintMatches(
   a: string,

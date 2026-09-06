@@ -1,6 +1,6 @@
 <template>
   <div class="local-model-page">
-    <!-- رجوع按钮 -->
+    <!-- Brauzio internal note. -->
     <div class="page-header">
       <button class="back-button" @click="$emit('back')" title="العودة للرئيسية">
         <svg
@@ -19,7 +19,7 @@
     </div>
 
     <div class="page-content">
-      <!-- 语义引擎 -->
+      <!-- Brauzio internal note. -->
       <div class="section">
         <h3 class="section-title">{{ getMessage('semanticEngineLabel') }}</h3>
         <div class="semantic-engine-card">
@@ -52,7 +52,7 @@
         </div>
       </div>
 
-      <!-- Embedding模型اختيار -->
+      <!-- Brauzio internal note. -->
       <div class="section">
         <h3 class="section-title">{{ getMessage('embeddingModelLabel') }}</h3>
 
@@ -117,7 +117,7 @@
         </div>
       </div>
 
-      <!-- الفهرس数据إدارة -->
+      <!-- Brauzio internal note. -->
       <div class="section">
         <h3 class="section-title">{{ getMessage('indexDataManagementLabel') }}</h3>
         <div class="stats-grid">
@@ -181,7 +181,7 @@
         </button>
       </div>
 
-      <!-- 模型缓存إدارة -->
+      <!-- Brauzio internal note. -->
       <ModelCacheManagement
         :cache-stats="cacheStats"
         :is-managing-cache="isManagingCache"
@@ -208,12 +208,12 @@ import {
 } from './icons';
 
 interface Props {
-  // 语义引擎
+  // Brauzio internal note.
   semanticEngineStatus: 'idle' | 'initializing' | 'ready' | 'error';
   isSemanticEngineInitializing: boolean;
   semanticEngineInitProgress: string;
   semanticEngineLastUpdated: number | null;
-  // 模型
+  // Brauzio internal note.
   availableModels: Array<{
     preset: string;
     performance: string;
@@ -227,7 +227,7 @@ interface Props {
   modelInitializationStatus: string;
   modelErrorMessage: string;
   modelErrorType: string;
-  // 存储统计
+  // Brauzio internal note.
   storageStats: {
     indexedPages: number;
     totalDocuments: number;
@@ -237,7 +237,7 @@ interface Props {
   } | null;
   isClearingData: boolean;
   clearDataProgress: string;
-  // 缓存
+  // Brauzio internal note.
   cacheStats: any;
   isManagingCache: boolean;
 }
@@ -254,7 +254,7 @@ defineEmits<{
   (e: 'clearAllCache'): void;
 }>();
 
-// 计算الخاصية
+// Brauzio internal note.
 const getSemanticEngineStatusClass = () => {
   switch (props.semanticEngineStatus) {
     case 'ready':
@@ -513,7 +513,7 @@ const formatIndexSize = () => {
   cursor: not-allowed;
 }
 
-/* 模型列表 */
+/* Brauzio internal note. */
 .model-list {
   display: flex;
   flex-direction: column;
@@ -612,7 +612,7 @@ const formatIndexSize = () => {
   color: var(--ac-text-muted, #4b5563);
 }
 
-/* 统计网格 */
+/* Brauzio internal note. */
 .stats-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -669,7 +669,7 @@ const formatIndexSize = () => {
   margin: 0;
 }
 
-/* خطأ卡片 */
+/* Brauzio internal note. */
 .error-card {
   background: #fef2f2;
   border: 1px solid #fecaca;

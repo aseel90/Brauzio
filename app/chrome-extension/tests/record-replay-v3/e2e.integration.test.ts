@@ -1,11 +1,11 @@
 /**
- * @fileoverview Record-Replay V3 service-level E2E 集成测试
+  * Brauzio internal note.
  * @description
- * 验证完整的 V3 流程：RPC → enqueue → schedule → run → complete
+  * Brauzio internal note.
  *
- * 测试使用：
- * - 真实 IndexedDB 存储（fake-indexeddb）
- * - service-level RPC（直接调用内部 handler，避免 Port mock）
+  * Brauzio internal note.
+  * Brauzio internal note.
+  * Brauzio internal note.
  */
 
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
@@ -25,7 +25,7 @@ import { createV3E2EHarness, type V3E2EHarness, type RpcClient } from './v3-e2e-
 // ==================== Test Fixtures ====================
 
 /**
- * 创建测试用 Flow
+  * Brauzio internal note.
  */
 function createTestFlow(
   id: string,
@@ -45,7 +45,7 @@ function createTestFlow(
 }
 
 /**
- * 创建测试用 RunRecord
+  * Brauzio internal note.
  */
 function createRunRecord(
   runId: string,
@@ -68,7 +68,7 @@ function createRunRecord(
 }
 
 /**
- * 提取事件类型列表
+  * Brauzio internal note.
  */
 function eventTypes(events: RunEvent[], runId: string): string[] {
   return events.filter((e) => e.runId === runId).map((e) => e.type);
@@ -95,7 +95,7 @@ describe('V3 service-level E2E', () => {
 
   describe('Happy path', () => {
     it('enqueueRun → schedule → runner → succeeded', async () => {
-      // 准备 Flow
+      // Brauzio internal note.
       const flow = createTestFlow('flow-happy');
       await h.storage.flows.save(flow);
 
@@ -106,14 +106,14 @@ describe('V3 service-level E2E', () => {
       expect(result.runId).toBeDefined();
       expect(result.position).toBeGreaterThanOrEqual(1);
 
-      // 等待完成
+      // Brauzio internal note.
       const run = await h.waitForTerminal(result.runId);
       expect(run.status).toBe('succeeded');
 
-      // 等待队列项被移除
+      // Brauzio internal note.
       await h.waitForQueueItemGone(result.runId);
 
-      // 验证事件序列
+      // Brauzio internal note.
       const events = await h.listEvents(result.runId);
       const types = eventTypes(events, result.runId);
 
@@ -124,7 +124,7 @@ describe('V3 service-level E2E', () => {
       expect(types).toContain('node.succeeded');
       expect(types).toContain('run.succeeded');
 
-      // 验证事件顺序
+      // Brauzio internal note.
       expect(types.indexOf('run.queued')).toBeLessThan(types.indexOf('run.started'));
       expect(types.indexOf('run.started')).toBeLessThan(types.indexOf('run.succeeded'));
     });
@@ -156,10 +156,10 @@ describe('V3 service-level E2E', () => {
       const flow = createTestFlow('flow-stream');
       await h.storage.flows.save(flow);
 
-      // 订阅所有 Run
+      // Brauzio internal note.
       await client.call('rr_v3.subscribe');
 
-      // 入队
+      // Brauzio internal note.
       const { runId } = await client.call<{ runId: string }>('rr_v3.enqueueRun', {
         flowId: flow.id,
       });
@@ -167,7 +167,7 @@ describe('V3 service-level E2E', () => {
       await h.waitForTerminal(runId);
       await h.waitForQueueItemGone(runId);
 
-      // 验证流式推送的事件
+      // Brauzio internal note.
       const streamed = client.getStreamedEvents().filter((e) => e.runId === runId);
       const streamedTypes = streamed.map((e) => e.type);
 
@@ -182,23 +182,23 @@ describe('V3 service-level E2E', () => {
       await h.storage.flows.save(flow1);
       await h.storage.flows.save(flow2);
 
-      // 先入队 run1
+      // Brauzio internal note.
       const { runId: runId1 } = await client.call<{ runId: string }>('rr_v3.enqueueRun', {
         flowId: flow1.id,
       });
       await h.waitForTerminal(runId1);
 
-      // 订阅只接收 runId1 的事件（但 runId1 已完成）
+      // Brauzio internal note.
       await client.call('rr_v3.subscribe', { runId: runId1 });
       client.clearMessages();
 
-      // 入队 run2
+      // Brauzio internal note.
       const { runId: runId2 } = await client.call<{ runId: string }>('rr_v3.enqueueRun', {
         flowId: flow2.id,
       });
       await h.waitForTerminal(runId2);
 
-      // 应该不收到 run2 的事件
+      // Brauzio internal note.
       const streamedForRun2 = client.getStreamedEvents().filter((e) => e.runId === runId2);
       expect(streamedForRun2).toHaveLength(0);
     });
@@ -209,24 +209,24 @@ describe('V3 service-level E2E', () => {
       const flow = createTestFlow('flow-control');
       await h.storage.flows.save(flow);
 
-      // 入队时启用 pauseOnStart
+      // Brauzio internal note.
       const { runId } = await client.call<{ runId: string }>('rr_v3.enqueueRun', {
         flowId: flow.id,
         debug: { pauseOnStart: true },
       });
 
-      // 等待 run.paused 事件
+      // Brauzio internal note.
       await h.waitForEvent(runId, (e) => e.type === 'run.paused');
 
-      // 暂停 queue item
+      // Brauzio internal note.
       await client.call('rr_v3.pauseRun', { runId });
       const pausedItem = await h.storage.queue.get(runId);
       expect(pausedItem?.status).toBe('paused');
 
-      // 恢复
+      // Brauzio internal note.
       await client.call('rr_v3.resumeRun', { runId });
 
-      // 等待完成
+      // Brauzio internal note.
       const run = await h.waitForTerminal(runId);
       expect(run.status).toBe('succeeded');
       await h.waitForQueueItemGone(runId);
@@ -243,10 +243,10 @@ describe('V3 service-level E2E', () => {
 
       await h.waitForEvent(runId, (e) => e.type === 'run.paused');
 
-      // 先暂停 queue item
+      // Brauzio internal note.
       await client.call('rr_v3.pauseRun', { runId });
 
-      // 取消
+      // Brauzio internal note.
       await client.call('rr_v3.cancelRun', { runId, reason: 'E2E cancel test' });
 
       const run = await h.waitForTerminal(runId);
@@ -255,7 +255,7 @@ describe('V3 service-level E2E', () => {
     });
 
     it('cancel queued run removes it from queue', async () => {
-      // 创建一个新的 harness，不自动启动 scheduler
+      // Brauzio internal note.
       await h.dispose();
       h = createV3E2EHarness({ autoStartScheduler: false });
       client = h.createClient();
@@ -267,18 +267,18 @@ describe('V3 service-level E2E', () => {
         flowId: flow.id,
       });
 
-      // 队列中应该有这个 item
+      // Brauzio internal note.
       let item = await h.storage.queue.get(runId);
       expect(item?.status).toBe('queued');
 
-      // 取消
+      // Brauzio internal note.
       await client.call('rr_v3.cancelRun', { runId });
 
       // Queue item should be removed (queue.get returns null when not found)
       item = await h.storage.queue.get(runId);
       expect(item).toBeNull();
 
-      // Run 状态应该是 canceled
+      // Brauzio internal note.
       const run = await h.storage.runs.get(runId);
       expect(run?.status).toBe('canceled');
     });
@@ -286,7 +286,7 @@ describe('V3 service-level E2E', () => {
 
   describe('Recovery', () => {
     it('orphan running lease is requeued and run can complete', async () => {
-      // 停止当前 harness，创建新的不启动 scheduler
+      // Brauzio internal note.
       await h.dispose();
       h = createV3E2EHarness({ autoStartScheduler: false, ownerId: 'owner-new' });
       client = h.createClient();
@@ -297,11 +297,11 @@ describe('V3 service-level E2E', () => {
       const runId = 'run-orphan';
       await h.storage.runs.save(createRunRecord(runId, flow.id, 'running'));
 
-      // 创建 orphan 队列项（旧 owner 持有）
+      // Brauzio internal note.
       await h.storage.queue.enqueue({ id: runId, flowId: flow.id, priority: 0 });
       await h.storage.queue.markRunning(runId, 'owner-old', Date.now());
 
-      // 执行恢复
+      // Brauzio internal note.
       const recovery = await recoverFromCrash({
         storage: h.storage,
         events: h.events,
@@ -312,16 +312,16 @@ describe('V3 service-level E2E', () => {
 
       expect(recovery.requeuedRunning).toContain(runId);
 
-      // 队列项应该回到 queued 状态
+      // Brauzio internal note.
       const queueItemAfter = await h.storage.queue.get(runId);
       expect(queueItemAfter?.status).toBe('queued');
       expect(queueItemAfter?.lease).toBeUndefined();
 
-      // 应该有 run.recovered 事件
+      // Brauzio internal note.
       const events = await h.listEvents(runId);
       expect(events.some((e) => e.type === 'run.recovered')).toBe(true);
 
-      // 启动 scheduler，Run 应该能继续执行
+      // Brauzio internal note.
       h.scheduler.start();
 
       const run = await h.waitForTerminal(runId);
@@ -353,7 +353,7 @@ describe('V3 service-level E2E', () => {
 
       expect(recovery.adoptedPaused).toContain(runId);
 
-      // 队列项应该仍是 paused，但 owner 换成新的
+      // Brauzio internal note.
       const queueItem = await h.storage.queue.get(runId);
       expect(queueItem?.status).toBe('paused');
       expect(queueItem?.lease?.ownerId).toBe(h.ownerId);
@@ -370,7 +370,7 @@ describe('V3 service-level E2E', () => {
       const runId = 'run-completed-orphan';
       await h.storage.runs.save(createRunRecord(runId, flow.id, 'succeeded'));
 
-      // 模拟崩溃场景：Run 完成但队列项未清理
+      // Brauzio internal note.
       await h.storage.queue.enqueue({ id: runId, flowId: flow.id, priority: 0 });
       await h.storage.queue.markRunning(runId, 'owner-old', Date.now());
 
@@ -384,7 +384,7 @@ describe('V3 service-level E2E', () => {
 
       expect(recovery.cleanedTerminal).toContain(runId);
 
-      // 队列应该为空
+      // Brauzio internal note.
       const remaining = await h.storage.queue.list();
       expect(remaining).toHaveLength(0);
     });

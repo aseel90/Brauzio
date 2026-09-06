@@ -1,6 +1,6 @@
 /**
- * @fileoverview Record-Replay V3 公共 API 入口
- * @description 导出所有公共类型和接口
+  * Brauzio internal note.
+  * Brauzio internal note.
  */
 
 // ==================== Domain ====================
@@ -23,7 +23,7 @@ import { createPersistentVarsStore } from './storage/persistent-vars';
 import { createTriggersStore } from './storage/triggers';
 
 /**
- * 创建完整的 StoragePort 实现
+  * Brauzio internal note.
  */
 export function createStoragePort(): StoragePort {
   return {
@@ -38,8 +38,8 @@ export function createStoragePort(): StoragePort {
 
 // ==================== Version ====================
 
-/** V3 API 版本 */
+/* Brauzio internal note. */
 export const RR_V3_VERSION = '3.0.0' as const;
 
-/** 是否为 V3 API */
+/* Brauzio internal note. */
 export const IS_RR_V3 = true as const;

@@ -28,7 +28,7 @@
 
       <div class="divider"></div>
 
-      <!-- الخاصية表单：统一使用 NodeSpec 驱动的表单引擎渲染 -->
+      <!-- Brauzio internal note. -->
       <PropertyFromSpec
         v-if="node"
         :key="node.type + ':' + node.id"
@@ -474,7 +474,7 @@ onMounted(async () => {
     if (res && res.success) flows.value = res.flows || [];
   } catch {}
 });
-// 高亮并تمرير到指定字段
+// Brauzio internal note.
 watch(
   () => props.highlightField,
   (field) => {
@@ -518,7 +518,7 @@ watch(
   scrollbar-color: rgba(0, 0, 0, 0.25) transparent;
 }
 
-/* 头部 */
+/* Brauzio internal note. */
 .panel-header {
   padding: 12px 12px 12px 20px;
   border-bottom: 1px solid var(--rr-border);
@@ -557,7 +557,7 @@ watch(
   border-color: rgba(239, 68, 68, 0.3);
 }
 
-/* 内容区 */
+/* Brauzio internal note. */
 .panel-content {
   display: flex;
   flex-direction: column;
@@ -597,7 +597,7 @@ watch(
   color: var(--rr-text-secondary);
 }
 
-/* 表单区域 */
+/* Brauzio internal note. */
 .panel-content :deep(.form-section) {
   padding: 16px 20px;
   display: flex;
@@ -605,7 +605,7 @@ watch(
   gap: 14px;
 }
 
-/* 区域头部 */
+/* Brauzio internal note. */
 .panel-content :deep(.section-header) {
   display: flex;
   align-items: center;
@@ -618,7 +618,7 @@ watch(
   color: var(--rr-text);
 }
 
-/* 表单组 */
+/* Brauzio internal note. */
 .panel-content :deep(.form-group) {
   display: flex;
   flex-direction: column;
@@ -630,7 +630,7 @@ watch(
   color: var(--rr-text-secondary);
 }
 
-/* 表单إدخال */
+/* Brauzio internal note. */
 .panel-content :deep(.form-input),
 .panel-content :deep(.form-select),
 .panel-content :deep(.form-textarea) {
@@ -684,7 +684,7 @@ watch(
   cursor: pointer;
 }
 
-/* المحدد列表 */
+/* Brauzio internal note. */
 .panel-content :deep(.selector-list) {
   display: flex;
   flex-direction: column;
@@ -715,7 +715,7 @@ watch(
   flex: 1;
 }
 
-/* 按钮 */
+/* Brauzio internal note. */
 .panel-content :deep(.btn-sm) {
   padding: 6px 12px;
   border: 1px solid var(--rr-border);
@@ -769,13 +769,13 @@ watch(
   color: var(--rr-danger);
 }
 
-/* 分割线 */
+/* Brauzio internal note. */
 .divider {
   height: 1px;
   background: var(--rr-border);
 }
 
-/* خطأ提示 */
+/* Brauzio internal note. */
 .error-box {
   margin: 0 20px 20px;
   padding: 12px;
@@ -816,7 +816,7 @@ watch(
   line-height: 1.6;
 }
 
-/* 高亮字段 */
+/* Brauzio internal note. */
 .panel-content :where([data-field].hl) {
   outline: 2px solid var(--rr-warn);
   background: rgba(245, 158, 11, 0.08);

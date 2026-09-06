@@ -2087,7 +2087,7 @@ onUnmounted(() => {
   }
 }
 
-/* 快捷工具icon按钮样式 */
+/* Brauzio internal note. */
 .rr-icon-buttons {
   display: flex;
   gap: 12px;
@@ -2127,7 +2127,7 @@ onUnmounted(() => {
   height: 24px;
 }
 
-/* 录制按钮 - 红色 */
+/* Brauzio internal note. */
 .rr-icon-btn-record {
   background: rgba(239, 68, 68, 0.1);
   color: #ef4444;
@@ -2138,7 +2138,7 @@ onUnmounted(() => {
   color: #dc2626;
 }
 
-/* 录制中الحالة - 脉冲动画 */
+/* Brauzio internal note. */
 .rr-icon-btn-recording {
   animation: pulse-recording 1.5s ease-in-out infinite;
 }
@@ -2153,7 +2153,7 @@ onUnmounted(() => {
   }
 }
 
-/* إيقاف按钮 - 深红色 */
+/* Brauzio internal note. */
 .rr-icon-btn-stop {
   background: rgba(185, 28, 28, 0.1);
   color: #b91c1c;
@@ -2164,7 +2164,7 @@ onUnmounted(() => {
   color: #991b1b;
 }
 
-/* تعديل按钮 - 蓝色 */
+/* Brauzio internal note. */
 .rr-icon-btn-edit {
   background: rgba(37, 99, 235, 0.1);
   color: #2563eb;
@@ -2175,7 +2175,7 @@ onUnmounted(() => {
   color: #1d4ed8;
 }
 
-/* تحديد按钮 - 绿色 */
+/* Brauzio internal note. */
 .rr-icon-btn-marker {
   background: rgba(16, 185, 129, 0.1);
   color: #10b981;
@@ -2186,7 +2186,7 @@ onUnmounted(() => {
   color: #059669;
 }
 
-/* Coming Soon 按钮样式 */
+/* Brauzio internal note. */
 .rr-icon-btn-coming-soon {
   opacity: 0.5;
   cursor: default !important;
@@ -2249,14 +2249,14 @@ onUnmounted(() => {
   visibility: visible;
 }
 
-/* 首页视图 */
+/* Brauzio internal note. */
 .home-view {
   display: flex;
   flex-direction: column;
   height: 100%;
 }
 
-/* إدارة入口卡片样式 */
+/* Brauzio internal note. */
 .entry-card {
   background: var(--ac-surface, white);
   border-radius: var(--ac-radius-card, 12px);

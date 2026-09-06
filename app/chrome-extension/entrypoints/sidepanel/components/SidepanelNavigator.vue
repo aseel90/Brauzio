@@ -5,7 +5,7 @@
     :style="wrapperStyle"
     :class="{ 'navigator-dragging': isDragging }"
   >
-    <!-- 触发按钮（同时作为سحب وإفلات手柄） -->
+    <!-- Brauzio internal note. -->
     <button
       ref="triggerRef"
       class="navigator-trigger"
@@ -27,7 +27,7 @@
       </svg>
     </button>
 
-    <!-- 浮层菜单 -->
+    <!-- Brauzio internal note. -->
     <Transition name="navigator-menu">
       <div v-if="isOpen" class="navigator-overlay" @click="closeMenu">
         <div class="navigator-menu" :style="menuStyle" @click.stop>

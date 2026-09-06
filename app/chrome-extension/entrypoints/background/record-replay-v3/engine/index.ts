@@ -1,5 +1,5 @@
 /**
- * @fileoverview Engine 层导出入口
+  * Brauzio internal note.
  */
 
 // Kernel

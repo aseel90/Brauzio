@@ -75,7 +75,7 @@ withDefaults(defineProps<Props>(), {
   }
 }
 
-/* الاستجابة式设计 */
+/* Brauzio internal note. */
 @media (max-width: 420px) {
   .progress-indicator {
     padding: 12px;

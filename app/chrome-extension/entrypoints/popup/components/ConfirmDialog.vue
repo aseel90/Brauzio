@@ -223,7 +223,7 @@ defineEmits<Emits>();
   box-shadow: none;
 }
 
-/* الاستجابة式设计 */
+/* Brauzio internal note. */
 @media (max-width: 420px) {
   .dialog-content {
     padding: 20px;
@@ -271,7 +271,7 @@ defineEmits<Emits>();
   }
 }
 
-/* 焦نقطة样式 */
+/* Brauzio internal note. */
 .dialog-button:focus {
   outline: none;
   box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.3);

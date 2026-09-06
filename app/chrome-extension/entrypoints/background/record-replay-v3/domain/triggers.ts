@@ -1,12 +1,12 @@
 /**
- * @fileoverview 触发器类型定义
- * @description 定义 Record-Replay V3 中的触发器规范
+  * Brauzio internal note.
+  * Brauzio internal note.
  */
 
 import type { JsonObject, UnixMillis } from './json';
 import type { FlowId, TriggerId } from './ids';
 
-/** 触发器类型 */
+/* Brauzio internal note. */
 export type TriggerKind =
   | 'manual'
   | 'url'
@@ -18,23 +18,23 @@ export type TriggerKind =
   | 'dom';
 
 /**
- * 触发器基础接口
+  * Brauzio internal note.
  */
 export interface TriggerSpecBase {
-  /** 触发器 ID */
+  /* Brauzio internal note. */
   id: TriggerId;
-  /** 触发器类型 */
+  /* Brauzio internal note. */
   kind: TriggerKind;
-  /** 是否启用 */
+  /* Brauzio internal note. */
   enabled: boolean;
-  /** 关联的 Flow ID */
+  /* Brauzio internal note. */
   flowId: FlowId;
-  /** 传递给 Flow 的参数 */
+  /* Brauzio internal note. */
   args?: JsonObject;
 }
 
 /**
- * URL 匹配规则
+  * Brauzio internal note.
  */
 export interface UrlMatchRule {
   kind: 'url' | 'domain' | 'path';
@@ -42,53 +42,53 @@ export interface UrlMatchRule {
 }
 
 /**
- * 触发器规范联合类型
+  * Brauzio internal note.
  */
 export type TriggerSpec =
-  // 手动触发
+  // Brauzio internal note.
   | (TriggerSpecBase & { kind: 'manual' })
 
-  // URL 触发
+  // Brauzio internal note.
   | (TriggerSpecBase & {
       kind: 'url';
       match: UrlMatchRule[];
     })
 
-  // Cron 定时触发
+  // Brauzio internal note.
   | (TriggerSpecBase & {
       kind: 'cron';
       cron: string;
       timezone?: string;
     })
 
-  // Interval 定时触发（固定间隔重复）
+  // Brauzio internal note.
   | (TriggerSpecBase & {
       kind: 'interval';
-      /** 间隔分钟数，最小为 1 */
+      /* Brauzio internal note. */
       periodMinutes: number;
     })
 
-  // Once 定时触发（指定时间触发一次后自动禁用）
+  // Brauzio internal note.
   | (TriggerSpecBase & {
       kind: 'once';
-      /** 触发时间戳 (Unix milliseconds) */
+      /* Brauzio internal note. */
       whenMs: UnixMillis;
     })
 
-  // 快捷键触发
+  // Brauzio internal note.
   | (TriggerSpecBase & {
       kind: 'command';
       commandKey: string;
     })
 
-  // 右键菜单触发
+  // Brauzio internal note.
   | (TriggerSpecBase & {
       kind: 'contextMenu';
       title: string;
       contexts?: ReadonlyArray<string>;
     })
 
-  // DOM 元素出现触发
+  // Brauzio internal note.
   | (TriggerSpecBase & {
       kind: 'dom';
       selector: string;
@@ -98,36 +98,36 @@ export type TriggerSpec =
     });
 
 /**
- * 触发器触发上下文
- * @description 描述触发器被触发时的上下文信息
+  * Brauzio internal note.
+  * Brauzio internal note.
  */
 export interface TriggerFireContext {
-  /** 触发器 ID */
+  /* Brauzio internal note. */
   triggerId: TriggerId;
-  /** 触发器类型 */
+  /* Brauzio internal note. */
   kind: TriggerKind;
-  /** 触发时间 */
+  /* Brauzio internal note. */
   firedAt: UnixMillis;
-  /** 来源 Tab ID */
+  /* Brauzio internal note. */
   sourceTabId?: number;
-  /** 来源 URL */
+  /* Brauzio internal note. */
   sourceUrl?: string;
 }
 
 /**
- * 根据触发器类型获取类型化的触发器规范
+  * Brauzio internal note.
  */
 export type TriggerSpecByKind<K extends TriggerKind> = Extract<TriggerSpec, { kind: K }>;
 
 /**
- * 判断触发器是否启用
+  * Brauzio internal note.
  */
 export function isTriggerEnabled(trigger: TriggerSpec): boolean {
   return trigger.enabled;
 }
 
 /**
- * 创建触发器触发上下文
+  * Brauzio internal note.
  */
 export function createTriggerFireContext(
   trigger: TriggerSpec,

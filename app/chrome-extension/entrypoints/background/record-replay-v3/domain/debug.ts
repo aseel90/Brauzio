@@ -1,6 +1,6 @@
 /**
- * @fileoverview 调试器类型定义
- * @description 定义 Record-Replay V3 中的调试器状态和协议
+  * Brauzio internal note.
+  * Brauzio internal note.
  */
 
 import type { JsonValue } from './json';
@@ -8,74 +8,74 @@ import type { NodeId, RunId } from './ids';
 import type { PauseReason } from './events';
 
 /**
- * 断点定义
+  * Brauzio internal note.
  */
 export interface Breakpoint {
-  /** 断点所在节点 ID */
+  /* Brauzio internal note. */
   nodeId: NodeId;
-  /** 是否启用 */
+  /* Brauzio internal note. */
   enabled: boolean;
 }
 
 /**
- * 调试器状态
- * @description 描述调试器当前的连接和执行状态
+  * Brauzio internal note.
+  * Brauzio internal note.
  */
 export interface DebuggerState {
-  /** 关联的 Run ID */
+  /* Brauzio internal note. */
   runId: RunId;
-  /** 调试器连接状态 */
+  /* Brauzio internal note. */
   status: 'attached' | 'detached';
-  /** 执行状态 */
+  /* Brauzio internal note. */
   execution: 'running' | 'paused';
-  /** 暂停原因（仅当 execution='paused' 时有效） */
+  /* Brauzio internal note. */
   pauseReason?: PauseReason;
-  /** 当前节点 ID */
+  /* Brauzio internal note. */
   currentNodeId?: NodeId;
-  /** 断点列表 */
+  /* Brauzio internal note. */
   breakpoints: Breakpoint[];
-  /** 单步模式 */
+  /* Brauzio internal note. */
   stepMode?: 'none' | 'stepOver';
 }
 
 /**
- * 调试器命令
- * @description 客户端发送给调试器的命令
+  * Brauzio internal note.
+  * Brauzio internal note.
  */
 export type DebuggerCommand =
-  // ===== 连接控制 =====
+  // Brauzio internal note.
   | { type: 'debug.attach'; runId: RunId }
   | { type: 'debug.detach'; runId: RunId }
 
-  // ===== 执行控制 =====
+  // Brauzio internal note.
   | { type: 'debug.pause'; runId: RunId }
   | { type: 'debug.resume'; runId: RunId }
   | { type: 'debug.stepOver'; runId: RunId }
 
-  // ===== 断点管理 =====
+  // Brauzio internal note.
   | { type: 'debug.setBreakpoints'; runId: RunId; nodeIds: NodeId[] }
   | { type: 'debug.addBreakpoint'; runId: RunId; nodeId: NodeId }
   | { type: 'debug.removeBreakpoint'; runId: RunId; nodeId: NodeId }
 
-  // ===== 状态查询 =====
+  // Brauzio internal note.
   | { type: 'debug.getState'; runId: RunId }
 
-  // ===== 变量操作 =====
+  // Brauzio internal note.
   | { type: 'debug.getVar'; runId: RunId; name: string }
   | { type: 'debug.setVar'; runId: RunId; name: string; value: JsonValue };
 
-/** 调试器命令类型（从联合类型提取） */
+/* Brauzio internal note. */
 export type DebuggerCommandType = DebuggerCommand['type'];
 
 /**
- * 调试器命令响应
+  * Brauzio internal note.
  */
 export type DebuggerResponse =
   | { ok: true; state?: DebuggerState; value?: JsonValue }
   | { ok: false; error: string };
 
 /**
- * 创建初始调试器状态
+  * Brauzio internal note.
  */
 export function createInitialDebuggerState(runId: RunId): DebuggerState {
   return {

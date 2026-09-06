@@ -1,6 +1,6 @@
 /**
- * @fileoverview RunEvent 持久化
- * @description 实现事件的原子 seq 分配和存储
+  * Brauzio internal note.
+  * Brauzio internal note.
  */
 
 import type { RunId } from '../domain/ids';
@@ -28,16 +28,16 @@ function idbRequest<T>(request: IDBRequest<T>, context: string): Promise<T> {
 }
 
 /**
- * 创建 EventsStore 实现
+  * Brauzio internal note.
  * @description
- * - append() 在单个事务中原子分配 seq
- * - seq 由 RunRecordV3.nextSeq 作为单一事实来源
+  * Brauzio internal note.
+  * Brauzio internal note.
  */
 export function createEventsStore(): EventsStore {
   return {
     /**
-     * 追加事件并原子分配 seq
-     * @description 在单个事务中：读取 RunRecordV3.nextSeq -> 写入事件 -> 递增 nextSeq
+      * Brauzio internal note.
+      * Brauzio internal note.
      */
     async append(input: RunEventInput): Promise<RunEvent> {
       return withTransaction(
@@ -98,8 +98,8 @@ export function createEventsStore(): EventsStore {
     },
 
     /**
-     * 列出事件
-     * @description 利用复合主键 [runId, seq] 实现高效范围查询
+      * Brauzio internal note.
+      * Brauzio internal note.
      */
     async list(runId: RunId, opts?: { fromSeq?: number; limit?: number }): Promise<RunEvent[]> {
       return withTransaction(RR_V3_STORES.EVENTS, 'readonly', async (stores) => {

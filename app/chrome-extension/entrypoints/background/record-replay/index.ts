@@ -79,7 +79,7 @@ export function initRecordReplayListeners() {
 
   chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     try {
-      // rr_recorder_event 交由 ContentMessageHandler 处理
+      // Brauzio internal note.
       switch (message?.type) {
         case BACKGROUND_MESSAGE_TYPES.RR_START_RECORDING: {
           startRecording(message.meta)

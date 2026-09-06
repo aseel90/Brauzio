@@ -184,7 +184,7 @@ function onConnectInternal(conn: Connection) {
   // Prefer sourceHandle as label so conditional branches can be identified
   const lab = (conn as any).sourceHandle || 'default';
   emit('connect', conn.source, conn.target, String(lab));
-  // 边تحديث由上层الحالة驱动，这里无يجب直接修改本地 vfEdges
+  // Brauzio internal note.
 }
 
 function onDragOver(e: DragEvent) {
@@ -353,7 +353,7 @@ defineExpose({ zoomIn, zoomOut, fitAll });
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* 图标颜色方案 - 参考图片风格 */
+/* Brauzio internal note. */
 /* Solid color icon backgrounds (no gradients) */
 :deep(.icon-navigate) {
   background: #667eea;
@@ -447,7 +447,7 @@ defineExpose({ zoomIn, zoomOut, fitAll });
   background: #34d399;
 }
 
-/* العقدة主体 */
+/* Brauzio internal note. */
 :deep(.node-body) {
   flex: 1;
   min-width: 0;
@@ -520,7 +520,7 @@ defineExpose({ zoomIn, zoomOut, fitAll });
   stroke: #8f8f8f !important;
 }
 
-/* 背景网格 */
+/* Brauzio internal note. */
 :deep(.vue-flow__background) {
   background-color: #ededed;
 }

@@ -1,5 +1,5 @@
 /**
- * @fileoverview Engine Storage 模块导出入口
+  * Brauzio internal note.
  */
 
 export * from './storage-port';

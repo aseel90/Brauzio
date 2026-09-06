@@ -1,5 +1,5 @@
 /**
- * @fileoverview 崩溃恢复测试 (P3-06)
+  * Brauzio internal note.
  * @description
  * Tests for:
  * - recoverOrphanLeases (queue-level)

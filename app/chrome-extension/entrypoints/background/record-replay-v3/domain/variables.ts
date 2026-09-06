@@ -1,77 +1,77 @@
 /**
- * @fileoverview 变量类型定义
- * @description 定义 Record-Replay V3 中使用的变量指针和持久化变量
+  * Brauzio internal note.
+  * Brauzio internal note.
  */
 
 import type { JsonValue, UnixMillis } from './json';
 
-/** 变量名称 */
+/* Brauzio internal note. */
 export type VariableName = string;
 
-/** 持久化变量名称（以 $ 开头） */
+/* Brauzio internal note. */
 export type PersistentVariableName = `$${string}`;
 
-/** 变量作用域 */
+/* Brauzio internal note. */
 export type VariableScope = 'run' | 'flow' | 'persistent';
 
 /**
- * 变量指针
- * @description 指向变量的引用，支持 JSON path 访问
+  * Brauzio internal note.
+  * Brauzio internal note.
  */
 export interface VariablePointer {
-  /** 变量作用域 */
+  /* Brauzio internal note. */
   scope: VariableScope;
-  /** 变量名称 */
+  /* Brauzio internal note. */
   name: VariableName;
-  /** JSON path（用于访问嵌套属性） */
+  /* Brauzio internal note. */
   path?: ReadonlyArray<string | number>;
 }
 
 /**
- * 变量定义
- * @description Flow 中声明的变量
+  * Brauzio internal note.
+  * Brauzio internal note.
  */
 export interface VariableDefinition {
-  /** 变量名称 */
+  /* Brauzio internal note. */
   name: VariableName;
-  /** 显示标签 */
+  /* Brauzio internal note. */
   label?: string;
-  /** 描述 */
+  /* Brauzio internal note. */
   description?: string;
-  /** 是否敏感（不显示/导出） */
+  /* Brauzio internal note. */
   sensitive?: boolean;
-  /** 是否必需 */
+  /* Brauzio internal note. */
   required?: boolean;
-  /** 默认值 */
+  /* Brauzio internal note. */
   default?: JsonValue;
-  /** 作用域（不含 persistent，persistent 通过 $ 前缀判断） */
+  /* Brauzio internal note. */
   scope?: Exclude<VariableScope, 'persistent'>;
 }
 
 /**
- * 持久化变量记录
- * @description 存储在 IndexedDB 中的持久化变量
+  * Brauzio internal note.
+  * Brauzio internal note.
  */
 export interface PersistentVarRecord {
-  /** 变量键（以 $ 开头） */
+  /* Brauzio internal note. */
   key: PersistentVariableName;
-  /** 变量值 */
+  /* Brauzio internal note. */
   value: JsonValue;
-  /** 最后更新时间 */
+  /* Brauzio internal note. */
   updatedAt: UnixMillis;
-  /** 版本号（单调递增，用于 LWW 和调试） */
+  /* Brauzio internal note. */
   version: number;
 }
 
 /**
- * 判断变量名是否为持久化变量
+  * Brauzio internal note.
  */
 export function isPersistentVariable(name: string): name is PersistentVariableName {
   return name.startsWith('$');
 }
 
 /**
- * 解析变量指针字符串
+  * Brauzio internal note.
  * @example "$user.name" -> { scope: 'persistent', name: '$user', path: ['name'] }
  */
 export function parseVariablePointer(ref: string): VariablePointer | null {
@@ -89,7 +89,7 @@ export function parseVariablePointer(ref: string): VariablePointer | null {
     };
   }
 
-  // 默认为 run 作用域
+  // Brauzio internal note.
   return {
     scope: 'run',
     name,

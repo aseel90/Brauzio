@@ -1,5 +1,5 @@
 /**
- * @fileoverview Keepalive 模块导出入口
+  * Brauzio internal note.
  */
 
 export * from './offscreen-keepalive';

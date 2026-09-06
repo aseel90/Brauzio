@@ -1,6 +1,6 @@
 <template>
   <div class="flex items-center gap-2">
-    <!-- 螺旋动画图标（仅 running/starting الحالة显示，且未被父组件隐藏时） -->
+    <!-- Brauzio internal note. -->
     <svg
       v-if="isRunning && !hideIcon"
       class="loading-scribble w-4 h-4 flex-shrink-0"
@@ -15,7 +15,7 @@
       />
     </svg>
 
-    <!-- shimmer 文案（running الحالة）أو普通文案 -->
+    <!-- Brauzio internal note. -->
     <span
       class="text-xs italic"
       :class="{ 'text-shimmer': isRunning }"
@@ -37,24 +37,24 @@ const props = defineProps<{
   hideIcon?: boolean;
 }>();
 
-// 是否处于تشغيلالحالة
+// Brauzio internal note.
 const isRunning = computed(
   () => props.item.status === 'running' || props.item.status === 'starting',
 );
 
-// 随机文案（仅 running الحالة使用）
+// Brauzio internal note.
 const randomText = ref(getRandomLoadingText());
 
-// جدولةتحديث文案的 timeout ID
+// Brauzio internal note.
 let timeoutId: ReturnType<typeof setTimeout> | null = null;
 
-// 记录上مرة واحدة的تشغيلالحالة，用于判断الحالة变化
+// Brauzio internal note.
 let wasRunning = false;
 
-// 启动جدولة器
+// Brauzio internal note.
 function startInterval(): void {
   if (timeoutId) return;
-  // 5-8 秒随机فاصلتحديث文案
+  // Brauzio internal note.
   const scheduleNext = () => {
     timeoutId = setTimeout(
       () => {
@@ -67,7 +67,7 @@ function startInterval(): void {
   scheduleNext();
 }
 
-// إيقافجدولة器
+// Brauzio internal note.
 function stopInterval(): void {
   if (timeoutId) {
     clearTimeout(timeoutId);
@@ -75,9 +75,9 @@ function stopInterval(): void {
   }
 }
 
-// 监听تشغيلالحالة变化 - 只在الحالةصحيح正变化时才处理
+// Brauzio internal note.
 watch(isRunning, (running) => {
-  // 只在从非تشغيل变为تشغيل时，才重新生成文案并启动جدولة器
+  // Brauzio internal note.
   if (running && !wasRunning) {
     randomText.value = getRandomLoadingText();
     startInterval();
@@ -87,7 +87,7 @@ watch(isRunning, (running) => {
   wasRunning = running;
 });
 
-// 初始化
+// Brauzio internal note.
 onMounted(() => {
   wasRunning = isRunning.value;
   if (isRunning.value) {
@@ -99,7 +99,7 @@ onUnmounted(() => {
   stopInterval();
 });
 
-// 非تشغيلالحالة的افتراضي文案
+// Brauzio internal note.
 const defaultText = computed(() => {
   switch (props.item.status) {
     case 'completed':
@@ -113,7 +113,7 @@ const defaultText = computed(() => {
   }
 });
 
-// 最终显示的文案
+// Brauzio internal note.
 const displayText = computed(() => {
   if (isRunning.value) {
     return randomText.value;

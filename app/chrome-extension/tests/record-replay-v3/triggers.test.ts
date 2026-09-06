@@ -1,5 +1,5 @@
 /**
- * @fileoverview 触发器测试 (P4-01)
+  * Brauzio internal note.
  * @description
  * Tests for:
  * - TriggerStore CRUD operations

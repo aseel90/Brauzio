@@ -1,11 +1,11 @@
 /**
- * Action System - 导出模块
+  * Brauzio internal note.
  */
 
-// 类型导出
+// Brauzio internal note.
 export * from './types';
 
-// 注册表导出
+// Brauzio internal note.
 export {
   ActionRegistry,
   createActionRegistry,
@@ -23,7 +23,7 @@ export {
   type ActionRegistryHooks,
 } from './registry';
 
-// 适配器导出
+// Brauzio internal note.
 export {
   execCtxToActionCtx,
   stepToAction,
@@ -34,7 +34,7 @@ export {
   type StepExecutionAttempt,
 } from './adapter';
 
-// Handler 工厂导出
+// Brauzio internal note.
 export {
   createReplayActionRegistry,
   registerReplayHandlers,

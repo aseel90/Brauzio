@@ -1,11 +1,11 @@
 /**
- * Action Registry - Action 执行器注册表和执行管道
+  * Brauzio internal note.
  *
- * 特性：
- * - 动态注册/注销 handler
- * - 中间件/钩子机制 (beforeExecute, afterExecute)
- * - 重试和超时策略
- * - 类型安全
+  * Brauzio internal note.
+  * Brauzio internal note.
+  * Brauzio internal note.
+  * Brauzio internal note.
+  * Brauzio internal note.
  */
 
 import type {
@@ -33,7 +33,7 @@ import type {
 } from './types';
 
 // ================================
-// 类型定义
+// Brauzio internal note.
 // ================================
 
 type AnyExecutableAction = {
@@ -70,7 +70,7 @@ export interface ActionRegistryHooks {
 }
 
 // ================================
-// 工具函数
+// Brauzio internal note.
 // ================================
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -135,7 +135,7 @@ function sleep(ms: number): Promise<void> {
 }
 
 // ================================
-// Resolvable 解析器
+// Brauzio internal note.
 // ================================
 
 function isVariablePointer(value: unknown): value is VariablePointer {
@@ -298,7 +298,7 @@ export function tryResolveNumber(
 export const tryResolveValue = tryResolveJson;
 
 // ================================
-// 重试和超时逻辑
+// Brauzio internal note.
 // ================================
 
 function shouldRetry(policy: RetryPolicy | undefined, error: ActionError | undefined): boolean {
@@ -357,7 +357,7 @@ async function runWithTimeout<T>(
 }
 
 // ================================
-// ActionRegistry 类
+// Brauzio internal note.
 // ================================
 
 export class ActionRegistry {
@@ -366,7 +366,7 @@ export class ActionRegistry {
   private readonly afterHooks: AfterExecuteHook[] = [];
 
   /**
-   * 注册 action handler
+    * Brauzio internal note.
    */
   register<T extends ExecutableActionType>(
     handler: ActionHandler<T>,
@@ -383,7 +383,7 @@ export class ActionRegistry {
   }
 
   /**
-   * 注销 action handler
+    * Brauzio internal note.
    */
   unregister<T extends ExecutableActionType>(type: T): boolean {
     const exists = this.handlers[type] !== undefined;
@@ -392,21 +392,21 @@ export class ActionRegistry {
   }
 
   /**
-   * 获取 handler
+    * Brauzio internal note.
    */
   get<T extends ExecutableActionType>(type: T): ActionHandler<T> | undefined {
     return this.handlers[type];
   }
 
   /**
-   * 检查是否存在 handler
+    * Brauzio internal note.
    */
   has(type: ExecutableActionType): boolean {
     return this.handlers[type] !== undefined;
   }
 
   /**
-   * 列出所有已注册的 handler
+    * Brauzio internal note.
    */
   list(): ReadonlyArray<AnyExecutableHandler> {
     const arr = Object.values(this.handlers).filter(
@@ -416,7 +416,7 @@ export class ActionRegistry {
   }
 
   /**
-   * 注册 beforeExecute 钩子
+    * Brauzio internal note.
    */
   onBeforeExecute(hook: BeforeExecuteHook): () => void {
     this.beforeHooks.push(hook);
@@ -427,7 +427,7 @@ export class ActionRegistry {
   }
 
   /**
-   * 注册 afterExecute 钩子
+    * Brauzio internal note.
    */
   onAfterExecute(hook: AfterExecuteHook): () => void {
     this.afterHooks.push(hook);
@@ -438,7 +438,7 @@ export class ActionRegistry {
   }
 
   /**
-   * 批量注册钩子
+    * Brauzio internal note.
    */
   use(hooks: ActionRegistryHooks): () => void {
     const disposers: Array<() => void> = [];
@@ -450,7 +450,7 @@ export class ActionRegistry {
   }
 
   /**
-   * 验证 action 配置
+    * Brauzio internal note.
    */
   validate<T extends ExecutableActionType>(action: ExecutableAction<T>): ValidationResult {
     const handler = this.get(action.type);
@@ -460,7 +460,7 @@ export class ActionRegistry {
   }
 
   /**
-   * 执行 action
+    * Brauzio internal note.
    */
   async execute<T extends ExecutableActionType>(
     ctx: ActionExecutionContext,
@@ -468,12 +468,12 @@ export class ActionRegistry {
   ): Promise<ActionExecutionResult<T>> {
     const startedAt = Date.now();
 
-    // 跳过禁用的 action
+    // Brauzio internal note.
     if (action.disabled) {
       return { status: 'skipped', durationMs: Date.now() - startedAt };
     }
 
-    // 获取 handler
+    // Brauzio internal note.
     const handler = this.get(action.type);
     if (!handler) {
       return {
@@ -486,7 +486,7 @@ export class ActionRegistry {
       };
     }
 
-    // 验证
+    // Brauzio internal note.
     const v = this.validate(action);
     if (!v.ok) {
       let result: ActionExecutionResult<T> = {
@@ -494,7 +494,7 @@ export class ActionRegistry {
         error: { code: 'VALIDATION_ERROR', message: v.errors.join(', ') },
       };
 
-      // 调用 afterExecute 钩子
+      // Brauzio internal note.
       for (const hook of this.afterHooks) {
         try {
           const maybe = await hook({ ctx, action, handler, result, attempt: 0 });
@@ -512,7 +512,7 @@ export class ActionRegistry {
       return result;
     }
 
-    // 计算重试和超时参数
+    // Brauzio internal note.
     const retryPolicy = action.policy?.retry;
     const timeoutPolicy = action.policy?.timeout;
     const maxAttempts = 1 + Math.max(0, Math.floor(retryPolicy?.retries ?? 0));
@@ -527,7 +527,7 @@ export class ActionRegistry {
 
     let last: ActionExecutionResult<T> | undefined;
 
-    // 执行循环（支持重试）
+    // Brauzio internal note.
     for (let attempt = 0; attempt < maxAttempts; attempt++) {
       const attemptTimeoutMs: number | undefined = (() => {
         if (!timeoutPolicy || timeoutPolicy.ms <= 0) return undefined;
@@ -541,7 +541,7 @@ export class ActionRegistry {
         break;
       }
 
-      // beforeExecute 钩子（可以短路）
+      // Brauzio internal note.
       let shortCircuited: ActionExecutionResult<T> | undefined;
       for (const hook of this.beforeHooks) {
         try {
@@ -559,7 +559,7 @@ export class ActionRegistry {
         }
       }
 
-      // 执行 handler
+      // Brauzio internal note.
       const runOutcome =
         shortCircuited ??
         (await (async () => {
@@ -575,7 +575,7 @@ export class ActionRegistry {
 
       let result: ActionExecutionResult<T> = runOutcome;
 
-      // afterExecute 钩子（可以替换结果）
+      // Brauzio internal note.
       for (const hook of this.afterHooks) {
         try {
           const maybe = await hook({ ctx, action, handler, result, attempt });
@@ -591,10 +591,10 @@ export class ActionRegistry {
 
       last = result;
 
-      // 成功则退出
+      // Brauzio internal note.
       if (result.status !== 'failed') break;
 
-      // 判断是否重试
+      // Brauzio internal note.
       const canRetry = attempt < maxAttempts - 1 && shouldRetry(retryPolicy, result.error);
       if (!canRetry) break;
 
@@ -629,11 +629,11 @@ export class ActionRegistry {
 }
 
 // ================================
-// 导出工厂函数
+// Brauzio internal note.
 // ================================
 
 /**
- * 创建默认的 ActionRegistry 实例
+  * Brauzio internal note.
  */
 export function createActionRegistry(): ActionRegistry {
   return new ActionRegistry();

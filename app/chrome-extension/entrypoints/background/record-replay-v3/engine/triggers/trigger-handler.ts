@@ -1,53 +1,53 @@
 /**
- * @fileoverview 触发器处理器接口定义
- * @description 定义各类触发器的统一接口
+  * Brauzio internal note.
+  * Brauzio internal note.
  */
 
 import type { TriggerSpec, TriggerKind } from '../../domain/triggers';
 
 /**
- * 触发器处理器接口
- * @description 每种触发器类型需要实现此接口
+  * Brauzio internal note.
+  * Brauzio internal note.
  */
 export interface TriggerHandler<K extends TriggerKind = TriggerKind> {
-  /** 触发器类型 */
+  /* Brauzio internal note. */
   readonly kind: K;
 
   /**
-   * 安装触发器
-   * @description 注册 chrome API 监听器等
-   * @param trigger 触发器规范
+    * Brauzio internal note.
+    * Brauzio internal note.
+    * Brauzio internal note.
    */
   install(trigger: Extract<TriggerSpec, { kind: K }>): Promise<void>;
 
   /**
-   * 卸载触发器
-   * @description 移除 chrome API 监听器等
-   * @param triggerId 触发器 ID
+    * Brauzio internal note.
+    * Brauzio internal note.
+    * Brauzio internal note.
    */
   uninstall(triggerId: string): Promise<void>;
 
   /**
-   * 卸载所有触发器
-   * @description 清理所有此类型的触发器
+    * Brauzio internal note.
+    * Brauzio internal note.
    */
   uninstallAll(): Promise<void>;
 
   /**
-   * 获取已安装的触发器 ID 列表
+    * Brauzio internal note.
    */
   getInstalledIds(): string[];
 }
 
 /**
- * 触发器触发回调
- * @description TriggerManager 注入给各 Handler 的回调
+  * Brauzio internal note.
+  * Brauzio internal note.
  */
 export interface TriggerFireCallback {
   /**
-   * 触发器被触发时调用
-   * @param triggerId 触发器 ID
-   * @param context 触发上下文
+    * Brauzio internal note.
+    * Brauzio internal note.
+    * Brauzio internal note.
    */
   onFire(
     triggerId: string,
@@ -59,7 +59,7 @@ export interface TriggerFireCallback {
 }
 
 /**
- * 触发器处理器工厂
+  * Brauzio internal note.
  */
 export type TriggerHandlerFactory<K extends TriggerKind> = (
   fireCallback: TriggerFireCallback,

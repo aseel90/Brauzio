@@ -1,6 +1,6 @@
 /**
- * @fileoverview RunRunner 接口和实现
- * @description 定义和实现单个 Run 的顺序执行器
+  * Brauzio internal note.
+  * Brauzio internal note.
  */
 
 import type { NodeId, RunId } from '../../domain/ids';
@@ -35,72 +35,72 @@ import type { RunResult } from './kernel';
 // ==================== Types ====================
 
 /**
- * RunRunner 运行时状态
+  * Brauzio internal note.
  */
 export interface RunnerRuntimeState {
   /** Run ID */
   runId: RunId;
-  /** 当前节点 ID */
+  /* Brauzio internal note. */
   currentNodeId: NodeId | null;
-  /** 当前尝试次数 */
+  /* Brauzio internal note. */
   attempt: number;
-  /** 变量表 */
+  /* Brauzio internal note. */
   vars: Record<string, JsonValue>;
-  /** 是否暂停 */
+  /* Brauzio internal note. */
   paused: boolean;
-  /** 是否取消 */
+  /* Brauzio internal note. */
   canceled: boolean;
 }
 
 /**
- * RunRunner 配置
+  * Brauzio internal note.
  */
 export interface RunnerConfig {
-  /** Flow 快照 */
+  /* Brauzio internal note. */
   flow: FlowV3;
   /** Tab ID */
   tabId: number;
-  /** 初始参数 */
+  /* Brauzio internal note. */
   args?: JsonObject;
-  /** 起始节点 ID */
+  /* Brauzio internal note. */
   startNodeId?: NodeId;
-  /** 调试配置 */
+  /* Brauzio internal note. */
   debug?: { breakpoints?: NodeId[]; pauseOnStart?: boolean };
 }
 
 /**
- * RunRunner 接口
+  * Brauzio internal note.
  */
 export interface RunRunner {
   /** Run ID */
   readonly runId: RunId;
-  /** 当前状态 */
+  /* Brauzio internal note. */
   readonly state: RunnerRuntimeState;
-  /** 订阅事件 */
+  /* Brauzio internal note. */
   onEvent(listener: (event: RunEvent) => void): Unsubscribe;
-  /** 开始执行 */
+  /* Brauzio internal note. */
   start(): Promise<RunResult>;
-  /** 暂停执行 */
+  /* Brauzio internal note. */
   pause(): void;
-  /** 恢复执行 */
+  /* Brauzio internal note. */
   resume(): void;
-  /** 取消执行 */
+  /* Brauzio internal note. */
   cancel(reason?: string): void;
-  /** 获取变量值 */
+  /* Brauzio internal note. */
   getVar(name: string): JsonValue | undefined;
-  /** 设置变量值 */
+  /* Brauzio internal note. */
   setVar(name: string, value: JsonValue): void;
 }
 
 /**
- * RunRunner 工厂接口
+  * Brauzio internal note.
  */
 export interface RunRunnerFactory {
   create(runId: RunId, config: RunnerConfig): RunRunner;
 }
 
 /**
- * RunRunner 工厂依赖
+  * Brauzio internal note.
  */
 export interface RunRunnerFactoryDeps {
   storage: StoragePort;
@@ -225,7 +225,7 @@ class SerialQueue {
 // ==================== Factory ====================
 
 /**
- * 创建 NotImplemented 的 RunRunnerFactory
+  * Brauzio internal note.
  */
 export function createNotImplementedRunnerFactory(): RunRunnerFactory {
   return {
@@ -236,7 +236,7 @@ export function createNotImplementedRunnerFactory(): RunRunnerFactory {
 }
 
 /**
- * 创建 RunRunner 工厂
+  * Brauzio internal note.
  */
 export function createRunRunnerFactory(deps: RunRunnerFactoryDeps): RunRunnerFactory {
   const plugins = deps.plugins ?? getPluginRegistry();

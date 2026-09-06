@@ -188,7 +188,7 @@ const filtered = computed(() => {
   scrollbar-color: rgba(0, 0, 0, 0.25) transparent;
 }
 
-/* 搜索框 */
+/* Brauzio internal note. */
 .search-box {
   position: relative;
   display: flex;
@@ -216,14 +216,14 @@ const filtered = computed(() => {
   box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.06);
 }
 
-/* العقدة区域 */
+/* Brauzio internal note. */
 .nodes-section {
   display: flex;
   flex-direction: column;
   gap: 6px;
 }
 
-/* العقدة按钮 */
+/* Brauzio internal note. */
 .node-btn {
   display: flex;
   align-items: center;
@@ -246,7 +246,7 @@ const filtered = computed(() => {
   transform: scale(0.98);
 }
 
-/* العقدة图标 - 彩色圆形 */
+/* Brauzio internal note. */
 .btn-icon {
   width: 30px;
   height: 30px;
@@ -346,7 +346,7 @@ const filtered = computed(() => {
   background: transparent !important;
 }
 
-/* العقدة标签 */
+/* Brauzio internal note. */
 .btn-label {
   font-size: 13px;
   font-weight: 500;
@@ -354,7 +354,7 @@ const filtered = computed(() => {
   flex: 1;
 }
 
-/* 分割线 */
+/* Brauzio internal note. */
 .section-divider {
   display: flex;
   align-items: center;

@@ -1,6 +1,6 @@
 /**
- * @fileoverview StoragePort 接口定义
- * @description 定义 Storage 层的抽象接口，用于依赖注入
+  * Brauzio internal note.
+  * Brauzio internal note.
  */
 
 import type { FlowId, RunId, TriggerId } from '../../domain/ids';
@@ -11,107 +11,107 @@ import type { TriggerSpec } from '../../domain/triggers';
 import type { RunQueue } from '../queue/queue';
 
 /**
- * FlowsStore 接口
+  * Brauzio internal note.
  */
 export interface FlowsStore {
-  /** 列出所有 Flow */
+  /* Brauzio internal note. */
   list(): Promise<FlowV3[]>;
-  /** 获取单个 Flow */
+  /* Brauzio internal note. */
   get(id: FlowId): Promise<FlowV3 | null>;
-  /** 保存 Flow */
+  /* Brauzio internal note. */
   save(flow: FlowV3): Promise<void>;
-  /** 删除 Flow */
+  /* Brauzio internal note. */
   delete(id: FlowId): Promise<void>;
 }
 
 /**
- * RunsStore 接口
+  * Brauzio internal note.
  */
 export interface RunsStore {
-  /** 列出所有 Run 记录 */
+  /* Brauzio internal note. */
   list(): Promise<RunRecordV3[]>;
-  /** 获取单个 Run 记录 */
+  /* Brauzio internal note. */
   get(id: RunId): Promise<RunRecordV3 | null>;
-  /** 保存 Run 记录 */
+  /* Brauzio internal note. */
   save(record: RunRecordV3): Promise<void>;
-  /** 部分更新 Run 记录 */
+  /* Brauzio internal note. */
   patch(id: RunId, patch: Partial<RunRecordV3>): Promise<void>;
 }
 
 /**
- * EventsStore 接口
- * @description seq 分配必须由 append() 内部原子完成
+  * Brauzio internal note.
+  * Brauzio internal note.
  */
 export interface EventsStore {
   /**
-   * 追加事件并原子分配 seq
-   * @description 在单个事务中：读取 RunRecordV3.nextSeq -> 写入事件 -> 递增 nextSeq
-   * @param event 事件输入（不含 seq）
-   * @returns 完整事件（含分配的 seq 和 ts）
+    * Brauzio internal note.
+    * Brauzio internal note.
+    * Brauzio internal note.
+    * Brauzio internal note.
    */
   append(event: RunEventInput): Promise<RunEvent>;
 
   /**
-   * 列出事件
+    * Brauzio internal note.
    * @param runId Run ID
-   * @param opts 查询选项
+    * Brauzio internal note.
    */
   list(runId: RunId, opts?: { fromSeq?: number; limit?: number }): Promise<RunEvent[]>;
 }
 
 /**
- * PersistentVarsStore 接口
+  * Brauzio internal note.
  */
 export interface PersistentVarsStore {
-  /** 获取持久化变量 */
+  /* Brauzio internal note. */
   get(key: PersistentVariableName): Promise<PersistentVarRecord | undefined>;
-  /** 设置持久化变量 */
+  /* Brauzio internal note. */
   set(
     key: PersistentVariableName,
     value: PersistentVarRecord['value'],
   ): Promise<PersistentVarRecord>;
-  /** 删除持久化变量 */
+  /* Brauzio internal note. */
   delete(key: PersistentVariableName): Promise<void>;
-  /** 列出持久化变量 */
+  /* Brauzio internal note. */
   list(prefix?: PersistentVariableName): Promise<PersistentVarRecord[]>;
 }
 
 /**
- * TriggersStore 接口
+  * Brauzio internal note.
  */
 export interface TriggersStore {
-  /** 列出所有触发器 */
+  /* Brauzio internal note. */
   list(): Promise<TriggerSpec[]>;
-  /** 获取单个触发器 */
+  /* Brauzio internal note. */
   get(id: TriggerId): Promise<TriggerSpec | null>;
-  /** 保存触发器 */
+  /* Brauzio internal note. */
   save(spec: TriggerSpec): Promise<void>;
-  /** 删除触发器 */
+  /* Brauzio internal note. */
   delete(id: TriggerId): Promise<void>;
 }
 
 /**
- * StoragePort 接口
- * @description 聚合所有存储接口，用于依赖注入
+  * Brauzio internal note.
+  * Brauzio internal note.
  */
 export interface StoragePort {
-  /** Flows 存储 */
+  /* Brauzio internal note. */
   flows: FlowsStore;
-  /** Runs 存储 */
+  /* Brauzio internal note. */
   runs: RunsStore;
-  /** Events 存储 */
+  /* Brauzio internal note. */
   events: EventsStore;
-  /** Queue 存储 */
+  /* Brauzio internal note. */
   queue: RunQueue;
-  /** 持久化变量存储 */
+  /* Brauzio internal note. */
   persistentVars: PersistentVarsStore;
-  /** 触发器存储 */
+  /* Brauzio internal note. */
   triggers: TriggersStore;
 }
 
 /**
- * 创建 NotImplemented 的 Store
- * @description 避免 Proxy 生成 'then' 导致 thenable 行为
+  * Brauzio internal note.
+  * Brauzio internal note.
  */
 function createNotImplementedStore<T extends object>(name: string): T {
   const target = {} as T;
@@ -129,8 +129,8 @@ function createNotImplementedStore<T extends object>(name: string): T {
 }
 
 /**
- * 创建 NotImplemented 的 StoragePort
- * @description Phase 0 占位实现
+  * Brauzio internal note.
+  * Brauzio internal note.
  */
 export function createNotImplementedStoragePort(): StoragePort {
   return {

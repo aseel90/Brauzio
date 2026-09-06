@@ -1,6 +1,6 @@
 /**
- * @fileoverview 插件类型定义
- * @description 定义 Record-Replay V3 中的节点和触发器插件接口
+  * Brauzio internal note.
+  * Brauzio internal note.
  */
 
 import { z } from 'zod';
@@ -14,65 +14,65 @@ import type { FlowV3, NodeV3 } from '../../domain/flow';
 import type { TriggerKind } from '../../domain/triggers';
 
 /**
- * Schema 类型
- * @description 使用 Zod 进行配置校验
+  * Brauzio internal note.
+  * Brauzio internal note.
  */
 export type Schema<T> = z.ZodType<T, z.ZodTypeDef, unknown>;
 
 /**
- * 节点执行上下文
- * @description 提供给节点执行器的运行时上下文
+  * Brauzio internal note.
+  * Brauzio internal note.
  */
 export interface NodeExecutionContext {
   /** Run ID */
   runId: RunId;
-  /** Flow 定义（快照） */
+  /* Brauzio internal note. */
   flow: FlowV3;
-  /** 当前节点 ID */
+  /* Brauzio internal note. */
   nodeId: NodeId;
 
-  /** 绑定的 Tab ID（每 Run 独占） */
+  /* Brauzio internal note. */
   tabId: number;
-  /** Frame ID（默认 0 为主框架） */
+  /* Brauzio internal note. */
   frameId?: number;
 
-  /** 当前变量表 */
+  /* Brauzio internal note. */
   vars: Record<string, JsonValue>;
 
   /**
-   * 日志记录
+    * Brauzio internal note.
    */
   log: (level: 'debug' | 'info' | 'warn' | 'error', message: string, data?: JsonValue) => void;
 
   /**
-   * 选择下一个边
-   * @description 用于条件分支节点
+    * Brauzio internal note.
+    * Brauzio internal note.
    */
   chooseNext: (label: string) => { kind: 'edgeLabel'; label: string };
 
   /**
-   * 工件操作
+    * Brauzio internal note.
    */
   artifacts: {
-    /** 截取当前页面截图 */
+    /* Brauzio internal note. */
     screenshot: () => Promise<{ ok: true; base64: string } | { ok: false; error: RRError }>;
   };
 
   /**
-   * 持久化变量操作
+    * Brauzio internal note.
    */
   persistent: {
-    /** 获取持久化变量 */
+    /* Brauzio internal note. */
     get: (name: `$${string}`) => Promise<JsonValue | undefined>;
-    /** 设置持久化变量 */
+    /* Brauzio internal note. */
     set: (name: `$${string}`, value: JsonValue) => Promise<void>;
-    /** 删除持久化变量 */
+    /* Brauzio internal note. */
     delete: (name: `$${string}`) => Promise<void>;
   };
 }
 
 /**
- * 变量补丁操作
+  * Brauzio internal note.
  */
 export interface VarsPatchOp {
   op: 'set' | 'delete';
@@ -81,38 +81,38 @@ export interface VarsPatchOp {
 }
 
 /**
- * 节点执行结果
+  * Brauzio internal note.
  */
 export type NodeExecutionResult =
   | {
       status: 'succeeded';
-      /** 下一步执行方向 */
+      /* Brauzio internal note. */
       next?: { kind: 'edgeLabel'; label: string } | { kind: 'end' };
-      /** 输出结果 */
+      /* Brauzio internal note. */
       outputs?: JsonObject;
-      /** 变量修改 */
+      /* Brauzio internal note. */
       varsPatch?: VarsPatchOp[];
     }
   | { status: 'failed'; error: RRError };
 
 /**
- * 节点定义
- * @description 定义一种节点类型的执行逻辑
+  * Brauzio internal note.
+  * Brauzio internal note.
  */
 export interface NodeDefinition<
   TKind extends NodeKind = NodeKind,
   TConfig extends JsonObject = JsonObject,
 > {
-  /** 节点类型标识 */
+  /* Brauzio internal note. */
   kind: TKind;
-  /** 配置校验 Schema */
+  /* Brauzio internal note. */
   schema: Schema<TConfig>;
-  /** 默认策略 */
+  /* Brauzio internal note. */
   defaultPolicy?: NodePolicy;
   /**
-   * 执行节点
-   * @param ctx 执行上下文
-   * @param node 节点定义（含配置）
+    * Brauzio internal note.
+    * Brauzio internal note.
+    * Brauzio internal note.
    */
   execute(
     ctx: NodeExecutionContext,
@@ -121,61 +121,61 @@ export interface NodeDefinition<
 }
 
 /**
- * 触发器安装上下文
+  * Brauzio internal note.
  */
 export interface TriggerInstallContext<
   TKind extends TriggerKind = TriggerKind,
   TConfig extends JsonObject = JsonObject,
 > {
-  /** 触发器 ID */
+  /* Brauzio internal note. */
   triggerId: TriggerId;
-  /** 触发器类型 */
+  /* Brauzio internal note. */
   kind: TKind;
-  /** 是否启用 */
+  /* Brauzio internal note. */
   enabled: boolean;
-  /** 关联的 Flow ID */
+  /* Brauzio internal note. */
   flowId: FlowId;
-  /** 触发器配置 */
+  /* Brauzio internal note. */
   config: TConfig;
-  /** 传递给 Flow 的参数 */
+  /* Brauzio internal note. */
   args?: JsonObject;
 }
 
 /**
- * 触发器定义
- * @description 定义一种触发器类型的安装和卸载逻辑
+  * Brauzio internal note.
+  * Brauzio internal note.
  */
 export interface TriggerDefinition<
   TKind extends TriggerKind = TriggerKind,
   TConfig extends JsonObject = JsonObject,
 > {
-  /** 触发器类型标识 */
+  /* Brauzio internal note. */
   kind: TKind;
-  /** 配置校验 Schema */
+  /* Brauzio internal note. */
   schema: Schema<TConfig>;
-  /** 安装触发器 */
+  /* Brauzio internal note. */
   install(ctx: TriggerInstallContext<TKind, TConfig>): Promise<void> | void;
-  /** 卸载触发器 */
+  /* Brauzio internal note. */
   uninstall(ctx: TriggerInstallContext<TKind, TConfig>): Promise<void> | void;
 }
 
 /**
- * 插件注册上下文
+  * Brauzio internal note.
  */
 export interface PluginRegistrationContext {
-  /** 注册节点定义 */
+  /* Brauzio internal note. */
   registerNode(def: NodeDefinition): void;
-  /** 注册触发器定义 */
+  /* Brauzio internal note. */
   registerTrigger(def: TriggerDefinition): void;
 }
 
 /**
- * 插件接口
- * @description Record-Replay 插件的标准接口
+  * Brauzio internal note.
+  * Brauzio internal note.
  */
 export interface RRPlugin {
-  /** 插件名称 */
+  /* Brauzio internal note. */
   name: string;
-  /** 注册插件内容 */
+  /* Brauzio internal note. */
   register(ctx: PluginRegistrationContext): void;
 }

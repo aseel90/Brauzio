@@ -1,81 +1,81 @@
 /**
- * @fileoverview 错误类型定义
- * @description 定义 Record-Replay V3 中使用的错误码和错误类型
+  * Brauzio internal note.
+  * Brauzio internal note.
  */
 
 import type { JsonValue } from './json';
 
-/** 错误码常量 */
+/* Brauzio internal note. */
 export const RR_ERROR_CODES = {
-  // ===== 验证错误 =====
-  /** 通用验证错误 */
+  // Brauzio internal note.
+  /* Brauzio internal note. */
   VALIDATION_ERROR: 'VALIDATION_ERROR',
-  /** 不支持的节点类型 */
+  /* Brauzio internal note. */
   UNSUPPORTED_NODE: 'UNSUPPORTED_NODE',
-  /** DAG 结构无效 */
+  /* Brauzio internal note. */
   DAG_INVALID: 'DAG_INVALID',
-  /** DAG 存在循环 */
+  /* Brauzio internal note. */
   DAG_CYCLE: 'DAG_CYCLE',
 
-  // ===== 运行时错误 =====
-  /** 操作超时 */
+  // Brauzio internal note.
+  /* Brauzio internal note. */
   TIMEOUT: 'TIMEOUT',
-  /** Tab 未找到 */
+  /* Brauzio internal note. */
   TAB_NOT_FOUND: 'TAB_NOT_FOUND',
-  /** Frame 未找到 */
+  /* Brauzio internal note. */
   FRAME_NOT_FOUND: 'FRAME_NOT_FOUND',
-  /** 目标元素未找到 */
+  /* Brauzio internal note. */
   TARGET_NOT_FOUND: 'TARGET_NOT_FOUND',
-  /** 元素不可见 */
+  /* Brauzio internal note. */
   ELEMENT_NOT_VISIBLE: 'ELEMENT_NOT_VISIBLE',
-  /** 导航失败 */
+  /* Brauzio internal note. */
   NAVIGATION_FAILED: 'NAVIGATION_FAILED',
-  /** 网络请求失败 */
+  /* Brauzio internal note. */
   NETWORK_REQUEST_FAILED: 'NETWORK_REQUEST_FAILED',
 
-  // ===== 脚本/工具错误 =====
-  /** 脚本执行失败 */
+  // Brauzio internal note.
+  /* Brauzio internal note. */
   SCRIPT_FAILED: 'SCRIPT_FAILED',
-  /** 权限被拒绝 */
+  /* Brauzio internal note. */
   PERMISSION_DENIED: 'PERMISSION_DENIED',
-  /** 工具执行错误 */
+  /* Brauzio internal note. */
   TOOL_ERROR: 'TOOL_ERROR',
 
-  // ===== 控制错误 =====
-  /** Run 被取消 */
+  // Brauzio internal note.
+  /* Brauzio internal note. */
   RUN_CANCELED: 'RUN_CANCELED',
-  /** Run 被暂停 */
+  /* Brauzio internal note. */
   RUN_PAUSED: 'RUN_PAUSED',
 
-  // ===== 内部错误 =====
-  /** 内部错误 */
+  // Brauzio internal note.
+  /* Brauzio internal note. */
   INTERNAL: 'INTERNAL',
-  /** 不变量违规 */
+  /* Brauzio internal note. */
   INVARIANT_VIOLATION: 'INVARIANT_VIOLATION',
 } as const;
 
-/** 错误码类型 */
+/* Brauzio internal note. */
 export type RRErrorCode = (typeof RR_ERROR_CODES)[keyof typeof RR_ERROR_CODES];
 
 /**
- * Record-Replay 错误接口
- * @description 统一的错误表示，支持错误链和可重试标记
+  * Brauzio internal note.
+  * Brauzio internal note.
  */
 export interface RRError {
-  /** 错误码 */
+  /* Brauzio internal note. */
   code: RRErrorCode;
-  /** 错误消息 */
+  /* Brauzio internal note. */
   message: string;
-  /** 附加数据 */
+  /* Brauzio internal note. */
   data?: JsonValue;
-  /** 是否可重试 */
+  /* Brauzio internal note. */
   retryable?: boolean;
-  /** 原因错误（错误链） */
+  /* Brauzio internal note. */
   cause?: RRError;
 }
 
 /**
- * 创建 RRError 的工厂函数
+  * Brauzio internal note.
  */
 export function createRRError(
   code: RRErrorCode,

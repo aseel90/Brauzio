@@ -1,5 +1,5 @@
 /**
- * @fileoverview TriggerManager 测试 (P4-02)
+  * Brauzio internal note.
  * @description
  * Tests for:
  * - TriggerManager lifecycle (start/stop/refresh)

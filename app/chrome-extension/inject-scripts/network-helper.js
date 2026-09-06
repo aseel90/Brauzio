@@ -174,12 +174,12 @@ if (window.__NETWORK_CAPTURE_HELPER_INITIALIZED__) {
         options.body = body;
       }
 
-      // 创建一个带超时的 fetch
+      // Brauzio internal note.
       const fetchWithTimeout = async (url, options, timeout) => {
         const controller = new AbortController();
         const signal = controller.signal;
 
-        // 设置超时
+        // Brauzio internal note.
         const timeoutId = setTimeout(() => controller.abort(), timeout);
 
         try {
@@ -192,7 +192,7 @@ if (window.__NETWORK_CAPTURE_HELPER_INITIALIZED__) {
         }
       };
 
-      // 发送带超时的请求
+      // Brauzio internal note.
       const response = await fetchWithTimeout(url, options, timeout);
 
       // Process response

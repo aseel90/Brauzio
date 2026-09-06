@@ -1,6 +1,6 @@
 /**
- * @fileoverview Flow 类型定义
- * @description 定义 Record-Replay V3 中的 Flow IR（中间表示）
+  * Brauzio internal note.
+  * Brauzio internal note.
  */
 
 import type { ISODateTimeString, JsonObject } from './json';
@@ -8,51 +8,51 @@ import type { EdgeId, EdgeLabel, FlowId, NodeId } from './ids';
 import type { FlowPolicy, NodePolicy } from './policy';
 import type { VariableDefinition } from './variables';
 
-/** Flow Schema 版本 */
+/* Brauzio internal note. */
 export const FLOW_SCHEMA_VERSION = 3 as const;
 
 /**
  * Edge V3
- * @description DAG 中的边，连接两个节点
+  * Brauzio internal note.
  */
 export interface EdgeV3 {
-  /** Edge 唯一标识符 */
+  /* Brauzio internal note. */
   id: EdgeId;
-  /** 源节点 ID */
+  /* Brauzio internal note. */
   from: NodeId;
-  /** 目标节点 ID */
+  /* Brauzio internal note. */
   to: NodeId;
-  /** 边标签（用于条件分支和错误处理） */
+  /* Brauzio internal note. */
   label?: EdgeLabel;
 }
 
-/** 节点类型（可扩展） */
+/* Brauzio internal note. */
 export type NodeKind = string;
 
 /**
  * Node V3
- * @description DAG 中的节点，代表一个可执行的操作
+  * Brauzio internal note.
  */
 export interface NodeV3 {
-  /** Node 唯一标识符 */
+  /* Brauzio internal note. */
   id: NodeId;
-  /** 节点类型 */
+  /* Brauzio internal note. */
   kind: NodeKind;
-  /** 节点名称（用于显示） */
+  /* Brauzio internal note. */
   name?: string;
-  /** 是否禁用 */
+  /* Brauzio internal note. */
   disabled?: boolean;
-  /** 节点级策略 */
+  /* Brauzio internal note. */
   policy?: NodePolicy;
-  /** 节点配置（类型由 kind 决定） */
+  /* Brauzio internal note. */
   config: JsonObject;
-  /** UI 布局信息 */
+  /* Brauzio internal note. */
   ui?: { x: number; y: number };
 }
 
 /**
- * Flow 元数据绑定
- * @description 定义 Flow 与特定域名/路径/URL 的关联
+  * Brauzio internal note.
+  * Brauzio internal note.
  */
 export interface FlowBinding {
   kind: 'domain' | 'path' | 'url';
@@ -61,58 +61,58 @@ export interface FlowBinding {
 
 /**
  * Flow V3
- * @description 完整的 Flow 定义，包含节点、边和配置
+  * Brauzio internal note.
  */
 export interface FlowV3 {
-  /** Schema 版本 */
+  /* Brauzio internal note. */
   schemaVersion: typeof FLOW_SCHEMA_VERSION;
-  /** Flow 唯一标识符 */
+  /* Brauzio internal note. */
   id: FlowId;
-  /** Flow 名称 */
+  /* Brauzio internal note. */
   name: string;
-  /** Flow 描述 */
+  /* Brauzio internal note. */
   description?: string;
-  /** 创建时间 */
+  /* Brauzio internal note. */
   createdAt: ISODateTimeString;
-  /** 更新时间 */
+  /* Brauzio internal note. */
   updatedAt: ISODateTimeString;
 
-  /** 入口节点 ID（显式指定，不依赖入度推断） */
+  /* Brauzio internal note. */
   entryNodeId: NodeId;
-  /** 节点列表 */
+  /* Brauzio internal note. */
   nodes: NodeV3[];
-  /** 边列表 */
+  /* Brauzio internal note. */
   edges: EdgeV3[];
 
-  /** 变量定义 */
+  /* Brauzio internal note. */
   variables?: VariableDefinition[];
-  /** Flow 级策略 */
+  /* Brauzio internal note. */
   policy?: FlowPolicy;
-  /** 元数据 */
+  /* Brauzio internal note. */
   meta?: {
-    /** 标签 */
+    /* Brauzio internal note. */
     tags?: string[];
-    /** 绑定规则 */
+    /* Brauzio internal note. */
     bindings?: FlowBinding[];
   };
 }
 
 /**
- * 根据 ID 查找节点
+  * Brauzio internal note.
  */
 export function findNodeById(flow: FlowV3, nodeId: NodeId): NodeV3 | undefined {
   return flow.nodes.find((n) => n.id === nodeId);
 }
 
 /**
- * 查找从指定节点出发的所有边
+  * Brauzio internal note.
  */
 export function findEdgesFrom(flow: FlowV3, nodeId: NodeId): EdgeV3[] {
   return flow.edges.filter((e) => e.from === nodeId);
 }
 
 /**
- * 查找指向指定节点的所有边
+  * Brauzio internal note.
  */
 export function findEdgesTo(flow: FlowV3, nodeId: NodeId): EdgeV3[] {
   return flow.edges.filter((e) => e.to === nodeId);

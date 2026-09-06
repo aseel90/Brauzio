@@ -1,31 +1,31 @@
 /**
- * @fileoverview Domain 层导出入口
- * @description 导出所有 Domain 类型定义
+  * Brauzio internal note.
+  * Brauzio internal note.
  */
 
-// JSON 基础类型
+// Brauzio internal note.
 export * from './json';
 
-// ID 类型
+// Brauzio internal note.
 export * from './ids';
 
-// 错误类型
+// Brauzio internal note.
 export * from './errors';
 
-// 策略类型
+// Brauzio internal note.
 export * from './policy';
 
-// 变量类型
+// Brauzio internal note.
 export * from './variables';
 
-// Flow 类型
+// Brauzio internal note.
 export * from './flow';
 
-// 事件类型
+// Brauzio internal note.
 export * from './events';
 
-// 调试器类型
+// Brauzio internal note.
 export * from './debug';
 
-// 触发器类型
+// Brauzio internal note.
 export * from './triggers';

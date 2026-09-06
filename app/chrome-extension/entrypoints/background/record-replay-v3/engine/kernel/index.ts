@@ -1,5 +1,5 @@
 /**
- * @fileoverview Kernel 模块导出入口
+  * Brauzio internal note.
  */
 
 export * from './kernel';

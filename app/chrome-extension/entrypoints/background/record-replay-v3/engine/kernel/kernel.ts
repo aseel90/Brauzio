@@ -1,6 +1,6 @@
 /**
- * @fileoverview ExecutionKernel 接口定义
- * @description 定义 Record-Replay V3 的核心执行引擎接口
+  * Brauzio internal note.
+  * Brauzio internal note.
  */
 
 import type { JsonObject } from '../../domain/json';
@@ -11,99 +11,99 @@ import type { DebuggerCommand, DebuggerState } from '../../domain/debug';
 import type { RunEvent, RunStatus, Unsubscribe } from '../../domain/events';
 
 /**
- * Run 启动请求
+  * Brauzio internal note.
  */
 export interface RunStartRequest {
-  /** Run ID（由调用方生成） */
+  /* Brauzio internal note. */
   runId: RunId;
   /** Flow ID */
   flowId: FlowId;
-  /** Flow 快照（执行时使用的完整 Flow 定义） */
+  /* Brauzio internal note. */
   flowSnapshot: FlowV3;
-  /** 运行参数 */
+  /* Brauzio internal note. */
   args?: JsonObject;
-  /** 起始节点 ID（默认为 Flow 的 entryNodeId） */
+  /* Brauzio internal note. */
   startNodeId?: NodeId;
-  /** Tab ID（必须由调用方分配，每 Run 独占） */
+  /* Brauzio internal note. */
   tabId: number;
-  /** 调试配置 */
+  /* Brauzio internal note. */
   debug?: { breakpoints?: NodeId[]; pauseOnStart?: boolean };
 }
 
 /**
- * Run 执行结果
+  * Brauzio internal note.
  */
 export interface RunResult {
   /** Run ID */
   runId: RunId;
-  /** 最终状态 */
+  /* Brauzio internal note. */
   status: Extract<RunStatus, 'succeeded' | 'failed' | 'canceled'>;
-  /** 总耗时（毫秒） */
+  /* Brauzio internal note. */
   tookMs: number;
-  /** 错误信息（如果失败） */
+  /* Brauzio internal note. */
   error?: RRError;
-  /** 输出结果 */
+  /* Brauzio internal note. */
   outputs?: JsonObject;
 }
 
 /**
- * Run 状态查询结果
+  * Brauzio internal note.
  */
 export interface RunStatusInfo {
-  /** 当前状态 */
+  /* Brauzio internal note. */
   status: RunStatus;
-  /** 当前节点 ID */
+  /* Brauzio internal note. */
   currentNodeId?: NodeId;
-  /** 开始时间 */
+  /* Brauzio internal note. */
   startedAt?: number;
-  /** 最后更新时间 */
+  /* Brauzio internal note. */
   updatedAt: number;
   /** Tab ID */
   tabId?: number;
 }
 
 /**
- * ExecutionKernel 接口
- * @description Record-Replay V3 的核心执行引擎
+  * Brauzio internal note.
+  * Brauzio internal note.
  */
 export interface ExecutionKernel {
   /**
-   * 订阅事件流
-   * @param listener 事件监听器
-   * @returns 取消订阅函数
+    * Brauzio internal note.
+    * Brauzio internal note.
+    * Brauzio internal note.
    */
   onEvent(listener: (event: RunEvent) => void): Unsubscribe;
 
   /**
-   * 启动 Run
-   * @description 将 Run 加入队列并开始执行
+    * Brauzio internal note.
+    * Brauzio internal note.
    */
   startRun(req: RunStartRequest): Promise<void>;
 
   /**
-   * 暂停 Run
+    * Brauzio internal note.
    * @param runId Run ID
-   * @param reason 暂停原因
+    * Brauzio internal note.
    */
   pauseRun(runId: RunId, reason?: { kind: 'command' }): Promise<void>;
 
   /**
-   * 恢复 Run
+    * Brauzio internal note.
    * @param runId Run ID
    */
   resumeRun(runId: RunId): Promise<void>;
 
   /**
-   * 取消 Run
+    * Brauzio internal note.
    * @param runId Run ID
-   * @param reason 取消原因
+    * Brauzio internal note.
    */
   cancelRun(runId: RunId, reason?: string): Promise<void>;
 
   /**
-   * 执行调试命令
+    * Brauzio internal note.
    * @param runId Run ID
-   * @param cmd 调试命令
+    * Brauzio internal note.
    */
   debug(
     runId: RunId,
@@ -111,22 +111,22 @@ export interface ExecutionKernel {
   ): Promise<{ ok: true; state?: DebuggerState } | { ok: false; error: string }>;
 
   /**
-   * 获取 Run 状态
+    * Brauzio internal note.
    * @param runId Run ID
-   * @returns Run 状态信息或 null（如果不存在）
+    * Brauzio internal note.
    */
   getRunStatus(runId: RunId): Promise<RunStatusInfo | null>;
 
   /**
-   * 恢复执行
-   * @description 在 Service Worker 重启后调用，恢复中断的 Run
+    * Brauzio internal note.
+    * Brauzio internal note.
    */
   recover(): Promise<void>;
 }
 
 /**
- * 创建 NotImplemented 的 ExecutionKernel
- * @description Phase 0 占位实现
+  * Brauzio internal note.
+  * Brauzio internal note.
  */
 export function createNotImplementedKernel(): ExecutionKernel {
   const notImplemented = () => {

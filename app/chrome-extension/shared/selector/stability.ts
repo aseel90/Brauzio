@@ -1,5 +1,5 @@
 /**
- * Selector Stability - 选择器稳定性评估
+  * Brauzio internal note.
  */
 
 import type {
@@ -79,7 +79,7 @@ function lengthPenalty(value: string): number {
 }
 
 /**
- * 计算选择器稳定性评分
+  * Brauzio internal note.
  */
 export function computeSelectorStability(candidate: SelectorCandidate): SelectorStability {
   if (candidate.type === 'css' || candidate.type === 'attr') {
@@ -146,7 +146,7 @@ export function computeSelectorStability(candidate: SelectorCandidate): Selector
 }
 
 /**
- * 为选择器候选添加稳定性评分
+  * Brauzio internal note.
  */
 export function withStability(candidate: SelectorCandidate): SelectorCandidate {
   if (candidate.stability) return candidate;
@@ -171,26 +171,26 @@ function typePriority(type: SelectorType): number {
 }
 
 /**
- * 比较两个选择器候选的优先级
- * 返回负数表示 a 优先，正数表示 b 优先
+  * Brauzio internal note.
+  * Brauzio internal note.
  */
 export function compareSelectorCandidates(a: SelectorCandidate, b: SelectorCandidate): number {
-  // 1. 用户指定的权重优先
+  // Brauzio internal note.
   const aw = a.weight ?? 0;
   const bw = b.weight ?? 0;
   if (aw !== bw) return bw - aw;
 
-  // 2. 稳定性评分
+  // Brauzio internal note.
   const as = a.stability?.score ?? computeSelectorStability(a).score;
   const bs = b.stability?.score ?? computeSelectorStability(b).score;
   if (as !== bs) return bs - as;
 
-  // 3. 类型优先级
+  // Brauzio internal note.
   const ap = typePriority(a.type);
   const bp = typePriority(b.type);
   if (ap !== bp) return bp - ap;
 
-  // 4. 长度（越短越好）
+  // Brauzio internal note.
   const alen = String(a.value || '').length;
   const blen = String(b.value || '').length;
   return alen - blen;

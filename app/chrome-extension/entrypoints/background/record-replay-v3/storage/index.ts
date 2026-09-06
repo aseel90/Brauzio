@@ -1,5 +1,5 @@
 /**
- * @fileoverview Storage 层导出入口
+  * Brauzio internal note.
  */
 
 export * from './db';

@@ -1,6 +1,6 @@
 /**
  * @fileoverview Recovery module exports
- * @description 崩溃恢复模块导出
+  * Brauzio internal note.
  */
 
 export * from './recovery-coordinator';

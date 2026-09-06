@@ -1,6 +1,6 @@
 /**
- * @fileoverview 策略类型定义
- * @description 定义 Record-Replay V3 中使用的超时、重试、错误处理和工件策略
+  * Brauzio internal note.
+  * Brauzio internal note.
  */
 
 import type { EdgeLabel, NodeId } from './ids';
@@ -8,38 +8,38 @@ import type { RRErrorCode } from './errors';
 import type { UnixMillis } from './json';
 
 /**
- * 超时策略
- * @description 定义操作的超时时间和作用范围
+  * Brauzio internal note.
+  * Brauzio internal note.
  */
 export interface TimeoutPolicy {
-  /** 超时时间（毫秒） */
+  /* Brauzio internal note. */
   ms: UnixMillis;
-  /** 超时范围：attempt=每次尝试, node=整个节点执行 */
+  /* Brauzio internal note. */
   scope?: 'attempt' | 'node';
 }
 
 /**
- * 重试策略
- * @description 定义失败后的重试行为
+  * Brauzio internal note.
+  * Brauzio internal note.
  */
 export interface RetryPolicy {
-  /** 最大重试次数 */
+  /* Brauzio internal note. */
   retries: number;
-  /** 重试间隔（毫秒） */
+  /* Brauzio internal note. */
   intervalMs: UnixMillis;
-  /** 退避策略：none=固定间隔, exp=指数退避, linear=线性增长 */
+  /* Brauzio internal note. */
   backoff?: 'none' | 'exp' | 'linear';
-  /** 最大重试间隔（毫秒） */
+  /* Brauzio internal note. */
   maxIntervalMs?: UnixMillis;
-  /** 抖动策略：none=无抖动, full=完全随机 */
+  /* Brauzio internal note. */
   jitter?: 'none' | 'full';
-  /** 仅在这些错误码时重试 */
+  /* Brauzio internal note. */
   retryOn?: ReadonlyArray<RRErrorCode>;
 }
 
 /**
- * 错误处理策略
- * @description 定义节点执行失败后的处理方式
+  * Brauzio internal note.
+  * Brauzio internal note.
  */
 export type OnErrorPolicy =
   | { kind: 'stop' }
@@ -51,51 +51,51 @@ export type OnErrorPolicy =
   | { kind: 'retry'; override?: Partial<RetryPolicy> };
 
 /**
- * 工件策略
- * @description 定义截图和日志收集的行为
+  * Brauzio internal note.
+  * Brauzio internal note.
  */
 export interface ArtifactPolicy {
-  /** 截图策略：never=从不, onFailure=失败时, always=总是 */
+  /* Brauzio internal note. */
   screenshot?: 'never' | 'onFailure' | 'always';
-  /** 截图保存路径模板 */
+  /* Brauzio internal note. */
   saveScreenshotAs?: string;
-  /** 是否包含控制台日志 */
+  /* Brauzio internal note. */
   includeConsole?: boolean;
-  /** 是否包含网络请求 */
+  /* Brauzio internal note. */
   includeNetwork?: boolean;
 }
 
 /**
- * 节点级策略
- * @description 单个节点的执行策略配置
+  * Brauzio internal note.
+  * Brauzio internal note.
  */
 export interface NodePolicy {
-  /** 超时策略 */
+  /* Brauzio internal note. */
   timeout?: TimeoutPolicy;
-  /** 重试策略 */
+  /* Brauzio internal note. */
   retry?: RetryPolicy;
-  /** 错误处理策略 */
+  /* Brauzio internal note. */
   onError?: OnErrorPolicy;
-  /** 工件策略 */
+  /* Brauzio internal note. */
   artifacts?: ArtifactPolicy;
 }
 
 /**
- * Flow 级策略
- * @description 整个 Flow 的执行策略配置
+  * Brauzio internal note.
+  * Brauzio internal note.
  */
 export interface FlowPolicy {
-  /** 默认节点策略 */
+  /* Brauzio internal note. */
   defaultNodePolicy?: NodePolicy;
-  /** 不支持节点的处理策略 */
+  /* Brauzio internal note. */
   unsupportedNodePolicy?: OnErrorPolicy;
-  /** Run 总超时时间（毫秒） */
+  /* Brauzio internal note. */
   runTimeoutMs?: UnixMillis;
 }
 
 /**
- * 合并节点策略
- * @description 将 Flow 级默认策略与节点级策略合并
+  * Brauzio internal note.
+  * Brauzio internal note.
  */
 export function mergeNodePolicy(
   flowDefault: NodePolicy | undefined,

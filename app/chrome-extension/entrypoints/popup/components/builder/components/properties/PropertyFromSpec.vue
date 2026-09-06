@@ -4,7 +4,7 @@
     <div class="section-title">لم يتم العثور على مواصفات العقدة</div>
     <div class="help">لا يتوفر NodeSpec لهذه العقدة؛ تم استخدام لوحة الخصائص الافتراضية.</div>
   </div>
-  <!-- 将通用字段留给外层 PropertyPanel 渲染（timeoutMs/screenshotOnFail等） -->
+  <!-- Brauzio internal note. -->
 </template>
 
 <script lang="ts" setup>

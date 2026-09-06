@@ -1,6 +1,6 @@
 /**
- * @fileoverview 租约管理
- * @description 管理 Run 的租约续约和过期回收
+  * Brauzio internal note.
+  * Brauzio internal note.
  */
 
 import type { UnixMillis } from '../../domain/json';
@@ -8,57 +8,57 @@ import type { RunId } from '../../domain/ids';
 import type { RunQueue, RunQueueConfig, Lease } from './queue';
 
 /**
- * 租约管理器
- * @description 管理租约续约和过期检测
+  * Brauzio internal note.
+  * Brauzio internal note.
  */
 export interface LeaseManager {
   /**
-   * 开始心跳
-   * @param ownerId 持有者 ID
+    * Brauzio internal note.
+    * Brauzio internal note.
    */
   startHeartbeat(ownerId: string): void;
 
   /**
-   * 停止心跳
-   * @param ownerId 持有者 ID
+    * Brauzio internal note.
+    * Brauzio internal note.
    */
   stopHeartbeat(ownerId: string): void;
 
   /**
-   * 检查并回收过期租约
-   * @param now 当前时间
-   * @returns 被回收的 Run ID 列表
+    * Brauzio internal note.
+    * Brauzio internal note.
+    * Brauzio internal note.
    */
   reclaimExpiredLeases(now: UnixMillis): Promise<RunId[]>;
 
   /**
-   * 判断租约是否过期
+    * Brauzio internal note.
    */
   isLeaseExpired(lease: Lease, now: UnixMillis): boolean;
 
   /**
-   * 创建新租约
+    * Brauzio internal note.
    */
   createLease(ownerId: string, now: UnixMillis): Lease;
 
   /**
-   * 停止所有心跳
+    * Brauzio internal note.
    */
   dispose(): void;
 }
 
 /**
- * 创建租约管理器
+  * Brauzio internal note.
  */
 export function createLeaseManager(queue: RunQueue, config: RunQueueConfig): LeaseManager {
   const heartbeatTimers = new Map<string, ReturnType<typeof setInterval>>();
 
   return {
     startHeartbeat(ownerId: string): void {
-      // 如果已有定时器，先停止
+      // Brauzio internal note.
       this.stopHeartbeat(ownerId);
 
-      // 创建新的心跳定时器
+      // Brauzio internal note.
       const timer = setInterval(async () => {
         try {
           await queue.heartbeat(ownerId, Date.now());
@@ -105,8 +105,8 @@ export function createLeaseManager(queue: RunQueue, config: RunQueueConfig): Lea
 }
 
 /**
- * 生成唯一的 owner ID
- * @description 用于标识当前 Service Worker 实例
+  * Brauzio internal note.
+  * Brauzio internal note.
  */
 export function generateOwnerId(): string {
   return `sw_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;

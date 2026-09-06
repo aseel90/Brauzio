@@ -1,5 +1,5 @@
 /**
- * @fileoverview Cron Trigger Handler 测试 (P4-07)
+  * Brauzio internal note.
  * @description
  * Tests for:
  * - Alarm scheduling on install

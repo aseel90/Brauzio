@@ -1,5 +1,5 @@
 /**
- * @fileoverview Command Trigger Handler 测试 (P4-04)
+  * Brauzio internal note.
  * @description
  * Tests for:
  * - Command event handling

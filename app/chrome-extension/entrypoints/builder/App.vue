@@ -385,7 +385,7 @@ async function bootstrap() {
 }
 
 /**
- * 初始化一个فارغ的سير العمل
+  * Brauzio internal note.
  */
 function initEmptyFlow() {
   const now = Date.now();
@@ -476,7 +476,7 @@ function applyRename() {
 }
 
 /**
- * حفظ Flow 到 V3 RPC
+  * Brauzio internal note.
  * @returns حفظنجحرجوع FlowV3，فشلرجوع null
  */
 async function save(): Promise<FlowV3 | null> {
@@ -527,8 +527,8 @@ function schId(flowId: string, nodeId: string, idx: number): TriggerId {
 }
 
 /**
- * 将 V2 schedule الإعداد转换为 cron التعبير
- * @returns cron التعبيرأو null（如果تعذر转换）
+  * Brauzio internal note.
+  * Brauzio internal note.
  */
 function scheduleToCron(schedule: { type?: string; when?: string }): string | null {
   if (!schedule) return null;
@@ -555,13 +555,13 @@ function scheduleToCron(schedule: { type?: string; when?: string }): string | nu
     return `${minute} ${hour} * * *`;
   }
 
-  // V3 cron 不支持 'once' مرة واحدة性جدولة
+  // Brauzio internal note.
   return null;
 }
 
 /**
- * 从 trigger العقدةالإعداد同步مشغّل到 V3 存储
- * @description V2 schedules 会转换为 V3 cron triggers
+  * Brauzio internal note.
+  * Brauzio internal note.
  */
 async function syncTriggersAndSchedules(flowId: string, nodes: unknown[]) {
   const triggersNeeded: TriggerSpec[] = [];

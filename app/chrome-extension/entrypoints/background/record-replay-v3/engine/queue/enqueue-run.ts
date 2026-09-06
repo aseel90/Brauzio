@@ -1,12 +1,12 @@
 /**
- * @fileoverview 共享入队服务
+  * Brauzio internal note.
  * @description
- * 提供统一的 Run 入队逻辑，供 RPC Server 和 TriggerManager 共用。
+  * Brauzio internal note.
  *
- * 设计理由：
- * - 将原本位于 RpcServer 的入队逻辑抽离为独立服务
- * - 避免 RPC 和 TriggerManager 之间的行为漂移
- * - 统一参数校验、Run 创建、队列入队、事件发布流程
+  * Brauzio internal note.
+  * Brauzio internal note.
+  * Brauzio internal note.
+  * Brauzio internal note.
  */
 
 import type { JsonObject, UnixMillis } from '../../domain/json';
@@ -20,38 +20,38 @@ import type { RunScheduler } from './scheduler';
 // ==================== Types ====================
 
 /**
- * 入队服务依赖
+  * Brauzio internal note.
  */
 export interface EnqueueRunDeps {
-  /** 存储层 (仅需 flows/runs/queue) */
+  /* Brauzio internal note. */
   storage: Pick<StoragePort, 'flows' | 'runs' | 'queue'>;
-  /** 事件总线 */
+  /* Brauzio internal note. */
   events: Pick<EventsBus, 'append'>;
-  /** 调度器 (可选) */
+  /* Brauzio internal note. */
   scheduler?: Pick<RunScheduler, 'kick'>;
-  /** RunId 生成器 (用于测试注入) */
+  /* Brauzio internal note. */
   generateRunId?: () => RunId;
-  /** 时间源 (用于测试注入) */
+  /* Brauzio internal note. */
   now?: () => UnixMillis;
 }
 
 /**
- * 入队请求参数
+  * Brauzio internal note.
  */
 export interface EnqueueRunInput {
-  /** Flow ID (必选) */
+  /* Brauzio internal note. */
   flowId: FlowId;
-  /** 起始节点 ID (可选，默认使用 Flow 的 entryNodeId) */
+  /* Brauzio internal note. */
   startNodeId?: NodeId;
-  /** 优先级 (默认 0) */
+  /* Brauzio internal note. */
   priority?: number;
-  /** 最大尝试次数 (默认 1) */
+  /* Brauzio internal note. */
   maxAttempts?: number;
-  /** 传递给 Flow 的参数 */
+  /* Brauzio internal note. */
   args?: JsonObject;
-  /** 触发上下文 (由 TriggerManager 设置) */
+  /* Brauzio internal note. */
   trigger?: TriggerFireContext;
-  /** 调试选项 */
+  /* Brauzio internal note. */
   debug?: {
     breakpoints?: NodeId[];
     pauseOnStart?: boolean;
@@ -59,26 +59,26 @@ export interface EnqueueRunInput {
 }
 
 /**
- * 入队结果
+  * Brauzio internal note.
  */
 export interface EnqueueRunResult {
-  /** 新创建的 Run ID */
+  /* Brauzio internal note. */
   runId: RunId;
-  /** 在队列中的位置 (1-based) */
+  /* Brauzio internal note. */
   position: number;
 }
 
 // ==================== Utilities ====================
 
 /**
- * 默认 RunId 生成器
+  * Brauzio internal note.
  */
 function defaultGenerateRunId(): RunId {
   return `run_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
 }
 
 /**
- * 校验整数参数
+  * Brauzio internal note.
  */
 function validateInt(
   value: unknown,
@@ -103,8 +103,8 @@ function validateInt(
 }
 
 /**
- * 计算 Run 在队列中的位置
- * @description 按调度顺序: priority DESC + createdAt ASC
+  * Brauzio internal note.
+  * Brauzio internal note.
  * @returns 1-based position, or -1 if run not found in queued items
  *
  * Note: Due to race conditions (scheduler may claim the run before this is called),
@@ -127,16 +127,16 @@ async function computeQueuePosition(
 // ==================== Main Function ====================
 
 /**
- * 入队执行一个 Run
+  * Brauzio internal note.
  * @description
- * 执行步骤：
- * 1. 参数校验
- * 2. 验证 Flow 存在
- * 3. 创建 RunRecordV3 (status=queued)
- * 4. 入队到 RunQueue
- * 5. 发布 run.queued 事件
- * 6. 触发调度 (best-effort)
- * 7. 计算队列位置
+  * Brauzio internal note.
+  * Brauzio internal note.
+  * Brauzio internal note.
+  * Brauzio internal note.
+  * Brauzio internal note.
+  * Brauzio internal note.
+  * Brauzio internal note.
+  * Brauzio internal note.
  */
 export async function enqueueRun(
   deps: EnqueueRunDeps,
@@ -150,17 +150,17 @@ export async function enqueueRun(
   const now = deps.now ?? (() => Date.now());
   const generateRunId = deps.generateRunId ?? defaultGenerateRunId;
 
-  // 参数校验
+  // Brauzio internal note.
   const priority = validateInt(input.priority, 0, 'priority');
   const maxAttempts = validateInt(input.maxAttempts, 1, 'maxAttempts', { min: 1 });
 
-  // 验证 Flow 存在
+  // Brauzio internal note.
   const flow = await deps.storage.flows.get(flowId);
   if (!flow) {
     throw new Error(`Flow "${flowId}" not found`);
   }
 
-  // 验证 startNodeId 存在于 Flow 中
+  // Brauzio internal note.
   if (input.startNodeId) {
     const nodeExists = flow.nodes.some((n) => n.id === input.startNodeId);
     if (!nodeExists) {
@@ -171,7 +171,7 @@ export async function enqueueRun(
   const ts = now();
   const runId = generateRunId();
 
-  // 1. 创建 RunRecordV3
+  // Brauzio internal note.
   const runRecord: RunRecordV3 = {
     schemaVersion: RUN_SCHEMA_VERSION,
     id: runId,
@@ -189,7 +189,7 @@ export async function enqueueRun(
   };
   await deps.storage.runs.save(runRecord);
 
-  // 2. 入队
+  // Brauzio internal note.
   await deps.storage.queue.enqueue({
     id: runId,
     flowId,
@@ -200,17 +200,17 @@ export async function enqueueRun(
     debug: input.debug,
   });
 
-  // 3. 发布 run.queued 事件
+  // Brauzio internal note.
   await deps.events.append({
     runId,
     type: 'run.queued',
     flowId,
   });
 
-  // 4. 计算队列位置 (在 kick 之前计算，减少竞态条件导致 position=-1 的概率)
+  // Brauzio internal note.
   const position = await computeQueuePosition(deps.storage, runId);
 
-  // 5. 触发调度 (best-effort, 不阻塞返回)
+  // Brauzio internal note.
   if (deps.scheduler) {
     void deps.scheduler.kick();
   }

@@ -50,7 +50,7 @@ curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
 WASM 文件会自动复制到 `app/chrome-extension/workers/` 目录，Chrome 扩展可以直接使用：
 
 ```typescript
-// 在 Chrome 扩展中使用
+// Brauzio internal note.
 const wasmUrl = chrome.runtime.getURL('workers/simd_math.js');
 const wasmModule = await import(wasmUrl);
 ```

@@ -1,5 +1,5 @@
 /**
- * @fileoverview Manual Trigger Handler 测试 (P4-08)
+  * Brauzio internal note.
  * @description
  * Tests for:
  * - Basic install/uninstall operations

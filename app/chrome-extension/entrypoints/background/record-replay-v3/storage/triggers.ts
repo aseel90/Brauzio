@@ -1,6 +1,6 @@
 /**
- * @fileoverview 触发器存储
- * @description 实现触发器的 CRUD 操作（Phase 4 完整实现）
+  * Brauzio internal note.
+  * Brauzio internal note.
  */
 
 import type { TriggerId } from '../domain/ids';
@@ -9,7 +9,7 @@ import type { TriggersStore } from '../engine/storage/storage-port';
 import { RR_V3_STORES, withTransaction } from './db';
 
 /**
- * 创建 TriggersStore 实现
+  * Brauzio internal note.
  */
 export function createTriggersStore(): TriggersStore {
   return {
