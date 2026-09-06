@@ -6,7 +6,7 @@ Brauzio هو جسر MCP للتحكم في Chrome من ChatGPT عبر Cloudflare 
 
 ```text
 ChatGPT Custom MCP
-        ↓ HTTPS
+        ↓ HTTPS /mcp + OAuth 2.1
 Cloudflare Worker
         ↓ Durable Object / WebSocket
 Brauzio Chrome Extension
@@ -20,6 +20,8 @@ Chrome
 
 - واجهة عربية RTL خاصة بـBrauzio.
 - اتصال آمن ومباشر عبر Cloudflare.
+- OAuth 2.1 لربط ChatGPT بدون وضع كلمة سر في رابط MCP.
+- رمز Pairing مؤقت من الإضافة، صالح لخمس دقائق ويستخدم مرة واحدة.
 - أدوات قراءة الصفحة، التنقل، النقر، الكتابة، Console، JavaScript، الشبكة، الأداء، الصور وGIF.
 - مؤشر Brauzio افتراضي مرئي داخل الصفحة.
 - تحكم ماوس حقيقي مستمر: `mouse_move` و`mouse_down` و`mouse_up` و`drag_hold`، مناسب للألعاب والـCanvas والـVirtual Joystick.
@@ -66,6 +68,7 @@ pnpm build:extension
 - [x] إزالة طبقات المنتج القديم
 - [x] إضافة الماوس الافتراضي المرئي وحالة الضغط المستمرة
 - [x] نجاح TypeScript compile وChrome extension build بعد التنظيف
+- [x] استبدال MCP query-string secret بـOAuth 2.1 + one-time pairing
 - [ ] إعادة اختبار النسخة المثبتة النهائية بعد نشر ZIP الجديد
 
 ## اتجاه V3
@@ -82,13 +85,22 @@ pnpm build:extension
 
 الخريطة التنفيذية الكاملة موجودة في `docs/ROADMAP.md`.
 
-## الأمان
+## المصادقة والأمان
 
-لا تسجل أو ترفع إلى GitHub أيًا من:
+رابط MCP النهائي نظيف ولا يحتوي على أسرار:
 
-- `BROWSER_SHARED_SECRET`
-- `MCP_SHARED_SECRET`
-- Device Token
+```text
+https://<worker>/mcp
+```
+
+عند الربط، ChatGPT يستخدم OAuth 2.1. الإضافة تنشئ Pairing Code مؤقتًا لاستخدام واحد، ثم يصدر Cloudflare OAuth tokens للعميل.
+
+مصادقة MCP ومصادقة الجهاز منفصلتان تمامًا:
+
+- ChatGPT ↔ Cloudflare: OAuth access/refresh tokens.
+- Extension ↔ Cloudflare: Device Token / `BROWSER_SHARED_SECRET`.
+
+لا تسجل أو ترفع إلى GitHub `BROWSER_SHARED_SECRET` أو Device Token أو OAuth tokens. لا يُسمح بإرسال Device Token داخل `?key=` أو أي query string.
 
 ## الترخيص والنسب
 
