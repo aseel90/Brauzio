@@ -1,0 +1,35 @@
+name: Brauzio Chinese audit
+
+on:
+  push:
+    paths:
+      - '.github/workflows/chinese-audit.yml'
+      - 'scripts/audit_chinese.py'
+      - 'app/chrome-extension/**'
+      - 'docs/**'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Scan source and docs
+        run: python scripts/audit_chinese.py
+      - name: Commit audit report
+        shell: bash
+        run: |
+          git add docs/CHINESE_AUDIT.md
+          if git diff --cached --quiet; then
+            echo "Audit report unchanged."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "chore: refresh Chinese-language audit"
+          git push origin HEAD:main
