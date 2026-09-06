@@ -1,5 +1,18 @@
 # Brauzio Changelog
 
+## 2026-09-06 — V2.1 OAuth Pairing
+
+- استبدال مصادقة `/mcp?key=...` بـOAuth 2.1.
+- رابط MCP أصبح نظيفًا: `/mcp` بدون Device Token أو secret في query string.
+- فصل مصادقة ChatGPT عن مصادقة Extension: OAuth tokens للـMCP وDevice Token للـWebSocket فقط.
+- إزالة `MCP_SHARED_SECRET` وإزالة fallback إلى `BROWSER_SHARED_SECRET`.
+- إضافة Pairing Code مؤقت من الإضافة، صالح لخمس دقائق ويستخدم مرة واحدة.
+- تخزين SHA-256 للـPairing Code فقط داخل Durable Object مع حد للمحاولات الفاشلة.
+- إضافة صفحة تفويض Brauzio عربية وربط OAuth grant بالـ`deviceId`.
+- إضافة `OAUTH_KV` لـCloudflare OAuth Provider وPKCE/DCR/CIMD support.
+- منع `/browser-status` من قبول query-string credentials.
+- رفع إصدار الإضافة والـCloud runtime إلى `2.1.0`.
+
 ## 2026-09-06 — V2 Clean Runtime
 
 - تحقق فعلي من اتصال ChatGPT → Cloudflare → Chrome.
