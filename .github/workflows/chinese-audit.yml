@@ -6,8 +6,12 @@ on:
       - '.github/workflows/chinese-audit.yml'
       - 'scripts/audit_chinese.py'
       - 'scripts/audit_ui_chinese.py'
-      - 'app/chrome-extension/**'
-      - 'packages/shared/src/node-specs-builtin.ts'
+      - 'app/**'
+      - 'packages/**'
+      - 'docs/**'
+      - 'README.md'
+      - 'package.json'
+      - 'pnpm-workspace.yaml'
   workflow_dispatch:
 
 permissions:
@@ -33,5 +37,10 @@ jobs:
         run: |
           grep -Fq 'Potential user-facing CJK lines: **0**' docs/UI_CHINESE_STRINGS.md
 
-      - name: Generate full repository audit for job logs
+      - name: Scan all Brauzio source and docs
         run: python scripts/audit_chinese.py
+
+      - name: Print full audit summary
+        shell: bash
+        run: |
+          sed -n '1,90p' docs/CHINESE_AUDIT.md
