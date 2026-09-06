@@ -1,20 +1,12 @@
 /**
- * Chrome Extension Constants
- * Centralized configuration values and magic constants
+ * Brauzio Chrome Extension Constants
+ * Centralized configuration values and magic constants.
  */
 
-// Native Host Configuration
-export const NATIVE_HOST = {
-  NAME: 'com.chromemcp.nativehost',
-  DEFAULT_PORT: 12306,
-} as const;
-
-// Chrome Extension Icons
 export const ICONS = {
   NOTIFICATION: 'icon/48.png',
 } as const;
 
-// Timeouts and Delays (in milliseconds)
 export const TIMEOUTS = {
   DEFAULT_WAIT: 1000,
   NETWORK_CAPTURE_MAX: 30000,
@@ -24,7 +16,6 @@ export const TIMEOUTS = {
   CLICK_DELAY: 100,
 } as const;
 
-// Limits and Thresholds
 export const LIMITS = {
   MAX_NETWORK_REQUESTS: 100,
   MAX_SEARCH_RESULTS: 50,
@@ -34,12 +25,7 @@ export const LIMITS = {
   VECTOR_DIMENSIONS: 384,
 } as const;
 
-// Error Messages
 export const ERROR_MESSAGES = {
-  NATIVE_CONNECTION_FAILED: 'Failed to connect to native host',
-  NATIVE_DISCONNECTED: 'Native connection disconnected',
-  SERVER_STATUS_LOAD_FAILED: 'Failed to load server status',
-  SERVER_STATUS_SAVE_FAILED: 'Failed to save server status',
   TOOL_EXECUTION_FAILED: 'Tool execution failed',
   INVALID_PARAMETERS: 'Invalid parameters provided',
   PERMISSION_DENIED: 'Permission denied',
@@ -48,20 +34,15 @@ export const ERROR_MESSAGES = {
   NETWORK_ERROR: 'Network error occurred',
 } as const;
 
-// Success Messages
 export const SUCCESS_MESSAGES = {
   TOOL_EXECUTED: 'Tool executed successfully',
   CONNECTION_ESTABLISHED: 'Connection established',
-  SERVER_STARTED: 'Server started successfully',
-  SERVER_STOPPED: 'Server stopped successfully',
 } as const;
 
-// External Links
 export const LINKS = {
-  TROUBLESHOOTING: 'https://github.com/hangwin/mcp-chrome/blob/master/docs/TROUBLESHOOTING.md',
+  TROUBLESHOOTING: 'https://github.com/aseel90/Brauzio/blob/main/docs/TROUBLESHOOTING.md',
 } as const;
 
-// File Extensions and MIME Types
 export const FILE_TYPES = {
   STATIC_EXTENSIONS: [
     '.css',
@@ -80,11 +61,8 @@ export const FILE_TYPES = {
   IMAGE_FORMATS: ['png', 'jpeg', 'webp'] as const,
 } as const;
 
-// Network Filtering
 export const NETWORK_FILTERS = {
-  // Substring match against full URL (not just hostname) to support patterns like 'facebook.com/tr'
   EXCLUDED_DOMAINS: [
-    // Google
     'google-analytics.com',
     'googletagmanager.com',
     'analytics.google.com',
@@ -94,25 +72,19 @@ export const NETWORK_FILTERS = {
     'stats.g.doubleclick.net',
     'adservice.google.com',
     'pagead2.googlesyndication.com',
-    // Amazon
     'amazon-adsystem.com',
-    // Microsoft
     'bat.bing.com',
     'clarity.ms',
-    // Facebook
     'connect.facebook.net',
     'facebook.com/tr',
-    // Twitter
     'analytics.twitter.com',
     'ads-twitter.com',
-    // Other ad networks
     'ads.yahoo.com',
     'adroll.com',
     'adnxs.com',
     'criteo.com',
     'quantserve.com',
     'scorecardresearch.com',
-    // Analytics & session recording
     'segment.io',
     'amplitude.com',
     'mixpanel.com',
@@ -123,10 +95,8 @@ export const NETWORK_FILTERS = {
     'clicktale.net',
     'mouseflow.com',
     'fullstory.com',
-    // LinkedIn (tracking pixels)
     'linkedin.com/px',
   ],
-  // Static resource extensions (used when includeStatic=false)
   STATIC_RESOURCE_EXTENSIONS: [
     '.jpg',
     '.jpeg',
@@ -172,7 +142,6 @@ export const NETWORK_FILTERS = {
     '.ppt',
     '.pptx',
   ],
-  // MIME types treated as static/binary (filtered when includeStatic=false)
   STATIC_MIME_TYPES_TO_FILTER: [
     'image/',
     'font/',
@@ -186,7 +155,6 @@ export const NETWORK_FILTERS = {
     'application/zip',
     'application/octet-stream',
   ],
-  // API-like MIME types (never filtered by MIME)
   API_MIME_TYPES: [
     'application/json',
     'application/xml',
@@ -208,7 +176,6 @@ export const NETWORK_FILTERS = {
   STATIC_RESOURCE_TYPES: ['stylesheet', 'image', 'font', 'media', 'other'],
 } as const;
 
-// Semantic Similarity Configuration
 export const SEMANTIC_CONFIG = {
   DEFAULT_MODEL: 'sentence-transformers/all-MiniLM-L6-v2',
   CHUNK_SIZE: 512,
@@ -217,27 +184,20 @@ export const SEMANTIC_CONFIG = {
   CACHE_SIZE: 1000,
 } as const;
 
-// Storage Keys
 export const STORAGE_KEYS = {
-  SERVER_STATUS: 'serverStatus',
-  NATIVE_SERVER_PORT: 'nativeServerPort',
-  NATIVE_AUTO_CONNECT_ENABLED: 'nativeAutoConnectEnabled',
   SEMANTIC_MODEL: 'selectedModel',
   USER_PREFERENCES: 'userPreferences',
   VECTOR_INDEX: 'vectorIndex',
   USERSCRIPTS: 'userscripts',
   USERSCRIPTS_DISABLED: 'userscripts_disabled',
-  // Record & Replay storage keys
   RR_FLOWS: 'rr_flows',
   RR_RUNS: 'rr_runs',
   RR_PUBLISHED: 'rr_published_flows',
   RR_SCHEDULES: 'rr_schedules',
   RR_TRIGGERS: 'rr_triggers',
-  // Persistent recording state (guards resume across navigations/service worker restarts)
   RR_RECORDING_STATE: 'rr_recording_state',
 } as const;
 
-// Notification Configuration
 export const NOTIFICATIONS = {
   PRIORITY: 2,
   TYPE: 'basic' as const,
