@@ -1,5 +1,17 @@
 # Brauzio Changelog
 
+## 2026-09-06 — Extension V2.5.0 Sense → Act → Verify
+
+- إضافة طبقة `action-verification` موحدة بدل اعتبار dispatch وحده نجاحًا نهائيًا.
+- `chrome_click_element` و`chrome_navigate` يدعمان الآن `verify` اختياريًا وإرجاع `Action + Evidence`.
+- دعم URL وDOM/text وpage-loaded وnetwork-idle كـpostconditions مبنية على Smart Wait.
+- Network request verification يتم تسليحه قبل الفعل عبر CDP حتى لا تضيع requests السريعة.
+- Console verification يتم تسليحه قبل الفعل ويغطي `Runtime.consoleAPICalled`, `Runtime.exceptionThrown`, و`Log.entryAdded`.
+- evidence يعرض snapshot آمن قبل/بعد الفعل، check-by-check status، وelapsed time مع تنظيف query/hash/credentials من URLs المسجلة.
+- إذا نُفذ الفعل لكن فشل postcondition المطلوبة، ترجع النتيجة `actionSucceeded: true` و`verified: false` كخطأ بدل نجاح زائف.
+- عند فتح tab/window جديد مع verification، يبدأ Brauzio من `about:blank` لتسليح Network/Console evidence قبل navigation.
+- رفع Extension وCloud runtime/schema إلى `2.5.0` / `v2.5.0-2026-09-06`.
+
 ## 2026-09-06 — Extension V2.4.0 Allowlisted Raw CDP
 
 - إضافة `chrome_cdp` كواجهة CDP متقدمة واحدة بدل تضخيم Brauzio بعشرات الأدوات المتخصصة.

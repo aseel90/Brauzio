@@ -1,8 +1,8 @@
-# Brauzio Development Roadmap
+# Brauzio V3 — Engineering Roadmap
 
-هذه الوثيقة هي خريطة التطوير الرسمية لـBrauzio.
+هذا الملف هو المرجع التنفيذي لتطوير Brauzio بعد الانتقال إلى Cloud MCP وChrome Extension نظيفة.
 
-## الهدف
+## الهدف العام
 
 تحويل Brauzio من MCP يتحكم في Chrome إلى Browser Agent سحابي متكامل مع الحفاظ على المسار:
 
@@ -56,43 +56,41 @@ ChatGPT → Cloudflare → Brauzio Extension → Chrome
 
 الأولوية: P0
 
-الهدف: Session Router حقيقية بدل attachment بسيط لكل tab.
+الهدف هو جعل `chrome.debugger` طبقة مشتركة آمنة بدل أن يدير كل Tool جلسة منفصلة.
 
 ```text
-CDPRouter
- ├── Root attachment per tab
- ├── Child sessions
- ├── Session ownership
- ├── Event routing
- ├── recovery
- └── emergency input cleanup
+Tool / Watch / Raw CDP
+        ↓
+     CDPRouter
+        ↓
+Root Session + Child Sessions
+        ↓
+chrome.debugger
 ```
 
-## مكتمل
+## مكتمل في المصدر
 
-- [x] إنشاء `CDPRouter` فوق `chrome.debugger`.
-- [x] ownership بعدّادات مستقلة لكل owner بدل `Set + refCount` غير الدقيق.
-- [x] منع owner غير مسجل من إنقاص ملكية session تخص أداة أخرى.
-- [x] Root APIs: `attach`, `detach`, `sendCommand`, `withSession`, `forceDetach`, `getSessionSnapshot`.
-- [x] event routing داخلي عبر `chrome.debugger.onEvent`.
-- [x] lazy recovery عند فقد root debugger attachment.
-- [x] Child CDP Sessions عبر `Target.attachToTarget(..., flatten: true)`.
-- [x] Child APIs: `createChildSession`, `sendToChild`, `detachChildSession`, `getChildSessionSnapshot`.
-- [x] ownership وتنظيف مستقل للـchild sessions.
-- [x] compatibility layer باسم `cdpSessionManager` حتى تعمل الأدوات الحالية فوق V3 بدون إعادة كتابة جماعية.
-- [x] emergency mouse release مربوط بمسار الأخطاء والانقطاع.
+- [x] `CDPRouter` مركزي لكل tab.
+- [x] Root session ownership بعدّادات per-owner بدل Set + refCount غير متطابقين.
+- [x] lazy recovery عند فقد debugger attachment.
+- [x] تنظيف state عند `chrome.debugger.onDetach` وtab close.
+- [x] snapshots للـroot sessions.
+- [x] event router مركزي لـ`chrome.debugger.onEvent`.
+- [x] API `subscribeEvents()`.
+- [x] `forceDetach()` للطوارئ.
+- [x] طبقة توافق `cdpSessionManager` للأدوات القديمة.
+- [x] Child Sessions عبر `Target.attachToTarget(..., flatten: true)`.
+- [x] child ownership مستقل.
+- [x] `sendToChild()` و`detachChild()`.
+- [x] cleanup عند `Target.detachedFromTarget`.
+- [x] child snapshots.
 
 ## متبقٍ
 
-- [ ] نقل Network / Performance / Console إلى child sessions عندما يعطي ذلك عزلًا حقيقيًا.
-- [ ] إضافة keyboard-held state وemergency key release عندما ندعم key-down/key-up المستمر.
-- [ ] اختبارات E2E لتعدد owners وchild lifecycle والفشل أثناء الاستخدام.
-
-معيار الإكمال:
-
-- أكثر من مراقب يستطيع استخدام tab نفسه دون أن يفصل أحدهم session الآخر.
-- فشل أداة لا يفصل أدوات أخرى.
-- لا يوجد root أو child debugger ownership leak.
+- [ ] E2E لعمر root session مع عدة Tools متداخلة.
+- [ ] E2E لـchild session على iframe/worker targets حقيقية.
+- [ ] تحديد سياسة واضحة لاستخدام child sessions افتراضيًا في Network/Performance.
+- [ ] session snapshot داخل Diagnostics UI.
 
 ---
 
@@ -100,9 +98,19 @@ CDPRouter
 
 الأولوية: P0
 
-الهدف: استبدال `sleep` الثابت بمراقبة أحداث Chrome الحقيقية.
+بدل:
 
-أدوات MCP:
+```text
+click → sleep(5s) → read
+```
+
+نستخدم:
+
+```text
+watch_start → click → watch_wait → verify
+```
+
+الأدوات:
 
 ```text
 chrome_watch_start
@@ -111,36 +119,31 @@ chrome_watch_read
 chrome_watch_stop
 ```
 
-## مكتمل في Extension
+## مكتمل في المصدر
 
-- [x] Event Router مبني فوق `CDPRouter.subscribeEvents`.
-- [x] الأدوات الأربع موجودة في Shared MCP schema وExtension dispatcher.
-- [x] دعم أولي لأحداث Navigation / Network / Runtime errors / Log / Dialog / Lifecycle.
-- [x] Filtering حسب categories وCDP methods و`urlIncludes`.
+- [x] Event Watch Engine داخل الإضافة.
 - [x] local ring buffer لكل Watch.
-- [x] sequence number متزايد لكل event.
-- [x] timestamp + tabId + sessionId/watchId.
-- [x] `watch_wait` يعيد event موجود مسبقًا فورًا، فلا تضيع الأحداث التي حدثت قبل wait.
-- [x] حدود للذاكرة: 20 Watch، وحجم buffer افتراضي 100 وأقصى 500.
-- [x] TTL وحد أقصى للانتظار.
-- [x] stop/cancel يحل waiters المعلقة ويحرر CDP ownership.
-- [x] cleanup للـWatches عند tab close أو Relay disconnect/error.
-- [x] summaries آمنة للشبكة لا تسجل cookies أو auth headers أو tokens.
-- [x] تجاهل الأحداث عالية التردد افتراضيًا ما لم تكن مطلوبة صراحة.
+- [x] sequence numbers تمنع ضياع الحدث إذا سبق `watch_wait`.
+- [x] TTL و`maxEvents` وlimits للذاكرة.
+- [x] Navigation events.
+- [x] Network request/response/finish/fail events.
+- [x] Runtime exceptions + Log entries.
+- [x] JavaScript dialogs.
+- [x] Page lifecycle events.
+- [x] cleanup عند tab close.
+- [x] cleanup عند Relay disconnect/error.
+- [x] URLs في persistence تُنظف من credentials/query/hash.
+- [x] Durable Object persistence لتعريفات الـWatch والـring buffer.
+- [x] `watch_read` و`watch_wait` يقرآن من Durable state عندما تكون الإضافة أعيد تشغيلها.
+- [x] Relay يعيد تفعيل الـWatches تلقائيًا بعد reconnect مع نفس `watchId`.
+- [x] `activeWatches` يظهر في BrowserSession status.
 
-## متبقٍ قبل إغلاق المرحلة
+## متبقٍ
 
-- [x] Durable Object ring buffer + مزامنة watch state/events مع Cloudflare، مع restore تلقائي بعد Relay/Service Worker restart.
-- [ ] ربط traceId الكامل بسياق Watch وكل event.
 - [ ] download events ضمن Event Engine الموحد.
-- [ ] اختبار Watch فعليًا على ZIP المثبت: start → action → navigation/network event → wait/read → stop.
-- [ ] اختبار race: وصول event قبل `watch_wait`.
-
-معيار الإكمال:
-
-- يمكن بدء Watch قبل النقر وانتظار navigation/network بدون sleep ثابت.
-- event الذي يصل قبل `watch_wait` يبقى قابلًا للقراءة.
-- Restart/Suspend لا يفقد الأحداث المهمة بعد إضافة Cloud persistence.
+- [ ] console-api messages العادية، وليس errors فقط.
+- [ ] traceId داخل كل event من Worker إلى Extension والعكس.
+- [ ] E2E لـreconnect أثناء Watch نشط وإثبات عدم فقد sequence.
 
 ---
 
@@ -148,26 +151,24 @@ chrome_watch_stop
 
 الأولوية: P0
 
-الشروط المخطط لها:
+بدون Tool جديدة؛ داخل `chrome_computer`:
 
-- [x] `page_loaded`
-- [x] `selector_exists`
-- [x] `selector_hidden`
-- [x] `text_appears`
-- [x] `text_disappears`
-- [x] `url_matches`
-- [x] `network_idle`
-- [x] `request_finished`
-- [ ] `download_started`
-- [ ] `console_error`
-- [ ] `dialog_opened`
+```text
+action: wait_for
+condition: selector_exists | selector_hidden | text_appears | text_disappears |
+           url_matches | network_idle | request_finished | page_loaded
+```
 
-المبدأ: إذا تحقق الشرط بعد 280ms فلا ننتظر 5 ثوانٍ.
-
-## مكتمل في 2.3.0+
-
-- [x] `chrome_computer` يدعم `action: wait_for` بدون إضافة Tool جديدة.
-- [x] DOM waits مبنية على `MutationObserver` بدل polling.
+- [x] `wait_for` داخل `chrome_computer`.
+- [x] `selector_exists`.
+- [x] `selector_hidden`.
+- [x] `text_appears`.
+- [x] `text_disappears`.
+- [x] `url_matches`.
+- [x] `network_idle`.
+- [x] `request_finished`.
+- [x] `page_loaded`.
+- [x] DOM waits مبنية على `MutationObserver` بدل polling ثابت.
 - [x] URL waits مبنية على `chrome.tabs.onUpdated`.
 - [x] Network waits مبنية على CDP Core V3 مع inflight request tracking.
 - [x] `network_idle` يدعم quiet window ويستثني WebSocket/EventSource/Media.
@@ -229,11 +230,14 @@ click
  → expected network request observed
 ```
 
-- [ ] URL verification.
-- [ ] DOM/text verification.
-- [ ] Network verification.
-- [ ] Console verification.
-- [ ] نتيجة موحدة: Action + Evidence.
+- [x] URL verification عبر `verify.urlIncludes`.
+- [x] DOM/text verification عبر `selector` و`text` مع exists/hidden وappears/disappears.
+- [x] Network verification pre-armed عبر `requestUrlIncludes` حتى لا تضيع requests السريعة أثناء الفعل.
+- [x] Console verification pre-armed عبر `Runtime.consoleAPICalled`, `Runtime.exceptionThrown`, و`Log.entryAdded`.
+- [x] نتيجة موحدة: `Action + Evidence` مع `before`, `after`, `checks`, و`verified`.
+- [x] دمج التحقق اختياريًا في `chrome_click_element` و`chrome_navigate` بدون Tool جديدة.
+- [x] فشل postcondition المطلوبة يجعل tool result خطأ مع `actionSucceeded: true` بدل الإبلاغ عن نجاح زائف.
+- [ ] E2E على ZIP 2.5.0 المثبت لحالات URL/DOM/Network/Console المركبة.
 
 ---
 
@@ -297,7 +301,6 @@ Latency          86 ms
 - [ ] CDP root/child ownership snapshots.
 - [ ] active watches.
 - [ ] آخر خطأ قابل للنسخ.
-- [ ] تقرير تشخيص بدون Tokens أو Secrets.
 
 ---
 
@@ -306,18 +309,17 @@ Latency          86 ms
 الأولوية: P2
 
 ```text
-B      MOVE
-B●     CLICK
-B●     HOLD
-B→     DRAG
-B⌨     TYPE
+B MOVE
+B● CLICK
+B● HOLD
+B→ DRAG
+B⌨ TYPE
 ```
 
-- [ ] toggle إظهار/إخفاء.
-- [ ] حالات pressed/drag/type أوضح.
-- [ ] label اختياري `Brauzio — ChatGPT`.
-- [x] `pointer-events: none` للمؤشر.
-- [x] smooth visual movement أولي.
+- [ ] animation ثابتة للحركة.
+- [ ] حالات visual مختلفة لكل action.
+- [ ] إخفاء تلقائي بعد idle.
+- [ ] عدم حجب عناصر الصفحة.
 
 ---
 
@@ -326,10 +328,11 @@ B⌨     TYPE
 الأولوية: P2
 
 - [ ] أسماء أجهزة بدل `default` فقط.
-- [ ] Online / Offline لكل جهاز.
-- [ ] Device Token rotation/revoke.
-- [ ] منع session collision.
-- [ ] إظهار extensionVersion وschemaVersion لكل جهاز.
+- [ ] Online / Offline / Last seen.
+- [ ] إصدار الإضافة لكل جهاز.
+- [ ] إصدار Cloud runtime لكل جهاز.
+- [ ] token rotation/revoke.
+- [ ] حذف جهاز.
 
 ---
 
@@ -362,7 +365,7 @@ B⌨     TYPE
 | 3 | Event Engine | P0 | Extension + Durable persistence مكتملة، E2E/trace/download متبقٍ |
 | 4 | Smart Wait | P0 | Foundation مكتملة، E2E وشروط إضافية متبقية |
 | 5 | Raw `chrome_cdp` | P1 | allowlisted implementation مكتمل، E2E/trace متبقٍ |
-| 6 | Sense → Act → Verify | P1 | لاحقًا |
+| 6 | Sense → Act → Verify | P1 | Foundation مكتملة في 2.5.0، E2E والتوسيع لبقية actions متبقيان |
 | 7 | Human Takeover + Emergency Stop | P1 | لاحقًا |
 | 8 | Actor / Observer Sessions | P1 | لاحقًا |
 | 9 | Diagnostics + Self Test | P1 | لاحقًا |
