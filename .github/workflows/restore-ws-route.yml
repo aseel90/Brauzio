@@ -1,4 +1,4 @@
-name: Restore Brauzio WebSocket Route
+name: Restore Brauzio Relay Routes
 
 on:
   workflow_dispatch:
@@ -32,7 +32,7 @@ jobs:
       - name: Install dependencies
         run: pnpm install --no-frozen-lockfile --ignore-scripts
 
-      - name: Restore /ws route
+      - name: Repair relay and internal tool routes
         shell: bash
         run: |
           set -euo pipefail
@@ -40,14 +40,29 @@ jobs:
           from pathlib import Path
           path = Path('app/cloudflare-mcp/src/index.ts')
           text = path.read_text(encoding='utf-8')
-          if "url.pathname === '/ws'" in text:
-              print('/ws route already present')
-              raise SystemExit(0)
-          needle = """    if (url.pathname === '/authorize') {\n      return await handleAuthorize(request, env);\n    }\n"""
-          block = """    if (url.pathname === '/ws') {\n      const deviceId = deviceIdFromRequest(request, env);\n      const stub = browserStub(env, deviceId);\n      const target = new URL(request.url);\n      target.protocol = 'https:';\n      target.hostname = 'brauzio-browser.internal';\n      target.pathname = '/ws';\n      return stub.fetch(new Request(target.toString(), request));\n    }\n\n"""
-          if needle not in text:
-              raise SystemExit('Unable to locate insertion point for /ws route')
-          path.write_text(text.replace(needle, block + needle, 1), encoding='utf-8')
+
+          if "url.pathname === '/ws'" not in text:
+              needle = """    if (url.pathname === '/authorize') {\n      return await handleAuthorize(request, env);\n    }\n"""
+              block = """    if (url.pathname === '/ws') {\n      const deviceId = deviceIdFromRequest(request, env);\n      const stub = browserStub(env, deviceId);\n      const target = new URL(request.url);\n      target.protocol = 'https:';\n      target.hostname = 'brauzio-browser.internal';\n      target.pathname = '/ws';\n      return stub.fetch(new Request(target.toString(), request));\n    }\n\n"""
+              if needle not in text:
+                  raise SystemExit('Unable to locate insertion point for /ws route')
+              text = text.replace(needle, block + needle, 1)
+
+          old_url = "const requestUrl = new URL('https://brauzio-browser.internal/tool-call');"
+          new_url = "const requestUrl = new URL('https://brauzio-browser.internal/call');"
+          if old_url in text:
+              text = text.replace(old_url, new_url, 1)
+          elif new_url not in text:
+              raise SystemExit('Unable to locate BrowserSession internal tool route')
+
+          old_body = "body: JSON.stringify({ name, arguments: args }),"
+          new_body = "body: JSON.stringify({ name, args }),"
+          if old_body in text:
+              text = text.replace(old_body, new_body, 1)
+          elif new_body not in text:
+              raise SystemExit('Unable to locate BrowserSession internal tool payload')
+
+          path.write_text(text, encoding='utf-8')
           PY
 
       - name: Build shared schemas
@@ -105,7 +120,7 @@ jobs:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         run: pnpm exec wrangler deploy
 
-      - name: Commit restored route
+      - name: Commit repaired routes
         shell: bash
         run: |
           set -euo pipefail
@@ -116,5 +131,5 @@ jobs:
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add app/cloudflare-mcp/src/index.ts
-          git commit -m 'fix: restore Brauzio WebSocket relay route [skip ci]'
+          git commit -m 'fix: repair Brauzio relay route contract [skip ci]'
           git push origin HEAD:main
