@@ -5,6 +5,7 @@ on:
     paths:
       - '.github/workflows/chinese-audit.yml'
       - 'scripts/audit_chinese.py'
+      - 'scripts/audit_ui_chinese.py'
       - 'app/chrome-extension/**'
       - 'docs/**'
   workflow_dispatch:
@@ -19,17 +20,24 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Scan source and docs
+
+      - name: Scan all source and docs
         run: python scripts/audit_chinese.py
-      - name: Commit audit report
+
+      - name: Scan user-facing UI
+        run: python scripts/audit_ui_chinese.py
+
+      - name: Commit audit reports
         shell: bash
         run: |
-          git add docs/CHINESE_AUDIT.md
+          git add docs/CHINESE_AUDIT.md docs/UI_CHINESE_STRINGS.md
           if git diff --cached --quiet; then
-            echo "Audit report unchanged."
+            echo "Audit reports unchanged."
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git commit -m "chore: refresh Chinese-language audit"
+          git commit -m "chore: refresh Chinese-language audits"
+          git fetch origin main
+          git rebase origin/main
           git push origin HEAD:main
