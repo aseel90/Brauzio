@@ -14,6 +14,10 @@
 
 لا توجد في V2 واجهة Agent داخلية أو Workflow Builder أو Record/Replay أو Local AI أو Web Editor أو Side Panel.
 
+## تحقق V2 النهائي
+
+يجب أن ينجح البناء القياسي وأن يمر فحص النسخة المبنية بدون أي مسارات Runtime قديمة مثل Native Host أو Record/Replay أو `rr-*` أو semantic/vector stack قبل الدمج إلى `main`.
+
 ## البناء
 
 من جذر المستودع:
