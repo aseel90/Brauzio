@@ -29,12 +29,12 @@ jobs:
             --exclude-dir=node_modules \
             --exclude-dir=.output \
             --exclude='*.map' \
-            'NATIVE_HOST|NATIVE_SERVER_PORT|connectNative|ENSURE_NATIVE|127\.0\.0\.1:12306|mcp-chrome-bridge' \
+            '127\.0\.0\.1|localhost|nativeServerPort|NATIVE_HOST|NATIVE_SERVER_PORT|NativeMessageType|connectNative|ENSURE_NATIVE|mcp-chrome-bridge' \
             app/chrome-extension; then
-            echo 'Legacy local/native bridge references remain in the Brauzio extension.' >&2
+            echo 'Legacy localhost/native bridge references remain in the Brauzio extension.' >&2
             exit 1
           fi
-          echo 'No legacy local/native bridge references found.'
+          echo 'Brauzio extension is cloud-only: no localhost/native bridge references found.'
 
       - name: Setup Node
         uses: actions/setup-node@v4
