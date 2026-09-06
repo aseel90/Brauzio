@@ -1,52 +1,68 @@
 <script setup lang="ts">
-import { ref } from 'vue';
-import { LINKS, NATIVE_HOST } from '@/common/constants';
+import { computed, onMounted, ref } from 'vue';
+import { LINKS } from '@/common/constants';
 
 import '../sidepanel/styles/agent-chat.css';
 
-const COMMANDS = {
-  npmInstall: 'npm install -g mcp-chrome-bridge',
-  pnpmInstall: 'pnpm add -g mcp-chrome-bridge',
-  yarnInstall: 'yarn global add mcp-chrome-bridge',
-  mcpUrl: 'http://127.0.0.1:' + NATIVE_HOST.DEFAULT_PORT + '/mcp',
-  doctor: 'mcp-chrome-bridge doctor',
-  fix: 'mcp-chrome-bridge doctor --fix',
-  report: 'mcp-chrome-bridge report --copy',
-} as const;
+type RelayState = 'disabled' | 'connecting' | 'connected' | 'disconnected' | 'error';
 
-type CommandKey = keyof typeof COMMANDS;
+const state = ref<RelayState>('disconnected');
+const authenticated = ref(false);
+const relayUrl = ref('');
+const deviceId = ref('default');
+const deviceToken = ref('');
+const copied = ref(false);
 
-const copiedKey = ref<CommandKey | null>(null);
+const statusLabel = computed(() => {
+  if (state.value === 'connected' && authenticated.value) return 'متصل وآمن';
+  if (state.value === 'connecting') return 'جارٍ الاتصال';
+  if (state.value === 'error') return 'يوجد خطأ في الاتصال';
+  if (state.value === 'disabled') return 'الاتصال التلقائي متوقف';
+  return 'غير متصل بعد';
+});
 
-const ALT_INSTALL = [
-  { label: 'pnpm', key: 'pnpmInstall' },
-  { label: 'yarn', key: 'yarnInstall' },
-] as const satisfies ReadonlyArray<{ label: string; key: CommandKey }>;
-
-const DIAGNOSTICS = [
-  { label: 'Doctor', key: 'doctor' },
-  { label: 'Auto-fix', key: 'fix' },
-] as const satisfies ReadonlyArray<{ label: string; key: CommandKey }>;
-
-function copyLabel(key: CommandKey): string {
-  return copiedKey.value === key ? 'Copied' : 'Copy';
-}
-
-function copyColor(key: CommandKey): string {
-  return copiedKey.value === key ? 'var(--ac-success)' : 'var(--ac-text-muted)';
-}
-
-async function copyCommand(key: CommandKey): Promise<void> {
+const mcpUrl = computed(() => {
+  if (!relayUrl.value || !deviceToken.value) return '';
   try {
-    await navigator.clipboard.writeText(COMMANDS[key]);
-    copiedKey.value = key;
-    window.setTimeout(() => {
-      if (copiedKey.value === key) copiedKey.value = null;
-    }, 2000);
-  } catch (err) {
-    console.error('Failed to copy:', err);
-    copiedKey.value = null;
+    const raw = /^https?:\/\//i.test(relayUrl.value)
+      ? relayUrl.value
+      : `https://${relayUrl.value}`;
+    const url = new URL(raw);
+    url.protocol = url.protocol === 'http:' ? 'http:' : 'https:';
+    if (!url.pathname || url.pathname === '/' || url.pathname.endsWith('/ws')) {
+      url.pathname = '/mcp';
+    }
+    url.searchParams.set('device', deviceId.value || 'default');
+    url.searchParams.set('key', deviceToken.value);
+    return url.toString();
+  } catch {
+    return '';
   }
+});
+
+async function loadState() {
+  const [configResponse, statusResponse] = await Promise.all([
+    chrome.runtime.sendMessage({ type: 'brauzio_relay_get_config' }),
+    chrome.runtime.sendMessage({ type: 'brauzio_relay_get_status' }),
+  ]);
+
+  if (configResponse?.success && configResponse.config) {
+    relayUrl.value = String(configResponse.config.relayUrl || '');
+    deviceId.value = String(configResponse.config.deviceId || 'default');
+    deviceToken.value = String(configResponse.config.deviceToken || '');
+  }
+
+  if (statusResponse?.success && statusResponse.status) {
+    state.value = statusResponse.status.state || 'disconnected';
+    authenticated.value = Boolean(statusResponse.status.authenticated);
+  }
+}
+
+async function copyMcpUrl() {
+  if (!mcpUrl.value) return;
+  await navigator.clipboard.writeText(mcpUrl.value);
+  copied.value = true;
+  window.setTimeout(() => (copied.value = false), 1600);
 }
 
 async function openDocs(): Promise<void> {
@@ -56,225 +72,81 @@ async function openDocs(): Promise<void> {
     window.open(LINKS.TROUBLESHOOTING, '_blank', 'noopener,noreferrer');
   }
 }
+
+onMounted(() => {
+  void loadState();
+});
 </script>
 
 <template>
-  <div class="agent-theme welcome-root">
-    <div class="min-h-screen flex flex-col">
-      <header class="welcome-header flex-none px-6 py-5">
-        <div class="max-w-3xl mx-auto flex items-center justify-between gap-4">
-          <div class="flex items-center gap-3 min-w-0">
-            <div
-              class="welcome-icon w-10 h-10 flex items-center justify-center flex-shrink-0"
-              aria-hidden="true"
-            >
-              <svg
-                class="w-6 h-6"
-                :style="{ color: 'var(--ac-accent)' }"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M13 10V3L4 14h7v7l9-11h-7z"
-                />
-              </svg>
-            </div>
-            <div class="min-w-0">
-              <h1 class="welcome-title text-lg font-medium tracking-tight truncate">
-                Chrome MCP Server
-              </h1>
-              <p class="welcome-muted text-sm truncate">
-                After the extension is installed, this is the only required step.
-              </p>
+  <div class="agent-theme welcome-root" dir="rtl">
+    <main class="welcome-shell">
+      <section class="welcome-card hero-card">
+        <div class="brand-row">
+          <div class="brand-icon" aria-hidden="true">B</div>
+          <div>
+            <p class="eyebrow">BRAUZIO CLOUD</p>
+            <h1>تم تثبيت Brauzio</h1>
+          </div>
+          <span class="status-pill" :class="`status-${state}`">{{ statusLabel }}</span>
+        </div>
+
+        <p class="lead">
+          لا تحتاج إلى Node.js أو Native Messaging أو cloudflared. يتصل Brauzio مباشرة بخدمة
+          Cloudflare الخاصة بك، ثم يستخدم ChatGPT رابط MCP للتحكم في Chrome.
+        </p>
+      </section>
+
+      <section class="welcome-card steps-card">
+        <h2>إعداد الاتصال</h2>
+        <div class="steps">
+          <div class="step">
+            <span>1</span>
+            <div>
+              <strong>افتح نافذة إضافة Brauzio</strong>
+              <p>أدخل رابط Cloudflare Worker ومعرف الجهاز ورمز الربط السري.</p>
             </div>
           </div>
-
-          <button
-            class="welcome-button px-3 py-2 text-xs font-medium ac-btn flex-shrink-0"
-            @click="openDocs"
-          >
-            Troubleshooting Docs
-          </button>
+          <div class="step">
+            <span>2</span>
+            <div>
+              <strong>اضغط «حفظ واتصال»</strong>
+              <p>عندما تظهر الحالة «متصل وآمن» يصبح متصفحك جاهزًا لاستقبال أدوات MCP.</p>
+            </div>
+          </div>
+          <div class="step">
+            <span>3</span>
+            <div>
+              <strong>أضف رابط MCP إلى ChatGPT</strong>
+              <p>انسخ الرابط الخاص من نافذة Brauzio وأضفه كـ Custom MCP في ChatGPT.</p>
+            </div>
+          </div>
         </div>
-      </header>
+      </section>
 
-      <main class="flex-1 px-6 py-8">
-        <div class="max-w-3xl mx-auto space-y-6">
-          <section class="welcome-card welcome-card--primary p-6">
-            <h2 class="welcome-title text-xl font-medium">
-              Install <code class="welcome-code">mcp-chrome-bridge</code>
-            </h2>
-            <p class="welcome-muted text-sm mt-2">
-              The Chrome extension uses this local bridge to expose MCP tools to your client.
-            </p>
-
-            <div class="mt-4 space-y-3">
-              <div class="welcome-command-row flex items-center justify-between gap-3 px-4 py-3">
-                <code class="welcome-code text-sm break-all">{{ COMMANDS.npmInstall }}</code>
-                <button
-                  class="welcome-mono px-2 py-1 text-xs font-medium ac-btn flex-shrink-0"
-                  :style="{ color: copyColor('npmInstall') }"
-                  @click="copyCommand('npmInstall')"
-                >
-                  {{ copyLabel('npmInstall') }}
-                </button>
-              </div>
-
-              <div class="grid sm:grid-cols-2 gap-3">
-                <div
-                  v-for="item in ALT_INSTALL"
-                  :key="item.key"
-                  class="welcome-alt-row flex items-center justify-between gap-3 px-4 py-3"
-                >
-                  <div class="min-w-0">
-                    <div
-                      class="welcome-mono welcome-subtle text-[10px] uppercase tracking-widest font-medium"
-                    >
-                      {{ item.label }}
-                    </div>
-                    <code class="welcome-code text-xs break-all">{{ COMMANDS[item.key] }}</code>
-                  </div>
-                  <button
-                    class="welcome-mono px-2 py-1 text-xs font-medium ac-btn flex-shrink-0"
-                    :style="{ color: copyColor(item.key) }"
-                    @click="copyCommand(item.key)"
-                  >
-                    {{ copyLabel(item.key) }}
-                  </button>
-                </div>
-              </div>
-
-              <div class="welcome-alt-row welcome-muted px-4 py-3 text-xs">
-                Requires Node.js 20+. Check your version with
-                <code class="welcome-code welcome-code-inline px-1 py-0.5">node -v</code>.
-              </div>
-            </div>
-
-            <div
-              class="mt-6 pt-5"
-              :style="{ borderTop: 'var(--ac-border-width) solid var(--ac-border)' }"
-            >
-              <h3 class="welcome-title text-sm font-medium">MCP client URL (streamable HTTP)</h3>
-              <p class="welcome-muted text-sm mt-1">
-                Use this URL in your MCP client (e.g., Claude Desktop, CherryStudio).
-              </p>
-
-              <div
-                class="welcome-command-row mt-3 flex items-center justify-between gap-3 px-4 py-3"
-              >
-                <code class="welcome-code text-sm break-all">{{ COMMANDS.mcpUrl }}</code>
-                <button
-                  class="welcome-mono px-2 py-1 text-xs font-medium ac-btn flex-shrink-0"
-                  :style="{ color: copyColor('mcpUrl') }"
-                  @click="copyCommand('mcpUrl')"
-                >
-                  {{ copyLabel('mcpUrl') }}
-                </button>
-              </div>
-
-              <p class="welcome-subtle text-xs mt-3">
-                Tip: You can also open the extension popup and click "Connect" to copy a full client
-                config snippet.
-              </p>
-            </div>
-          </section>
-
-          <details class="welcome-card overflow-hidden">
-            <summary
-              class="px-6 py-4 cursor-pointer select-none flex items-center justify-between gap-4"
-            >
-              <div class="min-w-0">
-                <div class="welcome-title text-sm font-medium">Troubleshooting</div>
-                <div class="welcome-muted text-xs truncate">
-                  Use these only if the bridge fails to register or connect.
-                </div>
-              </div>
-              <span class="welcome-mono welcome-subtle text-xs flex-shrink-0">doctor · report</span>
-            </summary>
-
-            <div class="px-6 pb-6 space-y-4">
-              <div class="welcome-alt-row p-4">
-                <div class="text-sm font-medium">Diagnostics</div>
-                <p class="welcome-muted text-sm mt-1">
-                  Run <code class="welcome-code">doctor</code> to check installation status. If it
-                  reports an error, run the auto-fix command.
-                </p>
-
-                <div class="mt-3 space-y-2">
-                  <div
-                    v-for="item in DIAGNOSTICS"
-                    :key="item.key"
-                    class="welcome-command-row flex items-center justify-between gap-3 px-3 py-2"
-                  >
-                    <div class="min-w-0">
-                      <div
-                        class="welcome-mono welcome-subtle text-[10px] uppercase tracking-widest font-medium"
-                      >
-                        {{ item.label }}
-                      </div>
-                      <code class="welcome-code text-xs break-all">{{ COMMANDS[item.key] }}</code>
-                    </div>
-                    <button
-                      class="welcome-mono px-2 py-1 text-xs font-medium ac-btn flex-shrink-0"
-                      :style="{ color: copyColor(item.key) }"
-                      @click="copyCommand(item.key)"
-                    >
-                      {{ copyLabel(item.key) }}
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              <div class="welcome-report-card p-4">
-                <div class="text-sm font-medium" :style="{ color: 'var(--ac-danger)' }">
-                  Report an issue
-                </div>
-                <p class="welcome-muted text-sm mt-1">
-                  Generate a diagnostic report and paste it into a GitHub issue.
-                </p>
-
-                <div
-                  class="welcome-command-row mt-3 flex items-center justify-between gap-3 px-3 py-2"
-                >
-                  <code class="welcome-code text-xs break-all">{{ COMMANDS.report }}</code>
-                  <button
-                    class="welcome-mono px-2 py-1 text-xs font-medium ac-btn flex-shrink-0"
-                    :style="{ color: copyColor('report') }"
-                    @click="copyCommand('report')"
-                  >
-                    {{ copyLabel('report') }}
-                  </button>
-                </div>
-
-                <p class="welcome-subtle text-xs mt-2">
-                  This copies the report to your clipboard (sensitive info is automatically
-                  redacted).
-                </p>
-              </div>
-
-              <div class="flex">
-                <button
-                  class="welcome-button px-3 py-2 text-xs font-medium ac-btn"
-                  @click="openDocs"
-                >
-                  Open troubleshooting docs
-                </button>
-              </div>
-            </div>
-          </details>
+      <section v-if="mcpUrl" class="welcome-card mcp-card">
+        <div>
+          <p class="eyebrow">رابط MCP الحالي</p>
+          <code>{{ mcpUrl }}</code>
+          <small>هذا الرابط يحتوي رمز وصول. لا تشاركه مع أي شخص.</small>
         </div>
-      </main>
-    </div>
+        <button type="button" @click="copyMcpUrl">{{ copied ? 'تم النسخ' : 'نسخ الرابط' }}</button>
+      </section>
+
+      <section v-else class="welcome-card note-card">
+        لم يتم حفظ إعدادات Cloudflare بعد. افتح نافذة الإضافة وأكمل بيانات Brauzio Cloud أولًا.
+      </section>
+
+      <div class="footer-actions">
+        <button type="button" class="secondary-button" @click="openDocs">دليل استكشاف الأخطاء</button>
+      </div>
+    </main>
   </div>
 </template>
 
 <style scoped>
 .welcome-root {
-  min-height: 100%;
+  min-height: 100vh;
   background: var(--ac-bg);
   background-image: var(--ac-bg-pattern);
   background-size: var(--ac-bg-pattern-size);
@@ -282,103 +154,217 @@ async function openDocs(): Promise<void> {
   font-family: var(--ac-font-body);
 }
 
-.welcome-header {
-  background: var(--ac-header-bg);
-  border-bottom: var(--ac-border-width) solid var(--ac-header-border);
-  backdrop-filter: blur(8px);
+.welcome-shell {
+  width: min(760px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 42px 0;
 }
 
 .welcome-card {
+  margin-bottom: 16px;
+  padding: 22px;
   background: var(--ac-surface);
   border: var(--ac-border-width) solid var(--ac-border);
   border-radius: var(--ac-radius-card);
   box-shadow: var(--ac-shadow-card);
 }
 
-.welcome-card--primary {
+.hero-card {
   box-shadow: var(--ac-shadow-float);
 }
 
-.welcome-icon {
-  background: var(--ac-surface);
-  border: var(--ac-border-width) solid var(--ac-border);
-  border-radius: var(--ac-radius-card);
-  box-shadow: var(--ac-shadow-card);
+.brand-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
-.welcome-title {
+.brand-icon {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  border-radius: 12px;
+  background: var(--ac-accent);
+  color: white;
   font-family: var(--ac-font-heading);
-  color: var(--ac-text);
+  font-size: 20px;
+  font-weight: 800;
 }
 
-.welcome-muted {
-  color: var(--ac-text-muted);
-}
-
-.welcome-subtle {
+.eyebrow {
+  margin: 0 0 3px;
   color: var(--ac-text-subtle);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
 }
 
-.welcome-mono {
-  font-family: var(--ac-font-mono);
+h1,
+h2 {
+  margin: 0;
+  color: var(--ac-text);
+  font-family: var(--ac-font-heading);
 }
 
-.welcome-code {
-  font-family: var(--ac-font-code);
+h1 {
+  font-size: 22px;
 }
 
-.welcome-button {
-  font-family: var(--ac-font-mono);
+h2 {
+  margin-bottom: 16px;
+  font-size: 17px;
+}
+
+.lead {
+  margin: 18px 0 0;
   color: var(--ac-text-muted);
-  background: var(--ac-surface);
+  font-size: 14px;
+  line-height: 1.9;
+}
+
+.status-pill {
+  margin-inline-start: auto;
+  padding: 7px 10px;
+  border-radius: 999px;
+  background: var(--ac-surface-muted);
+  color: var(--ac-text-muted);
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.status-connected {
+  background: #ecfdf5;
+  color: #047857;
+}
+
+.status-connecting {
+  background: #fffbeb;
+  color: #b45309;
+}
+
+.status-error {
+  background: #fef2f2;
+  color: #b91c1c;
+}
+
+.steps {
+  display: grid;
+  gap: 14px;
+}
+
+.step {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.step > span {
+  width: 27px;
+  height: 27px;
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: var(--ac-accent);
+  color: white;
+  font-family: var(--ac-font-mono);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.step strong {
+  display: block;
+  font-size: 14px;
+}
+
+.step p {
+  margin: 4px 0 0;
+  color: var(--ac-text-muted);
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+.mcp-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.mcp-card > div {
+  min-width: 0;
+}
+
+.mcp-card code {
+  display: block;
+  overflow: hidden;
+  margin-top: 6px;
+  direction: ltr;
+  text-align: left;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--ac-text);
+  font-family: var(--ac-font-code);
+  font-size: 11px;
+}
+
+.mcp-card small {
+  display: block;
+  margin-top: 7px;
+  color: var(--ac-text-subtle);
+  font-size: 10px;
+}
+
+.mcp-card button,
+.secondary-button {
   border: var(--ac-border-width) solid var(--ac-border);
   border-radius: var(--ac-radius-button);
+  padding: 9px 13px;
+  background: var(--ac-surface);
+  color: var(--ac-text-muted);
+  font-family: var(--ac-font-body);
+  font-size: 12px;
+  font-weight: 700;
   cursor: pointer;
-  transition: all 0.2s ease;
 }
 
-.welcome-button:hover {
-  background: var(--ac-hover-bg-subtle);
+.mcp-card button {
+  flex: 0 0 auto;
+  border-color: var(--ac-accent);
+  background: var(--ac-accent);
+  color: white;
 }
 
-.welcome-command-row {
-  background: var(--ac-code-bg);
-  border: var(--ac-border-width) solid var(--ac-code-border);
-  border-radius: var(--ac-radius-inner);
+.note-card {
+  color: var(--ac-text-muted);
+  font-size: 12px;
+  line-height: 1.8;
 }
 
-.welcome-alt-row {
-  background: var(--ac-surface-muted);
-  border: var(--ac-border-width) solid var(--ac-border);
-  border-radius: var(--ac-radius-inner);
+.footer-actions {
+  display: flex;
+  justify-content: flex-start;
+  padding-top: 2px;
 }
 
-.welcome-report-card {
-  background: var(--ac-diff-del-bg);
-  border: var(--ac-border-width) solid var(--ac-diff-del-border);
-  border-radius: var(--ac-radius-inner);
-}
+@media (max-width: 560px) {
+  .welcome-shell {
+    width: min(100% - 20px, 760px);
+    padding: 20px 0;
+  }
 
-.welcome-code-inline {
-  background: var(--ac-hover-bg-subtle);
-  border: var(--ac-border-width) solid var(--ac-border);
-  border-radius: 6px;
-}
+  .brand-row,
+  .mcp-card {
+    align-items: stretch;
+    flex-direction: column;
+  }
 
-.ac-btn {
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.ac-btn:hover {
-  opacity: 0.8;
-}
-
-summary {
-  list-style: none;
-}
-
-summary::-webkit-details-marker {
-  display: none;
+  .status-pill {
+    align-self: flex-start;
+    margin-inline-start: 0;
+  }
 }
 </style>
