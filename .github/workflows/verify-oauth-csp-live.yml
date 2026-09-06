@@ -1,0 +1,60 @@
+name: Verify OAuth CSP Live
+
+on:
+  push:
+    paths:
+      - '.github/workflows/verify-oauth-csp-live.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Wait for Brauzio 2.1.2 and inspect OAuth CSP
+        shell: bash
+        run: |
+          set -euo pipefail
+          BASE='https://brauzio-mcp.aseelsalah266.workers.dev'
+          ok='false'
+          for i in $(seq 1 30); do
+            health=$(curl -fsS "$BASE/health" || true)
+            if printf '%s' "$health" | grep -q '"version":"2.1.2"'; then
+              ok='true'
+              break
+            fi
+            sleep 5
+          done
+          if [ "$ok" != 'true' ]; then
+            echo "Brauzio 2.1.2 did not become live in time" >&2
+            exit 1
+          fi
+
+          AUTH_URL="$BASE/authorize?response_type=code&client_id=https%3A%2F%2Fchatgpt.com%2Foauth%2Fclient.json&redirect_uri=https%3A%2F%2Fchatgpt.com%2Fconnector_platform_oauth_redirect&scope=brauzio%3Acontrol&code_challenge=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&code_challenge_method=S256&resource=https%3A%2F%2Fbrauzio-mcp.aseelsalah266.workers.dev%2Fmcp&state=brauzio_live_check&ui_locales=ar"
+          curl -fsS -D /tmp/headers.txt -o /tmp/body.html "$AUTH_URL"
+          csp=$(awk 'BEGIN{IGNORECASE=1} /^content-security-policy:/ {sub(/\r$/, ""); print; exit}' /tmp/headers.txt)
+          action=$(grep -o 'action="[^"]*"' /tmp/body.html | head -n1 || true)
+
+          printf '%s\n' "$csp" | grep -q 'form-action https://brauzio-mcp.aseelsalah266.workers.dev'
+          if printf '%s\n' "$csp" | grep -q "form-action 'self'"; then
+            echo "Old form-action self policy still live" >&2
+            exit 1
+          fi
+          printf '%s\n' "$action" | grep -q 'https://brauzio-mcp.aseelsalah266.workers.dev/authorize'
+
+          {
+            echo "health=$health"
+            echo "$csp"
+            echo "$action"
+            echo 'RESULT=PASS'
+          } > docs/_oauth-csp-live.txt
+
+      - name: Record temporary verification result
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add docs/_oauth-csp-live.txt
+          git commit -m 'ci: record OAuth CSP live verification [skip ci]'
+          git push
