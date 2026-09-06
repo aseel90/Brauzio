@@ -1,5 +1,11 @@
 # Brauzio Changelog
 
+## 2026-09-06 — V2.1.2 OAuth Form CSP Fix
+
+- أصلحنا منع متصفح OAuth لإرسال نموذج `/authorize` بسبب `Content-Security-Policy: form-action 'self'`.
+- صفحة التفويض تستخدم الآن عنوان Worker نفسه صراحةً في `form-action` وفي `action` للنموذج، مع بقاء الإرسال محصورًا في نفس أصل Brauzio.
+- لا يتطلب الإصلاح إعادة تثبيت الإضافة؛ التغيير Cloud-only.
+
 ## 2026-09-06 — V2.1.1 Pairing Reliability
 
 - يبقى Pairing Code صالحًا طوال مدة الخمس دقائق حتى إذا أعادت الإضافة اتصال WebSocket بعد إنشاء الرمز.
