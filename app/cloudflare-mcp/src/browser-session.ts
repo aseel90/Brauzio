@@ -35,7 +35,46 @@ interface ToolResultMessage {
   error?: string;
 }
 
+
+interface PersistentWatchDescriptor {
+  watchId: string;
+  tabId: number;
+  createdAt: number;
+  expiresAt: number;
+  maxEvents: number;
+  nextSequence: number;
+  categories?: string[];
+  methods?: string[];
+  urlIncludes?: string;
+}
+
+interface PersistentWatchEvent {
+  sequence: number;
+  watchId: string;
+  tabId: number;
+  sessionId?: string;
+  method: string;
+  timestamp: number;
+  data: Record<string, unknown>;
+}
+
+interface PersistentWatchRecord extends PersistentWatchDescriptor {
+  events: PersistentWatchEvent[];
+  stopped?: boolean;
+  stopReason?: string;
+}
+
+interface PersistentWatchWaiter {
+  id: number;
+  afterSequence: number;
+  method?: string;
+  resolve: (response: Response) => void;
+  timer: ReturnType<typeof setTimeout>;
+}
+
 const PAIRING_STORAGE_KEY = 'oauth-pairing-v1';
+const WATCH_STORAGE_PREFIX = 'watch-v1:';
+const WATCH_WAIT_MAX_MS = 115_000;
 const PAIRING_TTL_MS = 5 * 60 * 1000;
 const PAIRING_MAX_ATTEMPTS = 10;
 const PAIRING_ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
@@ -80,6 +119,8 @@ function validTraceId(value: unknown): string | null {
 
 export class BrowserSession extends DurableObject<Env> {
   private pending = new Map<string, PendingCall>();
+  private watchWaiters = new Map<string, Map<number, PersistentWatchWaiter>>();
+  private watchWaiterSerial = 0;
 
   constructor(ctx: DurableObjectState, env: Env) {
     super(ctx, env);
@@ -112,7 +153,12 @@ export class BrowserSession extends DurableObject<Env> {
 
     if (url.pathname === '/status') {
       const sockets = this.authenticatedSockets();
-      return Response.json({ connected: sockets.length > 0, connections: sockets.length });
+      const activeWatches = (await this.listActiveWatches()).length;
+      return Response.json({
+        connected: sockets.length > 0,
+        connections: sockets.length,
+        activeWatches,
+      });
     }
 
     if (url.pathname === '/pairing/consume' && request.method === 'POST') {
@@ -153,14 +199,6 @@ export class BrowserSession extends DurableObject<Env> {
     }
 
     if (url.pathname === '/call' && request.method === 'POST') {
-      const browser = this.authenticatedSockets()[0];
-      if (!browser) {
-        return Response.json(
-          { error: 'Brauzio extension is not connected to Cloudflare' },
-          { status: 503 },
-        );
-      }
-
       const body = (await request.json()) as {
         name?: string;
         args?: Record<string, unknown>;
@@ -169,60 +207,28 @@ export class BrowserSession extends DurableObject<Env> {
       };
       if (!body.name) return Response.json({ error: 'Missing tool name' }, { status: 400 });
 
-      const requestId = validTraceId(body.traceId) || crypto.randomUUID();
-      const startedAt = Date.now();
-      sessionLog('CALL_RECEIVED', {
-        requestId,
-        name: body.name,
-        authenticatedSockets: this.authenticatedSockets().length,
-      });
-      const timeoutMs = Math.min(Math.max(Number(body.timeoutMs || 120_000), 1_000), 180_000);
-
-      return new Promise<Response>((resolve) => {
-        const timer = setTimeout(() => {
-          this.pending.delete(requestId);
-          sessionLog('CALL_TIMEOUT', {
-            requestId,
-            name: body.name,
-            timeoutMs,
-            durationMs: Date.now() - startedAt,
-          });
-          resolve(
-            Response.json(
-              { error: `Tool call timed out after ${timeoutMs}ms (traceId: ${requestId})` },
-              { status: 504 },
-            ),
-          );
-        }, timeoutMs);
-
-        this.pending.set(requestId, { resolve, timer, name: body.name!, startedAt });
-
-        try {
-          browser.send(
-            JSON.stringify({
-              type: 'tool_call',
-              requestId,
-              name: body.name,
-              args: body.args || {},
-            }),
-          );
-          sessionLog('CALL_SENT_TO_BROWSER', { requestId, name: body.name });
-        } catch (error) {
-          sessionLog('CALL_SEND_FAILED', {
-            requestId,
-            name: body.name,
-            error: error instanceof Error ? error.message : String(error),
-          });
-          clearTimeout(timer);
-          this.pending.delete(requestId);
-          resolve(
-            Response.json(
-              { error: error instanceof Error ? error.message : String(error) },
-              { status: 502 },
-            ),
-          );
+      if (body.name === 'chrome_watch_read') {
+        const watchId = String(body.args?.watchId || '');
+        if (watchId && (await this.getWatch(watchId))) {
+          return await this.handleWatchRead(body.args || {});
         }
-      });
+      }
+
+      if (body.name === 'chrome_watch_wait') {
+        const watchId = String(body.args?.watchId || '');
+        if (watchId && (await this.getWatch(watchId))) {
+          return await this.handleWatchWait(body.args || {});
+        }
+      }
+
+      if (body.name === 'chrome_watch_stop') {
+        const watchId = String(body.args?.watchId || '');
+        if (watchId && (await this.getWatch(watchId))) {
+          return await this.handleWatchStop(watchId);
+        }
+      }
+
+      return await this.forwardToolCall(body);
     }
 
     return new Response('Not found', { status: 404 });
@@ -273,6 +279,10 @@ export class BrowserSession extends DurableObject<Env> {
         }),
       );
 
+      if (authenticated) {
+        await this.sendWatchRestore(ws);
+      }
+
       if (!authenticated) {
         ws.close(1008, deviceMatches ? 'Authentication failed' : 'Device mismatch');
       }
@@ -282,6 +292,21 @@ export class BrowserSession extends DurableObject<Env> {
     if (!attachment.authenticated) {
       ws.send(JSON.stringify({ type: 'error', message: 'Authenticate first' }));
       ws.close(1008, 'Authentication required');
+      return;
+    }
+
+    if (payload.type === 'watch_started' && payload.watch) {
+      await this.persistWatchStarted(payload.watch as PersistentWatchDescriptor);
+      return;
+    }
+
+    if (payload.type === 'watch_event' && payload.event) {
+      await this.persistWatchEvent(payload.event as PersistentWatchEvent);
+      return;
+    }
+
+    if (payload.type === 'watch_stopped' && payload.watchId) {
+      await this.persistWatchStopped(String(payload.watchId), String(payload.reason || 'browser_stopped'));
       return;
     }
 
@@ -312,6 +337,294 @@ export class BrowserSession extends DurableObject<Env> {
     if (this.authenticatedSockets().length === 0) {
       this.failPending('Brauzio WebSocket connection failed');
     }
+  }
+
+  private watchKey(watchId: string): string {
+    return `${WATCH_STORAGE_PREFIX}${watchId}`;
+  }
+
+  private toolResult(payload: Record<string, unknown>) {
+    return {
+      content: [{ type: 'text', text: JSON.stringify({ success: true, ...payload }) }],
+      isError: false,
+    };
+  }
+
+  private async forwardToolCall(body: {
+    name?: string;
+    args?: Record<string, unknown>;
+    timeoutMs?: number;
+    traceId?: string;
+  }): Promise<Response> {
+    const browser = this.authenticatedSockets()[0];
+    if (!browser) {
+      return Response.json(
+        { error: 'Brauzio extension is not connected to Cloudflare' },
+        { status: 503 },
+      );
+    }
+
+    const requestId = validTraceId(body.traceId) || crypto.randomUUID();
+    const startedAt = Date.now();
+    sessionLog('CALL_RECEIVED', {
+      requestId,
+      name: body.name,
+      authenticatedSockets: this.authenticatedSockets().length,
+    });
+    const timeoutMs = Math.min(Math.max(Number(body.timeoutMs || 120_000), 1_000), 180_000);
+
+    return new Promise<Response>((resolve) => {
+      const timer = setTimeout(() => {
+        this.pending.delete(requestId);
+        sessionLog('CALL_TIMEOUT', {
+          requestId,
+          name: body.name,
+          timeoutMs,
+          durationMs: Date.now() - startedAt,
+        });
+        resolve(
+          Response.json(
+            { error: `Tool call timed out after ${timeoutMs}ms (traceId: ${requestId})` },
+            { status: 504 },
+          ),
+        );
+      }, timeoutMs);
+
+      this.pending.set(requestId, { resolve, timer, name: body.name!, startedAt });
+
+      try {
+        browser.send(
+          JSON.stringify({
+            type: 'tool_call',
+            requestId,
+            name: body.name,
+            args: body.args || {},
+          }),
+        );
+        sessionLog('CALL_SENT_TO_BROWSER', { requestId, name: body.name });
+      } catch (error) {
+        sessionLog('CALL_SEND_FAILED', {
+          requestId,
+          name: body.name,
+          error: error instanceof Error ? error.message : String(error),
+        });
+        clearTimeout(timer);
+        this.pending.delete(requestId);
+        resolve(
+          Response.json(
+            { error: error instanceof Error ? error.message : String(error) },
+            { status: 502 },
+          ),
+        );
+      }
+    });
+  }
+
+  private async getWatch(watchId: string): Promise<PersistentWatchRecord | null> {
+    const record = await this.ctx.storage.get<PersistentWatchRecord>(this.watchKey(watchId));
+    if (!record) return null;
+    if (record.expiresAt <= Date.now()) {
+      await this.ctx.storage.delete(this.watchKey(watchId));
+      this.resolveWatchWaiters(watchId, { stopped: true, reason: 'expired' });
+      return null;
+    }
+    return record;
+  }
+
+  private async listActiveWatches(): Promise<PersistentWatchRecord[]> {
+    const stored = await this.ctx.storage.list<PersistentWatchRecord>({ prefix: WATCH_STORAGE_PREFIX });
+    const active: PersistentWatchRecord[] = [];
+    const expired: string[] = [];
+    const now = Date.now();
+    for (const [key, record] of stored) {
+      if (!record || record.expiresAt <= now) {
+        expired.push(key);
+        continue;
+      }
+      if (!record.stopped) active.push(record);
+    }
+    if (expired.length) await this.ctx.storage.delete(expired);
+    return active;
+  }
+
+  private async sendWatchRestore(ws: WebSocket): Promise<void> {
+    const watches = await this.listActiveWatches();
+    if (!watches.length) return;
+    ws.send(
+      JSON.stringify({
+        type: 'watch_restore',
+        watches: watches.map(({ events: _events, stopped: _stopped, stopReason: _stopReason, ...watch }) => watch),
+      }),
+    );
+    sessionLog('WATCH_RESTORE_SENT', { count: watches.length });
+  }
+
+  private normalizeWatchDescriptor(value: PersistentWatchDescriptor): PersistentWatchDescriptor {
+    const now = Date.now();
+    return {
+      watchId: String(value.watchId || '').slice(0, 128),
+      tabId: Number(value.tabId),
+      createdAt: Number(value.createdAt || now),
+      expiresAt: Number(value.expiresAt || now),
+      maxEvents: Math.max(10, Math.min(Number(value.maxEvents || 100), 500)),
+      nextSequence: Math.max(0, Number(value.nextSequence || 0)),
+      categories: Array.isArray(value.categories) ? value.categories.map(String).slice(0, 10) : undefined,
+      methods: Array.isArray(value.methods) ? value.methods.map(String).slice(0, 50) : undefined,
+      urlIncludes: value.urlIncludes ? String(value.urlIncludes).slice(0, 2048) : undefined,
+    };
+  }
+
+  private async persistWatchStarted(value: PersistentWatchDescriptor): Promise<void> {
+    const watch = this.normalizeWatchDescriptor(value);
+    if (!watch.watchId || !Number.isFinite(watch.tabId) || watch.expiresAt <= Date.now()) return;
+    const existing = await this.ctx.storage.get<PersistentWatchRecord>(this.watchKey(watch.watchId));
+    const record: PersistentWatchRecord = {
+      ...watch,
+      nextSequence: Math.max(watch.nextSequence, existing?.nextSequence || 0),
+      events: existing?.events || [],
+      stopped: false,
+      stopReason: undefined,
+    };
+    await this.ctx.storage.put(this.watchKey(watch.watchId), record);
+    sessionLog('WATCH_PERSISTED', { watchId: watch.watchId, tabId: watch.tabId, nextSequence: record.nextSequence });
+  }
+
+  private async persistWatchEvent(event: PersistentWatchEvent): Promise<void> {
+    const watchId = String(event.watchId || '');
+    if (!watchId) return;
+    const record = await this.getWatch(watchId);
+    if (!record || record.stopped) return;
+    const sequence = Math.max(1, Number(event.sequence || 0));
+    if (sequence <= record.nextSequence) return;
+
+    const normalized: PersistentWatchEvent = {
+      sequence,
+      watchId,
+      tabId: Number(event.tabId || record.tabId),
+      sessionId: event.sessionId ? String(event.sessionId).slice(0, 256) : undefined,
+      method: String(event.method || '').slice(0, 256),
+      timestamp: Number(event.timestamp || Date.now()),
+      data: event.data && typeof event.data === 'object' ? event.data : {},
+    };
+    record.nextSequence = sequence;
+    record.events.push(normalized);
+    if (record.events.length > record.maxEvents) {
+      record.events.splice(0, record.events.length - record.maxEvents);
+    }
+    await this.ctx.storage.put(this.watchKey(watchId), record);
+    this.resolveWatchWaiters(watchId, { event: normalized });
+  }
+
+  private async persistWatchStopped(watchId: string, reason: string): Promise<void> {
+    const record = await this.getWatch(watchId);
+    if (!record) return;
+    record.stopped = true;
+    record.stopReason = reason.slice(0, 128);
+    await this.ctx.storage.put(this.watchKey(watchId), record);
+    this.resolveWatchWaiters(watchId, { stopped: true, reason: record.stopReason });
+    sessionLog('WATCH_STOPPED', { watchId, reason: record.stopReason });
+  }
+
+  private resolveWatchWaiters(
+    watchId: string,
+    result: { event?: PersistentWatchEvent; stopped?: boolean; reason?: string },
+  ): void {
+    const waiters = this.watchWaiters.get(watchId);
+    if (!waiters) return;
+    for (const [id, waiter] of waiters) {
+      if (result.event) {
+        if (result.event.sequence <= waiter.afterSequence) continue;
+        if (waiter.method && waiter.method !== result.event.method) continue;
+      }
+      clearTimeout(waiter.timer);
+      waiters.delete(id);
+      waiter.resolve(Response.json({ result: this.toolResult({ watchId, ...result, source: 'durable_object' }) }));
+    }
+    if (!waiters.size) this.watchWaiters.delete(watchId);
+  }
+
+  private async handleWatchRead(args: Record<string, unknown>): Promise<Response> {
+    const watchId = String(args.watchId || '');
+    const record = await this.getWatch(watchId);
+    if (!record) return Response.json({ error: `Watch not found: ${watchId}` }, { status: 404 });
+    const after = Math.max(0, Number(args.afterSequence || 0));
+    const limit = Math.max(1, Math.min(Number(args.limit || 50), 200));
+    const method = args.method ? String(args.method) : '';
+    const events = record.events
+      .filter((event) => event.sequence > after && (!method || event.method === method))
+      .slice(0, limit);
+    return Response.json({
+      result: this.toolResult({
+        watchId,
+        tabId: record.tabId,
+        events,
+        nextSequence: record.nextSequence,
+        buffered: record.events.length,
+        expiresAt: record.expiresAt,
+        stopped: Boolean(record.stopped),
+        stopReason: record.stopReason,
+        source: 'durable_object',
+      }),
+    });
+  }
+
+  private async handleWatchWait(args: Record<string, unknown>): Promise<Response> {
+    const watchId = String(args.watchId || '');
+    const record = await this.getWatch(watchId);
+    if (!record) return Response.json({ error: `Watch not found: ${watchId}` }, { status: 404 });
+    const after = Math.max(0, Number(args.afterSequence || 0));
+    const method = args.method ? String(args.method) : '';
+    const existing = record.events.find(
+      (event) => event.sequence > after && (!method || event.method === method),
+    );
+    if (existing) {
+      return Response.json({
+        result: this.toolResult({ watchId, event: existing, source: 'durable_object' }),
+      });
+    }
+    if (record.stopped) {
+      return Response.json({
+        result: this.toolResult({ watchId, stopped: true, reason: record.stopReason || 'stopped', source: 'durable_object' }),
+      });
+    }
+
+    const timeoutMs = Math.max(50, Math.min(Number(args.timeoutMs || 10_000), WATCH_WAIT_MAX_MS));
+    return await new Promise<Response>((resolve) => {
+      const id = ++this.watchWaiterSerial;
+      const timer = setTimeout(() => {
+        const waiters = this.watchWaiters.get(watchId);
+        waiters?.delete(id);
+        if (waiters && !waiters.size) this.watchWaiters.delete(watchId);
+        resolve(Response.json({
+          result: this.toolResult({ watchId, timedOut: true, reason: 'timeout', source: 'durable_object' }),
+        }));
+      }, timeoutMs);
+      const waiters = this.watchWaiters.get(watchId) || new Map<number, PersistentWatchWaiter>();
+      waiters.set(id, { id, afterSequence: after, method: method || undefined, resolve, timer });
+      this.watchWaiters.set(watchId, waiters);
+    });
+  }
+
+  private async handleWatchStop(watchId: string): Promise<Response> {
+    const record = await this.getWatch(watchId);
+    if (!record) return Response.json({ error: `Watch not found: ${watchId}` }, { status: 404 });
+    await this.persistWatchStopped(watchId, 'explicit_stop');
+    const browser = this.authenticatedSockets()[0];
+    if (browser) {
+      try {
+        browser.send(JSON.stringify({ type: 'watch_stop', watchId }));
+      } catch {}
+    }
+    return Response.json({
+      result: this.toolResult({
+        watchId,
+        tabId: record.tabId,
+        stopped: true,
+        reason: 'explicit_stop',
+        finalSequence: record.nextSequence,
+        source: 'durable_object',
+      }),
+    });
   }
 
   private authenticatedSockets(): WebSocket[] {

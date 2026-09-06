@@ -1,5 +1,12 @@
 import { handleCallTool } from './tools';
-import { stopAllBrowserWatches } from './tools/browser/watch';
+import {
+  configureWatchPersistenceSink,
+  restorePersistentBrowserWatches,
+  stopAllBrowserWatches,
+  stopPersistentBrowserWatch,
+  type PersistentWatchDescriptor,
+  type WatchEvent,
+} from './tools/browser/watch';
 import { releaseAllMouseHolds } from '@/utils/mouse-hold-safety';
 
 const LOG_PREFIX = '[BrauzioRelay]';
@@ -35,6 +42,8 @@ type RelayInboundMessage =
   | { type: 'hello_ack'; authenticated?: boolean }
   | { type: 'pairing_code'; code: string; expiresAt: number; deviceId?: string }
   | { type: 'tool_call'; requestId: string; name: string; args?: Record<string, unknown> }
+  | { type: 'watch_restore'; watches?: PersistentWatchDescriptor[] }
+  | { type: 'watch_stop'; watchId: string; reason?: string }
   | { type: 'pong' }
   | { type: 'error'; message?: string };
 
@@ -123,8 +132,20 @@ function releaseMouseSafety(reason: string) {
     });
 }
 
-function stopWatchSafety(reason: string) {
-  void stopAllBrowserWatches(reason)
+function sendWatchPersistenceMessage(payload: Record<string, unknown>): void {
+  if (!socket || socket.readyState !== WebSocket.OPEN || !currentStatus.authenticated) return;
+  try {
+    socket.send(JSON.stringify(payload));
+  } catch (error) {
+    relayLog('WATCH_PERSIST_SEND_FAILED', {
+      type: payload.type,
+      error: error instanceof Error ? error.message : String(error),
+    });
+  }
+}
+
+function stopWatchSafety(reason: string, notifyPersistence = false) {
+  void stopAllBrowserWatches(reason, undefined, notifyPersistence)
     .then((count) => {
       if (count > 0) relayLog('WATCHES_STOPPED', { reason, count });
     })
@@ -218,6 +239,18 @@ async function onRelayMessage(event: MessageEvent) {
 
   if (message.type === 'tool_call') {
     await executeToolCall(message);
+    return;
+  }
+
+  if (message.type === 'watch_restore') {
+    const result = await restorePersistentBrowserWatches(message.watches || []);
+    relayLog('WATCH_RESTORE_APPLIED', result);
+    return;
+  }
+
+  if (message.type === 'watch_stop') {
+    await stopPersistentBrowserWatch(String(message.watchId || ''), message.reason || 'cloud_stop');
+    relayLog('WATCH_STOP_APPLIED', { watchId: message.watchId, reason: message.reason || 'cloud_stop' });
     return;
   }
 
@@ -339,13 +372,25 @@ export async function disconnectRelay() {
   clearReconnect();
   await Promise.allSettled([
     releaseAllMouseHolds('manual_relay_disconnect'),
-    stopAllBrowserWatches('manual_relay_disconnect'),
+    stopAllBrowserWatches('manual_relay_disconnect', undefined, true),
   ]);
   closeSocket();
   updateStatus({ state: 'disconnected', authenticated: false, lastError: undefined });
 }
 
 export function initRemoteRelayListener() {
+  configureWatchPersistenceSink({
+    started(watch) {
+      sendWatchPersistenceMessage({ type: 'watch_started', watch });
+    },
+    event(event: WatchEvent) {
+      sendWatchPersistenceMessage({ type: 'watch_event', event });
+    },
+    stopped(watchId, reason) {
+      sendWatchPersistenceMessage({ type: 'watch_stopped', watchId, reason });
+    },
+  });
+
   chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
     if (!message || typeof message.type !== 'string') return false;
 
