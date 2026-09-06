@@ -1,0 +1,110 @@
+name: Apply Brauzio 2.6 Build Fixes
+
+on:
+  push:
+    paths:
+      - '.github/workflows/apply-260-fixes.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 8.15.9
+
+      - name: Install dependencies
+        run: pnpm install --no-frozen-lockfile --ignore-scripts
+
+      - name: Apply validated fixes
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+
+          tools = Path('packages/shared/src/tools.ts')
+          text = tools.read_text(encoding='utf-8')
+          old_import = "import type { Tool } from '@modelcontextprotocol/sdk/types.js';\n\n"
+          new_types = """export type BrauzioJsonValue =\n  | string\n  | number\n  | boolean\n  | null\n  | BrauzioJsonValue[]\n  | { [key: string]: BrauzioJsonValue };\n\nexport interface BrauzioToolSchema {\n  name: string;\n  description?: string;\n  inputSchema: {\n    type: 'object';\n    properties?: Record<string, BrauzioJsonValue>;\n    required?: string[];\n    [key: string]: unknown;\n  };\n}\n\n"""
+          if old_import not in text:
+              raise SystemExit('base Tool import marker not found')
+          text = text.replace(old_import, new_types, 1)
+          old_decl = 'export const TOOL_SCHEMAS: Tool[] = ['
+          if old_decl not in text:
+              raise SystemExit('base TOOL_SCHEMAS marker not found')
+          text = text.replace(old_decl, 'export const TOOL_SCHEMAS: BrauzioToolSchema[] = [', 1)
+          tools.write_text(text, encoding='utf-8')
+
+          watch = Path('packages/shared/src/watch-tools.ts')
+          watch_text = watch.read_text(encoding='utf-8')
+          old_watch_import = "import type { Tool } from '@modelcontextprotocol/sdk/types.js';"
+          if old_watch_import not in watch_text:
+              raise SystemExit('watch Tool import marker not found')
+          watch_text = watch_text.replace(old_watch_import, "import type { BrauzioToolSchema } from './tools';", 1)
+          old_watch_decl = 'export const WATCH_TOOL_SCHEMAS: Tool[] = ['
+          if old_watch_decl not in watch_text:
+              raise SystemExit('WATCH_TOOL_SCHEMAS marker not found')
+          watch_text = watch_text.replace(old_watch_decl, 'export const WATCH_TOOL_SCHEMAS: BrauzioToolSchema[] = [', 1)
+          watch.write_text(watch_text, encoding='utf-8')
+
+          common = Path('app/chrome-extension/entrypoints/background/tools/browser/common.ts')
+          common_text = common.read_text(encoding='utf-8')
+          old_update = """          if (newTab.id && shouldVerify) {\n            await armVerification(newTab.id);\n            newTab = await chrome.tabs.update(newTab.id, { url });\n          }\n"""
+          new_update = """          if (newTab.id && shouldVerify) {\n            await armVerification(newTab.id);\n            const updatedTab = await chrome.tabs.update(newTab.id, { url });\n            if (!updatedTab) {\n              return createErrorResponse('Tab closed before navigation could start');\n            }\n            newTab = updatedTab;\n          }\n"""
+          if old_update not in common_text:
+              raise SystemExit('navigation update marker not found')
+          common.write_text(common_text.replace(old_update, new_update, 1), encoding='utf-8')
+
+          verification = Path('app/chrome-extension/utils/action-verification.ts')
+          verification_text = verification.read_text(encoding='utf-8')
+          old_status = '  status?: chrome.tabs.TabStatus;'
+          if old_status not in verification_text:
+              raise SystemExit('TabStatus marker not found')
+          verification.write_text(verification_text.replace(old_status, "  status?: chrome.tabs.Tab['status'];", 1), encoding='utf-8')
+          PY
+
+      - name: Prepare WXT extension types
+        run: pnpm --filter brauzio-extension exec wxt prepare
+
+      - name: Build shared schemas
+        run: pnpm --filter brauzio-shared build
+
+      - name: Typecheck Brauzio Cloud MCP
+        run: pnpm --filter brauzio-cloud-mcp check
+
+      - name: Build Brauzio Cloud MCP
+        run: pnpm --filter brauzio-cloud-mcp build
+
+      - name: Typecheck Chrome extension
+        run: pnpm --filter brauzio-extension compile
+
+      - name: Build Chrome extension
+        run: pnpm --filter brauzio-extension build
+
+      - name: Commit validated fixes
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add packages/shared/src/tools.ts packages/shared/src/watch-tools.ts app/chrome-extension/entrypoints/background/tools/browser/common.ts app/chrome-extension/utils/action-verification.ts
+          if git diff --cached --quiet; then
+            echo 'Validated fixes already applied.'
+            exit 0
+          fi
+          git commit -m 'Fix Brauzio 2.6 schema and verification builds [skip ci]'
+          git push
