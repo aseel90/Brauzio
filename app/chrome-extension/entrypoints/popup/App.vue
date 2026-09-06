@@ -1,6 +1,6 @@
 <template>
   <div class="popup-container agent-theme" :data-agent-theme="agentTheme">
-    <!-- 首页 -->
+    
     <div v-show="currentView === 'home'" class="home-view">
       <div class="header">
         <div class="header-content">
@@ -49,7 +49,7 @@
           </div>
         </div>
 
-        <!-- 管理入口卡片 -->
+        
         <div class="section">
           <h2 class="section-title">الإدارة</h2>
           <div class="entry-card">
@@ -181,7 +181,7 @@
 
       <div class="footer">
         <div class="footer-links">
-          <button class="footer-link" @click="openWelcomePage" title="View installation guide">
+          <button class="footer-link" @click="openWelcomePage" title="دليل التثبيت">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
                 stroke-linecap="round"
@@ -190,9 +190,9 @@
                 d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
               />
             </svg>
-            Guide
+            دليل الاستخدام
           </button>
-          <button class="footer-link" @click="openTroubleshooting" title="Troubleshooting">
+          <button class="footer-link" @click="openTroubleshooting" title="استكشاف الأخطاء">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
                 stroke-linecap="round"
@@ -201,14 +201,14 @@
                 d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
               />
             </svg>
-            Docs
+            المساعدة
           </button>
         </div>
         <p class="footer-text">Brauzio — تحكم ذكي بالمتصفح عبر MCP</p>
       </div>
     </div>
 
-    <!-- 本地模型二级页面 -->
+    
     <LocalModelPage
       v-show="currentView === 'local-model'"
       :semantic-engine-status="semanticEngineStatus"
@@ -256,7 +256,7 @@
       @cancel="hideClearDataConfirmation"
     />
 
-    <!-- 侧边栏承担工作流管理；编辑器在独立窗口中打开 -->
+    
 
     <!-- Coming Soon Toast -->
     <Transition name="toast">
@@ -312,11 +312,7 @@ import {
   EditIcon,
   MarkerIcon,
 } from './components/icons';
-
-// AgentChat theme - 从preload中获取，保持与sidepanel一致
 const { theme: agentTheme, initTheme } = useAgentTheme();
-
-// 当前视图状态：首页 or 本地模型页
 const currentView = ref<'home' | 'local-model'>('home');
 
 // Coming Soon Toast
@@ -349,8 +345,6 @@ const filteredRrFlows = computed(() => {
   });
 });
 
-// Flow editor在独立窗口中打开；在popup不再展示繁杂列表
-
 const loadFlows = async () => {
   try {
     const res = await chrome.runtime.sendMessage({ type: BACKGROUND_MESSAGE_TYPES.RR_LIST_FLOWS });
@@ -376,27 +370,21 @@ function isFlowBoundToCurrent(flow: any) {
     return false;
   }
 }
-
-// 运行记录与覆盖项在侧边栏页面查看
 const startRecording = async () => {
-  // TODO: 录制回放功能开发中，暂时拦截
   showComingSoonToast('التسجيل وإعادة التشغيل');
   return;
   // if (rrRecording.value) return;
   // try {
   //   const res = await chrome.runtime.sendMessage({
   //     type: BACKGROUND_MESSAGE_TYPES.RR_START_RECORDING,
-  //     meta: { name: '新录制' },
   //   });
   //   rrRecording.value = !!(res && res.success);
   // } catch (e) {
-  //   console.error('开始录制失败:', e);
   //   rrRecording.value = false;
   // }
 };
 
 const stopRecording = async () => {
-  // TODO: 录制回放功能开发中，暂时拦截
   showComingSoonToast('التسجيل وإعادة التشغيل');
   return;
   // if (!rrRecording.value) return;
@@ -407,7 +395,6 @@ const stopRecording = async () => {
   //   rrRecording.value = false;
   //   if (res && res.success) await loadFlows();
   // } catch (e) {
-  //   console.error('停止录制失败:', e);
   //   rrRecording.value = false;
   // }
 };
@@ -432,7 +419,7 @@ const runFlow = async (flowId: string) => {
       options: { ...runOptions, ...ov, returnLogs: true },
     });
     if (!(res && res.success)) {
-      console.warn('回放失败');
+      console.warn('Brauzio');
       return;
     }
     // If failed, open builder and focus the failed node
@@ -442,7 +429,6 @@ const runFlow = async (flowId: string) => {
         const logs = result.logs || [];
         const failed = logs.find((l: any) => l.status === 'failed');
         if (failed && failed.stepId) {
-          // 打开独立编辑窗口并定位失败节点
           if (flow) openBuilderWindow(flow.id, String(failed.stepId));
         }
       } else if (result && result.success === true) {
@@ -453,11 +439,9 @@ const runFlow = async (flowId: string) => {
       }
     } catch {}
   } catch (e) {
-    console.error('回放失败:', e);
+    console.error('Brauzio:', e);
   }
 };
-
-// 旧的“克隆/发布/定时/覆盖项”在侧边栏或编辑器中处理
 
 const nativeConnectionStatus = ref<'unknown' | 'connected' | 'disconnected'>('unknown');
 const isConnecting = ref(false);
@@ -581,7 +565,6 @@ async function openSidepanelAndClose(tab: string) {
 
 // Open sidepanel from popup for workflow management
 function openWorkflowSidepanel() {
-  // TODO: 工作流功能开发中，暂时拦截
   showComingSoonToast('إدارة سير العمل');
   // openSidepanelAndClose('workflows');
 }
@@ -600,26 +583,23 @@ async function toggleWebEditor() {
   try {
     await chrome.runtime.sendMessage({ type: BACKGROUND_MESSAGE_TYPES.WEB_EDITOR_TOGGLE });
   } catch (error) {
-    console.warn('切换网页编辑模式失败:', error);
+    console.warn('Brauzio:', error);
   }
 }
 
 async function toggleElementMarker() {
   try {
-    // 获取当前活动tab
     const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
     if (!tab?.id) {
-      console.warn('无法获取当前tab');
+      console.warn('Brauziotab');
       return;
     }
-
-    // 向background发送消息，启动元素标注
     await chrome.runtime.sendMessage({
       type: BACKGROUND_MESSAGE_TYPES.ELEMENT_MARKER_START,
       tabId: tab.id,
     });
   } catch (error) {
-    console.warn('开启元素标注失败:', error);
+    console.warn('Brauzio:', error);
   }
 }
 
@@ -807,7 +787,7 @@ const saveSemanticEngineState = async () => {
     // eslint-disable-next-line no-undef
     await chrome.storage.local.set({ semanticEngineState });
   } catch (error) {
-    console.error('保存语义引擎状态失败:', error);
+    console.error('Brauzio:', error);
   }
 };
 
@@ -944,7 +924,7 @@ const checkNativeConnection = async () => {
     const response = await chrome.runtime.sendMessage({ type: 'ping_native' });
     nativeConnectionStatus.value = response?.connected ? 'connected' : 'disconnected';
   } catch (error) {
-    console.error('检测 Native 连接状态失败:', error);
+    console.error('Brauzio Native Brauzio:', error);
     nativeConnectionStatus.value = 'disconnected';
   }
 };
@@ -963,7 +943,7 @@ const checkServerStatus = async () => {
       nativeConnectionStatus.value = response.connected ? 'connected' : 'disconnected';
     }
   } catch (error) {
-    console.error('检测服务器状态失败:', error);
+    console.error('Brauzio:', error);
   }
 };
 
@@ -981,7 +961,7 @@ const refreshServerStatus = async () => {
       nativeConnectionStatus.value = response.connected ? 'connected' : 'disconnected';
     }
   } catch (error) {
-    console.error('刷新服务器状态失败:', error);
+    console.error('Brauzio:', error);
   }
 };
 
@@ -994,7 +974,7 @@ const copyMcpConfig = async () => {
       copyButtonText.value = getMessage('copyConfigButton');
     }, 2000);
   } catch (error) {
-    console.error('复制配置失败:', error);
+    console.error('Brauzio:', error);
     copyButtonText.value = '❌' + getMessage('networkErrorMessage');
 
     setTimeout(() => {
@@ -1012,7 +992,7 @@ const testNativeConnection = async () => {
       await chrome.runtime.sendMessage({ type: 'disconnect_native' });
       nativeConnectionStatus.value = 'disconnected';
     } else {
-      console.log(`尝试连接到端口: ${nativeServerPort.value}`);
+      console.log(`Brauzio: ${nativeServerPort.value}`);
       // eslint-disable-next-line no-undef
       const response = await chrome.runtime.sendMessage({
         type: 'connectNative',
@@ -1020,15 +1000,15 @@ const testNativeConnection = async () => {
       });
       if (response && response.success) {
         nativeConnectionStatus.value = 'connected';
-        console.log('连接成功:', response);
+        console.log('Brauzio:', response);
         await savePortPreference(nativeServerPort.value);
       } else {
         nativeConnectionStatus.value = 'disconnected';
-        console.error('连接失败:', response);
+        console.error('Brauzio:', response);
       }
     }
   } catch (error) {
-    console.error('测试连接失败:', error);
+    console.error('Brauzio:', error);
     nativeConnectionStatus.value = 'disconnected';
   } finally {
     isConnecting.value = false;
@@ -1105,7 +1085,7 @@ const loadModelPreference = async () => {
       semanticEngineStatus.value = 'idle';
     }
   } catch (error) {
-    console.error('❌ 加载模型偏好失败:', error);
+    console.error('❌ Brauzio:', error);
   }
 };
 
@@ -1114,7 +1094,7 @@ const saveModelPreference = async (model: ModelPreset) => {
     // eslint-disable-next-line no-undef
     await chrome.storage.local.set({ selectedModel: model });
   } catch (error) {
-    console.error('保存模型偏好失败:', error);
+    console.error('Brauzio:', error);
   }
 };
 
@@ -1123,7 +1103,7 @@ const saveVersionPreference = async (version: 'full' | 'quantized' | 'compressed
     // eslint-disable-next-line no-undef
     await chrome.storage.local.set({ selectedVersion: version });
   } catch (error) {
-    console.error('保存版本偏好失败:', error);
+    console.error('Brauzio:', error);
   }
 };
 
@@ -1131,9 +1111,9 @@ const savePortPreference = async (port: number) => {
   try {
     // eslint-disable-next-line no-undef
     await chrome.storage.local.set({ nativeServerPort: port });
-    console.log(`端口偏好已保存: ${port}`);
+    console.log(`Brauzio: ${port}`);
   } catch (error) {
-    console.error('保存端口偏好失败:', error);
+    console.error('Brauzio:', error);
   }
 };
 
@@ -1143,10 +1123,10 @@ const loadPortPreference = async () => {
     const result = await chrome.storage.local.get(['nativeServerPort']);
     if (result.nativeServerPort) {
       nativeServerPort.value = result.nativeServerPort;
-      console.log(`端口偏好已加载: ${result.nativeServerPort}`);
+      console.log(`Brauzio: ${result.nativeServerPort}`);
     }
   } catch (error) {
-    console.error('加载端口偏好失败:', error);
+    console.error('Brauzio:', error);
   }
 };
 
@@ -1161,7 +1141,7 @@ const saveModelState = async () => {
     // eslint-disable-next-line no-undef
     await chrome.storage.local.set({ modelState });
   } catch (error) {
-    console.error('保存模型状态失败:', error);
+    console.error('Brauzio:', error);
   }
 };
 
@@ -1201,7 +1181,7 @@ const startModelStatusMonitoring = () => {
         }
       }
     } catch (error) {
-      console.error('获取模型状态失败:', error);
+      console.error('Brauzio:', error);
     }
   }, 1000);
 };
@@ -1405,13 +1385,13 @@ const switchModel = async (newModel: ModelPreset) => {
       throw new Error(response?.error || 'Model switch failed');
     }
   } catch (error: any) {
-    console.error('模型切换失败:', error);
+    console.error('Brauzio:', error);
     modelSwitchProgress.value = `Model switch failed: ${error?.message || 'Unknown error'}`;
 
     modelInitializationStatus.value = 'error';
     isModelDownloading.value = false;
 
-    const errorMessage = error?.message || '未知错误';
+    const errorMessage = error?.message || 'خطأ غير معروف';
     if (
       errorMessage.includes('network') ||
       errorMessage.includes('fetch') ||
@@ -1460,7 +1440,6 @@ const setupServerStatusListener = () => {
 };
 
 onMounted(async () => {
-  // 初始化主题
   await initTheme();
   await loadModelPreference();
   await refreshStorageStats();
