@@ -1,7 +1,7 @@
 {
-  "name": "@chrome-mcp/wasm-simd",
+  "name": "@brauzio/wasm-simd",
   "version": "0.1.0",
-  "description": "SIMD-optimized WebAssembly math functions for Chrome MCP",
+  "description": "SIMD-optimized WebAssembly math functions for Brauzio",
   "main": "pkg/simd_math.js",
   "types": "pkg/simd_math.d.ts",
   "files": [
@@ -19,16 +19,17 @@
     "webassembly",
     "math",
     "cosine-similarity",
-    "vector-operations"
+    "vector-operations",
+    "brauzio"
   ],
-  "author": "hangye",
+  "author": "Brauzio Contributors",
   "license": "MIT",
   "devDependencies": {
     "rimraf": "^5.0.0"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/your-repo/chrome-mcp-server.git",
+    "url": "git+https://github.com/aseel90/Brauzio.git",
     "directory": "packages/wasm-simd"
   }
 }
