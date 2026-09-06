@@ -1,0 +1,46 @@
+name: Import upstream mcp-chrome
+
+on:
+  push:
+    paths:
+      - '.github/workflows/import-upstream.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Brauzio
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Import hangwin/mcp-chrome
+        shell: bash
+        run: |
+          set -euo pipefail
+          WORKFLOW_FILE=".github/workflows/import-upstream.yml"
+          cp "$WORKFLOW_FILE" /tmp/import-upstream.yml
+
+          git clone --depth=1 https://github.com/hangwin/mcp-chrome.git /tmp/mcp-chrome
+
+          find . -mindepth 1 -maxdepth 1 ! -name .git -exec rm -rf {} +
+          cp -a /tmp/mcp-chrome/. .
+          rm -rf .git
+
+          mkdir -p .github/workflows
+          cp /tmp/import-upstream.yml "$WORKFLOW_FILE"
+
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No upstream changes to import."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "chore: import hangwin/mcp-chrome upstream"
+          git push origin HEAD:main
