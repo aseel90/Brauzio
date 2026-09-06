@@ -1,4 +1,4 @@
-import { initNativeHostListener } from './native-host';
+import { initRemoteRelayListener } from './remote-relay';
 import {
   initSemanticSimilarityListener,
   initializeSemanticEngineIfCached,
@@ -16,34 +16,32 @@ import { initQuickPanelTabsHandler } from './quick-panel/tabs-handler';
 import { bootstrapV3 } from './record-replay-v3/bootstrap';
 
 /**
- * Feature flag for RR-V3
- * Set to true to enable the new Record-Replay V3 engine
+ * Feature flag for RR-V3.
  */
 const ENABLE_RR_V3 = true;
 
 /**
- * Background script entry point
- * Initializes all background services and listeners
+ * Background script entry point.
+ * Brauzio uses the Cloudflare relay by default; the legacy native host remains
+ * in the source tree only as a compatibility path and is not auto-started.
  */
 export default defineBackground(() => {
-  // Open welcome page on first install
   chrome.runtime.onInstalled.addListener((details) => {
     if (details.reason === 'install') {
-      // Open the welcome/onboarding page for new installations
       chrome.tabs.create({
         url: chrome.runtime.getURL('/welcome.html'),
       });
     }
   });
 
-  // Initialize core services
-  initNativeHostListener();
+  // Cloud connection used by ChatGPT Remote MCP -> Cloudflare -> Brauzio.
+  initRemoteRelayListener();
+
+  // Core extension services.
   initSemanticSimilarityListener();
   initStorageManagerListener();
-  // Record & Replay V1/V2 listeners
   initRecordReplayListeners();
 
-  // Record & Replay V3 (new engine)
   if (ENABLE_RR_V3) {
     bootstrapV3()
       .then((runtime) => {
@@ -54,18 +52,12 @@ export default defineBackground(() => {
       });
   }
 
-  // Element marker: context menu + CRUD listeners
   initElementMarkerListeners();
-  // Web editor: toggle edit-mode overlay
   initWebEditorListeners();
-  // Quick Panel: send messages to AgentChat via background-stream bridge
   initQuickPanelAgentHandler();
-  // Quick Panel: tabs search bridge for content script UI
   initQuickPanelTabsHandler();
-  // Quick Panel: keyboard shortcut handler
   initQuickPanelCommands();
 
-  // Conditionally initialize semantic similarity engine if model cache exists
   initializeSemanticEngineIfCached()
     .then((initialized) => {
       if (initialized) {
@@ -80,7 +72,6 @@ export default defineBackground(() => {
       console.warn('Background: Failed to conditionally initialize semantic engine:', error);
     });
 
-  // Initial cleanup on startup
   cleanupModelCache().catch((error) => {
     console.warn('Background: Initial cache cleanup failed:', error);
   });
