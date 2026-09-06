@@ -38,8 +38,7 @@ jobs:
 
       - name: Require zero user-facing CJK strings
         shell: bash
-        run: |
-          grep -q 'Potential user-facing CJK lines: **0**' docs/UI_CHINESE_STRINGS.md
+        run: grep -Fq 'Potential user-facing CJK lines: **0**' docs/UI_CHINESE_STRINGS.md
 
       - name: Commit translated UI
         shell: bash
