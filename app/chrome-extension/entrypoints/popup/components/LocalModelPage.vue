@@ -467,7 +467,7 @@ const formatIndexSize = () => {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  background: var(--ac-accent, #d97757);
+  background: var(--ac-accent, #14b8a6);
   color: var(--ac-accent-contrast, white);
   font-weight: 600;
   padding: 12px 16px;
@@ -478,7 +478,7 @@ const formatIndexSize = () => {
 }
 
 .primary-action-button:hover:not(:disabled) {
-  background: var(--ac-accent-hover, #c4664a);
+  background: var(--ac-accent-hover, #0d9488);
 }
 
 .primary-action-button:disabled {
@@ -530,11 +530,11 @@ const formatIndexSize = () => {
 }
 
 .model-card:hover {
-  border-color: var(--ac-accent, #d97757);
+  border-color: var(--ac-accent, #14b8a6);
 }
 
 .model-card.selected {
-  border: 2px solid var(--ac-accent, #d97757);
+  border: 2px solid var(--ac-accent, #14b8a6);
   background: var(--ac-accent-subtle, rgba(217, 119, 87, 0.08));
 }
 
@@ -561,7 +561,7 @@ const formatIndexSize = () => {
 }
 
 .model-name.selected-text {
-  color: var(--ac-accent, #d97757);
+  color: var(--ac-accent, #14b8a6);
 }
 
 .model-description {
@@ -574,7 +574,7 @@ const formatIndexSize = () => {
   width: 20px;
   height: 20px;
   flex-shrink: 0;
-  background: var(--ac-accent, #d97757);
+  background: var(--ac-accent, #14b8a6);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -647,15 +647,15 @@ const formatIndexSize = () => {
 
 .stats-icon.violet {
   background: #ede9fe;
-  color: #7c3aed;
+  color: #4f46e5;
 }
 .stats-icon.teal {
   background: #ccfbf1;
   color: #0d9488;
 }
 .stats-icon.blue {
-  background: #dbeafe;
-  color: #2563eb;
+  background: #e0e7ff;
+  color: #5b5bd6;
 }
 .stats-icon.green {
   background: #dcfce7;

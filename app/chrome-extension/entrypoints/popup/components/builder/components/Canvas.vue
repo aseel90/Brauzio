@@ -40,7 +40,7 @@ import type { NodeBase, Edge as EdgeV2 } from '@/entrypoints/background/record-r
 import NodeCard from './nodes/NodeCard.vue';
 import NodeIf from './nodes/NodeIf.vue';
 import { NODE_UI_LIST, canvasTypeKey } from '@/entrypoints/popup/components/builder/model/ui-nodes';
-import { EDGE_LABELS } from 'chrome-mcp-shared';
+import { EDGE_LABELS } from 'brauzio-shared';
 
 const props = defineProps<{
   nodes: NodeBase[];
@@ -356,7 +356,7 @@ defineExpose({ zoomIn, zoomOut, fitAll });
 /* Brauzio internal note. */
 /* Solid color icon backgrounds (no gradients) */
 :deep(.icon-navigate) {
-  background: #667eea;
+  background: #5b5bd6;
 }
 :deep(.icon-click) {
   background: #f5576c;
@@ -384,7 +384,7 @@ defineExpose({ zoomIn, zoomOut, fitAll });
   background: #f59e0b;
 }
 :deep(.icon-attr) {
-  background: #8b5cf6;
+  background: #5b5bd6;
 }
 :deep(.icon-loop) {
   background: #22c55e;
@@ -435,7 +435,7 @@ defineExpose({ zoomIn, zoomOut, fitAll });
   background: #f59e0b;
 }
 :deep(.icon-setAttribute) {
-  background: #8b5cf6;
+  background: #5b5bd6;
 }
 :deep(.icon-loopElements) {
   background: #22c55e;

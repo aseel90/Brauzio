@@ -109,8 +109,8 @@ export const QUICK_PANEL_STYLES = /* css */ `
     --ac-hover-bg: #f5f5f4;
     --ac-hover-bg-subtle: #fafaf9;
 
-    --ac-accent: #d97757;
-    --ac-accent-hover: #c4664a;
+    --ac-accent: #14b8a6;
+    --ac-accent-hover: #0d9488;
     --ac-accent-subtle: rgba(217, 119, 87, 0.12);
     --ac-accent-contrast: #ffffff;
 
@@ -174,7 +174,7 @@ export const QUICK_PANEL_STYLES = /* css */ `
     --ac-hover-bg: rgba(255, 255, 255, 0.06);
     --ac-hover-bg-subtle: rgba(255, 255, 255, 0.04);
 
-    --ac-accent: #d97757;
+    --ac-accent: #14b8a6;
     --ac-accent-hover: #e8956f;
     --ac-accent-subtle: rgba(217, 119, 87, 0.18);
     --ac-accent-contrast: #ffffff;
@@ -268,9 +268,9 @@ export const QUICK_PANEL_STYLES = /* css */ `
   .qp-root .text-shimmer {
     background: linear-gradient(
       90deg,
-      var(--ac-accent, #d97757) 0%,
+      var(--ac-accent, #14b8a6) 0%,
       var(--ac-accent-hover, #ffcab0) 50%,
-      var(--ac-accent, #d97757) 100%
+      var(--ac-accent, #14b8a6) 100%
     );
     background-size: 200% auto;
     color: transparent;

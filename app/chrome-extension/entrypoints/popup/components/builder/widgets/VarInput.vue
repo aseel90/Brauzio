@@ -240,7 +240,7 @@ watch(
   color: var(--rr-muted, #666);
 }
 .var-origin[data-origin='node'] {
-  color: #2563eb;
+  color: #5b5bd6;
 }
 .var-origin[data-origin='global'] {
   color: #059669;

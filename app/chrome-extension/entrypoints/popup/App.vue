@@ -3,8 +3,12 @@
     
     <div v-show="currentView === 'home'" class="home-view">
       <div class="header">
-        <div class="header-content">
-          <h1 class="header-title">Brauzio</h1>
+        <div class="header-content brand-lockup">
+          <img class="brand-mark" src="/brand/brauzio-mark.svg" alt="" aria-hidden="true" />
+          <div class="brand-title-stack">
+            <h1 class="header-title">Brauzio</h1>
+            <span class="brand-subtitle">بوابتك الذكية إلى المتصفح</span>
+          </div>
         </div>
       </div>
       <div class="content">
@@ -1403,7 +1407,7 @@ onUnmounted(() => {
 
 .model-name {
   font-weight: 600;
-  color: #7c3aed;
+  color: #4f46e5;
 }
 
 .stats-grid {
@@ -1438,7 +1442,7 @@ onUnmounted(() => {
 
 .stats-icon.violet {
   background: #ede9fe;
-  color: #7c3aed;
+  color: #4f46e5;
 }
 
 .stats-icon.teal {
@@ -1447,8 +1451,8 @@ onUnmounted(() => {
 }
 
 .stats-icon.blue {
-  background: #dbeafe;
-  color: #2563eb;
+  background: #e0e7ff;
+  color: #5b5bd6;
 }
 
 .stats-icon.green {
@@ -1493,7 +1497,7 @@ onUnmounted(() => {
 }
 
 .primary-button {
-  background: #3b82f6;
+  background: #5b5bd6;
   color: white;
   border: none;
   padding: 8px 16px;
@@ -1505,7 +1509,7 @@ onUnmounted(() => {
 }
 
 .primary-button:hover {
-  background: #2563eb;
+  background: #5b5bd6;
 }
 
 .section-title {
@@ -1537,7 +1541,7 @@ onUnmounted(() => {
 }
 
 .current-model-badge {
-  background: #8b5cf6;
+  background: #5b5bd6;
   color: white;
   font-size: 12px;
   font-weight: 600;
@@ -1548,7 +1552,7 @@ onUnmounted(() => {
 .current-model-name {
   font-size: 16px;
   font-weight: 700;
-  color: #7c3aed;
+  color: #4f46e5;
   margin: 0;
 }
 
@@ -1568,11 +1572,11 @@ onUnmounted(() => {
 }
 
 .model-card:hover {
-  border-color: #8b5cf6;
+  border-color: #5b5bd6;
 }
 
 .model-card.selected {
-  border: 2px solid #8b5cf6;
+  border: 2px solid #5b5bd6;
   background: #faf5ff;
 }
 
@@ -1599,7 +1603,7 @@ onUnmounted(() => {
 }
 
 .model-name.selected-text {
-  color: #7c3aed;
+  color: #4f46e5;
 }
 
 .model-description {
@@ -1612,7 +1616,7 @@ onUnmounted(() => {
   width: 20px;
   height: 20px;
   flex-shrink: 0;
-  background: #8b5cf6;
+  background: #5b5bd6;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -1680,7 +1684,7 @@ onUnmounted(() => {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  background: #8b5cf6;
+  background: #5b5bd6;
   color: white;
   font-weight: 600;
   padding: 12px 16px;
@@ -1692,7 +1696,7 @@ onUnmounted(() => {
 }
 
 .semantic-engine-button:hover:not(:disabled) {
-  background: #7c3aed;
+  background: #4f46e5;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
 
@@ -1810,7 +1814,7 @@ onUnmounted(() => {
 
 .port-input:focus {
   outline: none;
-  border-color: var(--ac-accent, #d97757);
+  border-color: var(--ac-accent, #14b8a6);
   box-shadow: 0 0 0 3px var(--ac-accent-subtle, rgba(217, 119, 87, 0.12));
 }
 
@@ -1820,7 +1824,7 @@ onUnmounted(() => {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  background: var(--ac-accent, #d97757);
+  background: var(--ac-accent, #14b8a6);
   color: var(--ac-accent-contrast, white);
   font-weight: 600;
   padding: 12px 16px;
@@ -1832,7 +1836,7 @@ onUnmounted(() => {
 }
 
 .connect-button:hover:not(:disabled) {
-  background: var(--ac-accent-hover, #c4664a);
+  background: var(--ac-accent-hover, #0d9488);
   box-shadow: var(--ac-shadow-float, 0 4px 20px -2px rgba(0, 0, 0, 0.05));
 }
 
@@ -1983,7 +1987,7 @@ onUnmounted(() => {
 }
 
 .footer-link:hover {
-  color: #8b5cf6;
+  color: #5b5bd6;
   background: #e2e8f0;
 }
 
@@ -2167,12 +2171,12 @@ onUnmounted(() => {
 /* Brauzio internal note. */
 .rr-icon-btn-edit {
   background: rgba(37, 99, 235, 0.1);
-  color: #2563eb;
+  color: #5b5bd6;
 }
 
 .rr-icon-btn-edit:hover:not(:disabled) {
   background: rgba(37, 99, 235, 0.2);
-  color: #1d4ed8;
+  color: #4f46e5;
 }
 
 /* Brauzio internal note. */
@@ -2298,12 +2302,12 @@ onUnmounted(() => {
 
 .entry-icon.agent {
   background: rgba(217, 119, 87, 0.12);
-  color: var(--ac-accent, #d97757);
+  color: var(--ac-accent, #14b8a6);
 }
 
 .entry-icon.workflow {
-  background: rgba(37, 99, 235, 0.12);
-  color: #2563eb;
+  background: rgba(91, 91, 214, 0.12);
+  color: #5b5bd6;
 }
 
 .entry-icon.marker {
@@ -2313,7 +2317,7 @@ onUnmounted(() => {
 
 .entry-icon.model {
   background: rgba(139, 92, 246, 0.12);
-  color: #8b5cf6;
+  color: #5b5bd6;
 }
 
 .entry-content {
@@ -2352,7 +2356,7 @@ onUnmounted(() => {
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  color: var(--ac-accent, #d97757);
+  color: var(--ac-accent, #14b8a6);
   background: rgba(217, 119, 87, 0.12);
   border-radius: 4px;
   vertical-align: middle;
@@ -2390,7 +2394,7 @@ onUnmounted(() => {
   width: 18px;
   height: 18px;
   flex-shrink: 0;
-  color: var(--ac-accent, #d97757);
+  color: var(--ac-accent, #14b8a6);
 }
 
 /* Toast transition */

@@ -6,7 +6,7 @@
 
   const IS_MAIN = window === window.top;
   const COLORS = {
-    hover: '#3b82f6', // blue-500
+    hover: '#5b5bd6', // blue-500
     selected: '#22c55e', // green-500
     backdrop: 'rgba(15, 23, 42, 0.15)', // slate-900 @ 15%
   };

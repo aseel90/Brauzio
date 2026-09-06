@@ -89,8 +89,8 @@
     --ac-hover-bg-subtle: #fafaf9;
 
     /* Accent (terracotta) */
-    --ac-accent: #d97757;
-    --ac-accent-hover: #c4664a;
+    --ac-accent: #14b8a6;
+    --ac-accent-hover: #0d9488;
     --ac-accent-subtle: rgba(217, 119, 87, 0.12);
     --ac-accent-contrast: #ffffff;
     --ac-accent-2: var(--ac-accent);
@@ -166,7 +166,7 @@
     --ac-text-muted: #6e6e6e;
     --ac-text-subtle: #a8a29e;
     --ac-border: #e7e5e4;
-    --ac-accent: #d97757;
+    --ac-accent: #14b8a6;
     --ac-shadow-card: 0 1px 3px rgba(0, 0, 0, 0.08);
     --ac-radius-card: 12px;
     --ac-border-width: 1px;
@@ -182,12 +182,12 @@
 
     --ac-bg: #f7fbff;
     --ac-bg-pattern:
-      linear-gradient(to right, rgba(37, 99, 235, 0.14) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(37, 99, 235, 0.14) 1px, transparent 1px);
+      linear-gradient(to right, rgba(91, 91, 214, 0.14) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(91, 91, 214, 0.14) 1px, transparent 1px);
     --ac-bg-pattern-size: 24px 24px;
 
     --ac-header-bg: rgba(247, 251, 255, 0.86);
-    --ac-header-border: rgba(37, 99, 235, 0.25);
+    --ac-header-border: rgba(91, 91, 214, 0.25);
 
     --ac-surface: rgba(255, 255, 255, 0.92);
     --ac-surface-muted: rgba(239, 246, 255, 0.9);
@@ -199,22 +199,22 @@
     --ac-text-inverse: #ffffff;
     --ac-text-placeholder: #64748b;
 
-    --ac-border: rgba(37, 99, 235, 0.25);
-    --ac-border-strong: rgba(37, 99, 235, 0.45);
+    --ac-border: rgba(91, 91, 214, 0.25);
+    --ac-border-strong: rgba(91, 91, 214, 0.45);
 
-    --ac-hover-bg: rgba(37, 99, 235, 0.08);
+    --ac-hover-bg: rgba(91, 91, 214, 0.08);
     --ac-hover-bg-subtle: rgba(37, 99, 235, 0.05);
 
-    --ac-accent: #2563eb;
-    --ac-accent-hover: #1d4ed8;
-    --ac-accent-subtle: rgba(37, 99, 235, 0.12);
+    --ac-accent: #5b5bd6;
+    --ac-accent-hover: #4f46e5;
+    --ac-accent-subtle: rgba(91, 91, 214, 0.12);
     --ac-accent-contrast: #ffffff;
 
     --ac-accent-2: #0ea5e9;
     --ac-link: var(--ac-accent);
     --ac-link-hover: var(--ac-accent-hover);
 
-    --ac-selection-bg: rgba(37, 99, 235, 0.16);
+    --ac-selection-bg: rgba(91, 91, 214, 0.16);
     --ac-selection-text: #0b1220;
 
     --ac-shadow-card: 0 1px 3px rgba(2, 6, 23, 0.12);
@@ -228,15 +228,15 @@
     --ac-timeline-node-active-border: var(--ac-accent);
     --ac-timeline-node-tool: rgba(37, 99, 235, 0.5);
     --ac-timeline-node-pulse-shadow:
-      0 0 0 2px rgba(37, 99, 235, 0.25), 0 0 12px rgba(37, 99, 235, 0.2);
+      0 0 0 2px rgba(91, 91, 214, 0.25), 0 0 12px rgba(37, 99, 235, 0.2);
 
     --ac-chip-bg: rgba(239, 246, 255, 0.9);
     --ac-chip-text: #0b1220;
-    --ac-chip-border: rgba(37, 99, 235, 0.25);
+    --ac-chip-border: rgba(91, 91, 214, 0.25);
 
     --ac-code-bg: rgba(255, 255, 255, 0.92);
     --ac-code-text: #0b1220;
-    --ac-code-border: rgba(37, 99, 235, 0.25);
+    --ac-code-border: rgba(91, 91, 214, 0.25);
 
     --ac-diff-add-bg: rgba(34, 197, 94, 0.12);
     --ac-diff-add-text: #15803d;
@@ -701,11 +701,11 @@
     display: inline-block;
     background: linear-gradient(
       90deg,
-      var(--ac-accent, #d97757) 0%,
-      var(--ac-accent, #d97757) 40%,
+      var(--ac-accent, #14b8a6) 0%,
+      var(--ac-accent, #14b8a6) 40%,
       #ffe0d0 50%,
-      var(--ac-accent, #d97757) 60%,
-      var(--ac-accent, #d97757) 100%
+      var(--ac-accent, #14b8a6) 60%,
+      var(--ac-accent, #14b8a6) 100%
     );
     background-size: 250% 100%;
     background-repeat: no-repeat;

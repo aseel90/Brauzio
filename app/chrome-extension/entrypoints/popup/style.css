@@ -7,10 +7,10 @@
   font-weight: 400;
 
   /* Brauzio internal note. */
-  --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  --primary-color: #667eea;
-  --primary-dark: #5a67d8;
-  --secondary-color: #764ba2;
+  --primary-gradient: linear-gradient(135deg, #5b5bd6 0%, #12b8b0 100%);
+  --primary-color: #5b5bd6;
+  --primary-dark: #4f46e5;
+  --secondary-color: #12b8b0;
 
   --success-color: #48bb78;
   --warning-color: #ed8936;
@@ -136,7 +136,7 @@ textarea:focus,
 select:focus {
   outline: none;
   border-color: var(--primary-color);
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  box-shadow: 0 0 0 3px rgba(91, 91, 214, 0.12);
 }
 
 /* Brauzio internal note. */
@@ -162,7 +162,7 @@ select:focus {
 
 /* Brauzio internal note. */
 ::selection {
-  background: rgba(102, 126, 234, 0.2);
+  background: rgba(91, 91, 214, 0.18);
   color: var(--text-primary);
 }
 

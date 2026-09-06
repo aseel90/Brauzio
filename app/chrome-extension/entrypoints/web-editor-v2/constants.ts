@@ -40,7 +40,7 @@ export const WEB_EDITOR_V2_PANEL_WIDTH = 320;
 
 export const WEB_EDITOR_V2_COLORS = {
   /** Hover highlight color */
-  hover: '#3b82f6', // blue-500
+  hover: '#5b5bd6', // blue-500
   /** Selected element color */
   selected: '#22c55e', // green-500
   /** Selection box border */

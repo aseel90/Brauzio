@@ -10,7 +10,7 @@
  * - Memory-efficient DOM recycling
  */
 
-import type { AgentMessage, AgentRole } from 'chrome-mcp-shared';
+import type { AgentMessage, AgentRole } from 'brauzio-shared';
 import { createMarkdownRenderer, type MarkdownRendererInstance } from './markdown-renderer';
 
 // ============================================================

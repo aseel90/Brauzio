@@ -218,7 +218,7 @@
                         class="text-xs px-1.5 py-0.5 rounded"
                         :style="{
                           backgroundColor: run.isInProgress
-                            ? 'var(--ac-primary-light, #dbeafe)'
+                            ? 'var(--ac-primary-light, #e0e7ff)'
                             : run.success
                               ? 'var(--ac-success-light, #dcfce7)'
                               : 'var(--ac-danger-light, #fee2e2)',
@@ -502,14 +502,14 @@ function getFlowName(flowId: string): string {
 function getRunStatusColor(run: RunLite): string {
   // V3 style: check isInProgress first
   if (run.isInProgress) {
-    return 'var(--ac-primary, #3b82f6)';
+    return 'var(--ac-primary, #5b5bd6)';
   }
   // V3 style: check status
   if (run.status) {
     if (run.status === 'succeeded') return 'var(--ac-success, #22c55e)';
     if (run.status === 'failed' || run.status === 'canceled') return 'var(--ac-danger, #ef4444)';
     // queued/running/paused - should be caught by isInProgress but just in case
-    return 'var(--ac-primary, #3b82f6)';
+    return 'var(--ac-primary, #5b5bd6)';
   }
   // V2 fallback: use success boolean
   return run.success ? 'var(--ac-success, #22c55e)' : 'var(--ac-danger, #ef4444)';
@@ -630,8 +630,8 @@ const triggerActionDangerStyle = computed(() => ({
 }
 
 .workflow-checkbox:checked {
-  background-color: var(--ac-accent, #d97757);
-  border-color: var(--ac-accent, #d97757);
+  background-color: var(--ac-accent, #14b8a6);
+  border-color: var(--ac-accent, #14b8a6);
   background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M12.207 4.793a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L6.5 9.086l4.293-4.293a1 1 0 011.414 0z'/%3e%3c/svg%3e");
 }
 

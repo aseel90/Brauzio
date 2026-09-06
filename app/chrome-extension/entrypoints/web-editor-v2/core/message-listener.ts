@@ -185,7 +185,7 @@ function showHighlight(element: Element): void {
     border-radius: 4px;
     pointer-events: none;
     z-index: 2147483646;
-    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+    box-shadow: 0 0 0 4px rgba(91, 91, 214, 0.12);
     transition: all 0.15s ease;
   `;
 

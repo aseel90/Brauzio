@@ -1,7 +1,7 @@
 {
-  "name": "chrome-mcp-shared",
+  "name": "brauzio-shared",
   "version": "1.0.1",
-  "author": "hangye",
+  "author": "Brauzio Contributors",
   "main": "dist/index.js",
   "module": "./dist/index.mjs",
   "types": "dist/index.d.ts",

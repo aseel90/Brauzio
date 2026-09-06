@@ -1,6 +1,6 @@
 import { Server, type CallToolResult } from '@modelcontextprotocol/server';
 import { createMcpHandler } from 'agents/mcp/server';
-import { TOOL_SCHEMAS } from 'chrome-mcp-shared';
+import { TOOL_SCHEMAS } from 'brauzio-shared';
 import { BrowserSession } from './browser-session';
 
 export { BrowserSession };

@@ -150,7 +150,7 @@ defineEmits<Emits>();
   background: linear-gradient(135deg, #f7fafc, #edf2f7);
   border-radius: 6px;
   padding: 12px 12px 12px 32px;
-  border-left: 3px solid #667eea;
+  border-left: 3px solid #5b5bd6;
 }
 
 .dialog-list li {

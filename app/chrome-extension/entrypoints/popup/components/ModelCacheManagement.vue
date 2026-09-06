@@ -228,7 +228,7 @@ const getModelNameFromUrl = (url: string) => {
 }
 
 .entry-size {
-  background: #dbeafe;
+  background: #e0e7ff;
   color: #1e40af;
   padding: 2px 6px;
   border-radius: 4px;

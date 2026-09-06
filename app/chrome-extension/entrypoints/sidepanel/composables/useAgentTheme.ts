@@ -17,7 +17,7 @@ export type AgentThemeId =
 const STORAGE_KEY_THEME = 'agentTheme';
 
 /** Default theme when none is set */
-const DEFAULT_THEME: AgentThemeId = 'warm-editorial';
+const DEFAULT_THEME: AgentThemeId = 'blueprint-architect';
 
 /** Valid theme IDs for validation */
 const VALID_THEMES: AgentThemeId[] = [
@@ -31,12 +31,12 @@ const VALID_THEMES: AgentThemeId[] = [
 
 /** Theme display names for UI */
 export const THEME_LABELS: Record<AgentThemeId, string> = {
-  'warm-editorial': 'Editorial',
-  'blueprint-architect': 'Blueprint',
-  'zen-journal': 'Zen',
-  'neo-pop': 'Neo-Pop',
-  'dark-console': 'Console',
-  'swiss-grid': 'Swiss',
+  'warm-editorial': 'ناعم',
+  'blueprint-architect': 'Brauzio',
+  'zen-journal': 'هادئ',
+  'neo-pop': 'جريء',
+  'dark-console': 'داكن',
+  'swiss-grid': 'شبكي',
 };
 
 export interface UseAgentTheme {

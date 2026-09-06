@@ -201,7 +201,7 @@ const descStyle = computed(() => ({
 
 const tagDomainStyle = computed(() => ({
   backgroundColor: 'var(--ac-accent-subtle, rgba(217, 119, 87, 0.12))',
-  color: 'var(--ac-accent, #d97757)',
+  color: 'var(--ac-accent, #14b8a6)',
 }));
 
 const tagStyle = computed(() => ({
@@ -216,7 +216,7 @@ const actionStyle = computed(() => ({
 }));
 
 const actionPrimaryStyle = computed(() => ({
-  backgroundColor: 'var(--ac-accent, #d97757)',
+  backgroundColor: 'var(--ac-accent, #14b8a6)',
   color: 'var(--ac-accent-contrast, #ffffff)',
   borderRadius: 'var(--ac-radius-button, 8px)',
 }));
@@ -319,7 +319,7 @@ const menuItemDangerStyle = computed(() => ({
 }
 
 .workflow-action-primary:hover {
-  background-color: var(--ac-accent-hover, #c4664a) !important;
+  background-color: var(--ac-accent-hover, #0d9488) !important;
 }
 
 .workflow-more-menu {

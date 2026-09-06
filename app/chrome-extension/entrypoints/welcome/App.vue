@@ -83,7 +83,7 @@ onMounted(() => {
     <main class="welcome-shell">
       <section class="welcome-card hero-card">
         <div class="brand-row">
-          <div class="brand-icon" aria-hidden="true">B</div>
+          <img class="brand-icon brand-icon-image" src="/brand/brauzio-mark.svg" alt="" aria-hidden="true" />
           <div>
             <p class="eyebrow">BRAUZIO CLOUD</p>
             <h1>تم تثبيت Brauzio</h1>

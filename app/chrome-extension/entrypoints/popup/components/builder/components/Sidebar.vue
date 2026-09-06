@@ -259,7 +259,7 @@ const filtered = computed(() => {
 }
 
 .icon-navigate {
-  background: #667eea;
+  background: #5b5bd6;
 }
 .icon-click {
   background: #f5576c;
@@ -290,7 +290,7 @@ const filtered = computed(() => {
   background: #f59e0b;
 }
 .icon-attr {
-  background: #8b5cf6;
+  background: #5b5bd6;
 }
 .icon-loop {
   background: #22c55e;

@@ -1,5 +1,5 @@
 import { computed, onMounted, onUnmounted, ref } from 'vue';
-import type { AgentEngineInfo, RealtimeEvent } from 'chrome-mcp-shared';
+import type { AgentEngineInfo, RealtimeEvent } from 'brauzio-shared';
 
 interface ServerStatus {
   isRunning: boolean;

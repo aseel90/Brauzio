@@ -269,13 +269,13 @@ function selectTab(tab: TabType) {
 }
 
 .navigator-trigger-active {
-  background: var(--ac-accent, #d97757);
+  background: var(--ac-accent, #14b8a6);
   color: var(--ac-accent-contrast, #ffffff);
-  border-color: var(--ac-accent, #d97757);
+  border-color: var(--ac-accent, #14b8a6);
 }
 
 .navigator-trigger-active:hover {
-  background: var(--ac-accent-hover, #c4664a);
+  background: var(--ac-accent-hover, #0d9488);
   color: var(--ac-accent-contrast, #ffffff);
 }
 
@@ -380,7 +380,7 @@ function selectTab(tab: TabType) {
 }
 
 .navigator-item-active .navigator-item-icon {
-  background: var(--ac-accent, #d97757);
+  background: var(--ac-accent, #14b8a6);
   color: var(--ac-accent-contrast, #ffffff);
 }
 
@@ -411,7 +411,7 @@ function selectTab(tab: TabType) {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--ac-accent, #d97757);
+  color: var(--ac-accent, #14b8a6);
   flex-shrink: 0;
 }
 

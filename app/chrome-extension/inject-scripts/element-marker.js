@@ -33,12 +33,12 @@
       RECTS: 2147483644,
     },
     COLORS: {
-      PRIMARY: '#2563eb',
+      PRIMARY: '#5b5bd6',
       SUCCESS: '#10b981',
       WARNING: '#f59e0b',
       DANGER: '#ef4444',
       HOVER: '#10b981',
-      VERIFY: '#3b82f6',
+      VERIFY: '#5b5bd6',
     },
   };
 
@@ -174,7 +174,7 @@
       }
 
       .em-square-btn.active {
-        background: #2563eb;
+        background: #5b5bd6;
       }
 
       .em-square-btn.active svg {
@@ -444,12 +444,12 @@
       }
 
       .em-btn-primary {
-        background: #2563eb;
+        background: #5b5bd6;
         color: #ffffff;
       }
 
       .em-btn-primary:hover {
-        background: #1d4ed8;
+        background: #4f46e5;
         transform: translateY(-1px);
         box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
       }
@@ -509,7 +509,7 @@
 
       .em-status.running {
         background: rgba(37, 99, 235, 0.1);
-        color: #2563eb;
+        color: #5b5bd6;
       }
 
       .em-status.success {

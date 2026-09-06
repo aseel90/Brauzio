@@ -143,7 +143,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
-import { TOOL_NAMES } from 'chrome-mcp-shared';
+import { TOOL_NAMES } from 'brauzio-shared';
 import { STORAGE_KEYS } from '@/common/constants';
 
 type ListItem = {
@@ -353,7 +353,7 @@ textarea {
   margin-top: 8px;
 }
 button {
-  background: #3b82f6;
+  background: #5b5bd6;
   color: #fff;
   border: none;
   padding: 8px 12px;
@@ -361,7 +361,7 @@ button {
   cursor: pointer;
 }
 button:hover {
-  background: #2563eb;
+  background: #5b5bd6;
 }
 .hint {
   color: #374151;

@@ -67,7 +67,7 @@ const SHADOW_HOST_STYLES = /* css */ `
     --we-control-bg-hover: #e8e8e8;
     --we-control-border-hover: #e0e0e0;
     --we-control-bg-focus: #ffffff;
-    --we-control-border-focus: #3b82f6;
+    --we-control-border-focus: #5b5bd6;
 
     /* Border colors */
     --we-border-subtle: #e5e5e5;
@@ -102,7 +102,7 @@ const SHADOW_HOST_STYLES = /* css */ `
     --we-icon-btn-size: 24px;
 
     /* Focus ring - blue inset border style */
-    --we-focus-ring: #3b82f6;
+    --we-focus-ring: #5b5bd6;
 
     /* Motion - bounce easing for toolbar animations */
     --we-ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
@@ -287,7 +287,7 @@ const SHADOW_HOST_STYLES = /* css */ `
     font-size: 10px;
     font-weight: 500;
     padding: 2px 6px;
-    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    background: linear-gradient(135deg, #6366f1, #5b5bd6);
     color: white;
     border-radius: 4px;
   }
@@ -1098,7 +1098,7 @@ const SHADOW_HOST_STYLES = /* css */ `
 
   .we-tree-item--selected {
     background: rgba(59, 130, 246, 0.12);
-    color: #1d4ed8;
+    color: #4f46e5;
     font-weight: 500;
   }
 
@@ -1128,7 +1128,7 @@ const SHADOW_HOST_STYLES = /* css */ `
   }
 
   .we-tree-item--selected .we-tree-icon {
-    color: #3b82f6;
+    color: #5b5bd6;
   }
 
   .we-tree-label {
@@ -3045,7 +3045,7 @@ const SHADOW_HOST_STYLES = /* css */ `
     padding: 2px 6px;
     border-radius: 999px;
     background: var(--we-accent-brand-bg);
-    color: #1d4ed8;
+    color: #4f46e5;
   }
 
   .we-props-status {
@@ -3121,7 +3121,7 @@ const SHADOW_HOST_STYLES = /* css */ `
   }
 
   .we-props-source-btn:hover:not(:disabled) {
-    color: #3b82f6;
+    color: #5b5bd6;
   }
 
   .we-props-source-btn:disabled {

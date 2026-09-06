@@ -1105,8 +1105,8 @@ function focusNode(id: string) {
   border-color: var(--rr-accent);
 }
 .top-btn.primary:hover {
-  background: #2563eb;
-  border-color: #2563eb;
+  background: #5b5bd6;
+  border-color: #5b5bd6;
 }
 .top-btn.success {
   background: #10b981;
@@ -1232,7 +1232,7 @@ function focusNode(id: string) {
   gap: 8px;
 }
 .rr-footer .primary {
-  background: #2563eb;
+  background: #5b5bd6;
   color: #fff;
   border: none;
   border-radius: 6px;

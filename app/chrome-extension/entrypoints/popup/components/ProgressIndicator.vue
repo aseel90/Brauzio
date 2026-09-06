@@ -31,18 +31,18 @@ withDefaults(defineProps<Props>(), {
   align-items: center;
   gap: 12px;
   padding: 16px;
-  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+  background: linear-gradient(135deg, rgba(91, 91, 214, 0.12), rgba(118, 75, 162, 0.1));
   border-radius: 8px;
-  border-left: 4px solid #667eea;
+  border-left: 4px solid #5b5bd6;
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(102, 126, 234, 0.2);
+  border: 1px solid rgba(91, 91, 214, 0.18);
 }
 
 .spinner {
   width: 20px;
   height: 20px;
-  border: 3px solid rgba(102, 126, 234, 0.2);
-  border-top: 3px solid #667eea;
+  border: 3px solid rgba(91, 91, 214, 0.18);
+  border-top: 3px solid #5b5bd6;
   border-radius: 50%;
   animation: spin 1s linear infinite;
   flex-shrink: 0;

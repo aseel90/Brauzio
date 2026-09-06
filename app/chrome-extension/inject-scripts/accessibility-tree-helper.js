@@ -836,7 +836,7 @@
           const box = document.createElement('div');
           Object.assign(box.style, {
             position: 'fixed',
-            border: '2px solid #3b82f6',
+            border: '2px solid #5b5bd6',
             background: 'rgba(59,130,246,0.15)',
             pointerEvents: 'none',
           });

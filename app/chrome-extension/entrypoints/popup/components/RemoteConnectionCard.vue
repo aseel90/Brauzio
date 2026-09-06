@@ -286,7 +286,7 @@ onBeforeUnmount(() => {
   font-size: 10px;
   font-weight: 800;
   letter-spacing: 0.11em;
-  color: #2563eb;
+  color: #5b5bd6;
 }
 
 .cloud-card__hint {
@@ -351,8 +351,8 @@ onBeforeUnmount(() => {
 }
 
 .cloud-field input:focus {
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  border-color: #5b5bd6;
+  box-shadow: 0 0 0 3px rgba(91, 91, 214, 0.12);
 }
 
 .cloud-field small {
@@ -384,7 +384,7 @@ onBeforeUnmount(() => {
   transform: translateY(-50%);
   border: 0;
   background: transparent;
-  color: #2563eb;
+  color: #5b5bd6;
   font-size: 10px;
   font-weight: 700;
   cursor: pointer;
@@ -401,7 +401,7 @@ onBeforeUnmount(() => {
 }
 
 .auto-connect input {
-  accent-color: #2563eb;
+  accent-color: #5b5bd6;
 }
 
 .mcp-url-box {
@@ -411,9 +411,9 @@ onBeforeUnmount(() => {
   gap: 10px;
   margin-top: 14px;
   padding: 10px;
-  border: 1px dashed #bfdbfe;
+  border: 1px dashed #c7d2fe;
   border-radius: 10px;
-  background: #eff6ff;
+  background: #eef2ff;
 }
 
 .mcp-url-box > div {
@@ -423,7 +423,7 @@ onBeforeUnmount(() => {
 .mcp-url-box__label {
   display: block;
   margin-bottom: 4px;
-  color: #1d4ed8;
+  color: #4f46e5;
   font-size: 10px;
   font-weight: 700;
 }
@@ -443,8 +443,8 @@ onBeforeUnmount(() => {
   border: 0;
   border-radius: 8px;
   padding: 7px 9px;
-  background: #dbeafe;
-  color: #1d4ed8;
+  background: #e0e7ff;
+  color: #4f46e5;
   font-size: 10px;
   font-weight: 700;
   cursor: pointer;
@@ -489,12 +489,12 @@ onBeforeUnmount(() => {
 
 .cloud-button--primary {
   flex: 1;
-  background: #2563eb;
+  background: #5b5bd6;
   color: white;
 }
 
 .cloud-button--primary:hover:not(:disabled) {
-  background: #1d4ed8;
+  background: #4f46e5;
 }
 
 .cloud-button--secondary {

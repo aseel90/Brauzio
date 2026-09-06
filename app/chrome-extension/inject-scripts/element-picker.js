@@ -24,7 +24,7 @@
   const MAX_TEXT_LEN = 160;
 
   // Highlight colors matching Editorial accent (terracotta)
-  const HIGHLIGHT_COLOR = '#d97757';
+  const HIGHLIGHT_COLOR = '#14b8a6';
   const HIGHLIGHT_BG = 'rgba(217, 119, 87, 0.08)';
   const HIGHLIGHT_BORDER = 'rgba(217, 119, 87, 0.4)';
 

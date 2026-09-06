@@ -893,12 +893,12 @@ onUnmounted(() => {
 }
 
 .em-btn-primary {
-  background: var(--ac-accent, #d97757);
+  background: var(--ac-accent, #14b8a6);
   color: var(--ac-accent-contrast, #ffffff);
 }
 
 .em-btn-primary:hover {
-  background: var(--ac-accent-hover, #c4664a);
+  background: var(--ac-accent-hover, #0d9488);
   transform: translateY(-1px);
   box-shadow: var(--ac-shadow-float, 0 4px 12px rgba(0, 0, 0, 0.15));
 }
@@ -995,7 +995,7 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--ac-accent, #d97757);
+  background: var(--ac-accent, #14b8a6);
   border: none;
   border-radius: var(--ac-radius-button, 10px);
   color: var(--ac-accent-contrast, #ffffff);
@@ -1005,7 +1005,7 @@ onUnmounted(() => {
 }
 
 .em-add-btn:hover {
-  background: var(--ac-accent-hover, #c4664a);
+  background: var(--ac-accent-hover, #0d9488);
   transform: translateY(-1px);
   box-shadow: var(--ac-shadow-float, 0 4px 12px rgba(0, 0, 0, 0.15));
 }
@@ -1293,7 +1293,7 @@ onUnmounted(() => {
 
 .em-action-btn.em-action-verify {
   background: var(--ac-accent-subtle, rgba(217, 119, 87, 0.1));
-  color: var(--ac-accent, #d97757);
+  color: var(--ac-accent, #14b8a6);
 }
 
 .em-action-btn.em-action-verify:hover {

@@ -737,7 +737,7 @@ watch(
   border-color: var(--rr-accent);
 }
 .panel-content :deep(.btn-sm.btn-primary:hover) {
-  background: #2563eb;
+  background: #5b5bd6;
   box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);
 }
 .panel-content :deep(.btn-icon-sm) {

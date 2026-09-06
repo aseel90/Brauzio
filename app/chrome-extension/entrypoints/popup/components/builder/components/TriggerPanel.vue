@@ -770,7 +770,7 @@ watch(
   border-color: var(--rr-accent);
 }
 .btn-sm.btn-primary:hover:not(:disabled) {
-  background: #2563eb;
+  background: #5b5bd6;
 }
 
 .btn-icon-sm {
@@ -889,7 +889,7 @@ watch(
 .form-input:focus,
 .form-select:focus {
   border-color: var(--rr-accent);
-  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+  box-shadow: 0 0 0 2px rgba(91, 91, 214, 0.12);
 }
 .checkbox-group {
   flex-direction: row;
@@ -932,7 +932,7 @@ watch(
   cursor: pointer;
 }
 .btn-primary:hover:not(:disabled) {
-  background: #2563eb;
+  background: #5b5bd6;
 }
 .btn-primary:disabled {
   opacity: 0.5;

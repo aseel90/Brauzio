@@ -17,7 +17,7 @@
 
 <script lang="ts" setup>
 import { computed } from 'vue';
-import type { AgentMessage } from 'chrome-mcp-shared';
+import type { AgentMessage } from 'brauzio-shared';
 
 const props = defineProps<{
   message: AgentMessage;
