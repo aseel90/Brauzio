@@ -1,0 +1,33 @@
+name: Brauzio popup cleanup
+
+on:
+  push:
+    paths:
+      - '.github/workflows/popup-cleanup.yml'
+      - 'scripts/cleanup_popup_native.py'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Remove localhost/native popup code
+        run: python scripts/cleanup_popup_native.py
+      - name: Commit cleanup
+        shell: bash
+        run: |
+          git add app/chrome-extension/entrypoints/popup/App.vue
+          if git diff --cached --quiet; then
+            echo "Popup already clean."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "refactor: remove legacy localhost popup code"
+          git push origin HEAD:main
