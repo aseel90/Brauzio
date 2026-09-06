@@ -1,5 +1,6 @@
 name: Remove Web Editor local Agent
 
+# One-time migration: remove the upstream localhost Agent subsystem after the cloud cutover.
 on:
   push:
     paths:
