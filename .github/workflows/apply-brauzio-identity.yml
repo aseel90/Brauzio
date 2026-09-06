@@ -1,0 +1,55 @@
+name: Apply Brauzio Identity
+
+on:
+  push:
+    paths:
+      - 'scripts/apply_brauzio_identity.py'
+      - '.github/workflows/apply-brauzio-identity.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Generate Brauzio visual identity
+        run: |
+          python -m pip install --disable-pip-version-check pillow
+          python scripts/apply_brauzio_identity.py
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 8.15.9
+
+      - name: Refresh lockfile after package rename
+        run: pnpm install --no-frozen-lockfile --ignore-scripts
+
+      - name: Commit identity migration
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'aseel-salah'
+          git config user.email 'salahabujaafar@gmail.com'
+          git add -A
+          if git diff --cached --quiet; then
+            echo 'No identity changes to commit.'
+            exit 0
+          fi
+          git commit -m 'brand: apply complete Brauzio identity'
+          git push
