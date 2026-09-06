@@ -1,0 +1,98 @@
+name: Brauzio V2 verified purge
+
+on:
+  push:
+    branches: [v2-ci-probe]
+    paths:
+      - '.github/workflows/v2-apply-purge.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  purge-and-verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: v2-ci-probe
+          fetch-depth: 0
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 8.15.9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Remove legacy product layers
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          rm -rf \
+            app/chrome-extension/entrypoints/background/element-marker \
+            app/chrome-extension/entrypoints/background/record-replay \
+            app/chrome-extension/entrypoints/background/record-replay-v3 \
+            app/chrome-extension/entrypoints/background/web-editor \
+            app/chrome-extension/entrypoints/background/utils \
+            app/chrome-extension/entrypoints/sidepanel \
+            app/chrome-extension/entrypoints/web-editor-v2 \
+            app/chrome-extension/entrypoints/shared \
+            app/chrome-extension/entrypoints/popup/components/builder \
+            app/chrome-extension/shared/quick-panel \
+            app/chrome-extension/tests/record-replay \
+            app/chrome-extension/tests/record-replay-v3 \
+            app/chrome-extension/tests/web-editor-v2
+
+          rm -f \
+            app/chrome-extension/common/element-marker-types.ts \
+            app/chrome-extension/common/web-editor-types.ts \
+            app/chrome-extension/entrypoints/offscreen/rr-keepalive.ts \
+            app/chrome-extension/inject-scripts/dom-observer.js \
+            app/chrome-extension/inject-scripts/element-marker.js \
+            app/chrome-extension/inject-scripts/props-agent.js \
+            app/chrome-extension/inject-scripts/recorder.js \
+            app/chrome-extension/inject-scripts/web-editor.js \
+            app/chrome-extension/utils/content-indexer.ts \
+            app/chrome-extension/utils/indexeddb-client.ts \
+            app/chrome-extension/utils/lru-cache.ts \
+            app/chrome-extension/utils/model-cache-manager.ts \
+            app/chrome-extension/utils/semantic-similarity-engine.ts \
+            app/chrome-extension/utils/simd-math-engine.ts \
+            app/chrome-extension/utils/text-chunker.ts \
+            app/chrome-extension/utils/vector-database.ts
+
+      - name: Install dependencies
+        run: pnpm install --no-frozen-lockfile
+
+      - name: Prepare extension types
+        run: pnpm --filter brauzio-extension exec wxt prepare
+
+      - name: Build shared MCP schemas
+        run: pnpm --filter brauzio-shared build
+
+      - name: Check Cloudflare MCP
+        run: pnpm --filter brauzio-cloud-mcp check
+
+      - name: Compile extension
+        run: pnpm --filter brauzio-extension compile
+
+      - name: Build extension
+        run: pnpm --filter brauzio-extension build
+
+      - name: Commit verified purge
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          if git diff --cached --quiet; then
+            echo 'Nothing to commit.'
+            exit 0
+          fi
+          git commit -m 'cleanup: remove verified legacy Brauzio layers [skip ci]'
+          git push origin HEAD:v2-ci-probe
