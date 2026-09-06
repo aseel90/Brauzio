@@ -1,25 +1,11 @@
-import { createErrorResponse, ToolResult } from '@/common/tool-handler';
+import { createErrorResponse, type ToolResult } from '@/common/tool-handler';
 import { BaseBrowserToolExecutor } from '../base-browser';
 import { TOOL_NAMES } from 'brauzio-shared';
 import { cdpSessionManager } from '@/utils/cdp-session-manager';
 
-type OwnerTag = 'performance';
-
-interface StartTraceParams {
-  reload?: boolean; // whether to reload the page after starting trace
-  autoStop?: boolean; // whether to auto stop after a short duration
-  durationMs?: number; // custom duration when autoStop is true (default 5000)
-}
-
-interface StopTraceParams {
-  saveToDownloads?: boolean; // save trace to Downloads as JSON (default true)
-  filenamePrefix?: string; // filename prefix (default 'performance_trace')
-}
-
-interface AnalyzeInsightParams {
-  insightName?: string; // placeholder for future deep insights
-}
-
+interface StartTraceParams { reload?: boolean; autoStop?: boolean; durationMs?: number }
+interface StopTraceParams { saveToDownloads?: boolean; filenamePrefix?: string }
+interface AnalyzeInsightParams { insightName?: string }
 type DebuggeeEvent = (source: chrome.debugger.Debuggee, method: string, params?: any) => void;
 
 interface TraceSessionState {
@@ -33,25 +19,18 @@ interface TraceSessionState {
 }
 
 const sessions = new Map<number, TraceSessionState>();
-const LAST_RESULTS = new Map<
-  number,
-  {
-    events: any[];
-    startedAt: number;
-    endedAt: number;
-    tabUrl: string;
-    saved?: { downloadId?: number; filename?: string; fullPath?: string };
-    metrics?: Record<string, number>;
-  }
->();
+const lastResults = new Map<number, {
+  events: any[];
+  startedAt: number;
+  endedAt: number;
+  tabUrl: string;
+  saved?: { downloadId?: number; filename?: string; fullPath?: string };
+  metrics?: Record<string, number>;
+}>();
 
 function tracingCategories(): string[] {
-  // Keep broadly consistent with other project
   return [
-    '-*',
-    'blink.console',
-    'blink.user_timing',
-    'devtools.timeline',
+    '-*', 'blink.console', 'blink.user_timing', 'devtools.timeline',
     'disabled-by-default-devtools.screenshot',
     'disabled-by-default-devtools.timeline',
     'disabled-by-default-devtools.timeline.invalidationTracking',
@@ -59,199 +38,69 @@ function tracingCategories(): string[] {
     'disabled-by-default-devtools.timeline.stack',
     'disabled-by-default-v8.cpu_profiler',
     'disabled-by-default-v8.cpu_profiler.hires',
-    'latencyInfo',
-    'loading',
-    'disabled-by-default-lighthouse',
-    'v8.execute',
-    'v8',
+    'latencyInfo', 'loading', 'disabled-by-default-lighthouse', 'v8.execute', 'v8',
   ];
 }
 
-async function enablePerformanceMetrics(tabId: number): Promise<Record<string, number>> {
+async function readPerformanceMetrics(tabId: number): Promise<Record<string, number>> {
   try {
     await cdpSessionManager.sendCommand(tabId, 'Performance.enable');
     const result = (await cdpSessionManager.sendCommand(tabId, 'Performance.getMetrics')) as {
       metrics: Array<{ name: string; value: number }>;
     };
     await cdpSessionManager.sendCommand(tabId, 'Performance.disable');
-    const map: Record<string, number> = {};
-    for (const m of result.metrics || []) map[m.name] = m.value;
-    return map;
-  } catch (e) {
+    return Object.fromEntries((result.metrics || []).map((metric) => [metric.name, metric.value]));
+  } catch {
     return {};
   }
 }
 
-async function saveTraceToDownloads(
-  json: string,
-  filenamePrefix = 'performance_trace',
-): Promise<{ downloadId?: number; filename?: string; fullPath?: string }> {
+async function saveTraceToDownloads(json: string, filenamePrefix = 'performance_trace') {
   try {
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
     const filename = `${filenamePrefix}_${timestamp}.json`;
     const dataUrl = `data:application/json;base64,${btoa(unescape(encodeURIComponent(json)))}`;
     const downloadId = await chrome.downloads.download({ url: dataUrl, filename, saveAs: false });
-    // Attempt to resolve full path
     try {
-      await new Promise((r) => setTimeout(r, 120));
+      await new Promise((resolve) => setTimeout(resolve, 120));
       const [item] = await chrome.downloads.search({ id: downloadId });
       return { downloadId, filename, fullPath: item?.filename };
     } catch {
       return { downloadId, filename };
     }
   } catch {
-    return {};
+    return undefined;
   }
 }
 
-async function saveTraceToNativeTemp(
-  json: string,
-  filenamePrefix = 'performance_trace',
-): Promise<{ filename?: string; fullPath?: string } | undefined> {
-  try {
-    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-    const filename = `${filenamePrefix}_${timestamp}.json`;
-    const base64 = btoa(unescape(encodeURIComponent(json)));
-
-    const requestId = `trace-temp-${Date.now()}-${Math.random().toString(36).slice(2)}`;
-    const timeoutMs = 30000;
-    const resp = await new Promise<any>((resolve, reject) => {
-      const timer = setTimeout(() => {
-        chrome.runtime.onMessage.removeListener(listener);
-        reject(new Error('Native temp save timed out'));
-      }, timeoutMs);
-      const listener = (message: any) => {
-        if (
-          message &&
-          message.type === 'file_operation_response' &&
-          message.responseToRequestId === requestId
-        ) {
-          clearTimeout(timer);
-          chrome.runtime.onMessage.removeListener(listener);
-          resolve(message.payload);
-        }
-      };
-      chrome.runtime.onMessage.addListener(listener);
-      chrome.runtime
-        .sendMessage({
-          type: 'forward_to_native',
-          message: {
-            type: 'file_operation',
-            requestId,
-            payload: {
-              action: 'prepareFile',
-              base64Data: base64,
-              fileName: filename,
-            },
-          },
-        })
-        .catch((err) => {
-          clearTimeout(timer);
-          chrome.runtime.onMessage.removeListener(listener);
-          reject(err);
-        });
-    });
-
-    if (resp && resp.success && resp.filePath) {
-      return { filename, fullPath: resp.filePath };
-    }
-  } catch {
-    // ignore, fallback will apply
+function getStopPromise(session: TraceSessionState) {
+  if (!session.stopPromise) {
+    session.stopPromise = new Promise((resolve) => { session.stopResolver = resolve; });
   }
-  return undefined;
-}
-
-async function cleanupNativeTempFile(filePath: string): Promise<void> {
-  if (!filePath) return;
-  try {
-    const requestId = `trace-clean-${Date.now()}-${Math.random().toString(36).slice(2)}`;
-    const timeoutMs = 10000;
-    await new Promise<void>((resolve) => {
-      const timer = setTimeout(() => {
-        chrome.runtime.onMessage.removeListener(listener);
-        resolve(); // best-effort
-      }, timeoutMs);
-      const listener = (message: any) => {
-        if (
-          message &&
-          message.type === 'file_operation_response' &&
-          message.responseToRequestId === requestId
-        ) {
-          clearTimeout(timer);
-          chrome.runtime.onMessage.removeListener(listener);
-          resolve();
-        }
-      };
-      chrome.runtime.onMessage.addListener(listener);
-      chrome.runtime
-        .sendMessage({
-          type: 'forward_to_native',
-          message: {
-            type: 'file_operation',
-            requestId,
-            payload: {
-              action: 'cleanupFile',
-              filePath,
-            },
-          },
-        })
-        .catch(() => {
-          clearTimeout(timer);
-          chrome.runtime.onMessage.removeListener(listener);
-          resolve();
-        });
-    });
-  } catch {
-    // ignore
-  }
-}
-
-function getOrCreateStopPromise(session: TraceSessionState): Promise<{ completed: boolean }> {
-  if (session.stopPromise) return session.stopPromise;
-  session.stopPromise = new Promise((resolve) => {
-    session.stopResolver = resolve;
-  });
   return session.stopPromise;
 }
 
-/**
- * Start performance trace
- */
 class PerformanceStartTraceTool extends BaseBrowserToolExecutor {
   name = TOOL_NAMES.BROWSER.PERFORMANCE_START_TRACE;
-
   async execute(args: StartTraceParams): Promise<ToolResult> {
     const { reload = false, autoStop = false, durationMs = 5000 } = args || {};
-
     try {
-      const [activeTab] = await chrome.tabs.query({ active: true, currentWindow: true });
-      if (!activeTab?.id) {
-        return createErrorResponse('No active tab found');
+      const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+      if (!tab?.id) return createErrorResponse('No active tab found');
+      const tabId = tab.id;
+      if (sessions.get(tabId)?.recording) {
+        return createErrorResponse('A performance trace is already running.');
       }
-      const tabId = activeTab.id;
-      const existed = sessions.get(tabId);
-      if (existed?.recording) {
-        return {
-          content: [{ type: 'text', text: 'Error: a performance trace is already running.' }],
-          isError: false,
-        };
-      }
-
       await cdpSessionManager.attach(tabId, 'performance');
-
       const state: TraceSessionState = {
         recording: true,
         events: [],
         startedAt: Date.now(),
-        pageUrl: activeTab.url || '',
+        pageUrl: tab.url || '',
         listener: (source, method, params) => {
           if (source.tabId !== tabId) return;
           if (method === 'Tracing.dataCollected' && params?.value) {
-            try {
-              state.events.push(...(params.value as any[]));
-            } catch {
-              // ignore
-            }
+            state.events.push(...(params.value as any[]));
           } else if (method === 'Tracing.tracingComplete') {
             state.recording = false;
             state.stopResolver?.({ completed: true });
@@ -260,119 +109,51 @@ class PerformanceStartTraceTool extends BaseBrowserToolExecutor {
       };
       chrome.debugger.onEvent.addListener(state.listener);
       sessions.set(tabId, state);
-
-      // Start tracing with categories
-      const cats = tracingCategories().join(',');
       await cdpSessionManager.sendCommand(tabId, 'Tracing.start', {
-        categories: cats,
+        categories: tracingCategories().join(','),
         options: 'record-as-much-as-possible',
         transferMode: 'ReportEvents',
       });
-
-      if (reload) {
-        try {
-          await cdpSessionManager.sendCommand(tabId, 'Page.reload', { ignoreCache: true });
-        } catch {
-          // best effort; ignore if fails
-        }
-      }
-
+      if (reload) await cdpSessionManager.sendCommand(tabId, 'Page.reload', { ignoreCache: true });
       if (autoStop) {
-        setTimeout(
-          async () => {
-            try {
-              await cdpSessionManager.sendCommand(tabId, 'Tracing.end');
-            } catch {
-              // ignore
-            }
-          },
-          Math.max(1000, Math.min(durationMs, 60000)),
-        );
+        setTimeout(() => {
+          cdpSessionManager.sendCommand(tabId, 'Tracing.end').catch(() => undefined);
+        }, Math.max(1000, Math.min(Number(durationMs) || 5000, 60000)));
       }
-
       return {
-        content: [
-          {
-            type: 'text',
-            text: JSON.stringify({
-              success: true,
-              message: 'Performance trace is recording. Use performance_stop_trace to stop it.',
-              reload,
-              autoStop,
-            }),
-          },
-        ],
+        content: [{ type: 'text', text: JSON.stringify({ success: true, message: 'Performance trace started.', reload, autoStop }) }],
         isError: false,
       };
-    } catch (e: any) {
-      return createErrorResponse(`Failed to start performance trace: ${e?.message || e}`);
+    } catch (error) {
+      return createErrorResponse(`Failed to start performance trace: ${error instanceof Error ? error.message : String(error)}`);
     }
   }
 }
 
-/**
- * Stop performance trace
- */
 class PerformanceStopTraceTool extends BaseBrowserToolExecutor {
   name = TOOL_NAMES.BROWSER.PERFORMANCE_STOP_TRACE;
-
   async execute(args: StopTraceParams): Promise<ToolResult> {
-    const { saveToDownloads = true, filenamePrefix } = args || {};
+    const { saveToDownloads = true, filenamePrefix = 'performance_trace' } = args || {};
     try {
-      const [activeTab] = await chrome.tabs.query({ active: true, currentWindow: true });
-      if (!activeTab?.id) return createErrorResponse('No active tab found');
-      const tabId = activeTab.id;
+      const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+      if (!tab?.id) return createErrorResponse('No active tab found');
+      const tabId = tab.id;
       const session = sessions.get(tabId);
-      if (!session) {
-        return {
-          content: [
-            { type: 'text', text: 'No performance trace session found for the current tab.' },
-          ],
-          isError: false,
-        };
-      }
+      if (!session) return createErrorResponse('No performance trace session found for the current tab.');
 
-      let stopResult: { completed: boolean } = { completed: false };
       if (session.recording) {
-        // End tracing and wait for completion signal
+        const done = getStopPromise(session);
         await cdpSessionManager.sendCommand(tabId, 'Tracing.end');
-        await getOrCreateStopPromise(session);
-        stopResult = await session.stopPromise!;
-      } else {
-        // Already auto-stopped; proceed to finalize without waiting
-        stopResult = { completed: true };
+        await done;
       }
-      // Fetch metrics before detach
-      const metrics = await enablePerformanceMetrics(tabId);
-
-      // Cleanup event listener and detach
-      try {
-        chrome.debugger.onEvent.removeListener(session.listener);
-      } catch {
-        // ignore
-      }
-      try {
-        await cdpSessionManager.detach(tabId, 'performance');
-      } catch {
-        // ignore
-      }
+      const metrics = await readPerformanceMetrics(tabId);
+      chrome.debugger.onEvent.removeListener(session.listener);
+      await cdpSessionManager.detach(tabId, 'performance').catch(() => undefined);
 
       const endedAt = Date.now();
-      const trace = { traceEvents: session.events };
-      const json = JSON.stringify(trace);
-
-      let saved: { downloadId?: number; filename?: string; fullPath?: string } | undefined;
-      if (saveToDownloads) {
-        saved = await saveTraceToDownloads(json, filenamePrefix || 'performance_trace');
-      } else {
-        // Persist to native temp directory so that analysis can run without Downloads permission
-        const tempSaved = await saveTraceToNativeTemp(json, filenamePrefix || 'performance_trace');
-        if (tempSaved) {
-          saved = { ...tempSaved } as any;
-        }
-      }
-
-      LAST_RESULTS.set(tabId, {
+      const json = JSON.stringify({ traceEvents: session.events });
+      const saved = saveToDownloads ? await saveTraceToDownloads(json, filenamePrefix) : undefined;
+      lastResults.set(tabId, {
         events: session.events,
         startedAt: session.startedAt,
         endedAt,
@@ -380,162 +161,63 @@ class PerformanceStopTraceTool extends BaseBrowserToolExecutor {
         saved,
         metrics,
       });
-
       sessions.delete(tabId);
 
       return {
-        content: [
-          {
-            type: 'text',
-            text: JSON.stringify({
-              success: true,
-              message: 'The performance trace has been stopped.',
-              eventCount: session.events.length,
-              saved,
-              metrics,
-              startedAt: session.startedAt,
-              endedAt,
-              durationMs: endedAt - session.startedAt,
-              url: session.pageUrl || '',
-              tracingCompleted: stopResult?.completed === true,
-            }),
-          },
-        ],
+        content: [{ type: 'text', text: JSON.stringify({
+          success: true,
+          message: 'Performance trace stopped.',
+          eventCount: session.events.length,
+          saved,
+          metrics,
+          startedAt: session.startedAt,
+          endedAt,
+          durationMs: endedAt - session.startedAt,
+          url: session.pageUrl || '',
+        }) }],
         isError: false,
       };
-    } catch (e: any) {
-      return createErrorResponse(`Failed to stop performance trace: ${e?.message || e}`);
+    } catch (error) {
+      return createErrorResponse(`Failed to stop performance trace: ${error instanceof Error ? error.message : String(error)}`);
     }
   }
 }
 
-/**
- * Analyze last trace (lightweight)
- * Note: Deep insights require DevTools front-end trace engine on the native side; this is a
- * pragmatic first step returning basic metrics and a quick event histogram.
- */
 class PerformanceAnalyzeInsightTool extends BaseBrowserToolExecutor {
   name = TOOL_NAMES.BROWSER.PERFORMANCE_ANALYZE_INSIGHT;
-
-  async execute(args: AnalyzeInsightParams & { timeoutMs?: number }): Promise<ToolResult> {
-    const { insightName } = args || {};
+  async execute(args: AnalyzeInsightParams): Promise<ToolResult> {
     try {
-      const [activeTab] = await chrome.tabs.query({ active: true, currentWindow: true });
-      if (!activeTab?.id) return createErrorResponse('No active tab found');
-      const tabId = activeTab.id;
-      const result = LAST_RESULTS.get(tabId);
-      if (!result) {
-        return {
-          content: [
-            {
-              type: 'text',
-              text: 'No recorded traces found. Start and stop a performance trace first.',
-            },
-          ],
-          isError: false,
-        };
-      }
+      const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+      if (!tab?.id) return createErrorResponse('No active tab found');
+      const result = lastResults.get(tab.id);
+      if (!result) return createErrorResponse('No completed performance trace found for the current tab.');
 
-      // Prefer native-side deep analysis when we have a saved file path
-      const fullPath = (result.saved && (result.saved as any).fullPath) || undefined;
-      if (fullPath) {
-        try {
-          const requestId = `trace-analyze-${Date.now()}-${Math.random().toString(36).slice(2)}`;
-          const timeoutMs = Math.max(10000, Math.min((args as any)?.timeoutMs ?? 60000, 300000));
-          const resp = await new Promise<any>((resolve, reject) => {
-            const timer = setTimeout(() => {
-              chrome.runtime.onMessage.removeListener(listener);
-              reject(new Error('Native trace analysis timed out'));
-            }, timeoutMs);
-            const listener = (message: any) => {
-              if (
-                message &&
-                message.type === 'file_operation_response' &&
-                message.responseToRequestId === requestId
-              ) {
-                clearTimeout(timer);
-                chrome.runtime.onMessage.removeListener(listener);
-                resolve(message.payload);
-              }
-            };
-            chrome.runtime.onMessage.addListener(listener);
-            chrome.runtime
-              .sendMessage({
-                type: 'forward_to_native',
-                message: {
-                  type: 'file_operation',
-                  requestId,
-                  payload: { action: 'analyzeTrace', traceFilePath: fullPath, insightName },
-                },
-              })
-              .catch((err) => {
-                clearTimeout(timer);
-                chrome.runtime.onMessage.removeListener(listener);
-                reject(err);
-              });
-          });
-          if (resp && resp.success) {
-            // Best-effort cleanup for temp files (Downloads paths are ignored by native cleaner)
-            await cleanupNativeTempFile(fullPath);
-            return {
-              content: [
-                {
-                  type: 'text',
-                  text: JSON.stringify({
-                    success: true,
-                    url: result.tabUrl,
-                    startedAt: result.startedAt,
-                    endedAt: result.endedAt,
-                    durationMs: result.endedAt - result.startedAt,
-                    metrics: result.metrics || {},
-                    saved: result.saved,
-                    summary: resp.summary,
-                    insight: resp.insight,
-                  }),
-                },
-              ],
-              isError: false,
-            };
-          }
-          // If native returned error, fall through to lightweight analysis
-        } catch (e) {
-          // Fallback to lightweight analysis below
-        }
-      }
-
-      // Lightweight fallback (when no saved file path)
       const counts = new Map<string, number>();
-      for (const ev of result.events.slice(0, 100000)) {
-        const n = typeof (ev as any)?.name === 'string' ? (ev as any).name : 'unknown';
-        counts.set(n, (counts.get(n) || 0) + 1);
+      for (const event of result.events.slice(0, 100000)) {
+        const name = typeof event?.name === 'string' ? event.name : 'unknown';
+        counts.set(name, (counts.get(name) || 0) + 1);
       }
-      const top = [...counts.entries()]
+      const topEventNames = [...counts.entries()]
         .sort((a, b) => b[1] - a[1])
         .slice(0, 20)
         .map(([name, count]) => ({ name, count }));
 
       return {
-        content: [
-          {
-            type: 'text',
-            text: JSON.stringify({
-              success: true,
-              info: 'Lightweight analysis (no saved file path). Native-side deep analysis unavailable.',
-              requestedInsight: insightName || null,
-              url: result.tabUrl,
-              startedAt: result.startedAt,
-              endedAt: result.endedAt,
-              durationMs: result.endedAt - result.startedAt,
-              metrics: result.metrics || {},
-              topEventNames: top,
-              saved: result.saved,
-            }),
-          },
-        ],
+        content: [{ type: 'text', text: JSON.stringify({
+          success: true,
+          requestedInsight: args?.insightName || null,
+          url: result.tabUrl,
+          startedAt: result.startedAt,
+          endedAt: result.endedAt,
+          durationMs: result.endedAt - result.startedAt,
+          metrics: result.metrics || {},
+          topEventNames,
+          saved: result.saved,
+        }) }],
         isError: false,
       };
-    } catch (e: any) {
-      return createErrorResponse(`Failed to analyze trace: ${e?.message || e}`);
+    } catch (error) {
+      return createErrorResponse(`Failed to analyze trace: ${error instanceof Error ? error.message : String(error)}`);
     }
   }
 }

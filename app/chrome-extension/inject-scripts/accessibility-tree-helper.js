@@ -742,7 +742,7 @@
       const reqId = `hover_ref_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
       const listener = (ev) => {
         const data = ev?.data;
-        if (!data || data.type !== 'rr-bridge-hover-ref-result' || data.reqId !== reqId) return;
+        if (!data || data.type !== 'brauzio-bridge-hover-ref-result' || data.reqId !== reqId) return;
         window.removeEventListener('message', listener, true);
         resolve(data.result);
       };
@@ -753,7 +753,7 @@
       }, 1500);
       for (const frame of frames) {
         try {
-          frame.contentWindow?.postMessage({ type: 'rr-bridge-hover-ref', reqId, ref }, '*');
+          frame.contentWindow?.postMessage({ type: 'brauzio-bridge-hover-ref', reqId, ref }, '*');
         } catch {}
       }
     });
@@ -765,271 +765,6 @@
       if (request && request.action === 'chrome_read_page_ping') {
         sendResponse({ status: 'pong' });
         return false;
-      }
-      if (request && request.action === 'rr_overlay') {
-        try {
-          const cmd = request.cmd || 'init';
-          let root = document.getElementById('__rr_overlay_root');
-          if (!root) {
-            root = document.createElement('div');
-            root.id = '__rr_overlay_root';
-            Object.assign(root.style, {
-              position: 'fixed',
-              right: '8px',
-              bottom: '8px',
-              zIndex: 2_147_483_647,
-              maxWidth: '40vw',
-              maxHeight: '40vh',
-              overflow: 'auto',
-              background: 'rgba(0,0,0,0.6)',
-              color: '#fff',
-              fontFamily:
-                'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
-              fontSize: '12px',
-              padding: '8px',
-              borderRadius: '6px',
-              boxShadow: '0 2px 8px rgba(0,0,0,0.3)',
-            });
-            const title = document.createElement('div');
-            title.textContent = 'سجل تشغيل Record-Replay';
-            Object.assign(title.style, { fontWeight: 'bold', marginBottom: '6px' });
-            const body = document.createElement('div');
-            body.id = '__rr_overlay_body';
-            root.appendChild(title);
-            root.appendChild(body);
-            document.documentElement.appendChild(root);
-          }
-          const body = document.getElementById('__rr_overlay_body');
-          if (cmd === 'append' && body) {
-            const line = document.createElement('div');
-            line.textContent = String(request.text || '');
-            body.appendChild(line);
-            body.scrollTop = body.scrollHeight;
-          }
-          if (cmd === 'done' && root) {
-            root.style.opacity = '0.5';
-          }
-          sendResponse({ success: true });
-          return true;
-        } catch (e) {
-          sendResponse({ success: false, error: String(e && e.message ? e.message : e) });
-          return true;
-        }
-      }
-      // Element picker: start a temporary overlay to let user pick an element
-      if (request && request.action === 'rr_picker_start') {
-        try {
-          // state
-          const state = { active: true };
-          const hostId = '__rr_picker_host__';
-          let host = document.getElementById(hostId);
-          if (host) host.remove();
-          host = document.createElement('div');
-          host.id = hostId;
-          Object.assign(host.style, {
-            position: 'fixed',
-            inset: '0',
-            zIndex: 2147483646,
-            cursor: 'crosshair',
-            background: 'rgba(0,0,0,0.0)',
-          });
-          const box = document.createElement('div');
-          Object.assign(box.style, {
-            position: 'fixed',
-            border: '2px solid #5b5bd6',
-            background: 'rgba(59,130,246,0.15)',
-            pointerEvents: 'none',
-          });
-          const tip = document.createElement('div');
-          tip.textContent = 'انقر لاختيار عنصر (Esc للإلغاء)';
-          Object.assign(tip.style, {
-            position: 'fixed',
-            top: '10px',
-            left: '10px',
-            background: 'rgba(0,0,0,0.7)',
-            color: '#fff',
-            padding: '6px 10px',
-            borderRadius: '6px',
-            fontSize: '12px',
-            fontFamily: 'system-ui,-apple-system,Segoe UI,Roboto,Arial',
-          });
-          host.appendChild(box);
-          host.appendChild(tip);
-          document.documentElement.appendChild(host);
-
-          const cleanup = () => {
-            try {
-              host.remove();
-            } catch {}
-            try {
-              document.removeEventListener('mousemove', onMove, true);
-            } catch {}
-            try {
-              document.removeEventListener('click', onClick, true);
-            } catch {}
-            try {
-              document.removeEventListener('keydown', onKey, true);
-            } catch {}
-            state.active = false;
-          };
-
-          const onMove = (e) => {
-            if (!state.active) return;
-            const el = e.target instanceof Element ? e.target : null;
-            if (!el) return;
-            try {
-              const r = el.getBoundingClientRect();
-              Object.assign(box.style, {
-                left: `${Math.round(r.left)}px`,
-                top: `${Math.round(r.top)}px`,
-                width: `${Math.round(Math.max(0, r.width))}px`,
-                height: `${Math.round(Math.max(0, r.height))}px`,
-                display: r.width > 0 && r.height > 0 ? 'block' : 'none',
-              });
-            } catch {}
-          };
-          const uniqueClassSelector = (node) => {
-            try {
-              const classes = Array.from(node.classList || []).filter(
-                (c) => c && /^[a-zA-Z0-9_-]+$/.test(c),
-              );
-              for (const cls of classes) {
-                const sel = `.${CSS.escape(cls)}`;
-                if (document.querySelectorAll(sel).length === 1) return sel;
-              }
-              const tag = node.tagName ? node.tagName.toLowerCase() : '';
-              for (const cls of classes) {
-                const sel = `${tag}.${CSS.escape(cls)}`;
-                if (document.querySelectorAll(sel).length === 1) return sel;
-              }
-              for (let i = 0; i < Math.min(classes.length, 3); i++) {
-                for (let j = i + 1; j < Math.min(classes.length, 3); j++) {
-                  const sel = `.${CSS.escape(classes[i])}.${CSS.escape(classes[j])}`;
-                  if (document.querySelectorAll(sel).length === 1) return sel;
-                }
-              }
-            } catch {}
-            return '';
-          };
-          const computeCandidates = (el) => {
-            const cands = [];
-            // css by id / class / short path
-            if (el.id) {
-              const idSel = `#${CSS.escape(el.id)}`;
-              if (document.querySelectorAll(idSel).length === 1)
-                cands.push({ type: 'css', value: idSel });
-            }
-            const classSel = uniqueClassSelector(el);
-            if (classSel) cands.push({ type: 'css', value: classSel });
-            // data-* and name
-            for (const attr of ['data-testid', 'data-cy', 'name']) {
-              const val = el.getAttribute(attr);
-              if (val) {
-                const s = `[${attr}="${CSS.escape(val)}"]`;
-                if (document.querySelectorAll(s).length === 1)
-                  cands.push({ type: 'attr', value: s });
-              }
-            }
-            // aria
-            const aria = el.getAttribute && el.getAttribute('aria-label');
-            if (aria) cands.push({ type: 'aria', value: `textbox[name=${aria}]` });
-            // text for clickable
-            const tag = (el.tagName || '').toLowerCase();
-            if (['button', 'a', 'summary'].includes(tag)) {
-              const text = (el.textContent || '').trim();
-              if (text) cands.push({ type: 'text', value: text.substring(0, 64) });
-            }
-            // fallback path selector
-            const gen = (node) => {
-              if (!(node instanceof Element)) return '';
-              let path = '';
-              let current = node;
-              while (
-                current &&
-                current.nodeType === Node.ELEMENT_NODE &&
-                current.tagName !== 'BODY'
-              ) {
-                let sel = current.tagName.toLowerCase();
-                const parent = current.parentElement;
-                if (parent) {
-                  const siblings = Array.from(parent.children).filter(
-                    (child) => child.tagName === current.tagName,
-                  );
-                  if (siblings.length > 1) {
-                    const index = siblings.indexOf(current) + 1;
-                    sel += `:nth-of-type(${index})`;
-                  }
-                }
-                path = path ? `${sel} > ${path}` : sel;
-                current = parent;
-              }
-              return path ? `body > ${path}` : 'body';
-            };
-            const pathSel = gen(el);
-            if (pathSel) cands.push({ type: 'css', value: pathSel });
-            return cands;
-          };
-          const onClick = (e) => {
-            if (!state.active) return;
-            e.preventDefault();
-            e.stopPropagation();
-            const el = e.target instanceof Element ? e.target : null;
-            if (!el) {
-              cleanup();
-              sendResponse({ success: false, error: 'no element' });
-              return true;
-            }
-            // create ref
-            try {
-              if (!window.__claudeElementMap) window.__claudeElementMap = {};
-              if (!window.__claudeRefCounter) window.__claudeRefCounter = 0;
-            } catch {}
-            let refId = null;
-            try {
-              for (const k in window.__claudeElementMap) {
-                if (
-                  window.__claudeElementMap[k].deref &&
-                  window.__claudeElementMap[k].deref() === el
-                ) {
-                  refId = k;
-                  break;
-                }
-              }
-              if (!refId) {
-                refId = `ref_${++window.__claudeRefCounter}`;
-                window.__claudeElementMap[refId] = new WeakRef(el);
-              }
-            } catch {}
-            const cands = computeCandidates(el);
-            cleanup();
-            sendResponse({ success: true, ref: refId, candidates: cands });
-            return true;
-          };
-          const onKey = (e) => {
-            if (e.key === 'Escape') {
-              cleanup();
-              sendResponse({ success: false, cancelled: true });
-            }
-          };
-          document.addEventListener('mousemove', onMove, true);
-          document.addEventListener('click', onClick, true);
-          document.addEventListener('keydown', onKey, true);
-          return true; // async
-        } catch (e) {
-          sendResponse({ success: false, error: String(e && e.message ? e.message : e) });
-          return true;
-        }
-      }
-      if (request && request.action === 'rr_picker_stop') {
-        try {
-          const host = document.getElementById('__rr_picker_host__');
-          if (host) host.remove();
-          sendResponse({ success: true });
-          return true;
-        } catch (e) {
-          sendResponse({ success: false, error: String(e && e.message ? e.message : e) });
-          return true;
-        }
       }
       if (request && request.action === 'generateAccessibilityTree') {
         const result = __generateAccessibilityTree(request.filter || null, {
@@ -1099,7 +834,7 @@
                     const data = ev && ev.data;
                     if (
                       !data ||
-                      data.type !== 'rr-bridge-ensure-ref-result' ||
+                      data.type !== 'brauzio-bridge-ensure-ref-result' ||
                       data.reqId !== reqId
                     )
                       return;
@@ -1147,7 +882,7 @@
                 window.addEventListener('message', listener, true);
                 cw.postMessage(
                   {
-                    type: 'rr-bridge-ensure-ref',
+                    type: 'brauzio-bridge-ensure-ref',
                     reqId,
                     selector: innerSel,
                     useText: !!request.useText,
@@ -1362,143 +1097,6 @@
           return true;
         }
       }
-      if (request && request.action === 'collectVariables') {
-        try {
-          let vars = Array.isArray(request.variables) ? request.variables : [];
-          if ((!vars || vars.length === 0) && request.payload) {
-            try {
-              const p = JSON.parse(String(request.payload || '{}'));
-              if (Array.isArray(p.variables)) vars = p.variables;
-            } catch {}
-          }
-          const useOverlay = request.useOverlay !== false; // default true
-          const values = {};
-          if (!useOverlay) {
-            for (const v of vars) {
-              const key = String(v && v.key ? v.key : '');
-              if (!key) continue;
-              const label = v.label || key;
-              const def = v.default || '';
-              const promptText = `أدخل المعامل ${label} (${key})`;
-              let val = window.prompt(promptText, def);
-              if (typeof val !== 'string') val = def;
-              values[key] = val;
-            }
-            sendResponse({ success: true, values });
-            return true;
-          }
-          // Build overlay form
-          const hostId = '__rr_var_overlay__';
-          let host = document.getElementById(hostId);
-          if (host) host.remove();
-          host = document.createElement('div');
-          host.id = hostId;
-          Object.assign(host.style, {
-            position: 'fixed',
-            inset: '0',
-            background: 'rgba(0,0,0,0.35)',
-            zIndex: 2147483646,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-          });
-          const panel = document.createElement('div');
-          Object.assign(panel.style, {
-            background: '#fff',
-            borderRadius: '8px',
-            width: 'min(520px, 96vw)',
-            maxHeight: '80vh',
-            overflow: 'auto',
-            boxShadow: '0 8px 24px rgba(0,0,0,0.2)',
-            padding: '16px',
-            fontFamily: 'system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif',
-          });
-          const title = document.createElement('div');
-          title.textContent = 'أدخل معاملات إعادة التشغيل';
-          Object.assign(title.style, { fontSize: '16px', fontWeight: '600', marginBottom: '12px' });
-          const form = document.createElement('form');
-          for (const v of vars) {
-            const row = document.createElement('div');
-            Object.assign(row.style, { marginBottom: '10px' });
-            const label = document.createElement('label');
-            label.textContent = `${v.label || v.key}${v.sensitive ? ' (حساس)' : ''}`;
-            Object.assign(label.style, {
-              display: 'block',
-              marginBottom: '6px',
-              fontWeight: '500',
-            });
-            const input = document.createElement('input');
-            input.type = v.sensitive ? 'password' : 'text';
-            input.name = String(v.key);
-            input.value = String(v.default || '');
-            Object.assign(input.style, {
-              width: '100%',
-              boxSizing: 'border-box',
-              padding: '8px 10px',
-              border: '1px solid #d0d7de',
-              borderRadius: '6px',
-              outline: 'none',
-            });
-            row.appendChild(label);
-            row.appendChild(input);
-            form.appendChild(row);
-          }
-          const actions = document.createElement('div');
-          Object.assign(actions.style, { display: 'flex', gap: '8px', marginTop: '12px' });
-          const ok = document.createElement('button');
-          ok.type = 'submit';
-          ok.textContent = 'تأكيد';
-          Object.assign(ok.style, {
-            background: '#0969da',
-            color: '#fff',
-            border: 'none',
-            padding: '8px 16px',
-            borderRadius: '6px',
-            cursor: 'pointer',
-          });
-          const cancel = document.createElement('button');
-          cancel.type = 'button';
-          cancel.textContent = 'إلغاء';
-          Object.assign(cancel.style, {
-            background: '#f3f4f6',
-            color: '#111',
-            border: '1px solid #d0d7de',
-            padding: '8px 16px',
-            borderRadius: '6px',
-            cursor: 'pointer',
-          });
-          actions.appendChild(ok);
-          actions.appendChild(cancel);
-          panel.appendChild(title);
-          panel.appendChild(form);
-          panel.appendChild(actions);
-          host.appendChild(panel);
-          document.documentElement.appendChild(host);
-
-          const cleanup = () => {
-            try {
-              host.remove();
-            } catch {}
-          };
-          cancel.onclick = () => {
-            cleanup();
-            sendResponse({ success: false, cancelled: true });
-          };
-          form.onsubmit = (e) => {
-            e.preventDefault();
-            for (const v of vars) {
-              const el = form.querySelector(`input[name="${CSS.escape(String(v.key))}"]`);
-              if (el) values[v.key] = /** @type {HTMLInputElement} */ (el).value;
-            }
-            cleanup();
-            sendResponse({ success: true, values });
-          };
-          return true; // async
-        } catch (e) {
-          sendResponse({ success: false, error: String(e && e.message ? e.message : e) });
-          return true;
-        }
-      }
       if (request && request.action === 'resolveRef') {
         const ref = request.ref;
         try {
@@ -1669,18 +1267,18 @@
         try {
           const data = ev && ev.data;
           // Handle hover-ref bridge requests from parent frame
-          if (data && data.type === 'rr-bridge-hover-ref') {
+          if (data && data.type === 'brauzio-bridge-hover-ref') {
             handleHoverForRef(data.ref)
               .then((result) => {
                 ev.source?.postMessage(
-                  { type: 'rr-bridge-hover-ref-result', reqId: data.reqId, result },
+                  { type: 'brauzio-bridge-hover-ref-result', reqId: data.reqId, result },
                   '*',
                 );
               })
               .catch((error) => {
                 ev.source?.postMessage(
                   {
-                    type: 'rr-bridge-hover-ref-result',
+                    type: 'brauzio-bridge-hover-ref-result',
                     reqId: data.reqId,
                     result: { success: false, error: error?.message || String(error) },
                   },
@@ -1689,13 +1287,13 @@
               });
             return;
           }
-          if (!data || data.type !== 'rr-bridge-ensure-ref') return;
+          if (!data || data.type !== 'brauzio-bridge-ensure-ref') return;
           const { reqId, selector, useText, isXPath, tagName } = data || {};
           const respond = (payload) => {
             try {
               ev.source &&
                 ev.source.postMessage(
-                  { type: 'rr-bridge-ensure-ref-result', reqId, ...payload },
+                  { type: 'brauzio-bridge-ensure-ref-result', reqId, ...payload },
                   '*',
                 );
             } catch {}
