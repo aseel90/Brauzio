@@ -1,0 +1,47 @@
+name: Final Arabic cleanup
+
+on:
+  push:
+    paths:
+      - '.github/workflows/final-arabic-cleanup.yml'
+      - 'scripts/arabicize_remaining_cjk.py'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  clean:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Arabicize remaining runtime CJK
+        run: python scripts/arabicize_remaining_cjk.py
+
+      - name: Verify user-facing UI remains clean
+        run: |
+          python scripts/audit_ui_chinese.py
+          grep -Fq 'Potential user-facing CJK lines: **0**' docs/UI_CHINESE_STRINGS.md
+
+      - name: Verify repository-wide CJK count
+        run: |
+          python scripts/audit_chinese.py
+          grep -Fq 'Remaining CJK-containing source/document lines: **0**' docs/CHINESE_AUDIT.md
+
+      - name: Commit final Arabic cleanup
+        shell: bash
+        run: |
+          git add app/chrome-extension releases packages/wasm-simd/BUILD.md
+          if git diff --cached --quiet; then
+            echo "No runtime Arabic cleanup changes."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "feat: remove remaining Chinese runtime text"
+          git fetch origin main
+          git rebase origin/main
+          git push origin HEAD:main
