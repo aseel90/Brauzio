@@ -19,7 +19,7 @@
 - `[BrauzioWorker]` في Cloudflare Worker logs.
 - `[BrauzioSession]` في Durable Object logs.
 
-لا يجب أن تظهر Device Token أو MCP secrets في السجلات.
+لا يجب أن تظهر Device Token أو OAuth access/refresh tokens أو Pairing Code في السجلات.
 
 ## لا يمكن قراءة chrome:// أو chrome-extension://
 
@@ -50,7 +50,22 @@ Chrome يقيّد حقن scripts في الصفحات الداخلية. اختب�
 
 ## ChatGPT لا يقبل MCP URL
 
-استخدم HTTPS endpoint الخاص بـ`/mcp`، وليس WebSocket URL. لا تشارك رابطًا يحتوي secret علنًا.
+استخدم فقط HTTPS endpoint النظيف:
+
+```text
+https://<worker>/mcp
+```
+
+لا تضف `?key=` ولا Device Token إلى الرابط. من المفترض أن يكتشف ChatGPT OAuth تلقائيًا ويفتح صفحة تفويض Brauzio.
+
+إذا ظهرت صفحة التفويض ولم يقبل الرمز:
+
+1. تأكد أن الإضافة متصلة بـCloudflare.
+2. أنشئ Pairing Code جديدًا من Popup.
+3. استخدمه خلال خمس دقائق.
+4. كل رمز يستخدم مرة واحدة فقط؛ إذا فشل أو استُخدم أنشئ رمزًا جديدًا.
+
+إذا لم تظهر صفحة OAuth أصلًا، افحص `/health` وتأكد أن `auth` يساوي `oauth2.1-pairing`، ثم افحص OAuth discovery metadata.
 
 ## أدوات تظهر لكن أداة واحدة تفشل
 
