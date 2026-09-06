@@ -12,6 +12,10 @@ interface Env {
   BROWSER_SHARED_SECRET: string;
 }
 
+function workerLog(event: string, details: Record<string, unknown> = {}) {
+  console.log('[BrauzioWorker]', new Date().toISOString(), event, details);
+}
+
 function jsonError(message: string): CallToolResult {
   return {
     content: [{ type: 'text', text: message }],
@@ -30,8 +34,6 @@ function requestAuthorized(request: Request, env: Env): boolean {
   const authorization = request.headers.get('Authorization') || '';
   if (authorization.startsWith('Bearer ') && authorization.slice(7) === expected) return true;
 
-  // Private/single-user bootstrap mode for ChatGPT Custom MCP URLs.
-  // For public or multi-user distribution, replace this with OAuth.
   const key = new URL(request.url).searchParams.get('key');
   return key === expected;
 }
@@ -52,12 +54,15 @@ async function callBrowserTool(
   name: string,
   args: Record<string, unknown>,
 ): Promise<CallToolResult> {
+  const traceId = crypto.randomUUID();
+  const startedAt = Date.now();
+  workerLog('TOOL_CALL_START', { traceId, deviceId, name });
   const stub = browserStub(env, deviceId);
   const response = await stub.fetch(
     new Request('https://brauzio-browser.internal/call', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ name, args, timeoutMs: 120_000 }),
+      body: JSON.stringify({ name, args, timeoutMs: 120_000, traceId }),
     }),
   );
 
@@ -67,11 +72,14 @@ async function callBrowserTool(
   };
 
   if (!response.ok) {
-    return jsonError(payload.error || `Brauzio relay failed with HTTP ${response.status}`);
+    workerLog('TOOL_CALL_FAILED', { traceId, deviceId, name, status: response.status, durationMs: Date.now() - startedAt, error: payload.error || '' });
+    return jsonError(payload.error || `Brauzio relay failed with HTTP ${response.status} (traceId: ${traceId})`);
   }
   if (!payload.result) {
-    return jsonError('Brauzio extension returned an empty tool result');
+    workerLog('TOOL_CALL_EMPTY', { traceId, deviceId, name, durationMs: Date.now() - startedAt });
+    return jsonError(`Brauzio extension returned an empty tool result (traceId: ${traceId})`);
   }
+  workerLog('TOOL_CALL_OK', { traceId, deviceId, name, durationMs: Date.now() - startedAt });
   return payload.result;
 }
 

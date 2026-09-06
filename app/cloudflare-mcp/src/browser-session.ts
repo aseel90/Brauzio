@@ -14,6 +14,12 @@ interface SocketAttachment {
 interface PendingCall {
   resolve: (response: Response) => void;
   timer: ReturnType<typeof setTimeout>;
+  name: string;
+  startedAt: number;
+}
+
+function sessionLog(event: string, details: Record<string, unknown> = {}) {
+  console.log('[BrauzioSession]', new Date().toISOString(), event, details);
 }
 
 interface ToolResultMessage {
@@ -50,6 +56,7 @@ export class BrowserSession extends DurableObject<Env> {
       const server = pair[1];
 
       this.ctx.acceptWebSocket(server, ['browser']);
+      sessionLog('WS_ACCEPTED', { deviceId: expectedDeviceId });
       server.serializeAttachment({
         authenticated: false,
         deviceId: expectedDeviceId,
@@ -81,15 +88,18 @@ export class BrowserSession extends DurableObject<Env> {
       if (!body.name) return Response.json({ error: 'Missing tool name' }, { status: 400 });
 
       const requestId = crypto.randomUUID();
+      const startedAt = Date.now();
+      sessionLog('CALL_RECEIVED', { requestId, name: body.name, authenticatedSockets: this.authenticatedSockets().length });
       const timeoutMs = Math.min(Math.max(Number(body.timeoutMs || 120_000), 1_000), 180_000);
 
       return new Promise<Response>((resolve) => {
         const timer = setTimeout(() => {
           this.pending.delete(requestId);
-          resolve(Response.json({ error: `Tool call timed out after ${timeoutMs}ms` }, { status: 504 }));
+          sessionLog('CALL_TIMEOUT', { requestId, name: body.name, timeoutMs, durationMs: Date.now() - startedAt });
+          resolve(Response.json({ error: `Tool call timed out after ${timeoutMs}ms (traceId: ${requestId})` }, { status: 504 }));
         }, timeoutMs);
 
-        this.pending.set(requestId, { resolve, timer });
+        this.pending.set(requestId, { resolve, timer, name: body.name!, startedAt });
 
         try {
           browser.send(
@@ -100,7 +110,9 @@ export class BrowserSession extends DurableObject<Env> {
               args: body.args || {},
             }),
           );
+          sessionLog('CALL_SENT_TO_BROWSER', { requestId, name: body.name });
         } catch (error) {
+          sessionLog('CALL_SEND_FAILED', { requestId, name: body.name, error: error instanceof Error ? error.message : String(error) });
           clearTimeout(timer);
           this.pending.delete(requestId);
           resolve(
@@ -148,6 +160,7 @@ export class BrowserSession extends DurableObject<Env> {
         connectedAt: attachment.connectedAt || Date.now(),
       };
       ws.serializeAttachment(next);
+      sessionLog('HELLO', { deviceId: attachment.deviceId, authenticated, extensionVersion: next.extensionVersion || '' });
       ws.send(
         JSON.stringify({
           type: 'hello_ack',
@@ -174,12 +187,14 @@ export class BrowserSession extends DurableObject<Env> {
   }
 
   webSocketClose(): void {
+    sessionLog('WS_CLOSE', { authenticatedSockets: this.authenticatedSockets().length });
     if (this.authenticatedSockets().length === 0) {
       this.failPending('Brauzio extension disconnected during tool execution');
     }
   }
 
   webSocketError(): void {
+    sessionLog('WS_ERROR', { authenticatedSockets: this.authenticatedSockets().length });
     if (this.authenticatedSockets().length === 0) {
       this.failPending('Brauzio WebSocket connection failed');
     }
@@ -201,6 +216,7 @@ export class BrowserSession extends DurableObject<Env> {
     if (!pending) return;
 
     clearTimeout(pending.timer);
+    sessionLog(message.error ? 'RESULT_ERROR' : 'RESULT_OK', { requestId: message.requestId, name: pending.name, durationMs: Date.now() - pending.startedAt, error: message.error || undefined });
     this.pending.delete(message.requestId);
 
     if (message.error) {

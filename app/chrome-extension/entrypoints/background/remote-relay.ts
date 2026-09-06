@@ -4,6 +4,10 @@ const LOG_PREFIX = '[BrauzioRelay]';
 const HEARTBEAT_MS = 20_000;
 const RECONNECT_MAX_MS = 30_000;
 
+function relayLog(event: string, details: Record<string, unknown> = {}) {
+  console.log(LOG_PREFIX, new Date().toISOString(), event, details);
+}
+
 const STORAGE_KEYS = {
   RELAY_URL: 'brauzioRelayUrl',
   DEVICE_ID: 'brauzioDeviceId',
@@ -123,8 +127,13 @@ function scheduleReconnect() {
 
 async function executeToolCall(message: Extract<RelayInboundMessage, { type: 'tool_call' }>) {
   const activeSocket = socket;
-  if (!activeSocket || activeSocket.readyState !== WebSocket.OPEN) return;
+  if (!activeSocket || activeSocket.readyState !== WebSocket.OPEN) {
+    relayLog('TOOL_DROPPED_SOCKET_NOT_OPEN', { requestId: message.requestId, name: message.name, readyState: activeSocket?.readyState ?? null });
+    return;
+  }
 
+  const startedAt = Date.now();
+  relayLog('TOOL_RECEIVED', { requestId: message.requestId, name: message.name });
   try {
     const result = await handleCallTool({
       name: message.name,
@@ -137,7 +146,9 @@ async function executeToolCall(message: Extract<RelayInboundMessage, { type: 'to
         result,
       }),
     );
+    relayLog('TOOL_FINISHED', { requestId: message.requestId, name: message.name, durationMs: Date.now() - startedAt });
   } catch (error) {
+    relayLog('TOOL_FAILED', { requestId: message.requestId, name: message.name, durationMs: Date.now() - startedAt, error: error instanceof Error ? error.message : String(error) });
     activeSocket.send(
       JSON.stringify({
         type: 'tool_result',
@@ -161,6 +172,7 @@ async function onRelayMessage(event: MessageEvent) {
   }
 
   if (message.type === 'hello_ack') {
+    relayLog('HELLO_ACK', { authenticated: Boolean(message.authenticated) });
     if (message.authenticated) {
       reconnectAttempt = 0;
       updateStatus({ state: 'connected', authenticated: true, lastError: undefined });
@@ -224,6 +236,7 @@ export async function connectRelay(): Promise<BrauzioRelayStatus> {
   try {
     socket = new WebSocket(wsUrl);
     socket.addEventListener('open', async () => {
+      relayLog('WS_OPEN', { relayHost: new URL(wsUrl).host, deviceId: config.deviceId || 'default' });
       const freshConfig = await loadConfig();
       socket?.send(
         JSON.stringify({
@@ -245,10 +258,12 @@ export async function connectRelay(): Promise<BrauzioRelayStatus> {
     });
 
     socket.addEventListener('error', () => {
+      relayLog('WS_ERROR', { relayHost: new URL(wsUrl).host });
       updateStatus({ state: 'error', authenticated: false, lastError: 'WebSocket connection error' });
     });
 
-    socket.addEventListener('close', () => {
+    socket.addEventListener('close', (event) => {
+      relayLog('WS_CLOSED', { code: event.code, reason: event.reason || '', wasClean: event.wasClean });
       clearHeartbeat();
       socket = null;
       if (!manualDisconnect) {
