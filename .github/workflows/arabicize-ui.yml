@@ -7,6 +7,7 @@ on:
       - 'scripts/arabicize_runtime_ui.py'
       - 'scripts/arabicize_ui_pass2.py'
       - 'scripts/arabicize_runtime_ui_pass2.py'
+      - 'scripts/arabicize_runtime_ui_pass3.py'
   workflow_dispatch:
 
 permissions:
@@ -20,29 +21,37 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Arabicize all runtime UI surfaces
+      - name: Arabicize runtime UI
         run: python scripts/arabicize_runtime_ui.py
 
-      - name: Clean mixed Arabic-Chinese phrases
+      - name: Clean mixed strings
         run: python scripts/arabicize_ui_pass2.py
 
-      - name: Final targeted cleanup
+      - name: Target remaining strings
         run: python scripts/arabicize_runtime_ui_pass2.py
 
-      - name: Re-audit user-facing UI
+      - name: Remove final eleven CJK strings
+        run: python scripts/arabicize_runtime_ui_pass3.py
+
+      - name: Audit user-facing UI
         run: python scripts/audit_ui_chinese.py
+
+      - name: Require zero user-facing CJK strings
+        shell: bash
+        run: |
+          grep -q 'Potential user-facing CJK lines: **0**' docs/UI_CHINESE_STRINGS.md
 
       - name: Commit translated UI
         shell: bash
         run: |
           git add app/chrome-extension/entrypoints packages/shared/src/node-specs-builtin.ts docs/UI_CHINESE_STRINGS.md
           if git diff --cached --quiet; then
-            echo "No UI translation changes."
+            echo "UI is already fully Arabic."
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git commit -m "feat: finish Arabic Brauzio runtime UI"
+          git commit -m "feat: complete Arabic Brauzio runtime UI"
           git fetch origin main
           git rebase origin/main
           git push origin HEAD:main
