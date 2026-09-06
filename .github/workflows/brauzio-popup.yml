@@ -27,17 +27,25 @@ jobs:
         run: |
           grep -q '<RemoteConnectionCard />' app/chrome-extension/entrypoints/popup/App.vue
           grep -q "RemoteConnectionCard from './components/RemoteConnectionCard.vue'" app/chrome-extension/entrypoints/popup/App.vue
+          grep -q "url.searchParams.set('key', form.deviceToken)" app/chrome-extension/entrypoints/popup/components/RemoteConnectionCard.vue
+          ! grep -q "'nativeMessaging'" app/chrome-extension/wxt.config.ts
           ! grep -q '<h1 class="header-title">Chrome MCP Server</h1>' app/chrome-extension/entrypoints/popup/App.vue
 
       - name: Commit migration
         shell: bash
         run: |
-          git add app/chrome-extension/entrypoints/popup/App.vue scripts/brauzio_popup_cloud.py
+          git add \
+            app/chrome-extension/entrypoints/popup/App.vue \
+            app/chrome-extension/entrypoints/popup/components/RemoteConnectionCard.vue \
+            app/chrome-extension/wxt.config.ts \
+            scripts/brauzio_popup_cloud.py
           if git diff --cached --quiet; then
             echo "Popup already migrated."
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git commit -m "feat: replace native popup with Brauzio Cloud UI"
+          git commit -m "feat: finalize Brauzio Cloud popup"
+          git fetch origin main
+          git rebase origin/main
           git push origin HEAD:main
