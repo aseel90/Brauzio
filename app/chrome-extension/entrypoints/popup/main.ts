@@ -1,10 +1,5 @@
 import { createApp } from 'vue';
-import './style.css';
-import '../sidepanel/styles/agent-chat.css';
-import { preloadAgentTheme } from '../sidepanel/composables/useAgentTheme';
 import App from './App.vue';
-import '../../brand.css';
+import './style.css';
 
-preloadAgentTheme().then(() => {
-  createApp(App).mount('#app');
-});
+createApp(App).mount('#app');
