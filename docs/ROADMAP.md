@@ -34,8 +34,10 @@ Brauzio لن ينسخ معمارية chrome-agent المحلية. سنأخذ ا�
 - [x] استبدال MCP `?key=` بـOAuth 2.1 + Pairing Code مؤقت، وفصل Device Token عن MCP auth.
 - [x] فحص ZIP النهائي والتأكد من عدم وجود Runtime قديم.
 - [ ] تثبيت آخر ZIP على جهاز الاختبار.
-- [ ] اختبار Virtual Mouse فعليًا على Wreckmarch وCanvas وDrag & Drop وsliders.
-- [ ] اختبار release آمن لأي Mouse Down عالق عند disconnect أو tab close أو navigation.
+- [x] إضافة emergency mouse release داخلي عند Relay disconnect/error، tab close، navigation، وتعليق Service Worker.
+- [x] تنظيف CDP session bookkeeping تلقائيًا عند debugger detach أو إغلاق التبويب.
+- [ ] اختبار Virtual Mouse فعليًا على Wreckmarch وCanvas وDrag & Drop وsliders على ZIP 2.1.1.
+- [ ] اختبار release آمن لأي Mouse Down عالق عند disconnect أو tab close أو navigation على ZIP 2.1.1.
 
 معيار الإكمال:
 
