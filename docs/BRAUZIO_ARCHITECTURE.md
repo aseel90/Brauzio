@@ -26,6 +26,26 @@ Brauzio Chrome Extension
 
 `app/cloudflare-mcp/src/browser-session.ts` يحتفظ باتصال WebSocket المصادق عليه، يرسل `tool_call` إلى الإضافة ويربط النتيجة بالطلب الأصلي.
 
+### Runtime health
+
+`GET /health` عام وآمن ولا يعرض أي سر. يستخدم للتحقق من النسخة المنشورة فعليًا ويعرض إصدار Brauzio، إصدار مخطط الأدوات، عدد الأدوات وأسماء أوامر الماوس المستمر الأساسية.
+
+### End-to-end trace ID
+
+كل استدعاء أداة ينشئ UUID واحدًا في Worker. يمر نفس `traceId` إلى Durable Object، ويستخدم هو نفسه كـ`requestId` في رسالة `tool_call` المرسلة إلى الإضافة، ثم يعود مع `tool_result`.
+
+بالتالي يمكن تتبع الطلب نفسه عبر:
+
+```text
+[BrauzioWorker] traceId
+       =
+[BrauzioSession] requestId
+       =
+[BrauzioRelay] requestId
+```
+
+إذا وصل طلب داخلي إلى Durable Object بدون UUID v4 صالح، ينشئ DO معرفًا جديدًا بدل الوثوق بقيمة غير صالحة.
+
 ## Extension
 
 ### Background
