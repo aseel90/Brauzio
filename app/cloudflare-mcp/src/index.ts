@@ -78,12 +78,12 @@ async function callBrowserTool(
   name: string,
   args: Record<string, unknown>,
 ): Promise<CallToolResult> {
-  const requestUrl = new URL('https://brauzio-browser.internal/tool-call');
+  const requestUrl = new URL('https://brauzio-browser.internal/call');
   const response = await browserStub(env, deviceId).fetch(
     new Request(requestUrl.toString(), {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ name, arguments: args }),
+      body: JSON.stringify({ name, args }),
     }),
   );
   const raw = await response.text();
