@@ -256,7 +256,8 @@ def audit_chinese() -> None:
         for n, line in enumerate(lines, 1):
             if re.search(r"[\u3400-\u9fff]", line):
                 rel = path.relative_to(ROOT)
-                hits.append(f"- `{rel}:{n}` — `{line.strip()[:180].replace('`', "'")}`")
+                safe = line.strip()[:180].replace("`", "'")
+                hits.append(f"- `{rel}:{n}` — `{safe}`")
 
     audit = ROOT / "docs" / "CHINESE_AUDIT.md"
     audit.parent.mkdir(parents=True, exist_ok=True)
