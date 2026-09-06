@@ -64,11 +64,12 @@
 
     <div v-if="mcpUrl" class="mcp-url-box">
       <div>
-        <span class="mcp-url-box__label">رابط MCP لـ ChatGPT</span>
+        <span class="mcp-url-box__label">رابط MCP الخاص لـ ChatGPT</span>
         <code>{{ mcpUrl }}</code>
       </div>
       <button type="button" @click="copyMcpUrl">{{ copyText }}</button>
     </div>
+    <p v-if="mcpUrl" class="mcp-secret-note">احتفظ بهذا الرابط سريًا لأنه يحتوي رمز الوصول.</p>
 
     <p v-if="status.lastError" class="cloud-error">{{ status.lastError }}</p>
 
@@ -159,6 +160,7 @@ const mcpUrl = computed(() => {
       url.pathname = '/mcp';
     }
     url.searchParams.set('device', form.deviceId || 'default');
+    url.searchParams.set('key', form.deviceToken);
     return url.toString();
   } catch {
     return '';
@@ -446,6 +448,13 @@ onBeforeUnmount(() => {
   font-size: 10px;
   font-weight: 700;
   cursor: pointer;
+}
+
+.mcp-secret-note {
+  margin: 6px 2px 0;
+  color: #64748b;
+  font-size: 9px;
+  line-height: 1.5;
 }
 
 .cloud-error {
