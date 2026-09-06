@@ -1,0 +1,63 @@
+name: Brauzio CI
+
+on:
+  push:
+    paths:
+      - '.github/workflows/brauzio-ci.yml'
+      - 'app/cloudflare-mcp/**'
+      - 'app/chrome-extension/entrypoints/background/remote-relay.ts'
+      - 'app/chrome-extension/entrypoints/background/index.ts'
+      - 'app/chrome-extension/entrypoints/popup/**'
+      - 'app/chrome-extension/wxt.config.ts'
+      - 'packages/shared/**'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 8.15.9
+
+      - name: Install dependencies
+        run: pnpm install --no-frozen-lockfile
+
+      - name: Build shared schemas
+        run: pnpm --filter chrome-mcp-shared build
+
+      - name: Typecheck Brauzio Cloud MCP
+        run: pnpm --filter brauzio-cloud-mcp check
+
+      - name: Dry-build Brauzio Cloud MCP
+        run: pnpm --filter brauzio-cloud-mcp build
+
+      - name: Build Chrome extension
+        run: pnpm --filter chrome-mcp-server build
+
+      - name: Persist lockfile updates
+        shell: bash
+        run: |
+          git add pnpm-lock.yaml
+          if git diff --cached --quiet; then
+            echo "Lockfile is already current."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "chore: update lockfile for Brauzio Cloud MCP"
+          git push origin HEAD:main
