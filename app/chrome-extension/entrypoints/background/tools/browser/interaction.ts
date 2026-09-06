@@ -3,6 +3,12 @@ import { BaseBrowserToolExecutor } from '../base-browser';
 import { TOOL_NAMES } from 'brauzio-shared';
 import { TOOL_MESSAGE_TYPES } from '@/common/message-types';
 import { TIMEOUTS, ERROR_MESSAGES } from '@/common/constants';
+import {
+  hasActionVerification,
+  prepareActionVerification,
+  type ActionVerificationSpec,
+  type PreparedActionVerification,
+} from '@/utils/action-verification';
 
 interface Coordinates {
   x: number;
@@ -24,6 +30,7 @@ interface ClickToolParams {
   modifiers?: { altKey?: boolean; ctrlKey?: boolean; metaKey?: boolean; shiftKey?: boolean };
   tabId?: number; // target existing tab id
   windowId?: number; // when no tabId, pick active tab from this window
+  verify?: ActionVerificationSpec; // Optional postcondition verification with evidence
 }
 
 /**
@@ -56,6 +63,8 @@ class ClickTool extends BaseBrowserToolExecutor {
         ERROR_MESSAGES.INVALID_PARAMETERS + ': Provide ref or selector or coordinates',
       );
     }
+
+    let verifier: PreparedActionVerification | undefined;
 
     try {
       // Resolve tab
@@ -96,6 +105,10 @@ class ClickTool extends BaseBrowserToolExecutor {
         }
       }
 
+      if (hasActionVerification(args.verify)) {
+        verifier = await prepareActionVerification(tab.id, args.verify!);
+      }
+
       await this.injectContentScript(tab.id, ['inject-scripts/click-helper.js']);
 
       // Send click message to content script
@@ -129,22 +142,26 @@ class ClickTool extends BaseBrowserToolExecutor {
         clickMethod = 'unknown';
       }
 
+      const verification = verifier ? await verifier.verify() : undefined;
+      verifier = undefined;
+
+      const payload = {
+        success: verification ? verification.verified : true,
+        actionSucceeded: true,
+        verified: verification?.verified,
+        message: result.message || 'Click operation successful',
+        elementInfo: result.elementInfo,
+        navigationOccurred: result.navigationOccurred,
+        clickMethod,
+        verification,
+      };
+
       return {
-        content: [
-          {
-            type: 'text',
-            text: JSON.stringify({
-              success: true,
-              message: result.message || 'Click operation successful',
-              elementInfo: result.elementInfo,
-              navigationOccurred: result.navigationOccurred,
-              clickMethod,
-            }),
-          },
-        ],
-        isError: false,
+        content: [{ type: 'text', text: JSON.stringify(payload) }],
+        isError: verification ? !verification.verified : false,
       };
     } catch (error) {
+      await verifier?.cancel().catch(() => {});
       console.error('Error in click operation:', error);
       return createErrorResponse(
         `Error performing click: ${error instanceof Error ? error.message : String(error)}`,

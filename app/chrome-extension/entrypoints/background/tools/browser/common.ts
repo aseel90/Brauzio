@@ -2,6 +2,12 @@ import { createErrorResponse, ToolResult } from '@/common/tool-handler';
 import { BaseBrowserToolExecutor } from '../base-browser';
 import { TOOL_NAMES } from 'brauzio-shared';
 import { captureFrameOnAction, isAutoCaptureActive } from './gif-recorder';
+import {
+  hasActionVerification,
+  prepareActionVerification,
+  type ActionVerificationSpec,
+  type PreparedActionVerification,
+} from '@/utils/action-verification';
 
 // Default window dimensions
 const DEFAULT_WINDOW_WIDTH = 1280;
@@ -16,6 +22,7 @@ interface NavigateToolParams {
   tabId?: number;
   windowId?: number;
   background?: boolean; // when true, do not activate tab or focus window
+  verify?: ActionVerificationSpec; // Optional postcondition verification with evidence
 }
 
 /**
@@ -55,6 +62,35 @@ class NavigateTool extends BaseBrowserToolExecutor {
       args,
     );
 
+    let verifier: PreparedActionVerification | undefined;
+    const armVerification = async (targetTabId: number) => {
+      if (hasActionVerification(args.verify)) {
+        verifier = await prepareActionVerification(targetTabId, args.verify!);
+      }
+    };
+    const finishAction = async (
+      targetTabId: number,
+      payload: Record<string, unknown>,
+    ): Promise<ToolResult> => {
+      const verification = verifier ? await verifier.verify() : undefined;
+      verifier = undefined;
+      return {
+        content: [
+          {
+            type: 'text',
+            text: JSON.stringify({
+              success: verification ? verification.verified : true,
+              actionSucceeded: true,
+              verified: verification?.verified,
+              ...payload,
+              verification,
+            }),
+          },
+        ],
+        isError: verification ? !verification.verified : false,
+      };
+    };
+
     try {
       // Handle refresh option first
       if (refresh) {
@@ -63,6 +99,7 @@ class NavigateTool extends BaseBrowserToolExecutor {
         // Get target tab (explicit or active in provided window)
         const targetTab = explicit || (await this.getActiveTabOrThrowInWindow(windowId));
         if (!targetTab.id) return createErrorResponse('No target tab found to refresh');
+        await armVerification(targetTab.id);
         await chrome.tabs.reload(targetTab.id);
 
         console.log(`Refreshed tab ID: ${targetTab.id}`);
@@ -73,21 +110,12 @@ class NavigateTool extends BaseBrowserToolExecutor {
         // Trigger auto-capture on refresh
         await this.triggerAutoCapture(updatedTab.id!, updatedTab.url);
 
-        return {
-          content: [
-            {
-              type: 'text',
-              text: JSON.stringify({
-                success: true,
-                message: 'Successfully refreshed current tab',
-                tabId: updatedTab.id,
-                windowId: updatedTab.windowId,
-                url: updatedTab.url,
-              }),
-            },
-          ],
-          isError: false,
-        };
+        return await finishAction(targetTab.id, {
+          message: 'Successfully refreshed current tab',
+          tabId: updatedTab.id,
+          windowId: updatedTab.windowId,
+          url: updatedTab.url,
+        });
       }
 
       // Validate that url is provided when not refreshing
@@ -102,6 +130,8 @@ class NavigateTool extends BaseBrowserToolExecutor {
         if (!targetTab.id) {
           return createErrorResponse('No target tab found for history navigation');
         }
+
+        await armVerification(targetTab.id);
 
         // Respect background flag for focus behavior
         await this.ensureFocus(targetTab, {
@@ -122,21 +152,12 @@ class NavigateTool extends BaseBrowserToolExecutor {
         // Trigger auto-capture on history navigation
         await this.triggerAutoCapture(updatedTab.id!, updatedTab.url);
 
-        return {
-          content: [
-            {
-              type: 'text',
-              text: JSON.stringify({
-                success: true,
-                message: `Successfully navigated ${url} in browser history`,
-                tabId: updatedTab.id,
-                windowId: updatedTab.windowId,
-                url: updatedTab.url,
-              }),
-            },
-          ],
-          isError: false,
-        };
+        return await finishAction(targetTab.id, {
+          message: `Successfully navigated ${url} in browser history`,
+          tabId: updatedTab.id,
+          windowId: updatedTab.windowId,
+          url: updatedTab.url,
+        });
       }
 
       // 1. Check if URL is already open
@@ -256,6 +277,8 @@ class NavigateTool extends BaseBrowserToolExecutor {
         console.log(
           `URL already open in Tab ID: ${existingTab.id}, Window ID: ${existingTab.windowId}`,
         );
+        await armVerification(existingTab.id);
+
         // Update URL only when explicit tab specified and url differs
         if (explicitTab && typeof explicitTab.id === 'number') {
           await chrome.tabs.update(explicitTab.id, { url });
@@ -273,21 +296,12 @@ class NavigateTool extends BaseBrowserToolExecutor {
         // Trigger auto-capture on existing tab activation
         await this.triggerAutoCapture(updatedTab.id!, updatedTab.url);
 
-        return {
-          content: [
-            {
-              type: 'text',
-              text: JSON.stringify({
-                success: true,
-                message: 'Activated existing tab',
-                tabId: updatedTab.id,
-                windowId: updatedTab.windowId,
-                url: updatedTab.url,
-              }),
-            },
-          ],
-          isError: false,
-        };
+        return await finishAction(existingTab.id, {
+          message: 'Activated existing tab',
+          tabId: updatedTab.id,
+          windowId: updatedTab.windowId,
+          url: updatedTab.url,
+        });
       }
 
       // 2. If URL is not already open, decide how to open it based on options
@@ -297,8 +311,9 @@ class NavigateTool extends BaseBrowserToolExecutor {
         console.log('Opening URL in a new window.');
 
         // Create new window
+        const shouldVerify = hasActionVerification(args.verify);
         const newWindow = await chrome.windows.create({
-          url: url,
+          url: shouldVerify ? 'about:blank' : url,
           width: typeof width === 'number' ? width : DEFAULT_WINDOW_WIDTH,
           height: typeof height === 'number' ? height : DEFAULT_WINDOW_HEIGHT,
           focused: background === true ? false : true,
@@ -306,11 +321,19 @@ class NavigateTool extends BaseBrowserToolExecutor {
 
         if (newWindow && newWindow.id !== undefined) {
           console.log(`URL opened in new Window ID: ${newWindow.id}`);
+          let firstTab = newWindow.tabs?.[0];
+          if (firstTab?.id && shouldVerify) {
+            await armVerification(firstTab.id);
+            firstTab = await chrome.tabs.update(firstTab.id, { url });
+          }
 
-          // Trigger auto-capture if the new window has a tab
-          const firstTab = newWindow.tabs?.[0];
           if (firstTab?.id) {
             await this.triggerAutoCapture(firstTab.id, firstTab.url);
+            return await finishAction(firstTab.id, {
+              message: 'Opened URL in new window',
+              windowId: newWindow.id,
+              tabs: [{ tabId: firstTab.id, url: firstTab.url }],
+            });
           }
 
           return {
@@ -319,14 +342,10 @@ class NavigateTool extends BaseBrowserToolExecutor {
                 type: 'text',
                 text: JSON.stringify({
                   success: true,
+                  actionSucceeded: true,
                   message: 'Opened URL in new window',
                   windowId: newWindow.id,
-                  tabs: newWindow.tabs
-                    ? newWindow.tabs.map((tab) => ({
-                        tabId: tab.id,
-                        url: tab.url,
-                      }))
-                    : [],
+                  tabs: [],
                 }),
               },
             ],
@@ -347,46 +366,42 @@ class NavigateTool extends BaseBrowserToolExecutor {
         if (targetWindow && targetWindow.id !== undefined) {
           console.log(`Found target Window ID: ${targetWindow.id}`);
 
-          const newTab = await chrome.tabs.create({
-            url: url,
+          const shouldVerify = hasActionVerification(args.verify);
+          let newTab = await chrome.tabs.create({
+            url: shouldVerify ? 'about:blank' : url,
             windowId: targetWindow.id,
             active: background === true ? false : true,
           });
           if (background !== true) {
             await chrome.windows.update(targetWindow.id, { focused: true });
           }
+          if (newTab.id && shouldVerify) {
+            await armVerification(newTab.id);
+            newTab = await chrome.tabs.update(newTab.id, { url });
+          }
 
           console.log(
             `URL opened in new Tab ID: ${newTab.id} in existing Window ID: ${targetWindow.id}`,
           );
 
-          // Trigger auto-capture on new tab
           if (newTab.id) {
             await this.triggerAutoCapture(newTab.id, newTab.url);
+            return await finishAction(newTab.id, {
+              message: 'Opened URL in new tab in existing window',
+              tabId: newTab.id,
+              windowId: targetWindow.id,
+              url: newTab.url,
+            });
           }
-
-          return {
-            content: [
-              {
-                type: 'text',
-                text: JSON.stringify({
-                  success: true,
-                  message: 'Opened URL in new tab in existing window',
-                  tabId: newTab.id,
-                  windowId: targetWindow.id,
-                  url: newTab.url,
-                }),
-              },
-            ],
-            isError: false,
-          };
+          return createErrorResponse('New tab was created without a tab ID');
         } else {
           // In rare cases, if there's no recently active window (e.g., browser just started with no windows)
           // Fall back to opening in a new window
           console.warn('No last focused window found, falling back to creating a new window.');
 
+          const shouldVerify = hasActionVerification(args.verify);
           const fallbackWindow = await chrome.windows.create({
-            url: url,
+            url: shouldVerify ? 'about:blank' : url,
             width: DEFAULT_WINDOW_WIDTH,
             height: DEFAULT_WINDOW_HEIGHT,
             focused: true,
@@ -394,32 +409,20 @@ class NavigateTool extends BaseBrowserToolExecutor {
 
           if (fallbackWindow && fallbackWindow.id !== undefined) {
             console.log(`URL opened in fallback new Window ID: ${fallbackWindow.id}`);
-
-            // Trigger auto-capture if fallback window has a tab
-            const firstTab = fallbackWindow.tabs?.[0];
+            let firstTab = fallbackWindow.tabs?.[0];
+            if (firstTab?.id && shouldVerify) {
+              await armVerification(firstTab.id);
+              firstTab = await chrome.tabs.update(firstTab.id, { url });
+            }
             if (firstTab?.id) {
               await this.triggerAutoCapture(firstTab.id, firstTab.url);
+              return await finishAction(firstTab.id, {
+                message: 'Opened URL in new window',
+                windowId: fallbackWindow.id,
+                tabs: [{ tabId: firstTab.id, url: firstTab.url }],
+              });
             }
-
-            return {
-              content: [
-                {
-                  type: 'text',
-                  text: JSON.stringify({
-                    success: true,
-                    message: 'Opened URL in new window',
-                    windowId: fallbackWindow.id,
-                    tabs: fallbackWindow.tabs
-                      ? fallbackWindow.tabs.map((tab) => ({
-                          tabId: tab.id,
-                          url: tab.url,
-                        }))
-                      : [],
-                  }),
-                },
-              ],
-              isError: false,
-            };
+            return createErrorResponse('Fallback window was created without a tab ID');
           }
         }
       }
@@ -427,6 +430,7 @@ class NavigateTool extends BaseBrowserToolExecutor {
       // If all attempts fail, return a generic error
       return createErrorResponse('Failed to open URL: Unknown error occurred');
     } catch (error) {
+      await verifier?.cancel().catch(() => {});
       if (chrome.runtime.lastError) {
         console.error(`Chrome API Error: ${chrome.runtime.lastError.message}`, error);
         return createErrorResponse(`Chrome API Error: ${chrome.runtime.lastError.message}`);

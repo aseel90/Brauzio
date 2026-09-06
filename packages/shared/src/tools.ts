@@ -52,12 +52,46 @@ const point = {
   required: ['x', 'y'],
 };
 
+const actionVerification = {
+  type: 'object',
+  description:
+    'Optional Sense → Act → Verify postconditions. When provided, Brauzio returns action evidence and marks the tool call as failed when any requested check does not pass.',
+  properties: {
+    urlIncludes: { type: 'string', description: 'Expected URL substring after the action.' },
+    selector: { type: 'string', description: 'CSS selector to verify after the action.' },
+    selectorState: {
+      type: 'string',
+      enum: ['exists', 'hidden'],
+      description: 'Expected selector state. Defaults to exists.',
+    },
+    text: { type: 'string', description: 'Visible page text to verify after the action.' },
+    textState: {
+      type: 'string',
+      enum: ['appears', 'disappears'],
+      description: 'Expected text state. Defaults to appears.',
+    },
+    requestUrlIncludes: {
+      type: 'string',
+      description:
+        'Expected network request URL substring. Armed before the action so fast requests are not missed.',
+    },
+    consoleIncludes: {
+      type: 'string',
+      description: 'Expected console/log/exception text substring. Armed before the action.',
+    },
+    pageLoaded: { type: 'boolean', description: 'Require the target document to reach loaded state.' },
+    networkIdle: { type: 'boolean', description: 'Require a quiet network period after the action.' },
+    timeoutMs: { type: 'number', description: 'Verification timeout in milliseconds, up to 120000.' },
+    quietMs: { type: 'number', description: 'Quiet period for networkIdle, 100-5000 ms.' },
+  },
+};
+
 export const TOOL_SCHEMAS: Tool[] = [
   { name: TOOL_NAMES.BROWSER.GET_WINDOWS_AND_TABS, description: 'Get all currently open Chrome windows and tabs.', inputSchema: { type: 'object', properties: {}, required: [] } },
-  { name: TOOL_NAMES.BROWSER.NAVIGATE, description: 'Navigate, refresh, go back/forward, or open a URL in Chrome.', inputSchema: { type: 'object', properties: { url: { type: 'string' }, refresh: { type: 'boolean' }, newWindow: { type: 'boolean' }, background: { type: 'boolean' }, ...tabTarget }, required: [] } },
+  { name: TOOL_NAMES.BROWSER.NAVIGATE, description: 'Navigate, refresh, go back/forward, or open a URL in Chrome. Can optionally verify URL, DOM/text, network, console, page load, and network-idle evidence.', inputSchema: { type: 'object', properties: { url: { type: 'string' }, refresh: { type: 'boolean' }, newWindow: { type: 'boolean' }, background: { type: 'boolean' }, verify: actionVerification, ...tabTarget }, required: [] } },
   { name: TOOL_NAMES.BROWSER.READ_PAGE, description: 'Read visible page content as an accessibility tree with stable element refs.', inputSchema: { type: 'object', properties: { filter: { type: 'string' }, depth: { type: 'number' }, refId: { type: 'string' }, ...tabTarget }, required: [] } },
   { name: TOOL_NAMES.BROWSER.COMPUTER, description: 'Control Chrome with visible Brauzio mouse feedback. Supports true press/move/release state for canvases, games, sliders and virtual joysticks.', inputSchema: { type: 'object', properties: { ...tabTarget, action: { type: 'string', description: 'left_click | right_click | double_click | triple_click | left_click_drag | drag_hold | mouse_move | mouse_down | mouse_up | scroll | scroll_to | type | key | fill | fill_form | hover | wait | wait_for | resize_page | zoom | screenshot' }, coordinates: { ...point, description: 'Target/end viewport coordinates.' }, startCoordinates: { ...point, description: 'Drag start viewport coordinates.' }, ref: { type: 'string' }, startRef: { type: 'string' }, selector: { type: 'string' }, selectorType: { type: 'string', enum: ['css', 'xpath'] }, frameId: { type: 'number' }, scrollDirection: { type: 'string', enum: ['up', 'down', 'left', 'right'] }, scrollAmount: { type: 'number' }, text: { type: 'string' }, repeat: { type: 'number' }, value: {}, elements: { type: 'array', items: { type: 'object', properties: { ref: { type: 'string' }, value: {} }, required: ['ref', 'value'] } }, duration: { type: 'number', description: 'Seconds. For drag_hold this is the hold time at the destination (max 15).' }, appear: { type: 'boolean' }, condition: { type: 'string', enum: ['selector_exists', 'selector_hidden', 'text_appears', 'text_disappears', 'url_matches', 'network_idle', 'request_finished', 'page_loaded'], description: 'Smart wait condition used with action=wait_for.' }, urlIncludes: { type: 'string', description: 'URL substring for url_matches or request filtering.' }, requestUrlIncludes: { type: 'string', description: 'Request URL substring for request_finished.' }, timeoutMs: { type: 'number', description: 'Smart wait timeout in milliseconds, up to 120000.' }, quietMs: { type: 'number', description: 'Required network quiet period for network_idle, 100-5000 ms.' }, width: { type: 'number' }, height: { type: 'number' }, region: { type: 'object', properties: { x0: { type: 'number' }, y0: { type: 'number' }, x1: { type: 'number' }, y1: { type: 'number' } } } }, required: ['action'] } },
-  { name: TOOL_NAMES.BROWSER.CLICK, description: 'Click a page element by ref, selector or coordinates.', inputSchema: { type: 'object', properties: { selector: { type: 'string' }, selectorType: { type: 'string', enum: ['css', 'xpath'] }, ref: { type: 'string' }, coordinates: point, double: { type: 'boolean' }, button: { type: 'string', enum: ['left', 'right', 'middle'] }, waitForNavigation: { type: 'boolean' }, timeout: { type: 'number' }, ...tabTarget }, required: [] } },
+  { name: TOOL_NAMES.BROWSER.CLICK, description: 'Click a page element by ref, selector or coordinates. Can pre-arm and verify URL, DOM/text, network, console, page-load, and network-idle postconditions.', inputSchema: { type: 'object', properties: { selector: { type: 'string' }, selectorType: { type: 'string', enum: ['css', 'xpath'] }, ref: { type: 'string' }, coordinates: point, double: { type: 'boolean' }, button: { type: 'string', enum: ['left', 'right', 'middle'] }, waitForNavigation: { type: 'boolean' }, timeout: { type: 'number' }, verify: actionVerification, ...tabTarget }, required: [] } },
   { name: TOOL_NAMES.BROWSER.FILL, description: 'Fill an input, textarea, checkbox, radio or select element.', inputSchema: { type: 'object', properties: { selector: { type: 'string' }, selectorType: { type: 'string', enum: ['css', 'xpath'] }, ref: { type: 'string' }, value: {}, frameId: { type: 'number' }, ...tabTarget }, required: ['value'] } },
   { name: TOOL_NAMES.BROWSER.SCREENSHOT, description: 'Capture the current page or a page element.', inputSchema: { type: 'object', properties: { name: { type: 'string' }, selector: { type: 'string' }, fullPage: { type: 'boolean' }, storeBase64: { type: 'boolean' }, savePng: { type: 'boolean' }, width: { type: 'number' }, height: { type: 'number' }, background: { type: 'boolean' }, ...tabTarget }, required: [] } },
   { name: TOOL_NAMES.BROWSER.CONSOLE, description: 'Capture console messages and uncaught exceptions from a browser tab.', inputSchema: { type: 'object', properties: { url: { type: 'string' }, mode: { type: 'string', enum: ['snapshot', 'buffer'] }, buffer: { type: 'boolean' }, clear: { type: 'boolean' }, clearAfterRead: { type: 'boolean' }, pattern: { type: 'string' }, onlyErrors: { type: 'boolean' }, includeExceptions: { type: 'boolean' }, maxMessages: { type: 'number' }, limit: { type: 'number' }, background: { type: 'boolean' }, ...tabTarget }, required: [] } },
