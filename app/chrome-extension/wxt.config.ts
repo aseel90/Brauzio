@@ -29,6 +29,7 @@ export default defineConfig({
   },
   manifest: {
     key: CHROME_EXTENSION_KEY,
+    minimum_chrome_version: '116',
     default_locale: 'ar',
     name: '__MSG_extensionName__',
     description: '__MSG_extensionDescription__',
@@ -64,11 +65,11 @@ export default defineConfig({
     commands: {
       toggle_web_editor: {
         suggested_key: { default: 'Ctrl+Shift+O', mac: 'Command+Shift+O' },
-        description: 'Toggle Web Editor mode',
+        description: 'تبديل وضع محرر الصفحة',
       },
       toggle_quick_panel: {
         suggested_key: { default: 'Ctrl+Shift+U', mac: 'Command+Shift+U' },
-        description: 'Toggle Quick Panel AI Chat',
+        description: 'تبديل لوحة Brauzio السريعة',
       },
     },
     web_accessible_resources: [
