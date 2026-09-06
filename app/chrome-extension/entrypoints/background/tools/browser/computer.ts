@@ -13,6 +13,7 @@ import {
   releaseMouseHold,
   updateMouseHoldPoint,
 } from '@/utils/mouse-hold-safety';
+import { waitForBrowserCondition, type SmartWaitCondition } from '@/utils/smart-wait';
 
 type Point = { x: number; y: number };
 type MouseState = 'move' | 'down' | 'up';
@@ -36,6 +37,11 @@ type ComputerParams = {
   scrollAmount?: number;
   duration?: number;
   appear?: boolean;
+  condition?: SmartWaitCondition;
+  urlIncludes?: string;
+  requestUrlIncludes?: string;
+  timeoutMs?: number;
+  quietMs?: number;
   width?: number;
   height?: number;
   region?: { x0: number; y0: number; x1: number; y1: number };
@@ -260,13 +266,34 @@ class ComputerTool extends BaseBrowserToolExecutor {
         for (const item of args.elements) { const r = await fillTool.execute({ ref: item.ref, value: item.value, tabId } as any); results.push({ ref: item.ref, ok: !r.isError }); }
         return ok({ action: 'fill_form', results });
       }
+      case 'wait_for': {
+        if (!args.condition) return createErrorResponse('condition is required for wait_for');
+        const result = await waitForBrowserCondition(tabId, {
+          condition: args.condition,
+          selector: args.selector,
+          text: args.text,
+          urlIncludes: args.urlIncludes,
+          requestUrlIncludes: args.requestUrlIncludes,
+          timeoutMs: args.timeoutMs,
+          quietMs: args.quietMs,
+        });
+        return result.ok
+          ? ok({ action: 'wait_for', ...result })
+          : createErrorResponse(`Smart wait failed (${result.condition}): ${result.reason || 'timeout'}`);
+      }
       case 'wait': {
         const seconds = Math.max(0, Math.min(args.duration ?? 0, 30));
         if (args.text) {
-          const expected = args.text, appear = args.appear !== false;
-          const timeout = Math.max(100, Math.min(seconds > 0 ? seconds * 1000 : 10000, 120000));
-          const result = await chrome.scripting.executeScript({ target: { tabId }, world: 'MAIN', func: async (text: string, shouldAppear: boolean, timeoutMs: number) => { const deadline = Date.now() + timeoutMs; while (Date.now() < deadline) { const has = (document.body?.innerText || '').includes(text); if (has === shouldAppear) return { ok: true, found: has }; await new Promise((r) => setTimeout(r, 100)); } return { ok: false }; }, args: [expected, appear, timeout] });
-          return result?.[0]?.result?.ok ? ok({ action: 'wait', text: expected, appear }) : createErrorResponse(`Timed out waiting for text: ${expected}`);
+          const expected = args.text;
+          const appear = args.appear !== false;
+          const result = await waitForBrowserCondition(tabId, {
+            condition: appear ? 'text_appears' : 'text_disappears',
+            text: expected,
+            timeoutMs: Math.max(100, Math.min(seconds > 0 ? seconds * 1000 : 10000, 120000)),
+          });
+          return result.ok
+            ? ok({ action: 'wait', text: expected, appear, smart: true, elapsedMs: result.elapsedMs })
+            : createErrorResponse(`Timed out waiting for text: ${expected}`);
         }
         if (!seconds) return createErrorResponse('duration is required for wait without text');
         await new Promise((r) => setTimeout(r, seconds * 1000)); return ok({ action: 'wait', duration: seconds });
