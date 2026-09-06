@@ -12,7 +12,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   build:
@@ -20,8 +20,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -50,16 +48,3 @@ jobs:
 
       - name: Build Chrome extension
         run: pnpm --filter chrome-mcp-server build
-
-      - name: Persist lockfile updates
-        shell: bash
-        run: |
-          git add pnpm-lock.yaml
-          if git diff --cached --quiet; then
-            echo "Lockfile is already current."
-            exit 0
-          fi
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git commit -m "chore: update lockfile for Brauzio Cloud MCP"
-          git push origin HEAD:main
