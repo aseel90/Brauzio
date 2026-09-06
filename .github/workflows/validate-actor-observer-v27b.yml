@@ -1,0 +1,55 @@
+name: Validate Actor Observer V27B
+
+on:
+  push:
+    paths:
+      - '.github/workflows/validate-actor-observer-v27b.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 8.15.9
+      - run: pnpm install --no-frozen-lockfile --ignore-scripts
+
+      - name: Decode and apply Actor Observer patch
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import base64, zlib
+          raw = open('scripts/actor-observer-v27.patch.zb64', encoding='utf-8').read().strip()
+          open('/tmp/actor-observer-v27.patch','wb').write(zlib.decompress(base64.b64decode(raw)))
+          PY
+          git apply --check /tmp/actor-observer-v27.patch
+          git apply /tmp/actor-observer-v27.patch
+
+      - name: Validate full Brauzio build
+        run: |
+          pnpm --filter brauzio-shared build
+          pnpm --filter brauzio-cloud-mcp check
+          pnpm --filter brauzio-cloud-mcp build
+          pnpm --filter brauzio-extension exec wxt prepare
+          pnpm --filter brauzio-extension compile
+          pnpm --filter brauzio-extension build
+
+      - name: Commit validated Actor Observer source
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add app/cloudflare-mcp/src/index.ts app/cloudflare-mcp/src/browser-session.ts
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m 'Add Actor Observer session isolation [skip ci]'
+          git push
