@@ -8,7 +8,7 @@ export { BrowserSession };
 interface Env {
   BROWSER_SESSIONS: DurableObjectNamespace<BrowserSession>;
   DEFAULT_DEVICE_ID?: string;
-  MCP_SHARED_SECRET: string;
+  MCP_SHARED_SECRET?: string;
   BROWSER_SHARED_SECRET: string;
 }
 
@@ -19,15 +19,19 @@ function jsonError(message: string): CallToolResult {
   };
 }
 
+function effectiveMcpSecret(env: Env): string {
+  return String(env.MCP_SHARED_SECRET || env.BROWSER_SHARED_SECRET || '');
+}
+
 function requestAuthorized(request: Request, env: Env): boolean {
-  const expected = String(env.MCP_SHARED_SECRET || '');
+  const expected = effectiveMcpSecret(env);
   if (expected.length < 16) return false;
 
   const authorization = request.headers.get('Authorization') || '';
   if (authorization.startsWith('Bearer ') && authorization.slice(7) === expected) return true;
 
-  // Bootstrap mode for ChatGPT clients that cannot attach a static header.
-  // Replace this with OAuth before multi-user/public distribution.
+  // Private/single-user bootstrap mode for ChatGPT Custom MCP URLs.
+  // For public or multi-user distribution, replace this with OAuth.
   const key = new URL(request.url).searchParams.get('key');
   return key === expected;
 }
@@ -44,10 +48,10 @@ function browserStub(env: Env, deviceId: string) {
 
 async function callBrowserTool(
   env: Env,
+  deviceId: string,
   name: string,
   args: Record<string, unknown>,
 ): Promise<CallToolResult> {
-  const deviceId = String(env.DEFAULT_DEVICE_ID || 'default');
   const stub = browserStub(env, deviceId);
   const response = await stub.fetch(
     new Request('https://brauzio-browser.internal/call', {
@@ -71,7 +75,7 @@ async function callBrowserTool(
   return payload.result;
 }
 
-function createServer(env: Env) {
+function createServer(env: Env, deviceId: string) {
   const server = new Server(
     { name: 'Brauzio', version: '0.1.0' },
     {
@@ -91,6 +95,7 @@ function createServer(env: Env) {
     try {
       return await callBrowserTool(
         env,
+        deviceId,
         request.params.name,
         (request.params.arguments || {}) as Record<string, unknown>,
       );
@@ -134,7 +139,8 @@ export default {
         });
       }
 
-      return createMcpHandler(() => createServer(env), {
+      const deviceId = deviceIdFromRequest(request, env);
+      return createMcpHandler(() => createServer(env, deviceId), {
         route: '/mcp',
         legacy: 'stateless',
       })(request, env, ctx);
