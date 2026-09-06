@@ -11,7 +11,7 @@
         />
       </div>
       <div class="form-group">
-        <label class="form-label">قيمة الخاصية（留فارغ并勾选حذف则移除）</label>
+        <label class="form-label">قيمة الخاصية (اتركها فارغة وحدد حذف لإزالتها)</label>
         <input class="form-input" v-model="(node as any).config.value" placeholder="قيمة الخاصية" />
       </div>
       <div class="form-group checkbox-group">

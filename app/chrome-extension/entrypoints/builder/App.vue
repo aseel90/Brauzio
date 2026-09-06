@@ -631,12 +631,12 @@ async function syncTriggersAndSchedules(flowId: string, nodes: unknown[]) {
           const scheduleType = String(s?.type || 'unknown');
           if (scheduleType === 'once') {
             pushToast(
-              `العقدة ${n.id} 的جدولة #${i + 1}: V3 暂不支持مرة واحدة性جدولة（once），تم التخطي`,
+              `جدولة العقدة ${n.id} رقم ${i + 1}: لا يدعم V3 الجدولة لمرة واحدة (once) حاليًا، وتم تجاوزها`,
               'warn',
             );
           } else {
             pushToast(
-              `العقدة ${n.id} 的جدولة #${i + 1}: تعذر التحويل إلى cron（type=${scheduleType}），تم التخطي`,
+              `جدولة العقدة ${n.id} رقم ${i + 1}: تعذر تحويلها إلى cron (type=${scheduleType})، وتم تجاوزها`,
               'warn',
             );
           }

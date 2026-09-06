@@ -608,7 +608,7 @@ function cancelEdit() {
 
 async function deleteMarker(marker: ElementMarker) {
   try {
-    const confirmed = confirm(`هل تريد حذف التحديد "${marker.name}" 吗?`);
+    const confirmed = confirm(`هل تريد حذف التحديد "${marker.name}"؟`);
     if (!confirmed) return;
 
     const res: any = await chrome.runtime.sendMessage({

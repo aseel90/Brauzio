@@ -367,7 +367,7 @@ export function registerBuiltinSpecs() {
     display: { label: 'معالجة التنزيل', iconClass: 'icon-download', category: 'Tools' },
     ports: { inputs: 1, outputs: [{ label: 'default' }] },
     schema: [
-      { key: 'filenameContains', label: '文件名يحتوي', type: 'string' },
+      { key: 'filenameContains', label: 'اسم الملف يتضمن', type: 'string' },
       { key: 'waitForComplete', label: 'انتظار الاكتمال', type: 'boolean', default: true },
       { key: 'timeoutMs', label: 'المهلة (ms)', type: 'number', default: 60000 },
       { key: 'saveAs', label: 'متغير الحفظ', type: 'string' },
@@ -623,7 +623,7 @@ export function registerBuiltinSpecs() {
         fields: [
           { key: 'selector', label: 'المحدد', type: 'string' },
           { key: 'appear', label: 'عند الظهور', type: 'boolean', default: true },
-          { key: 'once', label: '一次', type: 'boolean', default: true },
+          { key: 'once', label: 'مرة واحدة', type: 'boolean', default: true },
           { key: 'debounceMs', label: 'مهلة debounce (ms)', type: 'number', default: 800 },
           { key: 'enabled', label: 'تفعيل', type: 'boolean', default: false },
         ],
@@ -643,7 +643,7 @@ export function registerBuiltinSpecs() {
               label: 'النوع',
               type: 'select',
               options: [
-                { label: '一次', value: 'once' },
+                { label: 'مرة واحدة', value: 'once' },
                 { label: 'فاصل', value: 'interval' },
                 { label: 'يومي', value: 'daily' },
               ] as any,
