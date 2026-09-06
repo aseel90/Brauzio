@@ -2,27 +2,26 @@
 
 Japanese and Korean Chrome locale files are excluded because they may legitimately contain Han characters.
 
-Remaining CJK-containing source/document lines: **4522**
-Files containing CJK text: **195**
+Remaining CJK-containing source/document lines: **4263**
+Files containing CJK text: **182**
 
 ## Files by hit count
 
 - **769** — `docs/ISSUE.md`
-- **406** — `docs/UI_CHINESE_STRINGS.md`
+- **365** — `docs/UI_CJK_PHRASES.json`
 - **213** — `app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md`
+- **200** — `docs/UI_CHINESE_STRINGS.md`
 - **168** — `app/native-server/install.md`
-- **163** — `packages/shared/src/node-specs-builtin.ts`
 - **109** — `prompt/excalidraw-prompt.md`
 - **88** — `app/chrome-extension/utils/semantic-similarity-engine.ts`
 - **76** — `app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc-server.ts`
 - **72** — `app/chrome-extension/entrypoints/background/record-replay-v3/storage/import/v2-to-v3.ts`
 - **70** — `app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/trigger-manager.ts`
+- **68** — `packages/shared/src/node-specs-builtin.ts`
 - **65** — `app/chrome-extension/entrypoints/background/record-replay/actions/types.ts`
 - **57** — `app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/queue.ts`
 - **53** — `app/chrome-extension/entrypoints/background/record-replay-v3/engine/plugins/types.ts`
 - **51** — `app/chrome-extension/entrypoints/background/record-replay-v3/domain/events.ts`
-- **49** — `app/chrome-extension/entrypoints/builder/App.vue`
-- **49** — `app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts`
 - **48** — `app/chrome-extension/entrypoints/background/record-replay-v3/engine/recovery/recovery-coordinator.ts`
 - **47** — `prompt/content-analize.md`
 - **47** — `app/native-server/README.md`
@@ -35,10 +34,8 @@ Files containing CJK text: **195**
 - **40** — `app/chrome-extension/tests/record-replay-v3/e2e.integration.test.ts`
 - **39** — `releases/README.md`
 - **39** — `app/chrome-extension/tests/record-replay-v3/v3-e2e-harness.ts`
-- **39** — `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue`
 - **39** — `app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/kernel.ts`
 - **37** — `app/chrome-extension/entrypoints/background/record-replay-v3/domain/flow.ts`
-- **35** — `app/chrome-extension/entrypoints/sidepanel/App.vue`
 - **35** — `app/chrome-extension/entrypoints/background/record-replay-v3/domain/errors.ts`
 - **35** — `app/chrome-extension/entrypoints/background/record-replay-v3/domain/policy.ts`
 - **35** — `app/chrome-extension/entrypoints/background/record-replay-v3/engine/transport/rpc.ts`
@@ -48,13 +45,11 @@ Files containing CJK text: **195**
 - **29** — `app/chrome-extension/entrypoints/background/record-replay-v3/engine/plugins/registry.ts`
 - **29** — `app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/traversal.ts`
 - **29** — `app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/breakpoints.ts`
-- **28** — `app/chrome-extension/entrypoints/popup/components/builder/components/PropertyPanel.vue`
 - **28** — `app/chrome-extension/entrypoints/background/record-replay-v3/domain/variables.ts`
 - **28** — `packages/wasm-simd/BUILD.md`
 - **26** — `app/chrome-extension/entrypoints/shared/utils/rr-flow-convert.ts`
 - **26** — `app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/runner.ts`
 - **25** — `app/chrome-extension/utils/output-sanitizer.ts`
-- **25** — `app/chrome-extension/entrypoints/popup/components/builder/model/validation.ts`
 - **24** — `app/chrome-extension/shared/selector/dom-path.ts`
 - **24** — `app/chrome-extension/entrypoints/background/record-replay-v3/bootstrap.ts`
 - **24** — `app/chrome-extension/entrypoints/background/record-replay-v3/domain/debug.ts`
@@ -65,75 +60,66 @@ Files containing CJK text: **195**
 - **21** — `app/chrome-extension/inject-scripts/recorder.js`
 - **20** — `app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/trigger-handler.ts`
 - **19** — `app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/layout-control.ts`
-- **19** — `app/chrome-extension/entrypoints/popup/components/ScheduleDialog.vue`
-- **19** — `app/chrome-extension/entrypoints/popup/components/builder/components/nodes/node-util.ts`
 - **19** — `app/chrome-extension/entrypoints/background/record-replay-v3/engine/triggers/interval-trigger.ts`
 - **19** — `app/chrome-extension/entrypoints/background/record-replay-v3/engine/queue/leasing.ts`
 - **18** — `app/chrome-extension/entrypoints/popup/style.css`
+- **18** — `app/chrome-extension/entrypoints/builder/App.vue`
 - **18** — `app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/effects-control.ts`
 - **18** — `app/chrome-extension/entrypoints/background/record-replay-v3/storage/queue.ts`
 - **17** — `app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/position-control.ts`
 - **17** — `app/chrome-extension/entrypoints/background/tools/browser/console.ts`
 - **16** — `app/chrome-extension/shared/selector/locator.ts`
-- **16** — `app/chrome-extension/entrypoints/popup/components/LocalModelPage.vue`
 - **16** — `app/chrome-extension/entrypoints/background/tools/browser/console-buffer.ts`
 - **14** — `app/chrome-extension/entrypoints/sidepanel/components/agent-chat/timeline/TimelineStatusStep.vue`
-- **14** — `app/chrome-extension/entrypoints/popup/components/ElementMarkerManagement.vue`
+- **14** — `app/chrome-extension/entrypoints/popup/components/builder/components/PropertyPanel.vue`
 - **14** — `app/chrome-extension/entrypoints/background/record-replay-v3/domain/ids.ts`
+- **13** — `app/chrome-extension/entrypoints/popup/components/LocalModelPage.vue`
 - **13** — `app/chrome-extension/entrypoints/background/record-replay-v3/engine/kernel/recovery-kernel.ts`
+- **12** — `app/chrome-extension/entrypoints/sidepanel/App.vue`
 - **11** — `app/chrome-extension/entrypoints/background/record-replay-v3/domain/index.ts`
 - **11** — `app/chrome-extension/entrypoints/background/record-replay-v3/storage/runs.ts`
 - **11** — `app/native-server/src/scripts/postinstall.ts`
 - **10** — `app/chrome-extension/inject-scripts/accessibility-tree-helper.js`
-- **10** — `app/chrome-extension/entrypoints/sidepanel/components/SidepanelNavigator.vue`
-- **10** — `app/chrome-extension/entrypoints/popup/components/builder/store/useBuilderStore.ts`
-- **10** — `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyLoopElements.vue`
 - **9** — `app/chrome-extension/shared/selector/stability.ts`
 - **9** — `app/chrome-extension/entrypoints/popup/App.vue`
-- **9** — `app/chrome-extension/entrypoints/sidepanel/components/workflows/WorkflowsView.vue`
-- **9** — `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScroll.vue`
 - **9** — `app/chrome-extension/entrypoints/background/record-replay-v3/storage/events.ts`
 - **9** — `app/chrome-extension/entrypoints/background/record-replay-v3/storage/flows.ts`
 - **9** — `app/chrome-extension/entrypoints/background/record-replay-v3/storage/import/v2-reader.ts`
 - **9** — `app/native-server/src/util/logger.ts`
+- **8** — `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue`
 - **8** — `app/chrome-extension/entrypoints/background/record-replay-v3/domain/json.ts`
 - **7** — `app/chrome-extension/inject-scripts/element-marker.js`
-- **7** — `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyExtract.vue`
-- **7** — `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyFormRenderer.vue`
-- **7** — `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyHandleDownload.vue`
-- **7** — `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySwitchTab.vue`
-- **7** — `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyForeach.vue`
 - **6** — `app/chrome-extension/utils/vector-database.ts`
 - **6** — `app/chrome-extension/entrypoints/web-editor-v2/core/snap-engine.ts`
+- **6** — `app/chrome-extension/entrypoints/popup/components/builder/store/useBuilderStore.ts`
 - **6** — `app/chrome-extension/entrypoints/popup/components/builder/components/Sidebar.vue`
-- **6** — `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyWhile.vue`
-- **6** — `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScript.vue`
-- **6** — `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyIf.vue`
 - **5** — `app/chrome-extension/common/rr-v3-keepalive-protocol.ts`
 - **5** — `app/chrome-extension/shared/selector/generator.ts`
-- **5** — `app/chrome-extension/entrypoints/popup/components/builder/widgets/FieldSelector.vue`
-- **5** — `app/chrome-extension/entrypoints/popup/components/builder/components/Canvas.vue`
-- **5** — `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScreenshot.vue`
-- **5** — `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySetAttribute.vue`
-- **5** — `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySwitchFrame.vue`
+- **5** — `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyHandleDownload.vue`
 - **5** — `app/chrome-extension/entrypoints/background/record-replay-v3/index.ts`
 - **5** — `app/chrome-extension/entrypoints/background/record-replay-v3/storage/persistent-vars.ts`
 - **5** — `app/chrome-extension/entrypoints/background/record-replay/actions/index.ts`
 - **5** — `app/native-server/src/scripts/register.ts`
 - **4** — `app/chrome-extension/entrypoints/sidepanel/composables/useAgentProjects.ts`
-- **4** — `app/chrome-extension/entrypoints/popup/components/builder/components/KeyValueEditor.vue`
-- **4** — `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyExecuteFlow.vue`
-- **4** — `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyHttp.vue`
-- **4** — `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTriggerEvent.vue`
-- **4** — `app/chrome-extension/entrypoints/popup/components/builder/components/properties/SelectorEditor.vue`
+- **4** — `app/chrome-extension/entrypoints/sidepanel/components/SidepanelNavigator.vue`
+- **4** — `app/chrome-extension/entrypoints/popup/components/builder/components/Canvas.vue`
+- **4** — `app/chrome-extension/entrypoints/popup/components/builder/components/nodes/node-util.ts`
+- **4** — `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScript.vue`
+- **4** — `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySetAttribute.vue`
+- **4** — `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyLoopElements.vue`
+- **4** — `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyForeach.vue`
 - **4** — `app/native-server/src/server/server.test.ts`
 - **4** — `app/native-server/src/agent/engines/codex.ts`
 - **3** — `app/chrome-extension/inject-scripts/network-helper.js`
 - **3** — `app/chrome-extension/entrypoints/offscreen/main.ts`
-- **3** — `app/chrome-extension/entrypoints/popup/components/builder/model/transforms.ts`
-- **3** — `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyCloseTab.vue`
+- **3** — `app/chrome-extension/entrypoints/sidepanel/components/workflows/WorkflowsView.vue`
+- **3** — `app/chrome-extension/entrypoints/popup/components/builder/model/validation.ts`
+- **3** — `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyWhile.vue`
+- **3** — `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScroll.vue`
+- **3** — `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTriggerEvent.vue`
 - **3** — `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyFromSpec.vue`
-- **3** — `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyDrag.vue`
+- **3** — `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySwitchFrame.vue`
+- **3** — `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySwitchTab.vue`
 - **3** — `app/chrome-extension/entrypoints/background/record-replay-v3/storage/triggers.ts`
 - **3** — `app/chrome-extension/entrypoints/background/record-replay/nodes/download-screenshot-attr-event-frame-loop.ts`
 - **2** — `README.md`
@@ -144,12 +130,11 @@ Files containing CJK text: **195**
 - **2** — `app/chrome-extension/entrypoints/popup/main.ts`
 - **2** — `app/chrome-extension/entrypoints/sidepanel/styles/agent-chat.css`
 - **2** — `app/chrome-extension/entrypoints/popup/components/ConfirmDialog.vue`
-- **2** — `app/chrome-extension/entrypoints/popup/components/builder/widgets/FieldKeySequence.vue`
-- **2** — `app/chrome-extension/entrypoints/popup/components/builder/components/EdgePropertyPanel.vue`
-- **2** — `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyKey.vue`
-- **2** — `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyOpenTab.vue`
+- **2** — `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScreenshot.vue`
+- **2** — `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyExecuteFlow.vue`
+- **2** — `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyCloseTab.vue`
+- **2** — `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyExtract.vue`
 - **2** — `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyFill.vue`
-- **2** — `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyAssert.vue`
 - **2** — `app/chrome-extension/entrypoints/background/record-replay/index.ts`
 - **2** — `app/chrome-extension/entrypoints/background/web-editor/index.ts`
 - **2** — `app/chrome-extension/entrypoints/background/tools/browser/javascript.ts`
@@ -174,14 +159,16 @@ Files containing CJK text: **195**
 - **1** — `app/chrome-extension/tests/record-replay-v3/v2-to-v3-conversion.test.ts`
 - **1** — `app/chrome-extension/tests/record-replay-v3/url-trigger.test.ts`
 - **1** — `app/chrome-extension/tests/record-replay-v3/spec-smoke.test.ts`
-- **1** — `app/chrome-extension/entrypoints/sidepanel/index.html`
 - **1** — `app/chrome-extension/entrypoints/builder/index.html`
 - **1** — `app/chrome-extension/entrypoints/popup/components/ProgressIndicator.vue`
-- **1** — `app/chrome-extension/entrypoints/popup/components/builder/widgets/FieldExpression.vue`
-- **1** — `app/chrome-extension/entrypoints/popup/components/builder/components/nodes/NodeIf.vue`
-- **1** — `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyNavigate.vue`
-- **1** — `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyDelay.vue`
-- **1** — `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyWait.vue`
+- **1** — `app/chrome-extension/entrypoints/popup/components/builder/components/KeyValueEditor.vue`
+- **1** — `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyKey.vue`
+- **1** — `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyFormRenderer.vue`
+- **1** — `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyHttp.vue`
+- **1** — `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyIf.vue`
+- **1** — `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyDrag.vue`
+- **1** — `app/chrome-extension/entrypoints/popup/components/builder/components/properties/SelectorEditor.vue`
+- **1** — `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyAssert.vue`
 - **1** — `app/chrome-extension/entrypoints/background/record-replay/legacy-types.ts`
 - **1** — `app/chrome-extension/entrypoints/background/record-replay/selector-engine.ts`
 - **1** — `app/chrome-extension/entrypoints/background/element-marker/index.ts`
@@ -446,412 +433,571 @@ Files containing CJK text: **195**
 - `releases/README.md:58` — `3. 提交新的 Issue 并附上详细信息`
 - `releases/README.md:60` — `## ⚠️ 安全提醒`
 - `releases/README.md:62` — `- 此扩展具有较高权限，请确保从可信来源下载`
-- `docs/UI_CHINESE_STRINGS.md:5` — `- 'app/chrome-extension/entrypoints/popup/components/ElementMarkerManagement.vue:3' — '<h2 class="section-title">元素标注管理</h2>'`
-- `docs/UI_CHINESE_STRINGS.md:6` — `- 'app/chrome-extension/entrypoints/popup/components/ElementMarkerManagement.vue:7' — '<p class="status-label">当前页面</p>'`
-- `docs/UI_CHINESE_STRINGS.md:7` — `- 'app/chrome-extension/entrypoints/popup/components/ElementMarkerManagement.vue:11' — '<p class="status-label">已标注元素</p>'`
-- `docs/UI_CHINESE_STRINGS.md:8` — `- 'app/chrome-extension/entrypoints/popup/components/ElementMarkerManagement.vue:18' — '<p class="mcp-config-label">新增标注</p>'`
-- `docs/UI_CHINESE_STRINGS.md:9` — `- 'app/chrome-extension/entrypoints/popup/components/ElementMarkerManagement.vue:21' — '<input v-model="form.name" placeholder="名称，如 登录按钮" class="port-input" />'`
-- `docs/UI_CHINESE_STRINGS.md:10` — `- 'app/chrome-extension/entrypoints/popup/components/ElementMarkerManagement.vue:27' — '<option value="prefix">路径前缀</option>'`
-- `docs/UI_CHINESE_STRINGS.md:11` — `- 'app/chrome-extension/entrypoints/popup/components/ElementMarkerManagement.vue:28' — '<option value="exact">精确匹配</option>'`
-- `docs/UI_CHINESE_STRINGS.md:12` — `- 'app/chrome-extension/entrypoints/popup/components/ElementMarkerManagement.vue:29' — '<option value="host">域名</option>'`
-- `docs/UI_CHINESE_STRINGS.md:13` — `- 'app/chrome-extension/entrypoints/popup/components/ElementMarkerManagement.vue:32' — '<input v-model="form.selector" placeholder="CSS 选择器" class="port-input" />'`
-- `docs/UI_CHINESE_STRINGS.md:14` — `- 'app/chrome-extension/entrypoints/popup/components/ElementMarkerManagement.vue:35' — '保存'`
-- `docs/UI_CHINESE_STRINGS.md:15` — `- 'app/chrome-extension/entrypoints/popup/components/ElementMarkerManagement.vue:37' — '<button class="danger-button" type="button" @click="resetForm">清空</button>'`
-- `docs/UI_CHINESE_STRINGS.md:16` — `- 'app/chrome-extension/entrypoints/popup/components/ElementMarkerManagement.vue:57' — '<button class="semantic-engine-button" @click="validate(m)">验证</button>'`
-- `docs/UI_CHINESE_STRINGS.md:17` — `- 'app/chrome-extension/entrypoints/popup/components/ElementMarkerManagement.vue:58' — '<button class="secondary-button" @click="prefill(m)">编辑</button>'`
-- `docs/UI_CHINESE_STRINGS.md:18` — `- 'app/chrome-extension/entrypoints/popup/components/ElementMarkerManagement.vue:59' — '<button class="danger-button" @click="remove(m)">删除</button>'`
-- `docs/UI_CHINESE_STRINGS.md:19` — `- 'app/chrome-extension/entrypoints/popup/components/LocalModelPage.vue:5' — '<button class="back-button" @click="$emit('back')" title="返回首页">'`
-- `docs/UI_CHINESE_STRINGS.md:20` — `- 'app/chrome-extension/entrypoints/popup/components/LocalModelPage.vue:16' — '<span>返回</span>'`
-- `docs/UI_CHINESE_STRINGS.md:21` — `- 'app/chrome-extension/entrypoints/popup/components/LocalModelPage.vue:18' — '<h2 class="page-title">本地模型</h2>'`
-- `docs/UI_CHINESE_STRINGS.md:22` — `- 'app/chrome-extension/entrypoints/popup/components/ScheduleDialog.vue:5' — '<div class="title">定时执行</div>'`
-- `docs/UI_CHINESE_STRINGS.md:23` — `- 'app/chrome-extension/entrypoints/popup/components/ScheduleDialog.vue:10' — '<label>启用</label>'`
-- `docs/UI_CHINESE_STRINGS.md:24` — `- 'app/chrome-extension/entrypoints/popup/components/ScheduleDialog.vue:11' — '<label class="chk"><input type="checkbox" v-model="enabled" />启用定时</label>'`
-- `docs/UI_CHINESE_STRINGS.md:25` — `- 'app/chrome-extension/entrypoints/popup/components/ScheduleDialog.vue:14' — '<label>类型</label>'`
-- `docs/UI_CHINESE_STRINGS.md:26` — `- 'app/chrome-extension/entrypoints/popup/components/ScheduleDialog.vue:16' — '<option value="interval">每隔 N 分钟</option>'`
-- `docs/UI_CHINESE_STRINGS.md:27` — `- 'app/chrome-extension/entrypoints/popup/components/ScheduleDialog.vue:17' — '<option value="daily">每天固定时间</option>'`
-- `docs/UI_CHINESE_STRINGS.md:28` — `- 'app/chrome-extension/entrypoints/popup/components/ScheduleDialog.vue:18' — '<option value="once">只执行一次</option>'`
-- `docs/UI_CHINESE_STRINGS.md:29` — `- 'app/chrome-extension/entrypoints/popup/components/ScheduleDialog.vue:22' — '<label>间隔(分钟)</label>'`
-- `docs/UI_CHINESE_STRINGS.md:30` — `- 'app/chrome-extension/entrypoints/popup/components/ScheduleDialog.vue:26' — '<label>时间(HH:mm)</label>'`
-- `docs/UI_CHINESE_STRINGS.md:31` — `- 'app/chrome-extension/entrypoints/popup/components/ScheduleDialog.vue:27' — '<input v-model="dailyTime" placeholder="例如 09:30" />'`
-- `docs/UI_CHINESE_STRINGS.md:32` — `- 'app/chrome-extension/entrypoints/popup/components/ScheduleDialog.vue:30' — '<label>时间(ISO)</label>'`
-- `docs/UI_CHINESE_STRINGS.md:33` — `- 'app/chrome-extension/entrypoints/popup/components/ScheduleDialog.vue:31' — '<input v-model="onceAt" placeholder="例如 2025-10-05T10:00:00" />'`
-- `docs/UI_CHINESE_STRINGS.md:34` — `- 'app/chrome-extension/entrypoints/popup/components/ScheduleDialog.vue:34' — '<label>参数(JSON)</label>'`
-- `docs/UI_CHINESE_STRINGS.md:35` — `- 'app/chrome-extension/entrypoints/popup/components/ScheduleDialog.vue:38' — '<div class="section-title">已有计划</div>'`
-- `docs/UI_CHINESE_STRINGS.md:36` — `- 'app/chrome-extension/entrypoints/popup/components/ScheduleDialog.vue:46' — '<button class="small danger" @click="$emit('remove', s.id)">删除</button>'`
-- `docs/UI_CHINESE_STRINGS.md:37` — `- 'app/chrome-extension/entrypoints/popup/components/ScheduleDialog.vue:53' — '<button class="primary" @click="save">保存</button>'`
-- `docs/UI_CHINESE_STRINGS.md:38` — `- 'app/chrome-extension/entrypoints/popup/components/ScheduleDialog.vue:114' — 'if (s.type === 'interval') return '每 ${s.when} 分钟';'`
-- `docs/UI_CHINESE_STRINGS.md:39` — `- 'app/chrome-extension/entrypoints/popup/components/ScheduleDialog.vue:115' — 'if (s.type === 'daily') return '每天 ${s.when}';'`
-- `docs/UI_CHINESE_STRINGS.md:40` — `- 'app/chrome-extension/entrypoints/popup/components/ScheduleDialog.vue:116' — 'if (s.type === 'once') return '一次 ${s.when}';'`
-- `docs/UI_CHINESE_STRINGS.md:41` — `- 'app/chrome-extension/entrypoints/popup/components/builder/widgets/FieldExpression.vue:28' — 'err.value = '表达式解析错误';'`
-- `docs/UI_CHINESE_STRINGS.md:42` — `- 'app/chrome-extension/entrypoints/popup/components/builder/widgets/FieldSelector.vue:5' — '<button class="btn-mini" type="button" title="从页面拾取" @click="onPick">拾取</button>'`
-- `docs/UI_CHINESE_STRINGS.md:43` — `- 'app/chrome-extension/entrypoints/popup/components/builder/widgets/FieldSelector.vue:7' — '<div class="help">可输入 CSS 选择器，或点击“拾取”在页面中选择元素</div>'`
-- `docs/UI_CHINESE_STRINGS.md:44` — `- 'app/chrome-extension/entrypoints/popup/components/builder/widgets/FieldSelector.vue:47' — 'if (!tabId) throw new Error('未找到活动页签');'`
-- `docs/UI_CHINESE_STRINGS.md:45` — `- 'app/chrome-extension/entrypoints/popup/components/builder/widgets/FieldSelector.vue:52' — 'throw new Error(res?.error || '拾取失败');'`
-- `docs/UI_CHINESE_STRINGS.md:46` — `- 'app/chrome-extension/entrypoints/popup/components/builder/widgets/FieldSelector.vue:69' — 'err.value = '未生成有效选择器，请手动输入';'`
-- `docs/UI_CHINESE_STRINGS.md:47` — `- 'app/chrome-extension/entrypoints/popup/components/builder/widgets/FieldKeySequence.vue:4' — '<div class="help">示例：Backspace Enter 或 cmd+a</div>'`
-- `docs/UI_CHINESE_STRINGS.md:48` — `- 'app/chrome-extension/entrypoints/popup/components/builder/widgets/FieldKeySequence.vue:13' — 'const placeholder = props.field?.placeholder || 'Backspace Enter 或 cmd+a';'`
-- `docs/UI_CHINESE_STRINGS.md:49` — `- 'app/chrome-extension/entrypoints/popup/components/builder/model/transforms.ts:93' — 'return n.config?.target?.candidates?.[0]?.value || '未配置选择器';'`
-- `docs/UI_CHINESE_STRINGS.md:50` — `- 'app/chrome-extension/entrypoints/popup/components/builder/model/transforms.ts:123' — 'return 'if/else 分支数 ${cnt}${n.config?.else === false ? '' : ' + else'}';'`
-- `docs/UI_CHINESE_STRINGS.md:51` — `- 'app/chrome-extension/entrypoints/popup/components/builder/model/transforms.ts:129' — 'return a || b ? '${a} -> ${b}' : '拖拽';'`
-- `docs/UI_CHINESE_STRINGS.md:52` — `- 'app/chrome-extension/entrypoints/popup/components/builder/model/validation.ts:13' — 'if (!hasCandidate) errs.push('缺少目标选择器候选');'`
-- `docs/UI_CHINESE_STRINGS.md:53` — `- 'app/chrome-extension/entrypoints/popup/components/builder/model/validation.ts:14' — 'if (n.type === 'fill' && (!('value' in c) || c.value === undefined)) errs.push('缺少输入值');'`
-- `docs/UI_CHINESE_STRINGS.md:54` — `- 'app/chrome-extension/entrypoints/popup/components/builder/model/validation.ts:18' — 'if (!c?.condition) errs.push('缺少等待条件');'`
-- `docs/UI_CHINESE_STRINGS.md:55` — `- 'app/chrome-extension/entrypoints/popup/components/builder/model/validation.ts:22' — 'if (!c?.assert) errs.push('缺少断言条件');'`
-- `docs/UI_CHINESE_STRINGS.md:56` — `- 'app/chrome-extension/entrypoints/popup/components/builder/model/validation.ts:26' — 'if (!c?.url) errs.push('缺少 URL');'`
-- `docs/UI_CHINESE_STRINGS.md:57` — `- 'app/chrome-extension/entrypoints/popup/components/builder/model/validation.ts:30' — 'if (!c?.url) errs.push('HTTP: 缺少 URL');'`
-- `docs/UI_CHINESE_STRINGS.md:58` — `- 'app/chrome-extension/entrypoints/popup/components/builder/model/validation.ts:35' — 'if (!pathRe.test(s)) errs.push('Assign: 路径非法 ${s}');'`
-- `docs/UI_CHINESE_STRINGS.md:59` — `- 'app/chrome-extension/entrypoints/popup/components/builder/model/validation.ts:45' — 'if (!c?.saveAs) errs.push('Extract: 需填写保存变量名');'`
-- `docs/UI_CHINESE_STRINGS.md:60` — `- 'app/chrome-extension/entrypoints/popup/components/builder/model/validation.ts:46' — 'if (!c?.selector && !c?.js) errs.push('Extract: 需提供 selector 或 js');'`
-- `docs/UI_CHINESE_STRINGS.md:61` — `- 'app/chrome-extension/entrypoints/popup/components/builder/model/validation.ts:51' — 'errs.push('SwitchTab: 需提供 tabId 或 URL/标题包含');'`
-- `docs/UI_CHINESE_STRINGS.md:62` — `- 'app/chrome-extension/entrypoints/popup/components/builder/model/validation.ts:61' — 'if (!String(c?.event || '').trim()) errs.push('需提供事件类型');'`
-- `docs/UI_CHINESE_STRINGS.md:63` — `- 'app/chrome-extension/entrypoints/popup/components/builder/model/validation.ts:66' — 'if (arr.length === 0) errs.push('需添加至少一个条件分支');'`
-- `docs/UI_CHINESE_STRINGS.md:64` — `- 'app/chrome-extension/entrypoints/popup/components/builder/model/validation.ts:68' — 'if (!String(arr[i]?.expr || '').trim()) errs.push('分支${i + 1}: 需填写条件表达式');'`
-- `docs/UI_CHINESE_STRINGS.md:65` — `- 'app/chrome-extension/entrypoints/popup/components/builder/model/validation.ts:75' — 'if (!String(c?.name || '').trim()) errs.push('需提供属性名');'`
-- `docs/UI_CHINESE_STRINGS.md:66` — `- 'app/chrome-extension/entrypoints/popup/components/builder/model/validation.ts:79' — 'if (!String(c?.selector || '').trim()) errs.push('需提供元素选择器');'`
-- `docs/UI_CHINESE_STRINGS.md:67` — `- 'app/chrome-extension/entrypoints/popup/components/builder/model/validation.ts:80' — 'if (!String(c?.subflowId || '').trim()) errs.push('需提供子流 ID');'`
-- `docs/UI_CHINESE_STRINGS.md:68` — `- 'app/chrome-extension/entrypoints/popup/components/builder/model/validation.ts:88' — 'if (!String(c?.flowId || '').trim()) errs.push('需选择要执行的工作流');'`
-- `docs/UI_CHINESE_STRINGS.md:69` — `- 'app/chrome-extension/entrypoints/popup/components/builder/model/validation.ts:99' — 'errs.push('Script: 配置了保存/映射但缺少代码');'`
-- `docs/UI_CHINESE_STRINGS.md:70` — `- 'app/chrome-extension/entrypoints/popup/components/builder/store/useBuilderStore.ts:226' — 'toast('不能连接到自身', 'warn');'`
-- `docs/UI_CHINESE_STRINGS.md:71` — `- 'app/chrome-extension/entrypoints/popup/components/builder/store/useBuilderStore.ts:239' — 'toast('该节点最多允许 ${dstIo.inputs} 条入边', 'warn');'`
-- `docs/UI_CHINESE_STRINGS.md:72` — `- 'app/chrome-extension/entrypoints/popup/components/builder/store/useBuilderStore.ts:246' — 'toast('该节点最多允许 ${srcIo.outputs} 条出边', 'warn');'`
-- `docs/UI_CHINESE_STRINGS.md:73` — `- 'app/chrome-extension/entrypoints/popup/components/builder/store/useBuilderStore.ts:574' — 'toast('ELK 自动布局不可用，已使用备用布局', 'warn');'`
-- `docs/UI_CHINESE_STRINGS.md:74` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/PropertyPanel.vue:7' — '<div class="header-title">节点属性</div>'`
-- `docs/UI_CHINESE_STRINGS.md:75` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/PropertyPanel.vue:10' — '<button class="btn-delete" type="button" title="删除节点" @click.stop="onRemove">'`
-- `docs/UI_CHINESE_STRINGS.md:76` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/PropertyPanel.vue:24' — '<label class="form-label">节点名称</label>'`
-- `docs/UI_CHINESE_STRINGS.md:77` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/PropertyPanel.vue:25' — '<input class="form-input" v-model="node.name" placeholder="输入节点名称" />'`
-- `docs/UI_CHINESE_STRINGS.md:78` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/PropertyPanel.vue:42' — '<div class="section-title">通用设置</div>'`
-- `docs/UI_CHINESE_STRINGS.md:79` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/PropertyPanel.vue:44' — '<label class="form-label">超时 (ms)</label>'`
-- `docs/UI_CHINESE_STRINGS.md:80` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/PropertyPanel.vue:50' — 'placeholder="默认使用全局超时"'`
-- `docs/UI_CHINESE_STRINGS.md:81` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/PropertyPanel.vue:56' — '<span>失败时截图</span>'`
-- `docs/UI_CHINESE_STRINGS.md:82` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/PropertyPanel.vue:62' — '<div class="error-title">⚠️ 配置错误</div>'`
-- `docs/UI_CHINESE_STRINGS.md:83` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/PropertyPanel.vue:86' — '<div class="empty-text">选择一个节点<br />查看和编辑属性</div>'`
-- `docs/UI_CHINESE_STRINGS.md:84` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/PropertyPanel.vue:263' — 'const id = prompt('请输入新子流ID');'`
-- `docs/UI_CHINESE_STRINGS.md:85` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/PropertyPanel.vue:276' — 'if (!n.config?.saveAs) errs.push('需填写保存变量名');'`
-- `docs/UI_CHINESE_STRINGS.md:86` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/PropertyPanel.vue:277' — 'if (!n.config?.selector && !n.config?.js) errs.push('需提供 selector 或 js');'`
-- `docs/UI_CHINESE_STRINGS.md:87` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/EdgePropertyPanel.vue:9' — '<button class="btn-delete" type="button" title="删除边" @click.stop="onRemove">'`
-- `docs/UI_CHINESE_STRINGS.md:88` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/EdgePropertyPanel.vue:50' — '<div class="empty-text">未选择边</div>'`
-- `docs/UI_CHINESE_STRINGS.md:89` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/KeyValueEditor.vue:4' — '<input class="kve-key" v-model="item.k" placeholder="变量名" />'`
-- `docs/UI_CHINESE_STRINGS.md:90` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/KeyValueEditor.vue:5' — '<input class="kve-val" v-model="item.v" placeholder="结果路径（如 data.items[0].id）" />'`
-- `docs/UI_CHINESE_STRINGS.md:91` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/KeyValueEditor.vue:8' — '<button class="mini danger" @click="remove(i)">删</button>'`
-- `docs/UI_CHINESE_STRINGS.md:92` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/KeyValueEditor.vue:10' — '<button class="mini" @click="add">添加映射</button>'`
-- `docs/UI_CHINESE_STRINGS.md:93` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/nodes/NodeIf.vue:24' — '<div class="case-label">{{ b.name || '条件${idx + 1}' }}</div>'`
-- `docs/UI_CHINESE_STRINGS.md:94` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/nodes/node-util.ts:90' — 'trigger: '触发器','`
-- `docs/UI_CHINESE_STRINGS.md:95` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/nodes/node-util.ts:91' — 'click: '点击','`
-- `docs/UI_CHINESE_STRINGS.md:96` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/nodes/node-util.ts:92' — 'fill: '填充','`
-- `docs/UI_CHINESE_STRINGS.md:97` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/nodes/node-util.ts:93' — 'navigate: '导航','`
-- `docs/UI_CHINESE_STRINGS.md:98` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/nodes/node-util.ts:94' — 'wait: '等待','`
-- `docs/UI_CHINESE_STRINGS.md:99` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/nodes/node-util.ts:95' — 'extract: '提取','`
-- `docs/UI_CHINESE_STRINGS.md:100` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/nodes/node-util.ts:97' — 'script: '脚本','`
-- `docs/UI_CHINESE_STRINGS.md:101` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/nodes/node-util.ts:98' — 'if: '条件','`
-- `docs/UI_CHINESE_STRINGS.md:102` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/nodes/node-util.ts:99' — 'foreach: '循环','`
-- `docs/UI_CHINESE_STRINGS.md:103` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/nodes/node-util.ts:100' — 'assert: '断言','`
-- `docs/UI_CHINESE_STRINGS.md:104` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/nodes/node-util.ts:101' — 'key: '键盘','`
-- `docs/UI_CHINESE_STRINGS.md:105` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/nodes/node-util.ts:102' — 'drag: '拖拽','`
-- `docs/UI_CHINESE_STRINGS.md:106` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/nodes/node-util.ts:103' — 'dblclick: '双击','`
-- `docs/UI_CHINESE_STRINGS.md:107` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/nodes/node-util.ts:104' — 'openTab: '打开标签','`
-- `docs/UI_CHINESE_STRINGS.md:108` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/nodes/node-util.ts:105' — 'switchTab: '切换标签','`
-- `docs/UI_CHINESE_STRINGS.md:109` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/nodes/node-util.ts:106' — 'closeTab: '关闭标签','`
-- `docs/UI_CHINESE_STRINGS.md:110` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/nodes/node-util.ts:107' — 'delay: '延迟','`
-- `docs/UI_CHINESE_STRINGS.md:111` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/nodes/node-util.ts:108' — 'scroll: '滚动','`
-- `docs/UI_CHINESE_STRINGS.md:112` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/nodes/node-util.ts:109' — 'while: '循环','`
-- `docs/UI_CHINESE_STRINGS.md:113` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScreenshot.vue:4' — '<label class="form-label">元素选择器（可选）</label>'`
-- `docs/UI_CHINESE_STRINGS.md:114` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScreenshot.vue:8' — 'placeholder="为空则截取可视区或全页"'`
-- `docs/UI_CHINESE_STRINGS.md:115` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScreenshot.vue:13' — '><input type="checkbox" v-model="(node as any).config.fullPage" /> 全页截图</label'`
-- `docs/UI_CHINESE_STRINGS.md:116` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScreenshot.vue:17' — '<label class="form-label">保存为变量</label>'`
-- `docs/UI_CHINESE_STRINGS.md:117` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScreenshot.vue:21' — 'placeholder="变量名，例如 shot"'`
-- `docs/UI_CHINESE_STRINGS.md:118` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyExecuteFlow.vue:4' — '<label class="form-label">目标工作流</label>'`
-- `docs/UI_CHINESE_STRINGS.md:119` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyExecuteFlow.vue:6' — '<option value="">请选择</option>'`
-- `docs/UI_CHINESE_STRINGS.md:120` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyExecuteFlow.vue:13' — '内联执行（共享上下文变量）</label'`
-- `docs/UI_CHINESE_STRINGS.md:121` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyExecuteFlow.vue:17' — '<label class="form-label">传参 (JSON)</label>'`
-- `docs/UI_CHINESE_STRINGS.md:122` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyCloseTab.vue:4' — '<label class="form-label">按 URL 关闭（可选）</label>'`
-- `docs/UI_CHINESE_STRINGS.md:123` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyCloseTab.vue:5' — '<input class="form-input" v-model="(node as any).config.url" placeholder="子串匹配 URL" />'`
-- `docs/UI_CHINESE_STRINGS.md:124` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyCloseTab.vue:8' — '<label class="form-label">Tab IDs（JSON 数组，可选）</label>'`
-- `docs/UI_CHINESE_STRINGS.md:125` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyWhile.vue:4' — '<label class="form-label">条件 (JSON)</label>'`
-- `docs/UI_CHINESE_STRINGS.md:126` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyWhile.vue:13' — '<label class="form-label">子流 ID</label>'`
-- `docs/UI_CHINESE_STRINGS.md:127` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyWhile.vue:17' — 'placeholder="选择或新建子流"'`
-- `docs/UI_CHINESE_STRINGS.md:128` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyWhile.vue:19' — '<button class="btn-sm" style="margin-top: 8px" @click="onCreateSubflow">新建子流</button>'`
-- `docs/UI_CHINESE_STRINGS.md:129` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyWhile.vue:22' — '<label class="form-label">最大迭代次数（可选）</label>'`
-- `docs/UI_CHINESE_STRINGS.md:130` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyWhile.vue:60' — 'const id = prompt('请输入新子流ID');'`
-- `docs/UI_CHINESE_STRINGS.md:131` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyExtract.vue:4' — '<label class="form-label">元素选择器（可选）</label>'`
-- `docs/UI_CHINESE_STRINGS.md:132` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyExtract.vue:5' — '<input class="form-input" v-model="(node as any).config.selector" placeholder="CSS 选择器" />'`
-- `docs/UI_CHINESE_STRINGS.md:133` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyExtract.vue:8' — '<label class="form-label">属性</label>'`
-- `docs/UI_CHINESE_STRINGS.md:134` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyExtract.vue:12' — 'placeholder="text/textContent 或属性名"'`
-- `docs/UI_CHINESE_STRINGS.md:135` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyExtract.vue:16' — '<label class="form-label">自定义 JS（返回值）</label>'`
-- `docs/UI_CHINESE_STRINGS.md:136` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyExtract.vue:25' — '<label class="form-label">保存为变量</label>'`
-- `docs/UI_CHINESE_STRINGS.md:137` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyExtract.vue:26' — '<input class="form-input" v-model="(node as any).config.saveAs" placeholder="变量名" />'`
-- `docs/UI_CHINESE_STRINGS.md:138` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScript.vue:4' — '<label class="form-label">代码</label>'`
-- `docs/UI_CHINESE_STRINGS.md:139` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScript.vue:13' — '<label class="form-label">执行环境</label>'`
-- `docs/UI_CHINESE_STRINGS.md:140` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScript.vue:20' — '<label class="form-label">执行时机</label>'`
-- `docs/UI_CHINESE_STRINGS.md:141` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScript.vue:27' — '<label class="form-label">保存为变量（可选）</label>'`
-- `docs/UI_CHINESE_STRINGS.md:142` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScript.vue:28' — '<input class="form-input" v-model="(node as any).config.saveAs" placeholder="变量名" />'`
-- `docs/UI_CHINESE_STRINGS.md:143` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScript.vue:31' — '<label class="form-label">结果字段映射</label>'`
-- `docs/UI_CHINESE_STRINGS.md:144` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySetAttribute.vue:6' — '<label class="form-label">属性名</label>'`
-- `docs/UI_CHINESE_STRINGS.md:145` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySetAttribute.vue:10' — 'placeholder="如 value/src/disabled 等"'`
-- `docs/UI_CHINESE_STRINGS.md:146` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySetAttribute.vue:14' — '<label class="form-label">属性值（留空并勾选删除则移除）</label>'`
-- `docs/UI_CHINESE_STRINGS.md:147` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySetAttribute.vue:15' — '<input class="form-input" v-model="(node as any).config.value" placeholder="属性值" />'`
-- `docs/UI_CHINESE_STRINGS.md:148` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySetAttribute.vue:19' — '><input type="checkbox" v-model="(node as any).config.remove" /> 删除属性</label'`
-- `docs/UI_CHINESE_STRINGS.md:149` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyKey.vue:4' — '<label class="form-label">按键序列</label>'`
-- `docs/UI_CHINESE_STRINGS.md:150` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyKey.vue:8' — 'placeholder="如 Backspace Enter 或 cmd+a"'`
-- `docs/UI_CHINESE_STRINGS.md:151` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScroll.vue:4' — '<label class="form-label">模式</label>'`
-- `docs/UI_CHINESE_STRINGS.md:152` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScroll.vue:6' — '<option value="element">滚动到元素</option>'`
-- `docs/UI_CHINESE_STRINGS.md:153` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScroll.vue:7' — '<option value="offset">窗口偏移</option>'`
-- `docs/UI_CHINESE_STRINGS.md:154` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScroll.vue:8' — '<option value="container">容器偏移</option>'`
-- `docs/UI_CHINESE_STRINGS.md:155` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScroll.vue:13' — '<SelectorEditor :node="node" :allowPick="true" title="目标元素" targetKey="target" />'`
-- `docs/UI_CHINESE_STRINGS.md:156` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScroll.vue:18' — '<label class="form-label">偏移 X</label>'`
-- `docs/UI_CHINESE_STRINGS.md:157` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScroll.vue:22' — '<label class="form-label">偏移 Y</label>'`
-- `docs/UI_CHINESE_STRINGS.md:158` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScroll.vue:31' — '<SelectorEditor :node="node" :allowPick="true" title="容器选择器" targetKey="target" />'`
-- `docs/UI_CHINESE_STRINGS.md:159` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScroll.vue:32' — '<div class="hint"><small>容器需支持 scrollTo(top,left)</small></div>'`
-- `docs/UI_CHINESE_STRINGS.md:160` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyFormRenderer.vue:3' — '<div class="section-title">配置</div>'`
-- `docs/UI_CHINESE_STRINGS.md:161` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyFormRenderer.vue:16' — '<div class="error-title">⚠️ 配置错误</div>'`
-- `docs/UI_CHINESE_STRINGS.md:162` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyFormRenderer.vue:73' — 'if (f.required && (cfg[f.key] === undefined || cfg[f.key] === '')) out.push('${f.label} 必填');'`
-- `docs/UI_CHINESE_STRINGS.md:163` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyFormRenderer.vue:195' — 'err.value = 'JSON 格式错误';'`
-- `docs/UI_CHINESE_STRINGS.md:164` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyFormRenderer.vue:203' — 'placeholder: '输入 JSON','`
-- `docs/UI_CHINESE_STRINGS.md:165` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyFormRenderer.vue:303' — 'h('button', { class: 'btn-mini', type: 'button', onClick: () => remove(i) }, '删除'),'`
-- `docs/UI_CHINESE_STRINGS.md:166` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyFormRenderer.vue:306' — 'h('button', { class: 'btn', type: 'button', onClick: add }, '新增'),'`
-- `docs/UI_CHINESE_STRINGS.md:167` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyHttp.vue:4' — '<label class="form-label">请求方法</label>'`
-- `docs/UI_CHINESE_STRINGS.md:168` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyHttp.vue:14' — '<label class="form-label">URL 地址</label>'`
-- `docs/UI_CHINESE_STRINGS.md:169` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyHttp.vue:40' — '<label class="form-label">FormData (JSON，可选，提供时覆盖 Body)</label>'`
-- `docs/UI_CHINESE_STRINGS.md:170` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyHttp.vue:48' — '>支持简洁数组形式：[["file","url:https://...","a.png"],["metadata","value"]]</div'`
-- `docs/UI_CHINESE_STRINGS.md:171` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyNavigate.vue:4' — '<label class="form-label">URL 地址</label>'`
-- `docs/UI_CHINESE_STRINGS.md:172` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTriggerEvent.vue:6' — '<label class="form-label">事件类型</label>'`
-- `docs/UI_CHINESE_STRINGS.md:173` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTriggerEvent.vue:10' — 'placeholder="如 input/change/mouseover"'`
-- `docs/UI_CHINESE_STRINGS.md:174` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTriggerEvent.vue:15' — '><input type="checkbox" v-model="(node as any).config.bubbles" /> 冒泡</label'`
-- `docs/UI_CHINESE_STRINGS.md:175` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTriggerEvent.vue:18' — '><input type="checkbox" v-model="(node as any).config.cancelable" /> 可取消</label'`
-- `docs/UI_CHINESE_STRINGS.md:176` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyHandleDownload.vue:4' — '<label class="form-label">文件名包含（可选）</label>'`
-- `docs/UI_CHINESE_STRINGS.md:177` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyHandleDownload.vue:8' — 'placeholder="子串匹配文件名或URL"'`
-- `docs/UI_CHINESE_STRINGS.md:178` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyHandleDownload.vue:12' — '<label class="form-label">超时(ms)</label>'`
-- `docs/UI_CHINESE_STRINGS.md:179` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyHandleDownload.vue:13' — '<input class="form-input" v-model="(node as any).config.timeoutMs" placeholder="默认 60000" />'`
-- `docs/UI_CHINESE_STRINGS.md:180` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyHandleDownload.vue:18' — '等待下载完成</label'`
-- `docs/UI_CHINESE_STRINGS.md:181` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyHandleDownload.vue:22' — '<label class="form-label">保存到变量</label>'`
-- `docs/UI_CHINESE_STRINGS.md:182` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyHandleDownload.vue:23' — '<input class="form-input" v-model="(node as any).config.saveAs" placeholder="默认 download" />'`
-- `docs/UI_CHINESE_STRINGS.md:183` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyDelay.vue:4' — '<label class="form-label">延迟 (ms)</label>'`
-- `docs/UI_CHINESE_STRINGS.md:184` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyLoopElements.vue:4' — '<label class="form-label">元素选择器</label>'`
-- `docs/UI_CHINESE_STRINGS.md:185` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyLoopElements.vue:5' — '<input class="form-input" v-model="(node as any).config.selector" placeholder="CSS 选择器" />'`
-- `docs/UI_CHINESE_STRINGS.md:186` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyLoopElements.vue:8' — '<label class="form-label">列表变量名</label>'`
-- `docs/UI_CHINESE_STRINGS.md:187` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyLoopElements.vue:9' — '<input class="form-input" v-model="(node as any).config.saveAs" placeholder="默认 elements" />'`
-- `docs/UI_CHINESE_STRINGS.md:188` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyLoopElements.vue:12' — '<label class="form-label">循环项变量名</label>'`
-- `docs/UI_CHINESE_STRINGS.md:189` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyLoopElements.vue:13' — '<input class="form-input" v-model="(node as any).config.itemVar" placeholder="默认 item" />'`
-- `docs/UI_CHINESE_STRINGS.md:190` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyLoopElements.vue:16' — '<label class="form-label">子流 ID</label>'`
-- `docs/UI_CHINESE_STRINGS.md:191` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyLoopElements.vue:20' — 'placeholder="选择或新建子流"'`
-- `docs/UI_CHINESE_STRINGS.md:192` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyLoopElements.vue:22' — '<button class="btn-sm" style="margin-top: 8px" @click="onCreateSubflow">新建子流</button>'`
-- `docs/UI_CHINESE_STRINGS.md:193` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyLoopElements.vue:35' — 'const id = prompt('请输入新子流ID');'`
-- `docs/UI_CHINESE_STRINGS.md:194` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:5' — '><input type="checkbox" v-model="cfg.enabled" /> 启用触发器</label'`
-- `docs/UI_CHINESE_STRINGS.md:195` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:9' — '<label class="form-label">描述（可选）</label>'`
-- `docs/UI_CHINESE_STRINGS.md:196` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:10' — '<input class="form-input" v-model="cfg.description" placeholder="说明此触发器的用途" />'`
-- `docs/UI_CHINESE_STRINGS.md:197` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:17' — '<div class="section-header"><span class="section-title">触发方式</span></div>'`
-- `docs/UI_CHINESE_STRINGS.md:198` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:20' — '><input type="checkbox" v-model="cfg.modes.manual" /> 手动</label'`
-- `docs/UI_CHINESE_STRINGS.md:199` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:23' — '><input type="checkbox" v-model="cfg.modes.url" /> 访问 URL</label'`
-- `docs/UI_CHINESE_STRINGS.md:200` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:26' — '><input type="checkbox" v-model="cfg.modes.contextMenu" /> 右键菜单</label'`
-- `docs/UI_CHINESE_STRINGS.md:201` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:29' — '><input type="checkbox" v-model="cfg.modes.command" /> 快捷键</label'`
-- `docs/UI_CHINESE_STRINGS.md:202` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:32' — '><input type="checkbox" v-model="cfg.modes.dom" /> DOM 变化</label'`
-- `docs/UI_CHINESE_STRINGS.md:203` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:35' — '><input type="checkbox" v-model="cfg.modes.schedule" /> 定时</label'`
-- `docs/UI_CHINESE_STRINGS.md:204` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:41' — '<div class="section-title">访问 URL 匹配</div>'`
-- `docs/UI_CHINESE_STRINGS.md:205` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:45' — '<option value="url">前缀 URL</option>'`
-- `docs/UI_CHINESE_STRINGS.md:206` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:46' — '<option value="domain">域名包含</option>'`
-- `docs/UI_CHINESE_STRINGS.md:207` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:47' — '<option value="path">路径前缀</option>'`
-- `docs/UI_CHINESE_STRINGS.md:208` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:52' — 'placeholder="例如 https://example.com/app"'`
-- `docs/UI_CHINESE_STRINGS.md:209` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:64' — '<button class="btn-sm" @click="urlRules.push({ kind: 'url', value: '' })">+ 添加匹配</button>'`
-- `docs/UI_CHINESE_STRINGS.md:210` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:68' — '<div class="section-title">右键菜单</div>'`
-- `docs/UI_CHINESE_STRINGS.md:211` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:70' — '<label class="form-label">标题</label>'`
-- `docs/UI_CHINESE_STRINGS.md:212` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:71' — '<input class="form-input" v-model="cfg.contextMenu.title" placeholder="菜单标题" />'`
-- `docs/UI_CHINESE_STRINGS.md:213` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:74' — '<label class="form-label">作用范围</label>'`
-- `docs/UI_CHINESE_STRINGS.md:214` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:84' — '<div class="section-title">快捷键</div>'`
-- `docs/UI_CHINESE_STRINGS.md:215` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:86' — '<label class="form-label">命令键（需预先在 manifest commands 中声明）</label>'`
-- `docs/UI_CHINESE_STRINGS.md:216` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:90' — 'placeholder="例如 run_quick_trigger_1"'`
-- `docs/UI_CHINESE_STRINGS.md:217` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:94' — '>提示：Chrome 扩展快捷键需要在 manifest 里固定声明，无法运行时动态添加。</div'`
-- `docs/UI_CHINESE_STRINGS.md:218` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:99' — '<div class="section-title">DOM 变化</div>'`
-- `docs/UI_CHINESE_STRINGS.md:219` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:101' — '<label class="form-label">选择器</label>'`
-- `docs/UI_CHINESE_STRINGS.md:220` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:106' — '><input type="checkbox" v-model="cfg.dom.appear" /> 出现时触发</label'`
-- `docs/UI_CHINESE_STRINGS.md:221` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:109' — '><input type="checkbox" v-model="cfg.dom.once" /> 仅触发一次</label'`
-- `docs/UI_CHINESE_STRINGS.md:222` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:113' — '<label class="form-label">去抖(ms)</label>'`
-- `docs/UI_CHINESE_STRINGS.md:223` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:119' — '<div class="section-title">定时</div>'`
-- `docs/UI_CHINESE_STRINGS.md:224` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:123' — '<option value="interval">间隔(分钟)</option>'`
-- `docs/UI_CHINESE_STRINGS.md:225` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:124' — '<option value="daily">每天(HH:mm)</option>'`
-- `docs/UI_CHINESE_STRINGS.md:226` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:125' — '<option value="once">一次(ISO时间)</option>'`
-- `docs/UI_CHINESE_STRINGS.md:227` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:130' — 'placeholder="5 或 09:00 或 2025-01-01T10:00:00"'`
-- `docs/UI_CHINESE_STRINGS.md:228` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:132' — '<label class="checkbox-label"><input type="checkbox" v-model="s.enabled" /> 启用</label>'`
-- `docs/UI_CHINESE_STRINGS.md:229` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:144' — '>+ 添加定时</button'`
-- `docs/UI_CHINESE_STRINGS.md:230` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:151' — '>说明：'`
-- `docs/UI_CHINESE_STRINGS.md:231` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:152' — '触发器会在保存工作流时同步到后台触发表（URL/右键/快捷键/DOM）和计划任务（间隔/每天/一次）。'`
-- `docs/UI_CHINESE_STRINGS.md:232` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:178' — 'n.config.contextMenu = { title: '运行工作流', contexts: ['all'], enabled: false };'`
-- `docs/UI_CHINESE_STRINGS.md:233` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyIf.vue:8' — '>使用表达式定义分支，支持变量与常见比较运算符。</div'`
-- `docs/UI_CHINESE_STRINGS.md:234` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyIf.vue:13' — '<input class="form-input-sm flex-1" v-model="c.name" placeholder="分支名称（可选）" />'`
-- `docs/UI_CHINESE_STRINGS.md:235` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyIf.vue:14' — '<button class="btn-icon-sm danger" @click="removeIfCase(i)" title="删除">×</button>'`
-- `docs/UI_CHINESE_STRINGS.md:236` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyIf.vue:29' — '<option value="" disabled>插入变量</option>'`
-- `docs/UI_CHINESE_STRINGS.md:237` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyIf.vue:37' — '<option value="" disabled>运算符</option>'`
-- `docs/UI_CHINESE_STRINGS.md:238` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyIf.vue:44' — '<div class="text-xs text-slate-500">Else 分支（无需表达式，将匹配以上条件都不成立时）</div>'`
-- `docs/UI_CHINESE_STRINGS.md:239` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyOpenTab.vue:4' — '<label class="form-label">URL 地址（可选）</label>'`
-- `docs/UI_CHINESE_STRINGS.md:240` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyOpenTab.vue:13' — '><input type="checkbox" v-model="(node as any).config.newWindow" /> 新窗口</label'`
-- `docs/UI_CHINESE_STRINGS.md:241` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyFromSpec.vue:4' — '<div class="section-title">未找到节点规范</div>'`
-- `docs/UI_CHINESE_STRINGS.md:242` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyFromSpec.vue:5' — '<div class="help">该节点尚未提供 NodeSpec，已回退到默认属性面板。</div>'`
-- `docs/UI_CHINESE_STRINGS.md:243` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySwitchFrame.vue:4' — '<label class="form-label">按 URL 包含匹配（优先）</label>'`
-- `docs/UI_CHINESE_STRINGS.md:244` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySwitchFrame.vue:8' — 'placeholder="frame URL 包含的字符串"'`
-- `docs/UI_CHINESE_STRINGS.md:245` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySwitchFrame.vue:12' — '<label class="form-label">按索引匹配（从 0 起，仅子 frame）</label>'`
-- `docs/UI_CHINESE_STRINGS.md:246` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySwitchFrame.vue:13' — '<input class="form-input" v-model="(node as any).config.frame.index" placeholder="索引数字" />'`
-- `docs/UI_CHINESE_STRINGS.md:247` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySwitchFrame.vue:16' — '>同源/可注入 frame 可用；留空则回到顶级页面</div'`
-- `docs/UI_CHINESE_STRINGS.md:248` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyDrag.vue:3' — '<SelectorEditor :node="node" :allowPick="true" title="起点选择器" targetKey="start" />'`
-- `docs/UI_CHINESE_STRINGS.md:249` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyDrag.vue:4' — '<SelectorEditor :node="node" :allowPick="true" title="终点选择器" targetKey="end" />'`
-- `docs/UI_CHINESE_STRINGS.md:250` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyDrag.vue:6' — '<small>提示：路径（path）通常在录制时自动生成，手动创建时可留空。</small>'`
-- `docs/UI_CHINESE_STRINGS.md:251` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyWait.vue:4' — '<label class="form-label">等待条件 (JSON)</label>'`
-- `docs/UI_CHINESE_STRINGS.md:252` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/SelectorEditor.vue:4' — '<span class="section-title">{{ title || '选择器' }}</span>'`
-- `docs/UI_CHINESE_STRINGS.md:253` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/SelectorEditor.vue:5' — '<button v-if="allowPick" class="btn-sm btn-primary" @click="pickFromPage">从页面选择</button>'`
-- `docs/UI_CHINESE_STRINGS.md:254` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/SelectorEditor.vue:16' — '<input class="form-input-sm flex-1" v-model="c.value" placeholder="选择器值" />'`
-- `docs/UI_CHINESE_STRINGS.md:255` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/SelectorEditor.vue:21' — '<button class="btn-sm" @click="add">+ 添加选择器</button>'`
-- `docs/UI_CHINESE_STRINGS.md:256` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySwitchTab.vue:4' — '<label class="form-label">Tab ID（可选）</label>'`
-- `docs/UI_CHINESE_STRINGS.md:257` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySwitchTab.vue:9' — 'placeholder="数字"'`
-- `docs/UI_CHINESE_STRINGS.md:258` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySwitchTab.vue:13' — '<label class="form-label">URL 包含（可选）</label>'`
-- `docs/UI_CHINESE_STRINGS.md:259` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySwitchTab.vue:14' — '<input class="form-input" v-model="(node as any).config.urlContains" placeholder="子串匹配" />'`
-- `docs/UI_CHINESE_STRINGS.md:260` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySwitchTab.vue:17' — '<label class="form-label">标题包含（可选）</label>'`
-- `docs/UI_CHINESE_STRINGS.md:261` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySwitchTab.vue:21' — 'placeholder="子串匹配"'`
-- `docs/UI_CHINESE_STRINGS.md:262` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySwitchTab.vue:28' — '>需提供 tabId 或 URL/标题包含</div'`
-- `docs/UI_CHINESE_STRINGS.md:263` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyFill.vue:6' — '<label class="form-label">输入值</label>'`
-- `docs/UI_CHINESE_STRINGS.md:264` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyFill.vue:7' — '<VarInput v-model="value" :variables="variables" placeholder="支持 {变量名} 格式" />'`
-- `docs/UI_CHINESE_STRINGS.md:265` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyAssert.vue:4' — '<label class="form-label">断言条件 (JSON)</label>'`
-- `docs/UI_CHINESE_STRINGS.md:266` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyAssert.vue:13' — '<label class="form-label">失败策略</label>'`
-- `docs/UI_CHINESE_STRINGS.md:267` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyForeach.vue:4' — '<label class="form-label">列表变量</label>'`
-- `docs/UI_CHINESE_STRINGS.md:268` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyForeach.vue:12' — '<label class="form-label">循环项变量名</label>'`
-- `docs/UI_CHINESE_STRINGS.md:269` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyForeach.vue:13' — '<input class="form-input" v-model="(node as any).config.itemVar" placeholder="默认 item" />'`
-- `docs/UI_CHINESE_STRINGS.md:270` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyForeach.vue:16' — '<label class="form-label">子流 ID</label>'`
-- `docs/UI_CHINESE_STRINGS.md:271` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyForeach.vue:20' — 'placeholder="选择或新建子流"'`
-- `docs/UI_CHINESE_STRINGS.md:272` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyForeach.vue:22' — '<button class="btn-sm" style="margin-top: 8px" @click="onCreateSubflow">新建子流</button>'`
-- `docs/UI_CHINESE_STRINGS.md:273` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyForeach.vue:35' — 'const id = prompt('请输入新子流ID');'`
-- `docs/UI_CHINESE_STRINGS.md:274` — `- 'app/chrome-extension/entrypoints/sidepanel/App.vue:52' — 'placeholder="搜索标注名称、选择器..."'`
-- `docs/UI_CHINESE_STRINGS.md:275` — `- 'app/chrome-extension/entrypoints/sidepanel/App.vue:69' — '<button class="em-add-btn" @click="openMarkerEditor()" title="新增标注">'`
-- `docs/UI_CHINESE_STRINGS.md:276` — `- 'app/chrome-extension/entrypoints/sidepanel/App.vue:83' — '<h3 class="em-modal-title">{{ editingMarkerId ? '编辑标注' : '新增标注' }}</h3>'`
-- `docs/UI_CHINESE_STRINGS.md:277` — `- 'app/chrome-extension/entrypoints/sidepanel/App.vue:96' — '<label class="em-field-label">名称</label>'`
-- `docs/UI_CHINESE_STRINGS.md:278` — `- 'app/chrome-extension/entrypoints/sidepanel/App.vue:100' — 'placeholder="例如: 登录按钮"'`
-- `docs/UI_CHINESE_STRINGS.md:279` — `- 'app/chrome-extension/entrypoints/sidepanel/App.vue:108' — '<label class="em-field-label">选择器类型</label>'`
-- `docs/UI_CHINESE_STRINGS.md:280` — `- 'app/chrome-extension/entrypoints/sidepanel/App.vue:117' — '<label class="em-field-label">匹配类型</label>'`
-- `docs/UI_CHINESE_STRINGS.md:281` — `- 'app/chrome-extension/entrypoints/sidepanel/App.vue:120' — '<option value="prefix">路径前缀</option>'`
-- `docs/UI_CHINESE_STRINGS.md:282` — `- 'app/chrome-extension/entrypoints/sidepanel/App.vue:121' — '<option value="exact">精确匹配</option>'`
-- `docs/UI_CHINESE_STRINGS.md:283` — `- 'app/chrome-extension/entrypoints/sidepanel/App.vue:122' — '<option value="host">域名</option>'`
-- `docs/UI_CHINESE_STRINGS.md:284` — `- 'app/chrome-extension/entrypoints/sidepanel/App.vue:130' — '<label class="em-field-label">选择器</label>'`
-- `docs/UI_CHINESE_STRINGS.md:285` — `- 'app/chrome-extension/entrypoints/sidepanel/App.vue:134' — 'placeholder="CSS 选择器或 XPath"'`
-- `docs/UI_CHINESE_STRINGS.md:286` — `- 'app/chrome-extension/entrypoints/sidepanel/App.vue:143' — '取消'`
-- `docs/UI_CHINESE_STRINGS.md:287` — `- 'app/chrome-extension/entrypoints/sidepanel/App.vue:146' — '{{ editingMarkerId ? '更新' : '保存' }}'`
-- `docs/UI_CHINESE_STRINGS.md:288` — `- 'app/chrome-extension/entrypoints/sidepanel/App.vue:159' — '筛选出 <strong>{{ filteredMarkers.length }}</strong> 个标注 （共'`
-- `docs/UI_CHINESE_STRINGS.md:289` — `- 'app/chrome-extension/entrypoints/sidepanel/App.vue:160' — '{{ markers.length }} 个，{{ groupedMarkers.length }} 个域名）'`
-- `docs/UI_CHINESE_STRINGS.md:290` — `- 'app/chrome-extension/entrypoints/sidepanel/App.vue:163' — '共 <strong>{{ markers.length }}</strong> 个标注，'`
-- `docs/UI_CHINESE_STRINGS.md:291` — `- 'app/chrome-extension/entrypoints/sidepanel/App.vue:164' — '<strong>{{ groupedMarkers.length }}</strong> 个域名'`
-- `docs/UI_CHINESE_STRINGS.md:292` — `- 'app/chrome-extension/entrypoints/sidepanel/App.vue:188' — '<span class="em-domain-count">{{ domainGroup.count }} 个标注</span>'`
-- `docs/UI_CHINESE_STRINGS.md:293` — `- 'app/chrome-extension/entrypoints/sidepanel/App.vue:214' — 'title="验证"'`
-- `docs/UI_CHINESE_STRINGS.md:294` — `- 'app/chrome-extension/entrypoints/sidepanel/App.vue:227' — 'title="编辑"'`
-- `docs/UI_CHINESE_STRINGS.md:295` — `- 'app/chrome-extension/entrypoints/sidepanel/App.vue:240' — 'title="删除"'`
-- `docs/UI_CHINESE_STRINGS.md:296` — `- 'app/chrome-extension/entrypoints/sidepanel/App.vue:271' — '<p>未找到匹配的标注</p>'`
-- `docs/UI_CHINESE_STRINGS.md:297` — `- 'app/chrome-extension/entrypoints/sidepanel/App.vue:273' — '清除搜索'`
-- `docs/UI_CHINESE_STRINGS.md:298` — `- 'app/chrome-extension/entrypoints/sidepanel/App.vue:279' — '<p>暂无标注元素</p>'`
-- `docs/UI_CHINESE_STRINGS.md:299` — `- 'app/chrome-extension/entrypoints/sidepanel/App.vue:281' — '新增标注'`
-- `docs/UI_CHINESE_STRINGS.md:300` — `- 'app/chrome-extension/entrypoints/sidepanel/App.vue:356' — 'const domain = marker.host || '(本地文件)';'`
-- `docs/UI_CHINESE_STRINGS.md:301` — `- 'app/chrome-extension/entrypoints/sidepanel/App.vue:357' — 'const fullUrl = marker.url || '(未知URL)';'`
-- `docs/UI_CHINESE_STRINGS.md:302` — `- 'app/chrome-extension/entrypoints/sidepanel/App.vue:440' — 'alert('V3 Trigger 管理尚未实现，暂时无法创建触发器');'`
-- `docs/UI_CHINESE_STRINGS.md:303` — `- 'app/chrome-extension/entrypoints/sidepanel/App.vue:445' — 'alert('V3 Trigger 管理尚未实现，暂时无法编辑触发器');'`
-- `docs/UI_CHINESE_STRINGS.md:304` — `- 'app/chrome-extension/entrypoints/sidepanel/App.vue:459' — 'if (!result) console.warn('回放失败');'`
-- `docs/UI_CHINESE_STRINGS.md:305` — `- 'app/chrome-extension/entrypoints/sidepanel/App.vue:465' — 'alert('V3 Builder 尚未实现，暂时无法编辑工作流');'`
-- `docs/UI_CHINESE_STRINGS.md:306` — `- 'app/chrome-extension/entrypoints/sidepanel/App.vue:471' — 'alert('V3 Builder 尚未实现，暂时无法创建工作流');'`
-- `docs/UI_CHINESE_STRINGS.md:307` — `- 'app/chrome-extension/entrypoints/sidepanel/App.vue:477' — 'const ok = confirm('确认删除该工作流？此操作不可恢复');'`
-- `docs/UI_CHINESE_STRINGS.md:308` — `- 'app/chrome-extension/entrypoints/sidepanel/App.vue:611' — 'const confirmed = confirm('确定要删除标注 "${marker.name}" 吗?');'`
-- `docs/UI_CHINESE_STRINGS.md:309` — `- 'app/chrome-extension/entrypoints/sidepanel/index.html:6' — '<title>工作流管理</title>'`
-- `docs/UI_CHINESE_STRINGS.md:310` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:8' — ''本来应该从从容容游刃有余','`
-- `docs/UI_CHINESE_STRINGS.md:311` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:9' — ''现在是匆匆忙忙连滚带爬','`
-- `docs/UI_CHINESE_STRINGS.md:312` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:10' — ''我知道你很急，但是先别急','`
-- `docs/UI_CHINESE_STRINGS.md:313` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:11' — ''在知识的海洋里狗刨','`
-- `docs/UI_CHINESE_STRINGS.md:314` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:12' — ''让子弹再飞一会儿','`
-- `docs/UI_CHINESE_STRINGS.md:315` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:13' — ''正在为您手搓答案','`
-- `docs/UI_CHINESE_STRINGS.md:316` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:14' — ''浪浪山小妖怪集结中','`
-- `docs/UI_CHINESE_STRINGS.md:317` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:15' — ''别催，已经在写了（新建文件夹）','`
-- `docs/UI_CHINESE_STRINGS.md:318` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:16' — ''正在汗流浃背地思考中','`
-- `docs/UI_CHINESE_STRINGS.md:319` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:17' — ''CPU 都要给我干烧了','`
-- `docs/UI_CHINESE_STRINGS.md:320` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:19' — ''村咖慢焙，精华需要时间','`
-- `docs/UI_CHINESE_STRINGS.md:321` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:20' — ''知识煎饼翻面中','`
-- `docs/UI_CHINESE_STRINGS.md:322` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:21' — ''敬自己一杯，马上好','`
-- `docs/UI_CHINESE_STRINGS.md:323` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:22' — ''正在把灵感放入烤箱','`
-- `docs/UI_CHINESE_STRINGS.md:324` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:23' — ''让答案再泡一会儿','`
-- `docs/UI_CHINESE_STRINGS.md:325` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:24' — ''情绪价值拉满中','`
-- `docs/UI_CHINESE_STRINGS.md:326` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:25' — ''正在为您编织语言的毛衣','`
-- `docs/UI_CHINESE_STRINGS.md:327` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:27' — ''神经元蹦迪中','`
-- `docs/UI_CHINESE_STRINGS.md:328` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:28' — ''熬夜的猫头鹰在思考','`
-- `docs/UI_CHINESE_STRINGS.md:329` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:29' — ''给答案上色中','`
-- `docs/UI_CHINESE_STRINGS.md:330` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:30' — ''正在疯狂翻阅知识库','`
-- `docs/UI_CHINESE_STRINGS.md:331` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:31' — ''大脑马戏团开演','`
-- `docs/UI_CHINESE_STRINGS.md:332` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:32' — ''正在把 0 和 1 捏在一起','`
-- `docs/UI_CHINESE_STRINGS.md:333` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:33' — ''正在憋个大招','`
-- `docs/UI_CHINESE_STRINGS.md:334` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:34' — ''放大镜有点起雾，擦擦','`
-- `docs/UI_CHINESE_STRINGS.md:335` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:35' — ''试图理解这个离谱的需求','`
-- `docs/UI_CHINESE_STRINGS.md:336` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:37' — ''正在施法，莫打扰','`
-- `docs/UI_CHINESE_STRINGS.md:337` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:38' — ''唤醒硅基朋友','`
-- `docs/UI_CHINESE_STRINGS.md:338` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:39' — ''正在连接赛博空间的智慧','`
-- `docs/UI_CHINESE_STRINGS.md:339` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:40' — ''道友请留步，正在推演','`
-- `docs/UI_CHINESE_STRINGS.md:340` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:41' — ''穿越知识黑洞','`
-- `docs/UI_CHINESE_STRINGS.md:341` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:42' — ''正在反向解析人类意图','`
-- `docs/UI_CHINESE_STRINGS.md:342` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:43' — ''水晶球有点模糊，拍两下','`
-- `docs/UI_CHINESE_STRINGS.md:343` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:45' — ''代码跑得比记者还快','`
-- `docs/UI_CHINESE_STRINGS.md:344` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:46' — ''主理人已上线，请稍候','`
-- `docs/UI_CHINESE_STRINGS.md:345` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:47' — ''快马加鞭赶来中','`
-- `docs/UI_CHINESE_STRINGS.md:346` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:48' — ''正在光速搬运知识','`
-- `docs/UI_CHINESE_STRINGS.md:347` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:49' — ''拼图最后一块','`
-- `docs/UI_CHINESE_STRINGS.md:348` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:50' — ''答案即将杀青','`
-- `docs/UI_CHINESE_STRINGS.md:349` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:51' — ''发射倒计时','`
-- `docs/UI_CHINESE_STRINGS.md:350` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:52' — ''目标锁定中','`
-- `docs/UI_CHINESE_STRINGS.md:351` — `- 'app/chrome-extension/entrypoints/sidepanel/composables/useAgentProjects.ts:202' — ''目录 "${validation.absolute}" 不存在，是否创建？\n\nThe directory "${validation.absolute}" does not exist. Create it?','`
-- `docs/UI_CHINESE_STRINGS.md:352` — `- 'app/chrome-extension/entrypoints/sidepanel/composables/useAgentProjects.ts:428' — ''目录 "${validation.absolute}" 已存在对应的项目：${existingProject.name}\n\n' +'`
-- `docs/UI_CHINESE_STRINGS.md:353` — `- 'app/chrome-extension/entrypoints/sidepanel/composables/useAgentProjects.ts:429' — ''是否切换到该项目？\n\n' +'`
-- `docs/UI_CHINESE_STRINGS.md:354` — `- 'app/chrome-extension/entrypoints/sidepanel/components/SidepanelNavigator.vue:15' — 'title="切换页面（可拖拽移动，双击重置位置）"'`
-- `docs/UI_CHINESE_STRINGS.md:355` — `- 'app/chrome-extension/entrypoints/sidepanel/components/SidepanelNavigator.vue:35' — '<span class="navigator-title">切换页面</span>'`
-- `docs/UI_CHINESE_STRINGS.md:356` — `- 'app/chrome-extension/entrypoints/sidepanel/components/SidepanelNavigator.vue:72' — '<span class="navigator-item-title">智能助手</span>'`
-- `docs/UI_CHINESE_STRINGS.md:357` — `- 'app/chrome-extension/entrypoints/sidepanel/components/SidepanelNavigator.vue:73' — '<span class="navigator-item-desc">AI Agent 对话与任务</span>'`
-- `docs/UI_CHINESE_STRINGS.md:358` — `- 'app/chrome-extension/entrypoints/sidepanel/components/SidepanelNavigator.vue:110' — '<span class="navigator-item-title">工作流管理</span>'`
-- `docs/UI_CHINESE_STRINGS.md:359` — `- 'app/chrome-extension/entrypoints/sidepanel/components/SidepanelNavigator.vue:111' — '<span class="navigator-item-desc">录制与回放自动化流程</span>'`
-- `docs/UI_CHINESE_STRINGS.md:360` — `- 'app/chrome-extension/entrypoints/sidepanel/components/SidepanelNavigator.vue:148' — '<span class="navigator-item-title">元素标注管理</span>'`
-- `docs/UI_CHINESE_STRINGS.md:361` — `- 'app/chrome-extension/entrypoints/sidepanel/components/SidepanelNavigator.vue:149' — '<span class="navigator-item-desc">管理页面元素标注</span>'`
-- `docs/UI_CHINESE_STRINGS.md:362` — `- 'app/chrome-extension/entrypoints/sidepanel/components/workflows/WorkflowsView.vue:248' — '<span>状态: {{ getRunStatusText(run) }}</span>'`
-- `docs/UI_CHINESE_STRINGS.md:363` — `- 'app/chrome-extension/entrypoints/sidepanel/components/workflows/WorkflowsView.vue:250' — '>• 耗时:'`
-- `docs/UI_CHINESE_STRINGS.md:364` — `- 'app/chrome-extension/entrypoints/sidepanel/components/workflows/WorkflowsView.vue:524' — 'queued: '排队中','`
-- `docs/UI_CHINESE_STRINGS.md:365` — `- 'app/chrome-extension/entrypoints/sidepanel/components/workflows/WorkflowsView.vue:525' — 'running: '运行中','`
-- `docs/UI_CHINESE_STRINGS.md:366` — `- 'app/chrome-extension/entrypoints/sidepanel/components/workflows/WorkflowsView.vue:526' — 'paused: '已暂停','`
-- `docs/UI_CHINESE_STRINGS.md:367` — `- 'app/chrome-extension/entrypoints/sidepanel/components/workflows/WorkflowsView.vue:527' — 'succeeded: '成功','`
-- `docs/UI_CHINESE_STRINGS.md:368` — `- 'app/chrome-extension/entrypoints/sidepanel/components/workflows/WorkflowsView.vue:528' — 'failed: '失败','`
-- `docs/UI_CHINESE_STRINGS.md:369` — `- 'app/chrome-extension/entrypoints/sidepanel/components/workflows/WorkflowsView.vue:529' — 'canceled: '已取消','`
-- `docs/UI_CHINESE_STRINGS.md:370` — `- 'app/chrome-extension/entrypoints/sidepanel/components/workflows/WorkflowsView.vue:534' — 'return run.success ? '成功' : '失败';'`
-- `docs/UI_CHINESE_STRINGS.md:371` — `- 'app/chrome-extension/entrypoints/builder/App.vue:5' — '<span>已应用回退建议：提升 {{ fallbackNotice.type }} 优先级</span>'`
-- `docs/UI_CHINESE_STRINGS.md:372` — `- 'app/chrome-extension/entrypoints/builder/App.vue:6' — '<button class="mini" @click="undoFallbackPromotion">撤销</button>'`
-- `docs/UI_CHINESE_STRINGS.md:373` — `- 'app/chrome-extension/entrypoints/builder/App.vue:29' — '<span class="tip">工作流可视化编排</span>'`
-- `docs/UI_CHINESE_STRINGS.md:374` — `- 'app/chrome-extension/entrypoints/builder/App.vue:32' — '<button class="top-btn" @click="exportFlow" title="导出 JSON">'`
-- `docs/UI_CHINESE_STRINGS.md:375` — `- 'app/chrome-extension/entrypoints/builder/App.vue:43' — '导出'`
-- `docs/UI_CHINESE_STRINGS.md:376` — `- 'app/chrome-extension/entrypoints/builder/App.vue:45' — '<label class="top-btn import" title="导入 JSON">'`
-- `docs/UI_CHINESE_STRINGS.md:377` — `- 'app/chrome-extension/entrypoints/builder/App.vue:56' — '导入'`
-- `docs/UI_CHINESE_STRINGS.md:378` — `- 'app/chrome-extension/entrypoints/builder/App.vue:59' — '<button class="top-btn" @click="openRename" title="重命名工作流">'`
-- `docs/UI_CHINESE_STRINGS.md:379` — `- 'app/chrome-extension/entrypoints/builder/App.vue:77' — 'title="管理触发器"'`
-- `docs/UI_CHINESE_STRINGS.md:380` — `- 'app/chrome-extension/entrypoints/builder/App.vue:96' — 'title="从选中节点回放"'`
-- `docs/UI_CHINESE_STRINGS.md:381` — `- 'app/chrome-extension/entrypoints/builder/App.vue:108' — '从选中运行'`
-- `docs/UI_CHINESE_STRINGS.md:382` — `- 'app/chrome-extension/entrypoints/builder/App.vue:110' — '<button class="top-btn primary" @click="runAll" title="从头回放整流">'`
-- `docs/UI_CHINESE_STRINGS.md:383` — `- 'app/chrome-extension/entrypoints/builder/App.vue:121' — '运行'`
-- `docs/UI_CHINESE_STRINGS.md:384` — `- 'app/chrome-extension/entrypoints/builder/App.vue:139' — '保存'`
-- `docs/UI_CHINESE_STRINGS.md:385` — `- 'app/chrome-extension/entrypoints/builder/App.vue:184' — '<button class="toolbar-btn" @click="store.undo" title="撤销 (⌘/Ctrl+Z)">'`
-- `docs/UI_CHINESE_STRINGS.md:386` — `- 'app/chrome-extension/entrypoints/builder/App.vue:196' — '<button class="toolbar-btn" @click="store.redo" title="重做 (⌘/Ctrl+Shift+Z)">'`
-- `docs/UI_CHINESE_STRINGS.md:387` — `- 'app/chrome-extension/entrypoints/builder/App.vue:209' — '<button class="toolbar-btn" @click="store.layoutAuto" title="自动排版">'`
-- `docs/UI_CHINESE_STRINGS.md:388` — `- 'app/chrome-extension/entrypoints/builder/App.vue:224' — '<button class="toolbar-btn" @click="fitAll" title="自适应视图">'`
-- `docs/UI_CHINESE_STRINGS.md:389` — `- 'app/chrome-extension/entrypoints/builder/App.vue:251' — '<div class="title">重命名工作流</div>'`
-- `docs/UI_CHINESE_STRINGS.md:390` — `- 'app/chrome-extension/entrypoints/builder/App.vue:256' — '<label>名称</label>'`
-- `docs/UI_CHINESE_STRINGS.md:391` — `- 'app/chrome-extension/entrypoints/builder/App.vue:257' — '<input v-model="renameName" placeholder="工作流名称" />'`
-- `docs/UI_CHINESE_STRINGS.md:392` — `- 'app/chrome-extension/entrypoints/builder/App.vue:260' — '<label>描述</label>'`
-- `docs/UI_CHINESE_STRINGS.md:393` — `- 'app/chrome-extension/entrypoints/builder/App.vue:261' — '<textarea v-model="renameDesc" placeholder="可选描述"></textarea>'`
-- `docs/UI_CHINESE_STRINGS.md:394` — `- 'app/chrome-extension/entrypoints/builder/App.vue:265' — '<button class="primary" @click="applyRename">保存</button>'`
-- `docs/UI_CHINESE_STRINGS.md:395` — `- 'app/chrome-extension/entrypoints/builder/App.vue:299' — 'const title = ref('工作流编辑器');'`
-- `docs/UI_CHINESE_STRINGS.md:396` — `- 'app/chrome-extension/entrypoints/builder/App.vue:362' — 'title.value = '编辑：${flowV2.name || flowV2.id}';'`
-- `docs/UI_CHINESE_STRINGS.md:397` — `- 'app/chrome-extension/entrypoints/builder/App.vue:375' — 'pushToast('工作流 "${q.flowId}" 未找到，已创建新工作流', 'warn');'`
-- `docs/UI_CHINESE_STRINGS.md:398` — `- 'app/chrome-extension/entrypoints/builder/App.vue:379' — 'pushToast('加载工作流失败：${e instanceof Error ? e.message : String(e)}', 'error');'`
-- `docs/UI_CHINESE_STRINGS.md:399` — `- 'app/chrome-extension/entrypoints/builder/App.vue:394' — 'name: '新建工作流','`
-- `docs/UI_CHINESE_STRINGS.md:400` — `- 'app/chrome-extension/entrypoints/builder/App.vue:404' — 'title.value = '新建工作流';'`
-- `docs/UI_CHINESE_STRINGS.md:401` — `- 'app/chrome-extension/entrypoints/builder/App.vue:514' — 'pushToast('保存失败：${e instanceof Error ? e.message : String(e)}', 'error');'`
-- `docs/UI_CHINESE_STRINGS.md:402` — `- 'app/chrome-extension/entrypoints/builder/App.vue:634' — ''节点 ${n.id} 的定时 #${i + 1}: V3 暂不支持一次性定时（once），已跳过','`
-- `docs/UI_CHINESE_STRINGS.md:403` — `- 'app/chrome-extension/entrypoints/builder/App.vue:639' — ''节点 ${n.id} 的定时 #${i + 1}: 无法转换为 cron（type=${scheduleType}），已跳过','`
-- `docs/UI_CHINESE_STRINGS.md:404` — `- 'app/chrome-extension/entrypoints/builder/App.vue:713' — 'pushToast('导出失败：${e instanceof Error ? e.message : String(e)}', 'error');'`
-- `docs/UI_CHINESE_STRINGS.md:405` — `- 'app/chrome-extension/entrypoints/builder/App.vue:728' — 'pushToast('导入失败：未找到工作流数据', 'error');'`
-- `docs/UI_CHINESE_STRINGS.md:406` — `- 'app/chrome-extension/entrypoints/builder/App.vue:762' — 'title.value = '编辑：${store.flowLocal.name || store.flowLocal.id}';'`
-- `docs/UI_CHINESE_STRINGS.md:407` — `- 'app/chrome-extension/entrypoints/builder/App.vue:766' — 'pushToast('导入失败：${e instanceof Error ? e.message : String(e)}', 'error');'`
-- `docs/UI_CHINESE_STRINGS.md:408` — `- 'app/chrome-extension/entrypoints/builder/App.vue:790' — 'pushToast('运行失败：${e instanceof Error ? e.message : String(e)}', 'error');'`
-- `docs/UI_CHINESE_STRINGS.md:409` — `- 'app/chrome-extension/entrypoints/builder/App.vue:852' — 'saveState.value === 'saving' ? '保存中…' : saveState.value === 'saved' ? '已保存' : '','`
-- `docs/UI_CHINESE_STRINGS.md:410` — `- 'app/chrome-extension/entrypoints/builder/index.html:6' — '<title>工作流编辑器</title>'`
+- `docs/UI_CHINESE_STRINGS.md:5` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/KeyValueEditor.vue:8' — '<button class="mini danger" @click="remove(i)">删</button>'`
+- `docs/UI_CHINESE_STRINGS.md:6` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/nodes/node-util.ts:103' — 'dblclick: '双击','`
+- `docs/UI_CHINESE_STRINGS.md:7` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/nodes/node-util.ts:104' — 'openTab: '打开标签','`
+- `docs/UI_CHINESE_STRINGS.md:8` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/nodes/node-util.ts:105' — 'switchTab: '切换标签','`
+- `docs/UI_CHINESE_STRINGS.md:9` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/nodes/node-util.ts:106' — 'closeTab: '关闭标签','`
+- `docs/UI_CHINESE_STRINGS.md:10` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScreenshot.vue:17' — '<label class="form-label">حفظ为المتغير</label>'`
+- `docs/UI_CHINESE_STRINGS.md:11` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScreenshot.vue:21' — 'placeholder="اسم المتغير，例如 shot"'`
+- `docs/UI_CHINESE_STRINGS.md:12` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyExecuteFlow.vue:6' — '<option value="">请اختيار</option>'`
+- `docs/UI_CHINESE_STRINGS.md:13` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyExecuteFlow.vue:13' — '内联تشغيل（共享上下文المتغير）</label'`
+- `docs/UI_CHINESE_STRINGS.md:14` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyCloseTab.vue:4' — '<label class="form-label">按 URL 关闭（اختياري）</label>'`
+- `docs/UI_CHINESE_STRINGS.md:15` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyCloseTab.vue:5' — '<input class="form-input" v-model="(node as any).config.url" placeholder="子串مطابقة URL" />'`
+- `docs/UI_CHINESE_STRINGS.md:16` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyWhile.vue:17' — 'placeholder="اختيارأو新建التدفق الفرعي"'`
+- `docs/UI_CHINESE_STRINGS.md:17` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyWhile.vue:19' — '<button class="btn-sm" style="margin-top: 8px" @click="onCreateSubflow">新建التدفق الفرعي</button>'`
+- `docs/UI_CHINESE_STRINGS.md:18` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyWhile.vue:22' — '<label class="form-label">最大迭代次数（اختياري）</label>'`
+- `docs/UI_CHINESE_STRINGS.md:19` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyExtract.vue:16' — '<label class="form-label">自定义 JS（رجوع值）</label>'`
+- `docs/UI_CHINESE_STRINGS.md:20` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyExtract.vue:25' — '<label class="form-label">حفظ为المتغير</label>'`
+- `docs/UI_CHINESE_STRINGS.md:21` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScript.vue:13' — '<label class="form-label">تشغيل环境</label>'`
+- `docs/UI_CHINESE_STRINGS.md:22` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScript.vue:20' — '<label class="form-label">تشغيل时机</label>'`
+- `docs/UI_CHINESE_STRINGS.md:23` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScript.vue:27' — '<label class="form-label">حفظ为المتغير（اختياري）</label>'`
+- `docs/UI_CHINESE_STRINGS.md:24` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScript.vue:31' — '<label class="form-label">النتيجة字段映射</label>'`
+- `docs/UI_CHINESE_STRINGS.md:25` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySetAttribute.vue:6' — '<label class="form-label">الخاصية名</label>'`
+- `docs/UI_CHINESE_STRINGS.md:26` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySetAttribute.vue:10' — 'placeholder="如 value/src/disabled 等"'`
+- `docs/UI_CHINESE_STRINGS.md:27` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySetAttribute.vue:14' — '<label class="form-label">الخاصية值（留空并勾选حذف则移除）</label>'`
+- `docs/UI_CHINESE_STRINGS.md:28` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySetAttribute.vue:15' — '<input class="form-input" v-model="(node as any).config.value" placeholder="الخاصية值" />'`
+- `docs/UI_CHINESE_STRINGS.md:29` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyKey.vue:8' — 'placeholder="如 Backspace Enter أو cmd+a"'`
+- `docs/UI_CHINESE_STRINGS.md:30` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScroll.vue:6' — '<option value="element">تمرير到العنصر</option>'`
+- `docs/UI_CHINESE_STRINGS.md:31` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScroll.vue:7' — '<option value="offset">窗口إزاحة</option>'`
+- `docs/UI_CHINESE_STRINGS.md:32` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScroll.vue:32' — '<div class="hint"><small>حاويةيجب支持 scrollTo(top,left)</small></div>'`
+- `docs/UI_CHINESE_STRINGS.md:33` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyFormRenderer.vue:3' — '<div class="section-title">配置</div>'`
+- `docs/UI_CHINESE_STRINGS.md:34` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyHttp.vue:48' — '>支持简洁数组形式：[["file","url:https://...","a.png"],["metadata","value"]]</div'`
+- `docs/UI_CHINESE_STRINGS.md:35` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTriggerEvent.vue:10' — 'placeholder="如 input/change/mouseover"'`
+- `docs/UI_CHINESE_STRINGS.md:36` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTriggerEvent.vue:15' — '><input type="checkbox" v-model="(node as any).config.bubbles" /> 冒泡</label'`
+- `docs/UI_CHINESE_STRINGS.md:37` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTriggerEvent.vue:18' — '><input type="checkbox" v-model="(node as any).config.cancelable" /> 可取消</label'`
+- `docs/UI_CHINESE_STRINGS.md:38` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyHandleDownload.vue:4' — '<label class="form-label">文件名包含（اختياري）</label>'`
+- `docs/UI_CHINESE_STRINGS.md:39` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyHandleDownload.vue:8' — 'placeholder="子串مطابقة文件名أوURL"'`
+- `docs/UI_CHINESE_STRINGS.md:40` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyHandleDownload.vue:12' — '<label class="form-label">超时(ms)</label>'`
+- `docs/UI_CHINESE_STRINGS.md:41` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyHandleDownload.vue:18' — 'انتظار下载完成</label'`
+- `docs/UI_CHINESE_STRINGS.md:42` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyHandleDownload.vue:22' — '<label class="form-label">حفظ到المتغير</label>'`
+- `docs/UI_CHINESE_STRINGS.md:43` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyLoopElements.vue:8' — '<label class="form-label">列表اسم المتغير</label>'`
+- `docs/UI_CHINESE_STRINGS.md:44` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyLoopElements.vue:12' — '<label class="form-label">تكرار项اسم المتغير</label>'`
+- `docs/UI_CHINESE_STRINGS.md:45` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyLoopElements.vue:20' — 'placeholder="اختيارأو新建التدفق الفرعي"'`
+- `docs/UI_CHINESE_STRINGS.md:46` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyLoopElements.vue:22' — '<button class="btn-sm" style="margin-top: 8px" @click="onCreateSubflow">新建التدفق الفرعي</button>'`
+- `docs/UI_CHINESE_STRINGS.md:47` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:10' — '<input class="form-input" v-model="cfg.description" placeholder="说明此مشغّل的用途" />'`
+- `docs/UI_CHINESE_STRINGS.md:48` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:46' — '<option value="domain">النطاق包含</option>'`
+- `docs/UI_CHINESE_STRINGS.md:49` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:52' — 'placeholder="例如 https://example.com/app"'`
+- `docs/UI_CHINESE_STRINGS.md:50` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:71' — '<input class="form-input" v-model="cfg.contextMenu.title" placeholder="菜单العنوان" />'`
+- `docs/UI_CHINESE_STRINGS.md:51` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:86' — '<label class="form-label">命令键（يجب预先在 manifest commands 中声明）</label>'`
+- `docs/UI_CHINESE_STRINGS.md:52` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:90' — 'placeholder="例如 run_quick_trigger_1"'`
+- `docs/UI_CHINESE_STRINGS.md:53` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:94' — '>ملاحظة: Chrome 扩展اختصار لوحة المفاتيحيحتاج在 manifest 里固定声明，تعذرتشغيل时动态إضافة。</div'`
+- `docs/UI_CHINESE_STRINGS.md:54` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:152' — 'مشغّل会在حفظسير العمل时同步到后台触发表（URL/右键/اختصار لوحة المفاتيح/DOM）和جدول任务（间隔/يوميًا/مرة واحدة）。'`
+- `docs/UI_CHINESE_STRINGS.md:55` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyIf.vue:29' — '<option value="" disabled>插入المتغير</option>'`
+- `docs/UI_CHINESE_STRINGS.md:56` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyFromSpec.vue:4' — '<div class="section-title">غير موجودالعقدة规范</div>'`
+- `docs/UI_CHINESE_STRINGS.md:57` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyFromSpec.vue:5' — '<div class="help">该العقدة尚未توفير NodeSpec，تم回退到افتراضيالخاصية面板。</div>'`
+- `docs/UI_CHINESE_STRINGS.md:58` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySwitchFrame.vue:4' — '<label class="form-label">按 URL 包含مطابقة（优先）</label>'`
+- `docs/UI_CHINESE_STRINGS.md:59` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySwitchFrame.vue:12' — '<label class="form-label">按索引مطابقة（从 0 起，仅子 frame）</label>'`
+- `docs/UI_CHINESE_STRINGS.md:60` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySwitchFrame.vue:16' — '>同源/可注入 frame 可用；留空则回到顶级الصفحة</div'`
+- `docs/UI_CHINESE_STRINGS.md:61` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyDrag.vue:6' — '<small>ملاحظة: المسار（path）通常在录制时自动生成，يدويإنشاء时可留空。</small>'`
+- `docs/UI_CHINESE_STRINGS.md:62` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/SelectorEditor.vue:16' — '<input class="form-input-sm flex-1" v-model="c.value" placeholder="المحدد值" />'`
+- `docs/UI_CHINESE_STRINGS.md:63` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySwitchTab.vue:14' — '<input class="form-input" v-model="(node as any).config.urlContains" placeholder="子串مطابقة" />'`
+- `docs/UI_CHINESE_STRINGS.md:64` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySwitchTab.vue:17' — '<label class="form-label">العنوان包含（اختياري）</label>'`
+- `docs/UI_CHINESE_STRINGS.md:65` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySwitchTab.vue:21' — 'placeholder="子串مطابقة"'`
+- `docs/UI_CHINESE_STRINGS.md:66` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyFill.vue:6' — '<label class="form-label">إدخال值</label>'`
+- `docs/UI_CHINESE_STRINGS.md:67` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyFill.vue:7' — '<VarInput v-model="value" :variables="variables" placeholder="支持 {اسم المتغير} 格式" />'`
+- `docs/UI_CHINESE_STRINGS.md:68` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyAssert.vue:13' — '<label class="form-label">فشل策略</label>'`
+- `docs/UI_CHINESE_STRINGS.md:69` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyForeach.vue:4' — '<label class="form-label">列表المتغير</label>'`
+- `docs/UI_CHINESE_STRINGS.md:70` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyForeach.vue:12' — '<label class="form-label">تكرار项اسم المتغير</label>'`
+- `docs/UI_CHINESE_STRINGS.md:71` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyForeach.vue:20' — 'placeholder="اختيارأو新建التدفق الفرعي"'`
+- `docs/UI_CHINESE_STRINGS.md:72` — `- 'app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyForeach.vue:22' — '<button class="btn-sm" style="margin-top: 8px" @click="onCreateSubflow">新建التدفق الفرعي</button>'`
+- `docs/UI_CHINESE_STRINGS.md:73` — `- 'app/chrome-extension/entrypoints/sidepanel/App.vue:52' — 'placeholder="搜索تحديدالاسم、المحدد..."'`
+- `docs/UI_CHINESE_STRINGS.md:74` — `- 'app/chrome-extension/entrypoints/sidepanel/App.vue:100' — 'placeholder="例如: 登录按钮"'`
+- `docs/UI_CHINESE_STRINGS.md:75` — `- 'app/chrome-extension/entrypoints/sidepanel/App.vue:143' — '取消'`
+- `docs/UI_CHINESE_STRINGS.md:76` — `- 'app/chrome-extension/entrypoints/sidepanel/App.vue:159' — '筛选出 <strong>{{ filteredMarkers.length }}</strong> تحديدات （共'`
+- `docs/UI_CHINESE_STRINGS.md:77` — `- 'app/chrome-extension/entrypoints/sidepanel/App.vue:160' — '{{ markers.length }} 个，{{ groupedMarkers.length }} نطاقات）'`
+- `docs/UI_CHINESE_STRINGS.md:78` — `- 'app/chrome-extension/entrypoints/sidepanel/App.vue:163' — '共 <strong>{{ markers.length }}</strong> تحديدات，'`
+- `docs/UI_CHINESE_STRINGS.md:79` — `- 'app/chrome-extension/entrypoints/sidepanel/App.vue:271' — '<p>غير موجودمطابقة的تحديد</p>'`
+- `docs/UI_CHINESE_STRINGS.md:80` — `- 'app/chrome-extension/entrypoints/sidepanel/App.vue:273' — '清除搜索'`
+- `docs/UI_CHINESE_STRINGS.md:81` — `- 'app/chrome-extension/entrypoints/sidepanel/App.vue:279' — '<p>暂无تحديدالعنصر</p>'`
+- `docs/UI_CHINESE_STRINGS.md:82` — `- 'app/chrome-extension/entrypoints/sidepanel/App.vue:459' — 'if (!result) console.warn('回放فشل');'`
+- `docs/UI_CHINESE_STRINGS.md:83` — `- 'app/chrome-extension/entrypoints/sidepanel/App.vue:477' — 'const ok = confirm('确认حذف该سير العمل？此操作不可恢复');'`
+- `docs/UI_CHINESE_STRINGS.md:84` — `- 'app/chrome-extension/entrypoints/sidepanel/App.vue:611' — 'const confirmed = confirm('确定要حذفتحديد "${marker.name}" 吗?');'`
+- `docs/UI_CHINESE_STRINGS.md:85` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:8' — ''本来应该从从容容游刃有余','`
+- `docs/UI_CHINESE_STRINGS.md:86` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:9' — ''现在是匆匆忙忙连滚带爬','`
+- `docs/UI_CHINESE_STRINGS.md:87` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:10' — ''我知道你很急，但是先别急','`
+- `docs/UI_CHINESE_STRINGS.md:88` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:11' — ''在知识的海洋里狗刨','`
+- `docs/UI_CHINESE_STRINGS.md:89` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:12' — ''让子弹再飞一会儿','`
+- `docs/UI_CHINESE_STRINGS.md:90` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:13' — ''正在为您手搓答案','`
+- `docs/UI_CHINESE_STRINGS.md:91` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:14' — ''浪浪山小妖怪集结中','`
+- `docs/UI_CHINESE_STRINGS.md:92` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:15' — ''别催，تم经在写了（新建文件夹）','`
+- `docs/UI_CHINESE_STRINGS.md:93` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:16' — ''正在汗流浃背地思考中','`
+- `docs/UI_CHINESE_STRINGS.md:94` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:19' — ''村咖慢焙，精华يحتاجالوقت','`
+- `docs/UI_CHINESE_STRINGS.md:95` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:20' — ''知识煎饼翻面中','`
+- `docs/UI_CHINESE_STRINGS.md:96` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:21' — ''敬自己一杯，马上好','`
+- `docs/UI_CHINESE_STRINGS.md:97` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:22' — ''正在把灵感放入烤箱','`
+- `docs/UI_CHINESE_STRINGS.md:98` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:23' — ''让答案再泡一会儿','`
+- `docs/UI_CHINESE_STRINGS.md:99` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:24' — ''情绪价值拉满中','`
+- `docs/UI_CHINESE_STRINGS.md:100` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:25' — ''正在为您编织语言的毛衣','`
+- `docs/UI_CHINESE_STRINGS.md:101` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:27' — ''神经元蹦迪中','`
+- `docs/UI_CHINESE_STRINGS.md:102` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:28' — ''熬夜的猫头鹰在思考','`
+- `docs/UI_CHINESE_STRINGS.md:103` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:29' — ''给答案上色中','`
+- `docs/UI_CHINESE_STRINGS.md:104` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:30' — ''正在疯狂翻阅知识库','`
+- `docs/UI_CHINESE_STRINGS.md:105` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:31' — ''大脑马戏团开演','`
+- `docs/UI_CHINESE_STRINGS.md:106` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:32' — ''正在把 0 和 1 捏在一起','`
+- `docs/UI_CHINESE_STRINGS.md:107` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:33' — ''正在憋个大招','`
+- `docs/UI_CHINESE_STRINGS.md:108` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:34' — ''放大镜有نقطة起雾，擦擦','`
+- `docs/UI_CHINESE_STRINGS.md:109` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:35' — ''试图理解这个离谱的يجب求','`
+- `docs/UI_CHINESE_STRINGS.md:110` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:37' — ''正在施法，莫打扰','`
+- `docs/UI_CHINESE_STRINGS.md:111` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:38' — ''唤醒硅基朋友','`
+- `docs/UI_CHINESE_STRINGS.md:112` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:39' — ''正在连接赛博空间的智慧','`
+- `docs/UI_CHINESE_STRINGS.md:113` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:40' — ''道友请留步，正在推演','`
+- `docs/UI_CHINESE_STRINGS.md:114` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:41' — ''穿越知识黑洞','`
+- `docs/UI_CHINESE_STRINGS.md:115` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:42' — ''正在反向解析人类意图','`
+- `docs/UI_CHINESE_STRINGS.md:116` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:43' — ''水晶球有نقطة模糊，拍两下','`
+- `docs/UI_CHINESE_STRINGS.md:117` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:47' — ''快马加鞭赶来中','`
+- `docs/UI_CHINESE_STRINGS.md:118` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:48' — ''正在光速搬运知识','`
+- `docs/UI_CHINESE_STRINGS.md:119` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:49' — ''拼图最后一块','`
+- `docs/UI_CHINESE_STRINGS.md:120` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:50' — ''答案即将杀青','`
+- `docs/UI_CHINESE_STRINGS.md:121` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:51' — ''发射倒计时','`
+- `docs/UI_CHINESE_STRINGS.md:122` — `- 'app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:52' — ''الهدف锁定中','`
+- `docs/UI_CHINESE_STRINGS.md:123` — `- 'app/chrome-extension/entrypoints/sidepanel/composables/useAgentProjects.ts:202' — ''目录 "${validation.absolute}" 不存在，是否إنشاء？\n\nThe directory "${validation.absolute}" does not exist. Create it?','`
+- `docs/UI_CHINESE_STRINGS.md:124` — `- 'app/chrome-extension/entrypoints/sidepanel/composables/useAgentProjects.ts:428' — ''目录 "${validation.absolute}" تم存在对应的项目：${existingProject.name}\n\n' +'`
+- `docs/UI_CHINESE_STRINGS.md:125` — `- 'app/chrome-extension/entrypoints/sidepanel/composables/useAgentProjects.ts:429' — ''是否切换到该项目？\n\n' +'`
+- `docs/UI_CHINESE_STRINGS.md:126` — `- 'app/chrome-extension/entrypoints/sidepanel/components/SidepanelNavigator.vue:15' — 'title="切换الصفحة（可سحب وإفلات移动，双击重置位置）"'`
+- `docs/UI_CHINESE_STRINGS.md:127` — `- 'app/chrome-extension/entrypoints/sidepanel/components/SidepanelNavigator.vue:35' — '<span class="navigator-title">切换الصفحة</span>'`
+- `docs/UI_CHINESE_STRINGS.md:128` — `- 'app/chrome-extension/entrypoints/sidepanel/components/workflows/WorkflowsView.vue:525' — 'running: 'تشغيل中','`
+- `docs/UI_CHINESE_STRINGS.md:129` — `- 'app/chrome-extension/entrypoints/sidepanel/components/workflows/WorkflowsView.vue:526' — 'paused: 'تم暂停','`
+- `docs/UI_CHINESE_STRINGS.md:130` — `- 'app/chrome-extension/entrypoints/sidepanel/components/workflows/WorkflowsView.vue:529' — 'canceled: 'تم取消','`
+- `docs/UI_CHINESE_STRINGS.md:131` — `- 'app/chrome-extension/entrypoints/builder/App.vue:5' — '<span>تم应用回退建议：提升 {{ fallbackNotice.type }} الأولوية</span>'`
+- `docs/UI_CHINESE_STRINGS.md:132` — `- 'app/chrome-extension/entrypoints/builder/App.vue:29' — '<span class="tip">سير العمل可视化编排</span>'`
+- `docs/UI_CHINESE_STRINGS.md:133` — `- 'app/chrome-extension/entrypoints/builder/App.vue:59' — '<button class="top-btn" @click="openRename" title="重命名سير العمل">'`
+- `docs/UI_CHINESE_STRINGS.md:134` — `- 'app/chrome-extension/entrypoints/builder/App.vue:251' — '<div class="title">重命名سير العمل</div>'`
+- `docs/UI_CHINESE_STRINGS.md:135` — `- 'app/chrome-extension/entrypoints/builder/App.vue:299' — 'const title = ref('سير العملتعديل器');'`
+- `docs/UI_CHINESE_STRINGS.md:136` — `- 'app/chrome-extension/entrypoints/builder/App.vue:375' — 'pushToast('سير العمل "${q.flowId}" غير موجود，تمإنشاء新سير العمل', 'warn');'`
+- `docs/UI_CHINESE_STRINGS.md:137` — `- 'app/chrome-extension/entrypoints/builder/App.vue:394' — 'name: '新建سير العمل','`
+- `docs/UI_CHINESE_STRINGS.md:138` — `- 'app/chrome-extension/entrypoints/builder/App.vue:404' — 'title.value = '新建سير العمل';'`
+- `docs/UI_CHINESE_STRINGS.md:139` — `- 'app/chrome-extension/entrypoints/builder/App.vue:634' — ''العقدة ${n.id} 的جدولة #${i + 1}: V3 暂不支持مرة واحدة性جدولة（once），تم跳过','`
+- `docs/UI_CHINESE_STRINGS.md:140` — `- 'app/chrome-extension/entrypoints/builder/App.vue:639' — ''العقدة ${n.id} 的جدولة #${i + 1}: تعذر转换为 cron（type=${scheduleType}），تم跳过','`
+- `docs/UI_CHINESE_STRINGS.md:141` — `- 'app/chrome-extension/entrypoints/builder/App.vue:728' — 'pushToast('استيرادفشل：غير موجودسير العمل数据', 'error');'`
+- `docs/UI_CHINESE_STRINGS.md:142` — `- 'app/chrome-extension/entrypoints/builder/index.html:6' — '<title>سير العملتعديل器</title>'`
+- `docs/UI_CHINESE_STRINGS.md:143` — `- 'packages/shared/src/node-specs-builtin.ts:70' — 'display: { label: '双击', iconClass: 'icon-click', category: 'Actions' },'`
+- `docs/UI_CHINESE_STRINGS.md:144` — `- 'packages/shared/src/node-specs-builtin.ts:224' — '{ label: '警告', value: 'warn' },'`
+- `docs/UI_CHINESE_STRINGS.md:145` — `- 'packages/shared/src/node-specs-builtin.ts:242' — 'label: '方法','`
+- `docs/UI_CHINESE_STRINGS.md:146` — `- 'packages/shared/src/node-specs-builtin.ts:251' — '{ key: 'headers', label: 'طلب头(JSON)', type: 'json' },'`
+- `docs/UI_CHINESE_STRINGS.md:147` — `- 'packages/shared/src/node-specs-builtin.ts:252' — '{ key: 'body', label: 'طلب体(JSON)', type: 'json' },'`
+- `docs/UI_CHINESE_STRINGS.md:148` — `- 'packages/shared/src/node-specs-builtin.ts:253' — '{ key: 'formData', label: '表单(JSON)', type: 'json' },'`
+- `docs/UI_CHINESE_STRINGS.md:149` — `- 'packages/shared/src/node-specs-builtin.ts:254' — '{ key: 'saveAs', label: 'حفظ为变量', type: 'string' },'`
+- `docs/UI_CHINESE_STRINGS.md:150` — `- 'packages/shared/src/node-specs-builtin.ts:255' — '{ key: 'assign', label: '映射(JSON)', type: 'json' },'`
+- `docs/UI_CHINESE_STRINGS.md:151` — `- 'packages/shared/src/node-specs-builtin.ts:273' — '{ label: '文本(text)', value: 'text' },'`
+- `docs/UI_CHINESE_STRINGS.md:152` — `- 'packages/shared/src/node-specs-builtin.ts:274' — '{ label: '文本(textContent)', value: 'textContent' },'`
+- `docs/UI_CHINESE_STRINGS.md:153` — `- 'packages/shared/src/node-specs-builtin.ts:275' — '{ label: '自定义اسم الخاصية', value: 'attr' },'`
+- `docs/UI_CHINESE_STRINGS.md:154` — `- 'packages/shared/src/node-specs-builtin.ts:278' — '{ key: 'js', label: '自定义JS', type: 'string', help: '在页面中执行并رجوع值' },'`
+- `docs/UI_CHINESE_STRINGS.md:155` — `- 'packages/shared/src/node-specs-builtin.ts:279' — '{ key: 'saveAs', label: 'حفظ变量', type: 'string', required: true },'`
+- `docs/UI_CHINESE_STRINGS.md:156` — `- 'packages/shared/src/node-specs-builtin.ts:292' — '{ key: 'fullPage', label: '整页لقطة شاشة', type: 'boolean', default: false },'`
+- `docs/UI_CHINESE_STRINGS.md:157` — `- 'packages/shared/src/node-specs-builtin.ts:293' — '{ key: 'saveAs', label: 'حفظ变量', type: 'string' },'`
+- `docs/UI_CHINESE_STRINGS.md:158` — `- 'packages/shared/src/node-specs-builtin.ts:302' — 'display: { label: '触发حدث', iconClass: 'icon-trigger', category: 'Tools' },'`
+- `docs/UI_CHINESE_STRINGS.md:159` — `- 'packages/shared/src/node-specs-builtin.ts:307' — '{ key: 'bubbles', label: '冒泡', type: 'boolean', default: true },'`
+- `docs/UI_CHINESE_STRINGS.md:160` — `- 'packages/shared/src/node-specs-builtin.ts:308' — '{ key: 'cancelable', label: '可取消', type: 'boolean', default: false },'`
+- `docs/UI_CHINESE_STRINGS.md:161` — `- 'packages/shared/src/node-specs-builtin.ts:317' — 'display: { label: '设置خاصية', iconClass: 'icon-attr', category: 'Tools' },'`
+- `docs/UI_CHINESE_STRINGS.md:162` — `- 'packages/shared/src/node-specs-builtin.ts:323' — '{ key: 'remove', label: '移除خاصية', type: 'boolean', default: false },'`
+- `docs/UI_CHINESE_STRINGS.md:163` — `- 'packages/shared/src/node-specs-builtin.ts:337' — '{ key: 'itemVar', label: '项اسم المتغير', type: 'string', default: 'item' },'`
+- `docs/UI_CHINESE_STRINGS.md:164` — `- 'packages/shared/src/node-specs-builtin.ts:338' — '{ key: 'subflowId', label: 'سير عمل فرعي程ID', type: 'string', required: true },'`
+- `docs/UI_CHINESE_STRINGS.md:165` — `- 'packages/shared/src/node-specs-builtin.ts:347' — 'display: { label: '切换Frame', iconClass: 'icon-frame', category: 'Tools' },'`
+- `docs/UI_CHINESE_STRINGS.md:166` — `- 'packages/shared/src/node-specs-builtin.ts:352' — 'label: 'frame定位','`
+- `docs/UI_CHINESE_STRINGS.md:167` — `- 'packages/shared/src/node-specs-builtin.ts:355' — '{ key: 'index', label: '索引', type: 'number' },'`
+- `docs/UI_CHINESE_STRINGS.md:168` — `- 'packages/shared/src/node-specs-builtin.ts:356' — '{ key: 'urlContains', label: 'URL包含', type: 'string' },'`
+- `docs/UI_CHINESE_STRINGS.md:169` — `- 'packages/shared/src/node-specs-builtin.ts:367' — 'display: { label: '下载处理', iconClass: 'icon-download', category: 'Tools' },'`
+- `docs/UI_CHINESE_STRINGS.md:170` — `- 'packages/shared/src/node-specs-builtin.ts:370' — '{ key: 'filenameContains', label: '文件名包含', type: 'string' },'`
+- `docs/UI_CHINESE_STRINGS.md:171` — `- 'packages/shared/src/node-specs-builtin.ts:371' — '{ key: 'waitForComplete', label: 'انتظار完成', type: 'boolean', default: true },'`
+- `docs/UI_CHINESE_STRINGS.md:172` — `- 'packages/shared/src/node-specs-builtin.ts:372' — '{ key: 'timeoutMs', label: '超时(ms)', type: 'number', default: 60000 },'`
+- `docs/UI_CHINESE_STRINGS.md:173` — `- 'packages/shared/src/node-specs-builtin.ts:387' — 'label: '执行上下文','`
+- `docs/UI_CHINESE_STRINGS.md:174` — `- 'packages/shared/src/node-specs-builtin.ts:395' — '{ key: 'code', label: 'سكربت代码', type: 'string', widget: 'code', required: true },'`
+- `docs/UI_CHINESE_STRINGS.md:175` — `- 'packages/shared/src/node-specs-builtin.ts:398' — 'label: '执行时机','`
+- `docs/UI_CHINESE_STRINGS.md:176` — `- 'packages/shared/src/node-specs-builtin.ts:416' — 'display: { label: '打开标签', iconClass: 'icon-openTab', category: 'Tabs' },'`
+- `docs/UI_CHINESE_STRINGS.md:177` — `- 'packages/shared/src/node-specs-builtin.ts:427' — 'display: { label: '执行سير عمل فرعي程', iconClass: 'icon-exec', category: 'Flow' },'`
+- `docs/UI_CHINESE_STRINGS.md:178` — `- 'packages/shared/src/node-specs-builtin.ts:430' — '{ key: 'flowId', label: '流程ID', type: 'string', required: true },'`
+- `docs/UI_CHINESE_STRINGS.md:179` — `- 'packages/shared/src/node-specs-builtin.ts:431' — '{ key: 'inline', label: '内联执行', type: 'boolean', default: false },'`
+- `docs/UI_CHINESE_STRINGS.md:180` — `- 'packages/shared/src/node-specs-builtin.ts:439' — 'display: { label: '切换标签', iconClass: 'icon-switchTab', category: 'Tabs' },'`
+- `docs/UI_CHINESE_STRINGS.md:181` — `- 'packages/shared/src/node-specs-builtin.ts:444' — '{ key: 'titleContains', label: 'العنوان包含', type: 'string' },'`
+- `docs/UI_CHINESE_STRINGS.md:182` — `- 'packages/shared/src/node-specs-builtin.ts:451' — 'display: { label: '关闭标签', iconClass: 'icon-closeTab', category: 'Tabs' },'`
+- `docs/UI_CHINESE_STRINGS.md:183` — `- 'packages/shared/src/node-specs-builtin.ts:474' — 'label: 'الشرط表达式(JSON)','`
+- `docs/UI_CHINESE_STRINGS.md:184` — `- 'packages/shared/src/node-specs-builtin.ts:476' — 'help: '如 {"expression":"vars.a>0"} 等','`
+- `docs/UI_CHINESE_STRINGS.md:185` — `- 'packages/shared/src/node-specs-builtin.ts:489' — '{ key: 'expr', label: '表达式', type: 'string' },'`
+- `docs/UI_CHINESE_STRINGS.md:186` — `- 'packages/shared/src/node-specs-builtin.ts:503' — '{ key: 'listVar', label: '列表变量', type: 'string', required: true },'`
+- `docs/UI_CHINESE_STRINGS.md:187` — `- 'packages/shared/src/node-specs-builtin.ts:504' — '{ key: 'itemVar', label: '项变量', type: 'string', default: 'item' },'`
+- `docs/UI_CHINESE_STRINGS.md:188` — `- 'packages/shared/src/node-specs-builtin.ts:508' — 'label: '并发数','`
+- `docs/UI_CHINESE_STRINGS.md:189` — `- 'packages/shared/src/node-specs-builtin.ts:511' — 'help: '并发执行سير عمل فرعي程（浅拷贝变量，不自动合并）','`
+- `docs/UI_CHINESE_STRINGS.md:190` — `- 'packages/shared/src/node-specs-builtin.ts:524' — '{ key: 'maxIterations', label: '最大次数', type: 'number', default: 100 },'`
+- `docs/UI_CHINESE_STRINGS.md:191` — `- 'packages/shared/src/node-specs-builtin.ts:563' — '{ key: 'url', label: 'URL 触发', type: 'boolean', default: false },'`
+- `docs/UI_CHINESE_STRINGS.md:192` — `- 'packages/shared/src/node-specs-builtin.ts:572' — 'label: 'URL 规则','`
+- `docs/UI_CHINESE_STRINGS.md:193` — `- 'packages/shared/src/node-specs-builtin.ts:577' — 'label: '规则列表','`
+- `docs/UI_CHINESE_STRINGS.md:194` — `- 'packages/shared/src/node-specs-builtin.ts:581' — 'label: '规则','`
+- `docs/UI_CHINESE_STRINGS.md:195` — `- 'packages/shared/src/node-specs-builtin.ts:591' — '{ label: '路径', value: 'path' },'`
+- `docs/UI_CHINESE_STRINGS.md:196` — `- 'packages/shared/src/node-specs-builtin.ts:595' — '{ key: 'value', label: '值', type: 'string' },'`
+- `docs/UI_CHINESE_STRINGS.md:197` — `- 'packages/shared/src/node-specs-builtin.ts:625' — '{ key: 'appear', label: '出现', type: 'boolean', default: true },'`
+- `docs/UI_CHINESE_STRINGS.md:198` — `- 'packages/shared/src/node-specs-builtin.ts:626' — '{ key: 'once', label: '一次', type: 'boolean', default: true },'`
+- `docs/UI_CHINESE_STRINGS.md:199` — `- 'packages/shared/src/node-specs-builtin.ts:627' — '{ key: 'debounceMs', label: '防抖(ms)', type: 'number', default: 800 },'`
+- `docs/UI_CHINESE_STRINGS.md:200` — `- 'packages/shared/src/node-specs-builtin.ts:637' — 'label: '计划','`
+- `docs/UI_CHINESE_STRINGS.md:201` — `- 'packages/shared/src/node-specs-builtin.ts:646' — '{ label: '一次', value: 'once' },'`
+- `docs/UI_CHINESE_STRINGS.md:202` — `- 'packages/shared/src/node-specs-builtin.ts:647' — '{ label: '间隔', value: 'interval' },'`
+- `docs/UI_CHINESE_STRINGS.md:203` — `- 'packages/shared/src/node-specs-builtin.ts:648' — '{ label: '每日', value: 'daily' },'`
+- `docs/UI_CHINESE_STRINGS.md:204` — `- 'packages/shared/src/node-specs-builtin.ts:651' — '{ key: 'when', label: '时间(ISO/cron)', type: 'string' },'`
+- `docs/UI_CJK_PHRASES.json:3` — `"source": "${f.label} 必填",`
+- `docs/UI_CJK_PHRASES.json:9` — `"source": "(); function onCreateSubflow() { const id = prompt('请输入新子流ID'); if (!id) return; emit('create-subflow', id); const n = props.node as any; if (n && n.config) n.config.subflowId = id; }",`
+- `docs/UI_CJK_PHRASES.json:16` — `"source": "(未知URL)",`
+- `docs/UI_CJK_PHRASES.json:22` — `"source": "(本地文件)",`
+- `docs/UI_CJK_PHRASES.json:28` — `"source": "+ 添加匹配",`
+- `docs/UI_CJK_PHRASES.json:34` — `"source": "+ 添加定时",`
+- `docs/UI_CJK_PHRASES.json:40` — `"source": "+ 添加选择器",`
+- `docs/UI_CJK_PHRASES.json:46` — `"source": "5 或 09:00 或 2025-01-01T10:00:00",`
+- `docs/UI_CJK_PHRASES.json:52` — `"source": "AI Agent 对话与任务",`
+- `docs/UI_CJK_PHRASES.json:58` — `"source": "Assign: 路径非法 ${s}",`
+- `docs/UI_CJK_PHRASES.json:64` — `"source": "Backspace Enter 或 cmd+a",`
+- `docs/UI_CJK_PHRASES.json:70` — `"source": "CPU 都要给我干烧了",`
+- `docs/UI_CJK_PHRASES.json:76` — `"source": "CSS 选择器",`
+- `docs/UI_CJK_PHRASES.json:84` — `"source": "CSS 选择器或 XPath",`
+- `docs/UI_CJK_PHRASES.json:90` — `"source": "DOM 变化",`
+- `docs/UI_CJK_PHRASES.json:96` — `"source": "ELK 自动布局不可用，已使用备用布局",`
+- `docs/UI_CJK_PHRASES.json:102` — `"source": "Else 分支（无需表达式，将匹配以上条件都不成立时）",`
+- `docs/UI_CJK_PHRASES.json:108` — `"source": "Extract: 需填写保存变量名",`
+- `docs/UI_CJK_PHRASES.json:114` — `"source": "Extract: 需提供 selector 或 js",`
+- `docs/UI_CJK_PHRASES.json:120` — `"source": "FormData (JSON，可选，提供时覆盖 Body)",`
+- `docs/UI_CJK_PHRASES.json:126` — `"source": "HTTP: 缺少 URL",`
+- `docs/UI_CJK_PHRASES.json:132` — `"source": "JSON 格式错误",`
+- `docs/UI_CJK_PHRASES.json:138` — `"source": "Script: 配置了保存/映射但缺少代码",`
+- `docs/UI_CJK_PHRASES.json:144` — `"source": "SwitchTab: 需提供 tabId 或 URL/标题包含",`
+- `docs/UI_CJK_PHRASES.json:150` — `"source": "Tab IDs（JSON 数组，可选）",`
+- `docs/UI_CJK_PHRASES.json:156` — `"source": "Tab ID（可选）",`
+- `docs/UI_CJK_PHRASES.json:162` — `"source": "URL 包含（可选）",`
+- `docs/UI_CJK_PHRASES.json:168` — `"source": "URL 地址",`
+- `docs/UI_CJK_PHRASES.json:175` — `"source": "URL 地址（可选）",`
+- `docs/UI_CJK_PHRASES.json:181` — `"source": "V3 Builder 尚未实现，暂时无法创建工作流",`
+- `docs/UI_CJK_PHRASES.json:187` — `"source": "V3 Builder 尚未实现，暂时无法编辑工作流",`
+- `docs/UI_CJK_PHRASES.json:193` — `"source": "V3 Trigger 管理尚未实现，暂时无法创建触发器",`
+- `docs/UI_CJK_PHRASES.json:199` — `"source": "V3 Trigger 管理尚未实现，暂时无法编辑触发器",`
+- `docs/UI_CJK_PHRASES.json:205` — `"source": "frame URL 包含的字符串",`
+- `docs/UI_CJK_PHRASES.json:211` — `"source": "if/else 分支数 ${cnt}${n.config?.else === false ? '' : ' + else'}",`
+- `docs/UI_CJK_PHRASES.json:217` — `"source": "remove(i) }, '删除'), ]), ), h('button', { class: 'btn', type: 'button', onClick: add }, '新增'), ]); }, });",`
+- `docs/UI_CJK_PHRASES.json:223` — `"source": "saveState.value === 'saving' ? '保存中…' : saveState.value === 'saved' ? '已保存' : '', ); let saveTimer: ReturnType",`
+- `docs/UI_CJK_PHRASES.json:229` — `"source": "text/textContent 或属性名",`
+- `docs/UI_CJK_PHRASES.json:235` — `"source": "x.type === t && x.value); if (c) { sel = String(c.value); break; } } if (!sel && candidates[0]?.value) sel = String(candidates[0].value); if (sel) { text.value = sel; emit('update:modelValue', sel); } else { e`
+- `docs/UI_CJK_PHRASES.json:241` — `"source": "{{ b.name || '条件${idx + 1}' }}",`
+- `docs/UI_CJK_PHRASES.json:247` — `"source": "{{ domainGroup.count }} 个标注",`
+- `docs/UI_CJK_PHRASES.json:253` — `"source": "{{ editingMarkerId ? '更新' : '保存' }}",`
+- `docs/UI_CJK_PHRASES.json:259` — `"source": "{{ editingMarkerId ? '编辑标注' : '新增标注' }}",`
+- `docs/UI_CJK_PHRASES.json:265` — `"source": "{{ title || '选择器' }}",`
+- `docs/UI_CJK_PHRASES.json:271` — `"source": "• 耗时: {{ Math.round( (new Date(run.finishedAt).getTime() - new Date(run.startedAt).getTime()) / 1000, ) }}s",`
+- `docs/UI_CJK_PHRASES.json:277` — `"source": "⚠️ 配置错误",`
+- `docs/UI_CJK_PHRASES.json:284` — `"source": "一次 ${s.when}",`
+- `docs/UI_CJK_PHRASES.json:290` — `"source": "一次(ISO时间)",`
+- `docs/UI_CJK_PHRASES.json:296` — `"source": "不能连接到自身",`
+- `docs/UI_CJK_PHRASES.json:302` — `"source": "个域名",`
+- `docs/UI_CJK_PHRASES.json:308` — `"source": "个标注 （共 {{ markers.length }} 个，{{ groupedMarkers.length }} 个域名）",`
+- `docs/UI_CJK_PHRASES.json:314` — `"source": "个标注，",`
+- `docs/UI_CJK_PHRASES.json:320` — `"source": "为空则截取可视区或全页",`
+- `docs/UI_CJK_PHRASES.json:326` — `"source": "主理人已上线，请稍候",`
+- `docs/UI_CJK_PHRASES.json:332` — `"source": "事件类型",`
+- `docs/UI_CJK_PHRASES.json:338` — `"source": "仅触发一次",`
+- `docs/UI_CJK_PHRASES.json:344` — `"source": "从头回放整流",`
+- `docs/UI_CJK_PHRASES.json:350` — `"source": "从选中节点回放",`
+- `docs/UI_CJK_PHRASES.json:356` — `"source": "从选中运行",`
+- `docs/UI_CJK_PHRASES.json:362` — `"source": "从页面拾取",`
+- `docs/UI_CJK_PHRASES.json:368` — `"source": "从页面选择",`
+- `docs/UI_CJK_PHRASES.json:374` — `"source": "代码",`
+- `docs/UI_CJK_PHRASES.json:380` — `"source": "代码跑得比记者还快",`
+- `docs/UI_CJK_PHRASES.json:386` — `"source": "传参 (JSON)",`
+- `docs/UI_CJK_PHRASES.json:392` — `"source": "作用范围",`
+- `docs/UI_CJK_PHRASES.json:398` — `"source": "使用表达式定义分支，支持变量与常见比较运算符。",`
+- `docs/UI_CJK_PHRASES.json:404` — `"source": "例如 09:30",`
+- `docs/UI_CJK_PHRASES.json:410` — `"source": "例如 2025-10-05T10:00:00",`
+- `docs/UI_CJK_PHRASES.json:416` — `"source": "例如 https://example.com/app",`
+- `docs/UI_CJK_PHRASES.json:422` — `"source": "例如 run_quick_trigger_1",`
+- `docs/UI_CJK_PHRASES.json:428` — `"source": "例如: 登录按钮",`
+- `docs/UI_CJK_PHRASES.json:434` — `"source": "保存",`
+- `docs/UI_CJK_PHRASES.json:443` — `"source": "保存中…",`
+- `docs/UI_CJK_PHRASES.json:449` — `"source": "保存为变量",`
+- `docs/UI_CJK_PHRASES.json:456` — `"source": "保存为变量（可选）",`
+- `docs/UI_CJK_PHRASES.json:462` — `"source": "保存到变量",`
+- `docs/UI_CJK_PHRASES.json:468` — `"source": "保存失败：${e instanceof Error ? e.message : String(e)}",`
+- `docs/UI_CJK_PHRASES.json:474` — `"source": "偏移 X",`
+- `docs/UI_CJK_PHRASES.json:480` — `"source": "偏移 Y",`
+- `docs/UI_CJK_PHRASES.json:486` — `"source": "元素标注管理",`
+- `docs/UI_CJK_PHRASES.json:493` — `"source": "元素选择器",`
+- `docs/UI_CJK_PHRASES.json:499` — `"source": "元素选择器（可选）",`
+- `docs/UI_CJK_PHRASES.json:506` — `"source": "全页截图",`
+- `docs/UI_CJK_PHRASES.json:512` — `"source": "共",`
+- `docs/UI_CJK_PHRASES.json:518` — `"source": "关闭标签",`
+- `docs/UI_CJK_PHRASES.json:524` — `"source": "内联执行（共享上下文变量）",`
+- `docs/UI_CJK_PHRASES.json:530` — `"source": "冒泡",`
+- `docs/UI_CJK_PHRASES.json:536` — `"source": "出现时触发",`
+- `docs/UI_CJK_PHRASES.json:542` — `"source": "分支${i + 1}: 需填写条件表达式",`
+- `docs/UI_CJK_PHRASES.json:548` — `"source": "分支名称（可选）",`
+- `docs/UI_CJK_PHRASES.json:554` — `"source": "切换标签",`
+- `docs/UI_CJK_PHRASES.json:560` — `"source": "切换页面",`
+- `docs/UI_CJK_PHRASES.json:566` — `"source": "切换页面（可拖拽移动，双击重置位置）",`
+- `docs/UI_CJK_PHRASES.json:572` — `"source": "列表变量",`
+- `docs/UI_CJK_PHRASES.json:578` — `"source": "列表变量名",`
+- `docs/UI_CJK_PHRASES.json:584` — `"source": "删",`
+- `docs/UI_CJK_PHRASES.json:590` — `"source": "删除",`
+- `docs/UI_CJK_PHRASES.json:600` — `"source": "删除属性",`
+- `docs/UI_CJK_PHRASES.json:606` — `"source": "删除节点",`
+- `docs/UI_CJK_PHRASES.json:612` — `"source": "删除边",`
+- `docs/UI_CJK_PHRASES.json:618` — `"source": "别催，已经在写了（新建文件夹）",`
+- `docs/UI_CJK_PHRASES.json:624` — `"source": "前缀 URL",`
+- `docs/UI_CJK_PHRASES.json:630` — `"source": "加载工作流失败：${e instanceof Error ? e.message : String(e)}",`
+- `docs/UI_CJK_PHRASES.json:636` — `"source": "匹配类型",`
+- `docs/UI_CJK_PHRASES.json:642` — `"source": "去抖(ms)",`
+- `docs/UI_CJK_PHRASES.json:648` — `"source": "参数(JSON)",`
+- `docs/UI_CJK_PHRASES.json:654` — `"source": "双击",`
+- `docs/UI_CJK_PHRASES.json:660` — `"source": "发射倒计时",`
+- `docs/UI_CJK_PHRASES.json:666` — `"source": "取消",`
+- `docs/UI_CJK_PHRASES.json:672` — `"source": "变量名",`
+- `docs/UI_CJK_PHRASES.json:680` — `"source": "变量名，例如 shot",`
+- `docs/UI_CJK_PHRASES.json:686` — `"source": "只执行一次",`
+- `docs/UI_CJK_PHRASES.json:692` — `"source": "可取消",`
+- `docs/UI_CJK_PHRASES.json:698` — `"source": "可输入 CSS 选择器，或点击“拾取”在页面中选择元素",`
+- `docs/UI_CJK_PHRASES.json:704` — `"source": "可选描述",`
+- `docs/UI_CJK_PHRASES.json:710` — `"source": "右键菜单",`
+- `docs/UI_CJK_PHRASES.json:716` — `"source": "同源/可注入 frame 可用；留空则回到顶级页面",`
+- `docs/UI_CJK_PHRASES.json:722` — `"source": "名称",`
+- `docs/UI_CJK_PHRASES.json:729` — `"source": "名称，如 登录按钮",`
+- `docs/UI_CJK_PHRASES.json:735` — `"source": "启用",`
+- `docs/UI_CJK_PHRASES.json:742` — `"source": "启用定时",`
+- `docs/UI_CJK_PHRASES.json:748` — `"source": "启用触发器",`
+- `docs/UI_CJK_PHRASES.json:754` — `"source": "命令键（需预先在 manifest commands 中声明）",`
+- `docs/UI_CJK_PHRASES.json:760` — `"source": "唤醒硅基朋友",`
+- `docs/UI_CJK_PHRASES.json:766` — `"source": "回放失败",`
+- `docs/UI_CJK_PHRASES.json:772` — `"source": "在知识的海洋里狗刨",`
+- `docs/UI_CJK_PHRASES.json:778` — `"source": "域名",`
+- `docs/UI_CJK_PHRASES.json:785` — `"source": "域名包含",`
+- `docs/UI_CJK_PHRASES.json:791` — `"source": "填充",`
+- `docs/UI_CJK_PHRASES.json:797` — `"source": "大脑马戏团开演",`
+- `docs/UI_CJK_PHRASES.json:803` — `"source": "失败",`
+- `docs/UI_CJK_PHRASES.json:809` — `"source": "失败时截图",`
+- `docs/UI_CJK_PHRASES.json:815` — `"source": "失败策略",`
+- `docs/UI_CJK_PHRASES.json:821` — `"source": "如 Backspace Enter 或 cmd+a",`
+- `docs/UI_CJK_PHRASES.json:827` — `"source": "如 input/change/mouseover",`
+- `docs/UI_CJK_PHRASES.json:833` — `"source": "如 value/src/disabled 等",`
+- `docs/UI_CJK_PHRASES.json:839` — `"source": "子串匹配",`
+- `docs/UI_CJK_PHRASES.json:845` — `"source": "子串匹配 URL",`
+- `docs/UI_CJK_PHRASES.json:851` — `"source": "子串匹配文件名或URL",`
+- `docs/UI_CJK_PHRASES.json:857` — `"source": "子流 ID",`
+- `docs/UI_CJK_PHRASES.json:865` — `"source": "定时",`
+- `docs/UI_CJK_PHRASES.json:871` — `"source": "定时执行",`
+- `docs/UI_CJK_PHRASES.json:877` — `"source": "容器偏移",`
+- `docs/UI_CJK_PHRASES.json:883` — `"source": "容器选择器",`
+- `docs/UI_CJK_PHRASES.json:889` — `"source": "容器需支持 scrollTo(top,left)",`
+- `docs/UI_CJK_PHRASES.json:895` — `"source": "导入",`
+- `docs/UI_CJK_PHRASES.json:901` — `"source": "导入 JSON",`
+- `docs/UI_CJK_PHRASES.json:907` — `"source": "导入失败：${e instanceof Error ? e.message : String(e)}",`
+- `docs/UI_CJK_PHRASES.json:913` — `"source": "导入失败：未找到工作流数据",`
+- `docs/UI_CJK_PHRASES.json:919` — `"source": "导出",`
+- `docs/UI_CJK_PHRASES.json:925` — `"source": "导出 JSON",`
+- `docs/UI_CJK_PHRASES.json:931` — `"source": "导出失败：${e instanceof Error ? e.message : String(e)}",`
+- `docs/UI_CJK_PHRASES.json:937` — `"source": "导航",`
+- `docs/UI_CJK_PHRASES.json:943` — `"source": "属性",`
+- `docs/UI_CJK_PHRASES.json:949` — `"source": "属性值",`
+- `docs/UI_CJK_PHRASES.json:955` — `"source": "属性值（留空并勾选删除则移除）",`
+- `docs/UI_CJK_PHRASES.json:961` — `"source": "属性名",`
+- `docs/UI_CJK_PHRASES.json:967` — `"source": "工作流 \"${q.flowId}\" 未找到，已创建新工作流",`
+- `docs/UI_CJK_PHRASES.json:973` — `"source": "工作流可视化编排",`
+- `docs/UI_CJK_PHRASES.json:979` — `"source": "工作流名称",`
+- `docs/UI_CJK_PHRASES.json:985` — `"source": "工作流管理",`
+- `docs/UI_CJK_PHRASES.json:992` — `"source": "工作流编辑器",`
+- `docs/UI_CJK_PHRASES.json:999` — `"source": "已保存",`
+- `docs/UI_CJK_PHRASES.json:1005` — `"source": "已取消",`
+- `docs/UI_CJK_PHRASES.json:1011` — `"source": "已应用回退建议：提升 {{ fallbackNotice.type }} 优先级",`
+- `docs/UI_CJK_PHRASES.json:1017` — `"source": "已暂停",`
+- `docs/UI_CJK_PHRASES.json:1023` — `"source": "已有计划",`
+- `docs/UI_CJK_PHRASES.json:1029` — `"source": "已标注元素",`
+- `docs/UI_CJK_PHRASES.json:1035` — `"source": "延迟",`
+- `docs/UI_CJK_PHRASES.json:1041` — `"source": "延迟 (ms)",`
+- `docs/UI_CJK_PHRASES.json:1047` — `"source": "当前页面",`
+- `docs/UI_CJK_PHRASES.json:1053` — `"source": "录制与回放自动化流程",`
+- `docs/UI_CJK_PHRASES.json:1059` — `"source": "循环",`
+- `docs/UI_CJK_PHRASES.json:1065` — `"source": "循环项变量名",`
+- `docs/UI_CJK_PHRASES.json:1072` — `"source": "快捷键",`
+- `docs/UI_CJK_PHRASES.json:1078` — `"source": "快马加鞭赶来中",`
+- `docs/UI_CJK_PHRASES.json:1084` — `"source": "情绪价值拉满中",`
+- `docs/UI_CJK_PHRASES.json:1090` — `"source": "成功",`
+- `docs/UI_CJK_PHRASES.json:1096` — `"source": "我知道你很急，但是先别急",`
+- `docs/UI_CJK_PHRASES.json:1102` — `"source": "手动",`
+- `docs/UI_CJK_PHRASES.json:1108` — `"source": "打开标签",`
+- `docs/UI_CJK_PHRASES.json:1114` — `"source": "执行时机",`
+- `docs/UI_CJK_PHRASES.json:1120` — `"source": "执行环境",`
+- `docs/UI_CJK_PHRASES.json:1126` — `"source": "拖拽",`
+- `docs/UI_CJK_PHRASES.json:1133` — `"source": "拼图最后一块",`
+- `docs/UI_CJK_PHRASES.json:1139` — `"source": "拾取",`
+- `docs/UI_CJK_PHRASES.json:1145` — `"source": "拾取失败",`
+- `docs/UI_CJK_PHRASES.json:1151` — `"source": "按 URL 关闭（可选）",`
+- `docs/UI_CJK_PHRASES.json:1157` — `"source": "按 URL 包含匹配（优先）",`
+- `docs/UI_CJK_PHRASES.json:1163` — `"source": "按索引匹配（从 0 起，仅子 frame）",`
+- `docs/UI_CJK_PHRASES.json:1169` — `"source": "按键序列",`
+- `docs/UI_CJK_PHRASES.json:1175` — `"source": "排队中",`
+- `docs/UI_CJK_PHRASES.json:1181` — `"source": "描述",`
+- `docs/UI_CJK_PHRASES.json:1187` — `"source": "描述（可选）",`
+- `docs/UI_CJK_PHRASES.json:1193` — `"source": "提取",`
+- `docs/UI_CJK_PHRASES.json:1199` — `"source": "提示：Chrome 扩展快捷键需要在 manifest 里固定声明，无法运行时动态添加。",`
+- `docs/UI_CJK_PHRASES.json:1205` — `"source": "提示：路径（path）通常在录制时自动生成，手动创建时可留空。",`
+- `docs/UI_CJK_PHRASES.json:1211` — `"source": "插入变量",`
+- `docs/UI_CJK_PHRASES.json:1217` — `"source": "搜索标注名称、选择器...",`
+- `docs/UI_CJK_PHRASES.json:1223` — `"source": "撤销",`
+- `docs/UI_CJK_PHRASES.json:1229` — `"source": "撤销 (⌘/Ctrl+Z)",`
+- `docs/UI_CJK_PHRASES.json:1235` — `"source": "支持 {变量名} 格式",`
+- `docs/UI_CJK_PHRASES.json:1241` — `"source": "支持简洁数组形式：[[\"file\",\"url:https://...\",\"a.png\"],[\"metadata\",\"value\"]]",`
+- `docs/UI_CJK_PHRASES.json:1247` — `"source": "放大镜有点起雾，擦擦",`
+- `docs/UI_CJK_PHRASES.json:1253` — `"source": "敬自己一杯，马上好",`
+- `docs/UI_CJK_PHRASES.json:1259` — `"source": "数字",`
+- `docs/UI_CJK_PHRASES.json:1265` — `"source": "文件名包含（可选）",`
+- `docs/UI_CJK_PHRASES.json:1271` — `"source": "断言",`
+- `docs/UI_CJK_PHRASES.json:1277` — `"source": "断言条件 (JSON)",`
+- `docs/UI_CJK_PHRASES.json:1283` — `"source": "新增",`
+- `docs/UI_CJK_PHRASES.json:1289` — `"source": "新增标注",`
+- `docs/UI_CJK_PHRASES.json:1296` — `"source": "新建子流",`
+- `docs/UI_CJK_PHRASES.json:1304` — `"source": "新建工作流",`
+- `docs/UI_CJK_PHRASES.json:1310` — `"source": "新窗口",`
+- `docs/UI_CJK_PHRASES.json:1316` — `"source": "时间(HH:mm)",`
+- `docs/UI_CJK_PHRASES.json:1322` — `"source": "时间(ISO)",`
+- `docs/UI_CJK_PHRASES.json:1328` — `"source": "是否切换到该项目？\\n\\n",`
+- `docs/UI_CJK_PHRASES.json:1334` — `"source": "智能助手",`
+- `docs/UI_CJK_PHRASES.json:1340` — `"source": "暂无标注元素",`
+- `docs/UI_CJK_PHRASES.json:1346` — `"source": "更新",`
+- `docs/UI_CJK_PHRASES.json:1352` — `"source": "最大迭代次数（可选）",`
+- `docs/UI_CJK_PHRASES.json:1358` — `"source": "未找到匹配的标注",`
+- `docs/UI_CJK_PHRASES.json:1364` — `"source": "未找到活动页签",`
+- `docs/UI_CJK_PHRASES.json:1370` — `"source": "未找到节点规范",`
+- `docs/UI_CJK_PHRASES.json:1376` — `"source": "未生成有效选择器，请手动输入",`
+- `docs/UI_CJK_PHRASES.json:1382` — `"source": "未选择边",`
+- `docs/UI_CJK_PHRASES.json:1388` — `"source": "未配置选择器",`
+- `docs/UI_CJK_PHRASES.json:1394` — `"source": "本地模型",`
+- `docs/UI_CJK_PHRASES.json:1400` — `"source": "本来应该从从容容游刃有余",`
+- `docs/UI_CJK_PHRASES.json:1406` — `"source": "村咖慢焙，精华需要时间",`
+- `docs/UI_CJK_PHRASES.json:1412` — `"source": "条件",`
+- `docs/UI_CJK_PHRASES.json:1418` — `"source": "条件 (JSON)",`
+- `docs/UI_CJK_PHRASES.json:1424` — `"source": "条件${idx + 1}",`
+- `docs/UI_CJK_PHRASES.json:1430` — `"source": "查看和编辑属性",`
+- `docs/UI_CJK_PHRASES.json:1436` — `"source": "标题",`
+- `docs/UI_CJK_PHRASES.json:1442` — `"source": "标题包含（可选）",`
+- `docs/UI_CJK_PHRASES.json:1448` — `"source": "模式",`
+- `docs/UI_CJK_PHRASES.json:1454` — `"source": "正在为您手搓答案",`
+- `docs/UI_CJK_PHRASES.json:1460` — `"source": "正在为您编织语言的毛衣",`
+- `docs/UI_CJK_PHRASES.json:1466` — `"source": "正在光速搬运知识",`
+- `docs/UI_CJK_PHRASES.json:1472` — `"source": "正在反向解析人类意图",`
+- `docs/UI_CJK_PHRASES.json:1478` — `"source": "正在憋个大招",`
+- `docs/UI_CJK_PHRASES.json:1484` — `"source": "正在把 0 和 1 捏在一起",`
+- `docs/UI_CJK_PHRASES.json:1490` — `"source": "正在把灵感放入烤箱",`
+- `docs/UI_CJK_PHRASES.json:1496` — `"source": "正在施法，莫打扰",`
+- `docs/UI_CJK_PHRASES.json:1502` — `"source": "正在汗流浃背地思考中",`
+- `docs/UI_CJK_PHRASES.json:1508` — `"source": "正在疯狂翻阅知识库",`
+- `docs/UI_CJK_PHRASES.json:1514` — `"source": "正在连接赛博空间的智慧",`
+- `docs/UI_CJK_PHRASES.json:1520` — `"source": "每 ${s.when} 分钟",`
+- `docs/UI_CJK_PHRASES.json:1526` — `"source": "每天 ${s.when}",`
+- `docs/UI_CJK_PHRASES.json:1532` — `"source": "每天(HH:mm)",`
+- `docs/UI_CJK_PHRASES.json:1538` — `"source": "每天固定时间",`
+- `docs/UI_CJK_PHRASES.json:1544` — `"source": "每隔 N 分钟",`
+- `docs/UI_CJK_PHRASES.json:1550` — `"source": "水晶球有点模糊，拍两下",`
+- `docs/UI_CJK_PHRASES.json:1556` — `"source": "浪浪山小妖怪集结中",`
+- `docs/UI_CJK_PHRASES.json:1562` — `"source": "添加映射",`
+- `docs/UI_CJK_PHRASES.json:1568` — `"source": "清空",`
+- `docs/UI_CJK_PHRASES.json:1574` — `"source": "清除搜索",`
+- `docs/UI_CJK_PHRASES.json:1580` — `"source": "滚动",`
+- `docs/UI_CJK_PHRASES.json:1586` — `"source": "滚动到元素",`
+- `docs/UI_CJK_PHRASES.json:1592` — `"source": "点击",`
+- `docs/UI_CJK_PHRASES.json:1598` — `"source": "熬夜的猫头鹰在思考",`
+- `docs/UI_CJK_PHRASES.json:1604` — `"source": "状态: {{ getRunStatusText(run) }}",`
+- `docs/UI_CJK_PHRASES.json:1610` — `"source": "现在是匆匆忙忙连滚带爬",`
+- `docs/UI_CJK_PHRASES.json:1616` — `"source": "目录 \"${validation.absolute}\" 不存在，是否创建？\\n\\nThe directory \"${validation.absolute}\" does not exist. Create it?",`
+- `docs/UI_CJK_PHRASES.json:1622` — `"source": "目录 \"${validation.absolute}\" 已存在对应的项目：${existingProject.name}\\n\\n",`
+- `docs/UI_CJK_PHRASES.json:1628` — `"source": "目标元素",`
+- `docs/UI_CJK_PHRASES.json:1634` — `"source": "目标工作流",`
+- `docs/UI_CJK_PHRASES.json:1640` — `"source": "目标锁定中",`
+- `docs/UI_CJK_PHRASES.json:1646` — `"source": "知识煎饼翻面中",`
+- `docs/UI_CJK_PHRASES.json:1652` — `"source": "确定要删除标注 \"${marker.name}\" 吗?",`
+- `docs/UI_CJK_PHRASES.json:1658` — `"source": "确认删除该工作流？此操作不可恢复",`
+- `docs/UI_CJK_PHRASES.json:1664` — `"source": "示例：Backspace Enter 或 cmd+a",`
+- `docs/UI_CJK_PHRASES.json:1670` — `"source": "神经元蹦迪中",`
+- `docs/UI_CJK_PHRASES.json:1676` — `"source": "穿越知识黑洞",`
+- `docs/UI_CJK_PHRASES.json:1682` — `"source": "窗口偏移",`
+- `docs/UI_CJK_PHRASES.json:1688` — `"source": "等待",`
+- `docs/UI_CJK_PHRASES.json:1694` — `"source": "等待下载完成",`
+- `docs/UI_CJK_PHRASES.json:1700` — `"source": "等待条件 (JSON)",`
+- `docs/UI_CJK_PHRASES.json:1706` — `"source": "答案即将杀青",`
+- `docs/UI_CJK_PHRASES.json:1712` — `"source": "筛选出",`
+- `docs/UI_CJK_PHRASES.json:1718` — `"source": "管理触发器",`
+- `docs/UI_CJK_PHRASES.json:1724` — `"source": "管理页面元素标注",`
+- `docs/UI_CJK_PHRASES.json:1730` — `"source": "类型",`
+- `docs/UI_CJK_PHRASES.json:1736` — `"source": "精确匹配",`
+- `docs/UI_CJK_PHRASES.json:1743` — `"source": "索引数字",`
+- `docs/UI_CJK_PHRASES.json:1749` — `"source": "终点选择器",`
+- `docs/UI_CJK_PHRASES.json:1755` — `"source": "结果字段映射",`
+- `docs/UI_CJK_PHRASES.json:1761` — `"source": "结果路径（如 data.items[0].id）",`
+- `docs/UI_CJK_PHRASES.json:1767` — `"source": "给答案上色中",`
+- `docs/UI_CJK_PHRASES.json:1773` — `"source": "编辑",`
+- `docs/UI_CJK_PHRASES.json:1780` — `"source": "编辑标注",`
+- `docs/UI_CJK_PHRASES.json:1786` — `"source": "编辑：${flowV2.name || flowV2.id}",`
+- `docs/UI_CJK_PHRASES.json:1792` — `"source": "编辑：${store.flowLocal.name || store.flowLocal.id}",`
+- `docs/UI_CJK_PHRASES.json:1798` — `"source": "缺少 URL",`
+- `docs/UI_CJK_PHRASES.json:1804` — `"source": "缺少断言条件",`
+- `docs/UI_CJK_PHRASES.json:1810` — `"source": "缺少目标选择器候选",`
+- `docs/UI_CJK_PHRASES.json:1816` — `"source": "缺少等待条件",`
+- `docs/UI_CJK_PHRASES.json:1822` — `"source": "缺少输入值",`
+- `docs/UI_CJK_PHRASES.json:1828` — `"source": "脚本",`
+- `docs/UI_CJK_PHRASES.json:1834` — `"source": "自动排版",`
+- `docs/UI_CJK_PHRASES.json:1840` — `"source": "自定义 JS（返回值）",`
+- `docs/UI_CJK_PHRASES.json:1846` — `"source": "自适应视图",`
+- `docs/UI_CJK_PHRASES.json:1852` — `"source": "节点 ${n.id} 的定时 #${i + 1}: V3 暂不支持一次性定时（once），已跳过",`
+- `docs/UI_CJK_PHRASES.json:1858` — `"source": "节点 ${n.id} 的定时 #${i + 1}: 无法转换为 cron（type=${scheduleType}），已跳过",`
+- `docs/UI_CJK_PHRASES.json:1864` — `"source": "节点名称",`
+- `docs/UI_CJK_PHRASES.json:1870` — `"source": "节点属性",`
+- `docs/UI_CJK_PHRASES.json:1876` — `"source": "菜单标题",`
+- `docs/UI_CJK_PHRASES.json:1882` — `"source": "表达式解析错误",`
+- `docs/UI_CJK_PHRASES.json:1888` — `"source": "触发器",`
+- `docs/UI_CJK_PHRASES.json:1894` — `"source": "触发方式",`
+- `docs/UI_CJK_PHRASES.json:1900` — `"source": "让子弹再飞一会儿",`
+- `docs/UI_CJK_PHRASES.json:1906` — `"source": "让答案再泡一会儿",`
+- `docs/UI_CJK_PHRASES.json:1912` — `"source": "访问 URL",`
+- `docs/UI_CJK_PHRASES.json:1918` — `"source": "访问 URL 匹配",`
+- `docs/UI_CJK_PHRASES.json:1924` — `"source": "试图理解这个离谱的需求",`
+- `docs/UI_CJK_PHRASES.json:1930` — `"source": "该节点尚未提供 NodeSpec，已回退到默认属性面板。",`
+- `docs/UI_CJK_PHRASES.json:1936` — `"source": "该节点最多允许 ${dstIo.inputs} 条入边",`
+- `docs/UI_CJK_PHRASES.json:1942` — `"source": "该节点最多允许 ${srcIo.outputs} 条出边",`
+- `docs/UI_CJK_PHRASES.json:1948` — `"source": "说明此触发器的用途",`
+- `docs/UI_CJK_PHRASES.json:1954` — `"source": "说明： 触发器会在保存工作流时同步到后台触发表（URL/右键/快捷键/DOM）和计划任务（间隔/每天/一次）。",`
+- `docs/UI_CJK_PHRASES.json:1960` — `"source": "请求方法",`
+- `docs/UI_CJK_PHRASES.json:1966` — `"source": "请输入新子流ID",`
+- `docs/UI_CJK_PHRASES.json:1975` — `"source": "请选择",`
+- `docs/UI_CJK_PHRASES.json:1981` — `"source": "起点选择器",`
+- `docs/UI_CJK_PHRASES.json:1987` — `"source": "超时 (ms)",`
+- `docs/UI_CJK_PHRASES.json:1993` — `"source": "超时(ms)",`
+- `docs/UI_CJK_PHRASES.json:1999` — `"source": "路径前缀",`
+- `docs/UI_CJK_PHRASES.json:2007` — `"source": "输入 JSON",`
+- `docs/UI_CJK_PHRASES.json:2013` — `"source": "输入值",`
+- `docs/UI_CJK_PHRASES.json:2019` — `"source": "输入节点名称",`
+- `docs/UI_CJK_PHRASES.json:2025` — `"source": "运算符",`
+- `docs/UI_CJK_PHRASES.json:2031` — `"source": "运行",`
+- `docs/UI_CJK_PHRASES.json:2037` — `"source": "运行中",`
+- `docs/UI_CJK_PHRASES.json:2043` — `"source": "运行失败：${e instanceof Error ? e.message : String(e)}",`
+- `docs/UI_CJK_PHRASES.json:2049` — `"source": "运行工作流",`
+- `docs/UI_CJK_PHRASES.json:2055` — `"source": "返回",`
+- `docs/UI_CJK_PHRASES.json:2061` — `"source": "返回首页",`
+- `docs/UI_CJK_PHRASES.json:2067` — `"source": "选择一个节点",`
+- `docs/UI_CJK_PHRASES.json:2073` — `"source": "选择器",`
+- `docs/UI_CJK_PHRASES.json:2081` — `"source": "选择器值",`
+- `docs/UI_CJK_PHRASES.json:2087` — `"source": "选择器类型",`
+- `docs/UI_CJK_PHRASES.json:2093` — `"source": "选择或新建子流",`
+- `docs/UI_CJK_PHRASES.json:2101` — `"source": "通用设置",`
+- `docs/UI_CJK_PHRASES.json:2107` — `"source": "道友请留步，正在推演",`
+- `docs/UI_CJK_PHRASES.json:2113` — `"source": "配置",`
+- `docs/UI_CJK_PHRASES.json:2119` — `"source": "重做 (⌘/Ctrl+Shift+Z)",`
+- `docs/UI_CJK_PHRASES.json:2125` — `"source": "重命名工作流",`
+- `docs/UI_CJK_PHRASES.json:2131` — `"source": "键盘",`
+- `docs/UI_CJK_PHRASES.json:2137` — `"source": "间隔(分钟)",`
+- `docs/UI_CJK_PHRASES.json:2144` — `"source": "需填写保存变量名",`
+- `docs/UI_CJK_PHRASES.json:2150` — `"source": "需提供 selector 或 js",`
+- `docs/UI_CJK_PHRASES.json:2156` — `"source": "需提供 tabId 或 URL/标题包含",`
+- `docs/UI_CJK_PHRASES.json:2162` — `"source": "需提供事件类型",`
+- `docs/UI_CJK_PHRASES.json:2168` — `"source": "需提供元素选择器",`
+- `docs/UI_CJK_PHRASES.json:2174` — `"source": "需提供子流 ID",`
+- `docs/UI_CJK_PHRASES.json:2180` — `"source": "需提供属性名",`
+- `docs/UI_CJK_PHRASES.json:2186` — `"source": "需添加至少一个条件分支",`
+- `docs/UI_CJK_PHRASES.json:2192` — `"source": "需选择要执行的工作流",`
+- `docs/UI_CJK_PHRASES.json:2198` — `"source": "验证",`
+- `docs/UI_CJK_PHRASES.json:2205` — `"source": "默认 60000",`
+- `docs/UI_CJK_PHRASES.json:2211` — `"source": "默认 download",`
+- `docs/UI_CJK_PHRASES.json:2217` — `"source": "默认 elements",`
+- `docs/UI_CJK_PHRASES.json:2223` — `"source": "默认 item",`
+- `docs/UI_CJK_PHRASES.json:2230` — `"source": "默认使用全局超时",`
 - `docs/ISSUE.md:1` — `# Issues 总览`
 - `docs/ISSUE.md:3` — `## 📊 统计信息`
 - `docs/ISSUE.md:5` — `- **总Issue数**: 183`
@@ -2230,42 +2376,18 @@ Files containing CJK text: **195**
 - `app/chrome-extension/tests/record-replay-v3/e2e.integration.test.ts:387` — `// 队列应该为空`
 - `app/chrome-extension/tests/record-replay-v3/url-trigger.test.ts:2` — `* @fileoverview URL Trigger Handler 测试 (P4-03)`
 - `app/chrome-extension/tests/record-replay-v3/spec-smoke.test.ts:3` — `* @description 验证 V3 类型定义和常量可正常导入使用`
-- `app/chrome-extension/entrypoints/sidepanel/App.vue:52` — `placeholder="搜索标注名称、选择器..."`
-- `app/chrome-extension/entrypoints/sidepanel/App.vue:69` — `<button class="em-add-btn" @click="openMarkerEditor()" title="新增标注">`
-- `app/chrome-extension/entrypoints/sidepanel/App.vue:83` — `<h3 class="em-modal-title">{{ editingMarkerId ? '编辑标注' : '新增标注' }}</h3>`
-- `app/chrome-extension/entrypoints/sidepanel/App.vue:96` — `<label class="em-field-label">名称</label>`
+- `app/chrome-extension/entrypoints/sidepanel/App.vue:52` — `placeholder="搜索تحديدالاسم、المحدد..."`
 - `app/chrome-extension/entrypoints/sidepanel/App.vue:100` — `placeholder="例如: 登录按钮"`
-- `app/chrome-extension/entrypoints/sidepanel/App.vue:108` — `<label class="em-field-label">选择器类型</label>`
-- `app/chrome-extension/entrypoints/sidepanel/App.vue:117` — `<label class="em-field-label">匹配类型</label>`
-- `app/chrome-extension/entrypoints/sidepanel/App.vue:120` — `<option value="prefix">路径前缀</option>`
-- `app/chrome-extension/entrypoints/sidepanel/App.vue:121` — `<option value="exact">精确匹配</option>`
-- `app/chrome-extension/entrypoints/sidepanel/App.vue:122` — `<option value="host">域名</option>`
-- `app/chrome-extension/entrypoints/sidepanel/App.vue:130` — `<label class="em-field-label">选择器</label>`
-- `app/chrome-extension/entrypoints/sidepanel/App.vue:134` — `placeholder="CSS 选择器或 XPath"`
 - `app/chrome-extension/entrypoints/sidepanel/App.vue:143` — `取消`
-- `app/chrome-extension/entrypoints/sidepanel/App.vue:146` — `{{ editingMarkerId ? '更新' : '保存' }}`
-- `app/chrome-extension/entrypoints/sidepanel/App.vue:159` — `筛选出 <strong>{{ filteredMarkers.length }}</strong> 个标注 （共`
-- `app/chrome-extension/entrypoints/sidepanel/App.vue:160` — `{{ markers.length }} 个，{{ groupedMarkers.length }} 个域名）`
-- `app/chrome-extension/entrypoints/sidepanel/App.vue:163` — `共 <strong>{{ markers.length }}</strong> 个标注，`
-- `app/chrome-extension/entrypoints/sidepanel/App.vue:164` — `<strong>{{ groupedMarkers.length }}</strong> 个域名`
-- `app/chrome-extension/entrypoints/sidepanel/App.vue:188` — `<span class="em-domain-count">{{ domainGroup.count }} 个标注</span>`
-- `app/chrome-extension/entrypoints/sidepanel/App.vue:214` — `title="验证"`
-- `app/chrome-extension/entrypoints/sidepanel/App.vue:227` — `title="编辑"`
-- `app/chrome-extension/entrypoints/sidepanel/App.vue:240` — `title="删除"`
-- `app/chrome-extension/entrypoints/sidepanel/App.vue:271` — `<p>未找到匹配的标注</p>`
+- `app/chrome-extension/entrypoints/sidepanel/App.vue:159` — `筛选出 <strong>{{ filteredMarkers.length }}</strong> تحديدات （共`
+- `app/chrome-extension/entrypoints/sidepanel/App.vue:160` — `{{ markers.length }} 个，{{ groupedMarkers.length }} نطاقات）`
+- `app/chrome-extension/entrypoints/sidepanel/App.vue:163` — `共 <strong>{{ markers.length }}</strong> تحديدات，`
+- `app/chrome-extension/entrypoints/sidepanel/App.vue:271` — `<p>غير موجودمطابقة的تحديد</p>`
 - `app/chrome-extension/entrypoints/sidepanel/App.vue:273` — `清除搜索`
-- `app/chrome-extension/entrypoints/sidepanel/App.vue:279` — `<p>暂无标注元素</p>`
-- `app/chrome-extension/entrypoints/sidepanel/App.vue:281` — `新增标注`
-- `app/chrome-extension/entrypoints/sidepanel/App.vue:356` — `const domain = marker.host || '(本地文件)';`
-- `app/chrome-extension/entrypoints/sidepanel/App.vue:357` — `const fullUrl = marker.url || '(未知URL)';`
-- `app/chrome-extension/entrypoints/sidepanel/App.vue:440` — `alert('V3 Trigger 管理尚未实现，暂时无法创建触发器');`
-- `app/chrome-extension/entrypoints/sidepanel/App.vue:445` — `alert('V3 Trigger 管理尚未实现，暂时无法编辑触发器');`
-- `app/chrome-extension/entrypoints/sidepanel/App.vue:459` — `if (!result) console.warn('回放失败');`
-- `app/chrome-extension/entrypoints/sidepanel/App.vue:465` — `alert('V3 Builder 尚未实现，暂时无法编辑工作流');`
-- `app/chrome-extension/entrypoints/sidepanel/App.vue:471` — `alert('V3 Builder 尚未实现，暂时无法创建工作流');`
-- `app/chrome-extension/entrypoints/sidepanel/App.vue:477` — `const ok = confirm('确认删除该工作流？此操作不可恢复');`
-- `app/chrome-extension/entrypoints/sidepanel/App.vue:611` — `const confirmed = confirm('确定要删除标注 "${marker.name}" 吗?');`
-- `app/chrome-extension/entrypoints/sidepanel/index.html:6` — `<title>工作流管理</title>`
+- `app/chrome-extension/entrypoints/sidepanel/App.vue:279` — `<p>暂无تحديدالعنصر</p>`
+- `app/chrome-extension/entrypoints/sidepanel/App.vue:459` — `if (!result) console.warn('回放فشل');`
+- `app/chrome-extension/entrypoints/sidepanel/App.vue:477` — `const ok = confirm('确认حذف该سير العمل？此操作不可恢复');`
+- `app/chrome-extension/entrypoints/sidepanel/App.vue:611` — `const confirmed = confirm('确定要حذفتحديد "${marker.name}" 吗?');`
 - `app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:1` — `# Property Panel UI 重构计划`
 - `app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:3` — `## 背景`
 - `app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:5` — `当前属性面板的 UI 实现与设计稿 'attr-ui.html' 存在较大差异。本文档详细规划了重构任务，按照优先级从高到低排列，目标是让属性面板的视觉效果和交互体验与设计稿一致。`
@@ -2480,16 +2602,16 @@ Files containing CJK text: **195**
 - `app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:382` — `3. **设计决策记录**：遇到设计稿与实际需求冲突时，记录决策原因`
 - `app/chrome-extension/entrypoints/web-editor-v2/attr-ui-refactor.md:383` — `4. **性能考虑**：新增组件需考虑渲染性能，避免不必要的 DOM 操作`
 - `app/chrome-extension/entrypoints/popup/main.ts:4` — `// 引入AgentChat主题样式`
-- `app/chrome-extension/entrypoints/popup/main.ts:9` — `// 在Vue挂载前预加载主题，防止主题闪烁`
+- `app/chrome-extension/entrypoints/popup/main.ts:9` — `// 在Vue挂载前预تحميل主题，防止主题闪烁`
 - `app/chrome-extension/entrypoints/popup/App.vue:2090` — `/* 快捷工具icon按钮样式 */`
 - `app/chrome-extension/entrypoints/popup/App.vue:2130` — `/* 录制按钮 - 红色 */`
-- `app/chrome-extension/entrypoints/popup/App.vue:2141` — `/* 录制中状态 - 脉冲动画 */`
-- `app/chrome-extension/entrypoints/popup/App.vue:2156` — `/* 停止按钮 - 深红色 */`
-- `app/chrome-extension/entrypoints/popup/App.vue:2167` — `/* 编辑按钮 - 蓝色 */`
-- `app/chrome-extension/entrypoints/popup/App.vue:2178` — `/* 标注按钮 - 绿色 */`
+- `app/chrome-extension/entrypoints/popup/App.vue:2141` — `/* 录制中الحالة - 脉冲动画 */`
+- `app/chrome-extension/entrypoints/popup/App.vue:2156` — `/* إيقاف按钮 - 深红色 */`
+- `app/chrome-extension/entrypoints/popup/App.vue:2167` — `/* تعديل按钮 - 蓝色 */`
+- `app/chrome-extension/entrypoints/popup/App.vue:2178` — `/* تحديد按钮 - 绿色 */`
 - `app/chrome-extension/entrypoints/popup/App.vue:2189` — `/* Coming Soon 按钮样式 */`
 - `app/chrome-extension/entrypoints/popup/App.vue:2252` — `/* 首页视图 */`
-- `app/chrome-extension/entrypoints/popup/App.vue:2259` — `/* 管理入口卡片样式 */`
+- `app/chrome-extension/entrypoints/popup/App.vue:2259` — `/* إدارة入口卡片样式 */`
 - `app/chrome-extension/entrypoints/popup/style.css:1` — `/* 现代化全局样式 */`
 - `app/chrome-extension/entrypoints/popup/style.css:3` — `/* 字体系统 */`
 - `app/chrome-extension/entrypoints/popup/style.css:9` — `/* 颜色系统 */`
@@ -2508,56 +2630,25 @@ Files containing CJK text: **195**
 - `app/chrome-extension/entrypoints/popup/style.css:218` — `/* 响应式断点 */`
 - `app/chrome-extension/entrypoints/popup/style.css:231` — `/* 高对比度模式支持 */`
 - `app/chrome-extension/entrypoints/popup/style.css:239` — `/* 减少动画偏好 */`
-- `app/chrome-extension/entrypoints/builder/App.vue:5` — `<span>已应用回退建议：提升 {{ fallbackNotice.type }} 优先级</span>`
-- `app/chrome-extension/entrypoints/builder/App.vue:6` — `<button class="mini" @click="undoFallbackPromotion">撤销</button>`
-- `app/chrome-extension/entrypoints/builder/App.vue:29` — `<span class="tip">工作流可视化编排</span>`
-- `app/chrome-extension/entrypoints/builder/App.vue:32` — `<button class="top-btn" @click="exportFlow" title="导出 JSON">`
-- `app/chrome-extension/entrypoints/builder/App.vue:43` — `导出`
-- `app/chrome-extension/entrypoints/builder/App.vue:45` — `<label class="top-btn import" title="导入 JSON">`
-- `app/chrome-extension/entrypoints/builder/App.vue:56` — `导入`
-- `app/chrome-extension/entrypoints/builder/App.vue:59` — `<button class="top-btn" @click="openRename" title="重命名工作流">`
-- `app/chrome-extension/entrypoints/builder/App.vue:77` — `title="管理触发器"`
-- `app/chrome-extension/entrypoints/builder/App.vue:96` — `title="从选中节点回放"`
-- `app/chrome-extension/entrypoints/builder/App.vue:108` — `从选中运行`
-- `app/chrome-extension/entrypoints/builder/App.vue:110` — `<button class="top-btn primary" @click="runAll" title="从头回放整流">`
-- `app/chrome-extension/entrypoints/builder/App.vue:121` — `运行`
-- `app/chrome-extension/entrypoints/builder/App.vue:139` — `保存`
-- `app/chrome-extension/entrypoints/builder/App.vue:184` — `<button class="toolbar-btn" @click="store.undo" title="撤销 (⌘/Ctrl+Z)">`
-- `app/chrome-extension/entrypoints/builder/App.vue:196` — `<button class="toolbar-btn" @click="store.redo" title="重做 (⌘/Ctrl+Shift+Z)">`
-- `app/chrome-extension/entrypoints/builder/App.vue:209` — `<button class="toolbar-btn" @click="store.layoutAuto" title="自动排版">`
-- `app/chrome-extension/entrypoints/builder/App.vue:224` — `<button class="toolbar-btn" @click="fitAll" title="自适应视图">`
-- `app/chrome-extension/entrypoints/builder/App.vue:251` — `<div class="title">重命名工作流</div>`
-- `app/chrome-extension/entrypoints/builder/App.vue:256` — `<label>名称</label>`
-- `app/chrome-extension/entrypoints/builder/App.vue:257` — `<input v-model="renameName" placeholder="工作流名称" />`
-- `app/chrome-extension/entrypoints/builder/App.vue:260` — `<label>描述</label>`
-- `app/chrome-extension/entrypoints/builder/App.vue:261` — `<textarea v-model="renameDesc" placeholder="可选描述"></textarea>`
-- `app/chrome-extension/entrypoints/builder/App.vue:265` — `<button class="primary" @click="applyRename">保存</button>`
-- `app/chrome-extension/entrypoints/builder/App.vue:299` — `const title = ref('工作流编辑器');`
-- `app/chrome-extension/entrypoints/builder/App.vue:362` — `title.value = '编辑：${flowV2.name || flowV2.id}';`
-- `app/chrome-extension/entrypoints/builder/App.vue:375` — `pushToast('工作流 "${q.flowId}" 未找到，已创建新工作流', 'warn');`
-- `app/chrome-extension/entrypoints/builder/App.vue:379` — `pushToast('加载工作流失败：${e instanceof Error ? e.message : String(e)}', 'error');`
-- `app/chrome-extension/entrypoints/builder/App.vue:388` — `* 初始化一个空的工作流`
-- `app/chrome-extension/entrypoints/builder/App.vue:394` — `name: '新建工作流',`
-- `app/chrome-extension/entrypoints/builder/App.vue:404` — `title.value = '新建工作流';`
-- `app/chrome-extension/entrypoints/builder/App.vue:479` — `* 保存 Flow 到 V3 RPC`
-- `app/chrome-extension/entrypoints/builder/App.vue:480` — `* @returns 保存成功返回 FlowV3，失败返回 null`
-- `app/chrome-extension/entrypoints/builder/App.vue:514` — `pushToast('保存失败：${e instanceof Error ? e.message : String(e)}', 'error');`
-- `app/chrome-extension/entrypoints/builder/App.vue:530` — `* 将 V2 schedule 配置转换为 cron 表达式`
-- `app/chrome-extension/entrypoints/builder/App.vue:531` — `* @returns cron 表达式或 null（如果无法转换）`
-- `app/chrome-extension/entrypoints/builder/App.vue:558` — `// V3 cron 不支持 'once' 一次性定时`
-- `app/chrome-extension/entrypoints/builder/App.vue:563` — `* 从 trigger 节点配置同步触发器到 V3 存储`
+- `app/chrome-extension/entrypoints/builder/App.vue:5` — `<span>تم应用回退建议：提升 {{ fallbackNotice.type }} الأولوية</span>`
+- `app/chrome-extension/entrypoints/builder/App.vue:29` — `<span class="tip">سير العمل可视化编排</span>`
+- `app/chrome-extension/entrypoints/builder/App.vue:59` — `<button class="top-btn" @click="openRename" title="重命名سير العمل">`
+- `app/chrome-extension/entrypoints/builder/App.vue:251` — `<div class="title">重命名سير العمل</div>`
+- `app/chrome-extension/entrypoints/builder/App.vue:299` — `const title = ref('سير العملتعديل器');`
+- `app/chrome-extension/entrypoints/builder/App.vue:375` — `pushToast('سير العمل "${q.flowId}" غير موجود，تمإنشاء新سير العمل', 'warn');`
+- `app/chrome-extension/entrypoints/builder/App.vue:388` — `* 初始化一个空的سير العمل`
+- `app/chrome-extension/entrypoints/builder/App.vue:394` — `name: '新建سير العمل',`
+- `app/chrome-extension/entrypoints/builder/App.vue:404` — `title.value = '新建سير العمل';`
+- `app/chrome-extension/entrypoints/builder/App.vue:479` — `* حفظ Flow 到 V3 RPC`
+- `app/chrome-extension/entrypoints/builder/App.vue:530` — `* 将 V2 schedule 配置转换为 cron التعبير`
+- `app/chrome-extension/entrypoints/builder/App.vue:531` — `* @returns cron التعبيرأو null（如果تعذر转换）`
+- `app/chrome-extension/entrypoints/builder/App.vue:558` — `// V3 cron 不支持 'once' مرة واحدة性جدولة`
+- `app/chrome-extension/entrypoints/builder/App.vue:563` — `* 从 trigger العقدة配置同步مشغّل到 V3 存储`
 - `app/chrome-extension/entrypoints/builder/App.vue:564` — `* @description V2 schedules 会转换为 V3 cron triggers`
-- `app/chrome-extension/entrypoints/builder/App.vue:634` — `'节点 ${n.id} 的定时 #${i + 1}: V3 暂不支持一次性定时（once），已跳过',`
-- `app/chrome-extension/entrypoints/builder/App.vue:639` — `'节点 ${n.id} 的定时 #${i + 1}: 无法转换为 cron（type=${scheduleType}），已跳过',`
-- `app/chrome-extension/entrypoints/builder/App.vue:713` — `pushToast('导出失败：${e instanceof Error ? e.message : String(e)}', 'error');`
-- `app/chrome-extension/entrypoints/builder/App.vue:728` — `pushToast('导入失败：未找到工作流数据', 'error');`
-- `app/chrome-extension/entrypoints/builder/App.vue:744` — `title.value = '编辑：${flowV2.name || flowV2.id}';`
-- `app/chrome-extension/entrypoints/builder/App.vue:762` — `title.value = '编辑：${store.flowLocal.name || store.flowLocal.id}';`
-- `app/chrome-extension/entrypoints/builder/App.vue:766` — `pushToast('导入失败：${e instanceof Error ? e.message : String(e)}', 'error');`
-- `app/chrome-extension/entrypoints/builder/App.vue:790` — `pushToast('运行失败：${e instanceof Error ? e.message : String(e)}', 'error');`
-- `app/chrome-extension/entrypoints/builder/App.vue:804` — `pushToast('运行失败：${e instanceof Error ? e.message : String(e)}', 'error');`
-- `app/chrome-extension/entrypoints/builder/App.vue:852` — `saveState.value === 'saving' ? '保存中…' : saveState.value === 'saved' ? '已保存' : '',`
-- `app/chrome-extension/entrypoints/builder/index.html:6` — `<title>工作流编辑器</title>`
+- `app/chrome-extension/entrypoints/builder/App.vue:634` — `'العقدة ${n.id} 的جدولة #${i + 1}: V3 暂不支持مرة واحدة性جدولة（once），تم跳过',`
+- `app/chrome-extension/entrypoints/builder/App.vue:639` — `'العقدة ${n.id} 的جدولة #${i + 1}: تعذر转换为 cron（type=${scheduleType}），تم跳过',`
+- `app/chrome-extension/entrypoints/builder/App.vue:728` — `pushToast('استيرادفشل：غير موجودسير العمل数据', 'error');`
+- `app/chrome-extension/entrypoints/builder/index.html:6` — `<title>سير العملتعديل器</title>`
 - `app/chrome-extension/entrypoints/offscreen/main.ts:11` — `// 初始化 RR V3 Keepalive`
 - `app/chrome-extension/entrypoints/offscreen/main.ts:290` — `resolve(); // 不阻塞其他数据库的清理`
 - `app/chrome-extension/entrypoints/offscreen/main.ts:294` — `resolve(); // 不阻塞其他数据库的清理`
@@ -2587,93 +2678,32 @@ Files containing CJK text: **195**
 - `app/chrome-extension/entrypoints/shared/utils/rr-flow-convert.ts:125` — `// 对象格式`
 - `app/chrome-extension/entrypoints/shared/utils/rr-flow-convert.ts:129` — `// { flows: [...] } 格式`
 - `app/chrome-extension/entrypoints/shared/utils/rr-flow-convert.ts:134` — `// 单个 Flow 对象`
-- `app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:2` — `* 随机 Loading 文案`
-- `app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:3` — `* 用于 TimelineStatusStep 组件展示趣味等待提示`
-- `app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:7` — `// 必选神梗`
-- `app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:8` — `'本来应该从从容容游刃有余',`
-- `app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:9` — `'现在是匆匆忙忙连滚带爬',`
-- `app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:10` — `'我知道你很急，但是先别急',`
-- `app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:11` — `'在知识的海洋里狗刨',`
-- `app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:12` — `'让子弹再飞一会儿',`
-- `app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:13` — `'正在为您手搓答案',`
-- `app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:14` — `'浪浪山小妖怪集结中',`
-- `app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:15` — `'别催，已经在写了（新建文件夹）',`
-- `app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:16` — `'正在汗流浃背地思考中',`
-- `app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:17` — `'CPU 都要给我干烧了',`
-- `app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:18` — `// 生活气息`
-- `app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:19` — `'村咖慢焙，精华需要时间',`
-- `app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:20` — `'知识煎饼翻面中',`
-- `app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:21` — `'敬自己一杯，马上好',`
-- `app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:22` — `'正在把灵感放入烤箱',`
-- `app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:23` — `'让答案再泡一会儿',`
-- `app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:24` — `'情绪价值拉满中',`
-- `app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:25` — `'正在为您编织语言的毛衣',`
-- `app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:26` — `// 脑洞大开`
-- `app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:27` — `'神经元蹦迪中',`
-- `app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:28` — `'熬夜的猫头鹰在思考',`
-- `app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:29` — `'给答案上色中',`
-- `app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:30` — `'正在疯狂翻阅知识库',`
-- `app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:31` — `'大脑马戏团开演',`
-- `app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:32` — `'正在把 0 和 1 捏在一起',`
-- `app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:33` — `'正在憋个大招',`
-- `app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:34` — `'放大镜有点起雾，擦擦',`
-- `app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:35` — `'试图理解这个离谱的需求',`
-- `app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:36` — `// 玄幻`
-- `app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:37` — `'正在施法，莫打扰',`
-- `app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:38` — `'唤醒硅基朋友',`
-- `app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:39` — `'正在连接赛博空间的智慧',`
-- `app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:40` — `'道友请留步，正在推演',`
-- `app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:41` — `'穿越知识黑洞',`
-- `app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:42` — `'正在反向解析人类意图',`
-- `app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:43` — `'水晶球有点模糊，拍两下',`
-- `app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:44` — `// 职场`
-- `app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:45` — `'代码跑得比记者还快',`
-- `app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:46` — `'主理人已上线，请稍候',`
-- `app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:47` — `'快马加鞭赶来中',`
-- `app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:48` — `'正在光速搬运知识',`
-- `app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:49` — `'拼图最后一块',`
-- `app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:50` — `'答案即将杀青',`
-- `app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:51` — `'发射倒计时',`
-- `app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:52` — `'目标锁定中',`
-- `app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:56` — `* 获取随机 Loading 文案`
-- `app/chrome-extension/entrypoints/sidepanel/composables/useAgentProjects.ts:202` — `'目录 "${validation.absolute}" 不存在，是否创建？\n\nThe directory "${validation.absolute}" does not exist. Create it?',`
-- `app/chrome-extension/entrypoints/sidepanel/composables/useAgentProjects.ts:428` — `'目录 "${validation.absolute}" 已存在对应的项目：${existingProject.name}\n\n' +`
+- `app/chrome-extension/entrypoints/sidepanel/composables/useAgentProjects.ts:202` — `'目录 "${validation.absolute}" 不存在，是否إنشاء？\n\nThe directory "${validation.absolute}" does not exist. Create it?',`
+- `app/chrome-extension/entrypoints/sidepanel/composables/useAgentProjects.ts:428` — `'目录 "${validation.absolute}" تم存在对应的项目：${existingProject.name}\n\n' +`
 - `app/chrome-extension/entrypoints/sidepanel/composables/useAgentProjects.ts:429` — `'是否切换到该项目？\n\n' +`
-- `app/chrome-extension/entrypoints/sidepanel/composables/useAgentProjects.ts:447` — `'目录 "${validation.absolute}" 不存在，是否创建？\n\nThe directory "${validation.absolute}" does not exist. Create it?',`
+- `app/chrome-extension/entrypoints/sidepanel/composables/useAgentProjects.ts:447` — `'目录 "${validation.absolute}" 不存在，是否إنشاء？\n\nThe directory "${validation.absolute}" does not exist. Create it?',`
 - `app/chrome-extension/entrypoints/sidepanel/styles/agent-chat.css:699` — `/* 文案 shimmer 渐变动画 - 光从左到右扫过效果 */`
 - `app/chrome-extension/entrypoints/sidepanel/styles/agent-chat.css:728` — `/* 螺旋图标 - 笔迹重绘动画 */`
-- `app/chrome-extension/entrypoints/sidepanel/components/SidepanelNavigator.vue:8` — `<!-- 触发按钮（同时作为拖拽手柄） -->`
-- `app/chrome-extension/entrypoints/sidepanel/components/SidepanelNavigator.vue:15` — `title="切换页面（可拖拽移动，双击重置位置）"`
+- `app/chrome-extension/entrypoints/sidepanel/components/SidepanelNavigator.vue:8` — `<!-- 触发按钮（同时作为سحب وإفلات手柄） -->`
+- `app/chrome-extension/entrypoints/sidepanel/components/SidepanelNavigator.vue:15` — `title="切换الصفحة（可سحب وإفلات移动，双击重置位置）"`
 - `app/chrome-extension/entrypoints/sidepanel/components/SidepanelNavigator.vue:30` — `<!-- 浮层菜单 -->`
-- `app/chrome-extension/entrypoints/sidepanel/components/SidepanelNavigator.vue:35` — `<span class="navigator-title">切换页面</span>`
-- `app/chrome-extension/entrypoints/sidepanel/components/SidepanelNavigator.vue:72` — `<span class="navigator-item-title">智能助手</span>`
-- `app/chrome-extension/entrypoints/sidepanel/components/SidepanelNavigator.vue:73` — `<span class="navigator-item-desc">AI Agent 对话与任务</span>`
-- `app/chrome-extension/entrypoints/sidepanel/components/SidepanelNavigator.vue:110` — `<span class="navigator-item-title">工作流管理</span>`
-- `app/chrome-extension/entrypoints/sidepanel/components/SidepanelNavigator.vue:111` — `<span class="navigator-item-desc">录制与回放自动化流程</span>`
-- `app/chrome-extension/entrypoints/sidepanel/components/SidepanelNavigator.vue:148` — `<span class="navigator-item-title">元素标注管理</span>`
-- `app/chrome-extension/entrypoints/sidepanel/components/SidepanelNavigator.vue:149` — `<span class="navigator-item-desc">管理页面元素标注</span>`
-- `app/chrome-extension/entrypoints/sidepanel/components/workflows/WorkflowsView.vue:248` — `<span>状态: {{ getRunStatusText(run) }}</span>`
-- `app/chrome-extension/entrypoints/sidepanel/components/workflows/WorkflowsView.vue:250` — `>• 耗时:`
-- `app/chrome-extension/entrypoints/sidepanel/components/workflows/WorkflowsView.vue:524` — `queued: '排队中',`
-- `app/chrome-extension/entrypoints/sidepanel/components/workflows/WorkflowsView.vue:525` — `running: '运行中',`
-- `app/chrome-extension/entrypoints/sidepanel/components/workflows/WorkflowsView.vue:526` — `paused: '已暂停',`
-- `app/chrome-extension/entrypoints/sidepanel/components/workflows/WorkflowsView.vue:527` — `succeeded: '成功',`
-- `app/chrome-extension/entrypoints/sidepanel/components/workflows/WorkflowsView.vue:528` — `failed: '失败',`
-- `app/chrome-extension/entrypoints/sidepanel/components/workflows/WorkflowsView.vue:529` — `canceled: '已取消',`
-- `app/chrome-extension/entrypoints/sidepanel/components/workflows/WorkflowsView.vue:534` — `return run.success ? '成功' : '失败';`
-- `app/chrome-extension/entrypoints/sidepanel/components/agent-chat/timeline/TimelineStatusStep.vue:3` — `<!-- 螺旋动画图标（仅 running/starting 状态显示，且未被父组件隐藏时） -->`
-- `app/chrome-extension/entrypoints/sidepanel/components/agent-chat/timeline/TimelineStatusStep.vue:18` — `<!-- shimmer 文案（running 状态）或普通文案 -->`
-- `app/chrome-extension/entrypoints/sidepanel/components/agent-chat/timeline/TimelineStatusStep.vue:40` — `// 是否处于运行状态`
-- `app/chrome-extension/entrypoints/sidepanel/components/agent-chat/timeline/TimelineStatusStep.vue:45` — `// 随机文案（仅 running 状态使用）`
-- `app/chrome-extension/entrypoints/sidepanel/components/agent-chat/timeline/TimelineStatusStep.vue:48` — `// 定时更新文案的 timeout ID`
-- `app/chrome-extension/entrypoints/sidepanel/components/agent-chat/timeline/TimelineStatusStep.vue:51` — `// 记录上一次的运行状态，用于判断状态变化`
-- `app/chrome-extension/entrypoints/sidepanel/components/agent-chat/timeline/TimelineStatusStep.vue:54` — `// 启动定时器`
-- `app/chrome-extension/entrypoints/sidepanel/components/agent-chat/timeline/TimelineStatusStep.vue:57` — `// 5-8 秒随机间隔更新文案`
-- `app/chrome-extension/entrypoints/sidepanel/components/agent-chat/timeline/TimelineStatusStep.vue:70` — `// 停止定时器`
-- `app/chrome-extension/entrypoints/sidepanel/components/agent-chat/timeline/TimelineStatusStep.vue:78` — `// 监听运行状态变化 - 只在状态真正变化时才处理`
-- `app/chrome-extension/entrypoints/sidepanel/components/agent-chat/timeline/TimelineStatusStep.vue:80` — `// 只在从非运行变为运行时，才重新生成文案并启动定时器`
+- `app/chrome-extension/entrypoints/sidepanel/components/SidepanelNavigator.vue:35` — `<span class="navigator-title">切换الصفحة</span>`
+- `app/chrome-extension/entrypoints/sidepanel/components/workflows/WorkflowsView.vue:525` — `running: 'تشغيل中',`
+- `app/chrome-extension/entrypoints/sidepanel/components/workflows/WorkflowsView.vue:526` — `paused: 'تم暂停',`
+- `app/chrome-extension/entrypoints/sidepanel/components/workflows/WorkflowsView.vue:529` — `canceled: 'تم取消',`
+- `app/chrome-extension/entrypoints/sidepanel/components/agent-chat/timeline/TimelineStatusStep.vue:3` — `<!-- 螺旋动画图标（仅 running/starting الحالة显示，且未被父组件隐藏时） -->`
+- `app/chrome-extension/entrypoints/sidepanel/components/agent-chat/timeline/TimelineStatusStep.vue:18` — `<!-- shimmer 文案（running الحالة）أو普通文案 -->`
+- `app/chrome-extension/entrypoints/sidepanel/components/agent-chat/timeline/TimelineStatusStep.vue:40` — `// 是否处于تشغيلالحالة`
+- `app/chrome-extension/entrypoints/sidepanel/components/agent-chat/timeline/TimelineStatusStep.vue:45` — `// 随机文案（仅 running الحالة使用）`
+- `app/chrome-extension/entrypoints/sidepanel/components/agent-chat/timeline/TimelineStatusStep.vue:48` — `// جدولةتحديث文案的 timeout ID`
+- `app/chrome-extension/entrypoints/sidepanel/components/agent-chat/timeline/TimelineStatusStep.vue:51` — `// 记录上مرة واحدة的تشغيلالحالة，用于判断الحالة变化`
+- `app/chrome-extension/entrypoints/sidepanel/components/agent-chat/timeline/TimelineStatusStep.vue:54` — `// 启动جدولة器`
+- `app/chrome-extension/entrypoints/sidepanel/components/agent-chat/timeline/TimelineStatusStep.vue:57` — `// 5-8 秒随机间隔تحديث文案`
+- `app/chrome-extension/entrypoints/sidepanel/components/agent-chat/timeline/TimelineStatusStep.vue:70` — `// إيقافجدولة器`
+- `app/chrome-extension/entrypoints/sidepanel/components/agent-chat/timeline/TimelineStatusStep.vue:78` — `// 监听تشغيلالحالة变化 - 只在الحالة真正变化时才处理`
+- `app/chrome-extension/entrypoints/sidepanel/components/agent-chat/timeline/TimelineStatusStep.vue:80` — `// 只在从非تشغيل变为تشغيل时，才重新生成文案并启动جدولة器`
 - `app/chrome-extension/entrypoints/sidepanel/components/agent-chat/timeline/TimelineStatusStep.vue:90` — `// 初始化`
-- `app/chrome-extension/entrypoints/sidepanel/components/agent-chat/timeline/TimelineStatusStep.vue:102` — `// 非运行状态的默认文案`
+- `app/chrome-extension/entrypoints/sidepanel/components/agent-chat/timeline/TimelineStatusStep.vue:102` — `// 非تشغيلالحالة的افتراضي文案`
 - `app/chrome-extension/entrypoints/sidepanel/components/agent-chat/timeline/TimelineStatusStep.vue:116` — `// 最终显示的文案`
 - `app/chrome-extension/entrypoints/web-editor-v2/core/snap-engine.ts:251` — `* 中文说明：使用双向扫描策略，从 target 位置向两侧扩展，`
 - `app/chrome-extension/entrypoints/web-editor-v2/core/snap-engine.ts:252` — `* 避免当 target 在 children 后半部分时完全扫描不到附近元素。`
@@ -2681,27 +2711,27 @@ Files containing CJK text: **195**
 - `app/chrome-extension/entrypoints/web-editor-v2/core/snap-engine.ts:825` — `* - 当发生对齐时，显示"另一个方向"的间距`
 - `app/chrome-extension/entrypoints/web-editor-v2/core/snap-engine.ts:826` — `* - lockX 是垂直对齐线，所以显示 Y 方向的间距`
 - `app/chrome-extension/entrypoints/web-editor-v2/core/snap-engine.ts:827` — `* - lockY 是水平对齐线，所以显示 X 方向的间距`
-- `app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/layout-control.ts:256` — `// 容器边框（虚线矩形表示容器）`
-- `app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/layout-control.ts:293` — `// 两个全宽的块级元素，垂直堆叠`
+- `app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/layout-control.ts:256` — `// حاوية边框（虚线矩形表示حاوية）`
+- `app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/layout-control.ts:293` — `// 两个全宽的块级عنصر，垂直堆叠`
 - `app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/layout-control.ts:298` — `// 三行文本表示内联流`
 - `app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/layout-control.ts:304` — `// 左边一个块，右边两行文本`
 - `app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/layout-control.ts:310` — `// 三个水平排列的弹性子项`
 - `app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/layout-control.ts:316` — `// 2x2 网格布局`
 - `app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/layout-control.ts:323` — `// 禁用符号：斜线`
-- `app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/layout-control.ts:358` — `// 容器边框（虚线矩形表示容器）`
+- `app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/layout-control.ts:358` — `// حاوية边框（虚线矩形表示حاوية）`
 - `app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/layout-control.ts:371` — `// 内容块的 X 坐标根据对齐方式不同`
 - `app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/layout-control.ts:373` — `'flex-start': 3.5, // 左对齐`
 - `app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/layout-control.ts:374` — `center: 5.5, // 居中对齐`
 - `app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/layout-control.ts:375` — `'flex-end': 7.5, // 右对齐`
-- `app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/layout-control.ts:378` — `// 两个小方块表示子元素（水平方向排列变为垂直方向排列）`
-- `app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/layout-control.ts:402` — `// 容器边框（虚线矩形表示容器）`
+- `app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/layout-control.ts:378` — `// 两个小方块表示子عنصر（水平方向排列变为垂直方向排列）`
+- `app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/layout-control.ts:402` — `// حاوية边框（虚线矩形表示حاوية）`
 - `app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/layout-control.ts:415` — `// 内容块的 Y 坐标根据对齐方式不同`
 - `app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/layout-control.ts:417` — `'flex-start': 3.5, // 顶部对齐`
 - `app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/layout-control.ts:418` — `center: 5.5, // 居中对齐`
 - `app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/layout-control.ts:419` — `'flex-end': 7.5, // 底部对齐`
-- `app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/layout-control.ts:422` — `// 两个小方块表示子元素`
-- `app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/typography-control.ts:130` — `// 容器边框（虚线矩形表示容器）`
-- `app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/typography-control.ts:143` — `// 文本行的位置配置：每行的 [x起点, 宽度]`
+- `app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/layout-control.ts:422` — `// 两个小方块表示子عنصر`
+- `app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/typography-control.ts:130` — `// حاوية边框（虚线矩形表示حاوية）`
+- `app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/typography-control.ts:143` — `// 文本行的位置配置：每行的 [xالبداية, 宽度]`
 - `app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/typography-control.ts:146` — `[3.5, 8], // 长行`
 - `app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/typography-control.ts:147` — `[3.5, 5], // 短行`
 - `app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/typography-control.ts:148` — `[3.5, 6.5], // 中行`
@@ -2714,374 +2744,167 @@ Files containing CJK text: **195**
 - `app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/typography-control.ts:161` — `[3.5, 8], // 全宽`
 - `app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/typography-control.ts:162` — `[3.5, 8], // 全宽`
 - `app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/typography-control.ts:163` — `[3.5, 8], // 全宽`
-- `app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/typography-control.ts:188` — `// 容器边框（虚线矩形表示容器）`
+- `app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/typography-control.ts:188` — `// حاوية边框（虚线矩形表示حاوية）`
 - `app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/typography-control.ts:201` — `// 内容块的 Y 坐标根据对齐方式不同`
 - `app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/typography-control.ts:203` — `top: 3.5, // 顶部对齐`
 - `app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/typography-control.ts:204` — `middle: 5.5, // 居中对齐`
 - `app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/typography-control.ts:205` — `bottom: 7.5, // 底部对齐`
 - `app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/typography-control.ts:206` — `baseline: 6.5, // baseline 稍微偏下`
-- `app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/typography-control.ts:209` — `// 两个小方块表示子元素`
-- `app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/typography-control.ts:228` — `// baseline 模式添加基线指示线`
+- `app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/typography-control.ts:209` — `// 两个小方块表示子عنصر`
+- `app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/typography-control.ts:228` — `// baseline الوضع添加基线指示线`
 - `app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/position-control.ts:394` — `// 三条水平线表示正常文档流`
-- `app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/position-control.ts:401` — `// 虚线框表示原位置，实心块表示偏移后的位置`
-- `app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/position-control.ts:414` — `// 偏移后的实心块`
+- `app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/position-control.ts:401` — `// 虚线框表示原位置，实心块表示إزاحة后的位置`
+- `app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/position-control.ts:414` — `// إزاحة后的实心块`
 - `app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/position-control.ts:416` — `// 连接箭头`
-- `app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/position-control.ts:422` — `// 定位参考线（从容器边缘到元素）`
-- `app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/position-control.ts:424` — `// 元素块在右下角`
+- `app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/position-control.ts:422` — `// 定位参考线（从حاوية边缘到عنصر）`
+- `app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/position-control.ts:424` — `// عنصر块在右下角`
 - `app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/position-control.ts:429` — `// 图钉形状表示固定`
 - `app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/position-control.ts:436` — `// 图钉针`
-- `app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/position-control.ts:438` — `// 固定的元素`
+- `app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/position-control.ts:438` — `// 固定的عنصر`
 - `app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/position-control.ts:444` — `// 顶部吸附线`
-- `app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/position-control.ts:454` — `// 吸附的元素`
+- `app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/position-control.ts:454` — `// 吸附的عنصر`
 - `app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/position-control.ts:486` — `// 左侧镜像块（半透明表示原始）`
 - `app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/position-control.ts:496` — `// 右侧镜像块（实心表示翻转后）`
 - `app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/position-control.ts:505` — `// 中间镜像轴线`
 - `app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/position-control.ts:521` — `// 上方镜像块（半透明表示原始）`
 - `app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/position-control.ts:531` — `// 下方镜像块（实心表示翻转后）`
 - `app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/position-control.ts:540` — `// 中间镜像轴线`
-- `app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/effects-control.ts:1014` — `// 效果类型定义`
-- `app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/effects-control.ts:1052` — `// Shadow 类型效果（Drop Shadow / Inner Shadow）`
-- `app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/effects-control.ts:1064` — `// Blur 类型效果（Layer Blur / Backdrop Blur）`
+- `app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/effects-control.ts:1014` — `// 效果النوع定义`
+- `app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/effects-control.ts:1052` — `// Shadow النوع效果（Drop Shadow / Inner Shadow）`
+- `app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/effects-control.ts:1064` — `// Blur النوع效果（Layer Blur / Backdrop Blur）`
 - `app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/effects-control.ts:1071` — `// 无法解析的原始效果`
-- `app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/effects-control.ts:1446` — `// 每个元素的 effect items 缓存（仅限当前编辑会话）`
+- `app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/effects-control.ts:1446` — `// 每个عنصر的 effect items 缓存（仅限当前تعديل会话）`
 - `app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/effects-control.ts:1447` — `// 使用 WeakMap 的原因：`
 - `app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/effects-control.ts:1448` — `// 1. 隐藏的 effect 不会写入 CSS（enabled=false），但需要在会话内记住以便恢复`
-- `app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/effects-control.ts:1449` — `// 2. WeakMap 保证元素被移除时自动释放内存，无需手动清理`
+- `app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/effects-control.ts:1449` — `// 2. WeakMap 保证عنصر被移除时自动释放内存，无需يدوي清理`
 - `app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/effects-control.ts:1450` — `// 3. 只读取 inline style（不读 computed），因此缓存仅用于保留用户的隐藏操作`
 - `app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/effects-control.ts:1474` — `// 将 + 按钮放在 group header 的右侧（chevron 左边）`
 - `app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/effects-control.ts:1478` — `// 回退：在内容区域显示 toolbar`
-- `app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/effects-control.ts:1540` — `// 只在有打开的 popover 或正在进行事务时阻止刷新`
+- `app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/effects-control.ts:1540` — `// 只在有打开的 popover أو正在进行事务时阻止刷新`
 - `app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/effects-control.ts:1541` — `// 避免过于宽泛的 focus 检测导致外部样式变化无法同步`
 - `app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/effects-control.ts:1635` — `// 关闭后同步一次，确保 currentItems 与真实 inline 一致`
 - `app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/effects-control.ts:1636` — `// 避免浏览器归一化/修正值后产生不一致`
-- `app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/effects-control.ts:2321` — `// 使用 document 的捕获阶段监听，确保点击 Effects 控件外也能关闭`
-- `app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/effects-control.ts:2342` — `// 在 document 上监听捕获阶段的点击事件`
-- `app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/effects-control.ts:2348` — `// 在 root 上监听捕获阶段的键盘事件`
+- `app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/effects-control.ts:2321` — `// 使用 document 的捕获阶段监听，确保نقر Effects 控件外也能关闭`
+- `app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/effects-control.ts:2342` — `// 在 document 上监听捕获阶段的نقرحدث`
+- `app/chrome-extension/entrypoints/web-editor-v2/ui/property-panel/controls/effects-control.ts:2348` — `// 在 root 上监听捕获阶段的لوحة المفاتيححدث`
 - `app/chrome-extension/entrypoints/popup/components/ConfirmDialog.vue:226` — `/* 响应式设计 */`
-- `app/chrome-extension/entrypoints/popup/components/ConfirmDialog.vue:274` — `/* 焦点样式 */`
-- `app/chrome-extension/entrypoints/popup/components/ElementMarkerManagement.vue:3` — `<h2 class="section-title">元素标注管理</h2>`
-- `app/chrome-extension/entrypoints/popup/components/ElementMarkerManagement.vue:7` — `<p class="status-label">当前页面</p>`
-- `app/chrome-extension/entrypoints/popup/components/ElementMarkerManagement.vue:11` — `<p class="status-label">已标注元素</p>`
-- `app/chrome-extension/entrypoints/popup/components/ElementMarkerManagement.vue:18` — `<p class="mcp-config-label">新增标注</p>`
-- `app/chrome-extension/entrypoints/popup/components/ElementMarkerManagement.vue:21` — `<input v-model="form.name" placeholder="名称，如 登录按钮" class="port-input" />`
-- `app/chrome-extension/entrypoints/popup/components/ElementMarkerManagement.vue:27` — `<option value="prefix">路径前缀</option>`
-- `app/chrome-extension/entrypoints/popup/components/ElementMarkerManagement.vue:28` — `<option value="exact">精确匹配</option>`
-- `app/chrome-extension/entrypoints/popup/components/ElementMarkerManagement.vue:29` — `<option value="host">域名</option>`
-- `app/chrome-extension/entrypoints/popup/components/ElementMarkerManagement.vue:32` — `<input v-model="form.selector" placeholder="CSS 选择器" class="port-input" />`
-- `app/chrome-extension/entrypoints/popup/components/ElementMarkerManagement.vue:35` — `保存`
-- `app/chrome-extension/entrypoints/popup/components/ElementMarkerManagement.vue:37` — `<button class="danger-button" type="button" @click="resetForm">清空</button>`
-- `app/chrome-extension/entrypoints/popup/components/ElementMarkerManagement.vue:57` — `<button class="semantic-engine-button" @click="validate(m)">验证</button>`
-- `app/chrome-extension/entrypoints/popup/components/ElementMarkerManagement.vue:58` — `<button class="secondary-button" @click="prefill(m)">编辑</button>`
-- `app/chrome-extension/entrypoints/popup/components/ElementMarkerManagement.vue:59` — `<button class="danger-button" @click="remove(m)">删除</button>`
+- `app/chrome-extension/entrypoints/popup/components/ConfirmDialog.vue:274` — `/* 焦نقطة样式 */`
 - `app/chrome-extension/entrypoints/popup/components/ProgressIndicator.vue:78` — `/* 响应式设计 */`
-- `app/chrome-extension/entrypoints/popup/components/LocalModelPage.vue:3` — `<!-- 返回按钮 -->`
-- `app/chrome-extension/entrypoints/popup/components/LocalModelPage.vue:5` — `<button class="back-button" @click="$emit('back')" title="返回首页">`
-- `app/chrome-extension/entrypoints/popup/components/LocalModelPage.vue:16` — `<span>返回</span>`
-- `app/chrome-extension/entrypoints/popup/components/LocalModelPage.vue:18` — `<h2 class="page-title">本地模型</h2>`
+- `app/chrome-extension/entrypoints/popup/components/LocalModelPage.vue:3` — `<!-- رجوع按钮 -->`
 - `app/chrome-extension/entrypoints/popup/components/LocalModelPage.vue:22` — `<!-- 语义引擎 -->`
-- `app/chrome-extension/entrypoints/popup/components/LocalModelPage.vue:55` — `<!-- Embedding模型选择 -->`
-- `app/chrome-extension/entrypoints/popup/components/LocalModelPage.vue:120` — `<!-- 索引数据管理 -->`
-- `app/chrome-extension/entrypoints/popup/components/LocalModelPage.vue:184` — `<!-- 模型缓存管理 -->`
+- `app/chrome-extension/entrypoints/popup/components/LocalModelPage.vue:55` — `<!-- Embedding模型اختيار -->`
+- `app/chrome-extension/entrypoints/popup/components/LocalModelPage.vue:120` — `<!-- 索引数据إدارة -->`
+- `app/chrome-extension/entrypoints/popup/components/LocalModelPage.vue:184` — `<!-- 模型缓存إدارة -->`
 - `app/chrome-extension/entrypoints/popup/components/LocalModelPage.vue:211` — `// 语义引擎`
 - `app/chrome-extension/entrypoints/popup/components/LocalModelPage.vue:216` — `// 模型`
 - `app/chrome-extension/entrypoints/popup/components/LocalModelPage.vue:230` — `// 存储统计`
 - `app/chrome-extension/entrypoints/popup/components/LocalModelPage.vue:240` — `// 缓存`
-- `app/chrome-extension/entrypoints/popup/components/LocalModelPage.vue:257` — `// 计算属性`
+- `app/chrome-extension/entrypoints/popup/components/LocalModelPage.vue:257` — `// 计算الخاصية`
 - `app/chrome-extension/entrypoints/popup/components/LocalModelPage.vue:516` — `/* 模型列表 */`
 - `app/chrome-extension/entrypoints/popup/components/LocalModelPage.vue:615` — `/* 统计网格 */`
-- `app/chrome-extension/entrypoints/popup/components/LocalModelPage.vue:672` — `/* 错误卡片 */`
-- `app/chrome-extension/entrypoints/popup/components/ScheduleDialog.vue:5` — `<div class="title">定时执行</div>`
-- `app/chrome-extension/entrypoints/popup/components/ScheduleDialog.vue:10` — `<label>启用</label>`
-- `app/chrome-extension/entrypoints/popup/components/ScheduleDialog.vue:11` — `<label class="chk"><input type="checkbox" v-model="enabled" />启用定时</label>`
-- `app/chrome-extension/entrypoints/popup/components/ScheduleDialog.vue:14` — `<label>类型</label>`
-- `app/chrome-extension/entrypoints/popup/components/ScheduleDialog.vue:16` — `<option value="interval">每隔 N 分钟</option>`
-- `app/chrome-extension/entrypoints/popup/components/ScheduleDialog.vue:17` — `<option value="daily">每天固定时间</option>`
-- `app/chrome-extension/entrypoints/popup/components/ScheduleDialog.vue:18` — `<option value="once">只执行一次</option>`
-- `app/chrome-extension/entrypoints/popup/components/ScheduleDialog.vue:22` — `<label>间隔(分钟)</label>`
-- `app/chrome-extension/entrypoints/popup/components/ScheduleDialog.vue:26` — `<label>时间(HH:mm)</label>`
-- `app/chrome-extension/entrypoints/popup/components/ScheduleDialog.vue:27` — `<input v-model="dailyTime" placeholder="例如 09:30" />`
-- `app/chrome-extension/entrypoints/popup/components/ScheduleDialog.vue:30` — `<label>时间(ISO)</label>`
-- `app/chrome-extension/entrypoints/popup/components/ScheduleDialog.vue:31` — `<input v-model="onceAt" placeholder="例如 2025-10-05T10:00:00" />`
-- `app/chrome-extension/entrypoints/popup/components/ScheduleDialog.vue:34` — `<label>参数(JSON)</label>`
-- `app/chrome-extension/entrypoints/popup/components/ScheduleDialog.vue:38` — `<div class="section-title">已有计划</div>`
-- `app/chrome-extension/entrypoints/popup/components/ScheduleDialog.vue:46` — `<button class="small danger" @click="$emit('remove', s.id)">删除</button>`
-- `app/chrome-extension/entrypoints/popup/components/ScheduleDialog.vue:53` — `<button class="primary" @click="save">保存</button>`
-- `app/chrome-extension/entrypoints/popup/components/ScheduleDialog.vue:114` — `if (s.type === 'interval') return '每 ${s.when} 分钟';`
-- `app/chrome-extension/entrypoints/popup/components/ScheduleDialog.vue:115` — `if (s.type === 'daily') return '每天 ${s.when}';`
-- `app/chrome-extension/entrypoints/popup/components/ScheduleDialog.vue:116` — `if (s.type === 'once') return '一次 ${s.when}';`
-- `app/chrome-extension/entrypoints/popup/components/builder/widgets/FieldExpression.vue:28` — `err.value = '表达式解析错误';`
-- `app/chrome-extension/entrypoints/popup/components/builder/widgets/FieldSelector.vue:5` — `<button class="btn-mini" type="button" title="从页面拾取" @click="onPick">拾取</button>`
-- `app/chrome-extension/entrypoints/popup/components/builder/widgets/FieldSelector.vue:7` — `<div class="help">可输入 CSS 选择器，或点击“拾取”在页面中选择元素</div>`
-- `app/chrome-extension/entrypoints/popup/components/builder/widgets/FieldSelector.vue:47` — `if (!tabId) throw new Error('未找到活动页签');`
-- `app/chrome-extension/entrypoints/popup/components/builder/widgets/FieldSelector.vue:52` — `throw new Error(res?.error || '拾取失败');`
-- `app/chrome-extension/entrypoints/popup/components/builder/widgets/FieldSelector.vue:69` — `err.value = '未生成有效选择器，请手动输入';`
-- `app/chrome-extension/entrypoints/popup/components/builder/widgets/FieldKeySequence.vue:4` — `<div class="help">示例：Backspace Enter 或 cmd+a</div>`
-- `app/chrome-extension/entrypoints/popup/components/builder/widgets/FieldKeySequence.vue:13` — `const placeholder = props.field?.placeholder || 'Backspace Enter 或 cmd+a';`
-- `app/chrome-extension/entrypoints/popup/components/builder/model/transforms.ts:93` — `return n.config?.target?.candidates?.[0]?.value || '未配置选择器';`
-- `app/chrome-extension/entrypoints/popup/components/builder/model/transforms.ts:123` — `return 'if/else 分支数 ${cnt}${n.config?.else === false ? '' : ' + else'}';`
-- `app/chrome-extension/entrypoints/popup/components/builder/model/transforms.ts:129` — `return a || b ? '${a} -> ${b}' : '拖拽';`
-- `app/chrome-extension/entrypoints/popup/components/builder/model/validation.ts:13` — `if (!hasCandidate) errs.push('缺少目标选择器候选');`
-- `app/chrome-extension/entrypoints/popup/components/builder/model/validation.ts:14` — `if (n.type === 'fill' && (!('value' in c) || c.value === undefined)) errs.push('缺少输入值');`
-- `app/chrome-extension/entrypoints/popup/components/builder/model/validation.ts:18` — `if (!c?.condition) errs.push('缺少等待条件');`
-- `app/chrome-extension/entrypoints/popup/components/builder/model/validation.ts:22` — `if (!c?.assert) errs.push('缺少断言条件');`
-- `app/chrome-extension/entrypoints/popup/components/builder/model/validation.ts:26` — `if (!c?.url) errs.push('缺少 URL');`
-- `app/chrome-extension/entrypoints/popup/components/builder/model/validation.ts:30` — `if (!c?.url) errs.push('HTTP: 缺少 URL');`
-- `app/chrome-extension/entrypoints/popup/components/builder/model/validation.ts:35` — `if (!pathRe.test(s)) errs.push('Assign: 路径非法 ${s}');`
-- `app/chrome-extension/entrypoints/popup/components/builder/model/validation.ts:41` — `// filenameContains 可选`
-- `app/chrome-extension/entrypoints/popup/components/builder/model/validation.ts:45` — `if (!c?.saveAs) errs.push('Extract: 需填写保存变量名');`
-- `app/chrome-extension/entrypoints/popup/components/builder/model/validation.ts:46` — `if (!c?.selector && !c?.js) errs.push('Extract: 需提供 selector 或 js');`
-- `app/chrome-extension/entrypoints/popup/components/builder/model/validation.ts:51` — `errs.push('SwitchTab: 需提供 tabId 或 URL/标题包含');`
-- `app/chrome-extension/entrypoints/popup/components/builder/model/validation.ts:55` — `// selector 可空（全页/可视区），不强制`
-- `app/chrome-extension/entrypoints/popup/components/builder/model/validation.ts:60` — `if (!hasCandidate) errs.push('缺少目标选择器候选');`
-- `app/chrome-extension/entrypoints/popup/components/builder/model/validation.ts:61` — `if (!String(c?.event || '').trim()) errs.push('需提供事件类型');`
-- `app/chrome-extension/entrypoints/popup/components/builder/model/validation.ts:66` — `if (arr.length === 0) errs.push('需添加至少一个条件分支');`
-- `app/chrome-extension/entrypoints/popup/components/builder/model/validation.ts:68` — `if (!String(arr[i]?.expr || '').trim()) errs.push('分支${i + 1}: 需填写条件表达式');`
-- `app/chrome-extension/entrypoints/popup/components/builder/model/validation.ts:74` — `if (!hasCandidate) errs.push('缺少目标选择器候选');`
-- `app/chrome-extension/entrypoints/popup/components/builder/model/validation.ts:75` — `if (!String(c?.name || '').trim()) errs.push('需提供属性名');`
-- `app/chrome-extension/entrypoints/popup/components/builder/model/validation.ts:79` — `if (!String(c?.selector || '').trim()) errs.push('需提供元素选择器');`
-- `app/chrome-extension/entrypoints/popup/components/builder/model/validation.ts:80` — `if (!String(c?.subflowId || '').trim()) errs.push('需提供子流 ID');`
-- `app/chrome-extension/entrypoints/popup/components/builder/model/validation.ts:88` — `if (!String(c?.flowId || '').trim()) errs.push('需选择要执行的工作流');`
-- `app/chrome-extension/entrypoints/popup/components/builder/model/validation.ts:92` — `// 允许空（关闭当前标签页），不强制`
-- `app/chrome-extension/entrypoints/popup/components/builder/model/validation.ts:96` — `// 若配置了 saveAs/assign，应提供 code`
-- `app/chrome-extension/entrypoints/popup/components/builder/model/validation.ts:99` — `errs.push('Script: 配置了保存/映射但缺少代码');`
-- `app/chrome-extension/entrypoints/popup/components/builder/model/validation.ts:104` — `if (!pathRe.test(s)) errs.push('Assign: 路径非法 ${s}');`
-- `app/chrome-extension/entrypoints/popup/components/builder/store/useBuilderStore.ts:215` — `// 不计入历史栈，避免频繁记录；由用户触发操作（连接/新增/删除等）记录。`
-- `app/chrome-extension/entrypoints/popup/components/builder/store/useBuilderStore.ts:226` — `toast('不能连接到自身', 'warn');`
-- `app/chrome-extension/entrypoints/popup/components/builder/store/useBuilderStore.ts:239` — `toast('该节点最多允许 ${dstIo.inputs} 条入边', 'warn');`
-- `app/chrome-extension/entrypoints/popup/components/builder/store/useBuilderStore.ts:246` — `toast('该节点最多允许 ${srcIo.outputs} 条出边', 'warn');`
-- `app/chrome-extension/entrypoints/popup/components/builder/store/useBuilderStore.ts:251` — `// 单一同标签出边：删除同源 + 同标签的已有边`
+- `app/chrome-extension/entrypoints/popup/components/LocalModelPage.vue:672` — `/* خطأ卡片 */`
+- `app/chrome-extension/entrypoints/popup/components/builder/model/validation.ts:55` — `// selector 可空（الصفحة كاملة/المنطقة المرئية），不强制`
+- `app/chrome-extension/entrypoints/popup/components/builder/model/validation.ts:92` — `// 允许空（关闭الحالي标签页），不强制`
+- `app/chrome-extension/entrypoints/popup/components/builder/model/validation.ts:96` — `// 若配置了 saveAs/assign，应توفير code`
+- `app/chrome-extension/entrypoints/popup/components/builder/store/useBuilderStore.ts:215` — `// 不计入历史栈，避免频繁记录；由用户触发操作（连接/إضافة/حذف等）记录。`
+- `app/chrome-extension/entrypoints/popup/components/builder/store/useBuilderStore.ts:251` — `// 单一同标签出边：حذف同源 + 同标签的تم有边`
 - `app/chrome-extension/entrypoints/popup/components/builder/store/useBuilderStore.ts:421` — `// 备用布局：分层 + 重心排序（不依赖外部库）`
-- `app/chrome-extension/entrypoints/popup/components/builder/store/useBuilderStore.ts:521` — `// 自动排版（ELK 优先）：`
+- `app/chrome-extension/entrypoints/popup/components/builder/store/useBuilderStore.ts:521` — `// ترتيب تلقائي（ELK 优先）：`
 - `app/chrome-extension/entrypoints/popup/components/builder/store/useBuilderStore.ts:522` — `// - 动态引入 elkjs，避免常驻体积`
-- `app/chrome-extension/entrypoints/popup/components/builder/store/useBuilderStore.ts:523` — `// - 失败则回退到 layoutFallback()`
-- `app/chrome-extension/entrypoints/popup/components/builder/store/useBuilderStore.ts:574` — `toast('ELK 自动布局不可用，已使用备用布局', 'warn');`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/PropertyPanel.vue:7` — `<div class="header-title">节点属性</div>`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/PropertyPanel.vue:10` — `<button class="btn-delete" type="button" title="删除节点" @click.stop="onRemove">`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/PropertyPanel.vue:24` — `<label class="form-label">节点名称</label>`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/PropertyPanel.vue:25` — `<input class="form-input" v-model="node.name" placeholder="输入节点名称" />`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/PropertyPanel.vue:31` — `<!-- 属性表单：统一使用 NodeSpec 驱动的表单引擎渲染 -->`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/PropertyPanel.vue:40` — `<!-- 通用设置 -->`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/PropertyPanel.vue:42` — `<div class="section-title">通用设置</div>`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/PropertyPanel.vue:44` — `<label class="form-label">超时 (ms)</label>`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/PropertyPanel.vue:50` — `placeholder="默认使用全局超时"`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/PropertyPanel.vue:56` — `<span>失败时截图</span>`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/PropertyPanel.vue:62` — `<div class="error-title">⚠️ 配置错误</div>`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/PropertyPanel.vue:86` — `<div class="empty-text">选择一个节点<br />查看和编辑属性</div>`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/PropertyPanel.vue:263` — `const id = prompt('请输入新子流ID');`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/PropertyPanel.vue:276` — `if (!n.config?.saveAs) errs.push('需填写保存变量名');`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/PropertyPanel.vue:277` — `if (!n.config?.selector && !n.config?.js) errs.push('需提供 selector 或 js');`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/PropertyPanel.vue:477` — `// 高亮并滚动到指定字段`
+- `app/chrome-extension/entrypoints/popup/components/builder/store/useBuilderStore.ts:523` — `// - فشل则回退到 layoutFallback()`
+- `app/chrome-extension/entrypoints/popup/components/builder/components/PropertyPanel.vue:31` — `<!-- الخاصية表单：统一使用 NodeSpec 驱动的表单引擎渲染 -->`
+- `app/chrome-extension/entrypoints/popup/components/builder/components/PropertyPanel.vue:477` — `// 高亮并تمرير到指定字段`
 - `app/chrome-extension/entrypoints/popup/components/builder/components/PropertyPanel.vue:521` — `/* 头部 */`
 - `app/chrome-extension/entrypoints/popup/components/builder/components/PropertyPanel.vue:560` — `/* 内容区 */`
 - `app/chrome-extension/entrypoints/popup/components/builder/components/PropertyPanel.vue:600` — `/* 表单区域 */`
 - `app/chrome-extension/entrypoints/popup/components/builder/components/PropertyPanel.vue:608` — `/* 区域头部 */`
 - `app/chrome-extension/entrypoints/popup/components/builder/components/PropertyPanel.vue:621` — `/* 表单组 */`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/PropertyPanel.vue:633` — `/* 表单输入 */`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/PropertyPanel.vue:687` — `/* 选择器列表 */`
+- `app/chrome-extension/entrypoints/popup/components/builder/components/PropertyPanel.vue:633` — `/* 表单إدخال */`
+- `app/chrome-extension/entrypoints/popup/components/builder/components/PropertyPanel.vue:687` — `/* المحدد列表 */`
 - `app/chrome-extension/entrypoints/popup/components/builder/components/PropertyPanel.vue:718` — `/* 按钮 */`
 - `app/chrome-extension/entrypoints/popup/components/builder/components/PropertyPanel.vue:772` — `/* 分割线 */`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/PropertyPanel.vue:778` — `/* 错误提示 */`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/PropertyPanel.vue:799` — `/* 空状态 */`
+- `app/chrome-extension/entrypoints/popup/components/builder/components/PropertyPanel.vue:778` — `/* خطأ提示 */`
+- `app/chrome-extension/entrypoints/popup/components/builder/components/PropertyPanel.vue:799` — `/* 空الحالة */`
 - `app/chrome-extension/entrypoints/popup/components/builder/components/PropertyPanel.vue:819` — `/* 高亮字段 */`
 - `app/chrome-extension/entrypoints/popup/components/builder/components/Sidebar.vue:191` — `/* 搜索框 */`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/Sidebar.vue:219` — `/* 节点区域 */`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/Sidebar.vue:226` — `/* 节点按钮 */`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/Sidebar.vue:249` — `/* 节点图标 - 彩色圆形 */`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/Sidebar.vue:349` — `/* 节点标签 */`
+- `app/chrome-extension/entrypoints/popup/components/builder/components/Sidebar.vue:219` — `/* العقدة区域 */`
+- `app/chrome-extension/entrypoints/popup/components/builder/components/Sidebar.vue:226` — `/* العقدة按钮 */`
+- `app/chrome-extension/entrypoints/popup/components/builder/components/Sidebar.vue:249` — `/* العقدة图标 - 彩色圆形 */`
+- `app/chrome-extension/entrypoints/popup/components/builder/components/Sidebar.vue:349` — `/* العقدة标签 */`
 - `app/chrome-extension/entrypoints/popup/components/builder/components/Sidebar.vue:357` — `/* 分割线 */`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/EdgePropertyPanel.vue:9` — `<button class="btn-delete" type="button" title="删除边" @click.stop="onRemove">`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/EdgePropertyPanel.vue:50` — `<div class="empty-text">未选择边</div>`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/Canvas.vue:187` — `// 边更新由上层状态驱动，这里无需直接修改本地 vfEdges`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/Canvas.vue:333` — `/* 节点容器 */`
+- `app/chrome-extension/entrypoints/popup/components/builder/components/Canvas.vue:187` — `// 边تحديث由上层الحالة驱动，这里无يجب直接修改本地 vfEdges`
 - `app/chrome-extension/entrypoints/popup/components/builder/components/Canvas.vue:356` — `/* 图标颜色方案 - 参考图片风格 */`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/Canvas.vue:450` — `/* 节点主体 */`
+- `app/chrome-extension/entrypoints/popup/components/builder/components/Canvas.vue:450` — `/* العقدة主体 */`
 - `app/chrome-extension/entrypoints/popup/components/builder/components/Canvas.vue:523` — `/* 背景网格 */`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/KeyValueEditor.vue:4` — `<input class="kve-key" v-model="item.k" placeholder="变量名" />`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/KeyValueEditor.vue:5` — `<input class="kve-val" v-model="item.v" placeholder="结果路径（如 data.items[0].id）" />`
 - `app/chrome-extension/entrypoints/popup/components/builder/components/KeyValueEditor.vue:8` — `<button class="mini danger" @click="remove(i)">删</button>`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/KeyValueEditor.vue:10` — `<button class="mini" @click="add">添加映射</button>`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/nodes/NodeIf.vue:24` — `<div class="case-label">{{ b.name || '条件${idx + 1}' }}</div>`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/nodes/node-util.ts:90` — `trigger: '触发器',`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/nodes/node-util.ts:91` — `click: '点击',`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/nodes/node-util.ts:92` — `fill: '填充',`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/nodes/node-util.ts:93` — `navigate: '导航',`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/nodes/node-util.ts:94` — `wait: '等待',`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/nodes/node-util.ts:95` — `extract: '提取',`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/nodes/node-util.ts:97` — `script: '脚本',`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/nodes/node-util.ts:98` — `if: '条件',`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/nodes/node-util.ts:99` — `foreach: '循环',`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/nodes/node-util.ts:100` — `assert: '断言',`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/nodes/node-util.ts:101` — `key: '键盘',`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/nodes/node-util.ts:102` — `drag: '拖拽',`
 - `app/chrome-extension/entrypoints/popup/components/builder/components/nodes/node-util.ts:103` — `dblclick: '双击',`
 - `app/chrome-extension/entrypoints/popup/components/builder/components/nodes/node-util.ts:104` — `openTab: '打开标签',`
 - `app/chrome-extension/entrypoints/popup/components/builder/components/nodes/node-util.ts:105` — `switchTab: '切换标签',`
 - `app/chrome-extension/entrypoints/popup/components/builder/components/nodes/node-util.ts:106` — `closeTab: '关闭标签',`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/nodes/node-util.ts:107` — `delay: '延迟',`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/nodes/node-util.ts:108` — `scroll: '滚动',`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/nodes/node-util.ts:109` — `while: '循环',`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScreenshot.vue:4` — `<label class="form-label">元素选择器（可选）</label>`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScreenshot.vue:8` — `placeholder="为空则截取可视区或全页"`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScreenshot.vue:13` — `><input type="checkbox" v-model="(node as any).config.fullPage" /> 全页截图</label`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScreenshot.vue:17` — `<label class="form-label">保存为变量</label>`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScreenshot.vue:21` — `placeholder="变量名，例如 shot"`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyExecuteFlow.vue:4` — `<label class="form-label">目标工作流</label>`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyExecuteFlow.vue:6` — `<option value="">请选择</option>`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyExecuteFlow.vue:13` — `内联执行（共享上下文变量）</label`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyExecuteFlow.vue:17` — `<label class="form-label">传参 (JSON)</label>`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyCloseTab.vue:4` — `<label class="form-label">按 URL 关闭（可选）</label>`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyCloseTab.vue:5` — `<input class="form-input" v-model="(node as any).config.url" placeholder="子串匹配 URL" />`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyCloseTab.vue:8` — `<label class="form-label">Tab IDs（JSON 数组，可选）</label>`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyWhile.vue:4` — `<label class="form-label">条件 (JSON)</label>`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyWhile.vue:13` — `<label class="form-label">子流 ID</label>`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyWhile.vue:17` — `placeholder="选择或新建子流"`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyWhile.vue:19` — `<button class="btn-sm" style="margin-top: 8px" @click="onCreateSubflow">新建子流</button>`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyWhile.vue:22` — `<label class="form-label">最大迭代次数（可选）</label>`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyWhile.vue:60` — `const id = prompt('请输入新子流ID');`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyExtract.vue:4` — `<label class="form-label">元素选择器（可选）</label>`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyExtract.vue:5` — `<input class="form-input" v-model="(node as any).config.selector" placeholder="CSS 选择器" />`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyExtract.vue:8` — `<label class="form-label">属性</label>`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyExtract.vue:12` — `placeholder="text/textContent 或属性名"`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyExtract.vue:16` — `<label class="form-label">自定义 JS（返回值）</label>`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyExtract.vue:25` — `<label class="form-label">保存为变量</label>`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyExtract.vue:26` — `<input class="form-input" v-model="(node as any).config.saveAs" placeholder="变量名" />`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScript.vue:4` — `<label class="form-label">代码</label>`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScript.vue:13` — `<label class="form-label">执行环境</label>`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScript.vue:20` — `<label class="form-label">执行时机</label>`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScript.vue:27` — `<label class="form-label">保存为变量（可选）</label>`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScript.vue:28` — `<input class="form-input" v-model="(node as any).config.saveAs" placeholder="变量名" />`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScript.vue:31` — `<label class="form-label">结果字段映射</label>`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySetAttribute.vue:6` — `<label class="form-label">属性名</label>`
+- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScreenshot.vue:17` — `<label class="form-label">حفظ为المتغير</label>`
+- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScreenshot.vue:21` — `placeholder="اسم المتغير，例如 shot"`
+- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyExecuteFlow.vue:6` — `<option value="">请اختيار</option>`
+- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyExecuteFlow.vue:13` — `内联تشغيل（共享上下文المتغير）</label`
+- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyCloseTab.vue:4` — `<label class="form-label">按 URL 关闭（اختياري）</label>`
+- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyCloseTab.vue:5` — `<input class="form-input" v-model="(node as any).config.url" placeholder="子串مطابقة URL" />`
+- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyWhile.vue:17` — `placeholder="اختيارأو新建التدفق الفرعي"`
+- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyWhile.vue:19` — `<button class="btn-sm" style="margin-top: 8px" @click="onCreateSubflow">新建التدفق الفرعي</button>`
+- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyWhile.vue:22` — `<label class="form-label">最大迭代次数（اختياري）</label>`
+- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyExtract.vue:16` — `<label class="form-label">自定义 JS（رجوع值）</label>`
+- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyExtract.vue:25` — `<label class="form-label">حفظ为المتغير</label>`
+- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScript.vue:13` — `<label class="form-label">تشغيل环境</label>`
+- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScript.vue:20` — `<label class="form-label">تشغيل时机</label>`
+- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScript.vue:27` — `<label class="form-label">حفظ为المتغير（اختياري）</label>`
+- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScript.vue:31` — `<label class="form-label">النتيجة字段映射</label>`
+- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySetAttribute.vue:6` — `<label class="form-label">الخاصية名</label>`
 - `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySetAttribute.vue:10` — `placeholder="如 value/src/disabled 等"`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySetAttribute.vue:14` — `<label class="form-label">属性值（留空并勾选删除则移除）</label>`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySetAttribute.vue:15` — `<input class="form-input" v-model="(node as any).config.value" placeholder="属性值" />`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySetAttribute.vue:19` — `><input type="checkbox" v-model="(node as any).config.remove" /> 删除属性</label`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyKey.vue:4` — `<label class="form-label">按键序列</label>`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyKey.vue:8` — `placeholder="如 Backspace Enter 或 cmd+a"`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScroll.vue:4` — `<label class="form-label">模式</label>`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScroll.vue:6` — `<option value="element">滚动到元素</option>`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScroll.vue:7` — `<option value="offset">窗口偏移</option>`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScroll.vue:8` — `<option value="container">容器偏移</option>`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScroll.vue:13` — `<SelectorEditor :node="node" :allowPick="true" title="目标元素" targetKey="target" />`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScroll.vue:18` — `<label class="form-label">偏移 X</label>`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScroll.vue:22` — `<label class="form-label">偏移 Y</label>`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScroll.vue:31` — `<SelectorEditor :node="node" :allowPick="true" title="容器选择器" targetKey="target" />`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScroll.vue:32` — `<div class="hint"><small>容器需支持 scrollTo(top,left)</small></div>`
+- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySetAttribute.vue:14` — `<label class="form-label">الخاصية值（留空并勾选حذف则移除）</label>`
+- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySetAttribute.vue:15` — `<input class="form-input" v-model="(node as any).config.value" placeholder="الخاصية值" />`
+- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyKey.vue:8` — `placeholder="如 Backspace Enter أو cmd+a"`
+- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScroll.vue:6` — `<option value="element">تمرير到العنصر</option>`
+- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScroll.vue:7` — `<option value="offset">窗口إزاحة</option>`
+- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScroll.vue:32` — `<div class="hint"><small>حاويةيجب支持 scrollTo(top,left)</small></div>`
 - `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyFormRenderer.vue:3` — `<div class="section-title">配置</div>`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyFormRenderer.vue:16` — `<div class="error-title">⚠️ 配置错误</div>`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyFormRenderer.vue:73` — `if (f.required && (cfg[f.key] === undefined || cfg[f.key] === '')) out.push('${f.label} 必填');`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyFormRenderer.vue:195` — `err.value = 'JSON 格式错误';`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyFormRenderer.vue:203` — `placeholder: '输入 JSON',`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyFormRenderer.vue:303` — `h('button', { class: 'btn-mini', type: 'button', onClick: () => remove(i) }, '删除'),`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyFormRenderer.vue:306` — `h('button', { class: 'btn', type: 'button', onClick: add }, '新增'),`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyHttp.vue:4` — `<label class="form-label">请求方法</label>`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyHttp.vue:14` — `<label class="form-label">URL 地址</label>`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyHttp.vue:40` — `<label class="form-label">FormData (JSON，可选，提供时覆盖 Body)</label>`
 - `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyHttp.vue:48` — `>支持简洁数组形式：[["file","url:https://...","a.png"],["metadata","value"]]</div`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyNavigate.vue:4` — `<label class="form-label">URL 地址</label>`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTriggerEvent.vue:6` — `<label class="form-label">事件类型</label>`
 - `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTriggerEvent.vue:10` — `placeholder="如 input/change/mouseover"`
 - `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTriggerEvent.vue:15` — `><input type="checkbox" v-model="(node as any).config.bubbles" /> 冒泡</label`
 - `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTriggerEvent.vue:18` — `><input type="checkbox" v-model="(node as any).config.cancelable" /> 可取消</label`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyHandleDownload.vue:4` — `<label class="form-label">文件名包含（可选）</label>`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyHandleDownload.vue:8` — `placeholder="子串匹配文件名或URL"`
+- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyHandleDownload.vue:4` — `<label class="form-label">文件名包含（اختياري）</label>`
+- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyHandleDownload.vue:8` — `placeholder="子串مطابقة文件名أوURL"`
 - `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyHandleDownload.vue:12` — `<label class="form-label">超时(ms)</label>`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyHandleDownload.vue:13` — `<input class="form-input" v-model="(node as any).config.timeoutMs" placeholder="默认 60000" />`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyHandleDownload.vue:18` — `等待下载完成</label`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyHandleDownload.vue:22` — `<label class="form-label">保存到变量</label>`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyHandleDownload.vue:23` — `<input class="form-input" v-model="(node as any).config.saveAs" placeholder="默认 download" />`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyDelay.vue:4` — `<label class="form-label">延迟 (ms)</label>`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyLoopElements.vue:4` — `<label class="form-label">元素选择器</label>`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyLoopElements.vue:5` — `<input class="form-input" v-model="(node as any).config.selector" placeholder="CSS 选择器" />`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyLoopElements.vue:8` — `<label class="form-label">列表变量名</label>`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyLoopElements.vue:9` — `<input class="form-input" v-model="(node as any).config.saveAs" placeholder="默认 elements" />`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyLoopElements.vue:12` — `<label class="form-label">循环项变量名</label>`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyLoopElements.vue:13` — `<input class="form-input" v-model="(node as any).config.itemVar" placeholder="默认 item" />`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyLoopElements.vue:16` — `<label class="form-label">子流 ID</label>`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyLoopElements.vue:20` — `placeholder="选择或新建子流"`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyLoopElements.vue:22` — `<button class="btn-sm" style="margin-top: 8px" @click="onCreateSubflow">新建子流</button>`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyLoopElements.vue:35` — `const id = prompt('请输入新子流ID');`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:5` — `><input type="checkbox" v-model="cfg.enabled" /> 启用触发器</label`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:9` — `<label class="form-label">描述（可选）</label>`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:10` — `<input class="form-input" v-model="cfg.description" placeholder="说明此触发器的用途" />`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:17` — `<div class="section-header"><span class="section-title">触发方式</span></div>`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:20` — `><input type="checkbox" v-model="cfg.modes.manual" /> 手动</label`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:23` — `><input type="checkbox" v-model="cfg.modes.url" /> 访问 URL</label`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:26` — `><input type="checkbox" v-model="cfg.modes.contextMenu" /> 右键菜单</label`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:29` — `><input type="checkbox" v-model="cfg.modes.command" /> 快捷键</label`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:32` — `><input type="checkbox" v-model="cfg.modes.dom" /> DOM 变化</label`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:35` — `><input type="checkbox" v-model="cfg.modes.schedule" /> 定时</label`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:41` — `<div class="section-title">访问 URL 匹配</div>`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:45` — `<option value="url">前缀 URL</option>`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:46` — `<option value="domain">域名包含</option>`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:47` — `<option value="path">路径前缀</option>`
+- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyHandleDownload.vue:18` — `انتظار下载完成</label`
+- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyHandleDownload.vue:22` — `<label class="form-label">حفظ到المتغير</label>`
+- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyLoopElements.vue:8` — `<label class="form-label">列表اسم المتغير</label>`
+- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyLoopElements.vue:12` — `<label class="form-label">تكرار项اسم المتغير</label>`
+- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyLoopElements.vue:20` — `placeholder="اختيارأو新建التدفق الفرعي"`
+- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyLoopElements.vue:22` — `<button class="btn-sm" style="margin-top: 8px" @click="onCreateSubflow">新建التدفق الفرعي</button>`
+- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:10` — `<input class="form-input" v-model="cfg.description" placeholder="说明此مشغّل的用途" />`
+- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:46` — `<option value="domain">النطاق包含</option>`
 - `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:52` — `placeholder="例如 https://example.com/app"`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:64` — `<button class="btn-sm" @click="urlRules.push({ kind: 'url', value: '' })">+ 添加匹配</button>`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:68` — `<div class="section-title">右键菜单</div>`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:70` — `<label class="form-label">标题</label>`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:71` — `<input class="form-input" v-model="cfg.contextMenu.title" placeholder="菜单标题" />`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:74` — `<label class="form-label">作用范围</label>`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:84` — `<div class="section-title">快捷键</div>`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:86` — `<label class="form-label">命令键（需预先在 manifest commands 中声明）</label>`
+- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:71` — `<input class="form-input" v-model="cfg.contextMenu.title" placeholder="菜单العنوان" />`
+- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:86` — `<label class="form-label">命令键（يجب预先在 manifest commands 中声明）</label>`
 - `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:90` — `placeholder="例如 run_quick_trigger_1"`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:94` — `>提示：Chrome 扩展快捷键需要在 manifest 里固定声明，无法运行时动态添加。</div`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:99` — `<div class="section-title">DOM 变化</div>`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:101` — `<label class="form-label">选择器</label>`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:106` — `><input type="checkbox" v-model="cfg.dom.appear" /> 出现时触发</label`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:109` — `><input type="checkbox" v-model="cfg.dom.once" /> 仅触发一次</label`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:113` — `<label class="form-label">去抖(ms)</label>`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:119` — `<div class="section-title">定时</div>`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:123` — `<option value="interval">间隔(分钟)</option>`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:124` — `<option value="daily">每天(HH:mm)</option>`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:125` — `<option value="once">一次(ISO时间)</option>`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:130` — `placeholder="5 或 09:00 或 2025-01-01T10:00:00"`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:132` — `<label class="checkbox-label"><input type="checkbox" v-model="s.enabled" /> 启用</label>`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:144` — `>+ 添加定时</button`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:151` — `>说明：`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:152` — `触发器会在保存工作流时同步到后台触发表（URL/右键/快捷键/DOM）和计划任务（间隔/每天/一次）。`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:178` — `n.config.contextMenu = { title: '运行工作流', contexts: ['all'], enabled: false };`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyIf.vue:8` — `>使用表达式定义分支，支持变量与常见比较运算符。</div`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyIf.vue:13` — `<input class="form-input-sm flex-1" v-model="c.name" placeholder="分支名称（可选）" />`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyIf.vue:14` — `<button class="btn-icon-sm danger" @click="removeIfCase(i)" title="删除">×</button>`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyIf.vue:29` — `<option value="" disabled>插入变量</option>`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyIf.vue:37` — `<option value="" disabled>运算符</option>`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyIf.vue:44` — `<div class="text-xs text-slate-500">Else 分支（无需表达式，将匹配以上条件都不成立时）</div>`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyOpenTab.vue:4` — `<label class="form-label">URL 地址（可选）</label>`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyOpenTab.vue:13` — `><input type="checkbox" v-model="(node as any).config.newWindow" /> 新窗口</label`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyFromSpec.vue:4` — `<div class="section-title">未找到节点规范</div>`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyFromSpec.vue:5` — `<div class="help">该节点尚未提供 NodeSpec，已回退到默认属性面板。</div>`
+- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:94` — `>ملاحظة: Chrome 扩展اختصار لوحة المفاتيحيحتاج在 manifest 里固定声明，تعذرتشغيل时动态إضافة。</div`
+- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue:152` — `مشغّل会在حفظسير العمل时同步到后台触发表（URL/右键/اختصار لوحة المفاتيح/DOM）和جدول任务（间隔/يوميًا/مرة واحدة）。`
+- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyIf.vue:29` — `<option value="" disabled>插入المتغير</option>`
+- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyFromSpec.vue:4` — `<div class="section-title">غير موجودالعقدة规范</div>`
+- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyFromSpec.vue:5` — `<div class="help">该العقدة尚未توفير NodeSpec，تم回退到افتراضيالخاصية面板。</div>`
 - `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyFromSpec.vue:7` — `<!-- 将通用字段留给外层 PropertyPanel 渲染（timeoutMs/screenshotOnFail等） -->`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySwitchFrame.vue:4` — `<label class="form-label">按 URL 包含匹配（优先）</label>`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySwitchFrame.vue:8` — `placeholder="frame URL 包含的字符串"`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySwitchFrame.vue:12` — `<label class="form-label">按索引匹配（从 0 起，仅子 frame）</label>`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySwitchFrame.vue:13` — `<input class="form-input" v-model="(node as any).config.frame.index" placeholder="索引数字" />`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySwitchFrame.vue:16` — `>同源/可注入 frame 可用；留空则回到顶级页面</div`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyDrag.vue:3` — `<SelectorEditor :node="node" :allowPick="true" title="起点选择器" targetKey="start" />`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyDrag.vue:4` — `<SelectorEditor :node="node" :allowPick="true" title="终点选择器" targetKey="end" />`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyDrag.vue:6` — `<small>提示：路径（path）通常在录制时自动生成，手动创建时可留空。</small>`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyWait.vue:4` — `<label class="form-label">等待条件 (JSON)</label>`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/SelectorEditor.vue:4` — `<span class="section-title">{{ title || '选择器' }}</span>`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/SelectorEditor.vue:5` — `<button v-if="allowPick" class="btn-sm btn-primary" @click="pickFromPage">从页面选择</button>`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/SelectorEditor.vue:16` — `<input class="form-input-sm flex-1" v-model="c.value" placeholder="选择器值" />`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/SelectorEditor.vue:21` — `<button class="btn-sm" @click="add">+ 添加选择器</button>`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySwitchTab.vue:4` — `<label class="form-label">Tab ID（可选）</label>`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySwitchTab.vue:9` — `placeholder="数字"`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySwitchTab.vue:13` — `<label class="form-label">URL 包含（可选）</label>`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySwitchTab.vue:14` — `<input class="form-input" v-model="(node as any).config.urlContains" placeholder="子串匹配" />`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySwitchTab.vue:17` — `<label class="form-label">标题包含（可选）</label>`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySwitchTab.vue:21` — `placeholder="子串匹配"`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySwitchTab.vue:28` — `>需提供 tabId 或 URL/标题包含</div`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyFill.vue:6` — `<label class="form-label">输入值</label>`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyFill.vue:7` — `<VarInput v-model="value" :variables="variables" placeholder="支持 {变量名} 格式" />`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyAssert.vue:4` — `<label class="form-label">断言条件 (JSON)</label>`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyAssert.vue:13` — `<label class="form-label">失败策略</label>`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyForeach.vue:4` — `<label class="form-label">列表变量</label>`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyForeach.vue:12` — `<label class="form-label">循环项变量名</label>`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyForeach.vue:13` — `<input class="form-input" v-model="(node as any).config.itemVar" placeholder="默认 item" />`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyForeach.vue:16` — `<label class="form-label">子流 ID</label>`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyForeach.vue:20` — `placeholder="选择或新建子流"`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyForeach.vue:22` — `<button class="btn-sm" style="margin-top: 8px" @click="onCreateSubflow">新建子流</button>`
-- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyForeach.vue:35` — `const id = prompt('请输入新子流ID');`
+- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySwitchFrame.vue:4` — `<label class="form-label">按 URL 包含مطابقة（优先）</label>`
+- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySwitchFrame.vue:12` — `<label class="form-label">按索引مطابقة（从 0 起，仅子 frame）</label>`
+- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySwitchFrame.vue:16` — `>同源/可注入 frame 可用；留空则回到顶级الصفحة</div`
+- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyDrag.vue:6` — `<small>ملاحظة: المسار（path）通常在录制时自动生成，يدويإنشاء时可留空。</small>`
+- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/SelectorEditor.vue:16` — `<input class="form-input-sm flex-1" v-model="c.value" placeholder="المحدد值" />`
+- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySwitchTab.vue:14` — `<input class="form-input" v-model="(node as any).config.urlContains" placeholder="子串مطابقة" />`
+- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySwitchTab.vue:17` — `<label class="form-label">العنوان包含（اختياري）</label>`
+- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySwitchTab.vue:21` — `placeholder="子串مطابقة"`
+- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyFill.vue:6` — `<label class="form-label">إدخال值</label>`
+- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyFill.vue:7` — `<VarInput v-model="value" :variables="variables" placeholder="支持 {اسم المتغير} 格式" />`
+- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyAssert.vue:13` — `<label class="form-label">فشل策略</label>`
+- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyForeach.vue:4` — `<label class="form-label">列表المتغير</label>`
+- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyForeach.vue:12` — `<label class="form-label">تكرار项اسم المتغير</label>`
+- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyForeach.vue:20` — `placeholder="اختيارأو新建التدفق الفرعي"`
+- `app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyForeach.vue:22` — `<button class="btn-sm" style="margin-top: 8px" @click="onCreateSubflow">新建التدفق الفرعي</button>`
 - `app/chrome-extension/entrypoints/background/record-replay-v3/index.ts:2` — `* @fileoverview Record-Replay V3 公共 API 入口`
 - `app/chrome-extension/entrypoints/background/record-replay-v3/index.ts:3` — `* @description 导出所有公共类型和接口`
 - `app/chrome-extension/entrypoints/background/record-replay-v3/index.ts:26` — `* 创建完整的 StoragePort 实现`
@@ -4564,166 +4387,71 @@ Files containing CJK text: **195**
 - `packages/wasm-simd/BUILD.md:62` — `3. Chrome 扩展会自动使用新的 WASM 文件`
 - `packages/wasm-simd/BUILD.md:64` — `## 📊 性能测试`
 - `packages/wasm-simd/BUILD.md:67` — `# 在 Chrome 扩展中运行基准测试`
-- `packages/shared/src/node-specs-builtin.ts:10` — `display: { label: '导航', iconClass: 'icon-navigate', category: 'Actions' },`
-- `packages/shared/src/node-specs-builtin.ts:19` — `help: '目标地址，支持变量模板 {var}',`
-- `packages/shared/src/node-specs-builtin.ts:26` — `if (!cfg || !cfg.url || String(cfg.url).trim() === '') errs.push('URL 必填');`
-- `packages/shared/src/node-specs-builtin.ts:36` — `display: { label: '点击', iconClass: 'icon-click', category: 'Actions' },`
-- `packages/shared/src/node-specs-builtin.ts:41` — `label: '目标',`
-- `packages/shared/src/node-specs-builtin.ts:44` — `help: '选择或输入元素选择器',`
-- `packages/shared/src/node-specs-builtin.ts:48` — `label: '执行前',`
-- `packages/shared/src/node-specs-builtin.ts:51` — `{ key: 'scrollIntoView', label: '滚动到可见', type: 'boolean', default: true },`
-- `packages/shared/src/node-specs-builtin.ts:52` — `{ key: 'waitForSelector', label: '等待选择器', type: 'boolean', default: true },`
-- `packages/shared/src/node-specs-builtin.ts:57` — `label: '执行后',`
-- `packages/shared/src/node-specs-builtin.ts:60` — `{ key: 'waitForNavigation', label: '等待导航完成', type: 'boolean', default: false },`
-- `packages/shared/src/node-specs-builtin.ts:61` — `{ key: 'waitForNetworkIdle', label: '等待网络空闲', type: 'boolean', default: false },`
 - `packages/shared/src/node-specs-builtin.ts:70` — `display: { label: '双击', iconClass: 'icon-click', category: 'Actions' },`
-- `packages/shared/src/node-specs-builtin.ts:73` — `{ key: 'target', label: '目标', type: 'json', widget: 'targetlocator' },`
-- `packages/shared/src/node-specs-builtin.ts:76` — `label: '执行前',`
-- `packages/shared/src/node-specs-builtin.ts:79` — `{ key: 'scrollIntoView', label: '滚动到可见', type: 'boolean', default: true },`
-- `packages/shared/src/node-specs-builtin.ts:80` — `{ key: 'waitForSelector', label: '等待选择器', type: 'boolean', default: true },`
-- `packages/shared/src/node-specs-builtin.ts:85` — `label: '执行后',`
-- `packages/shared/src/node-specs-builtin.ts:88` — `{ key: 'waitForNavigation', label: '等待导航完成', type: 'boolean', default: false },`
-- `packages/shared/src/node-specs-builtin.ts:89` — `{ key: 'waitForNetworkIdle', label: '等待网络空闲', type: 'boolean', default: false },`
-- `packages/shared/src/node-specs-builtin.ts:100` — `display: { label: '填充', iconClass: 'icon-fill', category: 'Actions' },`
-- `packages/shared/src/node-specs-builtin.ts:103` — `{ key: 'target', label: '目标', type: 'json', widget: 'targetlocator' },`
-- `packages/shared/src/node-specs-builtin.ts:104` — `{ key: 'value', label: '输入值', type: 'string', required: true, help: '支持 {var} 模板' },`
-- `packages/shared/src/node-specs-builtin.ts:113` — `display: { label: '键盘', iconClass: 'icon-key', category: 'Actions' },`
-- `packages/shared/src/node-specs-builtin.ts:118` — `label: '按键序列',`
-- `packages/shared/src/node-specs-builtin.ts:122` — `help: '如 Backspace Enter 或 cmd+a',`
-- `packages/shared/src/node-specs-builtin.ts:124` — `{ key: 'target', label: '焦点目标(可选)', type: 'json', widget: 'targetlocator' },`
-- `packages/shared/src/node-specs-builtin.ts:133` — `display: { label: '滚动', iconClass: 'icon-scroll', category: 'Actions' },`
-- `packages/shared/src/node-specs-builtin.ts:138` — `label: '模式',`
-- `packages/shared/src/node-specs-builtin.ts:141` — `{ label: '元素', value: 'element' },`
-- `packages/shared/src/node-specs-builtin.ts:142` — `{ label: '偏移', value: 'offset' },`
-- `packages/shared/src/node-specs-builtin.ts:143` — `{ label: '容器', value: 'container' },`
-- `packages/shared/src/node-specs-builtin.ts:147` — `{ key: 'target', label: '目标(当元素/容器)', type: 'json', widget: 'targetlocator' },`
-- `packages/shared/src/node-specs-builtin.ts:150` — `label: '偏移',`
-- `packages/shared/src/node-specs-builtin.ts:165` — `display: { label: '拖拽', iconClass: 'icon-drag', category: 'Actions' },`
-- `packages/shared/src/node-specs-builtin.ts:168` — `{ key: 'start', label: '起点', type: 'json', widget: 'targetlocator' },`
-- `packages/shared/src/node-specs-builtin.ts:169` — `{ key: 'end', label: '终点', type: 'json', widget: 'targetlocator' },`
-- `packages/shared/src/node-specs-builtin.ts:172` — `label: '路径坐标',`
-- `packages/shared/src/node-specs-builtin.ts:176` — `label: '点',`
-- `packages/shared/src/node-specs-builtin.ts:192` — `display: { label: '等待', iconClass: 'icon-wait', category: 'Actions' },`
-- `packages/shared/src/node-specs-builtin.ts:197` — `label: '条件(JSON)',`
-- `packages/shared/src/node-specs-builtin.ts:199` — `help: '如 {"sleep":1000} 或 {"text":"Hello","appear":true}',`
-- `packages/shared/src/node-specs-builtin.ts:209` — `display: { label: '断言', iconClass: 'icon-assert', category: 'Actions' },`
-- `packages/shared/src/node-specs-builtin.ts:214` — `label: '断言(JSON)',`
-- `packages/shared/src/node-specs-builtin.ts:216` — `help: '如 {"exists":"#id"} / {"visible":".btn"}',`
-- `packages/shared/src/node-specs-builtin.ts:220` — `label: '失败策略',`
-- `packages/shared/src/node-specs-builtin.ts:223` — `{ label: '停止', value: 'stop' },`
 - `packages/shared/src/node-specs-builtin.ts:224` — `{ label: '警告', value: 'warn' },`
-- `packages/shared/src/node-specs-builtin.ts:225` — `{ label: '重试', value: 'retry' },`
 - `packages/shared/src/node-specs-builtin.ts:242` — `label: '方法',`
-- `packages/shared/src/node-specs-builtin.ts:251` — `{ key: 'headers', label: '请求头(JSON)', type: 'json' },`
-- `packages/shared/src/node-specs-builtin.ts:252` — `{ key: 'body', label: '请求体(JSON)', type: 'json' },`
+- `packages/shared/src/node-specs-builtin.ts:251` — `{ key: 'headers', label: 'طلب头(JSON)', type: 'json' },`
+- `packages/shared/src/node-specs-builtin.ts:252` — `{ key: 'body', label: 'طلب体(JSON)', type: 'json' },`
 - `packages/shared/src/node-specs-builtin.ts:253` — `{ key: 'formData', label: '表单(JSON)', type: 'json' },`
-- `packages/shared/src/node-specs-builtin.ts:254` — `{ key: 'saveAs', label: '保存为变量', type: 'string' },`
+- `packages/shared/src/node-specs-builtin.ts:254` — `{ key: 'saveAs', label: 'حفظ为变量', type: 'string' },`
 - `packages/shared/src/node-specs-builtin.ts:255` — `{ key: 'assign', label: '映射(JSON)', type: 'json' },`
-- `packages/shared/src/node-specs-builtin.ts:264` — `display: { label: '提取', iconClass: 'icon-extract', category: 'Tools' },`
-- `packages/shared/src/node-specs-builtin.ts:267` — `{ key: 'selector', label: '选择器', type: 'string', widget: 'selector' },`
-- `packages/shared/src/node-specs-builtin.ts:270` — `label: '属性',`
 - `packages/shared/src/node-specs-builtin.ts:273` — `{ label: '文本(text)', value: 'text' },`
 - `packages/shared/src/node-specs-builtin.ts:274` — `{ label: '文本(textContent)', value: 'textContent' },`
-- `packages/shared/src/node-specs-builtin.ts:275` — `{ label: '自定义属性名', value: 'attr' },`
-- `packages/shared/src/node-specs-builtin.ts:278` — `{ key: 'js', label: '自定义JS', type: 'string', help: '在页面中执行并返回值' },`
-- `packages/shared/src/node-specs-builtin.ts:279` — `{ key: 'saveAs', label: '保存变量', type: 'string', required: true },`
-- `packages/shared/src/node-specs-builtin.ts:288` — `display: { label: '截图', iconClass: 'icon-screenshot', category: 'Tools' },`
-- `packages/shared/src/node-specs-builtin.ts:291` — `{ key: 'selector', label: '目标选择器', type: 'string' },`
-- `packages/shared/src/node-specs-builtin.ts:292` — `{ key: 'fullPage', label: '整页截图', type: 'boolean', default: false },`
-- `packages/shared/src/node-specs-builtin.ts:293` — `{ key: 'saveAs', label: '保存变量', type: 'string' },`
-- `packages/shared/src/node-specs-builtin.ts:302` — `display: { label: '触发事件', iconClass: 'icon-trigger', category: 'Tools' },`
-- `packages/shared/src/node-specs-builtin.ts:305` — `{ key: 'target', label: '目标', type: 'json', widget: 'targetlocator' },`
-- `packages/shared/src/node-specs-builtin.ts:306` — `{ key: 'event', label: '事件类型', type: 'string', required: true },`
+- `packages/shared/src/node-specs-builtin.ts:275` — `{ label: '自定义اسم الخاصية', value: 'attr' },`
+- `packages/shared/src/node-specs-builtin.ts:278` — `{ key: 'js', label: '自定义JS', type: 'string', help: '在页面中执行并رجوع值' },`
+- `packages/shared/src/node-specs-builtin.ts:279` — `{ key: 'saveAs', label: 'حفظ变量', type: 'string', required: true },`
+- `packages/shared/src/node-specs-builtin.ts:292` — `{ key: 'fullPage', label: '整页لقطة شاشة', type: 'boolean', default: false },`
+- `packages/shared/src/node-specs-builtin.ts:293` — `{ key: 'saveAs', label: 'حفظ变量', type: 'string' },`
+- `packages/shared/src/node-specs-builtin.ts:302` — `display: { label: '触发حدث', iconClass: 'icon-trigger', category: 'Tools' },`
 - `packages/shared/src/node-specs-builtin.ts:307` — `{ key: 'bubbles', label: '冒泡', type: 'boolean', default: true },`
 - `packages/shared/src/node-specs-builtin.ts:308` — `{ key: 'cancelable', label: '可取消', type: 'boolean', default: false },`
-- `packages/shared/src/node-specs-builtin.ts:317` — `display: { label: '设置属性', iconClass: 'icon-attr', category: 'Tools' },`
-- `packages/shared/src/node-specs-builtin.ts:320` — `{ key: 'target', label: '目标', type: 'json', widget: 'targetlocator' },`
-- `packages/shared/src/node-specs-builtin.ts:321` — `{ key: 'name', label: '属性名', type: 'string', required: true },`
-- `packages/shared/src/node-specs-builtin.ts:322` — `{ key: 'value', label: '属性值', type: 'string' },`
-- `packages/shared/src/node-specs-builtin.ts:323` — `{ key: 'remove', label: '移除属性', type: 'boolean', default: false },`
-- `packages/shared/src/node-specs-builtin.ts:332` — `display: { label: '循环元素', iconClass: 'icon-loop', category: 'Tools' },`
-- `packages/shared/src/node-specs-builtin.ts:335` — `{ key: 'selector', label: '选择器', type: 'string', required: true },`
-- `packages/shared/src/node-specs-builtin.ts:336` — `{ key: 'saveAs', label: '列表变量名', type: 'string', default: 'elements' },`
-- `packages/shared/src/node-specs-builtin.ts:337` — `{ key: 'itemVar', label: '项变量名', type: 'string', default: 'item' },`
-- `packages/shared/src/node-specs-builtin.ts:338` — `{ key: 'subflowId', label: '子流程ID', type: 'string', required: true },`
+- `packages/shared/src/node-specs-builtin.ts:317` — `display: { label: '设置خاصية', iconClass: 'icon-attr', category: 'Tools' },`
+- `packages/shared/src/node-specs-builtin.ts:323` — `{ key: 'remove', label: '移除خاصية', type: 'boolean', default: false },`
+- `packages/shared/src/node-specs-builtin.ts:337` — `{ key: 'itemVar', label: '项اسم المتغير', type: 'string', default: 'item' },`
+- `packages/shared/src/node-specs-builtin.ts:338` — `{ key: 'subflowId', label: 'سير عمل فرعي程ID', type: 'string', required: true },`
 - `packages/shared/src/node-specs-builtin.ts:347` — `display: { label: '切换Frame', iconClass: 'icon-frame', category: 'Tools' },`
 - `packages/shared/src/node-specs-builtin.ts:352` — `label: 'frame定位',`
 - `packages/shared/src/node-specs-builtin.ts:355` — `{ key: 'index', label: '索引', type: 'number' },`
 - `packages/shared/src/node-specs-builtin.ts:356` — `{ key: 'urlContains', label: 'URL包含', type: 'string' },`
 - `packages/shared/src/node-specs-builtin.ts:367` — `display: { label: '下载处理', iconClass: 'icon-download', category: 'Tools' },`
 - `packages/shared/src/node-specs-builtin.ts:370` — `{ key: 'filenameContains', label: '文件名包含', type: 'string' },`
-- `packages/shared/src/node-specs-builtin.ts:371` — `{ key: 'waitForComplete', label: '等待完成', type: 'boolean', default: true },`
+- `packages/shared/src/node-specs-builtin.ts:371` — `{ key: 'waitForComplete', label: 'انتظار完成', type: 'boolean', default: true },`
 - `packages/shared/src/node-specs-builtin.ts:372` — `{ key: 'timeoutMs', label: '超时(ms)', type: 'number', default: 60000 },`
-- `packages/shared/src/node-specs-builtin.ts:373` — `{ key: 'saveAs', label: '保存变量', type: 'string' },`
-- `packages/shared/src/node-specs-builtin.ts:382` — `display: { label: '脚本', iconClass: 'icon-script', category: 'Tools' },`
+- `packages/shared/src/node-specs-builtin.ts:373` — `{ key: 'saveAs', label: 'حفظ变量', type: 'string' },`
 - `packages/shared/src/node-specs-builtin.ts:387` — `label: '执行上下文',`
-- `packages/shared/src/node-specs-builtin.ts:395` — `{ key: 'code', label: '脚本代码', type: 'string', widget: 'code', required: true },`
+- `packages/shared/src/node-specs-builtin.ts:395` — `{ key: 'code', label: 'سكربت代码', type: 'string', widget: 'code', required: true },`
 - `packages/shared/src/node-specs-builtin.ts:398` — `label: '执行时机',`
 - `packages/shared/src/node-specs-builtin.ts:406` — `{ key: 'assign', label: '映射(JSON)', type: 'json' },`
-- `packages/shared/src/node-specs-builtin.ts:407` — `{ key: 'saveAs', label: '保存变量', type: 'string' },`
+- `packages/shared/src/node-specs-builtin.ts:407` — `{ key: 'saveAs', label: 'حفظ变量', type: 'string' },`
 - `packages/shared/src/node-specs-builtin.ts:416` — `display: { label: '打开标签', iconClass: 'icon-openTab', category: 'Tabs' },`
-- `packages/shared/src/node-specs-builtin.ts:420` — `{ key: 'newWindow', label: '新窗口', type: 'boolean', default: false },`
-- `packages/shared/src/node-specs-builtin.ts:427` — `display: { label: '执行子流程', iconClass: 'icon-exec', category: 'Flow' },`
+- `packages/shared/src/node-specs-builtin.ts:427` — `display: { label: '执行سير عمل فرعي程', iconClass: 'icon-exec', category: 'Flow' },`
 - `packages/shared/src/node-specs-builtin.ts:430` — `{ key: 'flowId', label: '流程ID', type: 'string', required: true },`
 - `packages/shared/src/node-specs-builtin.ts:431` — `{ key: 'inline', label: '内联执行', type: 'boolean', default: false },`
-- `packages/shared/src/node-specs-builtin.ts:432` — `{ key: 'args', label: '参数(JSON)', type: 'json' },`
 - `packages/shared/src/node-specs-builtin.ts:439` — `display: { label: '切换标签', iconClass: 'icon-switchTab', category: 'Tabs' },`
 - `packages/shared/src/node-specs-builtin.ts:443` — `{ key: 'urlContains', label: 'URL包含', type: 'string' },`
-- `packages/shared/src/node-specs-builtin.ts:444` — `{ key: 'titleContains', label: '标题包含', type: 'string' },`
+- `packages/shared/src/node-specs-builtin.ts:444` — `{ key: 'titleContains', label: 'العنوان包含', type: 'string' },`
 - `packages/shared/src/node-specs-builtin.ts:451` — `display: { label: '关闭标签', iconClass: 'icon-closeTab', category: 'Tabs' },`
-- `packages/shared/src/node-specs-builtin.ts:469` — `display: { label: '条件', iconClass: 'icon-if', category: 'Logic' },`
-- `packages/shared/src/node-specs-builtin.ts:474` — `label: '条件表达式(JSON)',`
+- `packages/shared/src/node-specs-builtin.ts:474` — `label: 'الشرط表达式(JSON)',`
 - `packages/shared/src/node-specs-builtin.ts:476` — `help: '如 {"expression":"vars.a>0"} 等',`
-- `packages/shared/src/node-specs-builtin.ts:480` — `label: '分支',`
-- `packages/shared/src/node-specs-builtin.ts:488` — `{ key: 'name', label: '名称', type: 'string' },`
 - `packages/shared/src/node-specs-builtin.ts:489` — `{ key: 'expr', label: '表达式', type: 'string' },`
-- `packages/shared/src/node-specs-builtin.ts:493` — `{ key: 'else', label: '启用 else', type: 'boolean', default: true },`
-- `packages/shared/src/node-specs-builtin.ts:500` — `display: { label: '循环', iconClass: 'icon-foreach', category: 'Logic' },`
 - `packages/shared/src/node-specs-builtin.ts:503` — `{ key: 'listVar', label: '列表变量', type: 'string', required: true },`
 - `packages/shared/src/node-specs-builtin.ts:504` — `{ key: 'itemVar', label: '项变量', type: 'string', default: 'item' },`
-- `packages/shared/src/node-specs-builtin.ts:505` — `{ key: 'subflowId', label: '子流程ID', type: 'string', required: true },`
+- `packages/shared/src/node-specs-builtin.ts:505` — `{ key: 'subflowId', label: 'سير عمل فرعي程ID', type: 'string', required: true },`
 - `packages/shared/src/node-specs-builtin.ts:508` — `label: '并发数',`
-- `packages/shared/src/node-specs-builtin.ts:511` — `help: '并发执行子流程（浅拷贝变量，不自动合并）',`
-- `packages/shared/src/node-specs-builtin.ts:519` — `display: { label: '循环', iconClass: 'icon-while', category: 'Logic' },`
-- `packages/shared/src/node-specs-builtin.ts:522` — `{ key: 'condition', label: '条件(JSON)', type: 'json' },`
-- `packages/shared/src/node-specs-builtin.ts:523` — `{ key: 'subflowId', label: '子流程ID', type: 'string', required: true },`
+- `packages/shared/src/node-specs-builtin.ts:511` — `help: '并发执行سير عمل فرعي程（浅拷贝变量，不自动合并）',`
+- `packages/shared/src/node-specs-builtin.ts:523` — `{ key: 'subflowId', label: 'سير عمل فرعي程ID', type: 'string', required: true },`
 - `packages/shared/src/node-specs-builtin.ts:524` — `{ key: 'maxIterations', label: '最大次数', type: 'number', default: 100 },`
-- `packages/shared/src/node-specs-builtin.ts:533` — `display: { label: '延迟', iconClass: 'icon-delay', category: 'Actions' },`
-- `packages/shared/src/node-specs-builtin.ts:538` — `label: '延迟',`
-- `packages/shared/src/node-specs-builtin.ts:552` — `display: { label: '触发器', iconClass: 'icon-trigger', category: 'Flow' },`
-- `packages/shared/src/node-specs-builtin.ts:555` — `{ key: 'enabled', label: '启用', type: 'boolean', default: true },`
-- `packages/shared/src/node-specs-builtin.ts:556` — `{ key: 'description', label: '描述', type: 'string' },`
-- `packages/shared/src/node-specs-builtin.ts:559` — `label: '模式',`
-- `packages/shared/src/node-specs-builtin.ts:562` — `{ key: 'manual', label: '手动', type: 'boolean', default: true },`
 - `packages/shared/src/node-specs-builtin.ts:563` — `{ key: 'url', label: 'URL 触发', type: 'boolean', default: false },`
-- `packages/shared/src/node-specs-builtin.ts:564` — `{ key: 'contextMenu', label: '右键菜单', type: 'boolean', default: false },`
-- `packages/shared/src/node-specs-builtin.ts:565` — `{ key: 'command', label: '快捷键', type: 'boolean', default: false },`
-- `packages/shared/src/node-specs-builtin.ts:566` — `{ key: 'dom', label: 'DOM 事件', type: 'boolean', default: false },`
-- `packages/shared/src/node-specs-builtin.ts:567` — `{ key: 'schedule', label: '定时', type: 'boolean', default: false },`
 - `packages/shared/src/node-specs-builtin.ts:572` — `label: 'URL 规则',`
 - `packages/shared/src/node-specs-builtin.ts:577` — `label: '规则列表',`
 - `packages/shared/src/node-specs-builtin.ts:581` — `label: '规则',`
-- `packages/shared/src/node-specs-builtin.ts:586` — `label: '类型',`
-- `packages/shared/src/node-specs-builtin.ts:590` — `{ label: '域名', value: 'domain' },`
 - `packages/shared/src/node-specs-builtin.ts:591` — `{ label: '路径', value: 'path' },`
 - `packages/shared/src/node-specs-builtin.ts:595` — `{ key: 'value', label: '值', type: 'string' },`
-- `packages/shared/src/node-specs-builtin.ts:603` — `label: '右键菜单',`
-- `packages/shared/src/node-specs-builtin.ts:606` — `{ key: 'title', label: '标题', type: 'string', default: '运行工作流' },`
-- `packages/shared/src/node-specs-builtin.ts:607` — `{ key: 'enabled', label: '启用', type: 'boolean', default: false },`
-- `packages/shared/src/node-specs-builtin.ts:612` — `label: '快捷键',`
-- `packages/shared/src/node-specs-builtin.ts:615` — `{ key: 'commandKey', label: '快捷键', type: 'string' },`
-- `packages/shared/src/node-specs-builtin.ts:616` — `{ key: 'enabled', label: '启用', type: 'boolean', default: false },`
-- `packages/shared/src/node-specs-builtin.ts:621` — `label: 'DOM 事件',`
-- `packages/shared/src/node-specs-builtin.ts:624` — `{ key: 'selector', label: '选择器', type: 'string' },`
 - `packages/shared/src/node-specs-builtin.ts:625` — `{ key: 'appear', label: '出现', type: 'boolean', default: true },`
 - `packages/shared/src/node-specs-builtin.ts:626` — `{ key: 'once', label: '一次', type: 'boolean', default: true },`
 - `packages/shared/src/node-specs-builtin.ts:627` — `{ key: 'debounceMs', label: '防抖(ms)', type: 'number', default: 800 },`
-- `packages/shared/src/node-specs-builtin.ts:628` — `{ key: 'enabled', label: '启用', type: 'boolean', default: false },`
-- `packages/shared/src/node-specs-builtin.ts:633` — `label: '定时',`
 - `packages/shared/src/node-specs-builtin.ts:637` — `label: '计划',`
-- `packages/shared/src/node-specs-builtin.ts:643` — `label: '类型',`
 - `packages/shared/src/node-specs-builtin.ts:646` — `{ label: '一次', value: 'once' },`
 - `packages/shared/src/node-specs-builtin.ts:647` — `{ label: '间隔', value: 'interval' },`
 - `packages/shared/src/node-specs-builtin.ts:648` — `{ label: '每日', value: 'daily' },`
 - `packages/shared/src/node-specs-builtin.ts:651` — `{ key: 'when', label: '时间(ISO/cron)', type: 'string' },`
-- `packages/shared/src/node-specs-builtin.ts:652` — `{ key: 'enabled', label: '启用', type: 'boolean', default: true },`

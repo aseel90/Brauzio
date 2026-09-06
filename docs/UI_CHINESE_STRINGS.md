@@ -1,6 +1,6 @@
 # Brauzio user-facing Chinese audit
 
-Potential user-facing CJK lines: **200**
+Potential user-facing CJK lines: **162**
 
 - `app/chrome-extension/entrypoints/popup/components/builder/components/KeyValueEditor.vue:8` — `<button class="mini danger" @click="remove(i)">删</button>`
 - `app/chrome-extension/entrypoints/popup/components/builder/components/nodes/node-util.ts:103` — `dblclick: '双击',`
@@ -82,44 +82,6 @@ Potential user-facing CJK lines: **200**
 - `app/chrome-extension/entrypoints/sidepanel/App.vue:459` — `if (!result) console.warn('回放فشل');`
 - `app/chrome-extension/entrypoints/sidepanel/App.vue:477` — `const ok = confirm('确认حذف该سير العمل？此操作不可恢复');`
 - `app/chrome-extension/entrypoints/sidepanel/App.vue:611` — `const confirmed = confirm('确定要حذفتحديد "${marker.name}" 吗?');`
-- `app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:8` — `'本来应该从从容容游刃有余',`
-- `app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:9` — `'现在是匆匆忙忙连滚带爬',`
-- `app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:10` — `'我知道你很急，但是先别急',`
-- `app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:11` — `'在知识的海洋里狗刨',`
-- `app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:12` — `'让子弹再飞一会儿',`
-- `app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:13` — `'正在为您手搓答案',`
-- `app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:14` — `'浪浪山小妖怪集结中',`
-- `app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:15` — `'别催，تم经在写了（新建文件夹）',`
-- `app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:16` — `'正在汗流浃背地思考中',`
-- `app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:19` — `'村咖慢焙，精华يحتاجالوقت',`
-- `app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:20` — `'知识煎饼翻面中',`
-- `app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:21` — `'敬自己一杯，马上好',`
-- `app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:22` — `'正在把灵感放入烤箱',`
-- `app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:23` — `'让答案再泡一会儿',`
-- `app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:24` — `'情绪价值拉满中',`
-- `app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:25` — `'正在为您编织语言的毛衣',`
-- `app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:27` — `'神经元蹦迪中',`
-- `app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:28` — `'熬夜的猫头鹰在思考',`
-- `app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:29` — `'给答案上色中',`
-- `app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:30` — `'正在疯狂翻阅知识库',`
-- `app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:31` — `'大脑马戏团开演',`
-- `app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:32` — `'正在把 0 和 1 捏在一起',`
-- `app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:33` — `'正在憋个大招',`
-- `app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:34` — `'放大镜有نقطة起雾，擦擦',`
-- `app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:35` — `'试图理解这个离谱的يجب求',`
-- `app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:37` — `'正在施法，莫打扰',`
-- `app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:38` — `'唤醒硅基朋友',`
-- `app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:39` — `'正在连接赛博空间的智慧',`
-- `app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:40` — `'道友请留步，正在推演',`
-- `app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:41` — `'穿越知识黑洞',`
-- `app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:42` — `'正在反向解析人类意图',`
-- `app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:43` — `'水晶球有نقطة模糊，拍两下',`
-- `app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:47` — `'快马加鞭赶来中',`
-- `app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:48` — `'正在光速搬运知识',`
-- `app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:49` — `'拼图最后一块',`
-- `app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:50` — `'答案即将杀青',`
-- `app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:51` — `'发射倒计时',`
-- `app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts:52` — `'الهدف锁定中',`
 - `app/chrome-extension/entrypoints/sidepanel/composables/useAgentProjects.ts:202` — `'目录 "${validation.absolute}" 不存在，是否إنشاء？\n\nThe directory "${validation.absolute}" does not exist. Create it?',`
 - `app/chrome-extension/entrypoints/sidepanel/composables/useAgentProjects.ts:428` — `'目录 "${validation.absolute}" تم存在对应的项目：${existingProject.name}\n\n' +`
 - `app/chrome-extension/entrypoints/sidepanel/composables/useAgentProjects.ts:429` — `'是否切换到该项目？\n\n' +`

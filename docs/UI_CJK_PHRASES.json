@@ -1,415 +1,223 @@
 [
   {
-    "source": "${f.label} 必填",
+    "source": "إدخال值",
     "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyFormRenderer.vue"
+      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyFill.vue"
     ]
   },
   {
-    "source": "(); function onCreateSubflow() { const id = prompt('请输入新子流ID'); if (!id) return; emit('create-subflow', id); const n = props.node as any; if (n && n.config) n.config.subflowId = id; }",
+    "source": "اختيارأو新建التدفق الفرعي",
+    "files": [
+      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyForeach.vue",
+      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyLoopElements.vue",
+      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyWhile.vue"
+    ]
+  },
+  {
+    "source": "استيرادفشل：غير موجودسير العمل数据",
+    "files": [
+      "app/chrome-extension/entrypoints/builder/App.vue"
+    ]
+  },
+  {
+    "source": "اسم المتغير，例如 shot",
+    "files": [
+      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScreenshot.vue"
+    ]
+  },
+  {
+    "source": "الخاصية值",
+    "files": [
+      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySetAttribute.vue"
+    ]
+  },
+  {
+    "source": "الخاصية值（留空并勾选حذف则移除）",
+    "files": [
+      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySetAttribute.vue"
+    ]
+  },
+  {
+    "source": "الخاصية名",
+    "files": [
+      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySetAttribute.vue"
+    ]
+  },
+  {
+    "source": "العقدة ${n.id} 的جدولة #${i + 1}: V3 暂不支持مرة واحدة性جدولة（once），تم跳过",
+    "files": [
+      "app/chrome-extension/entrypoints/builder/App.vue"
+    ]
+  },
+  {
+    "source": "العقدة ${n.id} 的جدولة #${i + 1}: تعذر转换为 cron（type=${scheduleType}），تم跳过",
+    "files": [
+      "app/chrome-extension/entrypoints/builder/App.vue"
+    ]
+  },
+  {
+    "source": "العنوان包含（اختياري）",
+    "files": [
+      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySwitchTab.vue"
+    ]
+  },
+  {
+    "source": "المحدد值",
+    "files": [
+      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/SelectorEditor.vue"
+    ]
+  },
+  {
+    "source": "النتيجة字段映射",
+    "files": [
+      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScript.vue"
+    ]
+  },
+  {
+    "source": "النطاق包含",
+    "files": [
+      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue"
+    ]
+  },
+  {
+    "source": "انتظار下载完成",
+    "files": [
+      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyHandleDownload.vue"
+    ]
+  },
+  {
+    "source": "تحديدات （共 {{ markers.length }} 个，{{ groupedMarkers.length }} نطاقات）",
+    "files": [
+      "app/chrome-extension/entrypoints/sidepanel/App.vue"
+    ]
+  },
+  {
+    "source": "تشغيل中",
+    "files": [
+      "app/chrome-extension/entrypoints/sidepanel/components/workflows/WorkflowsView.vue"
+    ]
+  },
+  {
+    "source": "تشغيل时机",
+    "files": [
+      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScript.vue"
+    ]
+  },
+  {
+    "source": "تشغيل环境",
+    "files": [
+      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScript.vue"
+    ]
+  },
+  {
+    "source": "تكرار项اسم المتغير",
     "files": [
       "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyForeach.vue",
       "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyLoopElements.vue"
     ]
   },
   {
-    "source": "(未知URL)",
+    "source": "تمرير到العنصر",
     "files": [
-      "app/chrome-extension/entrypoints/sidepanel/App.vue"
+      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScroll.vue"
     ]
   },
   {
-    "source": "(本地文件)",
-    "files": [
-      "app/chrome-extension/entrypoints/sidepanel/App.vue"
-    ]
-  },
-  {
-    "source": "+ 添加匹配",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue"
-    ]
-  },
-  {
-    "source": "+ 添加定时",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue"
-    ]
-  },
-  {
-    "source": "+ 添加选择器",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/SelectorEditor.vue"
-    ]
-  },
-  {
-    "source": "5 或 09:00 或 2025-01-01T10:00:00",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue"
-    ]
-  },
-  {
-    "source": "AI Agent 对话与任务",
-    "files": [
-      "app/chrome-extension/entrypoints/sidepanel/components/SidepanelNavigator.vue"
-    ]
-  },
-  {
-    "source": "Assign: 路径非法 ${s}",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/model/validation.ts"
-    ]
-  },
-  {
-    "source": "Backspace Enter 或 cmd+a",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/widgets/FieldKeySequence.vue"
-    ]
-  },
-  {
-    "source": "CPU 都要给我干烧了",
-    "files": [
-      "app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts"
-    ]
-  },
-  {
-    "source": "CSS 选择器",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/ElementMarkerManagement.vue",
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyExtract.vue",
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyLoopElements.vue"
-    ]
-  },
-  {
-    "source": "CSS 选择器或 XPath",
-    "files": [
-      "app/chrome-extension/entrypoints/sidepanel/App.vue"
-    ]
-  },
-  {
-    "source": "DOM 变化",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue"
-    ]
-  },
-  {
-    "source": "ELK 自动布局不可用，已使用备用布局",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/store/useBuilderStore.ts"
-    ]
-  },
-  {
-    "source": "Else 分支（无需表达式，将匹配以上条件都不成立时）",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyIf.vue"
-    ]
-  },
-  {
-    "source": "Extract: 需填写保存变量名",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/model/validation.ts"
-    ]
-  },
-  {
-    "source": "Extract: 需提供 selector 或 js",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/model/validation.ts"
-    ]
-  },
-  {
-    "source": "FormData (JSON，可选，提供时覆盖 Body)",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyHttp.vue"
-    ]
-  },
-  {
-    "source": "HTTP: 缺少 URL",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/model/validation.ts"
-    ]
-  },
-  {
-    "source": "JSON 格式错误",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyFormRenderer.vue"
-    ]
-  },
-  {
-    "source": "Script: 配置了保存/映射但缺少代码",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/model/validation.ts"
-    ]
-  },
-  {
-    "source": "SwitchTab: 需提供 tabId 或 URL/标题包含",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/model/validation.ts"
-    ]
-  },
-  {
-    "source": "Tab IDs（JSON 数组，可选）",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyCloseTab.vue"
-    ]
-  },
-  {
-    "source": "Tab ID（可选）",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySwitchTab.vue"
-    ]
-  },
-  {
-    "source": "URL 包含（可选）",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySwitchTab.vue"
-    ]
-  },
-  {
-    "source": "URL 地址",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyHttp.vue",
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyNavigate.vue"
-    ]
-  },
-  {
-    "source": "URL 地址（可选）",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyOpenTab.vue"
-    ]
-  },
-  {
-    "source": "V3 Builder 尚未实现，暂时无法创建工作流",
-    "files": [
-      "app/chrome-extension/entrypoints/sidepanel/App.vue"
-    ]
-  },
-  {
-    "source": "V3 Builder 尚未实现，暂时无法编辑工作流",
-    "files": [
-      "app/chrome-extension/entrypoints/sidepanel/App.vue"
-    ]
-  },
-  {
-    "source": "V3 Trigger 管理尚未实现，暂时无法创建触发器",
-    "files": [
-      "app/chrome-extension/entrypoints/sidepanel/App.vue"
-    ]
-  },
-  {
-    "source": "V3 Trigger 管理尚未实现，暂时无法编辑触发器",
-    "files": [
-      "app/chrome-extension/entrypoints/sidepanel/App.vue"
-    ]
-  },
-  {
-    "source": "frame URL 包含的字符串",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySwitchFrame.vue"
-    ]
-  },
-  {
-    "source": "if/else 分支数 ${cnt}${n.config?.else === false ? '' : ' + else'}",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/model/transforms.ts"
-    ]
-  },
-  {
-    "source": "remove(i) }, '删除'), ]), ), h('button', { class: 'btn', type: 'button', onClick: add }, '新增'), ]); }, });",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyFormRenderer.vue"
-    ]
-  },
-  {
-    "source": "saveState.value === 'saving' ? '保存中…' : saveState.value === 'saved' ? '已保存' : '', ); let saveTimer: ReturnType",
-    "files": [
-      "app/chrome-extension/entrypoints/builder/App.vue"
-    ]
-  },
-  {
-    "source": "text/textContent 或属性名",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyExtract.vue"
-    ]
-  },
-  {
-    "source": "x.type === t && x.value); if (c) { sel = String(c.value); break; } } if (!sel && candidates[0]?.value) sel = String(candidates[0].value); if (sel) { text.value = sel; emit('update:modelValue', sel); } else { err.value = '未生成有效选择器，请手动输入'; } } catch (e: any) { err.value = e?.message || String(e); } }",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/widgets/FieldSelector.vue"
-    ]
-  },
-  {
-    "source": "{{ b.name || `条件${idx + 1}` }}",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/nodes/NodeIf.vue"
-    ]
-  },
-  {
-    "source": "{{ domainGroup.count }} 个标注",
-    "files": [
-      "app/chrome-extension/entrypoints/sidepanel/App.vue"
-    ]
-  },
-  {
-    "source": "{{ editingMarkerId ? '更新' : '保存' }}",
-    "files": [
-      "app/chrome-extension/entrypoints/sidepanel/App.vue"
-    ]
-  },
-  {
-    "source": "{{ editingMarkerId ? '编辑标注' : '新增标注' }}",
-    "files": [
-      "app/chrome-extension/entrypoints/sidepanel/App.vue"
-    ]
-  },
-  {
-    "source": "{{ title || '选择器' }}",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/SelectorEditor.vue"
-    ]
-  },
-  {
-    "source": "• 耗时: {{ Math.round( (new Date(run.finishedAt).getTime() - new Date(run.startedAt).getTime()) / 1000, ) }}s",
+    "source": "تم取消",
     "files": [
       "app/chrome-extension/entrypoints/sidepanel/components/workflows/WorkflowsView.vue"
     ]
   },
   {
-    "source": "⚠️ 配置错误",
+    "source": "تم应用回退建议：提升 {{ fallbackNotice.type }} الأولوية",
     "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/PropertyPanel.vue",
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyFormRenderer.vue"
+      "app/chrome-extension/entrypoints/builder/App.vue"
     ]
   },
   {
-    "source": "一次 ${s.when}",
+    "source": "تم暂停",
     "files": [
-      "app/chrome-extension/entrypoints/popup/components/ScheduleDialog.vue"
+      "app/chrome-extension/entrypoints/sidepanel/components/workflows/WorkflowsView.vue"
     ]
   },
   {
-    "source": "一次(ISO时间)",
+    "source": "توضيح: مشغّل会在حفظسير العمل时同步到后台触发表（URL/右键/اختصار لوحة المفاتيح/DOM）和جدول任务（间隔/يوميًا/مرة واحدة）。",
     "files": [
       "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue"
     ]
   },
   {
-    "source": "不能连接到自身",
+    "source": "حاويةيجب支持 scrollTo(top,left)",
     "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/store/useBuilderStore.ts"
+      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScroll.vue"
     ]
   },
   {
-    "source": "个域名",
+    "source": "حفظ为المتغير",
     "files": [
-      "app/chrome-extension/entrypoints/sidepanel/App.vue"
-    ]
-  },
-  {
-    "source": "个标注 （共 {{ markers.length }} 个，{{ groupedMarkers.length }} 个域名）",
-    "files": [
-      "app/chrome-extension/entrypoints/sidepanel/App.vue"
-    ]
-  },
-  {
-    "source": "个标注，",
-    "files": [
-      "app/chrome-extension/entrypoints/sidepanel/App.vue"
-    ]
-  },
-  {
-    "source": "为空则截取可视区或全页",
-    "files": [
+      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyExtract.vue",
       "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScreenshot.vue"
     ]
   },
   {
-    "source": "主理人已上线，请稍候",
-    "files": [
-      "app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts"
-    ]
-  },
-  {
-    "source": "事件类型",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTriggerEvent.vue"
-    ]
-  },
-  {
-    "source": "仅触发一次",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue"
-    ]
-  },
-  {
-    "source": "从头回放整流",
-    "files": [
-      "app/chrome-extension/entrypoints/builder/App.vue"
-    ]
-  },
-  {
-    "source": "从选中节点回放",
-    "files": [
-      "app/chrome-extension/entrypoints/builder/App.vue"
-    ]
-  },
-  {
-    "source": "从选中运行",
-    "files": [
-      "app/chrome-extension/entrypoints/builder/App.vue"
-    ]
-  },
-  {
-    "source": "从页面拾取",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/widgets/FieldSelector.vue"
-    ]
-  },
-  {
-    "source": "从页面选择",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/SelectorEditor.vue"
-    ]
-  },
-  {
-    "source": "代码",
+    "source": "حفظ为المتغير（اختياري）",
     "files": [
       "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScript.vue"
     ]
   },
   {
-    "source": "代码跑得比记者还快",
+    "source": "حفظ到المتغير",
     "files": [
-      "app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts"
+      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyHandleDownload.vue"
     ]
   },
   {
-    "source": "传参 (JSON)",
+    "source": "سير العمل \"${q.flowId}\" غير موجود，تمإنشاء新سير العمل",
     "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyExecuteFlow.vue"
+      "app/chrome-extension/entrypoints/builder/App.vue"
     ]
   },
   {
-    "source": "作用范围",
+    "source": "سير العملتعديل器",
+    "files": [
+      "app/chrome-extension/entrypoints/builder/App.vue",
+      "app/chrome-extension/entrypoints/builder/index.html"
+    ]
+  },
+  {
+    "source": "سير العمل可视化编排",
+    "files": [
+      "app/chrome-extension/entrypoints/builder/App.vue"
+    ]
+  },
+  {
+    "source": "غير موجودالعقدة规范",
+    "files": [
+      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyFromSpec.vue"
+    ]
+  },
+  {
+    "source": "غير موجودمطابقة的تحديد",
+    "files": [
+      "app/chrome-extension/entrypoints/sidepanel/App.vue"
+    ]
+  },
+  {
+    "source": "فشل策略",
+    "files": [
+      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyAssert.vue"
+    ]
+  },
+  {
+    "source": "ملاحظة: Chrome 扩展اختصار لوحة المفاتيحيحتاج在 manifest 里固定声明，تعذرتشغيل时动态إضافة。",
     "files": [
       "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue"
     ]
   },
   {
-    "source": "使用表达式定义分支，支持变量与常见比较运算符。",
+    "source": "ملاحظة: المسار（path）通常在录制时自动生成，يدويإنشاء时可留空。",
     "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyIf.vue"
-    ]
-  },
-  {
-    "source": "例如 09:30",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/ScheduleDialog.vue"
-    ]
-  },
-  {
-    "source": "例如 2025-10-05T10:00:00",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/ScheduleDialog.vue"
+      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyDrag.vue"
     ]
   },
   {
@@ -431,84 +239,6 @@
     ]
   },
   {
-    "source": "保存",
-    "files": [
-      "app/chrome-extension/entrypoints/builder/App.vue",
-      "app/chrome-extension/entrypoints/popup/components/ElementMarkerManagement.vue",
-      "app/chrome-extension/entrypoints/popup/components/ScheduleDialog.vue",
-      "app/chrome-extension/entrypoints/sidepanel/App.vue"
-    ]
-  },
-  {
-    "source": "保存中…",
-    "files": [
-      "app/chrome-extension/entrypoints/builder/App.vue"
-    ]
-  },
-  {
-    "source": "保存为变量",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyExtract.vue",
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScreenshot.vue"
-    ]
-  },
-  {
-    "source": "保存为变量（可选）",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScript.vue"
-    ]
-  },
-  {
-    "source": "保存到变量",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyHandleDownload.vue"
-    ]
-  },
-  {
-    "source": "保存失败：${e instanceof Error ? e.message : String(e)}",
-    "files": [
-      "app/chrome-extension/entrypoints/builder/App.vue"
-    ]
-  },
-  {
-    "source": "偏移 X",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScroll.vue"
-    ]
-  },
-  {
-    "source": "偏移 Y",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScroll.vue"
-    ]
-  },
-  {
-    "source": "元素标注管理",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/ElementMarkerManagement.vue",
-      "app/chrome-extension/entrypoints/sidepanel/components/SidepanelNavigator.vue"
-    ]
-  },
-  {
-    "source": "元素选择器",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyLoopElements.vue"
-    ]
-  },
-  {
-    "source": "元素选择器（可选）",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyExtract.vue",
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScreenshot.vue"
-    ]
-  },
-  {
-    "source": "全页截图",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScreenshot.vue"
-    ]
-  },
-  {
     "source": "共",
     "files": [
       "app/chrome-extension/entrypoints/sidepanel/App.vue"
@@ -521,7 +251,7 @@
     ]
   },
   {
-    "source": "内联执行（共享上下文变量）",
+    "source": "内联تشغيل（共享上下文المتغير）",
     "files": [
       "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyExecuteFlow.vue"
     ]
@@ -533,21 +263,15 @@
     ]
   },
   {
-    "source": "出现时触发",
+    "source": "切换الصفحة",
     "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue"
+      "app/chrome-extension/entrypoints/sidepanel/components/SidepanelNavigator.vue"
     ]
   },
   {
-    "source": "分支${i + 1}: 需填写条件表达式",
+    "source": "切换الصفحة（可سحب وإفلات移动，双击重置位置）",
     "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/model/validation.ts"
-    ]
-  },
-  {
-    "source": "分支名称（可选）",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyIf.vue"
+      "app/chrome-extension/entrypoints/sidepanel/components/SidepanelNavigator.vue"
     ]
   },
   {
@@ -557,27 +281,15 @@
     ]
   },
   {
-    "source": "切换页面",
-    "files": [
-      "app/chrome-extension/entrypoints/sidepanel/components/SidepanelNavigator.vue"
-    ]
-  },
-  {
-    "source": "切换页面（可拖拽移动，双击重置位置）",
-    "files": [
-      "app/chrome-extension/entrypoints/sidepanel/components/SidepanelNavigator.vue"
-    ]
-  },
-  {
-    "source": "列表变量",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyForeach.vue"
-    ]
-  },
-  {
-    "source": "列表变量名",
+    "source": "列表اسم المتغير",
     "files": [
       "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyLoopElements.vue"
+    ]
+  },
+  {
+    "source": "列表المتغير",
+    "files": [
+      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyForeach.vue"
     ]
   },
   {
@@ -587,79 +299,9 @@
     ]
   },
   {
-    "source": "删除",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/ElementMarkerManagement.vue",
-      "app/chrome-extension/entrypoints/popup/components/ScheduleDialog.vue",
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyFormRenderer.vue",
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyIf.vue",
-      "app/chrome-extension/entrypoints/sidepanel/App.vue"
-    ]
-  },
-  {
-    "source": "删除属性",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySetAttribute.vue"
-    ]
-  },
-  {
-    "source": "删除节点",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/PropertyPanel.vue"
-    ]
-  },
-  {
-    "source": "删除边",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/EdgePropertyPanel.vue"
-    ]
-  },
-  {
-    "source": "别催，已经在写了（新建文件夹）",
-    "files": [
-      "app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts"
-    ]
-  },
-  {
-    "source": "前缀 URL",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue"
-    ]
-  },
-  {
-    "source": "加载工作流失败：${e instanceof Error ? e.message : String(e)}",
-    "files": [
-      "app/chrome-extension/entrypoints/builder/App.vue"
-    ]
-  },
-  {
-    "source": "匹配类型",
-    "files": [
-      "app/chrome-extension/entrypoints/sidepanel/App.vue"
-    ]
-  },
-  {
-    "source": "去抖(ms)",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue"
-    ]
-  },
-  {
-    "source": "参数(JSON)",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/ScheduleDialog.vue"
-    ]
-  },
-  {
     "source": "双击",
     "files": [
       "app/chrome-extension/entrypoints/popup/components/builder/components/nodes/node-util.ts"
-    ]
-  },
-  {
-    "source": "发射倒计时",
-    "files": [
-      "app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts"
     ]
   },
   {
@@ -669,156 +311,31 @@
     ]
   },
   {
-    "source": "变量名",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/KeyValueEditor.vue",
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyExtract.vue",
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScript.vue"
-    ]
-  },
-  {
-    "source": "变量名，例如 shot",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScreenshot.vue"
-    ]
-  },
-  {
-    "source": "只执行一次",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/ScheduleDialog.vue"
-    ]
-  },
-  {
     "source": "可取消",
     "files": [
       "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTriggerEvent.vue"
     ]
   },
   {
-    "source": "可输入 CSS 选择器，或点击“拾取”在页面中选择元素",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/widgets/FieldSelector.vue"
-    ]
-  },
-  {
-    "source": "可选描述",
-    "files": [
-      "app/chrome-extension/entrypoints/builder/App.vue"
-    ]
-  },
-  {
-    "source": "右键菜单",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue"
-    ]
-  },
-  {
-    "source": "同源/可注入 frame 可用；留空则回到顶级页面",
+    "source": "同源/可注入 frame 可用；留空则回到顶级الصفحة",
     "files": [
       "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySwitchFrame.vue"
     ]
   },
   {
-    "source": "名称",
-    "files": [
-      "app/chrome-extension/entrypoints/builder/App.vue",
-      "app/chrome-extension/entrypoints/sidepanel/App.vue"
-    ]
-  },
-  {
-    "source": "名称，如 登录按钮",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/ElementMarkerManagement.vue"
-    ]
-  },
-  {
-    "source": "启用",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/ScheduleDialog.vue",
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue"
-    ]
-  },
-  {
-    "source": "启用定时",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/ScheduleDialog.vue"
-    ]
-  },
-  {
-    "source": "启用触发器",
+    "source": "命令键（يجب预先在 manifest commands 中声明）",
     "files": [
       "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue"
     ]
   },
   {
-    "source": "命令键（需预先在 manifest commands 中声明）",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue"
-    ]
-  },
-  {
-    "source": "唤醒硅基朋友",
-    "files": [
-      "app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts"
-    ]
-  },
-  {
-    "source": "回放失败",
+    "source": "回放فشل",
     "files": [
       "app/chrome-extension/entrypoints/sidepanel/App.vue"
     ]
   },
   {
-    "source": "在知识的海洋里狗刨",
-    "files": [
-      "app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts"
-    ]
-  },
-  {
-    "source": "域名",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/ElementMarkerManagement.vue",
-      "app/chrome-extension/entrypoints/sidepanel/App.vue"
-    ]
-  },
-  {
-    "source": "域名包含",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue"
-    ]
-  },
-  {
-    "source": "填充",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/nodes/node-util.ts"
-    ]
-  },
-  {
-    "source": "大脑马戏团开演",
-    "files": [
-      "app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts"
-    ]
-  },
-  {
-    "source": "失败",
-    "files": [
-      "app/chrome-extension/entrypoints/sidepanel/components/workflows/WorkflowsView.vue"
-    ]
-  },
-  {
-    "source": "失败时截图",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/PropertyPanel.vue"
-    ]
-  },
-  {
-    "source": "失败策略",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyAssert.vue"
-    ]
-  },
-  {
-    "source": "如 Backspace Enter 或 cmd+a",
+    "source": "如 Backspace Enter أو cmd+a",
     "files": [
       "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyKey.vue"
     ]
@@ -836,272 +353,21 @@
     ]
   },
   {
-    "source": "子串匹配",
+    "source": "子串مطابقة",
     "files": [
       "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySwitchTab.vue"
     ]
   },
   {
-    "source": "子串匹配 URL",
+    "source": "子串مطابقة URL",
     "files": [
       "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyCloseTab.vue"
     ]
   },
   {
-    "source": "子串匹配文件名或URL",
+    "source": "子串مطابقة文件名أوURL",
     "files": [
       "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyHandleDownload.vue"
-    ]
-  },
-  {
-    "source": "子流 ID",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyForeach.vue",
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyLoopElements.vue",
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyWhile.vue"
-    ]
-  },
-  {
-    "source": "定时",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue"
-    ]
-  },
-  {
-    "source": "定时执行",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/ScheduleDialog.vue"
-    ]
-  },
-  {
-    "source": "容器偏移",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScroll.vue"
-    ]
-  },
-  {
-    "source": "容器选择器",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScroll.vue"
-    ]
-  },
-  {
-    "source": "容器需支持 scrollTo(top,left)",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScroll.vue"
-    ]
-  },
-  {
-    "source": "导入",
-    "files": [
-      "app/chrome-extension/entrypoints/builder/App.vue"
-    ]
-  },
-  {
-    "source": "导入 JSON",
-    "files": [
-      "app/chrome-extension/entrypoints/builder/App.vue"
-    ]
-  },
-  {
-    "source": "导入失败：${e instanceof Error ? e.message : String(e)}",
-    "files": [
-      "app/chrome-extension/entrypoints/builder/App.vue"
-    ]
-  },
-  {
-    "source": "导入失败：未找到工作流数据",
-    "files": [
-      "app/chrome-extension/entrypoints/builder/App.vue"
-    ]
-  },
-  {
-    "source": "导出",
-    "files": [
-      "app/chrome-extension/entrypoints/builder/App.vue"
-    ]
-  },
-  {
-    "source": "导出 JSON",
-    "files": [
-      "app/chrome-extension/entrypoints/builder/App.vue"
-    ]
-  },
-  {
-    "source": "导出失败：${e instanceof Error ? e.message : String(e)}",
-    "files": [
-      "app/chrome-extension/entrypoints/builder/App.vue"
-    ]
-  },
-  {
-    "source": "导航",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/nodes/node-util.ts"
-    ]
-  },
-  {
-    "source": "属性",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyExtract.vue"
-    ]
-  },
-  {
-    "source": "属性值",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySetAttribute.vue"
-    ]
-  },
-  {
-    "source": "属性值（留空并勾选删除则移除）",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySetAttribute.vue"
-    ]
-  },
-  {
-    "source": "属性名",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySetAttribute.vue"
-    ]
-  },
-  {
-    "source": "工作流 \"${q.flowId}\" 未找到，已创建新工作流",
-    "files": [
-      "app/chrome-extension/entrypoints/builder/App.vue"
-    ]
-  },
-  {
-    "source": "工作流可视化编排",
-    "files": [
-      "app/chrome-extension/entrypoints/builder/App.vue"
-    ]
-  },
-  {
-    "source": "工作流名称",
-    "files": [
-      "app/chrome-extension/entrypoints/builder/App.vue"
-    ]
-  },
-  {
-    "source": "工作流管理",
-    "files": [
-      "app/chrome-extension/entrypoints/sidepanel/components/SidepanelNavigator.vue",
-      "app/chrome-extension/entrypoints/sidepanel/index.html"
-    ]
-  },
-  {
-    "source": "工作流编辑器",
-    "files": [
-      "app/chrome-extension/entrypoints/builder/App.vue",
-      "app/chrome-extension/entrypoints/builder/index.html"
-    ]
-  },
-  {
-    "source": "已保存",
-    "files": [
-      "app/chrome-extension/entrypoints/builder/App.vue"
-    ]
-  },
-  {
-    "source": "已取消",
-    "files": [
-      "app/chrome-extension/entrypoints/sidepanel/components/workflows/WorkflowsView.vue"
-    ]
-  },
-  {
-    "source": "已应用回退建议：提升 {{ fallbackNotice.type }} 优先级",
-    "files": [
-      "app/chrome-extension/entrypoints/builder/App.vue"
-    ]
-  },
-  {
-    "source": "已暂停",
-    "files": [
-      "app/chrome-extension/entrypoints/sidepanel/components/workflows/WorkflowsView.vue"
-    ]
-  },
-  {
-    "source": "已有计划",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/ScheduleDialog.vue"
-    ]
-  },
-  {
-    "source": "已标注元素",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/ElementMarkerManagement.vue"
-    ]
-  },
-  {
-    "source": "延迟",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/nodes/node-util.ts"
-    ]
-  },
-  {
-    "source": "延迟 (ms)",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyDelay.vue"
-    ]
-  },
-  {
-    "source": "当前页面",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/ElementMarkerManagement.vue"
-    ]
-  },
-  {
-    "source": "录制与回放自动化流程",
-    "files": [
-      "app/chrome-extension/entrypoints/sidepanel/components/SidepanelNavigator.vue"
-    ]
-  },
-  {
-    "source": "循环",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/nodes/node-util.ts"
-    ]
-  },
-  {
-    "source": "循环项变量名",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyForeach.vue",
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyLoopElements.vue"
-    ]
-  },
-  {
-    "source": "快捷键",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue"
-    ]
-  },
-  {
-    "source": "快马加鞭赶来中",
-    "files": [
-      "app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts"
-    ]
-  },
-  {
-    "source": "情绪价值拉满中",
-    "files": [
-      "app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts"
-    ]
-  },
-  {
-    "source": "成功",
-    "files": [
-      "app/chrome-extension/entrypoints/sidepanel/components/workflows/WorkflowsView.vue"
-    ]
-  },
-  {
-    "source": "我知道你很急，但是先别急",
-    "files": [
-      "app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts"
-    ]
-  },
-  {
-    "source": "手动",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue"
     ]
   },
   {
@@ -1111,128 +377,37 @@
     ]
   },
   {
-    "source": "执行时机",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScript.vue"
-    ]
-  },
-  {
-    "source": "执行环境",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScript.vue"
-    ]
-  },
-  {
-    "source": "拖拽",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/nodes/node-util.ts",
-      "app/chrome-extension/entrypoints/popup/components/builder/model/transforms.ts"
-    ]
-  },
-  {
-    "source": "拼图最后一块",
-    "files": [
-      "app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts"
-    ]
-  },
-  {
-    "source": "拾取",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/widgets/FieldSelector.vue"
-    ]
-  },
-  {
-    "source": "拾取失败",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/widgets/FieldSelector.vue"
-    ]
-  },
-  {
-    "source": "按 URL 关闭（可选）",
+    "source": "按 URL 关闭（اختياري）",
     "files": [
       "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyCloseTab.vue"
     ]
   },
   {
-    "source": "按 URL 包含匹配（优先）",
+    "source": "按 URL 包含مطابقة（优先）",
     "files": [
       "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySwitchFrame.vue"
     ]
   },
   {
-    "source": "按索引匹配（从 0 起，仅子 frame）",
+    "source": "按索引مطابقة（从 0 起，仅子 frame）",
     "files": [
       "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySwitchFrame.vue"
     ]
   },
   {
-    "source": "按键序列",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyKey.vue"
-    ]
-  },
-  {
-    "source": "排队中",
-    "files": [
-      "app/chrome-extension/entrypoints/sidepanel/components/workflows/WorkflowsView.vue"
-    ]
-  },
-  {
-    "source": "描述",
-    "files": [
-      "app/chrome-extension/entrypoints/builder/App.vue"
-    ]
-  },
-  {
-    "source": "描述（可选）",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue"
-    ]
-  },
-  {
-    "source": "提取",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/nodes/node-util.ts"
-    ]
-  },
-  {
-    "source": "提示：Chrome 扩展快捷键需要在 manifest 里固定声明，无法运行时动态添加。",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue"
-    ]
-  },
-  {
-    "source": "提示：路径（path）通常在录制时自动生成，手动创建时可留空。",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyDrag.vue"
-    ]
-  },
-  {
-    "source": "插入变量",
+    "source": "插入المتغير",
     "files": [
       "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyIf.vue"
     ]
   },
   {
-    "source": "搜索标注名称、选择器...",
+    "source": "搜索تحديدالاسم、المحدد...",
     "files": [
       "app/chrome-extension/entrypoints/sidepanel/App.vue"
     ]
   },
   {
-    "source": "撤销",
-    "files": [
-      "app/chrome-extension/entrypoints/builder/App.vue"
-    ]
-  },
-  {
-    "source": "撤销 (⌘/Ctrl+Z)",
-    "files": [
-      "app/chrome-extension/entrypoints/builder/App.vue"
-    ]
-  },
-  {
-    "source": "支持 {变量名} 格式",
+    "source": "支持 {اسم المتغير} 格式",
     "files": [
       "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyFill.vue"
     ]
@@ -1244,56 +419,13 @@
     ]
   },
   {
-    "source": "放大镜有点起雾，擦擦",
-    "files": [
-      "app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts"
-    ]
-  },
-  {
-    "source": "敬自己一杯，马上好",
-    "files": [
-      "app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts"
-    ]
-  },
-  {
-    "source": "数字",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySwitchTab.vue"
-    ]
-  },
-  {
-    "source": "文件名包含（可选）",
+    "source": "文件名包含（اختياري）",
     "files": [
       "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyHandleDownload.vue"
     ]
   },
   {
-    "source": "断言",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/nodes/node-util.ts"
-    ]
-  },
-  {
-    "source": "断言条件 (JSON)",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyAssert.vue"
-    ]
-  },
-  {
-    "source": "新增",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyFormRenderer.vue"
-    ]
-  },
-  {
-    "source": "新增标注",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/ElementMarkerManagement.vue",
-      "app/chrome-extension/entrypoints/sidepanel/App.vue"
-    ]
-  },
-  {
-    "source": "新建子流",
+    "source": "新建التدفق الفرعي",
     "files": [
       "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyForeach.vue",
       "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyLoopElements.vue",
@@ -1301,27 +433,9 @@
     ]
   },
   {
-    "source": "新建工作流",
+    "source": "新建سير العمل",
     "files": [
       "app/chrome-extension/entrypoints/builder/App.vue"
-    ]
-  },
-  {
-    "source": "新窗口",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyOpenTab.vue"
-    ]
-  },
-  {
-    "source": "时间(HH:mm)",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/ScheduleDialog.vue"
-    ]
-  },
-  {
-    "source": "时间(ISO)",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/ScheduleDialog.vue"
     ]
   },
   {
@@ -1331,243 +445,15 @@
     ]
   },
   {
-    "source": "智能助手",
-    "files": [
-      "app/chrome-extension/entrypoints/sidepanel/components/SidepanelNavigator.vue"
-    ]
-  },
-  {
-    "source": "暂无标注元素",
+    "source": "暂无تحديدالعنصر",
     "files": [
       "app/chrome-extension/entrypoints/sidepanel/App.vue"
     ]
   },
   {
-    "source": "更新",
-    "files": [
-      "app/chrome-extension/entrypoints/sidepanel/App.vue"
-    ]
-  },
-  {
-    "source": "最大迭代次数（可选）",
+    "source": "最大迭代次数（اختياري）",
     "files": [
       "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyWhile.vue"
-    ]
-  },
-  {
-    "source": "未找到匹配的标注",
-    "files": [
-      "app/chrome-extension/entrypoints/sidepanel/App.vue"
-    ]
-  },
-  {
-    "source": "未找到活动页签",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/widgets/FieldSelector.vue"
-    ]
-  },
-  {
-    "source": "未找到节点规范",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyFromSpec.vue"
-    ]
-  },
-  {
-    "source": "未生成有效选择器，请手动输入",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/widgets/FieldSelector.vue"
-    ]
-  },
-  {
-    "source": "未选择边",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/EdgePropertyPanel.vue"
-    ]
-  },
-  {
-    "source": "未配置选择器",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/model/transforms.ts"
-    ]
-  },
-  {
-    "source": "本地模型",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/LocalModelPage.vue"
-    ]
-  },
-  {
-    "source": "本来应该从从容容游刃有余",
-    "files": [
-      "app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts"
-    ]
-  },
-  {
-    "source": "村咖慢焙，精华需要时间",
-    "files": [
-      "app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts"
-    ]
-  },
-  {
-    "source": "条件",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/nodes/node-util.ts"
-    ]
-  },
-  {
-    "source": "条件 (JSON)",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyWhile.vue"
-    ]
-  },
-  {
-    "source": "条件${idx + 1}",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/nodes/NodeIf.vue"
-    ]
-  },
-  {
-    "source": "查看和编辑属性",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/PropertyPanel.vue"
-    ]
-  },
-  {
-    "source": "标题",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue"
-    ]
-  },
-  {
-    "source": "标题包含（可选）",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySwitchTab.vue"
-    ]
-  },
-  {
-    "source": "模式",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScroll.vue"
-    ]
-  },
-  {
-    "source": "正在为您手搓答案",
-    "files": [
-      "app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts"
-    ]
-  },
-  {
-    "source": "正在为您编织语言的毛衣",
-    "files": [
-      "app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts"
-    ]
-  },
-  {
-    "source": "正在光速搬运知识",
-    "files": [
-      "app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts"
-    ]
-  },
-  {
-    "source": "正在反向解析人类意图",
-    "files": [
-      "app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts"
-    ]
-  },
-  {
-    "source": "正在憋个大招",
-    "files": [
-      "app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts"
-    ]
-  },
-  {
-    "source": "正在把 0 和 1 捏在一起",
-    "files": [
-      "app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts"
-    ]
-  },
-  {
-    "source": "正在把灵感放入烤箱",
-    "files": [
-      "app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts"
-    ]
-  },
-  {
-    "source": "正在施法，莫打扰",
-    "files": [
-      "app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts"
-    ]
-  },
-  {
-    "source": "正在汗流浃背地思考中",
-    "files": [
-      "app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts"
-    ]
-  },
-  {
-    "source": "正在疯狂翻阅知识库",
-    "files": [
-      "app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts"
-    ]
-  },
-  {
-    "source": "正在连接赛博空间的智慧",
-    "files": [
-      "app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts"
-    ]
-  },
-  {
-    "source": "每 ${s.when} 分钟",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/ScheduleDialog.vue"
-    ]
-  },
-  {
-    "source": "每天 ${s.when}",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/ScheduleDialog.vue"
-    ]
-  },
-  {
-    "source": "每天(HH:mm)",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue"
-    ]
-  },
-  {
-    "source": "每天固定时间",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/ScheduleDialog.vue"
-    ]
-  },
-  {
-    "source": "每隔 N 分钟",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/ScheduleDialog.vue"
-    ]
-  },
-  {
-    "source": "水晶球有点模糊，拍两下",
-    "files": [
-      "app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts"
-    ]
-  },
-  {
-    "source": "浪浪山小妖怪集结中",
-    "files": [
-      "app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts"
-    ]
-  },
-  {
-    "source": "添加映射",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/KeyValueEditor.vue"
-    ]
-  },
-  {
-    "source": "清空",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/ElementMarkerManagement.vue"
     ]
   },
   {
@@ -1577,135 +463,33 @@
     ]
   },
   {
-    "source": "滚动",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/nodes/node-util.ts"
-    ]
-  },
-  {
-    "source": "滚动到元素",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScroll.vue"
-    ]
-  },
-  {
-    "source": "点击",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/nodes/node-util.ts"
-    ]
-  },
-  {
-    "source": "熬夜的猫头鹰在思考",
-    "files": [
-      "app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts"
-    ]
-  },
-  {
-    "source": "状态: {{ getRunStatusText(run) }}",
-    "files": [
-      "app/chrome-extension/entrypoints/sidepanel/components/workflows/WorkflowsView.vue"
-    ]
-  },
-  {
-    "source": "现在是匆匆忙忙连滚带爬",
-    "files": [
-      "app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts"
-    ]
-  },
-  {
-    "source": "目录 \"${validation.absolute}\" 不存在，是否创建？\\n\\nThe directory \"${validation.absolute}\" does not exist. Create it?",
+    "source": "目录 \"${validation.absolute}\" تم存在对应的项目：${existingProject.name}\\n\\n",
     "files": [
       "app/chrome-extension/entrypoints/sidepanel/composables/useAgentProjects.ts"
     ]
   },
   {
-    "source": "目录 \"${validation.absolute}\" 已存在对应的项目：${existingProject.name}\\n\\n",
+    "source": "目录 \"${validation.absolute}\" 不存在，是否إنشاء？\\n\\nThe directory \"${validation.absolute}\" does not exist. Create it?",
     "files": [
       "app/chrome-extension/entrypoints/sidepanel/composables/useAgentProjects.ts"
     ]
   },
   {
-    "source": "目标元素",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScroll.vue"
-    ]
-  },
-  {
-    "source": "目标工作流",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyExecuteFlow.vue"
-    ]
-  },
-  {
-    "source": "目标锁定中",
-    "files": [
-      "app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts"
-    ]
-  },
-  {
-    "source": "知识煎饼翻面中",
-    "files": [
-      "app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts"
-    ]
-  },
-  {
-    "source": "确定要删除标注 \"${marker.name}\" 吗?",
+    "source": "确定要حذفتحديد \"${marker.name}\" 吗?",
     "files": [
       "app/chrome-extension/entrypoints/sidepanel/App.vue"
     ]
   },
   {
-    "source": "确认删除该工作流？此操作不可恢复",
+    "source": "确认حذف该سير العمل？此操作不可恢复",
     "files": [
       "app/chrome-extension/entrypoints/sidepanel/App.vue"
     ]
   },
   {
-    "source": "示例：Backspace Enter 或 cmd+a",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/widgets/FieldKeySequence.vue"
-    ]
-  },
-  {
-    "source": "神经元蹦迪中",
-    "files": [
-      "app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts"
-    ]
-  },
-  {
-    "source": "穿越知识黑洞",
-    "files": [
-      "app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts"
-    ]
-  },
-  {
-    "source": "窗口偏移",
+    "source": "窗口إزاحة",
     "files": [
       "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScroll.vue"
-    ]
-  },
-  {
-    "source": "等待",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/nodes/node-util.ts"
-    ]
-  },
-  {
-    "source": "等待下载完成",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyHandleDownload.vue"
-    ]
-  },
-  {
-    "source": "等待条件 (JSON)",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyWait.vue"
-    ]
-  },
-  {
-    "source": "答案即将杀青",
-    "files": [
-      "app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts"
     ]
   },
   {
@@ -1715,278 +499,33 @@
     ]
   },
   {
-    "source": "管理触发器",
-    "files": [
-      "app/chrome-extension/entrypoints/builder/App.vue"
-    ]
-  },
-  {
-    "source": "管理页面元素标注",
-    "files": [
-      "app/chrome-extension/entrypoints/sidepanel/components/SidepanelNavigator.vue"
-    ]
-  },
-  {
-    "source": "类型",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/ScheduleDialog.vue"
-    ]
-  },
-  {
-    "source": "精确匹配",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/ElementMarkerManagement.vue",
-      "app/chrome-extension/entrypoints/sidepanel/App.vue"
-    ]
-  },
-  {
-    "source": "索引数字",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySwitchFrame.vue"
-    ]
-  },
-  {
-    "source": "终点选择器",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyDrag.vue"
-    ]
-  },
-  {
-    "source": "结果字段映射",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyScript.vue"
-    ]
-  },
-  {
-    "source": "结果路径（如 data.items[0].id）",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/KeyValueEditor.vue"
-    ]
-  },
-  {
-    "source": "给答案上色中",
-    "files": [
-      "app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts"
-    ]
-  },
-  {
-    "source": "编辑",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/ElementMarkerManagement.vue",
-      "app/chrome-extension/entrypoints/sidepanel/App.vue"
-    ]
-  },
-  {
-    "source": "编辑标注",
-    "files": [
-      "app/chrome-extension/entrypoints/sidepanel/App.vue"
-    ]
-  },
-  {
-    "source": "编辑：${flowV2.name || flowV2.id}",
-    "files": [
-      "app/chrome-extension/entrypoints/builder/App.vue"
-    ]
-  },
-  {
-    "source": "编辑：${store.flowLocal.name || store.flowLocal.id}",
-    "files": [
-      "app/chrome-extension/entrypoints/builder/App.vue"
-    ]
-  },
-  {
-    "source": "缺少 URL",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/model/validation.ts"
-    ]
-  },
-  {
-    "source": "缺少断言条件",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/model/validation.ts"
-    ]
-  },
-  {
-    "source": "缺少目标选择器候选",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/model/validation.ts"
-    ]
-  },
-  {
-    "source": "缺少等待条件",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/model/validation.ts"
-    ]
-  },
-  {
-    "source": "缺少输入值",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/model/validation.ts"
-    ]
-  },
-  {
-    "source": "脚本",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/nodes/node-util.ts"
-    ]
-  },
-  {
-    "source": "自动排版",
-    "files": [
-      "app/chrome-extension/entrypoints/builder/App.vue"
-    ]
-  },
-  {
-    "source": "自定义 JS（返回值）",
+    "source": "自定义 JS（رجوع值）",
     "files": [
       "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyExtract.vue"
     ]
   },
   {
-    "source": "自适应视图",
-    "files": [
-      "app/chrome-extension/entrypoints/builder/App.vue"
-    ]
-  },
-  {
-    "source": "节点 ${n.id} 的定时 #${i + 1}: V3 暂不支持一次性定时（once），已跳过",
-    "files": [
-      "app/chrome-extension/entrypoints/builder/App.vue"
-    ]
-  },
-  {
-    "source": "节点 ${n.id} 的定时 #${i + 1}: 无法转换为 cron（type=${scheduleType}），已跳过",
-    "files": [
-      "app/chrome-extension/entrypoints/builder/App.vue"
-    ]
-  },
-  {
-    "source": "节点名称",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/PropertyPanel.vue"
-    ]
-  },
-  {
-    "source": "节点属性",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/PropertyPanel.vue"
-    ]
-  },
-  {
-    "source": "菜单标题",
+    "source": "菜单العنوان",
     "files": [
       "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue"
     ]
   },
   {
-    "source": "表达式解析错误",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/widgets/FieldExpression.vue"
-    ]
-  },
-  {
-    "source": "触发器",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/nodes/node-util.ts"
-    ]
-  },
-  {
-    "source": "触发方式",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue"
-    ]
-  },
-  {
-    "source": "让子弹再飞一会儿",
-    "files": [
-      "app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts"
-    ]
-  },
-  {
-    "source": "让答案再泡一会儿",
-    "files": [
-      "app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts"
-    ]
-  },
-  {
-    "source": "访问 URL",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue"
-    ]
-  },
-  {
-    "source": "访问 URL 匹配",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue"
-    ]
-  },
-  {
-    "source": "试图理解这个离谱的需求",
-    "files": [
-      "app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts"
-    ]
-  },
-  {
-    "source": "该节点尚未提供 NodeSpec，已回退到默认属性面板。",
+    "source": "该العقدة尚未توفير NodeSpec，تم回退到افتراضيالخاصية面板。",
     "files": [
       "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyFromSpec.vue"
     ]
   },
   {
-    "source": "该节点最多允许 ${dstIo.inputs} 条入边",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/store/useBuilderStore.ts"
-    ]
-  },
-  {
-    "source": "该节点最多允许 ${srcIo.outputs} 条出边",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/store/useBuilderStore.ts"
-    ]
-  },
-  {
-    "source": "说明此触发器的用途",
+    "source": "说明此مشغّل的用途",
     "files": [
       "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue"
     ]
   },
   {
-    "source": "说明： 触发器会在保存工作流时同步到后台触发表（URL/右键/快捷键/DOM）和计划任务（间隔/每天/一次）。",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue"
-    ]
-  },
-  {
-    "source": "请求方法",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyHttp.vue"
-    ]
-  },
-  {
-    "source": "请输入新子流ID",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/PropertyPanel.vue",
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyForeach.vue",
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyLoopElements.vue",
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyWhile.vue"
-    ]
-  },
-  {
-    "source": "请选择",
+    "source": "请اختيار",
     "files": [
       "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyExecuteFlow.vue"
-    ]
-  },
-  {
-    "source": "起点选择器",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyDrag.vue"
-    ]
-  },
-  {
-    "source": "超时 (ms)",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/PropertyPanel.vue"
     ]
   },
   {
@@ -1996,240 +535,15 @@
     ]
   },
   {
-    "source": "路径前缀",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/ElementMarkerManagement.vue",
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue",
-      "app/chrome-extension/entrypoints/sidepanel/App.vue"
-    ]
-  },
-  {
-    "source": "输入 JSON",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyFormRenderer.vue"
-    ]
-  },
-  {
-    "source": "输入值",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyFill.vue"
-    ]
-  },
-  {
-    "source": "输入节点名称",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/PropertyPanel.vue"
-    ]
-  },
-  {
-    "source": "运算符",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyIf.vue"
-    ]
-  },
-  {
-    "source": "运行",
-    "files": [
-      "app/chrome-extension/entrypoints/builder/App.vue"
-    ]
-  },
-  {
-    "source": "运行中",
-    "files": [
-      "app/chrome-extension/entrypoints/sidepanel/components/workflows/WorkflowsView.vue"
-    ]
-  },
-  {
-    "source": "运行失败：${e instanceof Error ? e.message : String(e)}",
-    "files": [
-      "app/chrome-extension/entrypoints/builder/App.vue"
-    ]
-  },
-  {
-    "source": "运行工作流",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue"
-    ]
-  },
-  {
-    "source": "返回",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/LocalModelPage.vue"
-    ]
-  },
-  {
-    "source": "返回首页",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/LocalModelPage.vue"
-    ]
-  },
-  {
-    "source": "选择一个节点",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/PropertyPanel.vue"
-    ]
-  },
-  {
-    "source": "选择器",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue",
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/SelectorEditor.vue",
-      "app/chrome-extension/entrypoints/sidepanel/App.vue"
-    ]
-  },
-  {
-    "source": "选择器值",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/SelectorEditor.vue"
-    ]
-  },
-  {
-    "source": "选择器类型",
-    "files": [
-      "app/chrome-extension/entrypoints/sidepanel/App.vue"
-    ]
-  },
-  {
-    "source": "选择或新建子流",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyForeach.vue",
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyLoopElements.vue",
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyWhile.vue"
-    ]
-  },
-  {
-    "source": "通用设置",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/PropertyPanel.vue"
-    ]
-  },
-  {
-    "source": "道友请留步，正在推演",
-    "files": [
-      "app/chrome-extension/entrypoints/sidepanel/utils/loading-texts.ts"
-    ]
-  },
-  {
     "source": "配置",
     "files": [
       "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyFormRenderer.vue"
     ]
   },
   {
-    "source": "重做 (⌘/Ctrl+Shift+Z)",
+    "source": "重命名سير العمل",
     "files": [
       "app/chrome-extension/entrypoints/builder/App.vue"
-    ]
-  },
-  {
-    "source": "重命名工作流",
-    "files": [
-      "app/chrome-extension/entrypoints/builder/App.vue"
-    ]
-  },
-  {
-    "source": "键盘",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/nodes/node-util.ts"
-    ]
-  },
-  {
-    "source": "间隔(分钟)",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/ScheduleDialog.vue",
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyTrigger.vue"
-    ]
-  },
-  {
-    "source": "需填写保存变量名",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/PropertyPanel.vue"
-    ]
-  },
-  {
-    "source": "需提供 selector 或 js",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/PropertyPanel.vue"
-    ]
-  },
-  {
-    "source": "需提供 tabId 或 URL/标题包含",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertySwitchTab.vue"
-    ]
-  },
-  {
-    "source": "需提供事件类型",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/model/validation.ts"
-    ]
-  },
-  {
-    "source": "需提供元素选择器",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/model/validation.ts"
-    ]
-  },
-  {
-    "source": "需提供子流 ID",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/model/validation.ts"
-    ]
-  },
-  {
-    "source": "需提供属性名",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/model/validation.ts"
-    ]
-  },
-  {
-    "source": "需添加至少一个条件分支",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/model/validation.ts"
-    ]
-  },
-  {
-    "source": "需选择要执行的工作流",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/model/validation.ts"
-    ]
-  },
-  {
-    "source": "验证",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/ElementMarkerManagement.vue",
-      "app/chrome-extension/entrypoints/sidepanel/App.vue"
-    ]
-  },
-  {
-    "source": "默认 60000",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyHandleDownload.vue"
-    ]
-  },
-  {
-    "source": "默认 download",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyHandleDownload.vue"
-    ]
-  },
-  {
-    "source": "默认 elements",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyLoopElements.vue"
-    ]
-  },
-  {
-    "source": "默认 item",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyForeach.vue",
-      "app/chrome-extension/entrypoints/popup/components/builder/components/properties/PropertyLoopElements.vue"
-    ]
-  },
-  {
-    "source": "默认使用全局超时",
-    "files": [
-      "app/chrome-extension/entrypoints/popup/components/builder/components/PropertyPanel.vue"
     ]
   }
 ]
