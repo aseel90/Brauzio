@@ -1,4 +1,4 @@
-name: Apply Brauzio 2.6 Build Fixes
+name: Prepare Brauzio 2.6 Release Metadata
 
 on:
   push:
@@ -10,7 +10,7 @@ permissions:
   contents: write
 
 jobs:
-  apply:
+  prepare:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -29,82 +29,70 @@ jobs:
       - name: Install dependencies
         run: pnpm install --no-frozen-lockfile --ignore-scripts
 
-      - name: Apply validated fixes
+      - name: Patch 2.6 metadata and documentation
         shell: bash
         run: |
           set -euo pipefail
           python - <<'PY'
           from pathlib import Path
 
-          tools = Path('packages/shared/src/tools.ts')
-          text = tools.read_text(encoding='utf-8')
-          old_import = "import type { Tool } from '@modelcontextprotocol/sdk/types.js';\n\n"
-          new_types = """export type BrauzioJsonValue =\n  | string\n  | number\n  | boolean\n  | null\n  | BrauzioJsonValue[]\n  | { [key: string]: BrauzioJsonValue };\n\nexport interface BrauzioToolSchema {\n  name: string;\n  description?: string;\n  inputSchema: {\n    type: 'object';\n    properties?: Record<string, BrauzioJsonValue>;\n    required?: string[];\n    [key: string]: unknown;\n  };\n}\n\n"""
-          if old_import not in text:
-              raise SystemExit('base Tool import marker not found')
-          text = text.replace(old_import, new_types, 1)
-          old_decl = 'export const TOOL_SCHEMAS: Tool[] = ['
-          if old_decl not in text:
-              raise SystemExit('base TOOL_SCHEMAS marker not found')
-          text = text.replace(old_decl, 'export const TOOL_SCHEMAS: BrauzioToolSchema[] = [', 1)
-          tools.write_text(text, encoding='utf-8')
+          cloud = Path('app/cloudflare-mcp/src/index.ts')
+          text = cloud.read_text(encoding='utf-8')
+          text = text.replace("const BRAUZIO_RUNTIME_VERSION = '2.5.0';", "const BRAUZIO_RUNTIME_VERSION = '2.6.0';", 1)
+          text = text.replace("const BRAUZIO_SCHEMA_VERSION = 'v2.5.0-2026-09-06';", "const BRAUZIO_SCHEMA_VERSION = 'v2.6.0-2026-09-07';", 1)
+          cloud.write_text(text, encoding='utf-8')
 
-          watch = Path('packages/shared/src/watch-tools.ts')
-          watch_text = watch.read_text(encoding='utf-8')
-          old_watch_import = "import type { Tool } from '@modelcontextprotocol/sdk/types.js';"
-          if old_watch_import not in watch_text:
-              raise SystemExit('watch Tool import marker not found')
-          watch_text = watch_text.replace(old_watch_import, "import type { BrauzioToolSchema } from './tools';", 1)
-          old_watch_decl = 'export const WATCH_TOOL_SCHEMAS: Tool[] = ['
-          if old_watch_decl not in watch_text:
-              raise SystemExit('WATCH_TOOL_SCHEMAS marker not found')
-          watch_text = watch_text.replace(old_watch_decl, 'export const WATCH_TOOL_SCHEMAS: BrauzioToolSchema[] = [', 1)
-          watch.write_text(watch_text, encoding='utf-8')
+          changelog = Path('docs/CHANGELOG.md')
+          c = changelog.read_text(encoding='utf-8')
+          heading = '# Brauzio Changelog\n'
+          entry = """
 
-          common = Path('app/chrome-extension/entrypoints/background/tools/browser/common.ts')
-          common_text = common.read_text(encoding='utf-8')
-          old_update = """          if (newTab.id && shouldVerify) {\n            await armVerification(newTab.id);\n            newTab = await chrome.tabs.update(newTab.id, { url });\n          }\n"""
-          new_update = """          if (newTab.id && shouldVerify) {\n            await armVerification(newTab.id);\n            const updatedTab = await chrome.tabs.update(newTab.id, { url });\n            if (!updatedTab) {\n              return createErrorResponse('Tab closed before navigation could start');\n            }\n            newTab = updatedTab;\n          }\n"""
-          if old_update not in common_text:
-              raise SystemExit('navigation update marker not found')
-          common.write_text(common_text.replace(old_update, new_update, 1), encoding='utf-8')
+## 2026-09-07 — Extension V2.6.0 Human Takeover + Emergency Stop
 
-          verification = Path('app/chrome-extension/utils/action-verification.ts')
-          verification_text = verification.read_text(encoding='utf-8')
-          old_status = '  status?: chrome.tabs.TabStatus;'
-          if old_status not in verification_text:
-              raise SystemExit('TabStatus marker not found')
-          verification.write_text(verification_text.replace(old_status, "  status?: chrome.tabs.Tab['status'];", 1), encoding='utf-8')
+- إضافة Human Takeover لرصد pointer/keyboard/scroll/selection/touch وإيقاف Actor tools عند تدخل المستخدم.
+- التمييز بين إدخال المستخدم وإدخال Brauzio عبر Agent Activity suppression windows بدل الاعتماد على `isTrusted` وحده.
+- تحرير أي Mouse Hold عالق فور takeover أو Emergency Stop.
+- حفظ حالة pause محليًا ومزامنتها مع Durable Object؛ Cloudflare يرفض Actor calls أثناء الإيقاف مع حالة `423`.
+- إبقاء أدوات القراءة والمراقبة متاحة أثناء Human Takeover للتشخيص الآمن.
+- إضافة أزرار Emergency Stop واستئناف تحكم ChatGPT إلى Popup، مع Badge `STOP` على أيقونة الإضافة.
+- إصلاح توافق JSON Schema بين `brauzio-shared` وMCP Server 2.0 بتوحيد base/watch schemas على نوع JSON-safe واحد.
+- إصلاح حالتي TypeScript في Action Verification: إغلاق التبويب أثناء navigation ونوع `Tab.status`.
+- تم التحقق في CI التشخيصي من shared build وCloud check/dry-run وextension compile/build بنجاح قبل الإصدار.
+"""
+          if 'Extension V2.6.0 Human Takeover + Emergency Stop' not in c:
+              c = c.replace(heading, heading + entry, 1)
+          changelog.write_text(c, encoding='utf-8')
+
+          roadmap = Path('docs/ROADMAP.md')
+          r = roadmap.read_text(encoding='utf-8')
+          replacements = {
+            '- [ ] مراقبة pointer/click/keyboard/scroll/selection.': '- [x] مراقبة pointer/click/keyboard/scroll/selection/touch.',
+            '- [ ] تمييز Human input عن Agent-generated input بدون الاعتماد على `isTrusted` وحده.': '- [x] تمييز Human input عن Agent-generated input عبر Agent Activity suppression windows بدون الاعتماد على `isTrusted` وحده.',
+            '- [ ] زر Emergency Stop.': '- [x] زر Emergency Stop مع تحرير input الممسوك ومزامنة pause إلى Cloudflare.',
+            '- [ ] زر "استئناف تحكم ChatGPT".': '- [x] زر "استئناف تحكم ChatGPT" مع بقاء pause محفوظًا عبر Service Worker restarts.',
+            '| 7 | Human Takeover + Emergency Stop | P1 | لاحقًا |': '| 7 | Human Takeover + Emergency Stop | P1 | Foundation مكتملة ومبنية في 2.6.0، E2E على النسخة المثبتة متبقٍ |',
+          }
+          for old, new in replacements.items():
+              if old in r:
+                  r = r.replace(old, new, 1)
+          roadmap.write_text(r, encoding='utf-8')
           PY
 
-      - name: Prepare WXT extension types
-        run: pnpm --filter brauzio-extension exec wxt prepare
+      - name: Validate shared and Cloud runtime
+        run: |
+          pnpm --filter brauzio-shared build
+          pnpm --filter brauzio-cloud-mcp check
+          pnpm --filter brauzio-cloud-mcp build
 
-      - name: Build shared schemas
-        run: pnpm --filter brauzio-shared build
-
-      - name: Typecheck Brauzio Cloud MCP
-        run: pnpm --filter brauzio-cloud-mcp check
-
-      - name: Build Brauzio Cloud MCP
-        run: pnpm --filter brauzio-cloud-mcp build
-
-      - name: Typecheck Chrome extension
-        run: pnpm --filter brauzio-extension compile
-
-      - name: Build Chrome extension
-        run: pnpm --filter brauzio-extension build
-
-      - name: Commit validated fixes
+      - name: Commit prepared metadata
         shell: bash
         run: |
           set -euo pipefail
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add packages/shared/src/tools.ts packages/shared/src/watch-tools.ts app/chrome-extension/entrypoints/background/tools/browser/common.ts app/chrome-extension/utils/action-verification.ts
+          git add app/cloudflare-mcp/src/index.ts docs/CHANGELOG.md docs/ROADMAP.md
           if git diff --cached --quiet; then
-            echo 'Validated fixes already applied.'
             exit 0
           fi
-          git commit -m 'Fix Brauzio 2.6 schema and verification builds [skip ci]'
+          git commit -m 'Prepare Brauzio 2.6 runtime metadata and docs [skip ci]'
           git push
