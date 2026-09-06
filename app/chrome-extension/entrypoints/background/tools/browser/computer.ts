@@ -239,7 +239,7 @@ class ComputerTool extends BaseBrowserToolExecutor {
         if (args.text) {
           const expected = args.text, appear = args.appear !== false;
           const timeout = Math.max(100, Math.min(seconds > 0 ? seconds * 1000 : 10000, 120000));
-          const result = await chrome.scripting.executeScript({ target: { tabId }, world: 'MAIN', func: async (text, shouldAppear, timeoutMs) => { const deadline = Date.now() + timeoutMs; while (Date.now() < deadline) { const has = (document.body?.innerText || '').includes(text); if (has === shouldAppear) return { ok: true, found: has }; await new Promise((r) => setTimeout(r, 100)); } return { ok: false }; }, args: [expected, appear, timeout] });
+          const result = await chrome.scripting.executeScript({ target: { tabId }, world: 'MAIN', func: async (text: string, shouldAppear: boolean, timeoutMs: number) => { const deadline = Date.now() + timeoutMs; while (Date.now() < deadline) { const has = (document.body?.innerText || '').includes(text); if (has === shouldAppear) return { ok: true, found: has }; await new Promise((r) => setTimeout(r, 100)); } return { ok: false }; }, args: [expected, appear, timeout] });
           return result?.[0]?.result?.ok ? ok({ action: 'wait', text: expected, appear }) : createErrorResponse(`Timed out waiting for text: ${expected}`);
         }
         if (!seconds) return createErrorResponse('duration is required for wait without text');

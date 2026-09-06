@@ -10,6 +10,7 @@ const status = reactive({
   lastError: '',
 });
 const copied = ref(false);
+const version = chrome.runtime.getManifest().version;
 
 const connected = computed(() => status.state === 'connected' && status.authenticated);
 const statusLabel = computed(() => {
@@ -143,7 +144,7 @@ onBeforeUnmount(() => chrome.runtime.onMessage.removeListener(listener));
       <section v-if="status.lastError" class="error-card">{{ status.lastError }}</section>
 
       <footer>
-        <span>Brauzio v{{ chrome.runtime.getManifest().version }}</span>
+        <span>Brauzio v{{ version }}</span>
         <button @click="closePage">إغلاق</button>
       </footer>
     </main>
