@@ -1,70 +1,55 @@
-# WASM SIMD 构建指南
+# دليل بناء WASM SIMD
 
-## 🚀 快速构建
-
-### 前置要求
+## المتطلبات
 
 ```bash
-# 安装 Rust
+# تثبيت Rust
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 
-# 安装 wasm-pack
+# تثبيت wasm-pack
 curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
 ```
 
-### 构建选项
+## أوامر البناء
 
-1. **从项目根目录构建**（推荐）：
+من جذر المشروع:
 
-   ```bash
-   # 构建 WASM 并自动复制到 Chrome 扩展
-   npm run build:wasm
-   ```
+```bash
+npm run build:wasm
+```
 
-2. **只构建 WASM 包**：
+لبناء حزمة WASM فقط:
 
-   ```bash
-   # 从 packages/wasm-simd 目录
-   npm run build
+```bash
+pnpm --filter @chrome-mcp/wasm-simd build
+```
 
-   # 或者从任何地方使用 pnpm filter
-   pnpm --filter @chrome-mcp/wasm-simd build
-   ```
+للبناء في وضع التطوير:
 
-3. **开发模式构建**：
-   ```bash
-   npm run build:dev  # 未优化版本，构建更快
-   ```
+```bash
+npm run build:dev
+```
 
-### 构建产物
+## نواتج البناء
 
-构建完成后，在 `pkg/` 目录下会生成：
+يتم إنشاء الملفات التالية داخل `pkg/`:
 
-- `simd_math.js` - JavaScript 绑定
-- `simd_math_bg.wasm` - WebAssembly 二进制文件
-- `simd_math.d.ts` - TypeScript 类型定义
-- `package.json` - NPM 包信息
+- `simd_math.js` — ربط JavaScript.
+- `simd_math_bg.wasm` — ملف WebAssembly.
+- `simd_math.d.ts` — تعريفات TypeScript.
+- `package.json` — معلومات الحزمة.
 
-### 集成到 Chrome 扩展
+## دمجها مع إضافة Brauzio
 
-WASM 文件会自动复制到 `app/chrome-extension/workers/` 目录，Chrome 扩展可以直接使用：
+تُنسخ ملفات WASM إلى `app/chrome-extension/workers/` ليتم تحميلها من الإضافة مباشرة:
 
 ```typescript
-// Brauzio internal note.
 const wasmUrl = chrome.runtime.getURL('workers/simd_math.js');
 const wasmModule = await import(wasmUrl);
 ```
 
-## 🔧 开发工作流
+## سير التطوير
 
-1. 修改 `src/lib.rs` 中的 Rust 代码
-2. 运行 `npm run build` 重新构建
-3. Chrome 扩展会自动使用新的 WASM 文件
-
-## 📊 性能测试
-
-```bash
-# 在 Chrome 扩展中运行基准测试
-import { runSIMDBenchmark } from './utils/simd-benchmark';
-await runSIMDBenchmark();
-```
+1. عدّل `src/lib.rs`.
+2. شغّل أمر البناء.
+3. أعد بناء إضافة Brauzio لاستخدام ملفات WASM الجديدة.
