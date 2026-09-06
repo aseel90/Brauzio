@@ -11,12 +11,11 @@ const LOG_PREFIX = '[QuickPanelAgent]';
 let initialized = false;
 
 /**
- * Brauzio Cloud deliberately does not start the legacy localhost Agent API.
+ * Brauzio Cloud deliberately does not start the legacy embedded Agent API.
  * Browser automation is provided through ChatGPT -> Remote MCP -> Cloudflare -> Brauzio.
  *
  * The Quick Panel shell remains available for the rest of its browser helpers, but its
- * old embedded AI-chat transport is disabled instead of silently reconnecting to
- * 127.0.0.1 or requiring a local Node/native process.
+ * old embedded AI-chat transport is disabled instead of requiring a local runtime.
  */
 async function handleSendToAI(
   _message: QuickPanelSendToAIMessage,
@@ -47,7 +46,7 @@ async function handleCancelAI(
     };
   }
 
-  // There is no localhost Agent request to cancel in the cloud-only build.
+  // There is no embedded Agent request to cancel in the cloud-only build.
   return { success: true };
 }
 
