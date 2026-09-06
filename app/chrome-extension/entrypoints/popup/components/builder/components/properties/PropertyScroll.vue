@@ -1,11 +1,11 @@
 <template>
   <div>
     <div class="form-row">
-      <label class="form-label">模式</label>
+      <label class="form-label">الوضع</label>
       <select v-model="cfg.mode" class="form-select-sm">
-        <option value="element">滚动到العنصر</option>
-        <option value="offset">窗口偏移</option>
-        <option value="container">容器偏移</option>
+        <option value="element">تمرير到العنصر</option>
+        <option value="offset">窗口إزاحة</option>
+        <option value="container">حاويةإزاحة</option>
       </select>
     </div>
 
@@ -15,11 +15,11 @@
 
     <div v-if="cfg.mode !== 'element'" class="mt-2">
       <div class="form-row">
-        <label class="form-label">偏移 X</label>
+        <label class="form-label">إزاحة X</label>
         <input type="number" class="form-input-sm" v-model.number="cfg.offset.x" placeholder="0" />
       </div>
       <div class="form-row">
-        <label class="form-label">偏移 Y</label>
+        <label class="form-label">إزاحة Y</label>
         <input
           type="number"
           class="form-input-sm"
@@ -28,8 +28,8 @@
         />
       </div>
       <div v-if="cfg.mode === 'container'" class="mt-2">
-        <SelectorEditor :node="node" :allowPick="true" title="容器المحدد" targetKey="target" />
-        <div class="hint"><small>容器يجب支持 scrollTo(top,left)</small></div>
+        <SelectorEditor :node="node" :allowPick="true" title="حاويةالمحدد" targetKey="target" />
+        <div class="hint"><small>حاويةيجب支持 scrollTo(top,left)</small></div>
       </div>
     </div>
   </div>

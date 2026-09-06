@@ -1,6 +1,6 @@
 <template>
   <div class="flex items-center gap-2">
-    <!-- 螺旋动画图标（仅 running/starting 状态显示，且未被父组件隐藏时） -->
+    <!-- 螺旋动画图标（仅 running/starting الحالة显示，且未被父组件隐藏时） -->
     <svg
       v-if="isRunning && !hideIcon"
       class="loading-scribble w-4 h-4 flex-shrink-0"
@@ -15,7 +15,7 @@
       />
     </svg>
 
-    <!-- shimmer 文案（running 状态）或普通文案 -->
+    <!-- shimmer 文案（running الحالة）أو普通文案 -->
     <span
       class="text-xs italic"
       :class="{ 'text-shimmer': isRunning }"
@@ -37,21 +37,21 @@ const props = defineProps<{
   hideIcon?: boolean;
 }>();
 
-// 是否处于تشغيل状态
+// 是否处于تشغيلالحالة
 const isRunning = computed(
   () => props.item.status === 'running' || props.item.status === 'starting',
 );
 
-// 随机文案（仅 running 状态使用）
+// 随机文案（仅 running الحالة使用）
 const randomText = ref(getRandomLoadingText());
 
-// 定时تحديث文案的 timeout ID
+// جدولةتحديث文案的 timeout ID
 let timeoutId: ReturnType<typeof setTimeout> | null = null;
 
-// 记录上مرة واحدة的تشغيل状态，用于判断状态变化
+// 记录上مرة واحدة的تشغيلالحالة，用于判断الحالة变化
 let wasRunning = false;
 
-// 启动定时器
+// 启动جدولة器
 function startInterval(): void {
   if (timeoutId) return;
   // 5-8 秒随机间隔تحديث文案
@@ -67,7 +67,7 @@ function startInterval(): void {
   scheduleNext();
 }
 
-// 停止定时器
+// إيقافجدولة器
 function stopInterval(): void {
   if (timeoutId) {
     clearTimeout(timeoutId);
@@ -75,9 +75,9 @@ function stopInterval(): void {
   }
 }
 
-// 监听تشغيل状态变化 - 只在状态真正变化时才处理
+// 监听تشغيلالحالة变化 - 只在الحالة真正变化时才处理
 watch(isRunning, (running) => {
-  // 只在从非تشغيل变为تشغيل时，才重新生成文案并启动定时器
+  // 只在从非تشغيل变为تشغيل时，才重新生成文案并启动جدولة器
   if (running && !wasRunning) {
     randomText.value = getRandomLoadingText();
     startInterval();
@@ -99,7 +99,7 @@ onUnmounted(() => {
   stopInterval();
 });
 
-// 非تشغيل状态的افتراضي文案
+// 非تشغيلالحالة的افتراضي文案
 const defaultText = computed(() => {
   switch (props.item.status) {
     case 'completed':

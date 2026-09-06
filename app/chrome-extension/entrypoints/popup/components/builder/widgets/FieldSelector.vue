@@ -2,7 +2,7 @@
   <div class="selector">
     <div class="row">
       <input class="form-input" :placeholder="placeholder" :value="text" @input="onInput" />
-      <button class="btn-mini" type="button" title="اختيار من الصفحة" @click="onPick">拾取</button>
+      <button class="btn-mini" type="button" title="اختيار من الصفحة" @click="onPick">اختيار</button>
     </div>
     <div class="help">يمكنك إدخال محدد CSS أو اختيار العنصر مباشرة من الصفحة</div>
     <div v-if="err" class="error-item">{{ err }}</div>

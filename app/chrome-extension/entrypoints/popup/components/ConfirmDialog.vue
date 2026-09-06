@@ -271,7 +271,7 @@ defineEmits<Emits>();
   }
 }
 
-/* 焦点样式 */
+/* 焦نقطة样式 */
 .dialog-button:focus {
   outline: none;
   box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.3);

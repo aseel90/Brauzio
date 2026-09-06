@@ -245,7 +245,7 @@
                       :style="{ color: 'var(--ac-text-muted)' }"
                     >
                       <div class="flex items-center gap-2">
-                        <span>状态: {{ getRunStatusText(run) }}</span>
+                        <span>الحالة: {{ getRunStatusText(run) }}</span>
                         <span v-if="run.finishedAt"
                           >• المدة:
                           {{
@@ -521,7 +521,7 @@ function getRunStatusColor(run: RunLite): string {
 function getRunStatusText(run: RunLite): string {
   if (run.status) {
     const statusMap: Record<string, string> = {
-      queued: '排队中',
+      queued: 'في قائمة الانتظار',
       running: 'تشغيل中',
       paused: 'تم暂停',
       succeeded: 'نجح',

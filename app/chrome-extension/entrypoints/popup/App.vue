@@ -2138,7 +2138,7 @@ onUnmounted(() => {
   color: #dc2626;
 }
 
-/* 录制中状态 - 脉冲动画 */
+/* 录制中الحالة - 脉冲动画 */
 .rr-icon-btn-recording {
   animation: pulse-recording 1.5s ease-in-out infinite;
 }
@@ -2153,7 +2153,7 @@ onUnmounted(() => {
   }
 }
 
-/* 停止按钮 - 深红色 */
+/* إيقاف按钮 - 深红色 */
 .rr-icon-btn-stop {
   background: rgba(185, 28, 28, 0.1);
   color: #b91c1c;

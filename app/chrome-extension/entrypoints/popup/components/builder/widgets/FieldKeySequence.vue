@@ -1,7 +1,7 @@
 <template>
   <div class="keys">
     <input class="form-input" :placeholder="placeholder" :value="text" @input="onInput" />
-    <div class="help">示例：Backspace Enter أو cmd+a</div>
+    <div class="help">مثال: Backspace Enter أو cmd+a</div>
   </div>
 </template>
 

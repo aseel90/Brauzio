@@ -1,9 +1,9 @@
 <template>
   <div>
-    <SelectorEditor :node="node" :allowPick="true" title="起点المحدد" targetKey="start" />
-    <SelectorEditor :node="node" :allowPick="true" title="终点المحدد" targetKey="end" />
+    <SelectorEditor :node="node" :allowPick="true" title="البدايةالمحدد" targetKey="start" />
+    <SelectorEditor :node="node" :allowPick="true" title="النهايةالمحدد" targetKey="end" />
     <div class="hint">
-      <small>提示：المسار（path）通常在录制时自动生成，手动إنشاء时可留空。</small>
+      <small>ملاحظة: المسار（path）通常在录制时自动生成，يدويإنشاء时可留空。</small>
     </div>
   </div>
 </template>

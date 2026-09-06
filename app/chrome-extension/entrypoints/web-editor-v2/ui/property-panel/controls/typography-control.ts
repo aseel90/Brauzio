@@ -127,7 +127,7 @@ function createBaseIconSvg(): SVGSVGElement {
 function createTextAlignIcon(value: TextAlignValue): SVGElement {
   const svg = createBaseIconSvg();
 
-  // 容器边框（虚线矩形表示容器）
+  // حاوية边框（虚线矩形表示حاوية）
   const container = document.createElementNS(SVG_NS, 'rect');
   container.setAttribute('x', '2');
   container.setAttribute('y', '2');
@@ -140,7 +140,7 @@ function createTextAlignIcon(value: TextAlignValue): SVGElement {
   container.setAttribute('fill', 'none');
   container.setAttribute('opacity', '0.5');
 
-  // 文本行的位置配置：每行的 [x起点, 宽度]
+  // 文本行的位置配置：每行的 [xالبداية, 宽度]
   const lineConfigs: Record<TextAlignValue, Array<[number, number]>> = {
     left: [
       [3.5, 8], // 长行
@@ -185,7 +185,7 @@ function createTextAlignIcon(value: TextAlignValue): SVGElement {
 function createVerticalAlignIcon(value: VerticalAlignValue): SVGElement {
   const svg = createBaseIconSvg();
 
-  // 容器边框（虚线矩形表示容器）
+  // حاوية边框（虚线矩形表示حاوية）
   const container = document.createElementNS(SVG_NS, 'rect');
   container.setAttribute('x', '2');
   container.setAttribute('y', '2');
@@ -206,7 +206,7 @@ function createVerticalAlignIcon(value: VerticalAlignValue): SVGElement {
     baseline: 6.5, // baseline 稍微偏下
   };
 
-  // 两个小方块表示子元素
+  // 两个小方块表示子عنصر
   const block1 = document.createElementNS(SVG_NS, 'rect');
   block1.setAttribute('x', '4');
   block1.setAttribute('y', String(blockY[value]));
@@ -225,7 +225,7 @@ function createVerticalAlignIcon(value: VerticalAlignValue): SVGElement {
 
   svg.append(container, block1, block2);
 
-  // baseline 模式添加基线指示线
+  // baseline الوضع添加基线指示线
   if (value === 'baseline') {
     const baselinePath = document.createElementNS(SVG_NS, 'path');
     baselinePath.setAttribute('d', 'M3 10H12');

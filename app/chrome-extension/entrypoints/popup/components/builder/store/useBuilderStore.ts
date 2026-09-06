@@ -518,7 +518,7 @@ export function useBuilderStore(initial?: FlowV2 | null) {
     recordChange();
   }
 
-  // 自动排版（ELK 优先）：
+  // ترتيب تلقائي（ELK 优先）：
   // - 动态引入 elkjs，避免常驻体积
   // - فشل则回退到 layoutFallback()
   async function layoutAuto() {

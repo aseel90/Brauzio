@@ -474,7 +474,7 @@ onMounted(async () => {
     if (res && res.success) flows.value = res.flows || [];
   } catch {}
 });
-// 高亮并滚动到指定字段
+// 高亮并تمرير到指定字段
 watch(
   () => props.highlightField,
   (field) => {
@@ -796,7 +796,7 @@ watch(
   margin: 4px 0;
 }
 
-/* 空状态 */
+/* 空الحالة */
 .panel-empty {
   flex: 1;
   display: flex;

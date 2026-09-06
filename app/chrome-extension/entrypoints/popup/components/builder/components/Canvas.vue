@@ -184,7 +184,7 @@ function onConnectInternal(conn: Connection) {
   // Prefer sourceHandle as label so conditional branches can be identified
   const lab = (conn as any).sourceHandle || 'default';
   emit('connect', conn.source, conn.target, String(lab));
-  // 边تحديث由上层状态驱动，这里无يجب直接修改本地 vfEdges
+  // 边تحديث由上层الحالة驱动，这里无يجب直接修改本地 vfEdges
 }
 
 function onDragOver(e: DragEvent) {
@@ -330,7 +330,7 @@ defineExpose({ zoomIn, zoomOut, fitAll });
   box-shadow: 0 0 0 1px #afafaf;
 }
 
-/* العقدة容器 */
+/* العقدةحاوية */
 :deep(.node-container) {
   display: flex;
   align-items: center;

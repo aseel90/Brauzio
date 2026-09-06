@@ -6,7 +6,7 @@
       >
     </div>
     <div class="form-group">
-      <label class="form-label">描述（اختياري）</label>
+      <label class="form-label">الوصف（اختياري）</label>
       <input class="form-input" v-model="cfg.description" placeholder="说明此مشغّل的用途" />
     </div>
   </div>
@@ -14,31 +14,31 @@
   <div class="divider"></div>
 
   <div class="form-section">
-    <div class="section-header"><span class="section-title">触发方式</span></div>
+    <div class="section-header"><span class="section-title">طريقة التشغيل</span></div>
     <div class="form-group checkbox-group">
       <label class="checkbox-label"
-        ><input type="checkbox" v-model="cfg.modes.manual" /> 手动</label
+        ><input type="checkbox" v-model="cfg.modes.manual" /> يدوي</label
       >
       <label class="checkbox-label"
-        ><input type="checkbox" v-model="cfg.modes.url" /> 访问 URL</label
+        ><input type="checkbox" v-model="cfg.modes.url" /> زيارة URL</label
       >
       <label class="checkbox-label"
-        ><input type="checkbox" v-model="cfg.modes.contextMenu" /> 右键菜单</label
+        ><input type="checkbox" v-model="cfg.modes.contextMenu" /> القائمة السياقية</label
       >
       <label class="checkbox-label"
-        ><input type="checkbox" v-model="cfg.modes.command" /> 快捷键</label
+        ><input type="checkbox" v-model="cfg.modes.command" /> اختصار لوحة المفاتيح</label
       >
       <label class="checkbox-label"
         ><input type="checkbox" v-model="cfg.modes.dom" /> تغير DOM</label
       >
       <label class="checkbox-label"
-        ><input type="checkbox" v-model="cfg.modes.schedule" /> 定时</label
+        ><input type="checkbox" v-model="cfg.modes.schedule" /> جدولة</label
       >
     </div>
   </div>
 
   <div v-if="cfg.modes.url" class="form-section">
-    <div class="section-title">访问 URL مطابقة</div>
+    <div class="section-title">زيارة URL مطابقة</div>
     <div class="selector-list">
       <div v-for="(r, i) in urlRules" :key="i" class="selector-item">
         <select class="form-select-sm" v-model="r.kind">
@@ -65,7 +65,7 @@
   </div>
 
   <div v-if="cfg.modes.contextMenu" class="form-section">
-    <div class="section-title">右键菜单</div>
+    <div class="section-title">القائمة السياقية</div>
     <div class="form-group">
       <label class="form-label">العنوان</label>
       <input class="form-input" v-model="cfg.contextMenu.title" placeholder="菜单العنوان" />
@@ -81,7 +81,7 @@
   </div>
 
   <div v-if="cfg.modes.command" class="form-section">
-    <div class="section-title">快捷键</div>
+    <div class="section-title">اختصار لوحة المفاتيح</div>
     <div class="form-group">
       <label class="form-label">命令键（يجب预先在 manifest commands 中声明）</label>
       <input
@@ -91,7 +91,7 @@
       />
     </div>
     <div class="text-xs text-slate-500" style="padding: 0 20px"
-      >提示：Chrome 扩展快捷键يحتاج在 manifest 里固定声明，تعذرتشغيل时动态إضافة。</div
+      >ملاحظة: Chrome 扩展اختصار لوحة المفاتيحيحتاج在 manifest 里固定声明，تعذرتشغيل时动态إضافة。</div
     >
   </div>
 
@@ -103,20 +103,20 @@
     </div>
     <div class="form-group checkbox-group">
       <label class="checkbox-label"
-        ><input type="checkbox" v-model="cfg.dom.appear" /> 出现时触发</label
+        ><input type="checkbox" v-model="cfg.dom.appear" /> تشغيل عند الظهور</label
       >
       <label class="checkbox-label"
         ><input type="checkbox" v-model="cfg.dom.once" /> تشغيل مرة واحدة فقط</label
       >
     </div>
     <div class="form-group">
-      <label class="form-label">去抖(ms)</label>
+      <label class="form-label">مهلة debounce (ms)</label>
       <input class="form-input" type="number" min="0" v-model.number="cfg.dom.debounceMs" />
     </div>
   </div>
 
   <div v-if="cfg.modes.schedule" class="form-section">
-    <div class="section-title">定时</div>
+    <div class="section-title">جدولة</div>
     <div class="selector-list">
       <div v-for="(s, i) in schedules" :key="i" class="selector-item">
         <select class="form-select-sm" v-model="s.type">
@@ -127,7 +127,7 @@
         <input
           class="form-input-sm flex-1"
           v-model="s.when"
-          placeholder="5 或 09:00 或 2025-01-01T10:00:00"
+          placeholder="5 أو 09:00 أو 2025-01-01T10:00:00"
         />
         <label class="checkbox-label"><input type="checkbox" v-model="s.enabled" /> تفعيل</label>
         <button class="btn-icon-sm" @click="move(schedules, i, -1)" :disabled="i === 0">↑</button>
@@ -148,8 +148,8 @@
   <div class="divider"></div>
   <div class="form-section">
     <div class="text-xs text-slate-500" style="padding: 0 20px"
-      >说明：
-      مشغّل会在حفظسير العمل时同步到后台触发表（URL/右键/快捷键/DOM）和جدول任务（间隔/يوميًا/مرة واحدة）。
+      >توضيح: 
+      مشغّل会在حفظسير العمل时同步到后台触发表（URL/右键/اختصار لوحة المفاتيح/DOM）和جدول任务（间隔/يوميًا/مرة واحدة）。
     </div>
   </div>
 </template>

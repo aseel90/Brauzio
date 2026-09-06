@@ -5,7 +5,7 @@
       <input
         class="form-input"
         v-model="(node as any).config.filenameContains"
-        placeholder="子串مطابقة文件名或URL"
+        placeholder="子串مطابقة文件名أوURL"
       />
     </div>
     <div class="form-group">

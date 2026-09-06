@@ -1,7 +1,7 @@
 <template>
   <div class="form-section">
     <div class="form-group">
-      <label class="form-label">断言الشرط (JSON)</label>
+      <label class="form-label">تحققالشرط (JSON)</label>
       <textarea
         class="form-textarea"
         v-model="assertJson"

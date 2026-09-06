@@ -6,7 +6,7 @@
         class="form-input"
         type="number"
         v-model.number="(node as any).config.tabId"
-        placeholder="数字"
+        placeholder="رقم"
       />
     </div>
     <div class="form-group" :class="{ invalid: needOne && !hasAny }">

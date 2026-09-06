@@ -10,7 +10,7 @@
     </div>
     <div class="form-group checkbox-group">
       <label class="checkbox-label"
-        ><input type="checkbox" v-model="(node as any).config.newWindow" /> 新窗口</label
+        ><input type="checkbox" v-model="(node as any).config.newWindow" /> نافذة جديدة</label
       >
     </div>
   </div>

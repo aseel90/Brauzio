@@ -2,8 +2,8 @@
   <!-- rr-theme container provides CSS variables; data-theme for light/dark -->
   <div class="builder-page rr-theme" :data-theme="theme">
     <div v-if="fallbackNotice" class="notice-top">
-      <span>تم应用回退建议：提升 {{ fallbackNotice.type }} 优先级</span>
-      <button class="mini" @click="undoFallbackPromotion">撤销</button>
+      <span>تم应用回退建议：提升 {{ fallbackNotice.type }} الأولوية</span>
+      <button class="mini" @click="undoFallbackPromotion">تراجع</button>
     </div>
 
     <div class="main">
@@ -29,7 +29,7 @@
           <span class="tip">سير العمل可视化编排</span>
         </div>
         <div class="right">
-          <button class="top-btn" @click="exportFlow" title="导出 JSON">
+          <button class="top-btn" @click="exportFlow" title="تصدير JSON">
             <svg
               width="14"
               height="14"
@@ -40,9 +40,9 @@
             >
               <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3" />
             </svg>
-            导出
+            تصدير
           </button>
-          <label class="top-btn import" title="导入 JSON">
+          <label class="top-btn import" title="استيراد JSON">
             <svg
               width="14"
               height="14"
@@ -53,7 +53,7 @@
             >
               <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12" />
             </svg>
-            导入
+            استيراد
             <input type="file" accept="application/json" @change="onImport" />
           </label>
           <button class="top-btn" @click="openRename" title="重命名سير العمل">
@@ -181,7 +181,7 @@
       />
 
       <div class="bottom-toolbar">
-        <button class="toolbar-btn" @click="store.undo" title="撤销 (⌘/Ctrl+Z)">
+        <button class="toolbar-btn" @click="store.undo" title="تراجع (⌘/Ctrl+Z)">
           <svg
             width="16"
             height="16"
@@ -193,7 +193,7 @@
             <path d="M3 7v6h6M21 17a9 9 0 00-9-9 9 9 0 00-9 9" />
           </svg>
         </button>
-        <button class="toolbar-btn" @click="store.redo" title="重做 (⌘/Ctrl+Shift+Z)">
+        <button class="toolbar-btn" @click="store.redo" title="إعادة (⌘/Ctrl+Shift+Z)">
           <svg
             width="16"
             height="16"
@@ -206,7 +206,7 @@
           </svg>
         </button>
         <span class="toolbar-divider" />
-        <button class="toolbar-btn" @click="store.layoutAuto" title="自动排版">
+        <button class="toolbar-btn" @click="store.layoutAuto" title="ترتيب تلقائي">
           <svg
             width="16"
             height="16"
@@ -221,7 +221,7 @@
             <rect x="3" y="14" width="7" height="7" rx="1" />
           </svg>
         </button>
-        <button class="toolbar-btn" @click="fitAll" title="自适应视图">
+        <button class="toolbar-btn" @click="fitAll" title="ملاءمة العرض">
           <svg
             width="16"
             height="16"
@@ -257,8 +257,8 @@
           <input v-model="renameName" placeholder="سير العملالاسم" />
         </div>
         <div class="row">
-          <label>描述</label>
-          <textarea v-model="renameDesc" placeholder="اختياري描述"></textarea>
+          <label>الوصف</label>
+          <textarea v-model="renameDesc" placeholder="اختياريالوصف"></textarea>
         </div>
       </div>
       <div class="rr-footer">
@@ -528,7 +528,7 @@ function schId(flowId: string, nodeId: string, idx: number): TriggerId {
 
 /**
  * 将 V2 schedule 配置转换为 cron التعبير
- * @returns cron التعبير或 null（如果تعذر转换）
+ * @returns cron التعبيرأو null（如果تعذر转换）
  */
 function scheduleToCron(schedule: { type?: string; when?: string }): string | null {
   if (!schedule) return null;
@@ -555,7 +555,7 @@ function scheduleToCron(schedule: { type?: string; when?: string }): string | nu
     return `${minute} ${hour} * * *`;
   }
 
-  // V3 cron 不支持 'once' مرة واحدة性定时
+  // V3 cron 不支持 'once' مرة واحدة性جدولة
   return null;
 }
 
@@ -631,12 +631,12 @@ async function syncTriggersAndSchedules(flowId: string, nodes: unknown[]) {
           const scheduleType = String(s?.type || 'unknown');
           if (scheduleType === 'once') {
             pushToast(
-              `العقدة ${n.id} 的定时 #${i + 1}: V3 暂不支持مرة واحدة性定时（once），تم跳过`,
+              `العقدة ${n.id} 的جدولة #${i + 1}: V3 暂不支持مرة واحدة性جدولة（once），تم跳过`,
               'warn',
             );
           } else {
             pushToast(
-              `العقدة ${n.id} 的定时 #${i + 1}: تعذر转换为 cron（type=${scheduleType}），تم跳过`,
+              `العقدة ${n.id} 的جدولة #${i + 1}: تعذر转换为 cron（type=${scheduleType}），تم跳过`,
               'warn',
             );
           }
@@ -710,7 +710,7 @@ async function exportFlow() {
     } as chrome.downloads.DownloadOptions);
     URL.revokeObjectURL(url);
   } catch (e) {
-    pushToast(`导出فشل：${e instanceof Error ? e.message : String(e)}`, 'error');
+    pushToast(`تصديرفشل：${e instanceof Error ? e.message : String(e)}`, 'error');
   }
 }
 
@@ -725,7 +725,7 @@ async function onImport(e: Event) {
     const candidates = extractFlowCandidates(parsed);
 
     if (!candidates.length) {
-      pushToast('导入فشل：غير موجودسير العمل数据', 'error');
+      pushToast('استيرادفشل：غير موجودسير العمل数据', 'error');
       return;
     }
 
@@ -763,7 +763,7 @@ async function onImport(e: Event) {
       await save(); // Convert and save as V3
     }
   } catch (e) {
-    pushToast(`导入فشل：${e instanceof Error ? e.message : String(e)}`, 'error');
+    pushToast(`استيرادفشل：${e instanceof Error ? e.message : String(e)}`, 'error');
   } finally {
     input.value = '';
   }

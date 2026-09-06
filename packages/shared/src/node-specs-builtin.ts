@@ -7,7 +7,7 @@ export function registerBuiltinSpecs() {
   const nav: NodeSpec = {
     type: STEP_TYPES.NAVIGATE,
     version: 1,
-    display: { label: '导航', iconClass: 'icon-navigate', category: 'Actions' },
+    display: { label: 'انتقال', iconClass: 'icon-navigate', category: 'Actions' },
     ports: { inputs: 1, outputs: [{ label: 'default' }] },
     schema: [
       {
@@ -16,14 +16,14 @@ export function registerBuiltinSpecs() {
         type: 'string',
         required: true,
         placeholder: 'https://example.com',
-        help: '目标地址，支持变量模板 {var}',
+        help: 'العنوان الهدف، يدعم قالب المتغير {var}',
         default: '',
       },
     ],
     defaults: { url: '' },
     validate: (cfg) => {
       const errs: string[] = [];
-      if (!cfg || !cfg.url || String(cfg.url).trim() === '') errs.push('URL 必填');
+      if (!cfg || !cfg.url || String(cfg.url).trim() === '') errs.push('URL مطلوب');
       return errs;
     },
   };
@@ -33,32 +33,32 @@ export function registerBuiltinSpecs() {
   registerNodeSpec({
     type: STEP_TYPES.CLICK,
     version: 1,
-    display: { label: '点击', iconClass: 'icon-click', category: 'Actions' },
+    display: { label: 'نقر', iconClass: 'icon-click', category: 'Actions' },
     ports: { inputs: 1, outputs: [{ label: 'default' }] },
     schema: [
       {
         key: 'target',
-        label: '目标',
+        label: 'الهدف',
         type: 'json',
         widget: 'targetlocator',
-        help: '选择或输入元素选择器',
+        help: 'اختر أو أدخل محدد العنصر',
       },
       {
         key: 'before',
-        label: '执行前',
+        label: 'قبل التنفيذ',
         type: 'object',
         fields: [
-          { key: 'scrollIntoView', label: '滚动到可见', type: 'boolean', default: true },
-          { key: 'waitForSelector', label: '等待选择器', type: 'boolean', default: true },
+          { key: 'scrollIntoView', label: 'التمرير حتى الظهور', type: 'boolean', default: true },
+          { key: 'waitForSelector', label: 'انتظار المحدد', type: 'boolean', default: true },
         ],
       },
       {
         key: 'after',
-        label: '执行后',
+        label: 'بعد التنفيذ',
         type: 'object',
         fields: [
-          { key: 'waitForNavigation', label: '等待导航完成', type: 'boolean', default: false },
-          { key: 'waitForNetworkIdle', label: '等待网络空闲', type: 'boolean', default: false },
+          { key: 'waitForNavigation', label: 'انتظار اكتمال الانتقال', type: 'boolean', default: false },
+          { key: 'waitForNetworkIdle', label: 'انتظار خمول الشبكة', type: 'boolean', default: false },
         ],
       },
     ],
@@ -70,23 +70,23 @@ export function registerBuiltinSpecs() {
     display: { label: '双击', iconClass: 'icon-click', category: 'Actions' },
     ports: { inputs: 1, outputs: [{ label: 'default' }] },
     schema: [
-      { key: 'target', label: '目标', type: 'json', widget: 'targetlocator' },
+      { key: 'target', label: 'الهدف', type: 'json', widget: 'targetlocator' },
       {
         key: 'before',
-        label: '执行前',
+        label: 'قبل التنفيذ',
         type: 'object',
         fields: [
-          { key: 'scrollIntoView', label: '滚动到可见', type: 'boolean', default: true },
-          { key: 'waitForSelector', label: '等待选择器', type: 'boolean', default: true },
+          { key: 'scrollIntoView', label: 'التمرير حتى الظهور', type: 'boolean', default: true },
+          { key: 'waitForSelector', label: 'انتظار المحدد', type: 'boolean', default: true },
         ],
       },
       {
         key: 'after',
-        label: '执行后',
+        label: 'بعد التنفيذ',
         type: 'object',
         fields: [
-          { key: 'waitForNavigation', label: '等待导航完成', type: 'boolean', default: false },
-          { key: 'waitForNetworkIdle', label: '等待网络空闲', type: 'boolean', default: false },
+          { key: 'waitForNavigation', label: 'انتظار اكتمال الانتقال', type: 'boolean', default: false },
+          { key: 'waitForNetworkIdle', label: 'انتظار خمول الشبكة', type: 'boolean', default: false },
         ],
       },
     ],
@@ -97,11 +97,11 @@ export function registerBuiltinSpecs() {
   registerNodeSpec({
     type: STEP_TYPES.FILL,
     version: 1,
-    display: { label: '填充', iconClass: 'icon-fill', category: 'Actions' },
+    display: { label: 'تعبئة', iconClass: 'icon-fill', category: 'Actions' },
     ports: { inputs: 1, outputs: [{ label: 'default' }] },
     schema: [
-      { key: 'target', label: '目标', type: 'json', widget: 'targetlocator' },
-      { key: 'value', label: '输入值', type: 'string', required: true, help: '支持 {var} 模板' },
+      { key: 'target', label: 'الهدف', type: 'json', widget: 'targetlocator' },
+      { key: 'value', label: 'قيمة الإدخال', type: 'string', required: true, help: 'يدعم قالب {var}' },
     ],
     defaults: { value: '' },
   });
@@ -110,18 +110,18 @@ export function registerBuiltinSpecs() {
   registerNodeSpec({
     type: STEP_TYPES.KEY,
     version: 1,
-    display: { label: '键盘', iconClass: 'icon-key', category: 'Actions' },
+    display: { label: 'لوحة المفاتيح', iconClass: 'icon-key', category: 'Actions' },
     ports: { inputs: 1, outputs: [{ label: 'default' }] },
     schema: [
       {
         key: 'keys',
-        label: '按键序列',
+        label: 'تسلسل المفاتيح',
         type: 'string',
         widget: 'keysequence',
         required: true,
-        help: '如 Backspace Enter 或 cmd+a',
+        help: 'مثل Backspace Enter أو cmd+a',
       },
-      { key: 'target', label: '焦点目标(可选)', type: 'json', widget: 'targetlocator' },
+      { key: 'target', label: 'هدف التركيز (اختياري)', type: 'json', widget: 'targetlocator' },
     ],
     defaults: { keys: '' },
   });
@@ -130,24 +130,24 @@ export function registerBuiltinSpecs() {
   registerNodeSpec({
     type: STEP_TYPES.SCROLL,
     version: 1,
-    display: { label: '滚动', iconClass: 'icon-scroll', category: 'Actions' },
+    display: { label: 'تمرير', iconClass: 'icon-scroll', category: 'Actions' },
     ports: { inputs: 1, outputs: [{ label: 'default' }] },
     schema: [
       {
         key: 'mode',
-        label: '模式',
+        label: 'الوضع',
         type: 'select',
         options: [
-          { label: '元素', value: 'element' },
-          { label: '偏移', value: 'offset' },
-          { label: '容器', value: 'container' },
+          { label: 'عنصر', value: 'element' },
+          { label: 'إزاحة', value: 'offset' },
+          { label: 'حاوية', value: 'container' },
         ] as any,
         default: 'offset',
       },
-      { key: 'target', label: '目标(当元素/容器)', type: 'json', widget: 'targetlocator' },
+      { key: 'target', label: 'الهدف (للعنصر/الحاوية)', type: 'json', widget: 'targetlocator' },
       {
         key: 'offset',
-        label: '偏移',
+        label: 'إزاحة',
         type: 'object',
         fields: [
           { key: 'x', label: 'X', type: 'number' },
@@ -162,18 +162,18 @@ export function registerBuiltinSpecs() {
   registerNodeSpec({
     type: STEP_TYPES.DRAG,
     version: 1,
-    display: { label: '拖拽', iconClass: 'icon-drag', category: 'Actions' },
+    display: { label: 'سحب', iconClass: 'icon-drag', category: 'Actions' },
     ports: { inputs: 1, outputs: [{ label: 'default' }] },
     schema: [
-      { key: 'start', label: '起点', type: 'json', widget: 'targetlocator' },
-      { key: 'end', label: '终点', type: 'json', widget: 'targetlocator' },
+      { key: 'start', label: 'البداية', type: 'json', widget: 'targetlocator' },
+      { key: 'end', label: 'النهاية', type: 'json', widget: 'targetlocator' },
       {
         key: 'path',
-        label: '路径坐标',
+        label: 'إحداثيات المسار',
         type: 'array',
         item: {
           key: 'p',
-          label: '点',
+          label: 'نقطة',
           type: 'object',
           fields: [
             { key: 'x', label: 'X', type: 'number' },
@@ -189,14 +189,14 @@ export function registerBuiltinSpecs() {
   registerNodeSpec({
     type: STEP_TYPES.WAIT,
     version: 1,
-    display: { label: '等待', iconClass: 'icon-wait', category: 'Actions' },
+    display: { label: 'انتظار', iconClass: 'icon-wait', category: 'Actions' },
     ports: { inputs: 1, outputs: [{ label: 'default' }] },
     schema: [
       {
         key: 'condition',
-        label: '条件(JSON)',
+        label: 'الشرط (JSON)',
         type: 'json',
-        help: '如 {"sleep":1000} 或 {"text":"Hello","appear":true}',
+        help: 'مثل {"sleep":1000} أو {"text":"Hello","appear":true}',
       },
     ],
     defaults: { condition: { sleep: 500 } },
@@ -206,23 +206,23 @@ export function registerBuiltinSpecs() {
   registerNodeSpec({
     type: STEP_TYPES.ASSERT,
     version: 1,
-    display: { label: '断言', iconClass: 'icon-assert', category: 'Actions' },
+    display: { label: 'تحقق', iconClass: 'icon-assert', category: 'Actions' },
     ports: { inputs: 1, outputs: [{ label: 'default' }, { label: 'onError' }] },
     schema: [
       {
         key: 'assert',
-        label: '断言(JSON)',
+        label: 'تحقق(JSON)',
         type: 'json',
-        help: '如 {"exists":"#id"} / {"visible":".btn"}',
+        help: 'مثل {"exists":"#id"} / {"visible":".btn"}',
       },
       {
         key: 'failStrategy',
-        label: '失败策略',
+        label: 'استراتيجية الفشل',
         type: 'select',
         options: [
-          { label: '停止', value: 'stop' },
+          { label: 'إيقاف', value: 'stop' },
           { label: '警告', value: 'warn' },
-          { label: '重试', value: 'retry' },
+          { label: 'إعادة المحاولة', value: 'retry' },
         ] as any,
         default: 'stop',
       },
@@ -248,10 +248,10 @@ export function registerBuiltinSpecs() {
         default: 'GET',
       },
       { key: 'url', label: 'URL', type: 'string', required: true },
-      { key: 'headers', label: '请求头(JSON)', type: 'json' },
-      { key: 'body', label: '请求体(JSON)', type: 'json' },
+      { key: 'headers', label: 'طلب头(JSON)', type: 'json' },
+      { key: 'body', label: 'طلب体(JSON)', type: 'json' },
       { key: 'formData', label: '表单(JSON)', type: 'json' },
-      { key: 'saveAs', label: '保存为变量', type: 'string' },
+      { key: 'saveAs', label: 'حفظ为变量', type: 'string' },
       { key: 'assign', label: '映射(JSON)', type: 'json' },
     ],
     defaults: { method: 'GET' },
@@ -261,22 +261,22 @@ export function registerBuiltinSpecs() {
   registerNodeSpec({
     type: STEP_TYPES.EXTRACT,
     version: 1,
-    display: { label: '提取', iconClass: 'icon-extract', category: 'Tools' },
+    display: { label: 'استخراج', iconClass: 'icon-extract', category: 'Tools' },
     ports: { inputs: 1, outputs: [{ label: 'default' }] },
     schema: [
-      { key: 'selector', label: '选择器', type: 'string', widget: 'selector' },
+      { key: 'selector', label: 'المحدد', type: 'string', widget: 'selector' },
       {
         key: 'attr',
-        label: '属性',
+        label: 'خاصية',
         type: 'select',
         options: [
           { label: '文本(text)', value: 'text' },
           { label: '文本(textContent)', value: 'textContent' },
-          { label: '自定义属性名', value: 'attr' },
+          { label: '自定义اسم الخاصية', value: 'attr' },
         ] as any,
       },
-      { key: 'js', label: '自定义JS', type: 'string', help: '在页面中执行并返回值' },
-      { key: 'saveAs', label: '保存变量', type: 'string', required: true },
+      { key: 'js', label: '自定义JS', type: 'string', help: '在页面中执行并رجوع值' },
+      { key: 'saveAs', label: 'حفظ变量', type: 'string', required: true },
     ],
     defaults: { saveAs: '' },
   });
@@ -285,12 +285,12 @@ export function registerBuiltinSpecs() {
   registerNodeSpec({
     type: STEP_TYPES.SCREENSHOT,
     version: 1,
-    display: { label: '截图', iconClass: 'icon-screenshot', category: 'Tools' },
+    display: { label: 'لقطة شاشة', iconClass: 'icon-screenshot', category: 'Tools' },
     ports: { inputs: 1, outputs: [{ label: 'default' }] },
     schema: [
-      { key: 'selector', label: '目标选择器', type: 'string' },
-      { key: 'fullPage', label: '整页截图', type: 'boolean', default: false },
-      { key: 'saveAs', label: '保存变量', type: 'string' },
+      { key: 'selector', label: 'الهدفالمحدد', type: 'string' },
+      { key: 'fullPage', label: '整页لقطة شاشة', type: 'boolean', default: false },
+      { key: 'saveAs', label: 'حفظ变量', type: 'string' },
     ],
     defaults: { fullPage: false },
   });
@@ -299,11 +299,11 @@ export function registerBuiltinSpecs() {
   registerNodeSpec({
     type: STEP_TYPES.TRIGGER_EVENT,
     version: 1,
-    display: { label: '触发事件', iconClass: 'icon-trigger', category: 'Tools' },
+    display: { label: '触发حدث', iconClass: 'icon-trigger', category: 'Tools' },
     ports: { inputs: 1, outputs: [{ label: 'default' }] },
     schema: [
-      { key: 'target', label: '目标', type: 'json', widget: 'targetlocator' },
-      { key: 'event', label: '事件类型', type: 'string', required: true },
+      { key: 'target', label: 'الهدف', type: 'json', widget: 'targetlocator' },
+      { key: 'event', label: 'نوع الحدث', type: 'string', required: true },
       { key: 'bubbles', label: '冒泡', type: 'boolean', default: true },
       { key: 'cancelable', label: '可取消', type: 'boolean', default: false },
     ],
@@ -314,13 +314,13 @@ export function registerBuiltinSpecs() {
   registerNodeSpec({
     type: STEP_TYPES.SET_ATTRIBUTE,
     version: 1,
-    display: { label: '设置属性', iconClass: 'icon-attr', category: 'Tools' },
+    display: { label: '设置خاصية', iconClass: 'icon-attr', category: 'Tools' },
     ports: { inputs: 1, outputs: [{ label: 'default' }] },
     schema: [
-      { key: 'target', label: '目标', type: 'json', widget: 'targetlocator' },
-      { key: 'name', label: '属性名', type: 'string', required: true },
-      { key: 'value', label: '属性值', type: 'string' },
-      { key: 'remove', label: '移除属性', type: 'boolean', default: false },
+      { key: 'target', label: 'الهدف', type: 'json', widget: 'targetlocator' },
+      { key: 'name', label: 'اسم الخاصية', type: 'string', required: true },
+      { key: 'value', label: 'قيمة الخاصية', type: 'string' },
+      { key: 'remove', label: '移除خاصية', type: 'boolean', default: false },
     ],
     defaults: { remove: false },
   });
@@ -329,13 +329,13 @@ export function registerBuiltinSpecs() {
   registerNodeSpec({
     type: STEP_TYPES.LOOP_ELEMENTS,
     version: 1,
-    display: { label: '循环元素', iconClass: 'icon-loop', category: 'Tools' },
+    display: { label: 'تكرارعنصر', iconClass: 'icon-loop', category: 'Tools' },
     ports: { inputs: 1, outputs: [{ label: 'default' }] },
     schema: [
-      { key: 'selector', label: '选择器', type: 'string', required: true },
-      { key: 'saveAs', label: '列表变量名', type: 'string', default: 'elements' },
-      { key: 'itemVar', label: '项变量名', type: 'string', default: 'item' },
-      { key: 'subflowId', label: '子流程ID', type: 'string', required: true },
+      { key: 'selector', label: 'المحدد', type: 'string', required: true },
+      { key: 'saveAs', label: 'اسم متغير القائمة', type: 'string', default: 'elements' },
+      { key: 'itemVar', label: '项اسم المتغير', type: 'string', default: 'item' },
+      { key: 'subflowId', label: 'سير عمل فرعي程ID', type: 'string', required: true },
     ],
     defaults: { saveAs: 'elements', itemVar: 'item' },
   });
@@ -368,9 +368,9 @@ export function registerBuiltinSpecs() {
     ports: { inputs: 1, outputs: [{ label: 'default' }] },
     schema: [
       { key: 'filenameContains', label: '文件名包含', type: 'string' },
-      { key: 'waitForComplete', label: '等待完成', type: 'boolean', default: true },
+      { key: 'waitForComplete', label: 'انتظار完成', type: 'boolean', default: true },
       { key: 'timeoutMs', label: '超时(ms)', type: 'number', default: 60000 },
-      { key: 'saveAs', label: '保存变量', type: 'string' },
+      { key: 'saveAs', label: 'حفظ变量', type: 'string' },
     ],
     defaults: { waitForComplete: true, timeoutMs: 60000 },
   });
@@ -379,7 +379,7 @@ export function registerBuiltinSpecs() {
   registerNodeSpec({
     type: STEP_TYPES.SCRIPT,
     version: 1,
-    display: { label: '脚本', iconClass: 'icon-script', category: 'Tools' },
+    display: { label: 'سكربت', iconClass: 'icon-script', category: 'Tools' },
     ports: { inputs: 1, outputs: [{ label: 'default' }] },
     schema: [
       {
@@ -392,7 +392,7 @@ export function registerBuiltinSpecs() {
         ] as any,
         default: 'ISOLATED',
       },
-      { key: 'code', label: '脚本代码', type: 'string', widget: 'code', required: true },
+      { key: 'code', label: 'سكربت代码', type: 'string', widget: 'code', required: true },
       {
         key: 'when',
         label: '执行时机',
@@ -404,7 +404,7 @@ export function registerBuiltinSpecs() {
         default: 'after',
       },
       { key: 'assign', label: '映射(JSON)', type: 'json' },
-      { key: 'saveAs', label: '保存变量', type: 'string' },
+      { key: 'saveAs', label: 'حفظ变量', type: 'string' },
     ],
     defaults: { world: 'ISOLATED', when: 'after' },
   });
@@ -417,19 +417,19 @@ export function registerBuiltinSpecs() {
     ports: { inputs: 1, outputs: [{ label: 'default' }] },
     schema: [
       { key: 'url', label: 'URL', type: 'string' },
-      { key: 'newWindow', label: '新窗口', type: 'boolean', default: false },
+      { key: 'newWindow', label: 'نافذة جديدة', type: 'boolean', default: false },
     ],
     defaults: { newWindow: false },
   });
   registerNodeSpec({
     type: 'executeFlow' as any,
     version: 1,
-    display: { label: '执行子流程', iconClass: 'icon-exec', category: 'Flow' },
+    display: { label: '执行سير عمل فرعي程', iconClass: 'icon-exec', category: 'Flow' },
     ports: { inputs: 1, outputs: [{ label: 'default' }] },
     schema: [
       { key: 'flowId', label: '流程ID', type: 'string', required: true },
       { key: 'inline', label: '内联执行', type: 'boolean', default: false },
-      { key: 'args', label: '参数(JSON)', type: 'json' },
+      { key: 'args', label: 'المعاملات (JSON)', type: 'json' },
     ],
     defaults: { inline: false },
   });
@@ -441,7 +441,7 @@ export function registerBuiltinSpecs() {
     schema: [
       { key: 'tabId', label: 'TabId', type: 'number' },
       { key: 'urlContains', label: 'URL包含', type: 'string' },
-      { key: 'titleContains', label: '标题包含', type: 'string' },
+      { key: 'titleContains', label: 'العنوان包含', type: 'string' },
     ],
     defaults: {},
   });
@@ -466,18 +466,18 @@ export function registerBuiltinSpecs() {
   registerNodeSpec({
     type: STEP_TYPES.IF,
     version: 1,
-    display: { label: '条件', iconClass: 'icon-if', category: 'Logic' },
+    display: { label: 'الشرط', iconClass: 'icon-if', category: 'Logic' },
     ports: { inputs: 1, outputs: 'any' },
     schema: [
       {
         key: 'condition',
-        label: '条件表达式(JSON)',
+        label: 'الشرط表达式(JSON)',
         type: 'json',
         help: '如 {"expression":"vars.a>0"} 等',
       },
       {
         key: 'branches',
-        label: '分支',
+        label: 'فرع',
         type: 'array',
         item: {
           key: 'b',
@@ -485,30 +485,30 @@ export function registerBuiltinSpecs() {
           type: 'object',
           fields: [
             { key: 'id', label: 'ID', type: 'string' },
-            { key: 'name', label: '名称', type: 'string' },
+            { key: 'name', label: 'الاسم', type: 'string' },
             { key: 'expr', label: '表达式', type: 'string' },
           ],
         } as any,
       },
-      { key: 'else', label: '启用 else', type: 'boolean', default: true },
+      { key: 'else', label: 'تفعيل else', type: 'boolean', default: true },
     ],
     defaults: { else: true },
   });
   registerNodeSpec({
     type: STEP_TYPES.FOREACH,
     version: 1,
-    display: { label: '循环', iconClass: 'icon-foreach', category: 'Logic' },
+    display: { label: 'تكرار', iconClass: 'icon-foreach', category: 'Logic' },
     ports: { inputs: 1, outputs: [{ label: 'default' }] },
     schema: [
       { key: 'listVar', label: '列表变量', type: 'string', required: true },
       { key: 'itemVar', label: '项变量', type: 'string', default: 'item' },
-      { key: 'subflowId', label: '子流程ID', type: 'string', required: true },
+      { key: 'subflowId', label: 'سير عمل فرعي程ID', type: 'string', required: true },
       {
         key: 'concurrency',
         label: '并发数',
         type: 'number',
         default: 1,
-        help: '并发执行子流程（浅拷贝变量，不自动合并）',
+        help: '并发执行سير عمل فرعي程（浅拷贝变量，不自动合并）',
       },
     ],
     defaults: { itemVar: 'item' },
@@ -516,11 +516,11 @@ export function registerBuiltinSpecs() {
   registerNodeSpec({
     type: STEP_TYPES.WHILE,
     version: 1,
-    display: { label: '循环', iconClass: 'icon-while', category: 'Logic' },
+    display: { label: 'تكرار', iconClass: 'icon-while', category: 'Logic' },
     ports: { inputs: 1, outputs: [{ label: 'default' }] },
     schema: [
-      { key: 'condition', label: '条件(JSON)', type: 'json' },
-      { key: 'subflowId', label: '子流程ID', type: 'string', required: true },
+      { key: 'condition', label: 'الشرط (JSON)', type: 'json' },
+      { key: 'subflowId', label: 'سير عمل فرعي程ID', type: 'string', required: true },
       { key: 'maxIterations', label: '最大次数', type: 'number', default: 100 },
     ],
     defaults: { maxIterations: 100 },
@@ -530,12 +530,12 @@ export function registerBuiltinSpecs() {
   registerNodeSpec({
     type: STEP_TYPES.DELAY,
     version: 1,
-    display: { label: '延迟', iconClass: 'icon-delay', category: 'Actions' },
+    display: { label: 'تأخير', iconClass: 'icon-delay', category: 'Actions' },
     ports: { inputs: 1, outputs: [{ label: 'default' }] },
     schema: [
       {
         key: 'sleep',
-        label: '延迟',
+        label: 'تأخير',
         type: 'number',
         widget: 'duration',
         required: true,
@@ -549,22 +549,22 @@ export function registerBuiltinSpecs() {
   registerNodeSpec({
     type: STEP_TYPES.TRIGGER,
     version: 1,
-    display: { label: '触发器', iconClass: 'icon-trigger', category: 'Flow' },
+    display: { label: 'المشغل', iconClass: 'icon-trigger', category: 'Flow' },
     ports: { inputs: 0, outputs: [{ label: 'default' }] },
     schema: [
-      { key: 'enabled', label: '启用', type: 'boolean', default: true },
-      { key: 'description', label: '描述', type: 'string' },
+      { key: 'enabled', label: 'تفعيل', type: 'boolean', default: true },
+      { key: 'description', label: 'الوصف', type: 'string' },
       {
         key: 'modes',
-        label: '模式',
+        label: 'الوضع',
         type: 'object',
         fields: [
-          { key: 'manual', label: '手动', type: 'boolean', default: true },
+          { key: 'manual', label: 'يدوي', type: 'boolean', default: true },
           { key: 'url', label: 'URL 触发', type: 'boolean', default: false },
-          { key: 'contextMenu', label: '右键菜单', type: 'boolean', default: false },
-          { key: 'command', label: '快捷键', type: 'boolean', default: false },
-          { key: 'dom', label: 'DOM 事件', type: 'boolean', default: false },
-          { key: 'schedule', label: '定时', type: 'boolean', default: false },
+          { key: 'contextMenu', label: 'القائمة السياقية', type: 'boolean', default: false },
+          { key: 'command', label: 'اختصار لوحة المفاتيح', type: 'boolean', default: false },
+          { key: 'dom', label: 'DOM حدث', type: 'boolean', default: false },
+          { key: 'schedule', label: 'جدولة', type: 'boolean', default: false },
         ],
       },
       {
@@ -583,11 +583,11 @@ export function registerBuiltinSpecs() {
               fields: [
                 {
                   key: 'kind',
-                  label: '类型',
+                  label: 'النوع',
                   type: 'select',
                   options: [
                     { label: 'URL', value: 'url' },
-                    { label: '域名', value: 'domain' },
+                    { label: 'النطاق', value: 'domain' },
                     { label: '路径', value: 'path' },
                   ] as any,
                   default: 'url',
@@ -600,37 +600,37 @@ export function registerBuiltinSpecs() {
       },
       {
         key: 'contextMenu',
-        label: '右键菜单',
+        label: 'القائمة السياقية',
         type: 'object',
         fields: [
-          { key: 'title', label: '标题', type: 'string', default: '运行工作流' },
-          { key: 'enabled', label: '启用', type: 'boolean', default: false },
+          { key: 'title', label: 'العنوان', type: 'string', default: 'تشغيل سير العمل' },
+          { key: 'enabled', label: 'تفعيل', type: 'boolean', default: false },
         ],
       },
       {
         key: 'command',
-        label: '快捷键',
+        label: 'اختصار لوحة المفاتيح',
         type: 'object',
         fields: [
-          { key: 'commandKey', label: '快捷键', type: 'string' },
-          { key: 'enabled', label: '启用', type: 'boolean', default: false },
+          { key: 'commandKey', label: 'اختصار لوحة المفاتيح', type: 'string' },
+          { key: 'enabled', label: 'تفعيل', type: 'boolean', default: false },
         ],
       },
       {
         key: 'dom',
-        label: 'DOM 事件',
+        label: 'DOM حدث',
         type: 'object',
         fields: [
-          { key: 'selector', label: '选择器', type: 'string' },
+          { key: 'selector', label: 'المحدد', type: 'string' },
           { key: 'appear', label: '出现', type: 'boolean', default: true },
           { key: 'once', label: '一次', type: 'boolean', default: true },
           { key: 'debounceMs', label: '防抖(ms)', type: 'number', default: 800 },
-          { key: 'enabled', label: '启用', type: 'boolean', default: false },
+          { key: 'enabled', label: 'تفعيل', type: 'boolean', default: false },
         ],
       },
       {
         key: 'schedules',
-        label: '定时',
+        label: 'جدولة',
         type: 'array',
         item: {
           key: 'sched',
@@ -640,7 +640,7 @@ export function registerBuiltinSpecs() {
             { key: 'id', label: 'ID', type: 'string' },
             {
               key: 'type',
-              label: '类型',
+              label: 'النوع',
               type: 'select',
               options: [
                 { label: '一次', value: 'once' },
@@ -649,7 +649,7 @@ export function registerBuiltinSpecs() {
               ] as any,
             },
             { key: 'when', label: '时间(ISO/cron)', type: 'string' },
-            { key: 'enabled', label: '启用', type: 'boolean', default: true },
+            { key: 'enabled', label: 'تفعيل', type: 'boolean', default: true },
           ],
         } as any,
       },

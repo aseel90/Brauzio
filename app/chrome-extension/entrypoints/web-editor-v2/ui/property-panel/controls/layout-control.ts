@@ -253,7 +253,7 @@ function applyStroke(el: SVGElement, strokeWidth = '1.2'): void {
 function createDisplayIcon(value: DisplayValue): SVGElement {
   const svg = createBaseIconSvg();
 
-  // 容器边框（虚线矩形表示容器）
+  // حاوية边框（虚线矩形表示حاوية）
   const container = document.createElementNS(SVG_NS, 'rect');
   container.setAttribute('x', '2');
   container.setAttribute('y', '2');
@@ -290,7 +290,7 @@ function createDisplayIcon(value: DisplayValue): SVGElement {
 
   switch (value) {
     case 'block':
-      // 两个全宽的块级元素，垂直堆叠
+      // 两个全宽的块级عنصر，垂直堆叠
       addBlock(3.5, 3.5, 8, 3);
       addBlock(3.5, 8.5, 8, 3);
       break;
@@ -355,7 +355,7 @@ function createFlowIcon(direction: FlexDirectionValue): SVGElement {
 function createHorizontalAlignIcon(value: AlignmentAxisValue): SVGElement {
   const svg = createBaseIconSvg();
 
-  // 容器边框（虚线矩形表示容器）
+  // حاوية边框（虚线矩形表示حاوية）
   const container = document.createElementNS(SVG_NS, 'rect');
   container.setAttribute('x', '2');
   container.setAttribute('y', '2');
@@ -375,7 +375,7 @@ function createHorizontalAlignIcon(value: AlignmentAxisValue): SVGElement {
     'flex-end': 7.5, // 右对齐
   };
 
-  // 两个小方块表示子元素（水平方向排列变为垂直方向排列）
+  // 两个小方块表示子عنصر（水平方向排列变为垂直方向排列）
   const block1 = document.createElementNS(SVG_NS, 'rect');
   block1.setAttribute('x', String(blockX[value]));
   block1.setAttribute('y', '4');
@@ -399,7 +399,7 @@ function createHorizontalAlignIcon(value: AlignmentAxisValue): SVGElement {
 function createVerticalAlignIcon(value: AlignmentAxisValue): SVGElement {
   const svg = createBaseIconSvg();
 
-  // 容器边框（虚线矩形表示容器）
+  // حاوية边框（虚线矩形表示حاوية）
   const container = document.createElementNS(SVG_NS, 'rect');
   container.setAttribute('x', '2');
   container.setAttribute('y', '2');
@@ -419,7 +419,7 @@ function createVerticalAlignIcon(value: AlignmentAxisValue): SVGElement {
     'flex-end': 7.5, // 底部对齐
   };
 
-  // 两个小方块表示子元素
+  // 两个小方块表示子عنصر
   const block1 = document.createElementNS(SVG_NS, 'rect');
   block1.setAttribute('x', '4');
   block1.setAttribute('y', String(blockY[value]));

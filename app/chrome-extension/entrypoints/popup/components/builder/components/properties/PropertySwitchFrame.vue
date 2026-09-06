@@ -10,7 +10,7 @@
     </div>
     <div class="form-group">
       <label class="form-label">按索引مطابقة（从 0 起，仅子 frame）</label>
-      <input class="form-input" v-model="(node as any).config.frame.index" placeholder="索引数字" />
+      <input class="form-input" v-model="(node as any).config.frame.index" placeholder="رقم الفهرس" />
     </div>
     <div class="text-xs text-slate-500" style="padding: 0 20px"
       >同源/可注入 frame 可用；留空则回到顶级الصفحة</div

@@ -398,7 +398,7 @@ function createPositionIcon(position: PositionValue): SVGElement {
       break;
 
     case 'relative': {
-      // 虚线框表示原位置，实心块表示偏移后的位置
+      // 虚线框表示原位置，实心块表示إزاحة后的位置
       const ghost = document.createElementNS(SVG_NS, 'rect');
       ghost.setAttribute('x', '3.5');
       ghost.setAttribute('y', '3.5');
@@ -411,7 +411,7 @@ function createPositionIcon(position: PositionValue): SVGElement {
       ghost.setAttribute('fill', 'none');
       ghost.setAttribute('opacity', '0.5');
       svg.append(ghost);
-      // 偏移后的实心块
+      // إزاحة后的实心块
       addBlock(7.5, 7.5, 4, 4);
       // 连接箭头
       addPath('M5.5 7.5L7.5 9.5');
@@ -419,9 +419,9 @@ function createPositionIcon(position: PositionValue): SVGElement {
     }
 
     case 'absolute':
-      // 定位参考线（从容器边缘到元素）
+      // 定位参考线（从حاوية边缘到عنصر）
       addPath('M3 5.5H6M8 3V6', '0.8');
-      // 元素块在右下角
+      // عنصر块在右下角
       addBlock(6, 6, 5, 5);
       break;
 
@@ -435,7 +435,7 @@ function createPositionIcon(position: PositionValue): SVGElement {
       svg.append(pin);
       // 图钉针
       addPath('M7.5 5.5V8');
-      // 固定的元素
+      // 固定的عنصر
       addBlock(4.5, 8, 6, 4);
       break;
     }
@@ -451,7 +451,7 @@ function createPositionIcon(position: PositionValue): SVGElement {
       stickyLine.setAttribute('fill', 'currentColor');
       stickyLine.setAttribute('opacity', '0.4');
       svg.append(stickyLine);
-      // 吸附的元素
+      // 吸附的عنصر
       addBlock(4.5, 5, 6, 6);
       break;
     }

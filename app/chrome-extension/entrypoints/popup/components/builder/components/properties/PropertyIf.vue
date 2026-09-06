@@ -34,7 +34,7 @@
               @change="(e: any) => insertOp(e.target.value, i)"
               :value="''"
             >
-              <option value="" disabled>运算符</option>
+              <option value="" disabled>عامل المقارنة</option>
               <option v-for="op in ops" :key="op" :value="op">{{ op }}</option>
             </select>
           </div>

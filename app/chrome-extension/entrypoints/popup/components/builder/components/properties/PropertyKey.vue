@@ -1,7 +1,7 @@
 <template>
   <div class="form-section">
     <div class="form-group">
-      <label class="form-label">按键序列</label>
+      <label class="form-label">تسلسل المفاتيح</label>
       <input
         class="form-input"
         v-model="(node as any).config.keys"

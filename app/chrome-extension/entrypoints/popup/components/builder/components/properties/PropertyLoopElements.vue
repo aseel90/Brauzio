@@ -17,7 +17,7 @@
       <input
         class="form-input"
         v-model="(node as any).config.subflowId"
-        placeholder="اختيار或新建التدفق الفرعي"
+        placeholder="اختيارأو新建التدفق الفرعي"
       />
       <button class="btn-sm" style="margin-top: 8px" @click="onCreateSubflow">新建التدفق الفرعي</button>
     </div>

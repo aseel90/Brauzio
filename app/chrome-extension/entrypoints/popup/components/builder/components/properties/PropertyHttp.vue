@@ -1,7 +1,7 @@
 <template>
   <div class="form-section">
     <div class="form-group">
-      <label class="form-label">请求方法</label>
+      <label class="form-label">طريقة الطلب</label>
       <select class="form-select" v-model="(node as any).config.method">
         <option>GET</option>
         <option>POST</option>

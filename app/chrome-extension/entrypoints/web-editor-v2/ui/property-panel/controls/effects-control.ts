@@ -1011,7 +1011,7 @@ export function createLegacyEffectsControl(options: EffectsControlOptions): Desi
 const SVG_NS = 'http://www.w3.org/2000/svg';
 const BOX_SHADOW_PROPERTY = 'box-shadow';
 
-// 效果类型定义
+// 效果النوع定义
 const EFFECT_TYPE_OPTIONS = [
   { value: 'drop-shadow', label: 'Drop Shadow', category: 'shadow' },
   { value: 'inner-shadow', label: 'Inner Shadow', category: 'shadow' },
@@ -1049,7 +1049,7 @@ interface EffectItemBase {
   enabled: boolean;
 }
 
-// Shadow 类型效果（Drop Shadow / Inner Shadow）
+// Shadow النوع效果（Drop Shadow / Inner Shadow）
 interface ShadowEffectItem extends EffectItemBase {
   type: 'drop-shadow' | 'inner-shadow';
   kind: 'parsed';
@@ -1061,7 +1061,7 @@ interface ShadowEffectItem extends EffectItemBase {
   color: string;
 }
 
-// Blur 类型效果（Layer Blur / Backdrop Blur）
+// Blur النوع效果（Layer Blur / Backdrop Blur）
 interface BlurEffectItem extends EffectItemBase {
   type: 'layer-blur' | 'backdrop-blur';
   kind: 'parsed';
@@ -1443,10 +1443,10 @@ export function createEffectsControl(options: EffectsControlOptions): DesignCont
   const { container, transactionManager, tokensService, headerActionsContainer } = options;
   const disposer = new Disposer();
 
-  // 每个元素的 effect items 缓存（仅限当前编辑会话）
+  // 每个عنصر的 effect items 缓存（仅限当前تعديل会话）
   // 使用 WeakMap 的原因：
   // 1. 隐藏的 effect 不会写入 CSS（enabled=false），但需要在会话内记住以便恢复
-  // 2. WeakMap 保证元素被移除时自动释放内存，无需手动清理
+  // 2. WeakMap 保证عنصر被移除时自动释放内存，无需يدوي清理
   // 3. 只读取 inline style（不读 computed），因此缓存仅用于保留用户的隐藏操作
   const perTargetItems = new WeakMap<Element, EffectItem[]>();
 
@@ -1537,7 +1537,7 @@ export function createEffectsControl(options: EffectsControlOptions): DesignCont
   }
 
   function isEditing(): boolean {
-    // 只在有打开的 popover 或正在进行事务时阻止刷新
+    // 只在有打开的 popover أو正在进行事务时阻止刷新
     // 避免过于宽泛的 focus 检测导致外部样式变化无法同步
     return activeHandle !== null || openItemId !== null;
   }
@@ -2318,7 +2318,7 @@ export function createEffectsControl(options: EffectsControlOptions): DesignCont
   });
 
   // Close popover when clicking outside the open item
-  // 使用 document 的捕获阶段监听，确保点击 Effects 控件外也能关闭
+  // 使用 document 的捕获阶段监听，确保نقر Effects 控件外也能关闭
   const handleClickOutside = (e: MouseEvent) => {
     const openId = openItemId;
     if (!openId) return;
@@ -2339,13 +2339,13 @@ export function createEffectsControl(options: EffectsControlOptions): DesignCont
     closePopover({ commit: true });
   };
 
-  // 在 document 上监听捕获阶段的点击事件
+  // 在 document 上监听捕获阶段的نقرحدث
   const doc = root.ownerDocument;
   doc.addEventListener('click', handleClickOutside, true);
   disposer.add(() => doc.removeEventListener('click', handleClickOutside, true));
 
   // Escape closes the popover and rolls back the current preview transaction
-  // 在 root 上监听捕获阶段的键盘事件
+  // 在 root 上监听捕获阶段的لوحة المفاتيححدث
   const handleEscape = (e: KeyboardEvent) => {
     if (e.key !== 'Escape') return;
     if (!openItemId) return;
