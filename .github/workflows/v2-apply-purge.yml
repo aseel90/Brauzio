@@ -27,11 +27,9 @@ jobs:
           node-version: 22
           cache: pnpm
 
-      - name: Purge, diagnose, and persist result
+      - name: Remove legacy product layers
         shell: bash
         run: |
-          set -u
-
           rm -rf \
             app/chrome-extension/entrypoints/background/element-marker \
             app/chrome-extension/entrypoints/background/record-replay \
@@ -65,37 +63,47 @@ jobs:
             app/chrome-extension/utils/text-chunker.ts \
             app/chrome-extension/utils/vector-database.ts
 
-          LOG=PURGE_RESULT.txt
-          : > "$LOG"
-          FAIL=0
+      - name: Install dependencies
+        run: pnpm install --no-frozen-lockfile
 
-          run_step() {
-            NAME="$1"
-            shift
-            echo "===== $NAME =====" | tee -a "$LOG"
-            "$@" >> "$LOG" 2>&1
-            CODE=$?
-            echo "EXIT_CODE=$CODE" | tee -a "$LOG"
-            echo >> "$LOG"
-            if [ "$CODE" -ne 0 ]; then FAIL="$CODE"; fi
-            return 0
-          }
+      - name: Prepare extension types
+        run: pnpm --filter brauzio-extension exec wxt prepare
 
-          run_step install pnpm install --no-frozen-lockfile
-          run_step prepare pnpm --filter brauzio-extension exec wxt prepare
-          run_step shared_build pnpm --filter brauzio-shared build
-          run_step cloud_check pnpm --filter brauzio-cloud-mcp check
-          run_step extension_compile pnpm --filter brauzio-extension compile
+      - name: Build shared MCP schemas
+        run: pnpm --filter brauzio-shared build
 
-          if [ "$FAIL" -eq 0 ]; then
-            run_step extension_build pnpm --filter brauzio-extension build
-          else
-            echo "===== extension_build =====" >> "$LOG"
-            echo "SKIPPED_DUE_TO_PREVIOUS_FAILURE=1" >> "$LOG"
-          fi
+      - name: Check Cloudflare MCP
+        run: pnpm --filter brauzio-cloud-mcp check
 
-          echo "FINAL_EXIT_CODE=$FAIL" >> "$LOG"
+      - name: Compile extension and capture log
+        id: compile
+        shell: bash
+        run: |
+          set +e
+          pnpm --filter brauzio-extension compile > PURGE_RESULT.txt 2>&1
+          CODE=$?
+          echo "compile_code=$CODE" >> "$GITHUB_OUTPUT"
+          echo >> PURGE_RESULT.txt
+          echo "COMPILE_EXIT_CODE=$CODE" >> PURGE_RESULT.txt
+          exit 0
 
+      - name: Build extension and capture log
+        id: build
+        if: steps.compile.outputs.compile_code == '0'
+        shell: bash
+        run: |
+          set +e
+          pnpm --filter brauzio-extension build >> PURGE_RESULT.txt 2>&1
+          CODE=$?
+          echo "build_code=$CODE" >> "$GITHUB_OUTPUT"
+          echo >> PURGE_RESULT.txt
+          echo "BUILD_EXIT_CODE=$CODE" >> PURGE_RESULT.txt
+          exit 0
+
+      - name: Persist purge and diagnostics
+        if: always()
+        shell: bash
+        run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add -A
@@ -104,4 +112,6 @@ jobs:
             git push origin HEAD:v2-ci-probe
           fi
 
-          exit "$FAIL"
+      - name: Fail when verification failed
+        if: steps.compile.outputs.compile_code != '0' || (steps.build.outcome == 'success' && steps.build.outputs.build_code != '0')
+        run: exit 1
