@@ -1,0 +1,120 @@
+name: Restore Brauzio WebSocket Route
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/restore-ws-route.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  restore:
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 8.15.9
+
+      - name: Install dependencies
+        run: pnpm install --no-frozen-lockfile --ignore-scripts
+
+      - name: Restore /ws route
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          path = Path('app/cloudflare-mcp/src/index.ts')
+          text = path.read_text(encoding='utf-8')
+          if "url.pathname === '/ws'" in text:
+              print('/ws route already present')
+              raise SystemExit(0)
+          needle = """    if (url.pathname === '/authorize') {\n      return await handleAuthorize(request, env);\n    }\n"""
+          block = """    if (url.pathname === '/ws') {\n      const deviceId = deviceIdFromRequest(request, env);\n      const stub = browserStub(env, deviceId);\n      const target = new URL(request.url);\n      target.protocol = 'https:';\n      target.hostname = 'brauzio-browser.internal';\n      target.pathname = '/ws';\n      return stub.fetch(new Request(target.toString(), request));\n    }\n\n"""
+          if needle not in text:
+              raise SystemExit('Unable to locate insertion point for /ws route')
+          path.write_text(text.replace(needle, block + needle, 1), encoding='utf-8')
+          PY
+
+      - name: Build shared schemas
+        run: pnpm --filter brauzio-shared build
+
+      - name: Typecheck Cloud MCP
+        run: pnpm --filter brauzio-cloud-mcp check
+
+      - name: Wrangler dry run
+        working-directory: app/cloudflare-mcp
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: pnpm exec wrangler deploy --dry-run
+
+      - name: Ensure OAuth KV namespace
+        working-directory: app/cloudflare-mcp
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          API="https://api.cloudflare.com/client/v4/accounts/$CLOUDFLARE_ACCOUNT_ID/storage/kv/namespaces"
+          AUTH_HEADER="Authorization: Bearer $CLOUDFLARE_API_TOKEN"
+          response=$(curl -fsS -H "$AUTH_HEADER" "$API?per_page=100")
+          namespace_id=$(printf '%s' "$response" | jq -r '.result[] | select(.title == "brauzio-oauth") | .id' | head -n1)
+          if [ -z "$namespace_id" ] || [ "$namespace_id" = "null" ]; then
+            created=$(curl -fsS -X POST -H "$AUTH_HEADER" -H 'Content-Type: application/json' --data '{"title":"brauzio-oauth"}' "$API")
+            namespace_id=$(printf '%s' "$created" | jq -r '.result.id')
+          fi
+          python - "$namespace_id" <<'PY'
+          from pathlib import Path
+          import sys
+          path = Path('wrangler.jsonc')
+          text = path.read_text(encoding='utf-8')
+          placeholder = '00000000000000000000000000000000'
+          if placeholder in text:
+              text = text.replace(placeholder, sys.argv[1])
+          path.write_text(text, encoding='utf-8')
+          PY
+
+      - name: Restore browser shared secret
+        working-directory: app/cloudflare-mcp
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          BRAUZIO_BROWSER_SHARED_SECRET: ${{ secrets.BRAUZIO_BROWSER_SHARED_SECRET }}
+        run: printf '%s' "$BRAUZIO_BROWSER_SHARED_SECRET" | pnpm exec wrangler secret put BROWSER_SHARED_SECRET
+
+      - name: Deploy fixed Worker
+        working-directory: app/cloudflare-mcp
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: pnpm exec wrangler deploy
+
+      - name: Commit restored route
+        shell: bash
+        run: |
+          set -euo pipefail
+          if git diff --quiet -- app/cloudflare-mcp/src/index.ts; then
+            echo 'No source change to commit.'
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add app/cloudflare-mcp/src/index.ts
+          git commit -m 'fix: restore Brauzio WebSocket relay route [skip ci]'
+          git push origin HEAD:main
