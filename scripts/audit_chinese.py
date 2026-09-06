@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from collections import Counter
 from pathlib import Path
 import re
 
@@ -8,7 +9,6 @@ TEXT_EXTS = {'.ts', '.tsx', '.js', '.mjs', '.cjs', '.vue', '.html', '.css', '.md
 CJK = re.compile(r'[\u3400-\u4dbf\u4e00-\u9fff]')
 
 skip_parts = {'.git', 'node_modules', '.output', 'dist'}
-# Japanese/Korean locale files can legitimately contain Han characters; the Chinese locales themselves must not exist.
 locale_exclusions = {
     Path('app/chrome-extension/_locales/ja/messages.json'),
     Path('app/chrome-extension/_locales/ko/messages.json'),
@@ -32,14 +32,22 @@ for path in ROOT.rglob('*'):
             sample = line.strip().replace('`', "'")[:220]
             hits.append((str(rel), number, sample))
 
+counts = Counter(rel for rel, _, _ in hits)
 body = [
     '# Brauzio Chinese-language audit',
     '',
-    'This report excludes the Japanese and Korean Chrome locale files because they may legitimately contain Han characters.',
+    'Japanese and Korean Chrome locale files are excluded because they may legitimately contain Han characters.',
     '',
     f'Remaining CJK-containing source/document lines: **{len(hits)}**',
+    f'Files containing CJK text: **{len(counts)}**',
+    '',
+    '## Files by hit count',
     '',
 ]
+for rel, count in counts.most_common():
+    body.append(f'- **{count}** — `{rel}`')
+
+body += ['', '## Matching lines', '']
 for rel, number, sample in hits:
     body.append(f'- `{rel}:{number}` — `{sample}`')
 
@@ -48,4 +56,4 @@ if not hits:
 
 OUT.parent.mkdir(parents=True, exist_ok=True)
 OUT.write_text('\n'.join(body) + '\n', encoding='utf-8')
-print(f'Chinese audit hits: {len(hits)}')
+print(f'Chinese audit hits: {len(hits)} across {len(counts)} files')
