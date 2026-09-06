@@ -1,6 +1,6 @@
 name: Brauzio v2 Validate
 
-# validation-run: 2
+# validation-run: 3
 on:
   push:
     branches:
@@ -28,6 +28,30 @@ jobs:
       - uses: pnpm/action-setup@v4
         with:
           version: 8.15.9
+
+      - name: Apply deterministic v2 cleanup fixups
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+
+          p = Path('app/chrome-extension/entrypoints/background/tools/browser/common.ts')
+          text = p.read_text(encoding='utf-8')
+          text = text.replace("import { captureFrameOnAction, isAutoCaptureActive } from './gif-recorder';\n", '')
+          text = re.sub(
+              r"\n  /\*\*\n   \* Trigger GIF auto-capture after successful navigation\n   \*/\n  private async triggerAutoCapture\(tabId: number, url\?: string\): Promise<void> \{.*?\n  \}\n",
+              "\n",
+              text,
+              count=1,
+              flags=re.S,
+          )
+          text = re.sub(r"\n\s*// Trigger auto-capture[^\n]*\n\s*await this\.triggerAutoCapture\([^\n]*\);", "", text)
+          text = re.sub(r"\n\s*await this\.triggerAutoCapture\([^\n]*\);", "", text)
+          if 'gif-recorder' in text or 'triggerAutoCapture' in text or 'Auto-capture' in text:
+              raise RuntimeError('Legacy GIF references remain in browser/common.ts')
+          p.write_text(text, encoding='utf-8')
+          PY
 
       - name: Build and capture result
         shell: bash
@@ -84,6 +108,8 @@ jobs:
 
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add docs/V2_BUILD_STATUS.md
-          git commit -m "v2: record clean build validation (${STATUS}) [skip ci]"
-          git push origin HEAD:brauzio-v2-clean-ui
+          git add app/chrome-extension/entrypoints/background/tools/browser/common.ts docs/V2_BUILD_STATUS.md
+          if ! git diff --cached --quiet; then
+            git commit -m "v2: record clean build validation (${STATUS}) [skip ci]"
+            git push origin HEAD:brauzio-v2-clean-ui
+          fi
