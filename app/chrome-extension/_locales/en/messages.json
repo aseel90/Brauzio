@@ -7,10 +7,6 @@
     "message": "Control Chrome and browser tools with Brauzio",
     "description": "Extension description"
   },
-  "nativeServerConfigLabel": {
-    "message": "Native Server Configuration",
-    "description": "Main section header for native server settings"
-  },
   "semanticEngineLabel": {
     "message": "Semantic Engine",
     "description": "Main section header for semantic engine"
@@ -67,31 +63,9 @@
     "message": "Detecting...",
     "description": "Detecting status message"
   },
-  "serviceRunningStatus": {
-    "message": "Service Running (Port: $PORT$)",
-    "description": "Service running with port number",
-    "placeholders": {
-      "port": {
-        "content": "$1",
-        "example": "12306"
-      }
-    }
-  },
-  "serviceNotConnectedStatus": {
-    "message": "Service Not Connected",
-    "description": "Service not connected status"
-  },
-  "connectedServiceNotStartedStatus": {
-    "message": "Connected, Service Not Started",
-    "description": "Connected but service not started status"
-  },
   "mcpServerConfigLabel": {
     "message": "MCP Server Configuration",
     "description": "MCP server configuration section label"
-  },
-  "connectionPortLabel": {
-    "message": "Connection Port",
-    "description": "Connection port input label"
   },
   "refreshStatusButton": {
     "message": "Refresh Status",

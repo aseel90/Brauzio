@@ -1,266 +1,192 @@
 /**
- * Chrome Extension i18n utility
- * Provides safe access to chrome.i18n.getMessage with fallbacks
+ * Brauzio i18n helper.
+ * Chrome i18n is the primary source; Arabic is the safe fallback outside extension APIs.
  */
-
-// Fallback messages for when Chrome APIs aren't available (English)
 const fallbackMessages: Record<string, string> = {
-  // Extension metadata
-  extensionName: 'chrome-mcp-server',
-  extensionDescription: 'Exposes browser capabilities with your own chrome',
-
-  // Section headers
-  nativeServerConfigLabel: 'Native Server Configuration',
-  semanticEngineLabel: 'Semantic Engine',
-  embeddingModelLabel: 'Embedding Model',
-  indexDataManagementLabel: 'Index Data Management',
-  modelCacheManagementLabel: 'Model Cache Management',
-
-  // Status labels
-  statusLabel: 'Status',
-  runningStatusLabel: 'Running Status',
-  connectionStatusLabel: 'Connection Status',
-  lastUpdatedLabel: 'Last Updated:',
-
-  // Connection states
-  connectButton: 'Connect',
-  disconnectButton: 'Disconnect',
-  connectingStatus: 'Connecting...',
-  connectedStatus: 'Connected',
-  disconnectedStatus: 'Disconnected',
-  detectingStatus: 'Detecting...',
-
-  // Server states
-  serviceRunningStatus: 'Service Running (Port: {0})',
-  serviceNotConnectedStatus: 'Service Not Connected',
-  connectedServiceNotStartedStatus: 'Connected, Service Not Started',
-
-  // Configuration labels
-  mcpServerConfigLabel: 'MCP Server Configuration',
-  connectionPortLabel: 'Connection Port',
-  refreshStatusButton: 'Refresh Status',
-  copyConfigButton: 'Copy Configuration',
-
-  // Action buttons
-  retryButton: 'Retry',
-  cancelButton: 'Cancel',
-  confirmButton: 'Confirm',
-  saveButton: 'Save',
-  closeButton: 'Close',
-  resetButton: 'Reset',
-
-  // Progress states
-  initializingStatus: 'Initializing...',
-  processingStatus: 'Processing...',
-  loadingStatus: 'Loading...',
-  clearingStatus: 'Clearing...',
-  cleaningStatus: 'Cleaning...',
-  downloadingStatus: 'Downloading...',
-
-  // Semantic engine states
-  semanticEngineReadyStatus: 'Semantic Engine Ready',
-  semanticEngineInitializingStatus: 'Semantic Engine Initializing...',
-  semanticEngineInitFailedStatus: 'Semantic Engine Initialization Failed',
-  semanticEngineNotInitStatus: 'Semantic Engine Not Initialized',
-  initSemanticEngineButton: 'Initialize Semantic Engine',
-  reinitializeButton: 'Reinitialize',
-
-  // Model states
-  downloadingModelStatus: 'Downloading Model... {0}%',
-  switchingModelStatus: 'Switching Model...',
-  modelLoadedStatus: 'Model Loaded',
-  modelFailedStatus: 'Model Failed to Load',
-
-  // Model descriptions
-  lightweightModelDescription: 'Lightweight Multilingual Model',
-  betterThanSmallDescription: 'Slightly larger than e5-small, but better performance',
-  multilingualModelDescription: 'Multilingual Semantic Model',
-
-  // Performance levels
-  fastPerformance: 'Fast',
-  balancedPerformance: 'Balanced',
-  accuratePerformance: 'Accurate',
-
-  // Error messages
-  networkErrorMessage: 'Network connection error, please check network and retry',
-  modelCorruptedErrorMessage: 'Model file corrupted or incomplete, please retry download',
-  unknownErrorMessage: 'Unknown error, please check if your network can access HuggingFace',
-  permissionDeniedErrorMessage: 'Permission denied',
-  timeoutErrorMessage: 'Operation timed out',
-
-  // Data statistics
-  indexedPagesLabel: 'Indexed Pages',
-  indexSizeLabel: 'Index Size',
-  activeTabsLabel: 'Active Tabs',
-  vectorDocumentsLabel: 'Vector Documents',
-  cacheSizeLabel: 'Cache Size',
-  cacheEntriesLabel: 'Cache Entries',
-
-  // Data management
-  clearAllDataButton: 'Clear All Data',
-  clearAllCacheButton: 'Clear All Cache',
-  cleanExpiredCacheButton: 'Clean Expired Cache',
-  exportDataButton: 'Export Data',
-  importDataButton: 'Import Data',
-
-  // Dialog titles
-  confirmClearDataTitle: 'Confirm Clear Data',
-  settingsTitle: 'Settings',
-  aboutTitle: 'About',
-  helpTitle: 'Help',
-
-  // Dialog messages
-  clearDataWarningMessage:
-    'This operation will clear all indexed webpage content and vector data, including:',
-  clearDataList1: 'All webpage text content index',
-  clearDataList2: 'Vector embedding data',
-  clearDataList3: 'Search history and cache',
-  clearDataIrreversibleWarning:
-    'This operation is irreversible! After clearing, you need to browse webpages again to rebuild the index.',
-  confirmClearButton: 'Confirm Clear',
-
-  // Cache states
-  cacheDetailsLabel: 'Cache Details',
-  noCacheDataMessage: 'No cache data',
-  loadingCacheInfoStatus: 'Loading cache information...',
-  processingCacheStatus: 'Processing cache...',
-  expiredLabel: 'Expired',
-
-  // Browser integration
-  bookmarksBarLabel: 'Bookmarks Bar',
-  newTabLabel: 'New Tab',
-  currentPageLabel: 'Current Page',
-
-  // Accessibility
-  menuLabel: 'Menu',
-  navigationLabel: 'Navigation',
-  mainContentLabel: 'Main Content',
-
-  // Future features
-  languageSelectorLabel: 'Language',
-  themeLabel: 'Theme',
-  lightTheme: 'Light',
-  darkTheme: 'Dark',
-  autoTheme: 'Auto',
-  advancedSettingsLabel: 'Advanced Settings',
-  debugModeLabel: 'Debug Mode',
-  verboseLoggingLabel: 'Verbose Logging',
-
-  // Notifications
-  successNotification: 'Operation completed successfully',
-  warningNotification: 'Warning: Please review before proceeding',
-  infoNotification: 'Information',
-  configCopiedNotification: 'Configuration copied to clipboard',
-  dataClearedNotification: 'Data cleared successfully',
-
-  // Units
-  bytesUnit: 'bytes',
-  kilobytesUnit: 'KB',
-  megabytesUnit: 'MB',
-  gigabytesUnit: 'GB',
-  itemsUnit: 'items',
-  pagesUnit: 'pages',
-
-  // Legacy keys for backwards compatibility
-  nativeServerConfig: 'Native Server Configuration',
-  runningStatus: 'Running Status',
-  refreshStatus: 'Refresh Status',
-  lastUpdated: 'Last Updated:',
-  mcpServerConfig: 'MCP Server Configuration',
-  connectionPort: 'Connection Port',
-  connecting: 'Connecting...',
-  disconnect: 'Disconnect',
-  connect: 'Connect',
-  semanticEngine: 'Semantic Engine',
-  embeddingModel: 'Embedding Model',
-  retry: 'Retry',
-  indexDataManagement: 'Index Data Management',
-  clearing: 'Clearing...',
-  clearAllData: 'Clear All Data',
-  copyConfig: 'Copy Configuration',
-  serviceRunning: 'Service Running (Port: {0})',
-  connectedServiceNotStarted: 'Connected, Service Not Started',
-  serviceNotConnected: 'Service Not Connected',
-  detecting: 'Detecting...',
-  lightweightModel: 'Lightweight Multilingual Model',
-  betterThanSmall: 'Slightly larger than e5-small, but better performance',
-  multilingualModel: 'Multilingual Semantic Model',
-  fast: 'Fast',
-  balanced: 'Balanced',
-  accurate: 'Accurate',
-  semanticEngineReady: 'Semantic Engine Ready',
-  semanticEngineInitializing: 'Semantic Engine Initializing...',
-  semanticEngineInitFailed: 'Semantic Engine Initialization Failed',
-  semanticEngineNotInit: 'Semantic Engine Not Initialized',
-  downloadingModel: 'Downloading Model... {0}%',
-  switchingModel: 'Switching Model...',
-  networkError: 'Network connection error, please check network and retry',
-  modelCorrupted: 'Model file corrupted or incomplete, please retry download',
-  unknownError: 'Unknown error, please check if your network can access HuggingFace',
-  reinitialize: 'Reinitialize',
-  initializing: 'Initializing...',
-  initSemanticEngine: 'Initialize Semantic Engine',
-  indexedPages: 'Indexed Pages',
-  indexSize: 'Index Size',
-  activeTabs: 'Active Tabs',
-  vectorDocuments: 'Vector Documents',
-  confirmClearData: 'Confirm Clear Data',
-  clearDataWarning:
-    'This operation will clear all indexed webpage content and vector data, including:',
-  clearDataIrreversible:
-    'This operation is irreversible! After clearing, you need to browse webpages again to rebuild the index.',
-  confirmClear: 'Confirm Clear',
-  cancel: 'Cancel',
-  confirm: 'Confirm',
-  processing: 'Processing...',
-  modelCacheManagement: 'Model Cache Management',
-  cacheSize: 'Cache Size',
-  cacheEntries: 'Cache Entries',
-  cacheDetails: 'Cache Details',
-  noCacheData: 'No cache data',
-  loadingCacheInfo: 'Loading cache information...',
-  processingCache: 'Processing cache...',
-  cleaning: 'Cleaning...',
-  cleanExpiredCache: 'Clean Expired Cache',
-  clearAllCache: 'Clear All Cache',
-  expired: 'Expired',
-  bookmarksBar: 'Bookmarks Bar',
+  "extensionName": "Brauzio",
+  "extensionDescription": "تحكم بمتصفح Chrome وأدواته عبر Brauzio",
+  "semanticEngineLabel": "المحرك الدلالي",
+  "embeddingModelLabel": "نموذج التضمين",
+  "indexDataManagementLabel": "إدارة بيانات الفهرسة",
+  "modelCacheManagementLabel": "إدارة ذاكرة النماذج",
+  "statusLabel": "الحالة",
+  "runningStatusLabel": "حالة التشغيل",
+  "connectionStatusLabel": "حالة الاتصال",
+  "lastUpdatedLabel": "آخر تحديث:",
+  "connectButton": "اتصال",
+  "disconnectButton": "قطع الاتصال",
+  "connectingStatus": "جارٍ الاتصال...",
+  "connectedStatus": "متصل",
+  "disconnectedStatus": "غير متصل",
+  "detectingStatus": "جارٍ التحقق...",
+  "mcpServerConfigLabel": "إعداد خادم MCP",
+  "refreshStatusButton": "تحديث الحالة",
+  "copyConfigButton": "نسخ الإعدادات",
+  "retryButton": "إعادة المحاولة",
+  "cancelButton": "إلغاء",
+  "confirmButton": "تأكيد",
+  "saveButton": "حفظ",
+  "closeButton": "إغلاق",
+  "resetButton": "إعادة الضبط",
+  "initializingStatus": "جارٍ التهيئة...",
+  "processingStatus": "جارٍ المعالجة...",
+  "loadingStatus": "جارٍ التحميل...",
+  "clearingStatus": "جارٍ المسح...",
+  "cleaningStatus": "جارٍ التنظيف...",
+  "downloadingStatus": "جارٍ التنزيل...",
+  "semanticEngineReadyStatus": "المحرك الدلالي جاهز",
+  "semanticEngineInitializingStatus": "جارٍ تهيئة المحرك الدلالي...",
+  "semanticEngineInitFailedStatus": "فشلت تهيئة المحرك الدلالي",
+  "semanticEngineNotInitStatus": "المحرك الدلالي غير مهيأ",
+  "initSemanticEngineButton": "تهيئة المحرك الدلالي",
+  "reinitializeButton": "إعادة التهيئة",
+  "downloadingModelStatus": "جارٍ تنزيل النموذج... $PROGRESS$%",
+  "switchingModelStatus": "جارٍ تبديل النموذج...",
+  "modelLoadedStatus": "تم تحميل النموذج",
+  "modelFailedStatus": "فشل تحميل النموذج",
+  "lightweightModelDescription": "نموذج خفيف متعدد اللغات",
+  "betterThanSmallDescription": "أكبر قليلًا من e5-small مع أداء أفضل",
+  "multilingualModelDescription": "نموذج دلالي متعدد اللغات",
+  "fastPerformance": "سريع",
+  "balancedPerformance": "متوازن",
+  "accuratePerformance": "دقيق",
+  "networkErrorMessage": "خطأ في اتصال الشبكة، تحقق من الاتصال ثم أعد المحاولة",
+  "modelCorruptedErrorMessage": "ملف النموذج تالف أو غير مكتمل، أعد التنزيل",
+  "unknownErrorMessage": "حدث خطأ غير معروف، تحقق من إمكانية الوصول إلى HuggingFace",
+  "permissionDeniedErrorMessage": "تم رفض الإذن",
+  "timeoutErrorMessage": "انتهت مهلة العملية",
+  "indexedPagesLabel": "الصفحات المفهرسة",
+  "indexSizeLabel": "حجم الفهرس",
+  "activeTabsLabel": "علامات التبويب النشطة",
+  "vectorDocumentsLabel": "المستندات المتجهية",
+  "cacheSizeLabel": "حجم الذاكرة المؤقتة",
+  "cacheEntriesLabel": "عناصر الذاكرة المؤقتة",
+  "clearAllDataButton": "مسح جميع البيانات",
+  "clearAllCacheButton": "مسح الذاكرة المؤقتة بالكامل",
+  "cleanExpiredCacheButton": "تنظيف العناصر المنتهية",
+  "exportDataButton": "تصدير البيانات",
+  "importDataButton": "استيراد البيانات",
+  "confirmClearDataTitle": "تأكيد مسح البيانات",
+  "settingsTitle": "الإعدادات",
+  "aboutTitle": "حول Brauzio",
+  "helpTitle": "المساعدة",
+  "clearDataWarningMessage": "ستؤدي هذه العملية إلى مسح جميع محتويات الصفحات المفهرسة والبيانات المتجهية، بما في ذلك:",
+  "clearDataList1": "فهرس النصوص لجميع صفحات الويب",
+  "clearDataList2": "بيانات التضمين المتجهي",
+  "clearDataList3": "سجل البحث والذاكرة المؤقتة",
+  "clearDataIrreversibleWarning": "لا يمكن التراجع عن هذه العملية. بعد المسح ستحتاج إلى تصفح الصفحات مجددًا لإعادة بناء الفهرس.",
+  "confirmClearButton": "تأكيد المسح",
+  "cacheDetailsLabel": "تفاصيل الذاكرة المؤقتة",
+  "noCacheDataMessage": "لا توجد بيانات مؤقتة",
+  "loadingCacheInfoStatus": "جارٍ تحميل معلومات الذاكرة المؤقتة...",
+  "processingCacheStatus": "جارٍ معالجة الذاكرة المؤقتة...",
+  "expiredLabel": "منتهي",
+  "bookmarksBarLabel": "شريط الإشارات المرجعية",
+  "newTabLabel": "علامة تبويب جديدة",
+  "currentPageLabel": "الصفحة الحالية",
+  "menuLabel": "القائمة",
+  "navigationLabel": "التنقل",
+  "mainContentLabel": "المحتوى الرئيسي",
+  "languageSelectorLabel": "اللغة",
+  "themeLabel": "المظهر",
+  "lightTheme": "فاتح",
+  "darkTheme": "داكن",
+  "autoTheme": "تلقائي",
+  "advancedSettingsLabel": "الإعدادات المتقدمة",
+  "debugModeLabel": "وضع تصحيح الأخطاء",
+  "verboseLoggingLabel": "سجل تفصيلي",
+  "successNotification": "اكتملت العملية بنجاح",
+  "warningNotification": "تنبيه: راجع التفاصيل قبل المتابعة",
+  "infoNotification": "معلومات",
+  "configCopiedNotification": "تم نسخ الإعدادات",
+  "dataClearedNotification": "تم مسح البيانات بنجاح",
+  "bytesUnit": "بايت",
+  "kilobytesUnit": "ك.ب",
+  "megabytesUnit": "م.ب",
+  "gigabytesUnit": "ج.ب",
+  "itemsUnit": "عنصر",
+  "pagesUnit": "صفحة",
+  "userscriptsManagerTitle": "إدارة سكربتات المستخدم",
+  "emergencySwitchLabel": "مفتاح الإيقاف الطارئ",
+  "createRunSectionTitle": "إنشاء / تشغيل",
+  "nameLabel": "الاسم",
+  "runAtLabel": "وقت التشغيل",
+  "runAtAuto": "تلقائي",
+  "runAtDocumentStart": "عند بدء المستند",
+  "runAtDocumentEnd": "عند نهاية المستند",
+  "runAtDocumentIdle": "عند خمول المستند",
+  "worldLabel": "السياق",
+  "worldAuto": "تلقائي",
+  "worldIsolated": "معزول (ISOLATED)",
+  "worldMain": "الرئيسي (MAIN)",
+  "modeLabel": "الوضع",
+  "modeAuto": "تلقائي",
+  "modePersistent": "مستمر",
+  "modeCss": "CSS",
+  "modeOnce": "مرة واحدة",
+  "allFramesLabel": "كل الإطارات",
+  "persistLabel": "حفظ دائم",
+  "dnrFallbackLabel": "بديل DNR",
+  "matchesInputLabel": "عناوين المطابقة (مفصولة بفواصل)",
+  "excludesInputLabel": "عناوين الاستثناء (مفصولة بفواصل)",
+  "tagsInputLabel": "الوسوم (مفصولة بفواصل)",
+  "scriptLabel": "السكربت",
+  "applyButton": "تطبيق",
+  "runOnceButton": "تشغيل مرة واحدة (CDP)",
+  "listSectionTitle": "القائمة",
+  "queryLabel": "البحث",
+  "statusAll": "الكل",
+  "statusEnabled": "مفعّل",
+  "statusDisabled": "معطّل",
+  "domainLabel": "النطاق",
+  "exportAllButton": "تصدير الكل",
+  "tableHeaderName": "الاسم",
+  "tableHeaderWorld": "السياق",
+  "tableHeaderRunAt": "وقت التشغيل",
+  "tableHeaderUpdated": "آخر تحديث",
+  "deleteButton": "حذف",
+  "placeholderOptional": "اختياري",
+  "placeholderMatchesExample": "مثال: https://*.example.com/*",
+  "placeholderScriptHint": "ألصق JavaScript أو CSS أو TM هنا",
+  "placeholderDomainHint": "example.com"
 };
 
-/**
- * Safe i18n message getter with fallback support
- * @param key Message key
- * @param substitutions Optional substitution values
- * @returns Localized message or fallback
- */
-export function getMessage(key: string, substitutions?: string[]): string {
-  try {
-    // Check if Chrome extension APIs are available
-    if (typeof chrome !== 'undefined' && chrome.i18n && chrome.i18n.getMessage) {
-      const message = chrome.i18n.getMessage(key, substitutions);
-      if (message) {
-        return message;
-      }
-    }
-  } catch (error) {
-    console.warn(`Failed to get i18n message for key "${key}":`, error);
-  }
+function applyFallbackSubstitutions(message: string, substitutions?: string[]): string {
+  if (!substitutions?.length) return message;
 
-  // Fallback to English messages
-  let fallback = fallbackMessages[key] || key;
+  let index = 0;
+  let output = message.replace(/\$[A-Z0-9_]+\$/gi, (token) => {
+    if (token === '$$') return '$';
+    const value = substitutions[index];
+    index += 1;
+    return value ?? token;
+  });
 
-  // Handle substitutions in fallback messages
-  if (substitutions && substitutions.length > 0) {
-    substitutions.forEach((value, index) => {
-      fallback = fallback.replace(`{${index}}`, value);
-    });
-  }
+  substitutions.forEach((value, position) => {
+    output = output.replace(`{${position}}`, value);
+  });
 
-  return fallback;
+  return output;
 }
 
 /**
- * Check if Chrome extension i18n APIs are available
+ * Safe localized message getter with Arabic fallback support.
+ */
+export function getMessage(key: string, substitutions?: string[]): string {
+  try {
+    if (typeof chrome !== 'undefined' && chrome.i18n && chrome.i18n.getMessage) {
+      const message = chrome.i18n.getMessage(key, substitutions);
+      if (message) return message;
+    }
+  } catch (error) {
+    console.warn(`Brauzio i18n fallback for key "${key}":`, error);
+  }
+
+  return applyFallbackSubstitutions(fallbackMessages[key] || key, substitutions);
+}
+
+/**
+ * Check if Chrome extension i18n APIs are available.
  */
 export function isI18nAvailable(): boolean {
   try {

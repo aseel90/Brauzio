@@ -7,10 +7,6 @@
     "message": "تحكم بمتصفح Chrome وأدواته عبر Brauzio",
     "description": "ترجمة واجهة Brauzio العربية"
   },
-  "nativeServerConfigLabel": {
-    "message": "إعداد اتصال Brauzio",
-    "description": "ترجمة واجهة Brauzio العربية"
-  },
   "semanticEngineLabel": {
     "message": "المحرك الدلالي",
     "description": "ترجمة واجهة Brauzio العربية"
@@ -67,30 +63,8 @@
     "message": "جارٍ التحقق...",
     "description": "ترجمة واجهة Brauzio العربية"
   },
-  "serviceRunningStatus": {
-    "message": "الخدمة تعمل (المنفذ: $PORT$)",
-    "description": "ترجمة واجهة Brauzio العربية",
-    "placeholders": {
-      "port": {
-        "content": "$1",
-        "example": "12306"
-      }
-    }
-  },
-  "serviceNotConnectedStatus": {
-    "message": "الخدمة غير متصلة",
-    "description": "ترجمة واجهة Brauzio العربية"
-  },
-  "connectedServiceNotStartedStatus": {
-    "message": "متصل، لكن الخدمة لم تبدأ",
-    "description": "ترجمة واجهة Brauzio العربية"
-  },
   "mcpServerConfigLabel": {
     "message": "إعداد خادم MCP",
-    "description": "ترجمة واجهة Brauzio العربية"
-  },
-  "connectionPortLabel": {
-    "message": "منفذ الاتصال",
     "description": "ترجمة واجهة Brauzio العربية"
   },
   "refreshStatusButton": {

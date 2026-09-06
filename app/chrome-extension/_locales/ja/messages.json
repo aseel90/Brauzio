@@ -5,9 +5,6 @@
   "extensionDescription": {
     "message": "自身のChromeブラウザの機能を外部に公開します"
   },
-  "nativeServerConfigLabel": {
-    "message": "ネイティブサーバー設定"
-  },
   "semanticEngineLabel": {
     "message": "セマンティックエンジン"
   },
@@ -50,26 +47,8 @@
   "detectingStatus": {
     "message": "検出中..."
   },
-  "serviceRunningStatus": {
-    "message": "サービス実行中 (ポート: $1)",
-    "placeholders": {
-      "port": {
-        "content": "$1",
-        "example": "12306"
-      }
-    }
-  },
-  "serviceNotConnectedStatus": {
-    "message": "サービス未接続"
-  },
-  "connectedServiceNotStartedStatus": {
-    "message": "接続済み、サービス未起動"
-  },
   "mcpServerConfigLabel": {
     "message": "MCPサーバー設定"
-  },
-  "connectionPortLabel": {
-    "message": "接続ポート"
   },
   "refreshStatusButton": {
     "message": "ステータス更新"

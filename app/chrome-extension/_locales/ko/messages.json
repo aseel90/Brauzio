@@ -7,10 +7,6 @@
     "message": "크롬 브라우저와 연동하여 브라우저 기능을 제어하는 MCP 서버입니다.",
     "description": "확장 프로그램 설명"
   },
-  "nativeServerConfigLabel": {
-    "message": "네이티브 서버 설정",
-    "description": "네이티브 서버 설정의 주 섹션 제목"
-  },
   "semanticEngineLabel": {
     "message": "시맨틱 엔진",
     "description": "시맨틱 엔진의 주 섹션 제목"
@@ -67,31 +63,9 @@
     "message": "감지 중...",
     "description": "감지 상태 메시지"
   },
-  "serviceRunningStatus": {
-    "message": "서비스 실행 중 (포트: $PORT$)",
-    "description": "포트 번호와 함께 서비스 실행 중 상태",
-    "placeholders": {
-      "port": {
-        "content": "$1",
-        "example": "12306"
-      }
-    }
-  },
-  "serviceNotConnectedStatus": {
-    "message": "서비스에 연결되지 않음",
-    "description": "서비스가 연결되지 않은 상태"
-  },
-  "connectedServiceNotStartedStatus": {
-    "message": "연결됨, 서비스 시작되지 않음",
-    "description": "연결되었지만 서비스가 시작되지 않은 상태"
-  },
   "mcpServerConfigLabel": {
     "message": "MCP 서버 설정",
     "description": "MCP 서버 설정 섹션 레이블"
-  },
-  "connectionPortLabel": {
-    "message": "연결 포트",
-    "description": "연결 포트 입력 레이블"
   },
   "refreshStatusButton": {
     "message": "상태 새로고침",

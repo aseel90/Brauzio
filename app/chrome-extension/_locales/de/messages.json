@@ -7,10 +7,6 @@
     "message": "Stellt Browser-Funktionen mit Ihrem eigenen Chrome zur Verfügung",
     "description": "Erweiterungsbeschreibung"
   },
-  "nativeServerConfigLabel": {
-    "message": "Native Server-Konfiguration",
-    "description": "Hauptabschnittstitel für Native Server-Einstellungen"
-  },
   "semanticEngineLabel": {
     "message": "Semantische Engine",
     "description": "Hauptabschnittstitel für semantische Engine"
@@ -67,31 +63,9 @@
     "message": "Erkennung läuft...",
     "description": "Erkennungsstatusmeldung"
   },
-  "serviceRunningStatus": {
-    "message": "Service läuft (Port: $PORT$)",
-    "description": "Service läuft mit Portnummer",
-    "placeholders": {
-      "port": {
-        "content": "$1",
-        "example": "12306"
-      }
-    }
-  },
-  "serviceNotConnectedStatus": {
-    "message": "Service nicht verbunden",
-    "description": "Service nicht verbunden Status"
-  },
-  "connectedServiceNotStartedStatus": {
-    "message": "Verbunden, Service nicht gestartet",
-    "description": "Verbunden aber Service nicht gestartet Status"
-  },
   "mcpServerConfigLabel": {
     "message": "MCP Server-Konfiguration",
     "description": "MCP Server-Konfigurationsabschnittslabel"
-  },
-  "connectionPortLabel": {
-    "message": "Verbindungsport",
-    "description": "Verbindungsport-Eingabelabel"
   },
   "refreshStatusButton": {
     "message": "Status aktualisieren",
