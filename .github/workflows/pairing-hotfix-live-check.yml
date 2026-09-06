@@ -1,0 +1,46 @@
+name: Pairing Hotfix Live Check
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/pairing-hotfix-live-check.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Wait for Brauzio Cloud 2.1.1
+        shell: bash
+        run: |
+          set -euo pipefail
+          url='https://brauzio-mcp.aseelsalah266.workers.dev/health'
+          response=''
+          for i in $(seq 1 36); do
+            response=$(curl -fsS "$url" || true)
+            version=$(printf '%s' "$response" | jq -r '.version // empty' 2>/dev/null || true)
+            if [ "$version" = '2.1.1' ]; then
+              break
+            fi
+            sleep 5
+          done
+          version=$(printf '%s' "$response" | jq -r '.version // empty' 2>/dev/null || true)
+          if [ "$version" != '2.1.1' ]; then
+            echo "Expected live version 2.1.1, got: $response" >&2
+            exit 1
+          fi
+          printf '%s\n' "$response" > pairing-hotfix-live-result.txt
+
+      - name: Record result and remove temporary workflow
+        shell: bash
+        run: |
+          rm .github/workflows/pairing-hotfix-live-check.yml
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add pairing-hotfix-live-result.txt .github/workflows/pairing-hotfix-live-check.yml
+          git commit -m 'ci: record pairing hotfix live result [skip ci]'
+          git push origin HEAD:main
