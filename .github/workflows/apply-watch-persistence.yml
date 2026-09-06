@@ -1,0 +1,73 @@
+name: Apply Brauzio Watch Persistence
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/apply-watch-persistence.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Rebuild persistence patch
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat scripts/.brauzio-persistence.part0 \
+              scripts/.brauzio-persistence.part1 \
+              scripts/.brauzio-persistence.part2 \
+              scripts/.brauzio-persistence.part3 \
+              scripts/.brauzio-persistence.part4 > /tmp/apply-watch-persistence.py
+          python /tmp/apply-watch-persistence.py
+          git diff --check
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 8.15.9
+
+      - name: Install dependencies
+        run: pnpm install --no-frozen-lockfile --ignore-scripts
+
+      - name: Prepare extension types
+        run: pnpm --filter brauzio-extension exec wxt prepare
+
+      - name: Build shared schemas
+        run: pnpm --filter brauzio-shared build
+
+      - name: Typecheck Cloud MCP
+        run: pnpm --filter brauzio-cloud-mcp check
+
+      - name: Build extension
+        run: pnpm --filter brauzio-extension build
+
+      - name: Commit validated persistence layer
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add \
+            app/cloudflare-mcp/src/browser-session.ts \
+            app/chrome-extension/entrypoints/background/tools/browser/watch.ts \
+            app/chrome-extension/entrypoints/background/remote-relay.ts
+          if git diff --cached --quiet; then
+            echo 'Persistence patch already applied.'
+            exit 0
+          fi
+          git commit -m 'Persist Brauzio event watches across relay restarts'
+          git push
