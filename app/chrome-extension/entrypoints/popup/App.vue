@@ -443,38 +443,6 @@ const runFlow = async (flowId: string) => {
   }
 };
 
-const nativeConnectionStatus = ref<'unknown' | 'connected' | 'disconnected'>('unknown');
-const isConnecting = ref(false);
-const nativeServerPort = ref<number>(12306);
-
-const serverStatus = ref<{
-  isRunning: boolean;
-  port?: number;
-  lastUpdated: number;
-}>({
-  isRunning: false,
-  lastUpdated: Date.now(),
-});
-
-const showMcpConfig = computed(() => {
-  return nativeConnectionStatus.value === 'connected' && serverStatus.value.isRunning;
-});
-
-const copyButtonText = ref(getMessage('copyConfigButton'));
-
-const mcpConfigJson = computed(() => {
-  const port = serverStatus.value.port || nativeServerPort.value;
-  const config = {
-    mcpServers: {
-      'streamable-mcp-server': {
-        type: 'streamable-http',
-        url: `http://127.0.0.1:${port}/mcp`,
-      },
-    },
-  };
-  return JSON.stringify(config, null, 2);
-});
-
 const currentModel = ref<ModelPreset | null>(null);
 const isModelSwitching = ref(false);
 const modelSwitchProgress = ref('');
@@ -528,20 +496,6 @@ const availableModels = computed(() => {
     ...value,
   }));
 });
-
-const getStatusClass = () => {
-  if (nativeConnectionStatus.value === 'connected') {
-    if (serverStatus.value.isRunning) {
-      return 'bg-emerald-500';
-    } else {
-      return 'bg-yellow-500';
-    }
-  } else if (nativeConnectionStatus.value === 'disconnected') {
-    return 'bg-red-500';
-  } else {
-    return 'bg-gray-500';
-  }
-};
 
 // Open sidepanel and close popup
 async function openSidepanelAndClose(tab: string) {
@@ -625,22 +579,6 @@ function openBuilderWindow(flowId?: string, focusNodeId?: string) {
   if (focusNodeId) url.searchParams.set('focus', focusNodeId);
   chrome.windows.create({ url: url.toString(), type: 'popup', width: 1280, height: 800 });
 }
-
-const getStatusText = () => {
-  if (nativeConnectionStatus.value === 'connected') {
-    if (serverStatus.value.isRunning) {
-      return getMessage('serviceRunningStatus', [
-        (serverStatus.value.port || 'Unknown').toString(),
-      ]);
-    } else {
-      return getMessage('connectedServiceNotStartedStatus');
-    }
-  } else if (nativeConnectionStatus.value === 'disconnected') {
-    return getMessage('serviceNotConnectedStatus');
-  } else {
-    return getMessage('detectingStatus');
-  }
-};
 
 const formatIndexSize = () => {
   if (!storageStats.value?.indexSize) return '0 MB';
@@ -910,111 +848,6 @@ const retryModelInitialization = async () => {
   await switchModel(currentModel.value);
 };
 
-const updatePort = async (event: Event) => {
-  const target = event.target as HTMLInputElement;
-  const newPort = Number(target.value);
-  nativeServerPort.value = newPort;
-
-  await savePortPreference(newPort);
-};
-
-const checkNativeConnection = async () => {
-  try {
-    // eslint-disable-next-line no-undef
-    const response = await chrome.runtime.sendMessage({ type: 'ping_native' });
-    nativeConnectionStatus.value = response?.connected ? 'connected' : 'disconnected';
-  } catch (error) {
-    console.error('Brauzio Native Brauzio:', error);
-    nativeConnectionStatus.value = 'disconnected';
-  }
-};
-
-const checkServerStatus = async () => {
-  try {
-    // eslint-disable-next-line no-undef
-    const response = await chrome.runtime.sendMessage({
-      type: BACKGROUND_MESSAGE_TYPES.GET_SERVER_STATUS,
-    });
-    if (response?.success && response.serverStatus) {
-      serverStatus.value = response.serverStatus;
-    }
-
-    if (response?.connected !== undefined) {
-      nativeConnectionStatus.value = response.connected ? 'connected' : 'disconnected';
-    }
-  } catch (error) {
-    console.error('Brauzio:', error);
-  }
-};
-
-const refreshServerStatus = async () => {
-  try {
-    // eslint-disable-next-line no-undef
-    const response = await chrome.runtime.sendMessage({
-      type: BACKGROUND_MESSAGE_TYPES.REFRESH_SERVER_STATUS,
-    });
-    if (response?.success && response.serverStatus) {
-      serverStatus.value = response.serverStatus;
-    }
-
-    if (response?.connected !== undefined) {
-      nativeConnectionStatus.value = response.connected ? 'connected' : 'disconnected';
-    }
-  } catch (error) {
-    console.error('Brauzio:', error);
-  }
-};
-
-const copyMcpConfig = async () => {
-  try {
-    await navigator.clipboard.writeText(mcpConfigJson.value);
-    copyButtonText.value = '✅' + getMessage('configCopiedNotification');
-
-    setTimeout(() => {
-      copyButtonText.value = getMessage('copyConfigButton');
-    }, 2000);
-  } catch (error) {
-    console.error('Brauzio:', error);
-    copyButtonText.value = '❌' + getMessage('networkErrorMessage');
-
-    setTimeout(() => {
-      copyButtonText.value = getMessage('copyConfigButton');
-    }, 2000);
-  }
-};
-
-const testNativeConnection = async () => {
-  if (isConnecting.value) return;
-  isConnecting.value = true;
-  try {
-    if (nativeConnectionStatus.value === 'connected') {
-      // eslint-disable-next-line no-undef
-      await chrome.runtime.sendMessage({ type: 'disconnect_native' });
-      nativeConnectionStatus.value = 'disconnected';
-    } else {
-      console.log(`Brauzio: ${nativeServerPort.value}`);
-      // eslint-disable-next-line no-undef
-      const response = await chrome.runtime.sendMessage({
-        type: 'connectNative',
-        port: nativeServerPort.value,
-      });
-      if (response && response.success) {
-        nativeConnectionStatus.value = 'connected';
-        console.log('Brauzio:', response);
-        await savePortPreference(nativeServerPort.value);
-      } else {
-        nativeConnectionStatus.value = 'disconnected';
-        console.error('Brauzio:', response);
-      }
-    }
-  } catch (error) {
-    console.error('Brauzio:', error);
-    nativeConnectionStatus.value = 'disconnected';
-  } finally {
-    isConnecting.value = false;
-  }
-};
-
 const loadModelPreference = async () => {
   try {
     // eslint-disable-next-line no-undef
@@ -1102,29 +935,6 @@ const saveVersionPreference = async (version: 'full' | 'quantized' | 'compressed
   try {
     // eslint-disable-next-line no-undef
     await chrome.storage.local.set({ selectedVersion: version });
-  } catch (error) {
-    console.error('Brauzio:', error);
-  }
-};
-
-const savePortPreference = async (port: number) => {
-  try {
-    // eslint-disable-next-line no-undef
-    await chrome.storage.local.set({ nativeServerPort: port });
-    console.log(`Brauzio: ${port}`);
-  } catch (error) {
-    console.error('Brauzio:', error);
-  }
-};
-
-const loadPortPreference = async () => {
-  try {
-    // eslint-disable-next-line no-undef
-    const result = await chrome.storage.local.get(['nativeServerPort']);
-    if (result.nativeServerPort) {
-      nativeServerPort.value = result.nativeServerPort;
-      console.log(`Brauzio: ${result.nativeServerPort}`);
-    }
   } catch (error) {
     console.error('Brauzio:', error);
   }
@@ -1367,7 +1177,7 @@ const switchModel = async (newModel: ModelPreset) => {
       currentModel.value = newModel;
       modelSwitchProgress.value = getMessage('successNotification');
       console.log(
-        '模型切换成功:',
+        'Model switched successfully:',
         newModel,
         'version: quantized',
         'dimension:',
@@ -1424,11 +1234,6 @@ const switchModel = async (newModel: ModelPreset) => {
 const setupServerStatusListener = () => {
   // eslint-disable-next-line no-undef
   const onMessage = (message: { type?: string; payload?: unknown }) => {
-    // Server status changes
-    if (message.type === BACKGROUND_MESSAGE_TYPES.SERVER_STATUS_CHANGED && message.payload) {
-      serverStatus.value = message.payload as any;
-      console.log('Server status updated:', message.payload);
-    }
     // Flows changed - refresh list (IndexedDB-based notification)
     if (message.type === BACKGROUND_MESSAGE_TYPES.RR_FLOWS_CHANGED) {
       loadFlows();
