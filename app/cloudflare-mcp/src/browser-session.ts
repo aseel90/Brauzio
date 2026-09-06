@@ -12,8 +12,9 @@ interface SocketAttachment {
 }
 
 interface PairingRecord {
-  code: string;
+  codeHash: string;
   expiresAt: number;
+  attempts: number;
 }
 
 interface PendingCall {
@@ -36,6 +37,7 @@ interface ToolResultMessage {
 
 const PAIRING_STORAGE_KEY = 'oauth-pairing-v1';
 const PAIRING_TTL_MS = 5 * 60 * 1000;
+const PAIRING_MAX_ATTEMPTS = 10;
 const PAIRING_ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
 
 function normalizeDeviceId(value: unknown): string {
@@ -52,6 +54,21 @@ function createPairingCode(): string {
   crypto.getRandomValues(bytes);
   const raw = Array.from(bytes, (value) => PAIRING_ALPHABET[value % PAIRING_ALPHABET.length]).join('');
   return `${raw.slice(0, 4)}-${raw.slice(4)}`;
+}
+
+async function pairingCodeHash(value: unknown): Promise<string> {
+  const normalized = normalizePairingCode(value);
+  const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(normalized));
+  return Array.from(new Uint8Array(digest), (byte) => byte.toString(16).padStart(2, '0')).join('');
+}
+
+function constantTimeEqual(left: string, right: string): boolean {
+  if (left.length !== right.length) return false;
+  let diff = 0;
+  for (let index = 0; index < left.length; index += 1) {
+    diff |= left.charCodeAt(index) ^ right.charCodeAt(index);
+  }
+  return diff === 0;
 }
 
 function validTraceId(value: unknown): string | null {
@@ -104,12 +121,19 @@ export class BrowserSession extends DurableObject<Env> {
       }
 
       const body = (await request.json().catch(() => ({}))) as { code?: string };
-      const suppliedCode = normalizePairingCode(body.code);
+      const suppliedHash = await pairingCodeHash(body.code);
       const record = await this.ctx.storage.get<PairingRecord>(PAIRING_STORAGE_KEY);
+      const expired = Boolean(record && record.expiresAt <= Date.now());
+      const matched = Boolean(record && !expired && constantTimeEqual(suppliedHash, record.codeHash));
 
-      if (!record || record.expiresAt <= Date.now() || suppliedCode !== normalizePairingCode(record.code)) {
-        if (record?.expiresAt && record.expiresAt <= Date.now()) {
-          await this.ctx.storage.delete(PAIRING_STORAGE_KEY);
+      if (!record || expired || !matched) {
+        if (record) {
+          const attempts = record.attempts + 1;
+          if (expired || attempts >= PAIRING_MAX_ATTEMPTS) {
+            await this.ctx.storage.delete(PAIRING_STORAGE_KEY);
+          } else {
+            await this.ctx.storage.put(PAIRING_STORAGE_KEY, { ...record, attempts });
+          }
         }
         sessionLog('PAIRING_REJECTED');
         return Response.json({ error: 'Invalid or expired pairing code' }, { status: 401 });
@@ -256,7 +280,8 @@ export class BrowserSession extends DurableObject<Env> {
     if (payload.type === 'pairing_create') {
       const code = createPairingCode();
       const expiresAt = Date.now() + PAIRING_TTL_MS;
-      await this.ctx.storage.put(PAIRING_STORAGE_KEY, { code, expiresAt } satisfies PairingRecord);
+      const codeHash = await pairingCodeHash(code);
+      await this.ctx.storage.put(PAIRING_STORAGE_KEY, { codeHash, expiresAt, attempts: 0 } satisfies PairingRecord);
       sessionLog('PAIRING_CREATED', { deviceId: attachment.deviceId, expiresAt });
       ws.send(JSON.stringify({ type: 'pairing_code', code, expiresAt, deviceId: attachment.deviceId }));
       return;
