@@ -31,6 +31,7 @@ export interface BrauzioRelayStatus {
 
 type RelayInboundMessage =
   | { type: 'hello_ack'; authenticated?: boolean }
+  | { type: 'pairing_code'; code: string; expiresAt: number; deviceId?: string }
   | { type: 'tool_call'; requestId: string; name: string; args?: Record<string, unknown> }
   | { type: 'pong' }
   | { type: 'error'; message?: string };
@@ -40,6 +41,7 @@ let heartbeatTimer: ReturnType<typeof setInterval> | null = null;
 let reconnectTimer: ReturnType<typeof setTimeout> | null = null;
 let reconnectAttempt = 0;
 let manualDisconnect = false;
+let currentPairing: { code: string; expiresAt: number; deviceId: string } | null = null;
 
 let currentStatus: BrauzioRelayStatus = {
   state: 'disconnected',
@@ -189,6 +191,19 @@ async function onRelayMessage(event: MessageEvent) {
     return;
   }
 
+  if (message.type === 'pairing_code') {
+    currentPairing = {
+      code: String(message.code || ''),
+      expiresAt: Number(message.expiresAt || 0),
+      deviceId: String(message.deviceId || (await loadConfig()).deviceId || 'default'),
+    };
+    relayLog('PAIRING_CODE_RECEIVED', { deviceId: currentPairing.deviceId, expiresAt: currentPairing.expiresAt });
+    chrome.runtime
+      .sendMessage({ type: 'brauzio_pairing_code_changed', pairing: currentPairing })
+      .catch(() => {});
+    return;
+  }
+
   if (message.type === 'error') {
     updateStatus({ state: 'error', lastError: message.message || 'Relay error' });
   }
@@ -286,6 +301,7 @@ export async function connectRelay(): Promise<BrauzioRelayStatus> {
 
 export async function disconnectRelay() {
   manualDisconnect = true;
+  currentPairing = null;
   clearReconnect();
   closeSocket();
   updateStatus({ state: 'disconnected', authenticated: false, lastError: undefined });
@@ -317,6 +333,23 @@ export function initRemoteRelayListener() {
         })
         .catch((error) => sendResponse({ success: false, error: String(error) }));
       return true;
+    }
+
+    if (message.type === 'brauzio_pairing_get') {
+      if (currentPairing && currentPairing.expiresAt <= Date.now()) currentPairing = null;
+      sendResponse({ success: true, pairing: currentPairing });
+      return false;
+    }
+
+    if (message.type === 'brauzio_pairing_create') {
+      if (!socket || socket.readyState !== WebSocket.OPEN || !currentStatus.authenticated) {
+        sendResponse({ success: false, error: 'Brauzio Cloud is not connected' });
+        return false;
+      }
+      currentPairing = null;
+      socket.send(JSON.stringify({ type: 'pairing_create' }));
+      sendResponse({ success: true });
+      return false;
     }
 
     if (message.type === 'brauzio_relay_connect') {

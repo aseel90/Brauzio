@@ -4,7 +4,7 @@
 
 ```text
 ChatGPT Custom MCP
-        │ HTTPS /mcp
+        │ HTTPS /mcp + OAuth 2.1
         ▼
 Cloudflare Worker
         │ Durable Object by device id
@@ -22,13 +22,28 @@ Brauzio Chrome Extension
 
 ## Cloudflare
 
-`app/cloudflare-mcp/src/index.ts` يستقبل MCP ويصادق الطلب ويحدد `deviceId` ثم يمرر الأداة إلى Durable Object.
+`app/cloudflare-mcp/src/index.ts` يحمي `/mcp` بواسطة OAuth 2.1. بعد التفويض، يحمل OAuth grant خاصية `deviceId` ويستخدمها Worker لتوجيه استدعاء الأداة إلى Durable Object الصحيح.
 
 `app/cloudflare-mcp/src/browser-session.ts` يحتفظ باتصال WebSocket المصادق عليه، يرسل `tool_call` إلى الإضافة ويربط النتيجة بالطلب الأصلي.
 
+### OAuth + Pairing
+
+المساران منفصلان:
+
+```text
+ChatGPT ── OAuth access/refresh token ──> Cloudflare /mcp
+Extension ── Device Token ──> Cloudflare /ws
+```
+
+لا يُستخدم Device Token كمفتاح MCP ولا يوضع داخل URL. عند أول ربط ينشئ المستخدم Pairing Code من الإضافة. الرمز صالح لخمس دقائق ويستخدم مرة واحدة. لا يخزن Durable Object الرمز نفسه؛ يخزن SHA-256 فقط، ويحد المحاولات الفاشلة ثم يحذف السجل.
+
+بعد استهلاك Pairing Code يكمل OAuth Provider عملية التفويض ويربط grant بالـ`deviceId` ويصدر التوكنات للعميل.
+
+المسارات العامة للمصادقة يديرها `@cloudflare/workers-oauth-provider`، بما فيها Protected Resource / Authorization Server metadata، token endpoint، PKCE، وتسجيل العميل. شاشة `/authorize` هي واجهة Brauzio الخاصة بإثبات امتلاك الجهاز عبر Pairing Code.
+
 ### Runtime health
 
-`GET /health` عام وآمن ولا يعرض أي سر. يستخدم للتحقق من النسخة المنشورة فعليًا ويعرض إصدار Brauzio، إصدار مخطط الأدوات، عدد الأدوات وأسماء أوامر الماوس المستمر الأساسية.
+`GET /health` عام وآمن ولا يعرض أي سر. يستخدم للتحقق من النسخة المنشورة فعليًا ويعرض إصدار Brauzio، إصدار مخطط الأدوات، نوع المصادقة، عدد الأدوات وأسماء أوامر الماوس المستمر الأساسية.
 
 ### End-to-end trace ID
 
@@ -50,13 +65,13 @@ Brauzio Chrome Extension
 
 ### Background
 
-`remote-relay.ts` يدير WebSocket، hello/auth، heartbeat، reconnect، وتنفيذ استدعاءات الأدوات.
+`remote-relay.ts` يدير WebSocket، hello/auth، heartbeat، reconnect، تنفيذ استدعاءات الأدوات وإنشاء Pairing Code عند طلب المستخدم.
 
 `tools/` يحتوي أدوات Chrome فقط. لا يحتوي على Agent أو Workflow engine.
 
 ### Popup
 
-واجهة عربية RTL لإدارة الاتصال فقط. ليست منصة AI ثانية داخل المتصفح.
+واجهة عربية RTL لإدارة الاتصال وربط ChatGPT. تعرض رابط MCP النظيف وتسمح بإنشاء Pairing Code مؤقت. ليست منصة AI ثانية داخل المتصفح.
 
 ### Offscreen
 
@@ -76,9 +91,11 @@ Brauzio Chrome Extension
 
 لا يطبع Logging الأسرار. القيم التالية حساسة:
 
-- `BROWSER_SHARED_SECRET`
-- `MCP_SHARED_SECRET`
-- Device Token
+- `BROWSER_SHARED_SECRET` / Device Token.
+- OAuth access tokens وrefresh tokens.
+- Pairing Code أثناء مدة صلاحيته القصيرة.
+
+لا يوجد `MCP_SHARED_SECRET` في مسار 2.1، ولا يوجد fallback من MCP auth إلى Browser secret، ولا تقبل `/mcp` مصادقة `?key=`.
 
 يسمح بتسجيل Device ID وtrace/request IDs لتتبع الطلب عبر الطبقات.
 

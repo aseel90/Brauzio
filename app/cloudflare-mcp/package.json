@@ -1,6 +1,7 @@
 {
   "name": "brauzio-cloud-mcp",
-  "version": "0.1.0",
+  "version": "0.2.0",
+  "description": "Brauzio Cloud MCP relay with OAuth pairing",
   "private": true,
   "type": "module",
   "scripts": {
@@ -10,6 +11,7 @@
     "deploy": "wrangler deploy"
   },
   "dependencies": {
+    "@cloudflare/workers-oauth-provider": "0.10.3",
     "@modelcontextprotocol/server": "2.0.0",
     "agents": "*",
     "brauzio-shared": "workspace:*"
