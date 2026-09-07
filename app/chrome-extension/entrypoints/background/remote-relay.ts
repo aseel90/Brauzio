@@ -49,6 +49,26 @@ export interface BrauzioRelayStatus {
   lastError?: string;
 }
 
+export type BrauzioDiagnosticState = 'ok' | 'warn' | 'error';
+
+export interface BrauzioDiagnosticCheck {
+  key: string;
+  label: string;
+  state: BrauzioDiagnosticState;
+  detail: string;
+  latencyMs?: number;
+}
+
+export interface BrauzioDiagnosticReport {
+  generatedAt: number;
+  overall: BrauzioDiagnosticState;
+  extensionVersion: string;
+  serverVersion?: string;
+  schemaVersion?: string;
+  toolCount?: number;
+  checks: BrauzioDiagnosticCheck[];
+}
+
 type RelayInboundMessage =
   | { type: 'hello_ack'; authenticated?: boolean; controlState?: Partial<BrauzioControlState> }
   | { type: 'pairing_code'; code: string; expiresAt: number; deviceId?: string }
@@ -64,6 +84,12 @@ let reconnectTimer: ReturnType<typeof setTimeout> | null = null;
 let reconnectAttempt = 0;
 let manualDisconnect = false;
 let currentPairing: { code: string; expiresAt: number; deviceId: string } | null = null;
+let diagnosticPingWaiter: {
+  startedAt: number;
+  resolve: (latencyMs: number) => void;
+  reject: (error: Error) => void;
+  timer: ReturnType<typeof setTimeout>;
+} | null = null;
 
 let currentStatus: BrauzioRelayStatus = {
   state: 'disconnected',
@@ -191,6 +217,12 @@ function stopWatchSafety(reason: string, notifyPersistence = false) {
 }
 
 function closeSocket() {
+  if (diagnosticPingWaiter) {
+    const waiter = diagnosticPingWaiter;
+    diagnosticPingWaiter = null;
+    clearTimeout(waiter.timer);
+    waiter.reject(new Error('Relay socket closed during latency check'));
+  }
   releaseMouseSafety('relay_socket_close_requested');
   stopWatchSafety('relay_socket_close_requested');
   clearHeartbeat();
@@ -209,6 +241,151 @@ function scheduleReconnect() {
     reconnectTimer = null;
     void connectRelay().catch(() => {});
   }, delay);
+}
+
+function healthUrlFromRelay(relayUrl: string): string {
+  const raw = /^https?:\/\//i.test(relayUrl) || /^wss?:\/\//i.test(relayUrl)
+    ? relayUrl
+    : `https://${relayUrl}`;
+  const url = new URL(raw);
+  url.protocol = url.protocol === 'http:' || url.protocol === 'ws:' ? 'http:' : 'https:';
+  url.pathname = '/health';
+  url.search = '';
+  url.hash = '';
+  return url.toString();
+}
+
+async function measureRelayPing(timeoutMs = 4_000): Promise<number> {
+  if (!socket || socket.readyState !== WebSocket.OPEN || !currentStatus.authenticated) {
+    throw new Error('WebSocket is not authenticated');
+  }
+  if (diagnosticPingWaiter) throw new Error('A relay latency check is already running');
+
+  return await new Promise<number>((resolve, reject) => {
+    const startedAt = performance.now();
+    const timer = setTimeout(() => {
+      if (diagnosticPingWaiter?.timer === timer) diagnosticPingWaiter = null;
+      reject(new Error('Relay ping timed out'));
+    }, timeoutMs);
+    diagnosticPingWaiter = { startedAt, resolve, reject, timer };
+    try {
+      socket?.send('ping');
+    } catch (error) {
+      clearTimeout(timer);
+      diagnosticPingWaiter = null;
+      reject(error instanceof Error ? error : new Error(String(error)));
+    }
+  });
+}
+
+async function runDiagnostics(): Promise<BrauzioDiagnosticReport> {
+  const checks: BrauzioDiagnosticCheck[] = [];
+  const extensionVersion = chrome.runtime.getManifest().version;
+  const config = await loadConfig();
+  const controlState = await getControlState();
+  let serverVersion: string | undefined;
+  let schemaVersion: string | undefined;
+  let toolCount: number | undefined;
+
+  if (!config.relayUrl) {
+    checks.push({ key: 'cloudflare', label: 'Cloudflare Worker', state: 'error', detail: 'رابط الخدمة غير مضبوط' });
+  } else {
+    const startedAt = performance.now();
+    try {
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), 6_000);
+      const response = await fetch(healthUrlFromRelay(config.relayUrl), { cache: 'no-store', signal: controller.signal });
+      clearTimeout(timer);
+      const latencyMs = Math.max(0, Math.round(performance.now() - startedAt));
+      const body = (await response.json()) as { ok?: boolean; version?: string; schemaVersion?: string; toolCount?: number };
+      serverVersion = body.version ? String(body.version) : undefined;
+      schemaVersion = body.schemaVersion ? String(body.schemaVersion) : undefined;
+      toolCount = Number.isFinite(Number(body.toolCount)) ? Number(body.toolCount) : undefined;
+      checks.push({
+        key: 'cloudflare',
+        label: 'Cloudflare Worker',
+        state: response.ok && body.ok ? 'ok' : 'error',
+        detail: response.ok && body.ok ? `متاح • v${serverVersion || '؟'}` : `HTTP ${response.status}`,
+        latencyMs,
+      });
+    } catch (error) {
+      checks.push({
+        key: 'cloudflare',
+        label: 'Cloudflare Worker',
+        state: 'error',
+        detail: error instanceof Error ? error.message : String(error),
+      });
+    }
+  }
+
+  if (socket?.readyState === WebSocket.OPEN && currentStatus.authenticated) {
+    try {
+      const latencyMs = await measureRelayPing();
+      checks.push({ key: 'websocket', label: 'WebSocket Relay', state: 'ok', detail: 'متصل ومصادق عليه', latencyMs });
+    } catch (error) {
+      checks.push({ key: 'websocket', label: 'WebSocket Relay', state: 'warn', detail: error instanceof Error ? error.message : String(error) });
+    }
+  } else {
+    checks.push({ key: 'websocket', label: 'WebSocket Relay', state: 'error', detail: currentStatus.lastError || 'غير متصل' });
+  }
+
+  checks.push({
+    key: 'auth',
+    label: 'المصادقة',
+    state: currentStatus.authenticated ? 'ok' : 'error',
+    detail: currentStatus.authenticated ? `الجهاز ${config.deviceId || 'default'} مصادق عليه` : 'جلسة الجهاز غير مصادق عليها',
+  });
+
+  try {
+    const targets = await chrome.debugger.getTargets();
+    const pageTargets = targets.filter((target) => target.type === 'page');
+    checks.push({ key: 'debugger', label: 'Chrome Debugger', state: 'ok', detail: `جاهز • ${pageTargets.length} هدف صفحة` });
+    checks.push({ key: 'cdp', label: 'CDP', state: pageTargets.length > 0 ? 'ok' : 'warn', detail: pageTargets.length > 0 ? 'يمكن رؤية أهداف Chrome بدون attach' : 'لا توجد أهداف صفحة متاحة حاليًا' });
+  } catch (error) {
+    const detail = error instanceof Error ? error.message : String(error);
+    checks.push({ key: 'debugger', label: 'Chrome Debugger', state: 'error', detail });
+    checks.push({ key: 'cdp', label: 'CDP', state: 'error', detail: 'تعذر الوصول إلى Chrome Debugger API' });
+  }
+
+  try {
+    const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
+    const activeTab = tabs[0];
+    checks.push({
+      key: 'input',
+      label: 'Input Safety',
+      state: controlState.paused ? 'warn' : activeTab?.id ? 'ok' : 'warn',
+      detail: controlState.paused
+        ? `التحكم متوقف: ${controlState.reason || 'Human Takeover'}`
+        : activeTab?.id
+          ? `جاهز للتنفيذ الآمن على التبويب ${activeTab.id}`
+          : 'لا يوجد تبويب نشط',
+    });
+  } catch (error) {
+    checks.push({ key: 'input', label: 'Input Safety', state: 'error', detail: error instanceof Error ? error.message : String(error) });
+  }
+
+  checks.push({
+    key: 'extension',
+    label: 'Brauzio Extension',
+    state: 'ok',
+    detail: `v${extensionVersion} • MV3`,
+  });
+
+  const overall: BrauzioDiagnosticState = checks.some((check) => check.state === 'error')
+    ? 'error'
+    : checks.some((check) => check.state === 'warn')
+      ? 'warn'
+      : 'ok';
+
+  return {
+    generatedAt: Date.now(),
+    overall,
+    extensionVersion,
+    serverVersion,
+    schemaVersion,
+    toolCount,
+    checks,
+  };
 }
 
 async function executeToolCall(message: Extract<RelayInboundMessage, { type: 'tool_call' }>) {
@@ -262,7 +439,15 @@ async function executeToolCall(message: Extract<RelayInboundMessage, { type: 'to
 
 async function onRelayMessage(event: MessageEvent) {
   if (typeof event.data !== 'string') return;
-  if (event.data === 'pong') return;
+  if (event.data === 'pong') {
+    if (diagnosticPingWaiter) {
+      const waiter = diagnosticPingWaiter;
+      diagnosticPingWaiter = null;
+      clearTimeout(waiter.timer);
+      waiter.resolve(Math.max(0, Math.round(performance.now() - waiter.startedAt)));
+    }
+    return;
+  }
 
   let message: RelayInboundMessage;
   try {
@@ -519,6 +704,13 @@ export function initRemoteRelayListener() {
       void resumeAgentControl('manual')
         .then((state) => sendResponse({ success: true, state }))
         .catch((error) => sendResponse({ success: false, error: String(error) }));
+      return true;
+    }
+
+    if (message.type === 'brauzio_diagnostics_run') {
+      void runDiagnostics()
+        .then((report) => sendResponse({ success: true, report }))
+        .catch((error) => sendResponse({ success: false, error: error instanceof Error ? error.message : String(error) }));
       return true;
     }
 
