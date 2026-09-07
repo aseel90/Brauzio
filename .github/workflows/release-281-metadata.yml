@@ -1,0 +1,64 @@
+name: Prepare Brauzio 2.8.1 Reconnect Release
+
+on:
+  push:
+    paths:
+      - '.github/workflows/release-281-metadata.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 8.15.9
+      - run: pnpm install --no-frozen-lockfile --ignore-scripts
+      - name: Update runtime metadata and changelog
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          index = Path('app/cloudflare-mcp/src/index.ts')
+          s = index.read_text(encoding='utf-8')
+          s = s.replace("const BRAUZIO_RUNTIME_VERSION = '2.8.0';", "const BRAUZIO_RUNTIME_VERSION = '2.8.1';", 1)
+          s = s.replace("const BRAUZIO_SCHEMA_VERSION = 'v2.8.0-2026-09-07';", "const BRAUZIO_SCHEMA_VERSION = 'v2.8.1-2026-09-07';", 1)
+          if "BRAUZIO_RUNTIME_VERSION = '2.8.1'" not in s:
+              raise SystemExit('runtime 2.8.1 marker not applied')
+          index.write_text(s, encoding='utf-8')
+
+          changelog = Path('docs/CHANGELOG.md')
+          c = changelog.read_text(encoding='utf-8')
+          heading = '# Brauzio Changelog\n\n'
+          entry = """## 2026-09-07 — Extension/Cloud V2.8.1 Relay Reconnect Watchdog\n\n- إصلاح حالة WebSocket المعلقة بعد إعادة نشر Worker عندما لا يصل حدث `close` للعميل.\n- heartbeat أصبح يتتبع `pong` فعليًا ويعيد تدوير الاتصال إذا تجاوز مهلة الاستجابة.\n- إعادة الاتصال تلقائيًا عند فشل heartbeat أو خطأ WebSocket بدل البقاء في حالة اتصال وهمية.\n- حماية من أحداث socket قديم حتى لا تمسح أو تغيّر socket أحدث بعد reconnect.\n- الحفاظ على Mouse/Watch safety أثناء تدوير الاتصال.\n\n"""
+          if '## 2026-09-07 — Extension/Cloud V2.8.1 Relay Reconnect Watchdog' not in c:
+              if not c.startswith(heading):
+                  raise SystemExit('changelog heading marker not found')
+              c = heading + entry + c[len(heading):]
+          changelog.write_text(c, encoding='utf-8')
+          PY
+      - name: Validate release source
+        run: |
+          pnpm --filter brauzio-shared build
+          pnpm --filter brauzio-cloud-mcp check
+          pnpm --filter brauzio-cloud-mcp build
+          pnpm --filter brauzio-extension exec wxt prepare
+          pnpm --filter brauzio-extension compile
+          pnpm --filter brauzio-extension build
+      - name: Commit validated metadata
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add app/cloudflare-mcp/src/index.ts docs/CHANGELOG.md
+          git commit -m 'Set Brauzio reconnect runtime metadata to 2.8.1 [skip ci]' || true
+          git push
