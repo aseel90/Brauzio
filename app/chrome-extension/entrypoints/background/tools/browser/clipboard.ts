@@ -1,7 +1,6 @@
 import { MessageTarget } from '@/common/message-types';
 import { createErrorResponse, type ToolResult } from '@/common/tool-handler';
 import { offscreenManager } from '@/utils/offscreen-manager';
-import { TOOL_NAMES } from 'brauzio-shared';
 import { BaseBrowserToolExecutor } from '../base-browser';
 
 interface ClipboardParams {
@@ -10,7 +9,7 @@ interface ClipboardParams {
 }
 
 class ClipboardTool extends BaseBrowserToolExecutor {
-  name = TOOL_NAMES.BROWSER.CLIPBOARD;
+  name = 'chrome_clipboard';
 
   async execute(args: ClipboardParams): Promise<ToolResult> {
     if (!args?.action || !['read', 'write'].includes(args.action)) {
