@@ -31,3 +31,4 @@ export { gifRecorderTool } from './gif-recorder';
 export { watchStartTool, watchWaitTool, watchReadTool, watchStopTool } from './watch';
 export { rawCdpTool } from './raw-cdp';
 export { observeTool, resolveTool, actTool } from './v3-runtime';
+export { clipboardTool } from './clipboard';
