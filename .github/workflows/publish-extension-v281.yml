@@ -1,0 +1,56 @@
+name: Publish Brauzio Extension V281
+
+on:
+  push:
+    paths:
+      - '.github/workflows/publish-extension-v281.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 8.15.9
+      - run: pnpm install --no-frozen-lockfile --ignore-scripts
+      - run: pnpm --filter brauzio-extension exec wxt prepare
+      - run: pnpm --filter brauzio-shared build
+      - run: pnpm --filter brauzio-extension compile
+      - run: pnpm --filter brauzio-extension build
+      - name: Package and verify 2.8.1
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd app/chrome-extension/.output/chrome-mv3
+          python - <<'PY'
+          import json
+          manifest=json.load(open('manifest.json', encoding='utf-8'))
+          assert manifest.get('version') == '2.8.1', manifest.get('version')
+          print('Verified manifest version:', manifest['version'])
+          PY
+          zip -qr ../brauzio-chrome.zip .
+          cd ../../..
+          unzip -t app/chrome-extension/.output/brauzio-chrome.zip >/dev/null
+      - name: Publish latest ZIP
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p releases/chrome-extension/latest
+          cp app/chrome-extension/.output/brauzio-chrome.zip releases/chrome-extension/latest/brauzio-chrome-latest.zip
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add releases/chrome-extension/latest/brauzio-chrome-latest.zip
+          if git diff --cached --quiet; then
+            echo 'ZIP already current'
+            exit 0
+          fi
+          git commit -m 'build: publish Brauzio Chrome extension 2.8.1 [skip ci]'
+          git push
