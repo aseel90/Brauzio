@@ -1,0 +1,43 @@
+name: Brauzio V3 Cloud Prepare
+
+on:
+  push:
+    branches: [brauzio-v3-runtime]
+    paths:
+      - 'scripts/v3-cloud-version.py'
+      - '.github/workflows/v3-cloud-prepare.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: brauzio-v3-cloud-prepare
+  cancel-in-progress: true
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 8.15.9
+      - run: python scripts/v3-cloud-version.py
+      - run: pnpm install --no-frozen-lockfile --ignore-scripts
+      - run: pnpm --filter brauzio-shared build
+      - run: pnpm --filter brauzio-cloud-mcp check
+      - name: Commit validated cloud version
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add app/cloudflare-mcp/src/index.ts
+          if ! git diff --cached --quiet; then
+            git commit -m 'release(v3): prepare Cloudflare MCP runtime 3.0.0 [skip ci]'
+            git push
+          fi
