@@ -78,7 +78,9 @@ class SessionGraphService {
 
   async frames(tabId: number): Promise<V3Frame[]> {
     await this.ensure(tabId);
-    const response = await cdpRouter.sendCommand<{ frameTree?: FrameTreeNode }>(tabId, 'Page.getFrameTree').catch(() => ({}));
+    const response: { frameTree?: FrameTreeNode } = await cdpRouter
+      .sendCommand<{ frameTree?: FrameTreeNode }>(tabId, 'Page.getFrameTree')
+      .catch(() => ({} as { frameTree?: FrameTreeNode }));
     const frames = flattenFrames(response.frameTree);
     const childByTarget = new Map<string, CdpChildSessionSnapshot>();
     for (const child of cdpRouter.getChildSessionSnapshot(tabId)) childByTarget.set(child.targetId, child);
