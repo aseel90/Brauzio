@@ -1,0 +1,74 @@
+name: Prepare Brauzio 2.8 Diagnostics Release
+
+on:
+  push:
+    paths:
+      - '.github/workflows/release-28-metadata.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 8.15.9
+      - run: pnpm install --no-frozen-lockfile --ignore-scripts
+
+      - name: Update runtime, roadmap and changelog
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+
+          index = Path('app/cloudflare-mcp/src/index.ts')
+          s = index.read_text(encoding='utf-8')
+          s = s.replace("const BRAUZIO_RUNTIME_VERSION = '2.7.0';", "const BRAUZIO_RUNTIME_VERSION = '2.8.0';", 1)
+          s = s.replace("const BRAUZIO_SCHEMA_VERSION = 'v2.7.0-2026-09-07';", "const BRAUZIO_SCHEMA_VERSION = 'v2.8.0-2026-09-07';", 1)
+          index.write_text(s, encoding='utf-8')
+
+          roadmap = Path('docs/ROADMAP.md')
+          r = roadmap.read_text(encoding='utf-8')
+          marker = "- [ ] آخر Tool call وTrace ID.\n"
+          completed = """- [x] زر `فحص Brauzio` داخل Popup بدون تغيير الصفحة.\n- [x] Cloudflare `/health` مع runtime/schema/tool count وHTTP latency.\n- [x] WebSocket round-trip latency حقيقي عبر `ping`/`pong`.\n- [x] حالة مصادقة الجهاز والRelay.\n- [x] فحص Chrome Debugger API ورؤية CDP page targets بدون attach.\n- [x] Input Safety مع Human Takeover/Pause state والتبويب النشط.\n- [x] إصدار الإضافة وإصدار Cloud runtime داخل نتيجة الفحص.\n- [ ] Child session health/snapshot داخل Self Test.\n- [ ] Event Engine/active watches health داخل Self Test.\n"""
+          if marker not in r:
+              raise SystemExit('Diagnostics roadmap marker not found')
+          r = r.replace(marker, completed + marker, 1)
+          r = r.replace('| 9 | Diagnostics + Self Test | P1 | لاحقًا |', '| 9 | Diagnostics + Self Test | P1 | Foundation مكتملة في 2.8.0، snapshots/trace/E2E متبقية |', 1)
+          roadmap.write_text(r, encoding='utf-8')
+
+          changelog = Path('docs/CHANGELOG.md')
+          c = changelog.read_text(encoding='utf-8')
+          heading = '# Brauzio Changelog\n\n'
+          entry = """## 2026-09-07 — Extension/Cloud V2.8.0 Diagnostics + Self Test\n\n- إضافة بطاقة `فحص Brauzio` داخل Popup بواجهة عربية وحالات نجاح/تحذير/خطأ.\n- فحص `/health` وقياس HTTP latency مع عرض Cloud runtime/schema/tool count.\n- قياس WebSocket round-trip latency فعليًا عبر `ping`/`pong` على نفس Relay المصادق عليه.\n- فحص مصادقة الجهاز، Chrome Debugger API، ورؤية CDP page targets بدون attach أو تغيير الصفحة.\n- فحص Input Safety وحالة Human Takeover/Pause والتبويب النشط.\n- إظهار إصدار الإضافة وCloud runtime وآخر وقت للفحص.\n- Self Test غير متلف: لا ينقر، لا يتنقل، ولا يفتح CDP attachment جديد.\n- رفع Extension/Cloud runtime/schema إلى `2.8.0` / `v2.8.0-2026-09-07`.\n\n"""
+          if not c.startswith(heading):
+              raise SystemExit('Changelog heading marker not found')
+          changelog.write_text(heading + entry + c[len(heading):], encoding='utf-8')
+          PY
+
+      - name: Validate release source
+        run: |
+          pnpm --filter brauzio-shared build
+          pnpm --filter brauzio-cloud-mcp check
+          pnpm --filter brauzio-cloud-mcp build
+          pnpm --filter brauzio-extension exec wxt prepare
+          pnpm --filter brauzio-extension compile
+          pnpm --filter brauzio-extension build
+
+      - name: Commit validated metadata
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add app/cloudflare-mcp/src/index.ts docs/ROADMAP.md docs/CHANGELOG.md
+          git commit -m 'Set Brauzio Diagnostics runtime metadata to 2.8.0 [skip ci]' || true
+          git push
