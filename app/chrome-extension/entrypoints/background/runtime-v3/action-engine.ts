@@ -13,6 +13,7 @@ import { observationService } from './observation-service';
 import { sessionGraph } from './session-graph';
 import type {
   V3ActionEvidence,
+  V3Actionability,
   V3Element,
   V3ObservationSnapshot,
   V3ResolveResult,
@@ -82,10 +83,13 @@ class ActionEngine {
     if (!before) before = (await observationService.observe(tab, { mode: 'compact' })).snapshot;
     const beforeSnapshotId = before.snapshotId;
     const startCursor = eventJournal.cursor(tab.id);
+    const releaseActionScope = eventJournal.beginAction(tab.id, actionId);
+    const timeoutMs = Math.max(250, Math.min(Number(request.timeoutMs || 5000), 30000));
     let verifier: PreparedActionVerification | undefined;
     let targetElement: V3Element | undefined;
     let resolution: V3ResolveResult | undefined;
     let actionability;
+    let navigationWaiter: { promise: Promise<void>; cancel: () => void } | undefined;
 
     try {
       if (hasActionVerification(request.verification)) {
@@ -109,14 +113,23 @@ class ActionEngine {
         if (!request.source || !request.target) throw this.error('TARGET_REQUIRED', 'drag requires source and target');
       }
 
-      if (targetElement && !['fill', 'clear', 'type', 'press', 'select', 'focus', 'upload'].includes(request.action)) {
-        actionability = await actionabilityService.inspect(tab.id, targetElement, { scroll: true });
+      if (targetElement && request.action !== 'upload') {
+        const mode = ['fill', 'clear', 'type', 'select'].includes(request.action)
+          ? 'editable'
+          : ['focus', 'press'].includes(request.action)
+            ? 'focus'
+            : 'pointer';
+        actionability = await actionabilityService.waitFor(tab.id, targetElement, { mode, timeoutMs, scroll: true });
         if (!actionability.actionable) {
-          throw this.error('NOT_ACTIONABLE', `Target is not actionable: ${actionability.reason || 'unknown'}`, actionability);
+          throw this.error('NOT_ACTIONABLE', `Target is not actionable within ${timeoutMs}ms: ${actionability.reason || 'unknown'}`, actionability);
         }
       }
 
-      await this.perform(tab, request, targetElement, before);
+      navigationWaiter = ['navigate', 'back', 'forward', 'reload'].includes(request.action)
+        ? this.prepareNavigationCommit(tab.id, Math.min(timeoutMs, 10000))
+        : undefined;
+      await this.perform(tab, request, targetElement, before, actionability);
+      if (navigationWaiter) await navigationWaiter.promise;
       const verification = verifier ? await verifier.verify() : undefined;
       verifier = undefined;
 
@@ -129,7 +142,7 @@ class ActionEngine {
         });
       }
       const completedAt = Date.now();
-      const events = eventJournal.read(tab.id, { afterSequence: startCursor, since: startedAt, until: completedAt, limit: 180 });
+      const events = eventJournal.read(tab.id, { afterSequence: startCursor, since: startedAt, until: completedAt, actionId, limit: 180 });
       const evidence: V3ActionEvidence = {
         actionId,
         action: request.action,
@@ -152,10 +165,11 @@ class ActionEngine {
         resolution,
       };
     } catch (error) {
+      navigationWaiter?.cancel();
       await verifier?.cancel().catch(() => undefined);
       const completedAt = Date.now();
       const normalized = this.normalizeError(error);
-      const events = eventJournal.read(tab.id, { afterSequence: startCursor, since: startedAt, until: completedAt, limit: 180 });
+      const events = eventJournal.read(tab.id, { afterSequence: startCursor, since: startedAt, until: completedAt, actionId, limit: 180 });
       let failureObservation;
       try {
         failureObservation = await observationService.observe(tab, {
@@ -187,6 +201,8 @@ class ActionEngine {
         screenshot: failureObservation?.screenshot,
         resolution,
       };
+    } finally {
+      releaseActionScope();
     }
   }
 
@@ -204,6 +220,7 @@ class ActionEngine {
     request: V3ActionRequest,
     element: V3Element | undefined,
     snapshot: V3ObservationSnapshot,
+    actionability?: V3Actionability,
   ): Promise<void> {
     switch (request.action) {
       case 'navigate': {
@@ -252,7 +269,7 @@ class ActionEngine {
       case 'click':
       case 'double_click':
       case 'hover':
-        return await this.pointerAction(tab.id, element, request.action, request.button || 'left');
+        return await this.pointerAction(tab.id, element, request.action, request.button || 'left', actionability);
       case 'focus':
         await this.send(tab.id, element, 'DOM.focus', { backendNodeId: element.backendNodeId });
         return;
@@ -280,8 +297,14 @@ class ActionEngine {
     }
   }
 
-  private async pointerAction(tabId: number, element: V3Element, action: 'click' | 'double_click' | 'hover', button: 'left' | 'right' | 'middle'): Promise<void> {
-    const state = await actionabilityService.inspect(tabId, element, { scroll: true });
+  private async pointerAction(
+    tabId: number,
+    element: V3Element,
+    action: 'click' | 'double_click' | 'hover',
+    button: 'left' | 'right' | 'middle',
+    prepared?: V3Actionability,
+  ): Promise<void> {
+    const state = prepared || await actionabilityService.waitFor(tabId, element, { mode: 'pointer', timeoutMs: 5000, scroll: true });
     if (!state.center || !state.visible) throw this.error('NOT_VISIBLE', 'Target has no visible click point', state);
     const send = (method: string, params?: object) => this.send(tabId, element, method, params);
     const { x, y } = state.center;
@@ -380,6 +403,42 @@ class ActionEngine {
       await send({ type: 'mouseMoved', x: a.center.x + (b.center.x - a.center.x) * t, y: a.center.y + (b.center.y - a.center.y) * t, button: 'left', buttons: 1 });
     }
     await send({ type: 'mouseReleased', x: b.center.x, y: b.center.y, button: 'left', buttons: 0, clickCount: 1 });
+  }
+
+
+  private prepareNavigationCommit(tabId: number, timeoutMs: number): { promise: Promise<void>; cancel: () => void } {
+    let settled = false;
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    let resolvePromise: (() => void) | undefined;
+    const cleanup = () => {
+      if (timer) clearTimeout(timer);
+      chrome.webNavigation.onCommitted.removeListener(listener);
+    };
+    const listener = (details: any) => {
+      if (details.tabId !== tabId || details.frameId !== 0 || settled) return;
+      settled = true;
+      cleanup();
+      resolvePromise?.();
+    };
+    const promise = new Promise<void>((resolve, reject) => {
+      resolvePromise = resolve;
+      chrome.webNavigation.onCommitted.addListener(listener);
+      timer = setTimeout(() => {
+        if (settled) return;
+        settled = true;
+        cleanup();
+        reject(new Error(`Navigation did not commit within ${timeoutMs}ms`));
+      }, Math.max(250, timeoutMs));
+    });
+    return {
+      promise,
+      cancel: () => {
+        if (settled) return;
+        settled = true;
+        cleanup();
+        resolvePromise?.();
+      },
+    };
   }
 
   private error(code: string, message: string, details?: unknown): Error & { code?: string; details?: unknown } {

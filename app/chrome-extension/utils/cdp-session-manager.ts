@@ -1,13 +1,5 @@
 import { cdpRouter } from './cdp-router';
 
-// Compatibility export for the existing browser tools while Brauzio migrates
-// incrementally to CDP Core V3. New code should import cdpRouter directly.
+// Compatibility alias for legacy tools. New V3 code imports cdpRouter directly.
+// Do not re-export cdpRouter/types here: WXT auto-imports would see duplicate symbols.
 export const cdpSessionManager = cdpRouter;
-
-export { CDPRouter, cdpRouter } from './cdp-router';
-export type {
-  CdpChildSessionSnapshot,
-  CdpEventEnvelope,
-  CdpOwnerTag,
-  CdpSessionSnapshot,
-} from './cdp-router';

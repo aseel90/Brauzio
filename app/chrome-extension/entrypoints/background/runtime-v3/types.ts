@@ -150,6 +150,7 @@ export interface V3Actionability {
 export interface V3JournalEvent {
   sequence: number;
   tabId: number;
+  actionId?: string;
   sessionId?: string;
   method: string;
   category:

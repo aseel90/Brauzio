@@ -18,6 +18,8 @@ function closeEnough(a?: V3Rect, b?: V3Rect): boolean {
     && Math.abs(a.height - b.height) <= 1;
 }
 
+export type V3ActionabilityMode = 'pointer' | 'editable' | 'focus';
+
 class ActionabilityService {
   private async send<T = any>(tabId: number, sessionId: string | undefined, method: string, params?: object): Promise<T> {
     if (sessionId) return await cdpRouter.sendToChild<T>(tabId, sessionId, method, params);
@@ -84,6 +86,42 @@ class ActionabilityService {
             ? 'covered_or_no_pointer_events'
             : undefined;
     return { actionable, visible, stable, enabled, receivesEvents, editable, reason, center, box };
+  }
+
+  async waitFor(
+    tabId: number,
+    element: V3Element,
+    options: { mode?: V3ActionabilityMode; timeoutMs?: number; scroll?: boolean } = {},
+  ): Promise<V3Actionability> {
+    const mode = options.mode || 'pointer';
+    const timeoutMs = Math.max(100, Math.min(Number(options.timeoutMs || 5000), 30000));
+    const deadline = Date.now() + timeoutMs;
+    let last: V3Actionability | undefined;
+
+    do {
+      last = await this.inspect(tabId, element, { scroll: options.scroll !== false, stableMs: 70 });
+      const ready = mode === 'editable'
+        ? last.visible && last.stable && last.enabled && Boolean(last.editable)
+        : mode === 'focus'
+          ? last.visible && last.stable && last.enabled
+          : last.actionable;
+      if (ready) return { ...last, actionable: true, reason: undefined };
+      if (Date.now() >= deadline) break;
+      await new Promise((resolve) => setTimeout(resolve, Math.min(80, Math.max(20, deadline - Date.now()))));
+    } while (Date.now() < deadline);
+
+    if (!last) {
+      return {
+        actionable: false,
+        visible: false,
+        stable: false,
+        enabled: false,
+        receivesEvents: false,
+        reason: 'actionability_timeout',
+      };
+    }
+    const reason = mode === 'editable' && !last.editable ? 'not_editable' : last.reason || 'actionability_timeout';
+    return { ...last, actionable: false, reason };
   }
 }
 

@@ -67,20 +67,21 @@ class EventJournal {
   private sequence = 0;
   private events = new Map<number, V3JournalEvent[]>();
   private unsubscribers = new Map<number, () => void>();
+  private activeActions = new Map<number, string>();
 
   constructor() {
     chrome.tabs.onCreated.addListener((tab) => {
       if (typeof tab.id !== 'number') return;
-      this.push(tab.id, {
-        method: 'Tab.created',
-        category: 'tab',
-        summary: {
-          tabId: tab.id,
-          windowId: tab.windowId,
-          openerTabId: tab.openerTabId,
-          url: cleanUrl(tab.pendingUrl || tab.url),
-        },
-      });
+      const summary = {
+        tabId: tab.id,
+        windowId: tab.windowId,
+        openerTabId: tab.openerTabId,
+        url: cleanUrl(tab.pendingUrl || tab.url),
+      };
+      this.push(tab.id, { method: 'Tab.created', category: 'tab', summary });
+      if (typeof tab.openerTabId === 'number' && this.activeActions.has(tab.openerTabId)) {
+        this.push(tab.openerTabId, { method: 'Tab.childCreated', category: 'tab', summary });
+      }
     });
     chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
       if (!changeInfo.url && !changeInfo.status && !changeInfo.title) return;
@@ -98,6 +99,7 @@ class EventJournal {
       this.unsubscribers.get(tabId)?.();
       this.unsubscribers.delete(tabId);
       this.events.delete(tabId);
+      this.activeActions.delete(tabId);
     });
     chrome.downloads.onCreated.addListener((item) => {
       this.pushForLikelyActiveTab({
@@ -113,6 +115,16 @@ class EventJournal {
         summary: { downloadId: delta.id, state: delta.state?.current, filename: delta.filename?.current },
       });
     });
+  }
+
+  beginAction(tabId: number, actionId: string): () => void {
+    const previous = this.activeActions.get(tabId);
+    this.activeActions.set(tabId, actionId);
+    return () => {
+      if (this.activeActions.get(tabId) !== actionId) return;
+      if (previous) this.activeActions.set(tabId, previous);
+      else this.activeActions.delete(tabId);
+    };
   }
 
   ensure(tabId: number): void {
@@ -131,6 +143,11 @@ class EventJournal {
   }
 
   private pushForLikelyActiveTab(input: Omit<V3JournalEvent, 'sequence' | 'tabId' | 'receivedAt'> & { receivedAt?: number }): void {
+    const scopedTabs = [...this.activeActions.keys()];
+    if (scopedTabs.length === 1) {
+      this.push(scopedTabs[0], input);
+      return;
+    }
     void chrome.tabs.query({ active: true, currentWindow: true }).then(([tab]) => {
       if (typeof tab?.id === 'number') this.push(tab.id, input);
     }).catch(() => undefined);
@@ -144,6 +161,7 @@ class EventJournal {
     list.push({
       sequence: ++this.sequence,
       tabId,
+      actionId: input.actionId || this.activeActions.get(tabId),
       sessionId: input.sessionId,
       method: input.method,
       category: input.category,
@@ -159,12 +177,13 @@ class EventJournal {
     return list[list.length - 1]?.sequence || 0;
   }
 
-  read(tabId: number, options: { afterSequence?: number; since?: number; until?: number; limit?: number } = {}): V3JournalEvent[] {
+  read(tabId: number, options: { afterSequence?: number; since?: number; until?: number; actionId?: string; limit?: number } = {}): V3JournalEvent[] {
     const list = this.events.get(tabId) || [];
     const filtered = list.filter((event) => {
       if (typeof options.afterSequence === 'number' && event.sequence <= options.afterSequence) return false;
       if (typeof options.since === 'number' && event.receivedAt < options.since) return false;
       if (typeof options.until === 'number' && event.receivedAt > options.until) return false;
+      if (options.actionId && event.actionId !== options.actionId) return false;
       return true;
     });
     return filtered.slice(-Math.max(1, Math.min(options.limit ?? 120, 300)));
