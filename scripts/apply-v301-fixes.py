@@ -413,9 +413,4 @@ s = s.replace("const BRAUZIO_RUNTIME_VERSION = '3.0.0';", "const BRAUZIO_RUNTIME
 s = s.replace("const BRAUZIO_SCHEMA_VERSION = 'v3.0.0-2026-09-07';", "const BRAUZIO_SCHEMA_VERSION = 'v3.0.1-2026-09-07';")
 p.write_text(s, encoding='utf-8')
 
-for p in Path('.github/workflows').glob('v3-*.yml'):
-    s = p.read_text(encoding='utf-8')
-    if '3.0.0' in s:
-        p.write_text(s.replace('3.0.0', '3.0.1'), encoding='utf-8')
-
 print('Brauzio 3.0.1 fixes applied')
