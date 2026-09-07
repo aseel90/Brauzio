@@ -1,0 +1,89 @@
+name: Diagnose Brauzio Diagnostics V28
+
+on:
+  push:
+    branches: [diagnostics-v28]
+    paths:
+      - '.github/workflows/diagnose-diagnostics-v28.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 8.15.9
+      - name: Diagnose
+        shell: bash
+        run: |
+          set +e
+          LOG=DIAGNOSTICS_V28_LOG.txt
+          : > "$LOG"
+          pnpm install --no-frozen-lockfile --ignore-scripts > /tmp/install.log 2>&1
+          echo "install=$?" >> "$LOG"
+          tail -30 /tmp/install.log >> "$LOG"
+
+          python - <<'PY' > /tmp/apply.log 2>&1
+          from pathlib import Path
+          import textwrap
+          p = Path('.github/workflows/apply-diagnostics-v28.yml')
+          text = p.read_text(encoding='utf-8')
+          marker = "          python - <<'PY'\n"
+          start = text.index(marker) + len(marker)
+          end = text.index("\n          PY", start)
+          exec(compile(textwrap.dedent(text[start:end]), str(p), 'exec'), {})
+          PY
+          echo "apply=$?" >> "$LOG"
+          tail -80 /tmp/apply.log >> "$LOG"
+
+          python - <<'PY' > /tmp/meta.log 2>&1
+          from pathlib import Path
+          import textwrap
+          p = Path('.github/workflows/finalize-diagnostics-v28.yml')
+          text = p.read_text(encoding='utf-8')
+          marker = "          python - <<'PY'\n"
+          starts=[]; pos=0
+          while True:
+              try:
+                  s=text.index(marker,pos)+len(marker)
+              except ValueError:
+                  break
+              e=text.index("\n          PY",s)
+              starts.append(textwrap.dedent(text[s:e]))
+              pos=e+1
+          if len(starts) < 2:
+              raise SystemExit(f'expected 2 python blocks, got {len(starts)}')
+          exec(compile(starts[1], str(p), 'exec'), {})
+          PY
+          echo "metadata=$?" >> "$LOG"
+          tail -80 /tmp/meta.log >> "$LOG"
+
+          run_stage() {
+            name="$1"; shift
+            "$@" > "/tmp/${name}.log" 2>&1
+            code=$?
+            echo "${name}=${code}" >> "$LOG"
+            tail -120 "/tmp/${name}.log" >> "$LOG"
+          }
+          run_stage shared_build pnpm --filter brauzio-shared build
+          run_stage cloud_check pnpm --filter brauzio-cloud-mcp check
+          run_stage cloud_build pnpm --filter brauzio-cloud-mcp build
+          run_stage wxt_prepare pnpm --filter brauzio-extension exec wxt prepare
+          run_stage extension_compile pnpm --filter brauzio-extension compile
+          run_stage extension_build pnpm --filter brauzio-extension build
+
+          git checkout -- . ':!.github/workflows/diagnose-diagnostics-v28.yml' || true
+          git clean -fd -e "$LOG"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add "$LOG"
+          git commit -m 'diagnostics: capture Brauzio 2.8 failure [skip ci]' || true
+          git push || true
