@@ -3,7 +3,7 @@ export interface V3DownloadArtifact {
   filename: string;
   url: string;
   finalUrl?: string;
-  state: chrome.downloads.State;
+  state: 'in_progress' | 'interrupted' | 'complete';
   danger: chrome.downloads.DangerType;
   mime?: string;
   startTime?: string;
