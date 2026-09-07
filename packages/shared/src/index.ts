@@ -14,3 +14,5 @@ export const TOOL_NAMES = {
 export const TOOL_SCHEMAS = [...BASE_TOOL_SCHEMAS, ...WATCH_TOOL_SCHEMAS];
 
 export { WATCH_TOOL_NAMES, WATCH_TOOL_SCHEMAS } from './watch-tools';
+
+// Release trigger: Brauzio 2.9.1 Smart Wait + Device Mode
