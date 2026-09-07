@@ -32,3 +32,4 @@ export { watchStartTool, watchWaitTool, watchReadTool, watchStopTool } from './w
 export { rawCdpTool } from './raw-cdp';
 export { observeTool, resolveTool, actTool } from './v3-runtime';
 export { clipboardTool } from './clipboard';
+export { artifactsTool } from './artifacts';
