@@ -74,13 +74,36 @@ function orientedSize(width: number, height: number, orientation: Orientation) {
 
 async function releaseMode(tabId: number): Promise<void> {
   const state = activeModes.get(tabId);
-  if (!state) return;
+  const owner = state?.owner || `device-mode:${tabId}`;
   activeModes.delete(tabId);
-  try {
+
+  const clearOverrides = async () => {
     await cdpRouter.sendCommand(tabId, 'Emulation.clearDeviceMetricsOverride');
     await cdpRouter.sendCommand(tabId, 'Emulation.setTouchEmulationEnabled', { enabled: false });
+  };
+
+  try {
+    if (cdpRouter.hasSession(tabId)) {
+      await clearOverrides();
+    } else {
+      // `activeModes` is in-memory and may be empty after a service-worker
+      // lifecycle restart while Chrome still has emulation state. Reset must
+      // therefore clear the browser state even when our local map is empty.
+      await cdpRouter.withSession(tabId, `device-reset:${tabId}`, clearOverrides);
+    }
+  } catch {
+    // Reset is best-effort for tabs that are closing or no longer debuggable.
+  }
+
+  // Release every stale/ref-counted Device Mode owner without disturbing
+  // other CDP owners such as watches or raw CDP sessions.
+  try {
+    let refs = cdpRouter.getSessionSnapshot(tabId)[0]?.owners?.[owner] || 0;
+    while (refs > 0) {
+      await cdpRouter.detach(tabId, owner);
+      refs = cdpRouter.getSessionSnapshot(tabId)[0]?.owners?.[owner] || 0;
+    }
   } catch {}
-  await cdpRouter.detach(tabId, state.owner).catch(() => {});
 }
 
 chrome.tabs.onRemoved.addListener((tabId) => {
