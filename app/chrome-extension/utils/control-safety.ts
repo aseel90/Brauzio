@@ -35,9 +35,6 @@ export class BrauzioControlPausedError extends Error {
 type ControlStateSink = (state: BrauzioControlState) => void | Promise<void>;
 
 const STORAGE_KEY = 'brauzioControlStateV1';
-const RECENT_HUMAN_BLOCK_MS = 1_500;
-const AGENT_EVENT_SUPPRESSION_MS = 700;
-const POST_AGENT_TAKEOVER_MS = 5_000;
 
 const OBSERVER_TOOLS = new Set<string>([
   TOOL_NAMES.BROWSER.GET_WINDOWS_AND_TABS,
@@ -78,24 +75,26 @@ let stateLoaded = false;
 let stateLoadPromise: Promise<void> | null = null;
 let sink: ControlStateSink | null = null;
 
-let globalAgentDepth = 0;
-const agentDepthByTab = new Map<number, number>();
-let globalSuppressionUntil = 0;
-let globalTakeoverUntil = 0;
-const suppressionUntilByTab = new Map<number, number>();
-const takeoverUntilByTab = new Map<number, number>();
-let lastHumanInputAt = 0;
-const lastHumanInputByTab = new Map<number, number>();
-
 function cleanState(value: unknown): BrauzioControlState {
   const raw = (value || {}) as Partial<BrauzioControlState>;
+  const rawReason = String(raw.reason || '').slice(0, 128);
+  const rawSource = String(raw.source || 'none');
+
+  // v2.9.3 removes automatic human takeover entirely. Clear legacy automatic
+  // pauses so an old human_input_detected state cannot survive an upgrade.
+  const legacyAutomaticPause =
+    raw.paused === true &&
+    (rawSource === 'human' || rawReason === 'human_input_detected' || rawReason === 'recent_human_input');
+
   return {
-    paused: raw.paused === true,
-    reason: String(raw.reason || '').slice(0, 128),
-    source: ['human', 'manual', 'cloud', 'safety'].includes(String(raw.source))
-      ? (raw.source as ControlPauseSource)
-      : 'none',
-    since: raw.since ? Number(raw.since) : null,
+    paused: legacyAutomaticPause ? false : raw.paused === true,
+    reason: legacyAutomaticPause ? 'automatic_takeover_disabled' : rawReason,
+    source: legacyAutomaticPause
+      ? 'none'
+      : ['human', 'manual', 'cloud', 'safety'].includes(rawSource)
+        ? (rawSource as ControlPauseSource)
+        : 'none',
+    since: legacyAutomaticPause ? null : raw.since ? Number(raw.since) : null,
     lastUpdated: Number(raw.lastUpdated || Date.now()),
     lastHumanInputAt: raw.lastHumanInputAt ? Number(raw.lastHumanInputAt) : undefined,
     lastHumanInputType: raw.lastHumanInputType
@@ -140,30 +139,6 @@ async function persistAndBroadcast(): Promise<void> {
   } catch {
     // Cloud sync is best effort. Local safety state remains authoritative.
   }
-}
-
-function recentHumanAt(tabId?: number): number {
-  if (typeof tabId === 'number') return lastHumanInputByTab.get(tabId) || 0;
-  return lastHumanInputAt;
-}
-
-function activeAgentForTab(tabId?: number): boolean {
-  if (typeof tabId === 'number' && (agentDepthByTab.get(tabId) || 0) > 0) return true;
-  return globalAgentDepth > 0;
-}
-
-function suppressionUntil(tabId?: number): number {
-  if (typeof tabId === 'number') {
-    return Math.max(globalSuppressionUntil, suppressionUntilByTab.get(tabId) || 0);
-  }
-  return globalSuppressionUntil;
-}
-
-function takeoverUntil(tabId?: number): number {
-  if (typeof tabId === 'number') {
-    return Math.max(globalTakeoverUntil, takeoverUntilByTab.get(tabId) || 0);
-  }
-  return globalTakeoverUntil;
 }
 
 async function resolveLikelyTargetTabId(args: Record<string, unknown>): Promise<number | undefined> {
@@ -239,46 +214,19 @@ export async function resumeAgentControl(source: ControlPauseSource = 'manual'):
 
 export async function enforceRemotePause(remote: Partial<BrauzioControlState> | undefined): Promise<void> {
   if (!remote?.paused) return;
-  await pauseAgentControl(String(remote.reason || 'cloud_paused'), 'cloud');
+  // Only an explicit pause created from the extension UI is authoritative.
+  // Legacy automatic/human/cloud-only pauses are ignored.
+  if (String(remote.source || '') !== 'manual') return;
+  await pauseAgentControl(String(remote.reason || 'manual_pause'), 'manual');
 }
 
 export async function handleHumanInput(
-  tabId: number | undefined,
-  signal: HumanInputSignal,
+  _tabId: number | undefined,
+  _signal: HumanInputSignal,
 ): Promise<{ takeover: boolean; ignoredAsAgent: boolean; state: BrauzioControlState }> {
   await ensureStateLoaded();
-  const now = Math.min(Date.now(), Math.max(0, Number(signal.at || Date.now())));
-
-  // CDP-generated mouse/keyboard events can look trusted in the page. We therefore
-  // classify events using Brauzio's own execution/suppression windows as a second signal.
-  if (activeAgentForTab(tabId) || now <= suppressionUntil(tabId)) {
-    return { takeover: false, ignoredAsAgent: true, state: { ...state } };
-  }
-
-  lastHumanInputAt = now;
-  if (typeof tabId === 'number') lastHumanInputByTab.set(tabId, now);
-  state.lastHumanInputAt = now;
-  state.lastHumanInputType = String(signal.eventType || 'input').slice(0, 64);
-  state.lastHumanTabId = tabId;
-
-  if (state.paused) {
-    await persistAndBroadcast();
-    return { takeover: true, ignoredAsAgent: false, state: { ...state } };
-  }
-
-  const shouldTakeOver = now <= takeoverUntil(tabId);
-  if (shouldTakeOver) {
-    const paused = await pauseAgentControl('human_input_detected', 'human', {
-      eventType: signal.eventType,
-      tabId,
-      at: now,
-    });
-    return { takeover: true, ignoredAsAgent: false, state: paused };
-  }
-
-  // Do not write every pointer move to storage while idle. The in-memory timestamp is
-  // enough to stop a newly arriving actor command if the person is actively using Chrome.
-  return { takeover: false, ignoredAsAgent: false, state: { ...state } };
+  // Human input never pauses Brauzio in v2.9.3+. Pause/Resume is manual-only.
+  return { takeover: false, ignoredAsAgent: true, state: { ...state } };
 }
 
 export async function beginAgentToolExecution(
@@ -291,45 +239,12 @@ export async function beginAgentToolExecution(
 
   await ensureStateLoaded();
   const tabId = await resolveLikelyTargetTabId(args);
-  const now = Date.now();
 
   if (state.paused) throw new BrauzioControlPausedError({ ...state });
 
-  const lastHuman = recentHumanAt(tabId);
-  if (lastHuman && now - lastHuman <= RECENT_HUMAN_BLOCK_MS) {
-    const paused = await pauseAgentControl('recent_human_input', 'human', {
-      eventType: state.lastHumanInputType || 'input',
-      tabId,
-      at: lastHuman,
-    });
-    throw new BrauzioControlPausedError(paused);
-  }
-
-  if (typeof tabId === 'number') {
-    agentDepthByTab.set(tabId, (agentDepthByTab.get(tabId) || 0) + 1);
-  } else {
-    globalAgentDepth += 1;
-  }
-
-  let finished = false;
   return {
     actor: true,
     tabId,
-    async finish() {
-      if (finished) return;
-      finished = true;
-      const finishedAt = Date.now();
-      if (typeof tabId === 'number') {
-        const next = Math.max(0, (agentDepthByTab.get(tabId) || 1) - 1);
-        if (next === 0) agentDepthByTab.delete(tabId);
-        else agentDepthByTab.set(tabId, next);
-        suppressionUntilByTab.set(tabId, finishedAt + AGENT_EVENT_SUPPRESSION_MS);
-        takeoverUntilByTab.set(tabId, finishedAt + POST_AGENT_TAKEOVER_MS);
-      } else {
-        globalAgentDepth = Math.max(0, globalAgentDepth - 1);
-        globalSuppressionUntil = finishedAt + AGENT_EVENT_SUPPRESSION_MS;
-        globalTakeoverUntil = finishedAt + POST_AGENT_TAKEOVER_MS;
-      }
-    },
+    async finish() {},
   };
 }

@@ -1,4 +1,4 @@
-name: Publish Brauzio Extension V292
+name: Publish Brauzio Extension V293
 
 on:
   push:
@@ -27,7 +27,7 @@ jobs:
       - run: pnpm --filter brauzio-shared build
       - run: pnpm --filter brauzio-extension compile
       - run: pnpm --filter brauzio-extension build
-      - name: Package and verify 2.9.2
+      - name: Package and verify 2.9.3
         shell: bash
         run: |
           set -euo pipefail
@@ -35,7 +35,7 @@ jobs:
           python - <<'PY'
           import json
           manifest=json.load(open('manifest.json', encoding='utf-8'))
-          assert manifest.get('version') == '2.9.2', manifest.get('version')
+          assert manifest.get('version') == '2.9.3', manifest.get('version')
           print('Verified manifest version:', manifest['version'])
           PY
           zip -qr ../brauzio-chrome.zip .
@@ -54,5 +54,5 @@ jobs:
             echo 'ZIP already current'
             exit 0
           fi
-          git commit -m 'build: publish Brauzio Chrome extension 2.9.2 [skip ci]'
+          git commit -m 'build: publish Brauzio Chrome extension 2.9.3 [skip ci]'
           git push
