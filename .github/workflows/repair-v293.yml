@@ -1,0 +1,52 @@
+name: Repair Brauzio V293 Runtime Files
+
+on:
+  push:
+    paths:
+      - '.github/workflows/repair-v293.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Restore known-good large files and apply v2.9.3 patch
+        shell: bash
+        run: |
+          set -euo pipefail
+          git checkout dd4de97226da91f7e0872b75df5f9c6c8ae48bd0 -- \
+            app/chrome-extension/entrypoints/background/remote-relay.ts \
+            app/cloudflare-mcp/src/index.ts
+          python - <<'PY'
+          from pathlib import Path
+
+          relay = Path('app/chrome-extension/entrypoints/background/remote-relay.ts')
+          s = relay.read_text(encoding='utf-8')
+          s = s.replace('  handleHumanInput,\n', '')
+          old = '''    if (message.type === 'brauzio_human_input') {\n      const tabId = typeof _sender.tab?.id === 'number' ? _sender.tab.id : undefined;\n      void handleHumanInput(tabId, {\n        eventType: String(message.eventType || 'input'),\n        at: Number(message.at || Date.now()),\n      })\n        .then((result) => sendResponse({ success: true, ...result }))\n        .catch((error) => sendResponse({ success: false, error: String(error) }));\n      return true;\n    }\n'''
+          new = '''    if (message.type === 'brauzio_human_input') {\n      // Automatic human-input takeover was removed in v2.9.3. Ignore any\n      // stale content-script messages from tabs that have not reloaded yet.\n      sendResponse({ success: true, takeover: false, ignored: true });\n      return false;\n    }\n'''
+          if old not in s:
+              raise SystemExit('Expected human-input relay block not found')
+          relay.write_text(s.replace(old, new), encoding='utf-8')
+
+          cloud = Path('app/cloudflare-mcp/src/index.ts')
+          s = cloud.read_text(encoding='utf-8')
+          s = s.replace("const BRAUZIO_RUNTIME_VERSION = '2.9.2';", "const BRAUZIO_RUNTIME_VERSION = '2.9.3';")
+          s = s.replace("const BRAUZIO_SCHEMA_VERSION = 'v2.9.2-2026-09-07';", "const BRAUZIO_SCHEMA_VERSION = 'v2.9.3-2026-09-07';")
+          cloud.write_text(s, encoding='utf-8')
+          PY
+      - name: Commit repaired files
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add app/chrome-extension/entrypoints/background/remote-relay.ts app/cloudflare-mcp/src/index.ts
+          git commit -m 'fix: finalize manual-only control runtime for 2.9.3'
+          git push
