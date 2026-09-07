@@ -73,3 +73,5 @@ jobs:
           if [ "$VERSION" -ne 0 ] || [ "$INSTALL" -ne 0 ] || [ "$SHARED" -ne 0 ] || [ "$CLOUD" -ne 0 ]; then
             exit 1
           fi
+
+# rerun after schema typing fix: 2026-09-07T16:50Z
