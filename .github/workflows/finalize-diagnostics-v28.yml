@@ -1,0 +1,102 @@
+name: Finalize Brauzio Diagnostics V28
+
+on:
+  push:
+    branches: [diagnostics-v28]
+    paths:
+      - '.github/workflows/finalize-diagnostics-v28.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  finalize:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 8.15.9
+      - run: pnpm install --no-frozen-lockfile --ignore-scripts
+
+      - name: Apply existing Diagnostics source transformation
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          import textwrap
+          p = Path('.github/workflows/apply-diagnostics-v28.yml')
+          text = p.read_text(encoding='utf-8')
+          marker = "          python - <<'PY'\n"
+          start = text.index(marker) + len(marker)
+          end = text.index("\n          PY", start)
+          code = textwrap.dedent(text[start:end])
+          exec(compile(code, str(p), 'exec'), {})
+          PY
+
+      - name: Set Brauzio 2.8 release metadata
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          import json
+
+          ext = Path('app/chrome-extension/package.json')
+          data = json.loads(ext.read_text(encoding='utf-8'))
+          data['version'] = '2.8.0'
+          ext.write_text(json.dumps(data, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+
+          cloud_pkg = Path('app/cloudflare-mcp/package.json')
+          data = json.loads(cloud_pkg.read_text(encoding='utf-8'))
+          data['version'] = '0.8.0'
+          cloud_pkg.write_text(json.dumps(data, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+
+          cloud = Path('app/cloudflare-mcp/src/index.ts')
+          s = cloud.read_text(encoding='utf-8')
+          s = s.replace("const BRAUZIO_RUNTIME_VERSION = '2.7.0';", "const BRAUZIO_RUNTIME_VERSION = '2.8.0';", 1)
+          s = s.replace("const BRAUZIO_SCHEMA_VERSION = 'v2.7.0-2026-09-07';", "const BRAUZIO_SCHEMA_VERSION = 'v2.8.0-2026-09-07';", 1)
+          cloud.write_text(s, encoding='utf-8')
+
+          roadmap = Path('docs/ROADMAP.md')
+          r = roadmap.read_text(encoding='utf-8')
+          r = r.replace('- [ ] آخر Tool call وTrace ID.\n- [ ] latency لكل طبقة.\n- [ ] reconnect count.\n- [ ] CDP root/child ownership snapshots.\n- [ ] active watches.\n- [ ] آخر خطأ قابل للنسخ.', '- [ ] آخر Tool call وTrace ID.\n- [x] latency أساسي لـWebSocket ping/pong.\n- [ ] reconnect count.\n- [x] CDP root/child session counts داخل Self Test.\n- [ ] active watches.\n- [ ] آخر خطأ قابل للنسخ.\n- [x] Cloud/WebSocket/Auth/Extension/Debugger/CDP/Input Safety checks داخل Popup.\n- [ ] E2E يدوي على ZIP 2.8.0.', 1)
+          r = r.replace('| 9 | Diagnostics + Self Test | P1 | لاحقًا |', '| 9 | Diagnostics + Self Test | P1 | Foundation مكتملة في 2.8.0، telemetry الإضافي/E2E متبقيان |', 1)
+          roadmap.write_text(r, encoding='utf-8')
+
+          changelog = Path('docs/CHANGELOG.md')
+          c = changelog.read_text(encoding='utf-8')
+          entry = "## 2.8.0 — Diagnostics + Self Test\n\n- إضافة زر فحص Brauzio داخل Popup بدون تغيير الصفحة.\n- فحص WebSocket والمصادقة وChrome Debugger وCDP root/child وحالة Human Takeover.\n- قياس WebSocket ping/pong latency.\n- توحيد Extension runtime وCloud runtime على 2.8.0.\n\n"
+          if '## 2.8.0 — Diagnostics + Self Test' not in c:
+              if c.startswith('#'):
+                  first = c.find('\n') + 1
+                  c = c[:first] + '\n' + entry + c[first:]
+              else:
+                  c = entry + c
+          changelog.write_text(c, encoding='utf-8')
+          PY
+
+      - name: Validate full Brauzio build
+        run: |
+          pnpm --filter brauzio-shared build
+          pnpm --filter brauzio-cloud-mcp check
+          pnpm --filter brauzio-cloud-mcp build
+          pnpm --filter brauzio-extension exec wxt prepare
+          pnpm --filter brauzio-extension compile
+          pnpm --filter brauzio-extension build
+
+      - name: Commit validated 2.8 source
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add app/chrome-extension/entrypoints/background/remote-relay.ts app/chrome-extension/entrypoints/popup/App.vue app/chrome-extension/entrypoints/popup/style.css app/chrome-extension/package.json app/cloudflare-mcp/src/index.ts app/cloudflare-mcp/package.json docs/ROADMAP.md docs/CHANGELOG.md
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m 'Add Brauzio 2.8 Diagnostics and Self Test [skip ci]'
+          git push
