@@ -64,7 +64,7 @@ jobs:
           run_stage extension_compile pnpm --filter brauzio-extension compile
           run_stage extension_build pnpm --filter brauzio-extension build
 
-          git reset --hard HEAD
+          git checkout -- app/cloudflare-mcp/src/index.ts app/cloudflare-mcp/src/browser-session.ts
           git clean -fd -e "$LOG"
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
