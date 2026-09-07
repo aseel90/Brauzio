@@ -1,0 +1,84 @@
+name: Finalize Brauzio Diagnostics V28B
+
+on:
+  push:
+    branches: [diagnostics-v28]
+    paths:
+      - '.github/workflows/finalize-diagnostics-v28b.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  finalize:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 8.15.9
+      - run: pnpm install --no-frozen-lockfile --ignore-scripts
+
+      - name: Apply Diagnostics source transformation
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('.github/workflows/apply-diagnostics-v28.yml')
+          text = p.read_text(encoding='utf-8')
+          marker = "          python - <<'PY'\n"
+          start = text.index(marker) + len(marker)
+          end = text.index("\n          PY", start)
+          raw = text[start:end]
+          code = '\n'.join(line[10:] if line.startswith('          ') else line for line in raw.splitlines()) + '\n'
+          exec(compile(code, str(p), 'exec'), {})
+          PY
+
+      - name: Set 2.8 versions
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          import json
+
+          for path, version in [('app/chrome-extension/package.json','2.8.0'),('app/cloudflare-mcp/package.json','0.8.0')]:
+              p = Path(path)
+              data = json.loads(p.read_text(encoding='utf-8'))
+              data['version'] = version
+              p.write_text(json.dumps(data, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+
+          p = Path('app/cloudflare-mcp/src/index.ts')
+          s = p.read_text(encoding='utf-8')
+          s = s.replace("const BRAUZIO_RUNTIME_VERSION = '2.7.0';", "const BRAUZIO_RUNTIME_VERSION = '2.8.0';", 1)
+          s = s.replace("const BRAUZIO_SCHEMA_VERSION = 'v2.7.0-2026-09-07';", "const BRAUZIO_SCHEMA_VERSION = 'v2.8.0-2026-09-07';", 1)
+          p.write_text(s, encoding='utf-8')
+          PY
+
+      - name: Validate full Brauzio build
+        run: |
+          pnpm --filter brauzio-shared build
+          pnpm --filter brauzio-cloud-mcp check
+          pnpm --filter brauzio-cloud-mcp build
+          pnpm --filter brauzio-extension exec wxt prepare
+          pnpm --filter brauzio-extension compile
+          pnpm --filter brauzio-extension build
+
+      - name: Commit validated Diagnostics source
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add app/chrome-extension/entrypoints/background/remote-relay.ts app/chrome-extension/entrypoints/popup/App.vue app/chrome-extension/entrypoints/popup/style.css app/chrome-extension/package.json app/cloudflare-mcp/src/index.ts app/cloudflare-mcp/package.json
+          if git diff --cached --quiet; then
+            echo 'No source changes produced'
+            exit 1
+          fi
+          git commit -m 'Add Brauzio 2.8 Diagnostics and Self Test [skip ci]'
+          git push
