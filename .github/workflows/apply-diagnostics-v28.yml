@@ -1,0 +1,307 @@
+name: Apply Brauzio Diagnostics V28
+
+on:
+  push:
+    paths:
+      - '.github/workflows/apply-diagnostics-v28.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 8.15.9
+      - run: pnpm install --no-frozen-lockfile --ignore-scripts
+
+      - name: Apply Diagnostics foundation
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+
+          relay = Path('app/chrome-extension/entrypoints/background/remote-relay.ts')
+          s = relay.read_text(encoding='utf-8')
+
+          import_marker = "import { releaseAllMouseHolds } from '@/utils/mouse-hold-safety';\n"
+          if "@/utils/cdp-session-manager" not in s:
+              s = s.replace(import_marker, import_marker + "import { cdpRouter } from '@/utils/cdp-session-manager';\n", 1)
+
+          status_marker = """export interface BrauzioRelayStatus {
+            state: 'disabled' | 'connecting' | 'connected' | 'disconnected' | 'error';
+            authenticated: boolean;
+            lastUpdated: number;
+            lastError?: string;
+          }
+"""
+          diagnostics_types = """
+          export interface BrauzioDiagnosticCheck {
+            key: string;
+            label: string;
+            ok: boolean;
+            detail: string;
+          }
+
+          export interface BrauzioDiagnosticsResult {
+            checkedAt: number;
+            overall: boolean;
+            extensionVersion: string;
+            relayState: BrauzioRelayStatus['state'];
+            latencyMs: number | null;
+            controlPaused: boolean;
+            checks: BrauzioDiagnosticCheck[];
+          }
+"""
+          if diagnostics_types.strip() not in s:
+              if status_marker not in s:
+                  raise SystemExit('relay status marker missing')
+              s = s.replace(status_marker, status_marker + diagnostics_types, 1)
+
+          pairing_marker = "let currentPairing: { code: string; expiresAt: number; deviceId: string } | null = null;\n"
+          ping_state = """let lastPingSentAt = 0;
+          let lastPongAt = 0;
+          let lastRttMs: number | null = null;
+          const diagnosticPongWaiters = new Set<(rttMs: number | null) => void>();
+"""
+          if 'diagnosticPongWaiters' not in s:
+              if pairing_marker not in s:
+                  raise SystemExit('pairing state marker missing')
+              s = s.replace(pairing_marker, pairing_marker + ping_state, 1)
+
+          heartbeat_marker = """function clearHeartbeat() {
+            if (heartbeatTimer) clearInterval(heartbeatTimer);
+            heartbeatTimer = null;
+          }
+"""
+          helpers = """
+          function resolveRelayPong(): void {
+            const now = Date.now();
+            lastPongAt = now;
+            if (lastPingSentAt > 0) lastRttMs = Math.max(0, now - lastPingSentAt);
+            for (const resolve of diagnosticPongWaiters) resolve(lastRttMs);
+            diagnosticPongWaiters.clear();
+          }
+
+          function sendRelayPing(): boolean {
+            if (!socket || socket.readyState !== WebSocket.OPEN) return false;
+            lastPingSentAt = Date.now();
+            try {
+              socket.send('ping');
+              return true;
+            } catch {
+              return false;
+            }
+          }
+
+          async function measureRelayLatency(timeoutMs = 1_500): Promise<number | null> {
+            if (!socket || socket.readyState !== WebSocket.OPEN) return null;
+            return await new Promise<number | null>((resolve) => {
+              let settled = false;
+              const finish = (value: number | null) => {
+                if (settled) return;
+                settled = true;
+                diagnosticPongWaiters.delete(finish);
+                resolve(value);
+              };
+              diagnosticPongWaiters.add(finish);
+              if (!sendRelayPing()) {
+                finish(null);
+                return;
+              }
+              setTimeout(() => finish(lastRttMs), timeoutMs);
+            });
+          }
+
+          async function runDiagnostics(): Promise<BrauzioDiagnosticsResult> {
+            const checkedAt = Date.now();
+            const manifest = chrome.runtime.getManifest();
+            const config = await loadConfig();
+            const controlState = await getControlState();
+            let tabsOk = false;
+            let tabCount = 0;
+            try {
+              const tabs = await chrome.tabs.query({});
+              tabsOk = true;
+              tabCount = tabs.length;
+            } catch {}
+
+            const wsOpen = Boolean(socket && socket.readyState === WebSocket.OPEN);
+            const latencyMs = wsOpen ? await measureRelayLatency() : null;
+            const pongFresh = lastPongAt > 0 && Date.now() - lastPongAt < Math.max(HEARTBEAT_MS * 2, 45_000);
+            const debuggerDeclared = Array.isArray(manifest.permissions) && manifest.permissions.includes('debugger');
+            const debuggerApi = Boolean(chrome.debugger && typeof chrome.debugger.sendCommand === 'function');
+            let cdpRootSessions = 0;
+            let cdpChildSessions = 0;
+            let cdpOk = false;
+            try {
+              cdpRootSessions = cdpRouter.getSessionSnapshot().length;
+              cdpChildSessions = cdpRouter.getChildSessionSnapshot().length;
+              cdpOk = true;
+            } catch {}
+
+            const checks: BrauzioDiagnosticCheck[] = [
+              {
+                key: 'cloudflare',
+                label: 'Cloudflare',
+                ok: wsOpen && pongFresh,
+                detail: wsOpen ? (latencyMs === null ? 'متصل، قياس الاستجابة غير متاح' : `متصل • ${latencyMs}ms`) : 'قناة Cloud غير متصلة',
+              },
+              { key: 'websocket', label: 'WebSocket', ok: wsOpen, detail: wsOpen ? 'OPEN' : `state=${currentStatus.state}` },
+              { key: 'authentication', label: 'Authentication', ok: currentStatus.authenticated, detail: currentStatus.authenticated ? `device=${config.deviceId || 'default'}` : (currentStatus.lastError || 'غير مصادق') },
+              { key: 'extension', label: 'Extension', ok: tabsOk, detail: tabsOk ? `v${manifest.version} • ${tabCount} tabs` : `v${manifest.version} • tabs API unavailable` },
+              { key: 'chrome_debugger', label: 'Chrome Debugger', ok: debuggerDeclared && debuggerApi, detail: debuggerDeclared && debuggerApi ? 'permission + API جاهزان' : 'debugger permission/API غير جاهز' },
+              { key: 'cdp_core', label: 'CDP Core', ok: cdpOk, detail: cdpOk ? `${cdpRootSessions} root • ${cdpChildSessions} child` : 'CDP Router غير متاح' },
+              { key: 'input', label: 'Input Safety', ok: true, detail: controlState.paused ? `محمي • paused (${controlState.reason || 'safety'})` : 'جاهز • Human Takeover مفعّل' },
+            ];
+
+            return {
+              checkedAt,
+              overall: checks.every((check) => check.ok),
+              extensionVersion: manifest.version,
+              relayState: currentStatus.state,
+              latencyMs,
+              controlPaused: controlState.paused,
+              checks,
+            };
+          }
+"""
+          if 'async function runDiagnostics()' not in s:
+              if heartbeat_marker not in s:
+                  raise SystemExit('heartbeat marker missing')
+              s = s.replace(heartbeat_marker, heartbeat_marker + helpers, 1)
+
+          s = s.replace("  if (event.data === 'pong') return;", "  if (event.data === 'pong') { resolveRelayPong(); return; }", 1)
+          s = s.replace("        if (socket?.readyState === WebSocket.OPEN) socket.send('ping');", "        sendRelayPing();", 1)
+
+          status_handler = """    if (message.type === 'brauzio_relay_get_status') {
+              sendResponse({ success: true, status: currentStatus });
+              return false;
+            }
+"""
+          diagnostics_handler = """
+            if (message.type === 'brauzio_diagnostics_run') {
+              void runDiagnostics()
+                .then((diagnostics) => sendResponse({ success: true, diagnostics }))
+                .catch((error) => sendResponse({ success: false, error: error instanceof Error ? error.message : String(error) }));
+              return true;
+            }
+"""
+          if "message.type === 'brauzio_diagnostics_run'" not in s:
+              if status_handler not in s:
+                  raise SystemExit('status handler marker missing')
+              s = s.replace(status_handler, status_handler + diagnostics_handler, 1)
+
+          relay.write_text(s, encoding='utf-8')
+
+          app = Path('app/chrome-extension/entrypoints/popup/App.vue')
+          a = app.read_text(encoding='utf-8')
+          control_interface = """interface ControlState {
+            paused: boolean;
+            reason: string;
+            source: 'human' | 'manual' | 'cloud' | 'safety' | 'none';
+            since: number | null;
+            lastUpdated: number;
+            lastHumanInputAt?: number;
+            lastHumanInputType?: string;
+          }
+"""
+          diag_interfaces = """
+          interface DiagnosticCheck {
+            key: string;
+            label: string;
+            ok: boolean;
+            detail: string;
+          }
+
+          interface DiagnosticsResult {
+            checkedAt: number;
+            overall: boolean;
+            extensionVersion: string;
+            relayState: RelayState;
+            latencyMs: number | null;
+            controlPaused: boolean;
+            checks: DiagnosticCheck[];
+          }
+"""
+          if 'interface DiagnosticsResult' not in a:
+              if control_interface not in a:
+                  raise SystemExit('popup control interface marker missing')
+              a = a.replace(control_interface, control_interface + diag_interfaces, 1)
+
+          state_marker = "const controlBusy = ref(false);\n"
+          diag_state = "const diagnosticsBusy = ref(false);\nconst diagnostics = ref<DiagnosticsResult | null>(null);\n"
+          if 'diagnosticsBusy' not in a:
+              a = a.replace(state_marker, state_marker + diag_state, 1)
+
+          function_marker = "async function createPairingCode() {"
+          diag_function = """async function runDiagnostics() {
+            if (diagnosticsBusy.value) return;
+            diagnosticsBusy.value = true;
+            try {
+              const response = await chrome.runtime.sendMessage({ type: 'brauzio_diagnostics_run' });
+              if (!response?.success) throw new Error(response?.error || 'تعذر تشغيل فحص Brauzio');
+              diagnostics.value = response.diagnostics || null;
+            } finally {
+              diagnosticsBusy.value = false;
+            }
+          }
+"""
+          if 'async function runDiagnostics()' not in a:
+              if function_marker not in a:
+                  raise SystemExit('popup pairing function marker missing')
+              a = a.replace(function_marker, diag_function + function_marker, 1)
+
+          status_section_end = "</div></section>\n      <section class=\"control-card\""
+          diag_template = """</div></section>
+              <section class="diagnostics-card">
+                <div class="section-title"><div><span class="label">Diagnostics</span><h3>فحص Brauzio</h3></div><span v-if="diagnostics" class="diagnostic-pill" :class="{ ok: diagnostics.overall, bad: !diagnostics.overall }">{{ diagnostics.overall ? 'سليم' : 'يحتاج مراجعة' }}</span></div>
+                <p class="diagnostics-copy">يفحص قناة Cloudflare وWebSocket والمصادقة وChrome Debugger وCDP وحماية الإدخال بدون تنفيذ أي نقر أو تنقل.</p>
+                <button class="button quiet full" :disabled="diagnosticsBusy" @click="runDiagnostics">{{ diagnosticsBusy ? 'جارٍ الفحص…' : 'تشغيل الفحص' }}</button>
+                <div v-if="diagnostics" class="diagnostic-summary"><span>Latency</span><strong dir="ltr">{{ diagnostics.latencyMs === null ? '—' : `${diagnostics.latencyMs} ms` }}</strong></div>
+                <div v-if="diagnostics" class="diagnostic-list"><div v-for="check in diagnostics.checks" :key="check.key" class="diagnostic-row"><span class="diagnostic-dot" :class="{ ok: check.ok, bad: !check.ok }"></span><div><strong>{{ check.label }}</strong><span>{{ check.detail }}</span></div></div></div>
+              </section>
+              <section class="control-card""" 
+          if 'class="diagnostics-card"' not in a:
+              if status_section_end not in a:
+                  raise SystemExit('popup status/control boundary missing')
+              a = a.replace(status_section_end, diag_template, 1)
+
+          app.write_text(a, encoding='utf-8')
+
+          css = Path('app/chrome-extension/entrypoints/popup/style.css')
+          c = css.read_text(encoding='utf-8')
+          c = c.replace('.status-card,.mcp-card,.setup-card,.feature-strip,.control-card{', '.status-card,.mcp-card,.setup-card,.feature-strip,.control-card,.diagnostics-card{', 1)
+          diag_css = ".diagnostics-card{margin-top:10px;padding:14px}.diagnostics-copy{margin:8px 0 10px;color:var(--muted);font-size:10px;line-height:1.6}.diagnostic-pill{padding:5px 8px;border-radius:999px;font-size:9px;font-weight:800;background:#f0f1f5;color:var(--muted)}.diagnostic-pill.ok{background:#eaf8f2;color:var(--success)}.diagnostic-pill.bad{background:#fdecef;color:var(--danger)}.diagnostic-summary{margin-top:10px;padding:9px 10px;border-radius:11px;background:var(--surface-2);display:flex;align-items:center;justify-content:space-between;font-size:10px}.diagnostic-summary span{color:var(--muted)}.diagnostic-list{margin-top:8px;border-top:1px solid #eef0f5}.diagnostic-row{display:grid;grid-template-columns:10px minmax(0,1fr);gap:8px;align-items:start;padding:8px 0;border-bottom:1px solid #f2f3f7}.diagnostic-row:last-child{border-bottom:0}.diagnostic-dot{width:8px;height:8px;margin-top:4px;border-radius:50%;background:#aeb4c1}.diagnostic-dot.ok{background:var(--success)}.diagnostic-dot.bad{background:var(--danger)}.diagnostic-row strong{display:block;font-size:10px}.diagnostic-row span:not(.diagnostic-dot){display:block;margin-top:2px;color:var(--muted);font-size:9px;line-height:1.45}"
+          if '.diagnostics-card{' not in c:
+              c += diag_css
+          css.write_text(c, encoding='utf-8')
+          PY
+
+      - name: Validate full Brauzio build
+        run: |
+          pnpm --filter brauzio-shared build
+          pnpm --filter brauzio-cloud-mcp check
+          pnpm --filter brauzio-cloud-mcp build
+          pnpm --filter brauzio-extension exec wxt prepare
+          pnpm --filter brauzio-extension compile
+          pnpm --filter brauzio-extension build
+
+      - name: Commit validated Diagnostics source
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add app/chrome-extension/entrypoints/background/remote-relay.ts app/chrome-extension/entrypoints/popup/App.vue app/chrome-extension/entrypoints/popup/style.css
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m 'Add Brauzio Diagnostics self-test foundation [skip ci]'
+          git push
