@@ -1,0 +1,75 @@
+name: Prepare Brauzio 2.7 Metadata
+
+on:
+  push:
+    paths:
+      - '.github/workflows/release-27-metadata.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 8.15.9
+      - run: pnpm install --no-frozen-lockfile --ignore-scripts
+
+      - name: Update runtime metadata and docs
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+
+          index = Path('app/cloudflare-mcp/src/index.ts')
+          s = index.read_text(encoding='utf-8')
+          s = s.replace("const BRAUZIO_RUNTIME_VERSION = '2.6.0';", "const BRAUZIO_RUNTIME_VERSION = '2.7.0';", 1)
+          s = s.replace("const BRAUZIO_SCHEMA_VERSION = 'v2.6.0-2026-09-07';", "const BRAUZIO_SCHEMA_VERSION = 'v2.7.0-2026-09-07';", 1)
+          index.write_text(s, encoding='utf-8')
+
+          roadmap = Path('docs/ROADMAP.md')
+          r = roadmap.read_text(encoding='utf-8')
+          r = r.replace('- [ ] مراقبة pointer/click/keyboard/scroll/selection.\n- [ ] تمييز Human input عن Agent-generated input بدون الاعتماد على `isTrusted` وحده.\n- [ ] زر Emergency Stop.\n- [ ] زر "استئناف تحكم ChatGPT".', '- [x] مراقبة pointer/click/keyboard/scroll/selection.\n- [x] تمييز Human input عن Agent-generated input بدون الاعتماد على `isTrusted` وحده.\n- [x] زر Emergency Stop.\n- [x] زر "استئناف تحكم ChatGPT".\n- [ ] E2E يدوي على takeover أثناء click/drag/tool طويل بعد تثبيت ZIP النهائي.', 1)
+          r = r.replace('- [ ] Actor Lease داخل Durable Object.\n- [ ] lease timeout وتجديد.\n- [ ] عدة Observer sessions.\n- [ ] منع Agentين من التغيير في الوقت نفسه.', '- [x] Actor Lease داخل Durable Object.\n- [x] lease timeout أثناء التنفيذ + handoff idle لمدة 15 ثانية.\n- [x] عدة Observer sessions مع TTL مستقل.\n- [x] منع Agentين من التغيير في الوقت نفسه، ومنع mutating calls متزامنة حتى من نفس Actor.\n- [x] هوية caller مشتقة داخليًا ومشفرة SHA-256 بدون كشف OAuth token.\n- [ ] E2E تعارض حقيقي بين جلستي OAuth مستقلتين.', 1)
+          r = r.replace('| 7 | Human Takeover + Emergency Stop | P1 | لاحقًا |', '| 7 | Human Takeover + Emergency Stop | P1 | Foundation مكتملة في 2.6.0، E2E يدوي متبقٍ |', 1)
+          r = r.replace('| 8 | Actor / Observer Sessions | P1 | لاحقًا |', '| 8 | Actor / Observer Sessions | P1 | Foundation مكتملة في Cloud runtime 2.7.0، multi-session E2E متبقٍ |', 1)
+          roadmap.write_text(r, encoding='utf-8')
+
+          changelog = Path('docs/CHANGELOG.md')
+          c = changelog.read_text(encoding='utf-8')
+          marker = '# Brauzio Changelog\n\n'
+          entry = '''## 2026-09-07 — Cloud Runtime V2.7.0 Actor / Observer Sessions\n\n- إضافة Actor Lease ذري داخل Durable Object لمنع جلستين Agent من تعديل المتصفح في الوقت نفسه.\n- اشتقاق caller identity داخليًا من MCP session/client/auth context ثم SHA-256؛ لا يتم إرسال أو تخزين OAuth token كمعرّف.\n- منع mutating calls المتزامنة حتى من نفس Actor عبر `activeRequestId` وإرجاع `ACTOR_BUSY`.\n- إبقاء lease طوال تنفيذ الأمر، ثم handoff idle لمدة 15 ثانية فقط لتسليم التحكم بسرعة.\n- Observer sessions مستقلة بTTL خمس دقائق ولا تمنع DOM/Network/Console/Screenshot/Performance المتوازية.\n- Human Takeover أو WebSocket disconnect يلغي Actor Lease فورًا.\n- إضافة `actorLeaseActive`, `actorLeaseBusy`, `actorLeaseExpiresAt`, و`observerSessions` إلى BrowserSession status.\n- الحفاظ على عقد relay المصحح `/ws` وعقد Durable Object الداخلي `/call` مع توافق `/tool-call` القديم.\n- رفع Cloud runtime/schema إلى `2.7.0` / `v2.7.0-2026-09-07`.\n\n## 2026-09-07 — Extension/Cloud V2.6.0 Human Takeover + Emergency Stop\n\n- رصد إدخال الإنسان وإيقاف Actor tools مع إبقاء أدوات المراقبة متاحة.\n- تحرير أي Mouse Hold عند takeover أو disconnect.\n- Emergency Stop وResume من Popup مع Badge `STOP` وحفظ حالة الإيقاف.\n- مزامنة `controlPaused` مع Durable Object ورفض Actor calls بحالة 423 أثناء الإيقاف.\n- إصلاح regressions في `/ws` و`/call` بعد 2.6 وإعادة اختبار اتصال Chrome فعليًا.\n\n'''
+          if marker not in c:
+              raise SystemExit('changelog marker missing')
+          if 'Cloud Runtime V2.7.0 Actor / Observer Sessions' not in c:
+              c = c.replace(marker, marker + entry, 1)
+          changelog.write_text(c, encoding='utf-8')
+          PY
+
+      - name: Validate Cloud and extension compatibility
+        run: |
+          pnpm --filter brauzio-shared build
+          pnpm --filter brauzio-cloud-mcp check
+          pnpm --filter brauzio-cloud-mcp build
+          pnpm --filter brauzio-extension exec wxt prepare
+          pnpm --filter brauzio-extension compile
+          pnpm --filter brauzio-extension build
+
+      - name: Commit validated 2.7 metadata
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add app/cloudflare-mcp/src/index.ts docs/ROADMAP.md docs/CHANGELOG.md
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m 'Set Brauzio Cloud runtime to 2.7.0 [skip ci]'
+          git push
