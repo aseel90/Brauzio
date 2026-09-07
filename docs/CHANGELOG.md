@@ -1,5 +1,16 @@
 # Brauzio Changelog
 
+## 2026-09-07 — Extension/Cloud V2.9.0 Live View / Stream
+
+- إضافة `chrome_live_view` بإجراءات `start`, `status`, `latest`, `stop`.
+- التقاط متتابع خفيف للتبويب النشط مع interval افتراضي 900ms وحد أدنى آمن 550ms.
+- ضغط JPEG داخل الذاكرة مع scale/quality قابلة للضبط لتقليل النقل.
+- Ring buffer من 1–3 Frames فقط؛ لا Downloads ولا ملفات مؤقتة ولا حفظ على القرص.
+- إرجاع أحدث Frames كـ MCP `image` content لكي يراها الأيجينت مباشرة.
+- إسقاط Frames المتطابقة وتقارير captured/dropped/lastFrameAt.
+- إيقاف تلقائي ومسح الذاكرة عند Navigation أو إغلاق التبويب أو Relay disconnect/error/heartbeat recycle أو خمول الأيجينت 15 ثانية.
+- حماية من تصوير صفحات Chrome/Extension المحمية ومن تصوير تبويب غير نشط بالخطأ.
+
 ## 2026-09-07 — Extension/Cloud V2.8.1 Relay Reconnect Watchdog
 
 - إصلاح حالة WebSocket المعلقة بعد إعادة نشر Worker عندما لا يصل حدث `close` للعميل.

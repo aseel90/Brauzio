@@ -3,7 +3,7 @@
   "description": "Brauzio: Arabic-first cloud MCP control for Chrome",
   "author": "Brauzio Contributors",
   "private": true,
-  "version": "2.8.1",
+  "version": "2.9.0",
   "type": "module",
   "scripts": {
     "dev": "wxt",

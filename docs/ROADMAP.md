@@ -394,3 +394,15 @@ B⌨ TYPE
 2. هل تضيف Browser Agent capability حقيقية أم تعيد تضخيم Brauzio؟
 
 Brauzio V3 يجب أن يكون **أصغر في النواة، أكبر في القدرات، أوضح في التشخيص، وأكثر أمانًا عند التعاون بين الإنسان والوكيل**.
+
+## Phase 9.5 — Live View / Stream (P1) — Brauzio 2.9.0
+
+- [x] `chrome_live_view` start/status/latest/stop.
+- [x] Memory-only ring buffer (1–3 frames), no Downloads or disk persistence.
+- [x] JPEG compression with configurable interval/scale/quality.
+- [x] Duplicate-frame dropping and capture counters.
+- [x] MCP ImageContent output for direct Agent vision.
+- [x] Auto-stop + memory wipe on navigation, tab close, relay disconnect/error/heartbeat recycle and agent idle timeout.
+- [x] Protected-page and inactive-tab safety.
+- [ ] E2E installed ZIP: run Live View during Wreckmarch movement/drag and confirm sequential visual understanding.
+

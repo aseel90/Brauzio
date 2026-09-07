@@ -1,6 +1,7 @@
 export { navigateTool, closeTabsTool, switchTabTool } from './common';
 export { windowTool } from './window';
 export { screenshotTool } from './screenshot';
+export { liveViewTool } from './live-view';
 export { webFetcherTool, getInteractiveElementsTool } from './web-fetcher';
 export { clickTool, fillTool } from './interaction';
 export { elementPickerTool } from './element-picker';

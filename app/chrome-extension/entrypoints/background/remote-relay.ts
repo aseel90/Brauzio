@@ -7,6 +7,7 @@ import {
   type PersistentWatchDescriptor,
   type WatchEvent,
 } from './tools/browser/watch';
+import { stopAllLiveViews } from './tools/browser/live-view';
 import { releaseAllMouseHolds } from '@/utils/mouse-hold-safety';
 import {
   beginAgentToolExecution,
@@ -206,6 +207,11 @@ function sendWatchPersistenceMessage(payload: Record<string, unknown>): void {
   }
 }
 
+function stopLiveViewSafety(reason: string) {
+  const count = stopAllLiveViews(reason);
+  if (count > 0) relayLog('LIVE_VIEW_STOPPED', { reason, count });
+}
+
 function stopWatchSafety(reason: string, notifyPersistence = false) {
   void stopAllBrowserWatches(reason, undefined, notifyPersistence)
     .then((count) => {
@@ -228,6 +234,7 @@ function closeSocket() {
   }
   releaseMouseSafety('relay_socket_close_requested');
   stopWatchSafety('relay_socket_close_requested');
+  stopLiveViewSafety('relay_socket_close_requested');
   clearHeartbeat();
   if (socket) {
     try {
@@ -560,6 +567,7 @@ export async function connectRelay(): Promise<BrauzioRelayStatus> {
       relayLog('WS_RECYCLE', { reason, readyState: ws.readyState });
       releaseMouseSafety(reason);
       stopWatchSafety(reason);
+      stopLiveViewSafety(reason);
       clearHeartbeat();
       socket = null;
       try {
@@ -624,6 +632,7 @@ export async function connectRelay(): Promise<BrauzioRelayStatus> {
       relayLog('WS_CLOSED', { code: event.code, reason: event.reason || '', wasClean: event.wasClean });
       releaseMouseSafety('relay_socket_closed');
       stopWatchSafety('relay_socket_closed');
+      stopLiveViewSafety('relay_socket_closed');
       clearHeartbeat();
       socket = null;
       if (!manualDisconnect) {
@@ -648,6 +657,7 @@ export async function disconnectRelay() {
   manualDisconnect = true;
   currentPairing = null;
   clearReconnect();
+  stopLiveViewSafety('manual_relay_disconnect');
   await Promise.allSettled([
     releaseAllMouseHolds('manual_relay_disconnect'),
     stopAllBrowserWatches('manual_relay_disconnect', undefined, true),
