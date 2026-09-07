@@ -129,12 +129,22 @@ async function captureOne(session: LiveViewSession): Promise<void> {
     });
     if (!sourceDataUrl) throw new Error('captureVisibleTab returned empty data');
 
-    const compressed = await compressImage(sourceDataUrl, {
-      scale: session.scale,
-      quality: session.quality,
-      format: 'image/jpeg',
-    });
-    const base64 = compressed.dataUrl.replace(/^data:image\/[^;]+;base64,/, '');
+    let frameDataUrl = sourceDataUrl;
+    let mimeType = 'image/jpeg';
+    try {
+      const compressed = await compressImage(sourceDataUrl, {
+        scale: session.scale,
+        quality: session.quality,
+        format: 'image/jpeg',
+      });
+      frameDataUrl = compressed.dataUrl;
+      mimeType = compressed.mimeType;
+    } catch (compressionError) {
+      console.warn('[BrauzioLiveView] JPEG compression failed; using original frame', compressionError);
+      session.lastError = undefined;
+    }
+
+    const base64 = frameDataUrl.replace(/^data:image\/[^;]+;base64,/, '');
     const fingerprint = frameFingerprint(base64);
     const previous = session.frames[session.frames.length - 1];
     if (previous?.fingerprint === fingerprint) {
@@ -147,7 +157,7 @@ async function captureOne(session: LiveViewSession): Promise<void> {
       seq: nextSeq++,
       capturedAt: Date.now(),
       data: base64,
-      mimeType: compressed.mimeType,
+      mimeType,
       fingerprint,
       bytes: Math.ceil((base64.length * 3) / 4),
     };

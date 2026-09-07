@@ -2,6 +2,27 @@
  * Image processing utility functions
  */
 
+function bytesToBase64(bytes: Uint8Array): string {
+  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
+  let output = '';
+  for (let i = 0; i < bytes.length; i += 3) {
+    const a = bytes[i];
+    const b = i + 1 < bytes.length ? bytes[i + 1] : 0;
+    const c = i + 2 < bytes.length ? bytes[i + 2] : 0;
+    const triplet = (a << 16) | (b << 8) | c;
+    output += alphabet[(triplet >> 18) & 63];
+    output += alphabet[(triplet >> 12) & 63];
+    output += i + 1 < bytes.length ? alphabet[(triplet >> 6) & 63] : '=';
+    output += i + 2 < bytes.length ? alphabet[triplet & 63] : '=';
+  }
+  return output;
+}
+
+async function blobToDataURL(blob: Blob): Promise<string> {
+  const bytes = new Uint8Array(await blob.arrayBuffer());
+  return `data:${blob.type || 'application/octet-stream'};base64,${bytesToBase64(bytes)}`;
+}
+
 /**
  * Create ImageBitmap from data URL (for OffscreenCanvas)
  * @param dataUrl Image data URL
@@ -81,7 +102,6 @@ export async function cropAndResizeImage(
   let sWidth = cropRectPx.width;
   let sHeight = cropRectPx.height;
 
-  // Ensure crop area is within image boundaries
   if (sx < 0) {
     sWidth += sx;
     sx = 0;
@@ -135,12 +155,7 @@ export async function canvasToDataURL(
     quality: format === 'image/jpeg' ? quality : undefined,
   });
 
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onloadend = () => resolve(reader.result as string);
-    reader.onerror = reject;
-    reader.readAsDataURL(blob);
-  });
+  return blobToDataURL(blob);
 }
 
 /**
@@ -160,14 +175,10 @@ export async function compressImage(
 ): Promise<{ dataUrl: string; mimeType: string }> {
   const { scale = 1.0, quality = 0.8, format = 'image/jpeg' } = options;
 
-  // 1. Create an ImageBitmap from the original data URL for efficient drawing.
   const imageBitmap = await createImageBitmapFromUrl(imageDataUrl);
-
-  // 2. Calculate the new dimensions based on the scale factor.
   const newWidth = Math.round(imageBitmap.width * scale);
   const newHeight = Math.round(imageBitmap.height * scale);
 
-  // 3. Use OffscreenCanvas for performance, as it doesn't need to be in the DOM.
   const canvas = new OffscreenCanvas(newWidth, newHeight);
   const ctx = canvas.getContext('2d');
 
@@ -175,20 +186,10 @@ export async function compressImage(
     throw new Error('Failed to get 2D context from OffscreenCanvas');
   }
 
-  // 4. Draw the original image onto the smaller canvas, effectively resizing it.
   ctx.drawImage(imageBitmap, 0, 0, newWidth, newHeight);
 
-  // 5. Export the canvas content to the target format with the specified quality.
-  // This is the step that performs the data compression.
   const compressedDataUrl = await canvas.convertToBlob({ type: format, quality: quality });
+  const dataUrl = await blobToDataURL(compressedDataUrl);
 
-  // A helper to convert blob to data URL since OffscreenCanvas.toDataURL is not standard yet
-  // on all execution contexts (like service workers).
-  const dataUrl = await new Promise<string>((resolve) => {
-    const reader = new FileReader();
-    reader.onloadend = () => resolve(reader.result as string);
-    reader.readAsDataURL(compressedDataUrl);
-  });
-
-  return { dataUrl, mimeType: format };
+  return { dataUrl, mimeType: compressedDataUrl.type || format };
 }
