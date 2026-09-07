@@ -22,6 +22,7 @@ import {
 
 const LOG_PREFIX = '[BrauzioRelay]';
 const HEARTBEAT_MS = 20_000;
+const HEARTBEAT_TIMEOUT_MS = 35_000;
 const RECONNECT_MAX_MS = 30_000;
 
 function relayLog(event: string, details: Record<string, unknown> = {}) {
@@ -82,6 +83,7 @@ let socket: WebSocket | null = null;
 let heartbeatTimer: ReturnType<typeof setInterval> | null = null;
 let reconnectTimer: ReturnType<typeof setTimeout> | null = null;
 let reconnectAttempt = 0;
+let lastPongAt = 0;
 let manualDisconnect = false;
 let currentPairing: { code: string; expiresAt: number; deviceId: string } | null = null;
 let diagnosticPingWaiter: {
@@ -149,6 +151,7 @@ async function saveConfig(config: Partial<BrauzioRelayConfig>): Promise<BrauzioR
 function clearHeartbeat() {
   if (heartbeatTimer) clearInterval(heartbeatTimer);
   heartbeatTimer = null;
+  lastPongAt = 0;
 }
 
 function clearReconnect() {
@@ -440,6 +443,7 @@ async function executeToolCall(message: Extract<RelayInboundMessage, { type: 'to
 async function onRelayMessage(event: MessageEvent) {
   if (typeof event.data !== 'string') return;
   if (event.data === 'pong') {
+    lastPongAt = Date.now();
     if (diagnosticPingWaiter) {
       const waiter = diagnosticPingWaiter;
       diagnosticPingWaiter = null;
@@ -548,11 +552,30 @@ export async function connectRelay(): Promise<BrauzioRelayStatus> {
   updateStatus({ state: 'connecting', authenticated: false, lastError: undefined });
 
   try {
-    socket = new WebSocket(wsUrl);
-    socket.addEventListener('open', async () => {
+    const ws = new WebSocket(wsUrl);
+    socket = ws;
+
+    const recycleSocket = (reason: string, errorMessage?: string) => {
+      if (socket !== ws) return;
+      relayLog('WS_RECYCLE', { reason, readyState: ws.readyState });
+      releaseMouseSafety(reason);
+      stopWatchSafety(reason);
+      clearHeartbeat();
+      socket = null;
+      try {
+        ws.close(4000, reason.slice(0, 120));
+      } catch {}
+      if (!manualDisconnect) {
+        updateStatus({ state: 'disconnected', authenticated: false, lastError: errorMessage });
+        scheduleReconnect();
+      }
+    };
+
+    ws.addEventListener('open', async () => {
+      if (socket !== ws) return;
       relayLog('WS_OPEN', { relayHost: new URL(wsUrl).host, deviceId: config.deviceId || 'default' });
       const freshConfig = await loadConfig();
-      socket?.send(
+      ws.send(
         JSON.stringify({
           type: 'hello',
           deviceId: freshConfig.deviceId || 'default',
@@ -562,23 +585,42 @@ export async function connectRelay(): Promise<BrauzioRelayStatus> {
       );
 
       clearHeartbeat();
+      lastPongAt = Date.now();
       heartbeatTimer = setInterval(() => {
-        if (socket?.readyState === WebSocket.OPEN) socket.send('ping');
+        if (socket !== ws) {
+          clearHeartbeat();
+          return;
+        }
+        if (ws.readyState !== WebSocket.OPEN) {
+          recycleSocket('heartbeat_socket_not_open', 'Relay socket is no longer open');
+          return;
+        }
+        const now = Date.now();
+        if (lastPongAt > 0 && now - lastPongAt > HEARTBEAT_TIMEOUT_MS) {
+          recycleSocket('heartbeat_timeout', 'Relay heartbeat timed out');
+          return;
+        }
+        try {
+          ws.send('ping');
+        } catch {
+          recycleSocket('heartbeat_send_failed', 'Relay heartbeat send failed');
+        }
       }, HEARTBEAT_MS);
     });
 
-    socket.addEventListener('message', (event) => {
+    ws.addEventListener('message', (event) => {
+      if (socket !== ws) return;
       void onRelayMessage(event);
     });
 
-    socket.addEventListener('error', () => {
+    ws.addEventListener('error', () => {
+      if (socket !== ws) return;
       relayLog('WS_ERROR', { relayHost: new URL(wsUrl).host });
-      releaseMouseSafety('relay_socket_error');
-      stopWatchSafety('relay_socket_error');
-      updateStatus({ state: 'error', authenticated: false, lastError: 'WebSocket connection error' });
+      recycleSocket('relay_socket_error', 'WebSocket connection error');
     });
 
-    socket.addEventListener('close', (event) => {
+    ws.addEventListener('close', (event) => {
+      if (socket !== ws) return;
       relayLog('WS_CLOSED', { code: event.code, reason: event.reason || '', wasClean: event.wasClean });
       releaseMouseSafety('relay_socket_closed');
       stopWatchSafety('relay_socket_closed');
