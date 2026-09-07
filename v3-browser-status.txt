@@ -1,0 +1,1 @@
+{"connected":true,"connections":1,"activeWatches":0,"controlPaused":false,"controlReason":"","controlSince":null,"actorLeaseActive":false,"actorLeaseBusy":false,"actorLeaseExpiresAt":null,"observerSessions":0}
