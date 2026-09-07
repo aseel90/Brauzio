@@ -1,0 +1,282 @@
+--- a/app/chrome-extension/entrypoints/background/runtime-v3/element-registry.ts
++++ b/app/chrome-extension/entrypoints/background/runtime-v3/element-registry.ts
+@@ -85,6 +85,14 @@
+     return snapshot?.elements.find((element) => element.eid === eid);
+   }
+ 
++  findHistoricalElement(tabId: number, eid: string, excludeSnapshotId?: string): V3Element | undefined {
++    return [...this.snapshots.values()]
++      .filter((snapshot) => snapshot.tabId === tabId && snapshot.snapshotId !== excludeSnapshotId)
++      .sort((a, b) => b.capturedAt - a.capturedAt)
++      .flatMap((snapshot) => snapshot.elements)
++      .find((element) => element.eid === eid);
++  }
++
+   resolve(
+     tabId: number,
+     target: V3ResolveTarget,
+@@ -113,6 +121,27 @@
+       }
+     }
+ 
++    const historical = requestedEid
++      ? this.findHistoricalElement(tabId, requestedEid, snapshot.snapshotId)
++      : undefined;
++    const expandedTarget: V3ResolveTarget = historical
++      ? {
++          role: historical.fingerprint.role,
++          name: historical.fingerprint.name,
++          text: historical.fingerprint.text,
++          tag: historical.fingerprint.tag,
++          type: historical.fingerprint.type,
++          id: historical.fingerprint.id,
++          fieldName: historical.fingerprint.fieldName,
++          placeholder: historical.fingerprint.placeholder,
++          href: historical.fingerprint.href,
++          frameId: historical.fingerprint.frameId,
++          ...target,
++          // A stale backendNodeId is document-scoped and must never be inherited.
++          backendNodeId: target.backendNodeId,
++        }
++      : target;
++
+     const candidates: V3ResolveCandidate[] = [];
+     for (const element of snapshot.elements) {
+       let score = 0;
+@@ -125,38 +154,39 @@
+         if (reason && matched > 0) reasons.push(reason);
+       };
+ 
+-      if (typeof target.backendNodeId === 'number') {
+-        add(element.backendNodeId === target.backendNodeId ? 1 : 0, 1, 'backendNodeId');
++      if (typeof expandedTarget.backendNodeId === 'number') {
++        add(element.backendNodeId === expandedTarget.backendNodeId ? 1 : 0, 1, 'backendNodeId');
+       }
+-      if (target.frameId) add(element.frameId === target.frameId ? 0.8 : 0, 0.8, 'frame');
+-      if (target.role) {
+-        add(normalizeText(element.role) === normalizeText(target.role) ? 1 : 0, 1, 'role');
++      if (expandedTarget.frameId) add(element.frameId === expandedTarget.frameId ? 0.8 : 0, 0.8, 'frame');
++      if (expandedTarget.role) {
++        add(normalizeText(element.role) === normalizeText(expandedTarget.role) ? 1 : 0, 1, 'role');
+       }
+-      if (target.tag) add(normalizeText(element.tag) === normalizeText(target.tag) ? 0.7 : 0, 0.7, 'tag');
+-      if (target.type) add(attr(element, 'type') === normalizeText(target.type) ? 0.7 : 0, 0.7, 'type');
+-      if (target.id) add(attr(element, 'id') === normalizeText(target.id) ? 1 : 0, 1, 'id');
+-      if (target.fieldName) add(attr(element, 'name') === normalizeText(target.fieldName) ? 0.8 : 0, 0.8, 'fieldName');
+-      if (target.placeholder) {
+-        add(attr(element, 'placeholder') === normalizeText(target.placeholder) ? 0.7 : 0, 0.7, 'placeholder');
++      if (expandedTarget.tag) add(normalizeText(element.tag) === normalizeText(expandedTarget.tag) ? 0.7 : 0, 0.7, 'tag');
++      if (expandedTarget.type) add(attr(element, 'type') === normalizeText(expandedTarget.type) ? 0.7 : 0, 0.7, 'type');
++      if (expandedTarget.id) add(attr(element, 'id') === normalizeText(expandedTarget.id) ? 1 : 0, 1, 'id');
++      if (expandedTarget.fieldName) add(attr(element, 'name') === normalizeText(expandedTarget.fieldName) ? 0.8 : 0, 0.8, 'fieldName');
++      if (expandedTarget.placeholder) {
++        add(attr(element, 'placeholder') === normalizeText(expandedTarget.placeholder) ? 0.7 : 0, 0.7, 'placeholder');
+       }
+-      if (target.href) {
+-        const expected = normalizeText(target.href);
++      if (expandedTarget.href) {
++        const expected = normalizeText(expandedTarget.href);
+         const actual = attr(element, 'href');
+         const match = compareText(expected, actual);
+         add(match.score * 0.8, 0.8, match.reason ? `href:${match.reason}` : undefined);
+       }
+-      if (target.name) {
+-        const match = compareText(normalizeText(target.name), normalizeText(element.name));
++      if (expandedTarget.name) {
++        const match = compareText(normalizeText(expandedTarget.name), normalizeText(element.name));
+         add(match.score * 1.4, 1.4, match.reason ? `name:${match.reason}` : undefined);
+       }
+-      if (target.text) {
+-        const match = compareText(normalizeText(target.text), normalizeText(element.text || element.name));
++      if (expandedTarget.text) {
++        const match = compareText(normalizeText(expandedTarget.text), normalizeText(element.text || element.name));
+         add(match.score, 1, match.reason ? `text:${match.reason}` : undefined);
+       }
+ 
+       if (weight === 0) continue;
+       const normalizedScore = Math.max(0, Math.min(1, score / weight));
+       if (normalizedScore >= (options.minScore ?? 0.32)) {
++        if (historical) reasons.unshift('historical-fingerprint');
+         candidates.push({ eid: element.eid, score: Number(normalizedScore.toFixed(4)), reasons, element });
+       }
+     }
+--- a/app/chrome-extension/entrypoints/background/runtime-v3/observation-service.ts
++++ b/app/chrome-extension/entrypoints/background/runtime-v3/observation-service.ts
+@@ -181,8 +181,16 @@
+           const backendNodeId = Number(backendIds[nodeIndex] || 0);
+           if (!backendNodeId) continue;
+           const tag = readString(strings, nodes.nodeName?.[nodeIndex]).toUpperCase();
+-          if (!tag || ['#TEXT', '#COMMENT', '#DOCUMENT', '#DOCUMENT-FRAGMENT'].includes(tag)) continue;
++          if (!tag || ['#COMMENT', '#DOCUMENT', '#DOCUMENT-FRAGMENT'].includes(tag)) continue;
++          const isTextNode = tag === '#TEXT';
++          if (isTextNode && mode !== 'full') continue;
+           const attributes = attributesAt(nodes, nodeIndex, strings);
++          const passwordLike = !isTextNode
++            && tag === 'INPUT'
++            && (String(attributes.type || '').toLowerCase() === 'password'
++              || /(?:^|[-_ ])password(?:$|[-_ ])/i.test(String(attributes.autocomplete || '')));
++          if (passwordLike) delete attributes.value;
+           const ax = axByBackend.get(backendNodeId);
+           const role = roleOf(ax);
+           const name = nameOf(ax);
+@@ -202,6 +210,7 @@
+           const clickable = isClickable || INTERACTIVE_ROLES.has(role) || INTERACTIVE_TAGS.has(tag);
+           const interactive = clickable || editable || focusable || INTERACTIVE_ROLES.has(role);
+           if (mode !== 'full' && !interactive) continue;
++          if (isTextNode && !String(name || textValue || nodeValue || '').trim()) continue;
+ 
+           const effectiveSessionId = context.sessionId || loader?.sessionId;
+           const effectiveTargetId = context.targetId || loader?.targetId;
+@@ -253,9 +262,7 @@
+             selected: boolish(axProp(ax, 'selected')),
+             expanded: boolish(axProp(ax, 'expanded')),
+             required: boolish(axProp(ax, 'required')) || attributes.required !== undefined,
+-            value: attributes.type?.toLowerCase() === 'password' || /password/i.test(attributes.autocomplete || '')
+-              ? undefined
+-              : (inputValue ?? ax?.value?.value),
++            value: passwordLike ? undefined : (inputValue ?? ax?.value?.value),
+             fingerprint,
+           };
+           const element: V3Element = { ...elementBase, signature: elementSignature(elementBase) };
+@@ -285,6 +292,7 @@
+     const tabs = await sessionGraph.tabs();
+     const snapshotId = makeSnapshotId(tab.id);
+     const eventCursor = eventJournal.cursor(tab.id);
++    const previousRuntimeState = await runtimeState.get(tab.id);
+     const storedSnapshot: V3ObservationSnapshot = {
+       snapshotId,
+       tabId: tab.id,
+@@ -311,6 +319,7 @@
+       focusedEid,
+       delta,
+       eventCursor,
++      lastAction: previousRuntimeState?.lastAction,
+       warnings: warnings.length ? warnings : undefined,
+     };
+     elementRegistry.store(storedSnapshot);
+--- a/app/chrome-extension/entrypoints/background/runtime-v3/action-engine.ts
++++ b/app/chrome-extension/entrypoints/background/runtime-v3/action-engine.ts
+@@ -8,6 +8,7 @@
+ import { eventJournal } from './event-journal';
+ import { makeActionId } from './ids';
+ import { observationService } from './observation-service';
++import { runtimeState } from './runtime-state';
+ import { sessionGraph } from './session-graph';
+ import type {
+   V3ActionEvidence,
+@@ -77,11 +78,13 @@
+ class ActionEngine {
+   async execute(tab: chrome.tabs.Tab & { id: number }, request: V3ActionRequest): Promise<V3ActionResult> {
+     const actionId = makeActionId(tab.id);
+-    const startedAt = Date.now();
+     await sessionGraph.ensure(tab.id);
+-    let before = elementRegistry.get(request.snapshotId) || elementRegistry.latest(tab.id);
+-    if (!before) before = (await observationService.observe(tab, { mode: 'compact' })).snapshot;
++    // Every atomic action starts from a fresh mechanical observation. Historical
++    // snapshots remain in the registry only to explain stale EIDs to the agent.
++    const before = (await observationService.observe(tab, { mode: 'compact' })).snapshot;
+     const beforeSnapshotId = before.snapshotId;
++    const startedAt = Date.now();
+     const startCursor = eventJournal.cursor(tab.id);
+     const releaseActionScope = eventJournal.beginAction(tab.id, actionId);
+     const timeoutMs = Math.max(250, Math.min(Number(request.timeoutMs || 5000), 30000));
+@@ -158,6 +161,18 @@
+         events,
+         verification,
+       };
++      await runtimeState.patch(tab.id, {
++        lastAction: {
++          actionId,
++          action: request.action,
++          success: evidence.success,
++          completedAt,
++          targetEid: targetElement?.eid,
++          afterSnapshotId: observationResult?.snapshot.snapshotId,
++        },
++      });
+       return {
+         evidence,
+         observation: observationResult?.snapshot,
+@@ -181,7 +196,7 @@
+       } catch {
+         failureObservation = undefined;
+       }
+-      return {
+-        evidence: {
++      const failureEvidence: V3ActionEvidence = {
+           actionId,
+           action: request.action,
+           tabId: tab.id,
+@@ -196,7 +211,20 @@
+           events,
+           error: normalized,
+-        },
++      };
++      await runtimeState.patch(tab.id, {
++        lastAction: {
++          actionId,
++          action: request.action,
++          success: false,
++          completedAt,
++          targetEid: targetElement?.eid,
++          afterSnapshotId: failureObservation?.snapshot.snapshotId,
++          errorCode: normalized.code,
++        },
++      });
++      return {
++        evidence: failureEvidence,
+         observation: failureObservation?.snapshot,
+         screenshot: failureObservation?.screenshot,
+         resolution,
+--- a/app/chrome-extension/entrypoints/background/tools/browser/live-view.ts
++++ b/app/chrome-extension/entrypoints/background/tools/browser/live-view.ts
+@@ -9,7 +9,7 @@
+ const DEFAULT_SCALE = 0.65;
+ const DEFAULT_QUALITY = 0.72;
+ const MAX_BUFFERED_FRAMES = 3;
+-const IDLE_STOP_MS = 15_000;
++const IDLE_STOP_MS = 120_000;
+ 
+ type LiveViewAction = 'start' | 'status' | 'latest' | 'stop';
+ 
+@@ -264,7 +264,16 @@
+ 
+ chrome.tabs.onRemoved.addListener((tabId) => stopSession(tabId, 'tab_closed'));
+ chrome.tabs.onUpdated.addListener((tabId, changeInfo) => {
+-  if (changeInfo.status === 'loading' || typeof changeInfo.url === 'string') stopSession(tabId, 'navigation');
++  if (changeInfo.status !== 'loading' && typeof changeInfo.url !== 'string') return;
++  const session = sessions.get(tabId);
++  if (!session?.running) return;
++  // Keep the stream bound to the tab across navigation. Discard frames from the
++  // previous document so the agent can never mistake old pixels for the new page.
++  session.frames.length = 0;
++  session.lastFrameAt = undefined;
++  session.lastError = 'navigation_in_progress';
++  session.lastClientTouchAt = Date.now();
+ });
+ 
+ export const liveViewTool = new LiveViewTool();
+--- a/app/chrome-extension/entrypoints/background/runtime-v3/types.ts
++++ b/app/chrome-extension/entrypoints/background/runtime-v3/types.ts
+@@ -116,6 +116,7 @@
+   focusedEid?: string;
+   delta?: V3SnapshotDelta;
+   eventCursor?: number;
++  lastAction?: V3RuntimeTabState['lastAction'];
+   warnings?: string[];
+ }
+ 
+@@ -195,4 +196,13 @@
+   lastUpdatedAt: number;
+   eventCursor?: number;
+   sessionGraphEnabled?: boolean;
++  lastAction?: {
++    actionId: string;
++    action: string;
++    success: boolean;
++    completedAt: number;
++    targetEid?: string;
++    afterSnapshotId?: string;
++    errorCode?: string;
++  };
+ }

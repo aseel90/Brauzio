@@ -1,0 +1,1 @@
+{"ok":true,"service":"brauzio-mcp","version":"3.0.0","schemaVersion":"v3.0.0-2026-09-07","toolCount":39}

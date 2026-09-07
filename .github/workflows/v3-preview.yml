@@ -1,0 +1,81 @@
+name: Brauzio V3 Preview
+
+on:
+  push:
+    branches: [brauzio-v3-runtime]
+    paths:
+      - '.github/workflows/v3-preview.yml'
+      - 'app/chrome-extension/**'
+      - 'packages/shared/**'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: brauzio-v3-preview
+  cancel-in-progress: true
+
+jobs:
+  preview:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: brauzio-v3-runtime
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 8.15.9
+
+      - name: Install dependencies
+        run: pnpm install --no-frozen-lockfile --ignore-scripts
+
+      - name: Build shared package
+        run: pnpm --filter brauzio-shared build
+
+      - name: Prepare extension
+        run: pnpm --filter brauzio-extension exec wxt prepare
+
+      - name: Typecheck extension
+        run: pnpm --filter brauzio-extension compile
+
+      - name: Build extension
+        run: pnpm --filter brauzio-extension build
+
+      - name: Verify 3.0.1 manifest and package ZIP
+        shell: bash
+        run: |
+          set -euo pipefail
+          OUT='app/chrome-extension/.output/chrome-mv3'
+          node -e "const fs=require('fs');const m=JSON.parse(fs.readFileSync('$OUT/manifest.json','utf8'));if(m.version!=='3.0.1')throw new Error('Expected manifest 3.0.1, got '+m.version);console.log('Verified Brauzio',m.version)"
+          rm -f app/chrome-extension/.output/brauzio-chrome-v3-preview.zip
+          (cd "$OUT" && zip -qr ../brauzio-chrome-v3-preview.zip .)
+          unzip -t app/chrome-extension/.output/brauzio-chrome-v3-preview.zip >/dev/null
+
+      - name: Publish 3.0.1 preview ZIP
+        shell: bash
+        run: |
+          set -euo pipefail
+          PREVIEW='releases/chrome-extension/v3-preview'
+          LATEST='releases/chrome-extension/latest'
+          mkdir -p "$PREVIEW" "$LATEST"
+          rm -f "$PREVIEW/brauzio-chrome-3.0.0-preview.zip"
+          cp app/chrome-extension/.output/brauzio-chrome-v3-preview.zip "$PREVIEW/brauzio-chrome-3.0.1-preview.zip"
+          cp app/chrome-extension/.output/brauzio-chrome-v3-preview.zip "$LATEST/brauzio-chrome-latest.zip"
+          printf 'Brauzio 3.0.1\nBuilt from brauzio-v3-runtime\n' > "$LATEST/build-status.txt"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A "$PREVIEW" "$LATEST"
+          if ! git diff --cached --quiet; then
+            git commit -m 'build(v3): publish Brauzio Chrome 3.0.1 preview [skip ci]'
+            git push origin HEAD:brauzio-v3-runtime
+          fi

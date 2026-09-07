@@ -1,0 +1,39 @@
+name: Brauzio V3 Post Deploy Health
+
+on:
+  push:
+    branches: [brauzio-v3-runtime]
+    paths:
+      - '.github/workflows/v3-postdeploy-health.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  health:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check deployed Worker health
+        shell: bash
+        run: |
+          set -euo pipefail
+          LOG=v3-postdeploy-health.txt
+          curl -fsS 'https://brauzio-mcp.aseelsalah266.workers.dev/health' | tee "$LOG"
+          python - "$LOG" <<'PY'
+          import json,sys
+          data=json.load(open(sys.argv[1],encoding='utf-8'))
+          assert data.get('ok') is True, data
+          assert data.get('version') == '3.0.0', data
+          assert data.get('schemaVersion') == 'v3.0.0-2026-09-07', data
+          assert int(data.get('toolCount',0)) >= 39, data
+          print('validated health', data)
+          PY
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add "$LOG"
+          if ! git diff --cached --quiet; then
+            git commit -m 'test(v3): persist deployed Worker health [skip ci]'
+            git push
+          fi

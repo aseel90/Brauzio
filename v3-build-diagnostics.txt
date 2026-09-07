@@ -1,0 +1,98 @@
+=== shared build ===
+
+> brauzio-shared@1.0.1 build /home/runner/work/Brauzio/Brauzio/packages/shared
+> tsup src/index.ts --format cjs,esm --dts --clean
+
+[34mCLI[39m Building entry: src/index.ts
+[34mCLI[39m Using tsconfig: tsconfig.json
+[34mCLI[39m tsup v8.5.1
+[34mCLI[39m Target: es2020
+[34mCLI[39m Cleaning output folder
+[34mCJS[39m Build start
+[34mESM[39m Build start
+[32mESM[39m [1mdist/index.mjs [22m[32m23.91 KB[39m
+[32mESM[39m ⚡️ Build success in 27ms
+[32mCJS[39m [1mdist/index.js [22m[32m25.01 KB[39m
+[32mCJS[39m ⚡️ Build success in 29ms
+[34mDTS[39m Build start
+[32mDTS[39m ⚡️ Build success in 1184ms
+[32mDTS[39m [1mdist/index.d.ts  [22m[32m5.32 KB[39m
+[32mDTS[39m [1mdist/index.d.mts [22m[32m5.32 KB[39m
+shared_exit=0
+=== extension compile ===
+
+> brauzio-extension@2.9.3 compile /home/runner/work/Brauzio/Brauzio/app/chrome-extension
+> vue-tsc --noEmit
+
+compile_exit=0
+=== extension build ===
+
+> brauzio-extension@2.9.3 build /home/runner/work/Brauzio/Brauzio/app/chrome-extension
+> wxt build
+
+
+[log] [90mWXT[39m [90m[1m0.20.11[22m[39m
+[dotenv@17.2.3] injecting env (0) from .env.production.chrome.local,.env.production.chrome,.env.chrome.local,.env.chrome,.env.production.local,.env.production,.env.local,.env -- tip: ⚙️  specify custom .env file path with { path: '/custom/path/.env' }
+[warn] `InlineConfig#runner` is deprecated, use `InlineConfig#webExt` instead. See https://wxt.dev/guide/resources/upgrading.html#v0-19-0-rarr-v0-20-0
+[info] Building [36mchrome-mv3[39m for [36mproduction[39m with [32mVite 7.2.7[39m
+[warn] Duplicated imports "CDPRouter", the one from "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-router.ts" has been ignored and "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-session-manager.ts" is used
+[warn] Duplicated imports "cdpRouter", the one from "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-router.ts" has been ignored and "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-session-manager.ts" is used
+[warn] Duplicated imports "CdpChildSessionSnapshot", the one from "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-router.ts" has been ignored and "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-session-manager.ts" is used
+[warn] Duplicated imports "CdpEventEnvelope", the one from "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-router.ts" has been ignored and "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-session-manager.ts" is used
+[warn] Duplicated imports "CdpOwnerTag", the one from "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-router.ts" has been ignored and "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-session-manager.ts" is used
+[warn] Duplicated imports "CdpSessionSnapshot", the one from "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-router.ts" has been ignored and "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-session-manager.ts" is used
+- Preparing...
+[warn] Duplicated imports "CDPRouter", the one from "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-router.ts" has been ignored and "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-session-manager.ts" is used
+[warn] Duplicated imports "cdpRouter", the one from "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-router.ts" has been ignored and "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-session-manager.ts" is used
+[warn] Duplicated imports "CdpChildSessionSnapshot", the one from "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-router.ts" has been ignored and "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-session-manager.ts" is used
+[warn] Duplicated imports "CdpEventEnvelope", the one from "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-router.ts" has been ignored and "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-session-manager.ts" is used
+[warn] Duplicated imports "CdpOwnerTag", the one from "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-router.ts" has been ignored and "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-session-manager.ts" is used
+[warn] Duplicated imports "CdpSessionSnapshot", the one from "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-router.ts" has been ignored and "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-session-manager.ts" is used
+[warn] Duplicated imports "CDPRouter", the one from "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-router.ts" has been ignored and "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-session-manager.ts" is used
+[warn] Duplicated imports "cdpRouter", the one from "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-router.ts" has been ignored and "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-session-manager.ts" is used
+[warn] Duplicated imports "CdpChildSessionSnapshot", the one from "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-router.ts" has been ignored and "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-session-manager.ts" is used
+[warn] Duplicated imports "CdpEventEnvelope", the one from "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-router.ts" has been ignored and "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-session-manager.ts" is used
+[warn] Duplicated imports "CdpOwnerTag", the one from "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-router.ts" has been ignored and "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-session-manager.ts" is used
+[warn] Duplicated imports "CdpSessionSnapshot", the one from "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-router.ts" has been ignored and "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-session-manager.ts" is used
+[warn] Duplicated imports "CDPRouter", the one from "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-router.ts" has been ignored and "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-session-manager.ts" is used
+[warn] Duplicated imports "cdpRouter", the one from "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-router.ts" has been ignored and "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-session-manager.ts" is used
+[warn] Duplicated imports "CdpChildSessionSnapshot", the one from "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-router.ts" has been ignored and "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-session-manager.ts" is used
+[warn] Duplicated imports "CdpEventEnvelope", the one from "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-router.ts" has been ignored and "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-session-manager.ts" is used
+[warn] Duplicated imports "CdpOwnerTag", the one from "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-router.ts" has been ignored and "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-session-manager.ts" is used
+[warn] Duplicated imports "CdpSessionSnapshot", the one from "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-router.ts" has been ignored and "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-session-manager.ts" is used
+[warn] Duplicated imports "CDPRouter", the one from "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-router.ts" has been ignored and "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-session-manager.ts" is used
+[warn] Duplicated imports "cdpRouter", the one from "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-router.ts" has been ignored and "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-session-manager.ts" is used
+[warn] Duplicated imports "CdpChildSessionSnapshot", the one from "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-router.ts" has been ignored and "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-session-manager.ts" is used
+[warn] Duplicated imports "CdpEventEnvelope", the one from "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-router.ts" has been ignored and "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-session-manager.ts" is used
+[warn] Duplicated imports "CdpOwnerTag", the one from "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-router.ts" has been ignored and "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-session-manager.ts" is used
+[warn] Duplicated imports "CdpSessionSnapshot", the one from "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-router.ts" has been ignored and "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-session-manager.ts" is used
+[warn] Duplicated imports "CDPRouter", the one from "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-router.ts" has been ignored and "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-session-manager.ts" is used
+[warn] Duplicated imports "cdpRouter", the one from "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-router.ts" has been ignored and "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-session-manager.ts" is used
+[warn] Duplicated imports "CdpChildSessionSnapshot", the one from "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-router.ts" has been ignored and "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-session-manager.ts" is used
+[warn] Duplicated imports "CdpEventEnvelope", the one from "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-router.ts" has been ignored and "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-session-manager.ts" is used
+[warn] Duplicated imports "CdpOwnerTag", the one from "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-router.ts" has been ignored and "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-session-manager.ts" is used
+[warn] Duplicated imports "CdpSessionSnapshot", the one from "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-router.ts" has been ignored and "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-session-manager.ts" is used
+[success] Built extension in 2.445 s
+[90m  ├─[39m [2m.output/chrome-mv3/[22m[34mmanifest.json[39m                                 [2m1.16 kB[22m  
+[90m  ├─[39m [2m.output/chrome-mv3/[22m[32moffscreen.html[39m                                [2m295 B[22m    
+[90m  ├─[39m [2m.output/chrome-mv3/[22m[32mpopup.html[39m                                    [2m681 B[22m    
+[90m  ├─[39m [2m.output/chrome-mv3/[22m[32mwelcome.html[39m                                  [2m666 B[22m    
+[90m  ├─[39m [2m.output/chrome-mv3/[22m[36mbackground.js[39m                                 [2m592.9 kB[22m 
+[90m  ├─[39m [2m.output/chrome-mv3/[22m[36mchunks/_virtual_wxt-html-plugins-Cyikj0JH.js[39m  [2m1.32 kB[22m  
+[90m  ├─[39m [2m.output/chrome-mv3/[22m[36mchunks/brauzio-mark-ENWNIQ6F.js[39m               [2m185.86 kB[22m
+[90m  ├─[39m [2m.output/chrome-mv3/[22m[36mchunks/offscreen-Bho20vS9.js[39m                  [2m15.62 kB[22m 
+[90m  ├─[39m [2m.output/chrome-mv3/[22m[36mchunks/popup-Dp2FRZHB.js[39m                      [2m28.62 kB[22m 
+[90m  ├─[39m [2m.output/chrome-mv3/[22m[36mchunks/welcome-4OLPm0XG.js[39m                    [2m8.49 kB[22m  
+[90m  ├─[39m [2m.output/chrome-mv3/[22m[36mcontent-scripts/element-picker.js[39m             [2m26.04 kB[22m 
+[90m  ├─[39m [2m.output/chrome-mv3/[22m[36mcontent-scripts/human-takeover.js[39m             [2m10.64 kB[22m 
+[90m  ├─[39m [2m.output/chrome-mv3/[22m[35massets/popup-QKT3DmB7.css[39m                     [2m9.47 kB[22m  
+[90m  ├─[39m [2m.output/chrome-mv3/[22m[35massets/welcome-BZQ_n3bm.css[39m                   [2m3.89 kB[22m  
+[90m  ├─[39m [2m.output/chrome-mv3/[22m[34mbrand/brauzio-mark.svg[39m                        [2m845 B[22m    
+[90m  ├─[39m [2m.output/chrome-mv3/[22m[34micon/128.png[39m                                  [2m10.19 kB[22m 
+[90m  ├─[39m [2m.output/chrome-mv3/[22m[34micon/16.png[39m                                   [2m836 B[22m    
+[90m  ├─[39m [2m.output/chrome-mv3/[22m[34micon/32.png[39m                                   [2m2.1 kB[22m   
+[90m  ├─[39m [2m.output/chrome-mv3/[22m[34micon/48.png[39m                                   [2m3.47 kB[22m  
+[90m  └─[39m [2m.output/chrome-mv3/[22m[34micon/96.png[39m                                   [2m7.65 kB[22m  
+[36mΣ Total size:[39m 910.75 kB                                                                
+[success] Finished in 2.667 s
+build_exit=0

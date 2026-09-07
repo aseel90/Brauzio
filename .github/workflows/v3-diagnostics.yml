@@ -1,0 +1,60 @@
+name: Brauzio V3 Diagnostics
+
+on:
+  push:
+    branches: [brauzio-v3-runtime]
+    paths:
+      - '.github/workflows/v3-diagnostics.yml'
+      - 'app/chrome-extension/**'
+      - 'packages/shared/**'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: brauzio-v3-diagnostics
+  cancel-in-progress: true
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 8.15.9
+      - run: pnpm install --no-frozen-lockfile --ignore-scripts
+      - run: pnpm --filter brauzio-extension exec wxt prepare
+      - name: Build and persist diagnostics
+        shell: bash
+        run: |
+          set +e
+          LOG=v3-build-diagnostics.txt
+          : > "$LOG"
+          echo '=== shared build ===' >> "$LOG"
+          pnpm --filter brauzio-shared build >> "$LOG" 2>&1
+          SHARED=$?
+          echo "shared_exit=$SHARED" >> "$LOG"
+          echo '=== extension compile ===' >> "$LOG"
+          pnpm --filter brauzio-extension compile >> "$LOG" 2>&1
+          COMPILE=$?
+          echo "compile_exit=$COMPILE" >> "$LOG"
+          echo '=== extension build ===' >> "$LOG"
+          pnpm --filter brauzio-extension build >> "$LOG" 2>&1
+          BUILD=$?
+          echo "build_exit=$BUILD" >> "$LOG"
+
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add "$LOG"
+          if ! git diff --cached --quiet; then
+            git commit -m 'build(v3): persist diagnostics [skip ci]'
+            git push
+          fi
+          if [ "$SHARED" -ne 0 ] || [ "$COMPILE" -ne 0 ] || [ "$BUILD" -ne 0 ]; then
+            exit 1
+          fi

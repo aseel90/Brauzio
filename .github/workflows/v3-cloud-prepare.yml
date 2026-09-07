@@ -1,0 +1,77 @@
+name: Brauzio V3 Cloud Prepare
+
+on:
+  push:
+    branches: [brauzio-v3-runtime]
+    paths:
+      - 'scripts/v3-cloud-version.py'
+      - '.github/workflows/v3-cloud-prepare.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: brauzio-v3-cloud-prepare
+  cancel-in-progress: true
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 8.15.9
+      - name: Prepare and diagnose Cloudflare V3
+        shell: bash
+        run: |
+          set +e
+          LOG=v3-cloud-diagnostics.txt
+          : > "$LOG"
+
+          echo '=== version transform ===' >> "$LOG"
+          python scripts/v3-cloud-version.py >> "$LOG" 2>&1
+          VERSION=$?
+          echo "version_exit=$VERSION" >> "$LOG"
+
+          echo '=== install ===' >> "$LOG"
+          pnpm install --no-frozen-lockfile --ignore-scripts >> "$LOG" 2>&1
+          INSTALL=$?
+          echo "install_exit=$INSTALL" >> "$LOG"
+
+          echo '=== shared build ===' >> "$LOG"
+          pnpm --filter brauzio-shared build >> "$LOG" 2>&1
+          SHARED=$?
+          echo "shared_exit=$SHARED" >> "$LOG"
+
+          echo '=== cloud check ===' >> "$LOG"
+          pnpm --filter brauzio-cloud-mcp check >> "$LOG" 2>&1
+          CLOUD=$?
+          echo "cloud_exit=$CLOUD" >> "$LOG"
+
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add "$LOG"
+
+          if [ "$VERSION" -eq 0 ] && [ "$INSTALL" -eq 0 ] && [ "$SHARED" -eq 0 ] && [ "$CLOUD" -eq 0 ]; then
+            git add app/cloudflare-mcp/src/index.ts
+          fi
+
+          if ! git diff --cached --quiet; then
+            if [ "$VERSION" -eq 0 ] && [ "$INSTALL" -eq 0 ] && [ "$SHARED" -eq 0 ] && [ "$CLOUD" -eq 0 ]; then
+              git commit -m 'release(v3): prepare Cloudflare MCP runtime 3.0.0 [skip ci]'
+            else
+              git commit -m 'build(v3): persist Cloudflare prepare diagnostics [skip ci]'
+            fi
+            git push
+          fi
+
+          if [ "$VERSION" -ne 0 ] || [ "$INSTALL" -ne 0 ] || [ "$SHARED" -ne 0 ] || [ "$CLOUD" -ne 0 ]; then
+            exit 1
+          fi
+
+# rerun after schema typing fix: 2026-09-07T16:50Z

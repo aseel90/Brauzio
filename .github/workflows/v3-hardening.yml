@@ -1,0 +1,50 @@
+name: Brauzio V3 Hardening
+
+on:
+  push:
+    branches: [brauzio-v3-runtime]
+    paths:
+      - 'scripts/v3-second-hardening.py'
+      - '.github/workflows/v3-hardening.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: brauzio-v3-hardening
+  cancel-in-progress: true
+
+jobs:
+  harden:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 8.15.9
+      - name: Apply deterministic source transforms
+        run: python scripts/v3-second-hardening.py
+      - run: pnpm install --no-frozen-lockfile --ignore-scripts
+      - run: pnpm --filter brauzio-extension exec wxt prepare
+      - run: pnpm --filter brauzio-shared build
+      - run: pnpm --filter brauzio-extension compile
+      - run: pnpm --filter brauzio-extension build
+      - name: Commit validated runtime changes
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add app/chrome-extension/entrypoints/background/runtime-v3/element-registry.ts \
+                  app/chrome-extension/entrypoints/background/runtime-v3/observation-service.ts \
+                  app/chrome-extension/entrypoints/background/runtime-v3/action-engine.ts \
+                  app/chrome-extension/entrypoints/background/runtime-v3/types.ts \
+                  app/chrome-extension/entrypoints/background/tools/browser/live-view.ts
+          if ! git diff --cached --quiet; then
+            git commit -m 'fix(v3): stale recovery fresh actions privacy and live navigation [skip ci]'
+            git push
+          fi

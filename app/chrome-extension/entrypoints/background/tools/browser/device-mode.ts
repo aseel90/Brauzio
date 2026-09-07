@@ -53,6 +53,27 @@ const PRESETS: Record<string, DevicePreset> = {
 };
 
 const activeModes = new Map<number, ActiveDeviceMode>();
+const RESET_STORAGE_PREFIX = 'brauzio-device-mode-reset-v1:';
+
+function resetStorageKey(tabId: number): string {
+  return `${RESET_STORAGE_PREFIX}${tabId}`;
+}
+
+async function setResetMarker(tabId: number, active: boolean): Promise<void> {
+  const key = resetStorageKey(tabId);
+  if (active) await chrome.storage.session.set({ [key]: true });
+  else await chrome.storage.session.remove(key);
+}
+
+async function hasResetMarker(tabId: number): Promise<boolean> {
+  try {
+    const key = resetStorageKey(tabId);
+    const stored = await chrome.storage.session.get(key);
+    return stored[key] === true;
+  } catch {
+    return false;
+  }
+}
 
 function clampInt(value: unknown, fallback: number, min: number, max: number): number {
   const numeric = Number(value);
@@ -72,28 +93,26 @@ function orientedSize(width: number, height: number, orientation: Orientation) {
     : { width: Math.min(width, height), height: Math.max(width, height) };
 }
 
+async function clearDeviceOverrides(tabId: number): Promise<void> {
+  const clearOverrides = async () => {
+    await cdpRouter.sendCommand(tabId, 'Emulation.clearDeviceMetricsOverride');
+    await cdpRouter.sendCommand(tabId, 'Emulation.setTouchEmulationEnabled', { enabled: false });
+  };
+  try {
+    if (cdpRouter.hasSession(tabId)) await clearOverrides();
+    else await cdpRouter.withSession(tabId, `device-reset:${tabId}`, clearOverrides);
+  } catch {
+    // A navigation may temporarily replace the target. The onUpdated listener
+    // retries on the next loading/complete transition when reset is marked.
+  }
+}
+
 async function releaseMode(tabId: number): Promise<void> {
   const state = activeModes.get(tabId);
   const owner = state?.owner || `device-mode:${tabId}`;
   activeModes.delete(tabId);
 
-  const clearOverrides = async () => {
-    await cdpRouter.sendCommand(tabId, 'Emulation.clearDeviceMetricsOverride');
-    await cdpRouter.sendCommand(tabId, 'Emulation.setTouchEmulationEnabled', { enabled: false });
-  };
-
-  try {
-    if (cdpRouter.hasSession(tabId)) {
-      await clearOverrides();
-    } else {
-      // `activeModes` is in-memory and may be empty after a service-worker
-      // lifecycle restart while Chrome still has emulation state. Reset must
-      // therefore clear the browser state even when our local map is empty.
-      await cdpRouter.withSession(tabId, `device-reset:${tabId}`, clearOverrides);
-    }
-  } catch {
-    // Reset is best-effort for tabs that are closing or no longer debuggable.
-  }
+  await clearDeviceOverrides(tabId);
 
   // Release every stale/ref-counted Device Mode owner without disturbing
   // other CDP owners such as watches or raw CDP sessions.
@@ -108,6 +127,16 @@ async function releaseMode(tabId: number): Promise<void> {
 
 chrome.tabs.onRemoved.addListener((tabId) => {
   void releaseMode(tabId);
+  void setResetMarker(tabId, false);
+});
+
+chrome.tabs.onUpdated.addListener((tabId, changeInfo) => {
+  if (changeInfo.status !== 'loading' && changeInfo.status !== 'complete') return;
+  void (async () => {
+    if (!(await hasResetMarker(tabId))) return;
+    activeModes.delete(tabId);
+    await clearDeviceOverrides(tabId);
+  })();
 });
 
 class DeviceModeTool extends BaseBrowserToolExecutor {
@@ -140,7 +169,8 @@ class DeviceModeTool extends BaseBrowserToolExecutor {
     const tabId = tab.id;
 
     if (action === 'status') {
-      const state = activeModes.get(tabId);
+      const resetMarked = await hasResetMarker(tabId);
+      const state = resetMarked ? undefined : activeModes.get(tabId);
       let metrics: unknown = undefined;
       try {
         if (state) metrics = await cdpRouter.sendCommand(tabId, 'Page.getLayoutMetrics');
@@ -152,6 +182,7 @@ class DeviceModeTool extends BaseBrowserToolExecutor {
             success: true,
             tabId,
             active: Boolean(state),
+            resetMarked,
             mode: state || null,
             metrics,
           }),
@@ -161,6 +192,7 @@ class DeviceModeTool extends BaseBrowserToolExecutor {
     }
 
     if (action === 'reset') {
+      await setResetMarker(tabId, true);
       await releaseMode(tabId);
       return {
         content: [{
@@ -192,6 +224,7 @@ class DeviceModeTool extends BaseBrowserToolExecutor {
       return createErrorResponse(`Unsupported chrome_device_mode action: ${String(action)}`);
     }
 
+    await setResetMarker(tabId, false);
     const orientation: Orientation = args.orientation === 'landscape' ? 'landscape' : 'portrait';
     const size = orientedSize(base.width, base.height, orientation);
     const owner = `device-mode:${tabId}`;
