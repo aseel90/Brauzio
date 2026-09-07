@@ -1,2 +1,2 @@
-Brauzio 3.0.1
+Brauzio 3.0.2
 Built from brauzio-v3-runtime

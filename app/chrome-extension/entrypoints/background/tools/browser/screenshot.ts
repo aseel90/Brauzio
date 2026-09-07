@@ -285,17 +285,36 @@ class ScreenshotTool extends BaseBrowserToolExecutor {
         console.warn('Failed to set screenshot context:', e);
       }
       if (returnImage === true || storeBase64 === true) {
-        const compressed = await compressImage(finalImageDataUrl, {
-          scale: fullPage ? 0.7 : 0.85,
-          quality: 0.82,
-          format: 'image/jpeg',
-        });
-        const base64Data = compressed.dataUrl.replace(/^data:image\/[^;]+;base64,/, '');
-        if (returnImage === true) responseImage = { data: base64Data, mimeType: compressed.mimeType };
+        let imageDataUrl = finalImageDataUrl;
+        let imageMimeType = 'image/png';
+        let compressionFallback = false;
+
+        try {
+          const compressed = await compressImage(finalImageDataUrl, {
+            scale: fullPage ? 0.7 : 0.85,
+            quality: 0.82,
+            format: 'image/jpeg',
+          });
+          imageDataUrl = compressed.dataUrl;
+          imageMimeType = compressed.mimeType;
+        } catch (compressionError) {
+          compressionFallback = true;
+          imageMimeType = finalImageDataUrl.startsWith('data:image/jpeg')
+            ? 'image/jpeg'
+            : 'image/png';
+          console.warn(
+            `[Screenshot Tool] Compression failed; returning captured ${imageMimeType} directly`,
+            compressionError,
+          );
+        }
+
+        const base64Data = imageDataUrl.replace(/^data:image\/[^;]+;base64,/, '');
+        if (returnImage === true) responseImage = { data: base64Data, mimeType: imageMimeType };
         if (storeBase64 === true) {
           results.base64 = base64Data;
-          results.base64MimeType = compressed.mimeType;
+          results.base64MimeType = imageMimeType;
         }
+        if (compressionFallback) results.compressionFallback = true;
       }
 
       if (savePng === true) {
