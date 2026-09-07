@@ -1,5 +1,16 @@
 # Brauzio Changelog
 
+## 2026-09-07 — Extension/Cloud V2.8.0 Diagnostics + Self Test
+
+- إضافة بطاقة `فحص Brauzio` داخل Popup بواجهة عربية وحالات نجاح/تحذير/خطأ.
+- فحص `/health` وقياس HTTP latency مع عرض Cloud runtime/schema/tool count.
+- قياس WebSocket round-trip latency فعليًا عبر `ping`/`pong` على نفس Relay المصادق عليه.
+- فحص مصادقة الجهاز، Chrome Debugger API، ورؤية CDP page targets بدون attach أو تغيير الصفحة.
+- فحص Input Safety وحالة Human Takeover/Pause والتبويب النشط.
+- إظهار إصدار الإضافة وCloud runtime وآخر وقت للفحص.
+- Self Test غير متلف: لا ينقر، لا يتنقل، ولا يفتح CDP attachment جديد.
+- رفع Extension/Cloud runtime/schema إلى `2.8.0` / `v2.8.0-2026-09-07`.
+
 ## 2026-09-07 — Cloud Runtime V2.7.0 Actor / Observer Sessions
 
 - إضافة Actor Lease ذري داخل Durable Object لمنع جلستين Agent من تعديل المتصفح في الوقت نفسه.

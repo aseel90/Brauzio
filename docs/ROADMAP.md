@@ -298,6 +298,15 @@ Input            ✅
 Latency          86 ms
 ```
 
+- [x] زر `فحص Brauzio` داخل Popup بدون تغيير الصفحة.
+- [x] Cloudflare `/health` مع runtime/schema/tool count وHTTP latency.
+- [x] WebSocket round-trip latency حقيقي عبر `ping`/`pong`.
+- [x] حالة مصادقة الجهاز والRelay.
+- [x] فحص Chrome Debugger API ورؤية CDP page targets بدون attach.
+- [x] Input Safety مع Human Takeover/Pause state والتبويب النشط.
+- [x] إصدار الإضافة وإصدار Cloud runtime داخل نتيجة الفحص.
+- [ ] Child session health/snapshot داخل Self Test.
+- [ ] Event Engine/active watches health داخل Self Test.
 - [ ] آخر Tool call وTrace ID.
 - [ ] latency لكل طبقة.
 - [ ] reconnect count.
@@ -371,7 +380,7 @@ B⌨ TYPE
 | 6 | Sense → Act → Verify | P1 | Foundation مكتملة في 2.5.0، E2E والتوسيع لبقية actions متبقيان |
 | 7 | Human Takeover + Emergency Stop | P1 | Foundation مكتملة في 2.6.0، E2E يدوي متبقٍ |
 | 8 | Actor / Observer Sessions | P1 | Foundation مكتملة في Cloud runtime 2.7.0، multi-session E2E متبقٍ |
-| 9 | Diagnostics + Self Test | P1 | لاحقًا |
+| 9 | Diagnostics + Self Test | P1 | Foundation مكتملة في 2.8.0، snapshots/trace/E2E متبقية |
 | 10 | CDP Capability Discovery | P2 | لاحقًا |
 | 11 | Virtual Cursor UX | P2 | لاحقًا |
 | 12 | Device & Session Management | P2 | لاحقًا |
