@@ -1,5 +1,13 @@
 # Brauzio Changelog
 
+## 2026-09-07 — Extension/Cloud V2.8.1 Relay Reconnect Watchdog
+
+- إصلاح حالة WebSocket المعلقة بعد إعادة نشر Worker عندما لا يصل حدث `close` للعميل.
+- heartbeat أصبح يتتبع `pong` فعليًا ويعيد تدوير الاتصال إذا تجاوز مهلة الاستجابة.
+- إعادة الاتصال تلقائيًا عند فشل heartbeat أو خطأ WebSocket بدل البقاء في حالة اتصال وهمية.
+- حماية من أحداث socket قديم حتى لا تمسح أو تغيّر socket أحدث بعد reconnect.
+- الحفاظ على Mouse/Watch safety أثناء تدوير الاتصال.
+
 ## 2026-09-07 — Extension/Cloud V2.8.0 Diagnostics + Self Test
 
 - إضافة بطاقة `فحص Brauzio` داخل Popup بواجهة عربية وحالات نجاح/تحذير/خطأ.
