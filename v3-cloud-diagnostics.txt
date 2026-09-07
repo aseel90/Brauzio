@@ -3,14 +3,14 @@ prepared cloud runtime 3.0.0
 version_exit=0
 === install ===
 Scope: all 4 workspace projects
-Progress: resolved 0, reused 0, downloaded 1, added 0
-Progress: resolved 264, reused 0, downloaded 263, added 0
-Progress: resolved 681, reused 0, downloaded 536, added 0
-Progress: resolved 893, reused 0, downloaded 736, added 0
+Progress: resolved 1, reused 0, downloaded 0, added 0
+Progress: resolved 155, reused 0, downloaded 154, added 0
+Progress: resolved 398, reused 0, downloaded 344, added 0
+Progress: resolved 686, reused 0, downloaded 558, added 0
+Progress: resolved 872, reused 0, downloaded 726, added 0
 Packages: +749
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-Progress: resolved 910, reused 0, downloaded 751, added 748
-Progress: resolved 910, reused 0, downloaded 751, added 749
+Progress: resolved 910, reused 0, downloaded 751, added 195
 Progress: resolved 910, reused 0, downloaded 751, added 749, done
 
 devDependencies:
@@ -36,7 +36,7 @@ app/chrome-extension
   └─┬ vite 7.2.7
     └── ✕ unmet peer @types/node@"^20.19.0 || >=22.12.0": found 18.19.130
 
-Done in 8.8s
+Done in 7.2s
 install_exit=0
 === shared build ===
 
@@ -50,32 +50,18 @@ install_exit=0
 [34mCLI[39m Cleaning output folder
 [34mCJS[39m Build start
 [34mESM[39m Build start
-[32mCJS[39m [1mdist/index.js [22m[32m25.01 KB[39m
-[32mCJS[39m ⚡️ Build success in 18ms
-[32mESM[39m [1mdist/index.mjs [22m[32m23.91 KB[39m
-[32mESM[39m ⚡️ Build success in 18ms
+[32mESM[39m [1mdist/index.mjs [22m[32m23.92 KB[39m
+[32mESM[39m ⚡️ Build success in 26ms
+[32mCJS[39m [1mdist/index.js [22m[32m25.02 KB[39m
+[32mCJS[39m ⚡️ Build success in 27ms
 [34mDTS[39m Build start
-[32mDTS[39m ⚡️ Build success in 746ms
-[32mDTS[39m [1mdist/index.d.ts  [22m[32m5.32 KB[39m
-[32mDTS[39m [1mdist/index.d.mts [22m[32m5.32 KB[39m
+[32mDTS[39m ⚡️ Build success in 1216ms
+[32mDTS[39m [1mdist/index.d.ts  [22m[32m4.32 KB[39m
+[32mDTS[39m [1mdist/index.d.mts [22m[32m4.32 KB[39m
 shared_exit=0
 === cloud check ===
 
 > brauzio-cloud-mcp@0.9.0 check /home/runner/work/Brauzio/Brauzio/app/cloudflare-mcp
 > tsc --noEmit
 
-src/index.ts(124,54): error TS2322: Type 'Promise<{ tools: ({ name: "chrome_clipboard"; description: string; inputSchema: { type: "object"; properties: { action: { type: string; enum: string[]; }; text: { type: string; description: string; }; downloadId?: undefined; limit?: undefined; timeoutMs?: undefined; }; required: string[]; }; } | { ...; } | BrauzioTo...' is not assignable to type '{ [x: string]: unknown; tools: { inputSchema: { [x: string]: unknown; type: "object"; properties?: { [x: string]: string | number | boolean | { [x: string]: string | number | boolean | ... | (string | number | boolean | ... | (string | ... 4 more ... | null)[] | null)[] | null; } | (string | ... 4 more ... | null)[]...'.
-  Type 'Promise<{ tools: ({ name: "chrome_clipboard"; description: string; inputSchema: { type: "object"; properties: { action: { type: string; enum: string[]; }; text: { type: string; description: string; }; downloadId?: undefined; limit?: undefined; timeoutMs?: undefined; }; required: string[]; }; } | { ...; } | BrauzioTo...' is not assignable to type 'Promise<{ [x: string]: unknown; tools: { inputSchema: { [x: string]: unknown; type: "object"; properties?: { [x: string]: string | number | boolean | { [x: string]: string | number | boolean | ... | (string | number | boolean | ... | (string | ... 4 more ... | null)[] | null)[] | null; } | (string | ... 4 more ... |...'.
-    Type '{ tools: ({ name: "chrome_clipboard"; description: string; inputSchema: { type: "object"; properties: { action: { type: string; enum: string[]; }; text: { type: string; description: string; }; downloadId?: undefined; limit?: undefined; timeoutMs?: undefined; }; required: string[]; }; } | { ...; } | BrauzioToolSchema...' is not assignable to type '{ [x: string]: unknown; tools: { inputSchema: { [x: string]: unknown; type: "object"; properties?: { [x: string]: string | number | boolean | { [x: string]: string | number | boolean | ... | (string | number | boolean | ... | (string | ... 4 more ... | null)[] | null)[] | null; } | (string | ... 4 more ... | null)[]...'.
-      Types of property 'tools' are incompatible.
-        Type '({ name: "chrome_clipboard"; description: string; inputSchema: { type: "object"; properties: { action: { type: string; enum: string[]; }; text: { type: string; description: string; }; downloadId?: undefined; limit?: undefined; timeoutMs?: undefined; }; required: string[]; }; } | { ...; } | BrauzioToolSchema)[]' is not assignable to type '{ inputSchema: { [x: string]: unknown; type: "object"; properties?: { [x: string]: string | number | boolean | { [x: string]: string | number | boolean | ... | (string | number | boolean | ... | (string | number | boolean | ... | (string | ... 4 more ... | null)[] | null)[] | null)[] | null; } | (string | ... 4 more...'.
-          Type '{ name: "chrome_clipboard"; description: string; inputSchema: { type: "object"; properties: { action: { type: string; enum: string[]; }; text: { type: string; description: string; }; downloadId?: undefined; limit?: undefined; timeoutMs?: undefined; }; required: string[]; }; } | { ...; } | BrauzioToolSchema' is not assignable to type '{ inputSchema: { [x: string]: unknown; type: "object"; properties?: { [x: string]: string | number | boolean | { [x: string]: string | number | boolean | ... | (string | number | boolean | ... | (string | number | boolean | ... | (string | ... 4 more ... | null)[] | null)[] | null)[] | null; } | (string | ... 4 more...'.
-            Type '{ name: "chrome_clipboard"; description: string; inputSchema: { type: "object"; properties: { action: { type: string; enum: string[]; }; text: { type: string; description: string; }; downloadId?: undefined; limit?: undefined; timeoutMs?: undefined; }; required: string[]; }; }' is not assignable to type '{ inputSchema: { [x: string]: unknown; type: "object"; properties?: { [x: string]: string | number | boolean | { [x: string]: string | number | boolean | ... | (string | number | boolean | ... | (string | number | boolean | ... | (string | ... 4 more ... | null)[] | null)[] | null)[] | null; } | (string | ... 4 more...'.
-              The types of 'inputSchema.properties' are incompatible between these types.
-                Type '{ action: { type: string; enum: string[]; }; text: { type: string; description: string; }; downloadId?: undefined; limit?: undefined; timeoutMs?: undefined; }' is not assignable to type '{ [x: string]: string | number | boolean | { [x: string]: string | number | boolean | ... | (string | number | boolean | ... | (string | number | boolean | ... | (string | number | boolean | ... | (string | ... 4 more ... | null)[] | null)[] | null)[] | null)[] | null; } | (string | ... 4 more ... | null)[] | null; }'.
-                  Property 'downloadId' is incompatible with index signature.
-                    Type 'undefined' is not assignable to type 'string | number | boolean | { [x: string]: string | number | boolean | ... | (string | number | boolean | ... | (string | number | boolean | ... | (string | number | boolean | ... | (string | ... 4 more ... | null)[] | null)[] | null)[] | null)[] | null; } | (string | ... 4 more ... | null)[] | null'.
-/home/runner/work/Brauzio/Brauzio/app/cloudflare-mcp:
- ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL  brauzio-cloud-mcp@0.9.0 check: `tsc --noEmit`
-Exit status 2
-cloud_exit=2
+cloud_exit=0
