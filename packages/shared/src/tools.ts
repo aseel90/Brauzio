@@ -57,6 +57,9 @@ export const TOOL_NAMES = {
     GIF_RECORDER: 'chrome_gif_recorder',
     LIVE_VIEW: 'chrome_live_view',
     DEVICE_MODE: 'chrome_device_mode',
+    OBSERVE: 'chrome_observe',
+    RESOLVE: 'chrome_resolve',
+    ACT: 'chrome_act',
   },
 } as const;
 
@@ -105,7 +108,29 @@ const actionVerification = {
   },
 };
 
+const v3Target = {
+  type: 'object',
+  description: 'Mechanical target description. Brauzio returns candidates when the target is ambiguous or stale; the agent remains responsible for semantic choice.',
+  properties: {
+    eid: { type: 'string', description: 'Brauzio V3 element ID from chrome_observe.' },
+    backendNodeId: { type: 'number', description: 'Chrome backend DOM node ID when known.' },
+    role: { type: 'string' },
+    name: { type: 'string', description: 'Accessible name.' },
+    text: { type: 'string' },
+    tag: { type: 'string' },
+    type: { type: 'string' },
+    id: { type: 'string' },
+    fieldName: { type: 'string', description: 'HTML name attribute.' },
+    placeholder: { type: 'string' },
+    href: { type: 'string' },
+    frameId: { type: 'string' },
+  },
+};
+
 export const TOOL_SCHEMAS: BrauzioToolSchema[] = [
+  { name: TOOL_NAMES.BROWSER.OBSERVE, description: 'Capture a unified Brauzio V3 browser observation: DOMSnapshot + accessibility + layout + frames + tabs, with optional memory-only screenshot and compact/full/delta modes. This tool provides perception only; reasoning remains with the agent.', inputSchema: { type: 'object', properties: { mode: { type: 'string', enum: ['compact', 'full', 'delta'] }, sinceSnapshotId: { type: 'string', description: 'Base snapshot for delta comparison.' }, maxElements: { type: 'number', description: 'Maximum returned elements, clamped by the runtime.' }, includeScreenshot: { type: 'boolean', description: 'Include a current memory-only JPEG frame in the MCP response.' }, screenshotQuality: { type: 'number', description: 'JPEG quality 35-90.' }, ...tabTarget }, required: [] } },
+  { name: TOOL_NAMES.BROWSER.RESOLVE, description: 'Mechanically resolve a Brauzio V3 target against an observation. Returns scored candidates instead of making semantic choices for the agent.', inputSchema: { type: 'object', properties: { snapshotId: { type: 'string' }, target: v3Target, limit: { type: 'number' }, minScore: { type: 'number' }, refresh: { type: 'boolean', description: 'Refresh the compact observation before resolving.' }, ...tabTarget }, required: ['target'] } },
+  { name: TOOL_NAMES.BROWSER.ACT, description: 'Execute one atomic Brauzio V3 browser action and return evidence, correlated events, verification results, and an observation delta. Brauzio handles mechanical reliability only; planning and semantic recovery stay with the agent.', inputSchema: { type: 'object', properties: { action: { type: 'string', enum: ['click', 'double_click', 'hover', 'focus', 'fill', 'clear', 'type', 'press', 'select', 'scroll', 'drag', 'upload', 'navigate', 'back', 'forward', 'reload'] }, target: v3Target, source: v3Target, value: {}, text: { type: 'string' }, key: { type: 'string' }, url: { type: 'string' }, files: { type: 'array', items: { type: 'string' } }, deltaX: { type: 'number' }, deltaY: { type: 'number' }, button: { type: 'string', enum: ['left', 'right', 'middle'] }, snapshotId: { type: 'string' }, observeAfter: { type: 'boolean' }, includeScreenshotAfter: { type: 'boolean' }, verification: actionVerification, timeoutMs: { type: 'number' }, ...tabTarget }, required: ['action'] } },
   { name: TOOL_NAMES.BROWSER.GET_WINDOWS_AND_TABS, description: 'Get all currently open Chrome windows and tabs.', inputSchema: { type: 'object', properties: {}, required: [] } },
   { name: TOOL_NAMES.BROWSER.NAVIGATE, description: 'Navigate, refresh, go back/forward, or open a URL in Chrome. Can optionally verify URL, DOM/text, network, console, page load, and network-idle evidence.', inputSchema: { type: 'object', properties: { url: { type: 'string' }, refresh: { type: 'boolean' }, newWindow: { type: 'boolean' }, background: { type: 'boolean' }, verify: actionVerification, ...tabTarget }, required: [] } },
   { name: TOOL_NAMES.BROWSER.READ_PAGE, description: 'Read visible page content as an accessibility tree with stable element refs.', inputSchema: { type: 'object', properties: { filter: { type: 'string' }, depth: { type: 'number' }, refId: { type: 'string' }, ...tabTarget }, required: [] } },
