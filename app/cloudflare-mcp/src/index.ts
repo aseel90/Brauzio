@@ -77,13 +77,14 @@ async function callBrowserTool(
   deviceId: string,
   name: string,
   args: Record<string, unknown>,
+  callerId: string,
 ): Promise<CallToolResult> {
   const requestUrl = new URL('https://brauzio-browser.internal/call');
   const response = await browserStub(env, deviceId).fetch(
     new Request(requestUrl.toString(), {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ name, args }),
+      body: JSON.stringify({ name, args, callerId }),
     }),
   );
   const raw = await response.text();
@@ -97,6 +98,25 @@ async function callBrowserTool(
   }
 }
 
+async function callerLeaseId(ctx: {
+  sessionId?: string;
+  http?: { authInfo?: { clientId?: string; token?: string } };
+}): Promise<string> {
+  const auth = getMcpAuthContext();
+  const props = (auth?.props || {}) as Partial<BrauzioAuthProps>;
+  const clientId = String(ctx.http?.authInfo?.clientId || 'unknown').slice(0, 256);
+  const sessionId = String(ctx.sessionId || '').trim().slice(0, 256);
+  const token = String(ctx.http?.authInfo?.token || '');
+  const material = sessionId
+    ? `session|${clientId}|${sessionId}`
+    : token
+      ? `token|${clientId}|${token}`
+      : `grant|${clientId}|${String(props.authorizedAt || 0)}|${normalizeDeviceId(props.deviceId || 'default')}`;
+  const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(material));
+  const hex = Array.from(new Uint8Array(digest), (byte) => byte.toString(16).padStart(2, '0')).join('');
+  return `caller-${hex.slice(0, 32)}`;
+}
+
 function createServer(env: Env) {
   const server = new Server(
     { name: 'Brauzio', version: BRAUZIO_RUNTIME_VERSION },
@@ -104,10 +124,11 @@ function createServer(env: Env) {
   );
 
   server.setRequestHandler('tools/list', async () => ({ tools: TOOL_SCHEMAS }));
-  server.setRequestHandler('tools/call', async (request) => {
+  server.setRequestHandler('tools/call', async (request, ctx) => {
     const name = request.params.name;
     const args = (request.params.arguments || {}) as Record<string, unknown>;
-    return await callBrowserTool(env, deviceIdFromAuth(env), name, args);
+    const callerId = await callerLeaseId(ctx);
+    return await callBrowserTool(env, deviceIdFromAuth(env), name, args, callerId);
   });
 
   return server;
