@@ -1,0 +1,61 @@
+name: Brauzio V3 Preview
+
+on:
+  push:
+    branches: [brauzio-v3-runtime]
+    paths:
+      - '.github/workflows/v3-preview.yml'
+      - 'app/chrome-extension/**'
+      - 'packages/shared/**'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: brauzio-v3-preview
+  cancel-in-progress: true
+
+jobs:
+  preview:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 8.15.9
+      - run: pnpm install --no-frozen-lockfile --ignore-scripts
+      - run: pnpm --filter brauzio-extension exec wxt prepare
+      - run: pnpm --filter brauzio-shared build
+      - run: pnpm --filter brauzio-extension compile
+      - run: pnpm --filter brauzio-extension build
+      - name: Package and verify 3.0.0 preview
+        shell: bash
+        run: |
+          set -euo pipefail
+          OUT='app/chrome-extension/.output/chrome-mv3'
+          python - "$OUT/manifest.json" <<'PY'
+          import json,sys
+          m=json.load(open(sys.argv[1],encoding='utf-8'))
+          assert m.get('version') == '3.0.0', m.get('version')
+          print('verified',m['version'])
+          PY
+          (cd "$OUT" && zip -qr ../brauzio-chrome-v3-preview.zip .)
+          unzip -t app/chrome-extension/.output/brauzio-chrome-v3-preview.zip >/dev/null
+      - name: Publish preview ZIP on V3 branch only
+        shell: bash
+        run: |
+          set -euo pipefail
+          DEST='releases/chrome-extension/v3-preview'
+          mkdir -p "$DEST"
+          cp app/chrome-extension/.output/brauzio-chrome-v3-preview.zip "$DEST/brauzio-chrome-3.0.0-preview.zip"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add "$DEST/brauzio-chrome-3.0.0-preview.zip"
+          if ! git diff --cached --quiet; then
+            git commit -m 'build(v3): publish Brauzio 3.0.0 preview [skip ci]'
+            git push
+          fi
