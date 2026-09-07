@@ -1,0 +1,37 @@
+name: Brauzio V3 Browser Status
+
+on:
+  push:
+    branches: [brauzio-v3-runtime]
+    paths:
+      - '.github/workflows/v3-browser-status.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  status:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Query deployed browser status
+        shell: bash
+        run: |
+          set -euo pipefail
+          LOG=v3-browser-status.txt
+          curl -fsS 'https://brauzio-mcp.aseelsalah266.workers.dev/browser-status?device=default' | tee "$LOG"
+          python - "$LOG" <<'PY'
+          import json,sys
+          data=json.load(open(sys.argv[1],encoding='utf-8'))
+          assert data.get('connected') is True, data
+          assert int(data.get('connections',0)) >= 1, data
+          print('validated browser connection', data)
+          PY
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add "$LOG"
+          if ! git diff --cached --quiet; then
+            git commit -m 'test(v3): persist browser websocket status [skip ci]'
+            git push
+          fi
