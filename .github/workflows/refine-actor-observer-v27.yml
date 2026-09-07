@@ -1,0 +1,227 @@
+name: Refine Actor Observer V27
+
+on:
+  push:
+    paths:
+      - '.github/workflows/refine-actor-observer-v27.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  refine:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 8.15.9
+      - run: pnpm install --no-frozen-lockfile --ignore-scripts
+
+      - name: Refine Actor lease implementation
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('app/cloudflare-mcp/src/browser-session.ts')
+          s = p.read_text(encoding='utf-8')
+
+          s = s.replace(
+          """interface ActorLeaseRecord {
+            ownerId: string;
+            acquiredAt: number;
+            lastSeenAt: number;
+            expiresAt: number;
+          }""",
+          """interface ActorLeaseRecord {
+            ownerId: string;
+            acquiredAt: number;
+            lastSeenAt: number;
+            expiresAt: number;
+            activeRequestId?: string;
+          }""", 1)
+
+          s = s.replace(
+            "const ACTOR_LEASE_TTL_MS = 60_000;",
+            "const ACTOR_LEASE_IDLE_MS = 15_000;\nconst ACTOR_LEASE_MIN_EXECUTION_MS = 60_000;",
+            1,
+          )
+
+          s = s.replace(
+          """        actorLeaseActive: Boolean(actorLease),
+                  actorLeaseExpiresAt: actorLease?.expiresAt || null,
+                  observerSessions: observerSessions.length,""",
+          """        actorLeaseActive: Boolean(actorLease),
+                  actorLeaseBusy: Boolean(actorLease?.activeRequestId),
+                  actorLeaseExpiresAt: actorLease?.expiresAt || null,
+                  observerSessions: observerSessions.length,""", 1)
+
+          old = """    const timeoutMs = Math.min(Math.max(Number(body.timeoutMs || 120_000), 1_000), 180_000);
+              if (actor) {
+                const leaseResult = await this.acquireActorLease(callerId, timeoutMs);
+                if (!leaseResult.ok) {
+                  const retryAfterMs = Math.max(0, leaseResult.lease.expiresAt - Date.now());
+                  sessionLog('ACTOR_LEASE_CONFLICT', { name: body.name, retryAfterMs });
+                  return Response.json({
+                    error: 'Another Brauzio actor session currently holds control.',
+                    code: 'ACTOR_LEASE_CONFLICT',
+                    retryAfterMs,
+                    actorLeaseExpiresAt: leaseResult.lease.expiresAt,
+                  }, { status: 409 });
+                }
+              } else {
+                await this.touchObserverSession(callerId);
+              }
+
+              const requestId = validTraceId(body.traceId) || crypto.randomUUID();
+              const startedAt = Date.now();"""
+          new = """    const timeoutMs = Math.min(Math.max(Number(body.timeoutMs || 120_000), 1_000), 180_000);
+              const requestId = validTraceId(body.traceId) || crypto.randomUUID();
+              if (actor) {
+                const leaseResult = await this.acquireActorLease(callerId, requestId, timeoutMs);
+                if (!leaseResult.ok) {
+                  const retryAfterMs = Math.max(0, leaseResult.lease.expiresAt - Date.now());
+                  const conflict = leaseResult.code === 'ACTOR_LEASE_CONFLICT';
+                  sessionLog(leaseResult.code, { name: body.name, retryAfterMs });
+                  return Response.json({
+                    error: conflict
+                      ? 'Another Brauzio actor session currently holds control.'
+                      : 'This Brauzio actor session already has a mutating tool call in progress.',
+                    code: leaseResult.code,
+                    retryAfterMs,
+                    actorLeaseExpiresAt: leaseResult.lease.expiresAt,
+                  }, { status: 409 });
+                }
+              } else {
+                await this.touchObserverSession(callerId);
+              }
+
+              const startedAt = Date.now();"""
+          if old not in s:
+              raise SystemExit('forwardToolCall marker not found')
+          s = s.replace(old, new, 1)
+
+          s = s.replace(
+            "if (actor) void this.settleActorLease(callerId);",
+            "if (actor) void this.settleActorLease(callerId, requestId);",
+          )
+
+          old = """  private async acquireActorLease(ownerId: string, executionTimeoutMs: number): Promise<{ ok: true; lease: ActorLeaseRecord } | { ok: false; lease: ActorLeaseRecord }> {
+              return await this.ctx.storage.transaction(async (txn) => {
+                const now = Date.now();
+                const current = await txn.get<ActorLeaseRecord>(ACTOR_LEASE_STORAGE_KEY);
+                if (current && current.expiresAt > now && current.ownerId !== ownerId) {
+                  return { ok: false as const, lease: current };
+                }
+                const executionHoldMs = Math.min(Math.max(executionTimeoutMs + 5_000, ACTOR_LEASE_TTL_MS), 185_000);
+                const next: ActorLeaseRecord = {
+                  ownerId,
+                  acquiredAt: current?.ownerId === ownerId ? current.acquiredAt : now,
+                  lastSeenAt: now,
+                  expiresAt: now + executionHoldMs,
+                };
+                await txn.put(ACTOR_LEASE_STORAGE_KEY, next);
+                return { ok: true as const, lease: next };
+              });
+            }
+
+            private async settleActorLease(ownerId: string): Promise<void> {
+              await this.ctx.storage.transaction(async (txn) => {
+                const current = await txn.get<ActorLeaseRecord>(ACTOR_LEASE_STORAGE_KEY);
+                if (!current || current.ownerId !== ownerId) return;
+                const now = Date.now();
+                await txn.put(ACTOR_LEASE_STORAGE_KEY, { ...current, lastSeenAt: now, expiresAt: now + ACTOR_LEASE_TTL_MS });
+              });
+            }"""
+          new = """  private async acquireActorLease(
+              ownerId: string,
+              requestId: string,
+              executionTimeoutMs: number,
+            ): Promise<
+              | { ok: true; lease: ActorLeaseRecord }
+              | { ok: false; code: 'ACTOR_LEASE_CONFLICT' | 'ACTOR_BUSY'; lease: ActorLeaseRecord }
+            > {
+              return await this.ctx.storage.transaction(async (txn) => {
+                const now = Date.now();
+                const current = await txn.get<ActorLeaseRecord>(ACTOR_LEASE_STORAGE_KEY);
+                if (current && current.expiresAt > now) {
+                  if (current.ownerId !== ownerId) {
+                    return { ok: false as const, code: 'ACTOR_LEASE_CONFLICT' as const, lease: current };
+                  }
+                  if (current.activeRequestId && current.activeRequestId !== requestId) {
+                    return { ok: false as const, code: 'ACTOR_BUSY' as const, lease: current };
+                  }
+                }
+                const executionHoldMs = Math.min(
+                  Math.max(executionTimeoutMs + 5_000, ACTOR_LEASE_MIN_EXECUTION_MS),
+                  185_000,
+                );
+                const next: ActorLeaseRecord = {
+                  ownerId,
+                  acquiredAt: current?.ownerId === ownerId ? current.acquiredAt : now,
+                  lastSeenAt: now,
+                  expiresAt: now + executionHoldMs,
+                  activeRequestId: requestId,
+                };
+                await txn.put(ACTOR_LEASE_STORAGE_KEY, next);
+                return { ok: true as const, lease: next };
+              });
+            }
+
+            private async settleActorLease(ownerId: string, requestId: string): Promise<void> {
+              await this.ctx.storage.transaction(async (txn) => {
+                const current = await txn.get<ActorLeaseRecord>(ACTOR_LEASE_STORAGE_KEY);
+                if (!current || current.ownerId !== ownerId) return;
+                if (current.activeRequestId && current.activeRequestId !== requestId) return;
+                const now = Date.now();
+                await txn.put(ACTOR_LEASE_STORAGE_KEY, {
+                  ...current,
+                  activeRequestId: undefined,
+                  lastSeenAt: now,
+                  expiresAt: now + ACTOR_LEASE_IDLE_MS,
+                });
+              });
+            }"""
+          if old not in s:
+              raise SystemExit('lease methods marker not found')
+          s = s.replace(old, new, 1)
+
+          s = s.replace(
+            "if (pending.actor) await this.settleActorLease(pending.callerId);",
+            "if (pending.actor) await this.settleActorLease(pending.callerId, message.requestId);",
+            1,
+          )
+
+          p.write_text(s, encoding='utf-8')
+          PY
+
+      - name: Assert relay contract survives refinement
+        run: |
+          grep -q "url.pathname === '/ws'" app/cloudflare-mcp/src/index.ts
+          grep -q "brauzio-browser.internal/call" app/cloudflare-mcp/src/index.ts
+          grep -q "JSON.stringify({ name, args, callerId })" app/cloudflare-mcp/src/index.ts
+
+      - name: Validate full Brauzio build
+        run: |
+          pnpm --filter brauzio-shared build
+          pnpm --filter brauzio-cloud-mcp check
+          pnpm --filter brauzio-cloud-mcp build
+          pnpm --filter brauzio-extension exec wxt prepare
+          pnpm --filter brauzio-extension compile
+          pnpm --filter brauzio-extension build
+
+      - name: Commit refined source
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add app/cloudflare-mcp/src/browser-session.ts
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m 'Harden Actor lease concurrency and handoff [skip ci]'
+          git push
