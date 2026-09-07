@@ -36,6 +36,11 @@ jobs:
           s = s.replace("body: JSON.stringify({ name, args }),", "body: JSON.stringify({ name, arguments: args }),", 1)
           index.write_text(s, encoding='utf-8')
 
+          session = Path('app/cloudflare-mcp/src/browser-session.ts')
+          b = session.read_text(encoding='utf-8')
+          b = b.replace('  private finishToolCall(message: ToolResultMessage) {', '  private finishToolCall(message: ToolResultMessage): void {', 1)
+          session.write_text(b, encoding='utf-8')
+
           workflow = Path('.github/workflows/apply-actor-observer.yml').read_text(encoding='utf-8')
           start = workflow.index("          python - <<'PY'\n") + len("          python - <<'PY'\n")
           end = workflow.index("\n          PY", start)
