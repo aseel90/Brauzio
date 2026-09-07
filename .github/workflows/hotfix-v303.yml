@@ -1,0 +1,250 @@
+name: Brauzio 3.0.3 Hotfix
+
+on:
+  push:
+    paths:
+      - '.github/workflows/hotfix-v303.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Apply service-worker image and Live View fixes
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          def replace_once(text: str, old: str, new: str, label: str) -> str:
+              if old not in text:
+                  raise SystemExit(f'Expected block not found: {label}')
+              return text.replace(old, new, 1)
+
+          # 1) Service-worker-safe Blob -> data URL conversion.
+          p = Path('app/chrome-extension/utils/image-utils.ts')
+          s = p.read_text()
+          if 'function bytesToBase64' not in s:
+              marker = '/**\n * Create ImageBitmap from data URL'
+              helper = """function bytesToBase64(bytes: Uint8Array): string {
+            const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
+            let output = '';
+            for (let i = 0; i < bytes.length; i += 3) {
+              const a = bytes[i];
+              const b = i + 1 < bytes.length ? bytes[i + 1] : 0;
+              const c = i + 2 < bytes.length ? bytes[i + 2] : 0;
+              const triplet = (a << 16) | (b << 8) | c;
+              output += alphabet[(triplet >> 18) & 63];
+              output += alphabet[(triplet >> 12) & 63];
+              output += i + 1 < bytes.length ? alphabet[(triplet >> 6) & 63] : '=';
+              output += i + 2 < bytes.length ? alphabet[triplet & 63] : '=';
+            }
+            return output;
+          }
+
+          async function blobToDataURL(blob: Blob): Promise<string> {
+            const bytes = new Uint8Array(await blob.arrayBuffer());
+            return `data:${blob.type || 'application/octet-stream'};base64,${bytesToBase64(bytes)}`;
+          }
+
+          """
+              if marker not in s:
+                  raise SystemExit('image-utils insertion marker missing')
+              s = s.replace(marker, helper + marker, 1)
+
+          old_reader = """  return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onloadend = () => resolve(reader.result as string);
+            reader.onerror = reject;
+            reader.readAsDataURL(blob);
+          });"""
+          s = replace_once(s, old_reader, '  return blobToDataURL(blob);', 'canvas FileReader')
+
+          old_compress_reader = """  // A helper to convert blob to data URL since OffscreenCanvas.toDataURL is not standard yet
+            // on all execution contexts (like service workers).
+            const dataUrl = await new Promise<string>((resolve) => {
+              const reader = new FileReader();
+              reader.onloadend = () => resolve(reader.result as string);
+              reader.readAsDataURL(compressedDataUrl);
+            });
+
+            return { dataUrl, mimeType: format };"""
+          new_compress_reader = """  // Manifest V3 background code runs in a service worker where FileReader is
+            // not guaranteed to exist. Convert the Blob directly from its ArrayBuffer.
+            const dataUrl = await blobToDataURL(compressedDataUrl);
+
+            return { dataUrl, mimeType: compressedDataUrl.type || format };"""
+          s = replace_once(s, old_compress_reader, new_compress_reader, 'compress FileReader')
+          p.write_text(s)
+
+          # 2) Live View: fall back to captureVisibleTab's original JPEG if compression fails.
+          p = Path('app/chrome-extension/entrypoints/background/tools/browser/live-view.ts')
+          s = p.read_text()
+          old = """    const compressed = await compressImage(sourceDataUrl, {
+              scale: session.scale,
+              quality: session.quality,
+              format: 'image/jpeg',
+            });
+            const base64 = compressed.dataUrl.replace(/^data:image\\/[^;]+;base64,/, '');
+            const fingerprint = frameFingerprint(base64);"""
+          new = """    let frameDataUrl = sourceDataUrl;
+            let mimeType = 'image/jpeg';
+            try {
+              const compressed = await compressImage(sourceDataUrl, {
+                scale: session.scale,
+                quality: session.quality,
+                format: 'image/jpeg',
+              });
+              frameDataUrl = compressed.dataUrl;
+              mimeType = compressed.mimeType;
+            } catch (compressionError) {
+              console.warn('[BrauzioLiveView] JPEG compression failed; using original frame', compressionError);
+              session.lastError = undefined;
+            }
+            const base64 = frameDataUrl.replace(/^data:image\\/[^;]+;base64,/, '');
+            const fingerprint = frameFingerprint(base64);"""
+          s = replace_once(s, old, new, 'Live View compression')
+          s = replace_once(s, '      mimeType: compressed.mimeType,', '      mimeType,', 'Live View mime type')
+          p.write_text(s)
+
+          # 3) Screenshot: MCP image by default, no Downloads by default, PNG fallback.
+          p = Path('app/chrome-extension/entrypoints/background/tools/browser/screenshot.ts')
+          s = p.read_text()
+          s = replace_once(s, '  savePng?: boolean;\n', '  savePng?: boolean;\n  returnImage?: boolean;\n', 'screenshot returnImage interface')
+          s = replace_once(
+              s,
+              "      storeBase64 = false,\n      fullPage = false,\n      savePng = true,\n",
+              "      storeBase64 = false,\n      fullPage = false,\n      savePng = false,\n      returnImage = true,\n",
+              'screenshot defaults',
+          )
+          s = replace_once(
+              s,
+              "    let finalImageDataUrl: string | undefined;\n    let finalImageWidthCss: number | undefined;\n    let finalImageHeightCss: number | undefined;\n",
+              "    let finalImageDataUrl: string | undefined;\n    let finalImageWidthCss: number | undefined;\n    let finalImageHeightCss: number | undefined;\n    let transportDataUrl = '';\n    let transportMimeType = 'image/png';\n    let transportBase64 = '';\n",
+              'screenshot transport declarations',
+          )
+          old_store = """      if (storeBase64 === true) {
+                // Compress image for base64 output to reduce size
+                const compressed = await compressImage(finalImageDataUrl, {
+                  scale: 0.7, // Reduce dimensions by 30%
+                  quality: 0.8, // 80% quality for good balance
+                  format: 'image/jpeg', // JPEG for better compression
+                });
+
+                // Include base64 data in response (without prefix)
+                const base64Data = compressed.dataUrl.replace(/^data:image\\/[^;]+;base64,/, '');
+                results.base64 = base64Data;
+                return {
+                  content: [
+                    {
+                      type: 'text',
+                      text: JSON.stringify({ base64Data, mimeType: compressed.mimeType }),
+                    },
+                  ],
+                  isError: false,
+                };
+              }
+
+              if (savePng === true) {"""
+          new_store = """      // Return an MCP image in memory. Prefer compressed JPEG, but never fail the
+              // screenshot merely because re-encoding failed: use the original image instead.
+              transportDataUrl = finalImageDataUrl;
+              transportMimeType = finalImageDataUrl.startsWith('data:image/jpeg')
+                ? 'image/jpeg'
+                : 'image/png';
+              let compressionFallback = false;
+              if (returnImage !== false || storeBase64 === true) {
+                try {
+                  const compressed = await compressImage(finalImageDataUrl, {
+                    scale: 0.7,
+                    quality: 0.8,
+                    format: 'image/jpeg',
+                  });
+                  transportDataUrl = compressed.dataUrl;
+                  transportMimeType = compressed.mimeType;
+                } catch (compressionError) {
+                  compressionFallback = true;
+                  console.warn('Screenshot JPEG compression failed; returning original image:', compressionError);
+                }
+              }
+
+              transportBase64 = transportDataUrl.replace(/^data:image\\/[^;]+;base64,/, '');
+              if (storeBase64 === true) {
+                results.base64 = transportBase64;
+                results.mimeType = transportMimeType;
+              }
+              results.compressionFallback = compressionFallback;
+
+              if (savePng === true) {"""
+          s = replace_once(s, old_store, new_store, 'screenshot transport block')
+          old_return = """    return {
+              content: [
+                {
+                  type: 'text',
+                  text: JSON.stringify({
+                    success: true,
+                    message: `Screenshot [${name}] captured successfully`,
+                    tabId: tab.id,
+                    url: tab.url,
+                    name: name,
+                    ...results,
+                  }),
+                },
+              ],
+              isError: false,
+            };"""
+          new_return = """    const content: any[] = [
+              {
+                type: 'text',
+                text: JSON.stringify({
+                  success: true,
+                  message: `Screenshot [${name}] captured successfully`,
+                  tabId: tab.id,
+                  url: tab.url,
+                  name: name,
+                  ...results,
+                }),
+              },
+            ];
+
+            if (returnImage !== false) {
+              content.push({ type: 'image', data: transportBase64, mimeType: transportMimeType });
+            }
+
+            return { content, isError: false };"""
+          s = replace_once(s, old_return, new_return, 'screenshot MCP image return')
+          p.write_text(s)
+
+          # 4) Distinguishable patch version in extension and Worker health.
+          p = Path('app/chrome-extension/package.json')
+          data = json.loads(p.read_text())
+          data['version'] = '3.0.3'
+          p.write_text(json.dumps(data, ensure_ascii=False, indent=2) + '\n')
+
+          p = Path('app/cloudflare-mcp/src/index.ts')
+          s = p.read_text()
+          s = s.replace("const BRAUZIO_RUNTIME_VERSION = '3.0.2';", "const BRAUZIO_RUNTIME_VERSION = '3.0.3';")
+          s = s.replace("const BRAUZIO_SCHEMA_VERSION = '3.0.2';", "const BRAUZIO_SCHEMA_VERSION = '3.0.3';")
+          if "BRAUZIO_RUNTIME_VERSION = '3.0.3'" not in s or "BRAUZIO_SCHEMA_VERSION = '3.0.3'" not in s:
+              raise SystemExit('Worker version bump failed')
+          p.write_text(s)
+          PY
+
+      - name: Commit patch and remove one-shot workflow
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -f .github/workflows/hotfix-v303.yml
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git commit -m 'fix: Brauzio 3.0.3 service-worker images and Live View'
+          git push
