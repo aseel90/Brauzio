@@ -6,6 +6,7 @@ import { runtimeState } from './runtime-state';
 import { sessionGraph } from './session-graph';
 import type {
   V3Element,
+  V3FormSummary,
   V3Frame,
   V3ObservationSnapshot,
   V3Rect,
@@ -149,6 +150,7 @@ class ObservationService {
     }
 
     const elements: V3Element[] = [];
+    const forms = new Map<string, V3FormSummary>();
     let focusedEid: string | undefined;
     let mainDocumentId = '';
     let mainUrl = String(tab.url || '');
@@ -173,6 +175,43 @@ class ObservationService {
         const nodes = document.nodes || {};
         const layout = layoutMap(document);
         const backendIds: number[] = Array.isArray(nodes.backendNodeId) ? nodes.backendNodeId : [];
+        const parentIndexes: number[] = Array.isArray(nodes.parentIndex) ? nodes.parentIndex : [];
+        const effectiveSessionId = context.sessionId || loader?.sessionId;
+        const effectiveTargetId = context.targetId || loader?.targetId;
+        const formIdByIndex = new Map<number, string>();
+
+        for (let formIndex = 0; formIndex < backendIds.length; formIndex += 1) {
+          const formTag = readString(strings, nodes.nodeName?.[formIndex]).toUpperCase();
+          if (formTag !== 'FORM') continue;
+          const formBackendNodeId = Number(backendIds[formIndex] || 0);
+          if (!formBackendNodeId) continue;
+          const attrs = attributesAt(nodes, formIndex, strings);
+          const formId = makeElementId(documentId, formBackendNodeId, effectiveSessionId).replace(/^e_/, 'f_');
+          formIdByIndex.set(formIndex, formId);
+          forms.set(formId, {
+            formId,
+            backendNodeId: formBackendNodeId,
+            documentId,
+            frameId,
+            id: attrs.id || undefined,
+            name: attrs.name || undefined,
+            action: attrs.action || undefined,
+            method: String(attrs.method || 'get').toLowerCase(),
+            fields: [],
+          });
+        }
+
+        const owningFormId = (nodeIndex: number): string | undefined => {
+          let current = Number(parentIndexes[nodeIndex]);
+          let guard = 0;
+          while (Number.isInteger(current) && current >= 0 && guard++ < 80) {
+            const formId = formIdByIndex.get(current);
+            if (formId) return formId;
+            current = Number(parentIndexes[current]);
+          }
+          return undefined;
+        };
+
         for (let nodeIndex = 0; nodeIndex < backendIds.length; nodeIndex += 1) {
           const backendNodeId = Number(backendIds[nodeIndex] || 0);
           if (!backendNodeId) continue;
@@ -208,8 +247,6 @@ class ObservationService {
           if (mode !== 'full' && !interactive) continue;
           if (isTextNode && !String(name || textValue || nodeValue || '').trim()) continue;
 
-          const effectiveSessionId = context.sessionId || loader?.sessionId;
-          const effectiveTargetId = context.targetId || loader?.targetId;
           const eid = makeElementId(documentId, backendNodeId, effectiveSessionId);
           const text = name || String(textValue || nodeValue || '').trim();
           const fingerprint = {
@@ -256,6 +293,11 @@ class ObservationService {
           };
           const element: V3Element = { ...elementBase, signature: elementSignature(elementBase) };
           elements.push(element);
+          const formId = owningFormId(nodeIndex);
+          if (formId && ['INPUT', 'TEXTAREA', 'SELECT', 'BUTTON'].includes(tag)) {
+            const form = forms.get(formId);
+            if (form && !form.fields.includes(eid)) form.fields.push(eid);
+          }
           if (boolish(axProp(ax, 'focused')) === true) focusedEid = eid;
         }
       }
@@ -305,6 +347,7 @@ class ObservationService {
       },
       tabs,
       frames,
+      forms: [...forms.values()].filter((form) => form.fields.length > 0),
       elements: limited,
       focusedEid,
       delta,

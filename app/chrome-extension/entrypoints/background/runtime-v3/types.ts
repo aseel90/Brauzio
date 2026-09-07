@@ -51,6 +51,18 @@ export interface V3Element {
   signature: string;
 }
 
+export interface V3FormSummary {
+  formId: string;
+  backendNodeId: number;
+  documentId: string;
+  frameId: string;
+  id?: string;
+  name?: string;
+  action?: string;
+  method?: string;
+  fields: string[];
+}
+
 export interface V3Frame {
   frameId: string;
   parentFrameId?: string;
@@ -99,6 +111,7 @@ export interface V3ObservationSnapshot {
   };
   tabs: V3TabSummary[];
   frames: V3Frame[];
+  forms: V3FormSummary[];
   elements: V3Element[];
   focusedEid?: string;
   delta?: V3SnapshotDelta;
