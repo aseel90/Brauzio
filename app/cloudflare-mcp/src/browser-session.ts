@@ -31,6 +31,7 @@ interface ActorLeaseRecord {
   acquiredAt: number;
   lastSeenAt: number;
   expiresAt: number;
+  activeRequestId?: string;
 }
 
 interface ObserverSessionRecord {
@@ -97,7 +98,8 @@ const PAIRING_STORAGE_KEY = 'oauth-pairing-v1';
 const CONTROL_STORAGE_KEY = 'control-state-v1';
 const ACTOR_LEASE_STORAGE_KEY = 'actor-lease-v1';
 const OBSERVER_STORAGE_PREFIX = 'observer-session-v1:';
-const ACTOR_LEASE_TTL_MS = 60_000;
+const ACTOR_LEASE_IDLE_MS = 15_000;
+const ACTOR_LEASE_MIN_EXECUTION_MS = 60_000;
 const OBSERVER_SESSION_TTL_MS = 5 * 60_000;
 const WATCH_STORAGE_PREFIX = 'watch-v1:';
 const WATCH_WAIT_MAX_MS = 115_000;
@@ -240,6 +242,7 @@ export class BrowserSession extends DurableObject<Env> {
         controlReason: controlState.reason,
         controlSince: controlState.since,
         actorLeaseActive: Boolean(actorLease),
+        actorLeaseBusy: Boolean(actorLease?.activeRequestId),
         actorLeaseExpiresAt: actorLease?.expiresAt || null,
         observerSessions: observerSessions.length,
       });
@@ -419,14 +422,18 @@ export class BrowserSession extends DurableObject<Env> {
     if (!browser) return Response.json({ error: 'Brauzio extension is not connected to Cloudflare' }, { status: 503 });
 
     const timeoutMs = Math.min(Math.max(Number(body.timeoutMs || 120_000), 1_000), 180_000);
+    const requestId = validTraceId(body.traceId) || crypto.randomUUID();
     if (actor) {
-      const leaseResult = await this.acquireActorLease(callerId, timeoutMs);
+      const leaseResult = await this.acquireActorLease(callerId, requestId, timeoutMs);
       if (!leaseResult.ok) {
         const retryAfterMs = Math.max(0, leaseResult.lease.expiresAt - Date.now());
-        sessionLog('ACTOR_LEASE_CONFLICT', { name: body.name, retryAfterMs });
+        const conflict = leaseResult.code === 'ACTOR_LEASE_CONFLICT';
+        sessionLog(leaseResult.code, { name: body.name, retryAfterMs });
         return Response.json({
-          error: 'Another Brauzio actor session currently holds control.',
-          code: 'ACTOR_LEASE_CONFLICT',
+          error: conflict
+            ? 'Another Brauzio actor session currently holds control.'
+            : 'This Brauzio actor session already has a mutating tool call in progress.',
+          code: leaseResult.code,
           retryAfterMs,
           actorLeaseExpiresAt: leaseResult.lease.expiresAt,
         }, { status: 409 });
@@ -435,14 +442,13 @@ export class BrowserSession extends DurableObject<Env> {
       await this.touchObserverSession(callerId);
     }
 
-    const requestId = validTraceId(body.traceId) || crypto.randomUUID();
     const startedAt = Date.now();
     sessionLog('CALL_RECEIVED', { requestId, name: body.name, actor, authenticatedSockets: this.authenticatedSockets().length });
 
     return new Promise<Response>((resolve) => {
       const timer = setTimeout(() => {
         this.pending.delete(requestId);
-        if (actor) void this.settleActorLease(callerId);
+        if (actor) void this.settleActorLease(callerId, requestId);
         sessionLog('CALL_TIMEOUT', { requestId, name: body.name, timeoutMs, durationMs: Date.now() - startedAt });
         resolve(Response.json({ error: `Tool call timed out after ${timeoutMs}ms (traceId: ${requestId})` }, { status: 504 }));
       }, timeoutMs);
@@ -453,7 +459,7 @@ export class BrowserSession extends DurableObject<Env> {
       } catch (error) {
         clearTimeout(timer);
         this.pending.delete(requestId);
-        if (actor) void this.settleActorLease(callerId);
+        if (actor) void this.settleActorLease(callerId, requestId);
         resolve(Response.json({ error: error instanceof Error ? error.message : String(error) }, { status: 502 }));
       }
     });
@@ -471,31 +477,53 @@ export class BrowserSession extends DurableObject<Env> {
     return lease;
   }
 
-  private async acquireActorLease(ownerId: string, executionTimeoutMs: number): Promise<{ ok: true; lease: ActorLeaseRecord } | { ok: false; lease: ActorLeaseRecord }> {
+  private async acquireActorLease(
+    ownerId: string,
+    requestId: string,
+    executionTimeoutMs: number,
+  ): Promise<
+    | { ok: true; lease: ActorLeaseRecord }
+    | { ok: false; code: 'ACTOR_LEASE_CONFLICT' | 'ACTOR_BUSY'; lease: ActorLeaseRecord }
+  > {
     return await this.ctx.storage.transaction(async (txn) => {
       const now = Date.now();
       const current = await txn.get<ActorLeaseRecord>(ACTOR_LEASE_STORAGE_KEY);
-      if (current && current.expiresAt > now && current.ownerId !== ownerId) {
-        return { ok: false as const, lease: current };
+      if (current && current.expiresAt > now) {
+        if (current.ownerId !== ownerId) {
+          return { ok: false as const, code: 'ACTOR_LEASE_CONFLICT' as const, lease: current };
+        }
+        if (current.activeRequestId && current.activeRequestId !== requestId) {
+          return { ok: false as const, code: 'ACTOR_BUSY' as const, lease: current };
+        }
       }
-      const executionHoldMs = Math.min(Math.max(executionTimeoutMs + 5_000, ACTOR_LEASE_TTL_MS), 185_000);
+      const executionHoldMs = Math.min(
+        Math.max(executionTimeoutMs + 5_000, ACTOR_LEASE_MIN_EXECUTION_MS),
+        185_000,
+      );
       const next: ActorLeaseRecord = {
         ownerId,
         acquiredAt: current?.ownerId === ownerId ? current.acquiredAt : now,
         lastSeenAt: now,
         expiresAt: now + executionHoldMs,
+        activeRequestId: requestId,
       };
       await txn.put(ACTOR_LEASE_STORAGE_KEY, next);
       return { ok: true as const, lease: next };
     });
   }
 
-  private async settleActorLease(ownerId: string): Promise<void> {
+  private async settleActorLease(ownerId: string, requestId: string): Promise<void> {
     await this.ctx.storage.transaction(async (txn) => {
       const current = await txn.get<ActorLeaseRecord>(ACTOR_LEASE_STORAGE_KEY);
       if (!current || current.ownerId !== ownerId) return;
+      if (current.activeRequestId && current.activeRequestId !== requestId) return;
       const now = Date.now();
-      await txn.put(ACTOR_LEASE_STORAGE_KEY, { ...current, lastSeenAt: now, expiresAt: now + ACTOR_LEASE_TTL_MS });
+      await txn.put(ACTOR_LEASE_STORAGE_KEY, {
+        ...current,
+        activeRequestId: undefined,
+        lastSeenAt: now,
+        expiresAt: now + ACTOR_LEASE_IDLE_MS,
+      });
     });
   }
 
@@ -695,7 +723,7 @@ export class BrowserSession extends DurableObject<Env> {
     clearTimeout(pending.timer);
     sessionLog(message.error ? 'RESULT_ERROR' : 'RESULT_OK', { requestId: message.requestId, name: pending.name, durationMs: Date.now() - pending.startedAt, error: message.error || undefined });
     this.pending.delete(message.requestId);
-    if (pending.actor) await this.settleActorLease(pending.callerId);
+    if (pending.actor) await this.settleActorLease(pending.callerId, message.requestId);
     if (message.error) { pending.resolve(Response.json({ error: message.error }, { status: 500 })); return; }
     pending.resolve(Response.json({ result: message.result }));
   }
