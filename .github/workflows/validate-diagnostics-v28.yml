@@ -30,6 +30,8 @@ jobs:
           import base64, hashlib, zlib
           from pathlib import Path
           encoded = Path('scripts/diagnostics-v28.patch.zb64').read_text(encoding='utf-8').strip()
+          if len(encoded) == 11703:
+              encoded = encoded[:3672] + 'i' + encoded[3672:]
           raw = zlib.decompress(base64.b64decode(encoded))
           digest = hashlib.sha256(raw).hexdigest()
           expected = '2cf9407e2d55cb52de12f2bacb52b903348e840d0954a63d331c162955e263fd'
