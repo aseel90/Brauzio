@@ -25,16 +25,31 @@ jobs:
           ref: brauzio-v3-runtime
           fetch-depth: 0
       - name: Apply reviewed Brauzio 3.0.1 fixes
+        id: patch
         shell: bash
         run: |
-          set -euo pipefail
-          git fetch origin main
-          python scripts/apply-v301-fixes.py
-          git show origin/main:app/chrome-extension/entrypoints/popup/App.vue > app/chrome-extension/entrypoints/popup/App.vue
-          git show origin/main:app/chrome-extension/entrypoints/popup/style.css > app/chrome-extension/entrypoints/popup/style.css
-          git show origin/main:app/chrome-extension/entrypoints/background/index.ts > app/chrome-extension/entrypoints/background/index.ts
-          git show origin/main:app/chrome-extension/entrypoints/background/popup-live-view.ts > app/chrome-extension/entrypoints/background/popup-live-view.ts
-          rm -f scripts/apply-v301-fixes.py .github/workflows/apply-v301-fixes.yml
+          set +e
+          {
+            git fetch origin main
+            python scripts/apply-v301-fixes.py
+            git show origin/main:app/chrome-extension/entrypoints/popup/App.vue > app/chrome-extension/entrypoints/popup/App.vue
+            git show origin/main:app/chrome-extension/entrypoints/popup/style.css > app/chrome-extension/entrypoints/popup/style.css
+            git show origin/main:app/chrome-extension/entrypoints/background/index.ts > app/chrome-extension/entrypoints/background/index.ts
+            git show origin/main:app/chrome-extension/entrypoints/background/popup-live-view.ts > app/chrome-extension/entrypoints/background/popup-live-view.ts
+            rm -f scripts/apply-v301-fixes.py .github/workflows/apply-v301-fixes.yml
+          } > /tmp/v301-patch.log 2>&1
+          code=$?
+          cat /tmp/v301-patch.log
+          if [ "$code" -ne 0 ]; then
+            mkdir -p docs/diagnostics
+            cp /tmp/v301-patch.log docs/diagnostics/v301-patch-error.txt
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git add docs/diagnostics/v301-patch-error.txt
+            git commit -m 'test(v3): persist 3.0.1 patch failure [skip ci]' || true
+            git push origin HEAD:brauzio-v3-runtime || true
+            exit "$code"
+          fi
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
