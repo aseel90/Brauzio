@@ -1,0 +1,336 @@
+--- a/app/chrome-extension/entrypoints/background/runtime-v3/types.ts
++++ b/app/chrome-extension/entrypoints/background/runtime-v3/types.ts
+@@ -150,6 +150,7 @@
+ export interface V3JournalEvent {
+   sequence: number;
+   tabId: number;
++  actionId?: string;
+   sessionId?: string;
+   method: string;
+   category:
+--- a/app/chrome-extension/entrypoints/background/runtime-v3/event-journal.ts
++++ b/app/chrome-extension/entrypoints/background/runtime-v3/event-journal.ts
+@@ -67,20 +67,21 @@
+   private sequence = 0;
+   private events = new Map<number, V3JournalEvent[]>();
+   private unsubscribers = new Map<number, () => void>();
++  private activeActions = new Map<number, string>();
+ 
+   constructor() {
+     chrome.tabs.onCreated.addListener((tab) => {
+       if (typeof tab.id !== 'number') return;
+-      this.push(tab.id, {
+-        method: 'Tab.created',
+-        category: 'tab',
+-        summary: {
+-          tabId: tab.id,
+-          windowId: tab.windowId,
+-          openerTabId: tab.openerTabId,
+-          url: cleanUrl(tab.pendingUrl || tab.url),
+-        },
+-      });
++      const summary = {
++        tabId: tab.id,
++        windowId: tab.windowId,
++        openerTabId: tab.openerTabId,
++        url: cleanUrl(tab.pendingUrl || tab.url),
++      };
++      this.push(tab.id, { method: 'Tab.created', category: 'tab', summary });
++      if (typeof tab.openerTabId === 'number' && this.activeActions.has(tab.openerTabId)) {
++        this.push(tab.openerTabId, { method: 'Tab.childCreated', category: 'tab', summary });
++      }
+     });
+     chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+       if (!changeInfo.url && !changeInfo.status && !changeInfo.title) return;
+@@ -98,6 +99,7 @@
+       this.unsubscribers.get(tabId)?.();
+       this.unsubscribers.delete(tabId);
+       this.events.delete(tabId);
++      this.activeActions.delete(tabId);
+     });
+     chrome.downloads.onCreated.addListener((item) => {
+       this.pushForLikelyActiveTab({
+@@ -115,6 +117,16 @@
+     });
+   }
+ 
++  beginAction(tabId: number, actionId: string): () => void {
++    const previous = this.activeActions.get(tabId);
++    this.activeActions.set(tabId, actionId);
++    return () => {
++      if (this.activeActions.get(tabId) !== actionId) return;
++      if (previous) this.activeActions.set(tabId, previous);
++      else this.activeActions.delete(tabId);
++    };
++  }
++
+   ensure(tabId: number): void {
+     if (this.unsubscribers.has(tabId)) return;
+     const owner = `v3-journal:${tabId}`;
+@@ -131,6 +143,11 @@
+   }
+ 
+   private pushForLikelyActiveTab(input: Omit<V3JournalEvent, 'sequence' | 'tabId' | 'receivedAt'> & { receivedAt?: number }): void {
++    const scopedTabs = [...this.activeActions.keys()];
++    if (scopedTabs.length === 1) {
++      this.push(scopedTabs[0], input);
++      return;
++    }
+     void chrome.tabs.query({ active: true, currentWindow: true }).then(([tab]) => {
+       if (typeof tab?.id === 'number') this.push(tab.id, input);
+     }).catch(() => undefined);
+@@ -144,6 +161,7 @@
+     list.push({
+       sequence: ++this.sequence,
+       tabId,
++      actionId: input.actionId || this.activeActions.get(tabId),
+       sessionId: input.sessionId,
+       method: input.method,
+       category: input.category,
+@@ -159,12 +177,13 @@
+     return list[list.length - 1]?.sequence || 0;
+   }
+ 
+-  read(tabId: number, options: { afterSequence?: number; since?: number; until?: number; limit?: number } = {}): V3JournalEvent[] {
++  read(tabId: number, options: { afterSequence?: number; since?: number; until?: number; actionId?: string; limit?: number } = {}): V3JournalEvent[] {
+     const list = this.events.get(tabId) || [];
+     const filtered = list.filter((event) => {
+       if (typeof options.afterSequence === 'number' && event.sequence <= options.afterSequence) return false;
+       if (typeof options.since === 'number' && event.receivedAt < options.since) return false;
+       if (typeof options.until === 'number' && event.receivedAt > options.until) return false;
++      if (options.actionId && event.actionId !== options.actionId) return false;
+       return true;
+     });
+     return filtered.slice(-Math.max(1, Math.min(options.limit ?? 120, 300)));
+--- a/app/chrome-extension/entrypoints/background/runtime-v3/actionability.ts
++++ b/app/chrome-extension/entrypoints/background/runtime-v3/actionability.ts
+@@ -18,6 +18,8 @@
+     && Math.abs(a.height - b.height) <= 1;
+ }
+ 
++export type V3ActionabilityMode = 'pointer' | 'editable' | 'focus';
++
+ class ActionabilityService {
+   private async send<T = any>(tabId: number, sessionId: string | undefined, method: string, params?: object): Promise<T> {
+     if (sessionId) return await cdpRouter.sendToChild<T>(tabId, sessionId, method, params);
+@@ -85,6 +87,42 @@
+             : undefined;
+     return { actionable, visible, stable, enabled, receivesEvents, editable, reason, center, box };
+   }
++
++  async waitFor(
++    tabId: number,
++    element: V3Element,
++    options: { mode?: V3ActionabilityMode; timeoutMs?: number; scroll?: boolean } = {},
++  ): Promise<V3Actionability> {
++    const mode = options.mode || 'pointer';
++    const timeoutMs = Math.max(100, Math.min(Number(options.timeoutMs || 5000), 30000));
++    const deadline = Date.now() + timeoutMs;
++    let last: V3Actionability | undefined;
++
++    do {
++      last = await this.inspect(tabId, element, { scroll: options.scroll !== false, stableMs: 70 });
++      const ready = mode === 'editable'
++        ? last.visible && last.stable && last.enabled && Boolean(last.editable)
++        : mode === 'focus'
++          ? last.visible && last.stable && last.enabled
++          : last.actionable;
++      if (ready) return { ...last, actionable: true, reason: undefined };
++      if (Date.now() >= deadline) break;
++      await new Promise((resolve) => setTimeout(resolve, Math.min(80, Math.max(20, deadline - Date.now()))));
++    } while (Date.now() < deadline);
++
++    if (!last) {
++      return {
++        actionable: false,
++        visible: false,
++        stable: false,
++        enabled: false,
++        receivesEvents: false,
++        reason: 'actionability_timeout',
++      };
++    }
++    const reason = mode === 'editable' && !last.editable ? 'not_editable' : last.reason || 'actionability_timeout';
++    return { ...last, actionable: false, reason };
++  }
+ }
+ 
+ export const actionabilityService = new ActionabilityService();
+--- a/app/chrome-extension/entrypoints/background/runtime-v3/action-engine.ts
++++ b/app/chrome-extension/entrypoints/background/runtime-v3/action-engine.ts
+@@ -13,6 +13,7 @@
+ import { sessionGraph } from './session-graph';
+ import type {
+   V3ActionEvidence,
++  V3Actionability,
+   V3Element,
+   V3ObservationSnapshot,
+   V3ResolveResult,
+@@ -82,10 +83,13 @@
+     if (!before) before = (await observationService.observe(tab, { mode: 'compact' })).snapshot;
+     const beforeSnapshotId = before.snapshotId;
+     const startCursor = eventJournal.cursor(tab.id);
++    const releaseActionScope = eventJournal.beginAction(tab.id, actionId);
++    const timeoutMs = Math.max(250, Math.min(Number(request.timeoutMs || 5000), 30000));
+     let verifier: PreparedActionVerification | undefined;
+     let targetElement: V3Element | undefined;
+     let resolution: V3ResolveResult | undefined;
+     let actionability;
++    let navigationWaiter: { promise: Promise<void>; cancel: () => void } | undefined;
+ 
+     try {
+       if (hasActionVerification(request.verification)) {
+@@ -109,14 +113,23 @@
+         if (!request.source || !request.target) throw this.error('TARGET_REQUIRED', 'drag requires source and target');
+       }
+ 
+-      if (targetElement && !['fill', 'clear', 'type', 'press', 'select', 'focus', 'upload'].includes(request.action)) {
+-        actionability = await actionabilityService.inspect(tab.id, targetElement, { scroll: true });
++      if (targetElement && request.action !== 'upload') {
++        const mode = ['fill', 'clear', 'type', 'select'].includes(request.action)
++          ? 'editable'
++          : ['focus', 'press'].includes(request.action)
++            ? 'focus'
++            : 'pointer';
++        actionability = await actionabilityService.waitFor(tab.id, targetElement, { mode, timeoutMs, scroll: true });
+         if (!actionability.actionable) {
+-          throw this.error('NOT_ACTIONABLE', `Target is not actionable: ${actionability.reason || 'unknown'}`, actionability);
++          throw this.error('NOT_ACTIONABLE', `Target is not actionable within ${timeoutMs}ms: ${actionability.reason || 'unknown'}`, actionability);
+         }
+       }
+ 
+-      await this.perform(tab, request, targetElement, before);
++      navigationWaiter = ['navigate', 'back', 'forward', 'reload'].includes(request.action)
++        ? this.prepareNavigationCommit(tab.id, Math.min(timeoutMs, 10000))
++        : undefined;
++      await this.perform(tab, request, targetElement, before, actionability);
++      if (navigationWaiter) await navigationWaiter.promise;
+       const verification = verifier ? await verifier.verify() : undefined;
+       verifier = undefined;
+ 
+@@ -129,7 +142,7 @@
+         });
+       }
+       const completedAt = Date.now();
+-      const events = eventJournal.read(tab.id, { afterSequence: startCursor, since: startedAt, until: completedAt, limit: 180 });
++      const events = eventJournal.read(tab.id, { afterSequence: startCursor, since: startedAt, until: completedAt, actionId, limit: 180 });
+       const evidence: V3ActionEvidence = {
+         actionId,
+         action: request.action,
+@@ -152,10 +165,11 @@
+         resolution,
+       };
+     } catch (error) {
++      navigationWaiter?.cancel();
+       await verifier?.cancel().catch(() => undefined);
+       const completedAt = Date.now();
+       const normalized = this.normalizeError(error);
+-      const events = eventJournal.read(tab.id, { afterSequence: startCursor, since: startedAt, until: completedAt, limit: 180 });
++      const events = eventJournal.read(tab.id, { afterSequence: startCursor, since: startedAt, until: completedAt, actionId, limit: 180 });
+       let failureObservation;
+       try {
+         failureObservation = await observationService.observe(tab, {
+@@ -187,6 +201,8 @@
+         screenshot: failureObservation?.screenshot,
+         resolution,
+       };
++    } finally {
++      releaseActionScope();
+     }
+   }
+ 
+@@ -204,6 +220,7 @@
+     request: V3ActionRequest,
+     element: V3Element | undefined,
+     snapshot: V3ObservationSnapshot,
++    actionability?: V3Actionability,
+   ): Promise<void> {
+     switch (request.action) {
+       case 'navigate': {
+@@ -252,7 +269,7 @@
+       case 'click':
+       case 'double_click':
+       case 'hover':
+-        return await this.pointerAction(tab.id, element, request.action, request.button || 'left');
++        return await this.pointerAction(tab.id, element, request.action, request.button || 'left', actionability);
+       case 'focus':
+         await this.send(tab.id, element, 'DOM.focus', { backendNodeId: element.backendNodeId });
+         return;
+@@ -280,8 +297,14 @@
+     }
+   }
+ 
+-  private async pointerAction(tabId: number, element: V3Element, action: 'click' | 'double_click' | 'hover', button: 'left' | 'right' | 'middle'): Promise<void> {
+-    const state = await actionabilityService.inspect(tabId, element, { scroll: true });
++  private async pointerAction(
++    tabId: number,
++    element: V3Element,
++    action: 'click' | 'double_click' | 'hover',
++    button: 'left' | 'right' | 'middle',
++    prepared?: V3Actionability,
++  ): Promise<void> {
++    const state = prepared || await actionabilityService.waitFor(tabId, element, { mode: 'pointer', timeoutMs: 5000, scroll: true });
+     if (!state.center || !state.visible) throw this.error('NOT_VISIBLE', 'Target has no visible click point', state);
+     const send = (method: string, params?: object) => this.send(tabId, element, method, params);
+     const { x, y } = state.center;
+@@ -382,6 +405,42 @@
+     await send({ type: 'mouseReleased', x: b.center.x, y: b.center.y, button: 'left', buttons: 0, clickCount: 1 });
+   }
+ 
++
++  private prepareNavigationCommit(tabId: number, timeoutMs: number): { promise: Promise<void>; cancel: () => void } {
++    let settled = false;
++    let timer: ReturnType<typeof setTimeout> | undefined;
++    let resolvePromise: (() => void) | undefined;
++    const cleanup = () => {
++      if (timer) clearTimeout(timer);
++      chrome.webNavigation.onCommitted.removeListener(listener);
++    };
++    const listener = (details: any) => {
++      if (details.tabId !== tabId || details.frameId !== 0 || settled) return;
++      settled = true;
++      cleanup();
++      resolvePromise?.();
++    };
++    const promise = new Promise<void>((resolve, reject) => {
++      resolvePromise = resolve;
++      chrome.webNavigation.onCommitted.addListener(listener);
++      timer = setTimeout(() => {
++        if (settled) return;
++        settled = true;
++        cleanup();
++        reject(new Error(`Navigation did not commit within ${timeoutMs}ms`));
++      }, Math.max(250, timeoutMs));
++    });
++    return {
++      promise,
++      cancel: () => {
++        if (settled) return;
++        settled = true;
++        cleanup();
++        resolvePromise?.();
++      },
++    };
++  }
++
+   private error(code: string, message: string, details?: unknown): Error & { code?: string; details?: unknown } {
+     const error = new Error(message) as Error & { code?: string; details?: unknown };
+     error.code = code;
+--- a/app/chrome-extension/utils/cdp-session-manager.ts
++++ b/app/chrome-extension/utils/cdp-session-manager.ts
+@@ -1,13 +1,5 @@
+ import { cdpRouter } from './cdp-router';
+ 
+-// Compatibility export for the existing browser tools while Brauzio migrates
+-// incrementally to CDP Core V3. New code should import cdpRouter directly.
++// Compatibility alias for legacy tools. New V3 code imports cdpRouter directly.
++// Do not re-export cdpRouter/types here: WXT auto-imports would see duplicate symbols.
+ export const cdpSessionManager = cdpRouter;
+-
+-export { CDPRouter, cdpRouter } from './cdp-router';
+-export type {
+-  CdpChildSessionSnapshot,
+-  CdpEventEnvelope,
+-  CdpOwnerTag,
+-  CdpSessionSnapshot,
+-} from './cdp-router';
