@@ -55,7 +55,7 @@ jobs:
       - uses: pnpm/action-setup@v4
         with:
           version: 8.15.9
-      - name: Build and typecheck with diagnostics
+      - name: Build, typecheck, package and diagnose
         shell: bash
         run: |
           set +e
@@ -65,6 +65,15 @@ jobs:
             pnpm --filter brauzio-shared build
             pnpm --filter brauzio-extension compile
             pnpm --filter brauzio-extension build
+            OUT='app/chrome-extension/.output/chrome-mv3'
+            python - "$OUT/manifest.json" <<'PY'
+          import json,sys
+          m=json.load(open(sys.argv[1],encoding='utf-8'))
+          assert m.get('version') == '3.0.1', m.get('version')
+          print('verified',m['version'])
+          PY
+            (cd "$OUT" && zip -qr ../brauzio-chrome-v3-preview.zip .)
+            unzip -t app/chrome-extension/.output/brauzio-chrome-v3-preview.zip >/dev/null
           } > /tmp/v301-build.log 2>&1
           code=$?
           cat /tmp/v301-build.log
@@ -78,19 +87,6 @@ jobs:
             git push origin HEAD:brauzio-v3-runtime || true
             exit "$code"
           fi
-      - name: Package and verify 3.0.1 preview
-        shell: bash
-        run: |
-          set -euo pipefail
-          OUT='app/chrome-extension/.output/chrome-mv3'
-          python - "$OUT/manifest.json" <<'PY'
-          import json,sys
-          m=json.load(open(sys.argv[1],encoding='utf-8'))
-          assert m.get('version') == '3.0.1', m.get('version')
-          print('verified',m['version'])
-          PY
-          (cd "$OUT" && zip -qr ../brauzio-chrome-v3-preview.zip .)
-          unzip -t app/chrome-extension/.output/brauzio-chrome-v3-preview.zip >/dev/null
       - name: Publish verified 3.0.1 code and preview ZIP
         shell: bash
         run: |
