@@ -25,7 +25,6 @@ jobs:
           ref: brauzio-v3-runtime
           fetch-depth: 0
       - name: Apply reviewed Brauzio 3.0.1 fixes
-        id: patch
         shell: bash
         run: |
           set +e
@@ -56,11 +55,29 @@ jobs:
       - uses: pnpm/action-setup@v4
         with:
           version: 8.15.9
-      - run: pnpm install --no-frozen-lockfile --ignore-scripts
-      - run: pnpm --filter brauzio-extension exec wxt prepare
-      - run: pnpm --filter brauzio-shared build
-      - run: pnpm --filter brauzio-extension compile
-      - run: pnpm --filter brauzio-extension build
+      - name: Build and typecheck with diagnostics
+        shell: bash
+        run: |
+          set +e
+          {
+            pnpm install --no-frozen-lockfile --ignore-scripts
+            pnpm --filter brauzio-extension exec wxt prepare
+            pnpm --filter brauzio-shared build
+            pnpm --filter brauzio-extension compile
+            pnpm --filter brauzio-extension build
+          } > /tmp/v301-build.log 2>&1
+          code=$?
+          cat /tmp/v301-build.log
+          if [ "$code" -ne 0 ]; then
+            mkdir -p docs/diagnostics
+            cp /tmp/v301-build.log docs/diagnostics/v301-build-error.txt
+            git config user.name 'github-actions[bot]'
+            git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+            git add docs/diagnostics/v301-build-error.txt
+            git commit -m 'test(v3): persist 3.0.1 build failure [skip ci]' || true
+            git push origin HEAD:brauzio-v3-runtime || true
+            exit "$code"
+          fi
       - name: Package and verify 3.0.1 preview
         shell: bash
         run: |
@@ -83,6 +100,7 @@ jobs:
           cp app/chrome-extension/.output/brauzio-chrome-v3-preview.zip "$DEST/brauzio-chrome-3.0.1-preview.zip"
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          rm -f docs/diagnostics/v301-patch-error.txt docs/diagnostics/v301-build-error.txt
           git add -A
           if ! git diff --cached --quiet; then
             git commit -m 'fix(v3): Brauzio 3.0.1 reliability and native image delivery [skip ci]'
