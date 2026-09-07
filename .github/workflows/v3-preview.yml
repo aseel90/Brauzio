@@ -21,6 +21,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: brauzio-v3-runtime
+          fetch-depth: 0
+      - name: Apply reviewed Brauzio 3.0.1 fixes
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin main
+          python scripts/apply-v301-fixes.py
+          git show origin/main:app/chrome-extension/entrypoints/popup/App.vue > app/chrome-extension/entrypoints/popup/App.vue
+          git show origin/main:app/chrome-extension/entrypoints/popup/style.css > app/chrome-extension/entrypoints/popup/style.css
+          git show origin/main:app/chrome-extension/entrypoints/background/index.ts > app/chrome-extension/entrypoints/background/index.ts
+          git show origin/main:app/chrome-extension/entrypoints/background/popup-live-view.ts > app/chrome-extension/entrypoints/background/popup-live-view.ts
+          rm -f scripts/apply-v301-fixes.py .github/workflows/apply-v301-fixes.yml
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
@@ -32,7 +46,7 @@ jobs:
       - run: pnpm --filter brauzio-shared build
       - run: pnpm --filter brauzio-extension compile
       - run: pnpm --filter brauzio-extension build
-      - name: Package and verify 3.0.0 preview
+      - name: Package and verify 3.0.1 preview
         shell: bash
         run: |
           set -euo pipefail
@@ -40,24 +54,22 @@ jobs:
           python - "$OUT/manifest.json" <<'PY'
           import json,sys
           m=json.load(open(sys.argv[1],encoding='utf-8'))
-          assert m.get('version') == '3.0.0', m.get('version')
+          assert m.get('version') == '3.0.1', m.get('version')
           print('verified',m['version'])
           PY
           (cd "$OUT" && zip -qr ../brauzio-chrome-v3-preview.zip .)
           unzip -t app/chrome-extension/.output/brauzio-chrome-v3-preview.zip >/dev/null
-      - name: Publish preview ZIP on V3 branch only
+      - name: Publish verified 3.0.1 code and preview ZIP
         shell: bash
         run: |
           set -euo pipefail
           DEST='releases/chrome-extension/v3-preview'
           mkdir -p "$DEST"
-          cp app/chrome-extension/.output/brauzio-chrome-v3-preview.zip "$DEST/brauzio-chrome-3.0.0-preview.zip"
+          cp app/chrome-extension/.output/brauzio-chrome-v3-preview.zip "$DEST/brauzio-chrome-3.0.1-preview.zip"
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add "$DEST/brauzio-chrome-3.0.0-preview.zip"
+          git add -A
           if ! git diff --cached --quiet; then
-            git commit -m 'build(v3): publish Brauzio 3.0.0 preview [skip ci]'
-            git push
+            git commit -m 'fix(v3): Brauzio 3.0.1 reliability and native image delivery [skip ci]'
+            git push origin HEAD:brauzio-v3-runtime
           fi
-
-# Rebuild marker: final form grouping c315cd1
