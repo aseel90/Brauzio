@@ -1,15 +1,15 @@
 branch=actor-observer-v27
-head=ceaea800bc5dd1ff387bbf246138287a9304e941
+head=d16a744c5c48d1ab2fd2297e56ab3f5209604516
 install=0
 Scope: all 4 workspace projects
-Progress: resolved 1, reused 0, downloaded 0, added 0
-Progress: resolved 153, reused 0, downloaded 152, added 0
-Progress: resolved 400, reused 0, downloaded 346, added 0
-Progress: resolved 751, reused 0, downloaded 603, added 0
-Progress: resolved 886, reused 0, downloaded 735, added 0
+Progress: resolved 0, reused 0, downloaded 1, added 0
+Progress: resolved 164, reused 0, downloaded 163, added 0
+Progress: resolved 415, reused 0, downloaded 362, added 0
+Progress: resolved 766, reused 0, downloaded 620, added 0
+Progress: resolved 908, reused 0, downloaded 748, added 0
 Packages: +749
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-Progress: resolved 910, reused 0, downloaded 751, added 668
+Progress: resolved 910, reused 0, downloaded 751, added 748
 Progress: resolved 910, reused 0, downloaded 751, added 749, done
 
 devDependencies:
@@ -35,8 +35,11 @@ app/chrome-extension
   └─┬ vite 7.2.7
     └── ✕ unmet peer @types/node@"^20.19.0 || >=22.12.0": found 18.19.130
 
-Done in 6.9s
+Done in 6.7s
 decode=1
+Traceback (most recent call last):
+  File "<stdin>", line 3, in <module>
+zlib.error: Error -3 while decompressing data: invalid distance too far back
 apply_check=128
 error: No valid patches in input (allow with "--allow-empty")
 apply=128
@@ -53,12 +56,12 @@ shared_build=0
 [34mCLI[39m Cleaning output folder
 [34mCJS[39m Build start
 [34mESM[39m Build start
-[32mCJS[39m [1mdist/index.js [22m[32m18.76 KB[39m
-[32mCJS[39m ⚡️ Build success in 28ms
 [32mESM[39m [1mdist/index.mjs [22m[32m17.67 KB[39m
-[32mESM[39m ⚡️ Build success in 28ms
+[32mESM[39m ⚡️ Build success in 24ms
+[32mCJS[39m [1mdist/index.js [22m[32m18.76 KB[39m
+[32mCJS[39m ⚡️ Build success in 25ms
 [34mDTS[39m Build start
-[32mDTS[39m ⚡️ Build success in 1248ms
+[32mDTS[39m ⚡️ Build success in 1214ms
 [32mDTS[39m [1mdist/index.d.ts  [22m[32m4.01 KB[39m
 [32mDTS[39m [1mdist/index.d.mts [22m[32m4.01 KB[39m
 cloud_check=0
@@ -87,7 +90,7 @@ Cloudflare collects anonymous telemetry about your usage of Wrangler. Learn more
 wxt_prepare=0
 
 [log] [90mWXT[39m [90m[1m0.20.11[22m[39m
-[dotenv@17.2.3] injecting env (0) from .env.production.chrome.local,.env.production.chrome,.env.chrome.local,.env.chrome,.env.production.local,.env.production,.env.local,.env -- tip: ⚙️  override existing env vars with { override: true }
+[dotenv@17.2.3] injecting env (0) from .env.production.chrome.local,.env.production.chrome,.env.chrome.local,.env.chrome,.env.production.local,.env.production,.env.local,.env -- tip: ⚙️  write to custom object with { processEnv: myObject }
 [warn] `InlineConfig#runner` is deprecated, use `InlineConfig#webExt` instead. See https://wxt.dev/guide/resources/upgrading.html#v0-19-0-rarr-v0-20-0
 [info] Generating types...
 [warn] Duplicated imports "CDPRouter", the one from "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-router.ts" has been ignored and "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-session-manager.ts" is used
@@ -102,7 +105,7 @@ wxt_prepare=0
 [warn] Duplicated imports "CdpEventEnvelope", the one from "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-router.ts" has been ignored and "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-session-manager.ts" is used
 [warn] Duplicated imports "CdpOwnerTag", the one from "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-router.ts" has been ignored and "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-session-manager.ts" is used
 [warn] Duplicated imports "CdpSessionSnapshot", the one from "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-router.ts" has been ignored and "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-session-manager.ts" is used
-[success] Finished in 714 ms
+[success] Finished in 736 ms
 extension_compile=0
 
 > brauzio-extension@2.6.0 compile /home/runner/work/Brauzio/Brauzio/app/chrome-extension
@@ -115,7 +118,7 @@ extension_build=0
 
 
 [log] [90mWXT[39m [90m[1m0.20.11[22m[39m
-[dotenv@17.2.3] injecting env (0) from .env.production.chrome.local,.env.production.chrome,.env.chrome.local,.env.chrome,.env.production.local,.env.production,.env.local,.env -- tip: ✅ audit secrets and track compliance: https://dotenvx.com/ops
+[dotenv@17.2.3] injecting env (0) from .env.production.chrome.local,.env.production.chrome,.env.chrome.local,.env.chrome,.env.production.local,.env.production,.env.local,.env -- tip: 🔐 encrypt with Dotenvx: https://dotenvx.com
 [warn] `InlineConfig#runner` is deprecated, use `InlineConfig#webExt` instead. See https://wxt.dev/guide/resources/upgrading.html#v0-19-0-rarr-v0-20-0
 [info] Building [36mchrome-mv3[39m for [36mproduction[39m with [32mVite 7.2.7[39m
 [warn] Duplicated imports "CDPRouter", the one from "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-router.ts" has been ignored and "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-session-manager.ts" is used
@@ -155,7 +158,7 @@ extension_build=0
 [warn] Duplicated imports "CdpEventEnvelope", the one from "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-router.ts" has been ignored and "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-session-manager.ts" is used
 [warn] Duplicated imports "CdpOwnerTag", the one from "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-router.ts" has been ignored and "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-session-manager.ts" is used
 [warn] Duplicated imports "CdpSessionSnapshot", the one from "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-router.ts" has been ignored and "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-session-manager.ts" is used
-[success] Built extension in 2.305 s
+[success] Built extension in 2.377 s
 [90m  ├─[39m [2m.output/chrome-mv3/[22m[34mmanifest.json[39m                                 [2m1.13 kB[22m  
 [90m  ├─[39m [2m.output/chrome-mv3/[22m[32moffscreen.html[39m                                [2m295 B[22m    
 [90m  ├─[39m [2m.output/chrome-mv3/[22m[32mpopup.html[39m                                    [2m681 B[22m    
@@ -177,4 +180,4 @@ extension_build=0
 [90m  ├─[39m [2m.output/chrome-mv3/[22m[34micon/48.png[39m                                   [2m3.47 kB[22m  
 [90m  └─[39m [2m.output/chrome-mv3/[22m[34micon/96.png[39m                                   [2m7.65 kB[22m  
 [36mΣ Total size:[39m 805.88 kB                                                                
-[success] Finished in 2.530 s
+[success] Finished in 2.599 s
