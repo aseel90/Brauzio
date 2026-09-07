@@ -49,17 +49,15 @@ jobs:
             git push origin HEAD:brauzio-v3-runtime || true
             exit "$code"
           fi
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-      - uses: pnpm/action-setup@v4
-        with:
-          version: 8.15.9
-      - name: Build, typecheck, package and diagnose
+      - name: Install, build, typecheck, package and diagnose
         shell: bash
         run: |
           set +e
           {
+            echo "Node: $(node --version)"
+            echo "npm: $(npm --version)"
+            npm install --global pnpm@8.15.9
+            echo "pnpm: $(pnpm --version)"
             pnpm install --no-frozen-lockfile --ignore-scripts
             pnpm --filter brauzio-extension exec wxt prepare
             pnpm --filter brauzio-shared build
