@@ -79,9 +79,12 @@ class ActionEngine {
   async execute(tab: chrome.tabs.Tab & { id: number }, request: V3ActionRequest): Promise<V3ActionResult> {
     const actionId = makeActionId(tab.id);
     await sessionGraph.ensure(tab.id);
-    // Always execute from a fresh mechanical snapshot. Historical snapshots stay
-    // in the registry only to explain stale EIDs to the agent.
-    const before = (await observationService.observe(tab, { mode: 'compact' })).snapshot;
+    // Always execute from a fresh mechanical snapshot. Drag needs the full DOM
+    // because draggable/drop targets are frequently non-interactive and omitted
+    // from compact observations. EIDs remain deterministic for the same document.
+    const before = (await observationService.observe(tab, {
+      mode: request.action === 'drag' ? 'full' : 'compact',
+    })).snapshot;
     const beforeSnapshotId = before.snapshotId;
     const startedAt = Date.now();
     const startCursor = eventJournal.cursor(tab.id);
@@ -128,7 +131,7 @@ class ActionEngine {
       }
 
       navigationWaiter = ['navigate', 'back', 'forward', 'reload'].includes(request.action)
-        ? this.prepareNavigationCommit(tab.id, Math.min(timeoutMs, 10000))
+        ? this.prepareNavigationReady(tab.id, Math.min(Math.max(timeoutMs, 5000), 15000))
         : undefined;
       await this.perform(tab, request, targetElement, before, actionability);
       if (navigationWaiter) await navigationWaiter.promise;
@@ -430,39 +433,59 @@ class ActionEngine {
   }
 
 
-  private prepareNavigationCommit(tabId: number, timeoutMs: number): { promise: Promise<void>; cancel: () => void } {
+  private prepareNavigationReady(tabId: number, timeoutMs: number): { promise: Promise<void>; cancel: () => void } {
     let settled = false;
+    let transitionSeen = false;
     let timer: ReturnType<typeof setTimeout> | undefined;
     let resolvePromise: (() => void) | undefined;
     const cleanup = () => {
       if (timer) clearTimeout(timer);
-      chrome.webNavigation.onCommitted.removeListener(listener);
+      chrome.webNavigation.onCommitted.removeListener(onCommitted);
+      chrome.webNavigation.onCompleted.removeListener(onCompleted);
+      chrome.webNavigation.onHistoryStateUpdated.removeListener(onHistory);
+      chrome.tabs.onUpdated.removeListener(onTabUpdated);
     };
-    const listener = (details: any) => {
-      if (details.tabId !== tabId || details.frameId !== 0 || settled) return;
+    const finish = () => {
+      if (settled) return;
       settled = true;
       cleanup();
       resolvePromise?.();
     };
+    const onCommitted = (details: any) => {
+      if (details.tabId !== tabId || details.frameId !== 0 || settled) return;
+      transitionSeen = true;
+    };
+    const onCompleted = (details: any) => {
+      if (details.tabId !== tabId || details.frameId !== 0 || settled) return;
+      transitionSeen = true;
+      finish();
+    };
+    const onHistory = (details: any) => {
+      if (details.tabId !== tabId || details.frameId !== 0 || settled) return;
+      transitionSeen = true;
+      void chrome.tabs.get(tabId).then((current) => {
+        if (current.status === 'complete') finish();
+      }).catch(() => undefined);
+    };
+    const onTabUpdated = (updatedTabId: number, changeInfo: chrome.tabs.TabChangeInfo, current: chrome.tabs.Tab) => {
+      if (updatedTabId !== tabId || settled) return;
+      if (changeInfo.url || changeInfo.status === 'loading') transitionSeen = true;
+      if (transitionSeen && (changeInfo.status === 'complete' || current.status === 'complete')) finish();
+    };
     const promise = new Promise<void>((resolve, reject) => {
       resolvePromise = resolve;
-      chrome.webNavigation.onCommitted.addListener(listener);
+      chrome.webNavigation.onCommitted.addListener(onCommitted);
+      chrome.webNavigation.onCompleted.addListener(onCompleted);
+      chrome.webNavigation.onHistoryStateUpdated.addListener(onHistory);
+      chrome.tabs.onUpdated.addListener(onTabUpdated);
       timer = setTimeout(() => {
         if (settled) return;
         settled = true;
         cleanup();
-        reject(new Error(`Navigation did not commit within ${timeoutMs}ms`));
-      }, Math.max(250, timeoutMs));
+        reject(new Error(`Navigation did not finish loading within ${timeoutMs}ms`));
+      }, Math.max(500, timeoutMs));
     });
-    return {
-      promise,
-      cancel: () => {
-        if (settled) return;
-        settled = true;
-        cleanup();
-        resolvePromise?.();
-      },
-    };
+    return { promise, cancel: () => finish() };
   }
 
   private error(code: string, message: string, details?: unknown): Error & { code?: string; details?: unknown } {

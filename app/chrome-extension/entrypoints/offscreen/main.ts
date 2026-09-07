@@ -7,14 +7,57 @@ interface ClipboardMessage {
   text?: string;
 }
 
+function clipboardTextarea(value = ''): HTMLTextAreaElement {
+  const textarea = document.createElement('textarea');
+  textarea.value = value;
+  textarea.setAttribute('aria-hidden', 'true');
+  textarea.style.position = 'fixed';
+  textarea.style.left = '-10000px';
+  textarea.style.top = '0';
+  textarea.style.opacity = '0';
+  document.body.appendChild(textarea);
+  textarea.focus({ preventScroll: true });
+  textarea.select();
+  return textarea;
+}
+
+function execClipboardWrite(text: string): void {
+  const textarea = clipboardTextarea(text);
+  try {
+    if (!document.execCommand('copy')) throw new Error('execCommand(copy) returned false');
+  } finally {
+    textarea.remove();
+  }
+}
+
+function execClipboardRead(): string {
+  const textarea = clipboardTextarea();
+  try {
+    if (!document.execCommand('paste')) throw new Error('execCommand(paste) returned false');
+    return textarea.value;
+  } finally {
+    textarea.remove();
+  }
+}
+
 async function handleClipboard(message: ClipboardMessage): Promise<unknown> {
   if (message.type === 'BRAUZIO_CLIPBOARD_READ') {
-    const text = await navigator.clipboard.readText();
-    return { success: true, text };
+    try {
+      return { success: true, text: execClipboardRead(), method: 'execCommand' };
+    } catch {
+      const text = await navigator.clipboard.readText();
+      return { success: true, text, method: 'navigator.clipboard' };
+    }
   }
   if (message.type === 'BRAUZIO_CLIPBOARD_WRITE') {
-    await navigator.clipboard.writeText(String(message.text ?? ''));
-    return { success: true };
+    const text = String(message.text ?? '');
+    try {
+      execClipboardWrite(text);
+      return { success: true, method: 'execCommand' };
+    } catch {
+      await navigator.clipboard.writeText(text);
+      return { success: true, method: 'navigator.clipboard' };
+    }
   }
   return null;
 }

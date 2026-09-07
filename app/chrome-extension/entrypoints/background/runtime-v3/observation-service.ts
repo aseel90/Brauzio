@@ -321,6 +321,14 @@ class ObservationService {
       returnByValue: true,
     }).catch(() => ({}));
     const dpr = Number(dprResult?.result?.value);
+    const identityResult = await cdpRouter.sendCommand<any>(tab.id, 'Runtime.evaluate', {
+      expression: '({title: document.title, url: location.href})',
+      returnByValue: true,
+    }).catch(() => ({}));
+    const liveIdentity = identityResult?.result?.value || {};
+    const freshTab = await chrome.tabs.get(tab.id).catch(() => tab);
+    const liveUrl = String(liveIdentity.url || mainUrl || freshTab.url || tab.url || '');
+    const liveTitle = String(liveIdentity.title || freshTab.title || tab.title || '');
     const base = elementRegistry.get(options.sinceSnapshotId) || (mode === 'delta' ? elementRegistry.latest(tab.id) : undefined);
     const delta = makeDelta(limited, base);
     const tabs = await sessionGraph.tabs();
@@ -333,8 +341,8 @@ class ObservationService {
       windowId: tab.windowId,
       capturedAt: Date.now(),
       mode,
-      url: mainUrl || String(tab.url || ''),
-      title: String(tab.title || ''),
+      url: liveUrl,
+      title: liveTitle,
       documentId: mainDocumentId || makeDocumentId(tab.id, frames[0]?.frameId || 'main', frames[0]?.loaderId, mainUrl),
       viewport: {
         width: Number.isFinite(Number(visual.clientWidth)) ? Number(visual.clientWidth) : null,

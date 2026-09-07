@@ -6,8 +6,8 @@ import { BrowserSession } from './browser-session';
 
 export { BrowserSession };
 
-const BRAUZIO_RUNTIME_VERSION = '3.0.0';
-const BRAUZIO_SCHEMA_VERSION = 'v3.0.0-2026-09-07';
+const BRAUZIO_RUNTIME_VERSION = '3.0.1';
+const BRAUZIO_SCHEMA_VERSION = 'v3.0.1-2026-09-07';
 const BRAUZIO_ORIGIN = 'https://brauzio-mcp.aseelsalah266.workers.dev';
 const BRAUZIO_RESOURCE = `${BRAUZIO_ORIGIN}/mcp`;
 const BRAUZIO_SCOPE = 'brauzio:control';
@@ -90,7 +90,15 @@ async function callBrowserTool(
     return jsonError(raw || `Browser tool failed with HTTP ${response.status}`);
   }
   try {
-    return JSON.parse(raw) as CallToolResult;
+    const parsed = JSON.parse(raw) as any;
+    const candidate = parsed?.result && typeof parsed.result === 'object'
+      ? parsed.result
+      : parsed;
+    if (candidate && Array.isArray(candidate.content)) {
+      return candidate as CallToolResult;
+    }
+    if (parsed?.error) return jsonError(String(parsed.error));
+    return jsonError('Browser tool returned an invalid MCP result');
   } catch {
     return jsonError(raw || 'Browser tool returned an invalid response');
   }
