@@ -1,0 +1,72 @@
+name: Verify Brauzio 2.9.3 Build
+
+on:
+  push:
+    paths:
+      - '.github/workflows/verify-v293.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 8.15.9
+      - name: Build, verify, publish status
+        shell: bash
+        run: |
+          set +e
+          LOG=/tmp/brauzio-v293-build.log
+          {
+            set -x
+            pnpm install --no-frozen-lockfile --ignore-scripts
+            pnpm --filter brauzio-extension exec wxt prepare
+            pnpm --filter brauzio-shared build
+            pnpm --filter brauzio-extension compile
+            pnpm --filter brauzio-extension build
+            cd app/chrome-extension/.output/chrome-mv3
+            python - <<'PY'
+          import json
+          manifest=json.load(open('manifest.json', encoding='utf-8'))
+          assert manifest.get('version') == '2.9.3', manifest.get('version')
+          print('Verified manifest version:', manifest['version'])
+          PY
+            zip -qr ../brauzio-chrome.zip .
+            cd ../../..
+            unzip -t app/chrome-extension/.output/brauzio-chrome.zip >/dev/null
+          } >"$LOG" 2>&1
+          RC=$?
+
+          mkdir -p releases/chrome-extension/latest
+          if [ "$RC" -eq 0 ]; then
+            cp app/chrome-extension/.output/brauzio-chrome.zip releases/chrome-extension/latest/brauzio-chrome-latest.zip
+            STATUS=success
+          else
+            STATUS=failure
+          fi
+
+          {
+            echo "status=$STATUS"
+            echo "exit_code=$RC"
+            echo "commit=$GITHUB_SHA"
+            echo "--- log tail ---"
+            tail -n 160 "$LOG"
+          } > releases/chrome-extension/latest/v293-build-status.txt
+
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add releases/chrome-extension/latest/v293-build-status.txt
+          if [ "$RC" -eq 0 ]; then
+            git add releases/chrome-extension/latest/brauzio-chrome-latest.zip
+          fi
+          git commit -m "build: verify Brauzio 2.9.3 ($STATUS) [skip ci]" || true
+          git push
+          exit "$RC"
