@@ -1,4 +1,4 @@
-# Brauzio 2.9.3 runtime deployment trigger
+# Brauzio 3.0.2 runtime deployment trigger
 name: Deploy Brauzio Cloudflare MCP
 
 on:
