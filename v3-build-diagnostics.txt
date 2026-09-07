@@ -11,11 +11,11 @@
 [34mCJS[39m Build start
 [34mESM[39m Build start
 [32mESM[39m [1mdist/index.mjs [22m[32m23.91 KB[39m
-[32mESM[39m ⚡️ Build success in 28ms
+[32mESM[39m ⚡️ Build success in 27ms
 [32mCJS[39m [1mdist/index.js [22m[32m25.01 KB[39m
 [32mCJS[39m ⚡️ Build success in 29ms
 [34mDTS[39m Build start
-[32mDTS[39m ⚡️ Build success in 1148ms
+[32mDTS[39m ⚡️ Build success in 1184ms
 [32mDTS[39m [1mdist/index.d.ts  [22m[32m5.32 KB[39m
 [32mDTS[39m [1mdist/index.d.mts [22m[32m5.32 KB[39m
 shared_exit=0
@@ -24,13 +24,7 @@ shared_exit=0
 > brauzio-extension@2.9.3 compile /home/runner/work/Brauzio/Brauzio/app/chrome-extension
 > vue-tsc --noEmit
 
-entrypoints/background/runtime-v3/artifact-manager.ts(6,27): error TS2694: Namespace 'chrome.downloads' has no exported member 'State'.
-entrypoints/background/runtime-v3/session-graph.ts(82,43): error TS2339: Property 'frameTree' does not exist on type '{ frameTree?: FrameTreeNode | undefined; } | {}'.
-  Property 'frameTree' does not exist on type '{}'.
-/home/runner/work/Brauzio/Brauzio/app/chrome-extension:
- ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL  brauzio-extension@2.9.3 compile: `vue-tsc --noEmit`
-Exit status 2
-compile_exit=2
+compile_exit=0
 === extension build ===
 
 > brauzio-extension@2.9.3 build /home/runner/work/Brauzio/Brauzio/app/chrome-extension
@@ -38,7 +32,7 @@ compile_exit=2
 
 
 [log] [90mWXT[39m [90m[1m0.20.11[22m[39m
-[dotenv@17.2.3] injecting env (0) from .env.production.chrome.local,.env.production.chrome,.env.chrome.local,.env.chrome,.env.production.local,.env.production,.env.local,.env -- tip: 🗂️ backup and recover secrets: https://dotenvx.com/ops
+[dotenv@17.2.3] injecting env (0) from .env.production.chrome.local,.env.production.chrome,.env.chrome.local,.env.chrome,.env.production.local,.env.production,.env.local,.env -- tip: ⚙️  specify custom .env file path with { path: '/custom/path/.env' }
 [warn] `InlineConfig#runner` is deprecated, use `InlineConfig#webExt` instead. See https://wxt.dev/guide/resources/upgrading.html#v0-19-0-rarr-v0-20-0
 [info] Building [36mchrome-mv3[39m for [36mproduction[39m with [32mVite 7.2.7[39m
 [warn] Duplicated imports "CDPRouter", the one from "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-router.ts" has been ignored and "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-session-manager.ts" is used
@@ -78,7 +72,7 @@ compile_exit=2
 [warn] Duplicated imports "CdpEventEnvelope", the one from "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-router.ts" has been ignored and "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-session-manager.ts" is used
 [warn] Duplicated imports "CdpOwnerTag", the one from "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-router.ts" has been ignored and "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-session-manager.ts" is used
 [warn] Duplicated imports "CdpSessionSnapshot", the one from "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-router.ts" has been ignored and "/home/runner/work/Brauzio/Brauzio/app/chrome-extension/utils/cdp-session-manager.ts" is used
-[success] Built extension in 2.417 s
+[success] Built extension in 2.445 s
 [90m  ├─[39m [2m.output/chrome-mv3/[22m[34mmanifest.json[39m                                 [2m1.16 kB[22m  
 [90m  ├─[39m [2m.output/chrome-mv3/[22m[32moffscreen.html[39m                                [2m295 B[22m    
 [90m  ├─[39m [2m.output/chrome-mv3/[22m[32mpopup.html[39m                                    [2m681 B[22m    
@@ -100,5 +94,5 @@ compile_exit=2
 [90m  ├─[39m [2m.output/chrome-mv3/[22m[34micon/48.png[39m                                   [2m3.47 kB[22m  
 [90m  └─[39m [2m.output/chrome-mv3/[22m[34micon/96.png[39m                                   [2m7.65 kB[22m  
 [36mΣ Total size:[39m 910.75 kB                                                                
-[success] Finished in 2.645 s
+[success] Finished in 2.667 s
 build_exit=0
