@@ -20,83 +20,62 @@ jobs:
   preview:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
         with:
           ref: brauzio-v3-runtime
           fetch-depth: 0
-      - name: Apply reviewed Brauzio 3.0.1 fixes
-        shell: bash
-        run: |
-          set +e
-          {
-            git fetch origin main
-            python scripts/apply-v301-fixes.py
-            git show origin/main:app/chrome-extension/entrypoints/popup/App.vue > app/chrome-extension/entrypoints/popup/App.vue
-            git show origin/main:app/chrome-extension/entrypoints/popup/style.css > app/chrome-extension/entrypoints/popup/style.css
-            git show origin/main:app/chrome-extension/entrypoints/background/index.ts > app/chrome-extension/entrypoints/background/index.ts
-            git show origin/main:app/chrome-extension/entrypoints/background/popup-live-view.ts > app/chrome-extension/entrypoints/background/popup-live-view.ts
-            rm -f scripts/apply-v301-fixes.py .github/workflows/apply-v301-fixes.yml
-          } > /tmp/v301-patch.log 2>&1
-          code=$?
-          cat /tmp/v301-patch.log
-          if [ "$code" -ne 0 ]; then
-            mkdir -p docs/diagnostics
-            cp /tmp/v301-patch.log docs/diagnostics/v301-patch-error.txt
-            git config user.name 'github-actions[bot]'
-            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-            git add docs/diagnostics/v301-patch-error.txt
-            git commit -m 'test(v3): persist 3.0.1 patch failure [skip ci]' || true
-            git push origin HEAD:brauzio-v3-runtime || true
-            exit "$code"
-          fi
-      - name: Install, build, typecheck, package and diagnose
-        shell: bash
-        run: |
-          set +e
-          {
-            echo "Node: $(node --version)"
-            echo "npm: $(npm --version)"
-            npm install --global pnpm@8.15.9
-            echo "pnpm: $(pnpm --version)"
-            pnpm install --no-frozen-lockfile --ignore-scripts
-            pnpm --filter brauzio-extension exec wxt prepare
-            pnpm --filter brauzio-shared build
-            pnpm --filter brauzio-extension compile
-            pnpm --filter brauzio-extension build
-            OUT='app/chrome-extension/.output/chrome-mv3'
-            python - "$OUT/manifest.json" <<'PY'
-          import json,sys
-          m=json.load(open(sys.argv[1],encoding='utf-8'))
-          assert m.get('version') == '3.0.1', m.get('version')
-          print('verified',m['version'])
-          PY
-            (cd "$OUT" && zip -qr ../brauzio-chrome-v3-preview.zip .)
-            unzip -t app/chrome-extension/.output/brauzio-chrome-v3-preview.zip >/dev/null
-          } > /tmp/v301-build.log 2>&1
-          code=$?
-          cat /tmp/v301-build.log
-          if [ "$code" -ne 0 ]; then
-            mkdir -p docs/diagnostics
-            cp /tmp/v301-build.log docs/diagnostics/v301-build-error.txt
-            git config user.name 'github-actions[bot]'
-            git config user.email 41898282+github-actions[bot]@users.noreply.github.com
-            git add docs/diagnostics/v301-build-error.txt
-            git commit -m 'test(v3): persist 3.0.1 build failure [skip ci]' || true
-            git push origin HEAD:brauzio-v3-runtime || true
-            exit "$code"
-          fi
-      - name: Publish verified 3.0.1 code and preview ZIP
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 8.15.9
+
+      - name: Install dependencies
+        run: pnpm install --no-frozen-lockfile --ignore-scripts
+
+      - name: Build shared package
+        run: pnpm --filter brauzio-shared build
+
+      - name: Prepare extension
+        run: pnpm --filter brauzio-extension exec wxt prepare
+
+      - name: Typecheck extension
+        run: pnpm --filter brauzio-extension compile
+
+      - name: Build extension
+        run: pnpm --filter brauzio-extension build
+
+      - name: Verify 3.0.1 manifest and package ZIP
         shell: bash
         run: |
           set -euo pipefail
-          DEST='releases/chrome-extension/v3-preview'
-          mkdir -p "$DEST"
-          cp app/chrome-extension/.output/brauzio-chrome-v3-preview.zip "$DEST/brauzio-chrome-3.0.1-preview.zip"
+          OUT='app/chrome-extension/.output/chrome-mv3'
+          node -e "const fs=require('fs');const m=JSON.parse(fs.readFileSync('$OUT/manifest.json','utf8'));if(m.version!=='3.0.1')throw new Error('Expected manifest 3.0.1, got '+m.version);console.log('Verified Brauzio',m.version)"
+          rm -f app/chrome-extension/.output/brauzio-chrome-v3-preview.zip
+          (cd "$OUT" && zip -qr ../brauzio-chrome-v3-preview.zip .)
+          unzip -t app/chrome-extension/.output/brauzio-chrome-v3-preview.zip >/dev/null
+
+      - name: Publish 3.0.1 preview ZIP
+        shell: bash
+        run: |
+          set -euo pipefail
+          PREVIEW='releases/chrome-extension/v3-preview'
+          LATEST='releases/chrome-extension/latest'
+          mkdir -p "$PREVIEW" "$LATEST"
+          rm -f "$PREVIEW/brauzio-chrome-3.0.0-preview.zip"
+          cp app/chrome-extension/.output/brauzio-chrome-v3-preview.zip "$PREVIEW/brauzio-chrome-3.0.1-preview.zip"
+          cp app/chrome-extension/.output/brauzio-chrome-v3-preview.zip "$LATEST/brauzio-chrome-latest.zip"
+          printf 'Brauzio 3.0.1\nBuilt from brauzio-v3-runtime\n' > "$LATEST/build-status.txt"
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          rm -f docs/diagnostics/v301-patch-error.txt docs/diagnostics/v301-build-error.txt
-          git add -A
+          git add -A "$PREVIEW" "$LATEST"
           if ! git diff --cached --quiet; then
-            git commit -m 'fix(v3): Brauzio 3.0.1 reliability and native image delivery [skip ci]'
+            git commit -m 'build(v3): publish Brauzio Chrome 3.0.1 preview [skip ci]'
             git push origin HEAD:brauzio-v3-runtime
           fi
