@@ -42,4 +42,4 @@ jobs:
             git push
           fi
 
-# Isolated rerun marker: 2026-09-07
+# Install confirmed; retriggered 2026-09-07 18:44 Africa/Tripoli
