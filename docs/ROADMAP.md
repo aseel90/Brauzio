@@ -253,10 +253,11 @@ Human input detected
  → notify Cloudflare
 ```
 
-- [ ] مراقبة pointer/click/keyboard/scroll/selection.
-- [ ] تمييز Human input عن Agent-generated input بدون الاعتماد على `isTrusted` وحده.
-- [ ] زر Emergency Stop.
-- [ ] زر "استئناف تحكم ChatGPT".
+- [x] مراقبة pointer/click/keyboard/scroll/selection.
+- [x] تمييز Human input عن Agent-generated input بدون الاعتماد على `isTrusted` وحده.
+- [x] زر Emergency Stop.
+- [x] زر "استئناف تحكم ChatGPT".
+- [ ] E2E يدوي على takeover أثناء click/drag/tool طويل بعد تثبيت ZIP النهائي.
 
 ---
 
@@ -269,10 +270,12 @@ Actor   = click / type / navigate / drag
 Observer = DOM / Network / Console / Screenshot / Performance
 ```
 
-- [ ] Actor Lease داخل Durable Object.
-- [ ] lease timeout وتجديد.
-- [ ] عدة Observer sessions.
-- [ ] منع Agentين من التغيير في الوقت نفسه.
+- [x] Actor Lease داخل Durable Object.
+- [x] lease timeout أثناء التنفيذ + handoff idle لمدة 15 ثانية.
+- [x] عدة Observer sessions مع TTL مستقل.
+- [x] منع Agentين من التغيير في الوقت نفسه، ومنع mutating calls متزامنة حتى من نفس Actor.
+- [x] هوية caller مشتقة داخليًا ومشفرة SHA-256 بدون كشف OAuth token.
+- [ ] E2E تعارض حقيقي بين جلستي OAuth مستقلتين.
 
 ---
 
@@ -366,8 +369,8 @@ B⌨ TYPE
 | 4 | Smart Wait | P0 | Foundation مكتملة، E2E وشروط إضافية متبقية |
 | 5 | Raw `chrome_cdp` | P1 | allowlisted implementation مكتمل، E2E/trace متبقٍ |
 | 6 | Sense → Act → Verify | P1 | Foundation مكتملة في 2.5.0، E2E والتوسيع لبقية actions متبقيان |
-| 7 | Human Takeover + Emergency Stop | P1 | لاحقًا |
-| 8 | Actor / Observer Sessions | P1 | لاحقًا |
+| 7 | Human Takeover + Emergency Stop | P1 | Foundation مكتملة في 2.6.0، E2E يدوي متبقٍ |
+| 8 | Actor / Observer Sessions | P1 | Foundation مكتملة في Cloud runtime 2.7.0، multi-session E2E متبقٍ |
 | 9 | Diagnostics + Self Test | P1 | لاحقًا |
 | 10 | CDP Capability Discovery | P2 | لاحقًا |
 | 11 | Virtual Cursor UX | P2 | لاحقًا |

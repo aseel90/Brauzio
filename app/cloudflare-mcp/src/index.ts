@@ -6,8 +6,8 @@ import { BrowserSession } from './browser-session';
 
 export { BrowserSession };
 
-const BRAUZIO_RUNTIME_VERSION = '2.6.0';
-const BRAUZIO_SCHEMA_VERSION = 'v2.6.0-2026-09-07';
+const BRAUZIO_RUNTIME_VERSION = '2.7.0';
+const BRAUZIO_SCHEMA_VERSION = 'v2.7.0-2026-09-07';
 const BRAUZIO_ORIGIN = 'https://brauzio-mcp.aseelsalah266.workers.dev';
 const BRAUZIO_RESOURCE = `${BRAUZIO_ORIGIN}/mcp`;
 const BRAUZIO_SCOPE = 'brauzio:control';

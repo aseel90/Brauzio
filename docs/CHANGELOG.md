@@ -1,5 +1,25 @@
 # Brauzio Changelog
 
+## 2026-09-07 — Cloud Runtime V2.7.0 Actor / Observer Sessions
+
+- إضافة Actor Lease ذري داخل Durable Object لمنع جلستين Agent من تعديل المتصفح في الوقت نفسه.
+- اشتقاق caller identity داخليًا من MCP session/client/auth context ثم SHA-256؛ لا يتم إرسال أو تخزين OAuth token كمعرّف.
+- منع mutating calls المتزامنة حتى من نفس Actor عبر `activeRequestId` وإرجاع `ACTOR_BUSY`.
+- إبقاء lease طوال تنفيذ الأمر، ثم handoff idle لمدة 15 ثانية فقط لتسليم التحكم بسرعة.
+- Observer sessions مستقلة بTTL خمس دقائق ولا تمنع DOM/Network/Console/Screenshot/Performance المتوازية.
+- Human Takeover أو WebSocket disconnect يلغي Actor Lease فورًا.
+- إضافة `actorLeaseActive`, `actorLeaseBusy`, `actorLeaseExpiresAt`, و`observerSessions` إلى BrowserSession status.
+- الحفاظ على عقد relay المصحح `/ws` وعقد Durable Object الداخلي `/call` مع توافق `/tool-call` القديم.
+- رفع Cloud runtime/schema إلى `2.7.0` / `v2.7.0-2026-09-07`.
+
+## 2026-09-07 — Extension/Cloud V2.6.0 Human Takeover + Emergency Stop
+
+- رصد إدخال الإنسان وإيقاف Actor tools مع إبقاء أدوات المراقبة متاحة.
+- تحرير أي Mouse Hold عند takeover أو disconnect.
+- Emergency Stop وResume من Popup مع Badge `STOP` وحفظ حالة الإيقاف.
+- مزامنة `controlPaused` مع Durable Object ورفض Actor calls بحالة 423 أثناء الإيقاف.
+- إصلاح regressions في `/ws` و`/call` بعد 2.6 وإعادة اختبار اتصال Chrome فعليًا.
+
 ## 2026-09-06 — Extension V2.5.0 Sense → Act → Verify
 
 - إضافة طبقة `action-verification` موحدة بدل اعتبار dispatch وحده نجاحًا نهائيًا.
