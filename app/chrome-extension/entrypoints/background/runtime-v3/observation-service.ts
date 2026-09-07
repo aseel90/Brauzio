@@ -177,8 +177,15 @@ class ObservationService {
           const backendNodeId = Number(backendIds[nodeIndex] || 0);
           if (!backendNodeId) continue;
           const tag = readString(strings, nodes.nodeName?.[nodeIndex]).toUpperCase();
-          if (!tag || ['#TEXT', '#COMMENT', '#DOCUMENT', '#DOCUMENT-FRAGMENT'].includes(tag)) continue;
+          if (!tag || ['#COMMENT', '#DOCUMENT', '#DOCUMENT-FRAGMENT'].includes(tag)) continue;
+          const isTextNode = tag === '#TEXT';
+          if (isTextNode && mode !== 'full') continue;
           const attributes = attributesAt(nodes, nodeIndex, strings);
+          const passwordLike = !isTextNode
+            && tag === 'INPUT'
+            && (String(attributes.type || '').toLowerCase() === 'password'
+              || /(?:^|[-_ ])password(?:$|[-_ ])/i.test(String(attributes.autocomplete || '')));
+          if (passwordLike) delete attributes.value;
           const ax = axByBackend.get(backendNodeId);
           const role = roleOf(ax);
           const name = nameOf(ax);
@@ -199,6 +206,7 @@ class ObservationService {
           const clickable = isClickable || INTERACTIVE_ROLES.has(role) || INTERACTIVE_TAGS.has(tag);
           const interactive = clickable || editable || focusable || INTERACTIVE_ROLES.has(role);
           if (mode !== 'full' && !interactive) continue;
+          if (isTextNode && !String(name || textValue || nodeValue || '').trim()) continue;
 
           const effectiveSessionId = context.sessionId || loader?.sessionId;
           const effectiveTargetId = context.targetId || loader?.targetId;
@@ -243,9 +251,7 @@ class ObservationService {
             selected: boolish(axProp(ax, 'selected')),
             expanded: boolish(axProp(ax, 'expanded')),
             required: boolish(axProp(ax, 'required')) || attributes.required !== undefined,
-            value: attributes.type?.toLowerCase() === 'password' || /password/i.test(attributes.autocomplete || '')
-              ? undefined
-              : (inputValue ?? ax?.value?.value),
+            value: passwordLike ? undefined : (inputValue ?? ax?.value?.value),
             fingerprint,
           };
           const element: V3Element = { ...elementBase, signature: elementSignature(elementBase) };
@@ -278,6 +284,7 @@ class ObservationService {
     const tabs = await sessionGraph.tabs();
     const snapshotId = makeSnapshotId(tab.id);
     const eventCursor = eventJournal.cursor(tab.id);
+    const previousRuntimeState = await runtimeState.get(tab.id);
     const storedSnapshot: V3ObservationSnapshot = {
       snapshotId,
       tabId: tab.id,
@@ -302,6 +309,7 @@ class ObservationService {
       focusedEid,
       delta,
       eventCursor,
+      lastAction: previousRuntimeState?.lastAction,
       warnings: warnings.length ? warnings : undefined,
     };
     elementRegistry.store(storedSnapshot);

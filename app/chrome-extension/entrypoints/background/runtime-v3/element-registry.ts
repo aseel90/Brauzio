@@ -85,6 +85,14 @@ class ElementRegistry {
     return snapshot?.elements.find((element) => element.eid === eid);
   }
 
+  findHistoricalElement(tabId: number, eid: string, excludeSnapshotId?: string): V3Element | undefined {
+    return [...this.snapshots.values()]
+      .filter((snapshot) => snapshot.tabId === tabId && snapshot.snapshotId !== excludeSnapshotId)
+      .sort((a, b) => b.capturedAt - a.capturedAt)
+      .flatMap((snapshot) => snapshot.elements)
+      .find((element) => element.eid === eid);
+  }
+
   resolve(
     tabId: number,
     target: V3ResolveTarget,
@@ -113,6 +121,27 @@ class ElementRegistry {
       }
     }
 
+    const historical = requestedEid
+      ? this.findHistoricalElement(tabId, requestedEid, snapshot.snapshotId)
+      : undefined;
+    const expandedTarget: V3ResolveTarget = historical
+      ? {
+          role: historical.fingerprint.role,
+          name: historical.fingerprint.name,
+          text: historical.fingerprint.text,
+          tag: historical.fingerprint.tag,
+          type: historical.fingerprint.type,
+          id: historical.fingerprint.id,
+          fieldName: historical.fingerprint.fieldName,
+          placeholder: historical.fingerprint.placeholder,
+          href: historical.fingerprint.href,
+          frameId: historical.fingerprint.frameId,
+          ...target,
+          // backendNodeId is document-scoped and is never inherited from history.
+          backendNodeId: target.backendNodeId,
+        }
+      : target;
+
     const candidates: V3ResolveCandidate[] = [];
     for (const element of snapshot.elements) {
       let score = 0;
@@ -125,38 +154,39 @@ class ElementRegistry {
         if (reason && matched > 0) reasons.push(reason);
       };
 
-      if (typeof target.backendNodeId === 'number') {
-        add(element.backendNodeId === target.backendNodeId ? 1 : 0, 1, 'backendNodeId');
+      if (typeof expandedTarget.backendNodeId === 'number') {
+        add(element.backendNodeId === expandedTarget.backendNodeId ? 1 : 0, 1, 'backendNodeId');
       }
-      if (target.frameId) add(element.frameId === target.frameId ? 0.8 : 0, 0.8, 'frame');
-      if (target.role) {
-        add(normalizeText(element.role) === normalizeText(target.role) ? 1 : 0, 1, 'role');
+      if (expandedTarget.frameId) add(element.frameId === expandedTarget.frameId ? 0.8 : 0, 0.8, 'frame');
+      if (expandedTarget.role) {
+        add(normalizeText(element.role) === normalizeText(expandedTarget.role) ? 1 : 0, 1, 'role');
       }
-      if (target.tag) add(normalizeText(element.tag) === normalizeText(target.tag) ? 0.7 : 0, 0.7, 'tag');
-      if (target.type) add(attr(element, 'type') === normalizeText(target.type) ? 0.7 : 0, 0.7, 'type');
-      if (target.id) add(attr(element, 'id') === normalizeText(target.id) ? 1 : 0, 1, 'id');
-      if (target.fieldName) add(attr(element, 'name') === normalizeText(target.fieldName) ? 0.8 : 0, 0.8, 'fieldName');
-      if (target.placeholder) {
-        add(attr(element, 'placeholder') === normalizeText(target.placeholder) ? 0.7 : 0, 0.7, 'placeholder');
+      if (expandedTarget.tag) add(normalizeText(element.tag) === normalizeText(expandedTarget.tag) ? 0.7 : 0, 0.7, 'tag');
+      if (expandedTarget.type) add(attr(element, 'type') === normalizeText(expandedTarget.type) ? 0.7 : 0, 0.7, 'type');
+      if (expandedTarget.id) add(attr(element, 'id') === normalizeText(expandedTarget.id) ? 1 : 0, 1, 'id');
+      if (expandedTarget.fieldName) add(attr(element, 'name') === normalizeText(expandedTarget.fieldName) ? 0.8 : 0, 0.8, 'fieldName');
+      if (expandedTarget.placeholder) {
+        add(attr(element, 'placeholder') === normalizeText(expandedTarget.placeholder) ? 0.7 : 0, 0.7, 'placeholder');
       }
-      if (target.href) {
-        const expected = normalizeText(target.href);
+      if (expandedTarget.href) {
+        const expected = normalizeText(expandedTarget.href);
         const actual = attr(element, 'href');
         const match = compareText(expected, actual);
         add(match.score * 0.8, 0.8, match.reason ? `href:${match.reason}` : undefined);
       }
-      if (target.name) {
-        const match = compareText(normalizeText(target.name), normalizeText(element.name));
+      if (expandedTarget.name) {
+        const match = compareText(normalizeText(expandedTarget.name), normalizeText(element.name));
         add(match.score * 1.4, 1.4, match.reason ? `name:${match.reason}` : undefined);
       }
-      if (target.text) {
-        const match = compareText(normalizeText(target.text), normalizeText(element.text || element.name));
+      if (expandedTarget.text) {
+        const match = compareText(normalizeText(expandedTarget.text), normalizeText(element.text || element.name));
         add(match.score, 1, match.reason ? `text:${match.reason}` : undefined);
       }
 
       if (weight === 0) continue;
       const normalizedScore = Math.max(0, Math.min(1, score / weight));
       if (normalizedScore >= (options.minScore ?? 0.32)) {
+        if (historical) reasons.unshift('historical-fingerprint');
         candidates.push({ eid: element.eid, score: Number(normalizedScore.toFixed(4)), reasons, element });
       }
     }

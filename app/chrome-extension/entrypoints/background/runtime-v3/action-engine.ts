@@ -10,6 +10,7 @@ import { elementRegistry } from './element-registry';
 import { eventJournal } from './event-journal';
 import { makeActionId } from './ids';
 import { observationService } from './observation-service';
+import { runtimeState } from './runtime-state';
 import { sessionGraph } from './session-graph';
 import type {
   V3ActionEvidence,
@@ -77,11 +78,12 @@ const KEY_MAP: Record<string, { key: string; code: string; windowsVirtualKeyCode
 class ActionEngine {
   async execute(tab: chrome.tabs.Tab & { id: number }, request: V3ActionRequest): Promise<V3ActionResult> {
     const actionId = makeActionId(tab.id);
-    const startedAt = Date.now();
     await sessionGraph.ensure(tab.id);
-    let before = elementRegistry.get(request.snapshotId) || elementRegistry.latest(tab.id);
-    if (!before) before = (await observationService.observe(tab, { mode: 'compact' })).snapshot;
+    // Always execute from a fresh mechanical snapshot. Historical snapshots stay
+    // in the registry only to explain stale EIDs to the agent.
+    const before = (await observationService.observe(tab, { mode: 'compact' })).snapshot;
     const beforeSnapshotId = before.snapshotId;
+    const startedAt = Date.now();
     const startCursor = eventJournal.cursor(tab.id);
     const releaseActionScope = eventJournal.beginAction(tab.id, actionId);
     const timeoutMs = Math.max(250, Math.min(Number(request.timeoutMs || 5000), 30000));
@@ -158,6 +160,16 @@ class ActionEngine {
         events,
         verification,
       };
+      await runtimeState.patch(tab.id, {
+        lastAction: {
+          actionId,
+          action: request.action,
+          success: evidence.success,
+          completedAt,
+          targetEid: targetElement?.eid,
+          afterSnapshotId: observationResult?.snapshot.snapshotId,
+        },
+      });
       return {
         evidence,
         observation: observationResult?.snapshot,
@@ -181,22 +193,34 @@ class ActionEngine {
       } catch {
         failureObservation = undefined;
       }
-      return {
-        evidence: {
+      const failureEvidence: V3ActionEvidence = {
+        actionId,
+        action: request.action,
+        tabId: tab.id,
+        startedAt,
+        completedAt,
+        elapsedMs: completedAt - startedAt,
+        success: false,
+        beforeSnapshotId,
+        afterSnapshotId: failureObservation?.snapshot.snapshotId,
+        targetEid: targetElement?.eid,
+        actionability,
+        events,
+        error: normalized,
+      };
+      await runtimeState.patch(tab.id, {
+        lastAction: {
           actionId,
           action: request.action,
-          tabId: tab.id,
-          startedAt,
-          completedAt,
-          elapsedMs: completedAt - startedAt,
           success: false,
-          beforeSnapshotId,
-          afterSnapshotId: failureObservation?.snapshot.snapshotId,
+          completedAt,
           targetEid: targetElement?.eid,
-          actionability,
-          events,
-          error: normalized,
+          afterSnapshotId: failureObservation?.snapshot.snapshotId,
+          errorCode: normalized.code,
         },
+      });
+      return {
+        evidence: failureEvidence,
         observation: failureObservation?.snapshot,
         screenshot: failureObservation?.screenshot,
         resolution,

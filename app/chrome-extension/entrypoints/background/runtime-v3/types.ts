@@ -103,6 +103,7 @@ export interface V3ObservationSnapshot {
   focusedEid?: string;
   delta?: V3SnapshotDelta;
   eventCursor?: number;
+  lastAction?: V3RuntimeTabState['lastAction'];
   warnings?: string[];
 }
 
@@ -195,4 +196,13 @@ export interface V3RuntimeTabState {
   lastUpdatedAt: number;
   eventCursor?: number;
   sessionGraphEnabled?: boolean;
+  lastAction?: {
+    actionId: string;
+    action: string;
+    success: boolean;
+    completedAt: number;
+    targetEid?: string;
+    afterSnapshotId?: string;
+    errorCode?: string;
+  };
 }
