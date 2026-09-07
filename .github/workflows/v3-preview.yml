@@ -26,6 +26,9 @@ jobs:
           ref: brauzio-v3-runtime
           fetch-depth: 0
 
+      - name: Apply Brauzio 3.0.2 screenshot hotfix
+        run: python scripts/apply-v302-hotfix.py
+
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
@@ -51,31 +54,33 @@ jobs:
       - name: Build extension
         run: pnpm --filter brauzio-extension build
 
-      - name: Verify 3.0.1 manifest and package ZIP
+      - name: Verify manifest and package ZIP
         shell: bash
         run: |
           set -euo pipefail
           OUT='app/chrome-extension/.output/chrome-mv3'
-          node -e "const fs=require('fs');const m=JSON.parse(fs.readFileSync('$OUT/manifest.json','utf8'));if(m.version!=='3.0.1')throw new Error('Expected manifest 3.0.1, got '+m.version);console.log('Verified Brauzio',m.version)"
+          VERSION=$(node -p "require('./app/chrome-extension/package.json').version")
+          node -e "const fs=require('fs');const expected=process.argv[1];const m=JSON.parse(fs.readFileSync('$OUT/manifest.json','utf8'));if(m.version!==expected)throw new Error('Expected manifest '+expected+', got '+m.version);console.log('Verified Brauzio',m.version)" "$VERSION"
           rm -f app/chrome-extension/.output/brauzio-chrome-v3-preview.zip
           (cd "$OUT" && zip -qr ../brauzio-chrome-v3-preview.zip .)
           unzip -t app/chrome-extension/.output/brauzio-chrome-v3-preview.zip >/dev/null
 
-      - name: Publish 3.0.1 preview ZIP
+      - name: Publish versioned preview ZIP
         shell: bash
         run: |
           set -euo pipefail
+          VERSION=$(node -p "require('./app/chrome-extension/package.json').version")
           PREVIEW='releases/chrome-extension/v3-preview'
           LATEST='releases/chrome-extension/latest'
           mkdir -p "$PREVIEW" "$LATEST"
-          rm -f "$PREVIEW/brauzio-chrome-3.0.0-preview.zip"
-          cp app/chrome-extension/.output/brauzio-chrome-v3-preview.zip "$PREVIEW/brauzio-chrome-3.0.1-preview.zip"
+          rm -f "$PREVIEW"/brauzio-chrome-*-preview.zip
+          cp app/chrome-extension/.output/brauzio-chrome-v3-preview.zip "$PREVIEW/brauzio-chrome-${VERSION}-preview.zip"
           cp app/chrome-extension/.output/brauzio-chrome-v3-preview.zip "$LATEST/brauzio-chrome-latest.zip"
-          printf 'Brauzio 3.0.1\nBuilt from brauzio-v3-runtime\n' > "$LATEST/build-status.txt"
+          printf 'Brauzio %s\nBuilt from brauzio-v3-runtime\n' "$VERSION" > "$LATEST/build-status.txt"
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add -A "$PREVIEW" "$LATEST"
+          git add app/chrome-extension/entrypoints/background/tools/browser/screenshot.ts app/chrome-extension/package.json "$PREVIEW" "$LATEST"
           if ! git diff --cached --quiet; then
-            git commit -m 'build(v3): publish Brauzio Chrome 3.0.1 preview [skip ci]'
+            git commit -m "fix(v3): Brauzio Chrome ${VERSION} screenshot fallback and preview [skip ci]"
             git push origin HEAD:brauzio-v3-runtime
           fi
