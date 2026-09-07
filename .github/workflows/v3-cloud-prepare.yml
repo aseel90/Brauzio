@@ -41,3 +41,5 @@ jobs:
             git commit -m 'release(v3): prepare Cloudflare MCP runtime 3.0.0 [skip ci]'
             git push
           fi
+
+# Isolated rerun marker: 2026-09-07
