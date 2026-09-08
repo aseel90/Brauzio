@@ -18,7 +18,6 @@ def replace_once(path: str, old: str, new: str) -> None:
     write(path, text.replace(old, new, 1))
 
 
-# Popup Live View must target an actual web page, not its own extension page.
 popup_live = '''import { liveViewTool } from './tools/browser/live-view';
 
 type PopupLiveAction = 'start' | 'status' | 'stop';
@@ -30,7 +29,7 @@ function isCapturableWebTab(tab: chrome.tabs.Tab | undefined): tab is chrome.tab
     tab
       && typeof tab.id === 'number'
       && typeof tab.url === 'string'
-      && /^https?:\\/\\//i.test(tab.url),
+      && /^https?:\/\//i.test(tab.url),
   );
 }
 
@@ -136,20 +135,16 @@ export function initPopupLiveViewControls() {
 '''
 write('app/chrome-extension/entrypoints/background/popup-live-view.ts', popup_live)
 
-# Device Mode accepts both IDs and visible labels, e.g. iphone_14 and iPhone 14.
 device = 'app/chrome-extension/entrypoints/background/tools/browser/device-mode.ts'
 old = """    if (action === 'apply') {\n      presetName = String(args.preset || '').trim();\n      base = PRESETS[presetName];\n      if (!base) return createErrorResponse(`Unknown device preset: ${presetName}`);\n    } else if (action === 'custom') {\n"""
 new = """    if (action === 'apply') {\n      const requestedPreset = String(args.preset || '').trim();\n      const normalizedPreset = requestedPreset.toLowerCase().replace(/[\\s_-]+/g, '');\n      const match = Object.entries(PRESETS).find(([id, preset]) => {\n        const normalizedId = id.toLowerCase().replace(/[\\s_-]+/g, '');\n        const normalizedLabel = preset.label.toLowerCase().replace(/[\\s_-]+/g, '');\n        return requestedPreset === id || normalizedPreset === normalizedId || normalizedPreset === normalizedLabel;\n      });\n      if (!match) return createErrorResponse(`Unknown device preset: ${requestedPreset}`);\n      [presetName, base] = match;\n    } else if (action === 'custom') {\n"""
 replace_once(device, old, new)
 
-# HTML5 drag support: trusted pointer movement first, then the standard DragEvent
-# lifecycle using one DataTransfer object so real drop targets receive `drop`.
 action_engine = 'app/chrome-extension/entrypoints/background/runtime-v3/action-engine.ts'
 old = """    await send({ type: 'mouseReleased', x: b.center.x, y: b.center.y, button: 'left', buttons: 0, clickCount: 1 });\n  }\n\n\n  private prepareNavigationReady"""
 new = """    await send({ type: 'mouseReleased', x: b.center.x, y: b.center.y, button: 'left', buttons: 0, clickCount: 1 });\n    await this.dispatchHtml5Drag(tabId, sourceElement, targetElement);\n  }\n\n  private async dispatchHtml5Drag(tabId: number, sourceElement: V3Element, targetElement: V3Element): Promise<void> {\n    const objectGroup = `brauzio-v3-html5-drag:${tabId}`;\n    const sourceResolved = await this.send<any>(tabId, sourceElement, 'DOM.resolveNode', { backendNodeId: sourceElement.backendNodeId, objectGroup });\n    const targetResolved = await this.send<any>(tabId, targetElement, 'DOM.resolveNode', { backendNodeId: targetElement.backendNodeId, objectGroup });\n    const sourceObjectId = sourceResolved?.object?.objectId;\n    const targetObjectId = targetResolved?.object?.objectId;\n    if (!sourceObjectId || !targetObjectId) {\n      await this.send(tabId, sourceElement, 'Runtime.releaseObjectGroup', { objectGroup }).catch(() => undefined);\n      return;\n    }\n    try {\n      const result = await this.send<any>(tabId, sourceElement, 'Runtime.callFunctionOn', {\n        objectId: sourceObjectId,\n        arguments: [{ objectId: targetObjectId }],\n        returnByValue: true,\n        functionDeclaration: `function(target){\n          const source=this;\n          let dataTransfer=null;\n          try { dataTransfer=new DataTransfer(); } catch {}\n          if(dataTransfer){\n            try { dataTransfer.effectAllowed='all'; dataTransfer.dropEffect='move'; } catch {}\n            try { dataTransfer.setData('text/plain', source.id || source.textContent || 'brauzio-drag'); } catch {}\n          }\n          const fire=(node,type)=>{\n            let event;\n            try { event=new DragEvent(type,{bubbles:true,cancelable:true,composed:true,dataTransfer}); }\n            catch {\n              event=new Event(type,{bubbles:true,cancelable:true,composed:true});\n              try { Object.defineProperty(event,'dataTransfer',{value:dataTransfer}); } catch {}\n            }\n            node.dispatchEvent(event);\n          };\n          fire(source,'dragstart');\n          fire(target,'dragenter');\n          fire(target,'dragover');\n          fire(target,'drop');\n          fire(source,'dragend');\n          return true;\n        }`,\n      });\n      if (result?.exceptionDetails) throw this.error('HTML5_DRAG_FAILED', String(result.exceptionDetails.text || 'HTML5 drag dispatch failed'));\n    } finally {\n      await this.send(tabId, sourceElement, 'Runtime.releaseObjectGroup', { objectGroup }).catch(() => undefined);\n    }\n  }\n\n\n  private prepareNavigationReady"""
 replace_once(action_engine, old, new)
 
-# Keep Worker/extension/schema versions aligned.
 ext_pkg = Path('app/chrome-extension/package.json')
 data = json.loads(ext_pkg.read_text(encoding='utf-8'))
 data['version'] = '3.0.4'
@@ -158,10 +153,9 @@ ext_pkg.write_text(json.dumps(data, ensure_ascii=False, indent=2) + '\n', encodi
 cloud = 'app/cloudflare-mcp/src/index.ts'
 text = read(cloud)
 text = re.sub(r"const BRAUZIO_RUNTIME_VERSION = '[^']+';", "const BRAUZIO_RUNTIME_VERSION = '3.0.4';", text, count=1)
-text = re.sub(r"const BRAUZIO_SCHEMA_VERSION = '[^']+';", "const BRAUZIO_SCHEMA_VERSION = 'v3.0.4-2026-09-08';", text, count=1)
+text = re.sub(r"const BRAUZIO_SCHEMA_VERSION = '[^']+';", "const BRAUZIO_SCHEMA_VERSION = '3.0.4';", text, count=1)
 write(cloud, text)
 
-# Fail loudly instead of creating another mixed release.
 checks = {
   'app/chrome-extension/entrypoints/background/tools/browser/index.ts': ["from './v3-runtime'", "from './clipboard'", "from './artifacts'"],
   'packages/shared/src/index.ts': ["CLIPBOARD: 'chrome_clipboard'", "ARTIFACTS: 'chrome_artifacts'", 'WATCH_TOOL_SCHEMAS'],
@@ -174,7 +168,7 @@ checks = {
   'app/chrome-extension/entrypoints/background/tools/browser/device-mode.ts': ['RESET_STORAGE_PREFIX', 'normalizedLabel'],
   'app/chrome-extension/entrypoints/background/runtime-v3/action-engine.ts': ['dispatchHtml5Drag', "fire(target,'drop')"],
   'app/cloudflare-mcp/src/browser-session.ts': ['WS_SUPERSEDED'],
-  'app/cloudflare-mcp/src/index.ts': ["BRAUZIO_RUNTIME_VERSION = '3.0.4'", 'const candidate = parsed?.result'],
+  'app/cloudflare-mcp/src/index.ts': ["BRAUZIO_RUNTIME_VERSION = '3.0.4'", 'createMcpHandler', 'BROWSER_SESSIONS'],
   'app/chrome-extension/entrypoints/background/popup-live-view.ts': ['brauzio-popup-live-view-tab-v1', 'isCapturableWebTab'],
 }
 for path, needles in checks.items():
