@@ -6,8 +6,8 @@ import { BrowserSession } from './browser-session';
 
 export { BrowserSession };
 
-const BRAUZIO_RUNTIME_VERSION = '3.0.3';
-const BRAUZIO_SCHEMA_VERSION = '3.0.3';
+const BRAUZIO_RUNTIME_VERSION = '3.0.4';
+const BRAUZIO_SCHEMA_VERSION = '3.0.4';
 const BRAUZIO_ORIGIN = 'https://brauzio-mcp.aseelsalah266.workers.dev';
 const BRAUZIO_RESOURCE = `${BRAUZIO_ORIGIN}/mcp`;
 const BRAUZIO_SCOPE = 'brauzio:control';
@@ -255,12 +255,14 @@ const defaultHandler = {
       return await handleAuthorize(request, env);
     }
     if (url.pathname === '/browser-pairing') {
+      if (request.method !== 'GET' && request.method !== 'HEAD') {
+        return Response.json(
+          { error: 'Create pairing codes from the Brauzio extension', code: 'PAIRING_CREATE_EXTENSION_ONLY' },
+          { status: 405, headers: { allow: 'GET, HEAD' } },
+        );
+      }
       return await browserStub(env, deviceIdFromRequest(request, env)).fetch(
-        new Request('https://brauzio-browser.internal/pairing/create', {
-          method: request.method,
-          headers: { 'content-type': request.headers.get('content-type') || 'application/json' },
-          body: request.method === 'GET' || request.method === 'HEAD' ? undefined : request.body,
-        }),
+        new Request('https://brauzio-browser.internal/pairing/status'),
       );
     }
     if (url.pathname === '/browser-status') {

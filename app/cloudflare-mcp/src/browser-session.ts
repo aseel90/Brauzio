@@ -248,6 +248,26 @@ export class BrowserSession extends DurableObject<Env> {
       });
     }
 
+    if (url.pathname === '/pairing/status' && request.method === 'GET') {
+      let record = await this.ctx.storage.get<PairingRecord>(PAIRING_STORAGE_KEY);
+      if (record && record.expiresAt <= Date.now()) {
+        await this.ctx.storage.delete(PAIRING_STORAGE_KEY);
+        record = undefined;
+      }
+      return Response.json({
+        active: Boolean(record),
+        expiresAt: record?.expiresAt || null,
+        connected: this.authenticatedSockets().length > 0,
+      });
+    }
+
+    if (url.pathname === '/pairing/create') {
+      return Response.json(
+        { error: 'Pairing codes can only be created from the Brauzio extension', code: 'PAIRING_CREATE_EXTENSION_ONLY' },
+        { status: 405, headers: { allow: 'GET /pairing/status' } },
+      );
+    }
+
     if (url.pathname === '/pairing/consume' && request.method === 'POST') {
       const body = (await request.json().catch(() => ({}))) as { code?: string };
       const suppliedHash = await pairingCodeHash(body.code);

@@ -52,6 +52,7 @@ interface ScreenshotToolParams {
   width?: number;
   height?: number;
   storeBase64?: boolean;
+  returnImage?: boolean;
   fullPage?: boolean;
   savePng?: boolean;
   maxHeight?: number; // Maximum height to capture in pixels (for infinite scroll pages)
@@ -116,8 +117,9 @@ class ScreenshotTool extends BaseBrowserToolExecutor {
       name = 'screenshot',
       selector,
       storeBase64 = false,
+      returnImage = true,
       fullPage = false,
-      savePng = true,
+      savePng = false,
     } = args;
 
     console.log(`Starting screenshot with options:`, args);
@@ -139,6 +141,7 @@ class ScreenshotTool extends BaseBrowserToolExecutor {
     }
 
     let finalImageDataUrl: string | undefined;
+    let responseImage: { data: string; mimeType: string } | undefined;
     let finalImageWidthCss: number | undefined;
     let finalImageHeightCss: number | undefined;
     const results: any = { base64: null, fileSaved: false };
@@ -281,26 +284,37 @@ class ScreenshotTool extends BaseBrowserToolExecutor {
       } catch (e) {
         console.warn('Failed to set screenshot context:', e);
       }
-      if (storeBase64 === true) {
-        // Compress image for base64 output to reduce size
-        const compressed = await compressImage(finalImageDataUrl, {
-          scale: 0.7, // Reduce dimensions by 30%
-          quality: 0.8, // 80% quality for good balance
-          format: 'image/jpeg', // JPEG for better compression
-        });
+      if (returnImage === true || storeBase64 === true) {
+        let imageDataUrl = finalImageDataUrl;
+        let imageMimeType = 'image/png';
+        let compressionFallback = false;
 
-        // Include base64 data in response (without prefix)
-        const base64Data = compressed.dataUrl.replace(/^data:image\/[^;]+;base64,/, '');
-        results.base64 = base64Data;
-        return {
-          content: [
-            {
-              type: 'text',
-              text: JSON.stringify({ base64Data, mimeType: compressed.mimeType }),
-            },
-          ],
-          isError: false,
-        };
+        try {
+          const compressed = await compressImage(finalImageDataUrl, {
+            scale: fullPage ? 0.7 : 0.85,
+            quality: 0.82,
+            format: 'image/jpeg',
+          });
+          imageDataUrl = compressed.dataUrl;
+          imageMimeType = compressed.mimeType;
+        } catch (compressionError) {
+          compressionFallback = true;
+          imageMimeType = finalImageDataUrl.startsWith('data:image/jpeg')
+            ? 'image/jpeg'
+            : 'image/png';
+          console.warn(
+            `[Screenshot Tool] Compression failed; returning captured ${imageMimeType} directly`,
+            compressionError,
+          );
+        }
+
+        const base64Data = imageDataUrl.replace(/^data:image\/[^;]+;base64,/, '');
+        if (returnImage === true) responseImage = { data: base64Data, mimeType: imageMimeType };
+        if (storeBase64 === true) {
+          results.base64 = base64Data;
+          results.base64MimeType = imageMimeType;
+        }
+        if (compressionFallback) results.compressionFallback = true;
       }
 
       if (savePng === true) {
@@ -367,22 +381,22 @@ class ScreenshotTool extends BaseBrowserToolExecutor {
 
     this.logInfo('Screenshot completed!');
 
-    return {
-      content: [
-        {
-          type: 'text',
-          text: JSON.stringify({
-            success: true,
-            message: `Screenshot [${name}] captured successfully`,
-            tabId: tab.id,
-            url: tab.url,
-            name: name,
-            ...results,
-          }),
-        },
-      ],
-      isError: false,
-    };
+    const content: ToolResult['content'] = [
+      {
+        type: 'text',
+        text: JSON.stringify({
+          success: true,
+          message: `Screenshot [${name}] captured successfully`,
+          tabId: tab.id,
+          url: tab.url,
+          name: name,
+          returnedImage: Boolean(responseImage),
+          ...results,
+        }),
+      },
+    ];
+    if (responseImage) content.push({ type: 'image', data: responseImage.data, mimeType: responseImage.mimeType });
+    return { content, isError: false };
   }
 
   /**
