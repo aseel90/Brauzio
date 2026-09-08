@@ -19,11 +19,25 @@ jobs:
           ref: fix/v3.0.4-from-v3
           fetch-depth: 0
 
-      - name: Fetch stable 3.0.3 source
-        run: git fetch origin main
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
 
-      - name: Port only live-verified 3.0.3 fixes
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 8.15.9
+
+      - name: Run complete repair and verification
+        shell: bash
         run: |
+          set -Eeuo pipefail
+          exec > >(tee /tmp/v304.log) 2>&1
+          trap 'code=$?; echo "FAILED exit=$code line=$LINENO command=$BASH_COMMAND"; exit $code' ERR
+
+          echo 'STEP 1 fetch main'
+          git fetch origin main
+
+          echo 'STEP 2 port live-verified 3.0.3 files'
           git checkout origin/main -- \
             app/chrome-extension/entrypoints/background/index.ts \
             app/chrome-extension/entrypoints/background/popup-live-view.ts \
@@ -33,42 +47,31 @@ jobs:
             app/chrome-extension/utils/image-utils.ts \
             app/cloudflare-mcp/src/browser-session.ts
 
-      - name: Apply comprehensive 3.0.4 patch
-        run: python scripts/apply-v304-from-v3.py
+          echo 'STEP 3 apply 3.0.4 patch'
+          python scripts/apply-v304-from-v3.py
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '22'
+          echo 'STEP 4 install dependencies'
+          pnpm install --no-frozen-lockfile --ignore-scripts
 
-      - uses: pnpm/action-setup@v4
-        with:
-          version: 8.15.9
+          echo 'STEP 5 prepare WXT'
+          pnpm --filter brauzio-extension exec wxt prepare
 
-      - name: Install
-        run: pnpm install --no-frozen-lockfile --ignore-scripts
+          echo 'STEP 6 build shared runtime'
+          pnpm --filter brauzio-shared build
 
-      - name: Prepare WXT
-        run: pnpm --filter brauzio-extension exec wxt prepare
+          echo 'STEP 7 typecheck Worker'
+          pnpm --filter brauzio-cloud-mcp check
 
-      - name: Build shared runtime
-        run: pnpm --filter brauzio-shared build
+          echo 'STEP 8 dry-build Worker'
+          pnpm --filter brauzio-cloud-mcp build
 
-      - name: Check Worker
-        run: pnpm --filter brauzio-cloud-mcp check
+          echo 'STEP 9 typecheck extension'
+          pnpm --filter brauzio-extension compile
 
-      - name: Dry-build Worker
-        run: pnpm --filter brauzio-cloud-mcp build
+          echo 'STEP 10 build extension'
+          pnpm --filter brauzio-extension build
 
-      - name: Typecheck extension
-        run: pnpm --filter brauzio-extension compile
-
-      - name: Build extension
-        run: pnpm --filter brauzio-extension build
-
-      - name: Verify output and package Preview
-        shell: bash
-        run: |
-          set -euo pipefail
+          echo 'STEP 11 verify generated runtime'
           python - <<'PY'
           import json
           from pathlib import Path
@@ -83,19 +86,35 @@ jobs:
               assert needle in bg, needle
           print('Generated Brauzio 3.0.4 verification PASS')
           PY
+
+          echo 'STEP 12 package Preview'
           mkdir -p releases/chrome-extension/v3-preview releases/chrome-extension/latest
           cd app/chrome-extension/.output/chrome-mv3
           zip -qr ../../../../releases/chrome-extension/v3-preview/brauzio-chrome-3.0.4-preview.zip .
           cd ../../../..
           cp releases/chrome-extension/v3-preview/brauzio-chrome-3.0.4-preview.zip releases/chrome-extension/latest/brauzio-chrome-latest.zip
           unzip -t releases/chrome-extension/v3-preview/brauzio-chrome-3.0.4-preview.zip >/dev/null
+          echo 'SUCCESS all verification stages passed'
 
-      - name: Persist only verified source + Preview
+      - name: Persist verified 3.0.4
+        if: success()
         run: |
           git rm scripts/apply-v304-from-v3.py
-          git rm .github/v304-build-trigger || true
+          rm -f .github/v304-build-trigger .github/v304-last-run.txt
           git config user.name github-actions[bot]
           git config user.email 41898282+github-actions[bot]@users.noreply.github.com
           git add -A
           git commit -m 'fix: Brauzio 3.0.4 comprehensive repair [skip ci]'
+          git push origin HEAD:fix/v3.0.4-from-v3
+
+      - name: Persist failure diagnostics only
+        if: failure()
+        shell: bash
+        run: |
+          git reset --hard HEAD
+          tail -n 160 /tmp/v304.log > .github/v304-last-run.txt || echo 'No diagnostic log captured' > .github/v304-last-run.txt
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add .github/v304-last-run.txt
+          git commit -m 'test: persist Brauzio 3.0.4 build failure [skip ci]' || true
           git push origin HEAD:fix/v3.0.4-from-v3
