@@ -1,0 +1,64 @@
+name: Harden Brauzio 3.0.4 pairing routes
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/v304-pairing-hardening.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  patch-and-verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/v3.0.4-from-v3
+          fetch-depth: 0
+
+      - name: Patch pairing status and external pairing route
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          p=Path('app/cloudflare-mcp/src/browser-session.ts')
+          s=p.read_text()
+          needle="""    if (url.pathname === '/pairing/consume' && request.method === 'POST') {\n"""
+          insert="""    if (url.pathname === '/pairing/status' && request.method === 'GET') {\n      let record = await this.ctx.storage.get<PairingRecord>(PAIRING_STORAGE_KEY);\n      if (record && record.expiresAt <= Date.now()) {\n        await this.ctx.storage.delete(PAIRING_STORAGE_KEY);\n        record = undefined;\n      }\n      return Response.json({\n        active: Boolean(record),\n        expiresAt: record?.expiresAt || null,\n        connected: this.authenticatedSockets().length > 0,\n      });\n    }\n\n    if (url.pathname === '/pairing/create') {\n      return Response.json(\n        { error: 'Pairing codes can only be created from the Brauzio extension', code: 'PAIRING_CREATE_EXTENSION_ONLY' },\n        { status: 405, headers: { allow: 'GET /pairing/status' } },\n      );\n    }\n\n    if (url.pathname === '/pairing/consume' && request.method === 'POST') {\n"""
+          assert needle in s
+          s=s.replace(needle,insert,1)
+          p.write_text(s)
+
+          p=Path('app/cloudflare-mcp/src/index.ts')
+          s=p.read_text()
+          old="""    if (url.pathname === '/browser-pairing') {\n      return await browserStub(env, deviceIdFromRequest(request, env)).fetch(\n        new Request('https://brauzio-browser.internal/pairing/create', {\n          method: request.method,\n          headers: { 'content-type': request.headers.get('content-type') || 'application/json' },\n          body: request.method === 'GET' || request.method === 'HEAD' ? undefined : request.body,\n        }),\n      );\n    }\n"""
+          new="""    if (url.pathname === '/browser-pairing') {\n      if (request.method !== 'GET' && request.method !== 'HEAD') {\n        return Response.json(\n          { error: 'Create pairing codes from the Brauzio extension', code: 'PAIRING_CREATE_EXTENSION_ONLY' },\n          { status: 405, headers: { allow: 'GET, HEAD' } },\n        );\n      }\n      return await browserStub(env, deviceIdFromRequest(request, env)).fetch(\n        new Request('https://brauzio-browser.internal/pairing/status'),\n      );\n    }\n"""
+          assert old in s
+          s=s.replace(old,new,1)
+          p.write_text(s)
+          PY
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 8.15.9
+      - run: pnpm install --no-frozen-lockfile --ignore-scripts
+      - run: pnpm --filter brauzio-cloud-mcp check
+      - run: pnpm --filter brauzio-cloud-mcp build
+      - name: Static pairing assertions
+        run: |
+          grep -q "url.pathname === '/pairing/status'" app/cloudflare-mcp/src/browser-session.ts
+          grep -q "PAIRING_CREATE_EXTENSION_ONLY" app/cloudflare-mcp/src/browser-session.ts
+          grep -q "PAIRING_CREATE_EXTENSION_ONLY" app/cloudflare-mcp/src/index.ts
+      - name: Commit verified hardening
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add app/cloudflare-mcp/src/browser-session.ts app/cloudflare-mcp/src/index.ts
+          git commit -m 'fix: harden Brauzio 3.0.4 OAuth pairing routes [skip ci]'
+          git push origin HEAD:fix/v3.0.4-from-v3
