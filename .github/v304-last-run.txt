@@ -1,0 +1,83 @@
+STEP 1 fetch main
+From https://github.com/aseel90/Brauzio
+ * branch            main       -> FETCH_HEAD
+STEP 2 port live-verified 3.0.3 files
+STEP 3 apply 3.0.4 patch
+Brauzio 3.0.4 integration patch PASS
+STEP 4 install dependencies
+Scope: all 4 workspace projects
+Progress: resolved 1, reused 0, downloaded 0, added 0
+Progress: resolved 150, reused 0, downloaded 149, added 0
+Progress: resolved 454, reused 0, downloaded 423, added 0
+Progress: resolved 809, reused 0, downloaded 659, added 0
+Progress: resolved 910, reused 0, downloaded 750, added 0
+Packages: +749
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Progress: resolved 910, reused 0, downloaded 751, added 749, done
+
+devDependencies:
++ @commitlint/cli 19.8.1
++ @commitlint/config-conventional 19.8.1
++ @eslint/js 9.39.2
++ @typescript-eslint/eslint-plugin 8.49.0
++ @typescript-eslint/parser 8.49.0
++ eslint 9.39.2 (10.10.0 is available)
++ eslint-config-prettier 10.1.8
++ eslint-plugin-vue 10.6.2
++ globals 16.5.0
++ husky 9.1.7
++ lint-staged 15.5.2
++ prettier 3.7.4
++ typescript 5.9.3 (7.0.2 is available)
++ typescript-eslint 8.49.0
++ vue-eslint-parser 10.2.0
+
+ WARN  Issues with peer dependencies found
+app/chrome-extension
+└─┬ wxt 0.20.11
+  └─┬ vite 7.2.7
+    └── ✕ unmet peer @types/node@"^20.19.0 || >=22.12.0": found 18.19.130
+
+Done in 6.9s
+STEP 5 prepare WXT
+
+[log] [90mWXT[39m [90m[1m0.20.11[22m[39m
+[dotenv@17.2.3] injecting env (0) from .env.production.chrome.local,.env.production.chrome,.env.chrome.local,.env.chrome,.env.production.local,.env.production,.env.local,.env -- tip: 📡 add observability to secrets: https://dotenvx.com/ops
+[warn] `InlineConfig#runner` is deprecated, use `InlineConfig#webExt` instead. See https://wxt.dev/guide/resources/upgrading.html#v0-19-0-rarr-v0-20-0
+[info] Generating types...
+[success] Finished in 768 ms
+STEP 6 build shared runtime
+
+> brauzio-shared@1.0.1 build /home/runner/work/Brauzio/Brauzio/packages/shared
+> tsup src/index.ts --format cjs,esm --dts --clean
+
+[34mCLI[39m Building entry: src/index.ts
+[34mCLI[39m Using tsconfig: tsconfig.json
+[34mCLI[39m tsup v8.5.1
+[34mCLI[39m Target: es2020
+[34mCLI[39m Cleaning output folder
+[34mCJS[39m Build start
+[34mESM[39m Build start
+[32mCJS[39m [1mdist/index.js [22m[32m25.37 KB[39m
+[32mCJS[39m ⚡️ Build success in 33ms
+[32mESM[39m [1mdist/index.mjs [22m[32m24.27 KB[39m
+[32mESM[39m ⚡️ Build success in 33ms
+[34mDTS[39m Build start
+[32mDTS[39m ⚡️ Build success in 1201ms
+[32mDTS[39m [1mdist/index.d.ts  [22m[32m4.32 KB[39m
+[32mDTS[39m [1mdist/index.d.mts [22m[32m4.32 KB[39m
+STEP 7 typecheck Worker
+
+> brauzio-cloud-mcp@0.9.0 check /home/runner/work/Brauzio/Brauzio/app/cloudflare-mcp
+> tsc --noEmit
+
+src/index.ts(1,27): error TS2307: Cannot find module '@modelcontextprotocol/sdk/server/mcp.js' or its corresponding type declarations.
+src/index.ts(2,10): error TS2724: '"agents/mcp"' has no exported member named 'HttpMcpAgent'. Did you mean 'McpAgent'?
+src/index.ts(3,19): error TS2307: Cannot find module 'zod' or its corresponding type declarations.
+src/index.ts(181,37): error TS2339: Property 'env' does not exist on type 'BrauzioMcp'.
+src/index.ts(181,47): error TS2339: Property 'props' does not exist on type 'BrauzioMcp'.
+src/index.ts(375,25): error TS2339: Property 'serve' does not exist on type 'typeof BrauzioMcp'.
+/home/runner/work/Brauzio/Brauzio/app/cloudflare-mcp:
+ ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL  brauzio-cloud-mcp@0.9.0 check: `tsc --noEmit`
+Exit status 2
+FAILED exit=2 line=31 command=pnpm --filter brauzio-cloud-mcp check
