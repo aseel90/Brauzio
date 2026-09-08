@@ -1,0 +1,100 @@
+name: Integrate verified Brauzio 3.0.4 release
+
+on:
+  push:
+    branches: [release/v3.0.4]
+    paths:
+      - '.github/v304-release-trigger'
+      - '.github/workflows/release-v304.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  integrate-and-verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: release/v3.0.4
+          fetch-depth: 0
+
+      - name: Fetch verified source branch
+        run: git fetch origin fix/v3.0.4-from-v3
+
+      - name: Import verified production runtime only
+        run: |
+          git checkout origin/fix/v3.0.4-from-v3 -- \
+            app/chrome-extension \
+            packages/shared \
+            app/cloudflare-mcp/src/index.ts \
+            app/cloudflare-mcp/src/browser-session.ts \
+            pnpm-lock.yaml \
+            releases/chrome-extension/v3-preview/brauzio-chrome-3.0.4-preview.zip \
+            releases/chrome-extension/latest/brauzio-chrome-latest.zip \
+            releases/chrome-extension/latest/build-status.txt
+          printf 'Brauzio 3.0.4\nBuilt from verified release/v3.0.4\n' > releases/chrome-extension/latest/build-status.txt
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 8.15.9
+
+      - name: Install dependencies
+        run: pnpm install --no-frozen-lockfile --ignore-scripts
+
+      - name: Prepare extension
+        run: pnpm --filter brauzio-extension exec wxt prepare
+
+      - name: Build shared runtime
+        run: pnpm --filter brauzio-shared build
+
+      - name: Verify Worker typecheck
+        run: pnpm --filter brauzio-cloud-mcp check
+
+      - name: Verify Worker dry build
+        run: pnpm --filter brauzio-cloud-mcp build
+
+      - name: Verify extension typecheck
+        run: pnpm --filter brauzio-extension compile
+
+      - name: Verify extension build
+        run: pnpm --filter brauzio-extension build
+
+      - name: Verify generated release
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json, zipfile
+          from pathlib import Path
+          root=Path('app/chrome-extension/.output/chrome-mv3')
+          manifest=json.loads((root/'manifest.json').read_text())
+          assert manifest['version']=='3.0.4', manifest['version']
+          perms=set(manifest.get('permissions', []))
+          for p in ('clipboardRead','clipboardWrite','offscreen','debugger'):
+              assert p in perms, p
+          bg=(root/'background.js').read_text(errors='ignore')
+          for needle in ('chrome_observe','chrome_resolve','chrome_act','chrome_clipboard','chrome_artifacts','dispatchHtml5Drag','brauzio-popup-live-view-tab-v1'):
+              assert needle in bg, needle
+          cloud=Path('app/cloudflare-mcp/src/index.ts').read_text()
+          assert "BRAUZIO_RUNTIME_VERSION = '3.0.4'" in cloud
+          assert "BRAUZIO_SCHEMA_VERSION = '3.0.4'" in cloud
+          z=zipfile.ZipFile('releases/chrome-extension/v3-preview/brauzio-chrome-3.0.4-preview.zip')
+          assert z.testzip() is None
+          zm=json.loads(z.read('manifest.json'))
+          assert zm['version']=='3.0.4'
+          print('Brauzio 3.0.4 clean release verification PASS')
+          PY
+
+      - name: Persist clean verified release branch
+        run: |
+          git rm -f .github/v304-release-trigger || true
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add -A
+          git commit -m 'release: Brauzio 3.0.4 comprehensive verified runtime [skip ci]'
+          git push origin HEAD:release/v3.0.4
