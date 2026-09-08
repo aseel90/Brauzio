@@ -37,6 +37,8 @@ export default defineConfig({
       'bookmarks',
       'offscreen',
       'storage',
+      'clipboardRead',
+      'clipboardWrite',
     ],
     host_permissions: ['<all_urls>'],
     action: {

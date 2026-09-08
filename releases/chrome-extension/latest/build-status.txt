@@ -1,0 +1,2 @@
+Brauzio 3.0.4
+Built from verified release/v3.0.4
