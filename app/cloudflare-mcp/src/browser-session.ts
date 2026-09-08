@@ -344,6 +344,34 @@ export class BrowserSession extends DurableObject<Env> {
       };
       ws.serializeAttachment(next);
       sessionLog('HELLO', { deviceId: attachment.deviceId, authenticated, extensionVersion: next.extensionVersion || '' });
+
+      // A reconnect can leave an older hibernating WebSocket looking OPEN for a
+      // short time. Tool forwarding previously picked the first authenticated
+      // socket, which could route every command to that stale connection and
+      // make the MCP call hang until its timeout. Once a new browser connection
+      // authenticates, make it authoritative and retire older sockets for the
+      // same device.
+      if (authenticated) {
+        for (const other of this.ctx.getWebSockets('browser')) {
+          if (other === ws) continue;
+          try {
+            const otherAttachment = other.deserializeAttachment() as SocketAttachment | null;
+            if (
+              other.readyState === WebSocket.OPEN &&
+              otherAttachment?.authenticated === true &&
+              otherAttachment.deviceId === next.deviceId
+            ) {
+              sessionLog('WS_SUPERSEDED', {
+                deviceId: next.deviceId,
+                oldConnectedAt: otherAttachment.connectedAt,
+                newConnectedAt: next.connectedAt,
+              });
+              other.close(4001, 'Superseded by newer Brauzio connection');
+            }
+          } catch {}
+        }
+      }
+
       const controlState = await this.getControlState();
       ws.send(JSON.stringify({ type: 'hello_ack', authenticated, deviceId: attachment.deviceId, controlState }));
       if (authenticated) await this.sendWatchRestore(ws);
@@ -709,12 +737,25 @@ export class BrowserSession extends DurableObject<Env> {
   }
 
   private authenticatedSockets(): WebSocket[] {
-    return this.ctx.getWebSockets('browser').filter((ws) => {
-      try {
-        const attachment = ws.deserializeAttachment() as SocketAttachment | null;
-        return attachment?.authenticated === true && ws.readyState === WebSocket.OPEN;
-      } catch { return false; }
-    });
+    return this.ctx
+      .getWebSockets('browser')
+      .filter((ws) => {
+        try {
+          const attachment = ws.deserializeAttachment() as SocketAttachment | null;
+          return attachment?.authenticated === true && ws.readyState === WebSocket.OPEN;
+        } catch {
+          return false;
+        }
+      })
+      .sort((left, right) => {
+        try {
+          const leftAttachment = left.deserializeAttachment() as SocketAttachment | null;
+          const rightAttachment = right.deserializeAttachment() as SocketAttachment | null;
+          return Number(rightAttachment?.connectedAt || 0) - Number(leftAttachment?.connectedAt || 0);
+        } catch {
+          return 0;
+        }
+      });
   }
 
   private async finishToolCall(message: ToolResultMessage): Promise<void> {

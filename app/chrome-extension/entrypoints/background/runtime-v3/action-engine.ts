@@ -430,6 +430,53 @@ class ActionEngine {
       await send({ type: 'mouseMoved', x: a.center.x + (b.center.x - a.center.x) * t, y: a.center.y + (b.center.y - a.center.y) * t, button: 'left', buttons: 1 });
     }
     await send({ type: 'mouseReleased', x: b.center.x, y: b.center.y, button: 'left', buttons: 0, clickCount: 1 });
+    await this.dispatchHtml5Drag(tabId, sourceElement, targetElement);
+  }
+
+  private async dispatchHtml5Drag(tabId: number, sourceElement: V3Element, targetElement: V3Element): Promise<void> {
+    const objectGroup = `brauzio-v3-html5-drag:${tabId}`;
+    const sourceResolved = await this.send<any>(tabId, sourceElement, 'DOM.resolveNode', { backendNodeId: sourceElement.backendNodeId, objectGroup });
+    const targetResolved = await this.send<any>(tabId, targetElement, 'DOM.resolveNode', { backendNodeId: targetElement.backendNodeId, objectGroup });
+    const sourceObjectId = sourceResolved?.object?.objectId;
+    const targetObjectId = targetResolved?.object?.objectId;
+    if (!sourceObjectId || !targetObjectId) {
+      await this.send(tabId, sourceElement, 'Runtime.releaseObjectGroup', { objectGroup }).catch(() => undefined);
+      return;
+    }
+    try {
+      const result = await this.send<any>(tabId, sourceElement, 'Runtime.callFunctionOn', {
+        objectId: sourceObjectId,
+        arguments: [{ objectId: targetObjectId }],
+        returnByValue: true,
+        functionDeclaration: `function(target){
+          const source=this;
+          let dataTransfer=null;
+          try { dataTransfer=new DataTransfer(); } catch {}
+          if(dataTransfer){
+            try { dataTransfer.effectAllowed='all'; dataTransfer.dropEffect='move'; } catch {}
+            try { dataTransfer.setData('text/plain', source.id || source.textContent || 'brauzio-drag'); } catch {}
+          }
+          const fire=(node,type)=>{
+            let event;
+            try { event=new DragEvent(type,{bubbles:true,cancelable:true,composed:true,dataTransfer}); }
+            catch {
+              event=new Event(type,{bubbles:true,cancelable:true,composed:true});
+              try { Object.defineProperty(event,'dataTransfer',{value:dataTransfer}); } catch {}
+            }
+            node.dispatchEvent(event);
+          };
+          fire(source,'dragstart');
+          fire(target,'dragenter');
+          fire(target,'dragover');
+          fire(target,'drop');
+          fire(source,'dragend');
+          return true;
+        }`,
+      });
+      if (result?.exceptionDetails) throw this.error('HTML5_DRAG_FAILED', String(result.exceptionDetails.text || 'HTML5 drag dispatch failed'));
+    } finally {
+      await this.send(tabId, sourceElement, 'Runtime.releaseObjectGroup', { objectGroup }).catch(() => undefined);
+    }
   }
 
 

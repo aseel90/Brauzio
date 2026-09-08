@@ -206,9 +206,15 @@ class DeviceModeTool extends BaseBrowserToolExecutor {
     let base: DevicePreset;
     let presetName: string | undefined;
     if (action === 'apply') {
-      presetName = String(args.preset || '').trim();
-      base = PRESETS[presetName];
-      if (!base) return createErrorResponse(`Unknown device preset: ${presetName}`);
+      const requestedPreset = String(args.preset || '').trim();
+      const normalizedPreset = requestedPreset.toLowerCase().replace(/[\s_-]+/g, '');
+      const match = Object.entries(PRESETS).find(([id, preset]) => {
+        const normalizedId = id.toLowerCase().replace(/[\s_-]+/g, '');
+        const normalizedLabel = preset.label.toLowerCase().replace(/[\s_-]+/g, '');
+        return requestedPreset === id || normalizedPreset === normalizedId || normalizedPreset === normalizedLabel;
+      });
+      if (!match) return createErrorResponse(`Unknown device preset: ${requestedPreset}`);
+      [presetName, base] = match;
     } else if (action === 'custom') {
       const width = clampInt(args.width, 390, 240, 3840);
       const height = clampInt(args.height, 844, 240, 3840);

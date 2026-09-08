@@ -9,7 +9,7 @@ const DEFAULT_INTERVAL_MS = 900;
 const DEFAULT_SCALE = 0.65;
 const DEFAULT_QUALITY = 0.72;
 const MAX_BUFFERED_FRAMES = 3;
-const IDLE_STOP_MS = 120_000;
+const IDLE_STOP_MS = 15_000;
 
 type LiveViewAction = 'start' | 'status' | 'latest' | 'stop';
 
@@ -129,12 +129,22 @@ async function captureOne(session: LiveViewSession): Promise<void> {
     });
     if (!sourceDataUrl) throw new Error('captureVisibleTab returned empty data');
 
-    const compressed = await compressImage(sourceDataUrl, {
-      scale: session.scale,
-      quality: session.quality,
-      format: 'image/jpeg',
-    });
-    const base64 = compressed.dataUrl.replace(/^data:image\/[^;]+;base64,/, '');
+    let frameDataUrl = sourceDataUrl;
+    let mimeType = 'image/jpeg';
+    try {
+      const compressed = await compressImage(sourceDataUrl, {
+        scale: session.scale,
+        quality: session.quality,
+        format: 'image/jpeg',
+      });
+      frameDataUrl = compressed.dataUrl;
+      mimeType = compressed.mimeType;
+    } catch (compressionError) {
+      console.warn('[BrauzioLiveView] JPEG compression failed; using original frame', compressionError);
+      session.lastError = undefined;
+    }
+
+    const base64 = frameDataUrl.replace(/^data:image\/[^;]+;base64,/, '');
     const fingerprint = frameFingerprint(base64);
     const previous = session.frames[session.frames.length - 1];
     if (previous?.fingerprint === fingerprint) {
@@ -147,7 +157,7 @@ async function captureOne(session: LiveViewSession): Promise<void> {
       seq: nextSeq++,
       capturedAt: Date.now(),
       data: base64,
-      mimeType: compressed.mimeType,
+      mimeType,
       fingerprint,
       bytes: Math.ceil((base64.length * 3) / 4),
     };
@@ -265,15 +275,7 @@ class LiveViewTool extends BaseBrowserToolExecutor {
 
 chrome.tabs.onRemoved.addListener((tabId) => stopSession(tabId, 'tab_closed'));
 chrome.tabs.onUpdated.addListener((tabId, changeInfo) => {
-  if (changeInfo.status !== 'loading' && typeof changeInfo.url !== 'string') return;
-  const session = sessions.get(tabId);
-  if (!session?.running) return;
-  // Keep the stream bound to this tab across navigation, but discard pixels from
-  // the previous document so the agent cannot mistake an old frame for the new page.
-  session.frames.length = 0;
-  session.lastFrameAt = undefined;
-  session.lastError = 'navigation_in_progress';
-  session.lastClientTouchAt = Date.now();
+  if (changeInfo.status === 'loading' || typeof changeInfo.url === 'string') stopSession(tabId, 'navigation');
 });
 
 export const liveViewTool = new LiveViewTool();
