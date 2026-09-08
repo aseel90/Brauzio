@@ -135,4 +135,4 @@ jobs:
           git commit -m 'build: publish latest Brauzio Chrome extension [skip ci]'
           git push
 
-# Manual release trigger: Brauzio extension 2.8.1
+# Current release line: Brauzio 3.0.x
