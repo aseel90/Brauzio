@@ -35,6 +35,31 @@ jobs:
             releases/chrome-extension/latest/build-status.txt
           printf 'Brauzio 3.0.4\nBuilt from verified release/v3.0.4\n' > releases/chrome-extension/latest/build-status.txt
 
+      - name: Harden OAuth pairing routes
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          p=Path('app/cloudflare-mcp/src/browser-session.ts')
+          s=p.read_text()
+          if "url.pathname === '/pairing/status'" not in s:
+              needle="    if (url.pathname === '/pairing/consume' && request.method === 'POST') {\n"
+              insert="""    if (url.pathname === '/pairing/status' && request.method === 'GET') {\n      let record = await this.ctx.storage.get<PairingRecord>(PAIRING_STORAGE_KEY);\n      if (record && record.expiresAt <= Date.now()) {\n        await this.ctx.storage.delete(PAIRING_STORAGE_KEY);\n        record = undefined;\n      }\n      return Response.json({\n        active: Boolean(record),\n        expiresAt: record?.expiresAt || null,\n        connected: this.authenticatedSockets().length > 0,\n      });\n    }\n\n    if (url.pathname === '/pairing/create') {\n      return Response.json(\n        { error: 'Pairing codes can only be created from the Brauzio extension', code: 'PAIRING_CREATE_EXTENSION_ONLY' },\n        { status: 405, headers: { allow: 'GET /pairing/status' } },\n      );\n    }\n\n    if (url.pathname === '/pairing/consume' && request.method === 'POST') {\n"""
+              assert needle in s
+              s=s.replace(needle,insert,1)
+              p.write_text(s)
+
+          p=Path('app/cloudflare-mcp/src/index.ts')
+          s=p.read_text()
+          old="""    if (url.pathname === '/browser-pairing') {\n      return await browserStub(env, deviceIdFromRequest(request, env)).fetch(\n        new Request('https://brauzio-browser.internal/pairing/create', {\n          method: request.method,\n          headers: { 'content-type': request.headers.get('content-type') || 'application/json' },\n          body: request.method === 'GET' || request.method === 'HEAD' ? undefined : request.body,\n        }),\n      );\n    }\n"""
+          if old in s:
+              new="""    if (url.pathname === '/browser-pairing') {\n      if (request.method !== 'GET' && request.method !== 'HEAD') {\n        return Response.json(\n          { error: 'Create pairing codes from the Brauzio extension', code: 'PAIRING_CREATE_EXTENSION_ONLY' },\n          { status: 405, headers: { allow: 'GET, HEAD' } },\n        );\n      }\n      return await browserStub(env, deviceIdFromRequest(request, env)).fetch(\n        new Request('https://brauzio-browser.internal/pairing/status'),\n      );\n    }\n"""
+              s=s.replace(old,new,1)
+              p.write_text(s)
+          assert "PAIRING_CREATE_EXTENSION_ONLY" in p.read_text()
+          PY
+
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
@@ -83,6 +108,10 @@ jobs:
           cloud=Path('app/cloudflare-mcp/src/index.ts').read_text()
           assert "BRAUZIO_RUNTIME_VERSION = '3.0.4'" in cloud
           assert "BRAUZIO_SCHEMA_VERSION = '3.0.4'" in cloud
+          assert "PAIRING_CREATE_EXTENSION_ONLY" in cloud
+          session=Path('app/cloudflare-mcp/src/browser-session.ts').read_text()
+          assert "url.pathname === '/pairing/status'" in session
+          assert "PAIRING_CREATE_EXTENSION_ONLY" in session
           z=zipfile.ZipFile('releases/chrome-extension/v3-preview/brauzio-chrome-3.0.4-preview.zip')
           assert z.testzip() is None
           zm=json.loads(z.read('manifest.json'))
@@ -96,5 +125,5 @@ jobs:
           git config user.name github-actions[bot]
           git config user.email 41898282+github-actions[bot]@users.noreply.github.com
           git add -A
-          git commit -m 'release: Brauzio 3.0.4 comprehensive verified runtime [skip ci]'
+          git commit -m 'release: Brauzio 3.0.4 pairing-hardened verified runtime [skip ci]'
           git push origin HEAD:release/v3.0.4
