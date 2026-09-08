@@ -1,4 +1,4 @@
-name: Run Brauzio 3.0.4 comprehensive repair
+name: Run Brauzio 3.0.4 comprehensive build
 
 on:
   push:
@@ -10,71 +10,93 @@ permissions:
   contents: write
 
 jobs:
-  repair-fix-branch:
+  build-v304:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: fix/v3.0.4-comprehensive
+          ref: fix/v3.0.4-from-v3
           fetch-depth: 0
 
-      - name: Fetch V3 source branch
-        run: git fetch origin brauzio-v3-runtime
+      - name: Fetch stable 3.0.3 fixes
+        run: git fetch origin main
 
-      - name: Restore complete reviewed V3 runtime
+      - name: Port only fixes already verified on 3.0.3
         run: |
-          git checkout origin/brauzio-v3-runtime -- \
-            app/chrome-extension/entrypoints/background/runtime-v3 \
-            app/chrome-extension/entrypoints/background/tools/browser/v3-runtime.ts \
-            app/chrome-extension/entrypoints/background/tools/browser/clipboard.ts \
-            app/chrome-extension/entrypoints/background/tools/browser/artifacts.ts \
-            app/chrome-extension/entrypoints/background/tools/browser/index.ts \
-            app/chrome-extension/entrypoints/background/tools/browser/device-mode.ts \
-            app/chrome-extension/entrypoints/background/tools/browser/screenshot.ts \
-            app/chrome-extension/entrypoints/offscreen/main.ts \
-            app/chrome-extension/wxt.config.ts \
-            packages/shared/src
+          git checkout origin/main -- \
+            app/chrome-extension/entrypoints/background/index.ts \
+            app/chrome-extension/entrypoints/background/popup-live-view.ts \
+            app/chrome-extension/entrypoints/background/tools/browser/live-view.ts \
+            app/chrome-extension/entrypoints/popup/App.vue \
+            app/chrome-extension/entrypoints/popup/style.css \
+            app/chrome-extension/utils/image-utils.ts \
+            app/cloudflare-mcp/src/browser-session.ts
 
-      - name: Apply 3.0.4 fixes
-        run: python scripts/apply-v304-comprehensive.py
+      - name: Apply comprehensive 3.0.4 fixes
+        run: python scripts/apply-v304-from-v3.py
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 8.15.9
 
       - name: Install dependencies
-        run: |
-          corepack enable
-          corepack prepare pnpm@8.15.9 --activate
-          pnpm install --frozen-lockfile
+        run: pnpm install --no-frozen-lockfile --ignore-scripts
 
-      - name: Verify extension
-        run: |
-          pnpm --filter brauzio-extension compile
-          pnpm --filter brauzio-extension build
+      - name: Prepare extension types
+        run: pnpm --filter brauzio-extension exec wxt prepare
 
-      - name: Verify Worker
-        run: |
-          pnpm --filter brauzio-cloud-mcp check
-          pnpm --filter brauzio-cloud-mcp build
+      - name: Build shared schemas
+        run: pnpm --filter brauzio-shared build
 
-      - name: Verify generated bundle
+      - name: Typecheck Worker
+        run: pnpm --filter brauzio-cloud-mcp check
+
+      - name: Dry-build Worker
+        run: pnpm --filter brauzio-cloud-mcp build
+
+      - name: Typecheck extension
+        run: pnpm --filter brauzio-extension compile
+
+      - name: Build extension
+        run: pnpm --filter brauzio-extension build
+
+      - name: Verify generated runtime
         run: |
           python - <<'PY'
           import json
           from pathlib import Path
-          manifest = json.loads(Path('app/chrome-extension/.output/chrome-mv3/manifest.json').read_text())
-          assert manifest['version'] == '3.0.4', manifest['version']
-          perms = set(manifest.get('permissions', []))
-          for p in ('clipboardRead','clipboardWrite','offscreen','debugger'):
-              assert p in perms, p
-          background = Path('app/chrome-extension/.output/chrome-mv3/background.js').read_text(errors='ignore')
-          for needle in ('chrome_observe','chrome_resolve','chrome_act','chrome_clipboard','chrome_artifacts','compressionFallback','brauzio-popup-live-view-tab-v1'):
+          root=Path('app/chrome-extension/.output/chrome-mv3')
+          manifest=json.loads((root/'manifest.json').read_text())
+          assert manifest.get('version')=='3.0.4', manifest.get('version')
+          perms=set(manifest.get('permissions',[]))
+          for permission in ('clipboardRead','clipboardWrite','offscreen','debugger'):
+              assert permission in perms, permission
+          background=(root/'background.js').read_text(errors='ignore')
+          for needle in ('chrome_observe','chrome_resolve','chrome_act','chrome_clipboard','chrome_artifacts','brauzio-popup-live-view-tab-v1','dispatchHtml5Drag'):
               assert needle in background, needle
-          print('Brauzio 3.0.4 generated bundle PASS')
+          print('Brauzio 3.0.4 runtime verification PASS')
           PY
 
-      - name: Commit verified sources to fix branch
+      - name: Package verified Preview ZIP
         run: |
-          git rm -f scripts/apply-v304-comprehensive.py .github/workflows/v304-comprehensive.yml
+          mkdir -p releases/chrome-extension/v3-preview releases/chrome-extension/latest
+          cd app/chrome-extension/.output/chrome-mv3
+          zip -qr ../../../../releases/chrome-extension/v3-preview/brauzio-chrome-3.0.4-preview.zip .
+          cd ../../../..
+          cp releases/chrome-extension/v3-preview/brauzio-chrome-3.0.4-preview.zip releases/chrome-extension/latest/brauzio-chrome-latest.zip
+          unzip -t releases/chrome-extension/v3-preview/brauzio-chrome-3.0.4-preview.zip >/dev/null
+
+      - name: Commit only verified 3.0.4 sources and ZIP
+        run: |
+          git rm scripts/apply-v304-from-v3.py
           git config user.name github-actions[bot]
           git config user.email 41898282+github-actions[bot]@users.noreply.github.com
           git add -A
-          git commit -m "fix: Brauzio 3.0.4 comprehensive runtime repair"
-          git push origin HEAD:fix/v3.0.4-comprehensive
+          git commit -m "fix: Brauzio 3.0.4 comprehensive repair"
+          git push origin HEAD:fix/v3.0.4-from-v3
