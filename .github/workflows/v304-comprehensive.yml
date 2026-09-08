@@ -1,0 +1,85 @@
+name: Brauzio 3.0.4 comprehensive repair
+
+on:
+  push:
+    branches: [fix/v3.0.4-comprehensive]
+    paths:
+      - scripts/apply-v304-comprehensive.py
+      - .github/workflows/v304-comprehensive.yml
+
+permissions:
+  contents: write
+
+jobs:
+  repair-and-verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/v3.0.4-comprehensive
+          fetch-depth: 0
+
+      - name: Restore the complete reviewed V3 runtime
+        run: |
+          git fetch origin brauzio-v3-runtime
+          git checkout origin/brauzio-v3-runtime -- \
+            app/chrome-extension/entrypoints/background/runtime-v3 \
+            app/chrome-extension/entrypoints/background/tools/browser/v3-runtime.ts \
+            app/chrome-extension/entrypoints/background/tools/browser/clipboard.ts \
+            app/chrome-extension/entrypoints/background/tools/browser/artifacts.ts \
+            app/chrome-extension/entrypoints/background/tools/browser/index.ts \
+            app/chrome-extension/entrypoints/background/tools/browser/device-mode.ts \
+            app/chrome-extension/entrypoints/background/tools/browser/screenshot.ts \
+            app/chrome-extension/entrypoints/offscreen/main.ts \
+            app/chrome-extension/wxt.config.ts \
+            packages/shared/src
+
+      - name: Apply current 3.0.4 fixes on top of V3 runtime
+        run: python scripts/apply-v304-comprehensive.py
+
+      - name: Install workspace dependencies
+        run: |
+          corepack enable
+          corepack prepare pnpm@8.15.9 --activate
+          pnpm install --frozen-lockfile
+
+      - name: Type-check and build Chrome extension
+        run: |
+          pnpm --filter brauzio-extension compile
+          pnpm --filter brauzio-extension build
+
+      - name: Type-check and dry-build Cloudflare Worker
+        run: |
+          pnpm --filter brauzio-cloud-mcp check
+          pnpm --filter brauzio-cloud-mcp build
+
+      - name: Verify generated Chrome manifest and runtime bundle
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          manifest_path = Path('app/chrome-extension/.output/chrome-mv3/manifest.json')
+          if not manifest_path.exists():
+              raise SystemExit('built manifest missing')
+          manifest = json.loads(manifest_path.read_text())
+          if manifest.get('version') != '3.0.4':
+              raise SystemExit(f"unexpected manifest version: {manifest.get('version')}")
+          perms = set(manifest.get('permissions', []))
+          for required in ('clipboardRead', 'clipboardWrite', 'offscreen', 'debugger'):
+              if required not in perms:
+                  raise SystemExit(f'manifest permission missing: {required}')
+          background = Path('app/chrome-extension/.output/chrome-mv3/background.js').read_text(errors='ignore')
+          for needle in ('chrome_observe', 'chrome_act', 'chrome_clipboard', 'chrome_artifacts', 'compressionFallback', 'brauzio-popup-live-view-tab-v1'):
+              if needle not in background:
+                  raise SystemExit(f'built background missing {needle}')
+          print('Built extension verification PASS')
+          PY
+
+      - name: Commit verified comprehensive repair
+        run: |
+          git rm scripts/apply-v304-comprehensive.py .github/workflows/v304-comprehensive.yml
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add -A
+          git commit -m "fix: Brauzio 3.0.4 comprehensive runtime repair"
+          git push origin HEAD:fix/v3.0.4-comprehensive
