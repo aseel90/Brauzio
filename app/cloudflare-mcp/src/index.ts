@@ -6,8 +6,8 @@ import { BrowserSession } from './browser-session';
 
 export { BrowserSession };
 
-const BRAUZIO_RUNTIME_VERSION = '3.0.6';
-const BRAUZIO_SCHEMA_VERSION = '3.0.6';
+const BRAUZIO_RUNTIME_VERSION = '3.0.7';
+const BRAUZIO_SCHEMA_VERSION = '3.0.7';
 const BRAUZIO_ORIGIN = 'https://brauzio-mcp.aseelsalah266.workers.dev';
 const BRAUZIO_RESOURCE = `${BRAUZIO_ORIGIN}/mcp`;
 const BRAUZIO_SCOPE = 'brauzio:control';
@@ -91,9 +91,6 @@ async function callBrowserTool(
   }
   try {
     const parsed = JSON.parse(raw) as unknown;
-    // Durable Object relay responses are transport envelopes: { result: CallToolResult }.
-    // MCP requires CallToolResult itself at the top level. Returning the envelope causes
-    // clients to see an empty outer content array and hides image content under result.result.content.
     if (parsed && typeof parsed === 'object' && 'result' in parsed) {
       const inner = (parsed as { result?: unknown }).result;
       if (inner && typeof inner === 'object' && Array.isArray((inner as CallToolResult).content)) {
@@ -107,60 +104,6 @@ async function callBrowserTool(
   } catch {
     return jsonError(raw || 'Browser tool returned an invalid response');
   }
-}
-
-function shouldRelayScreenshotThroughObserve(name: string, args: Record<string, unknown>): boolean {
-  return name === 'chrome_screenshot'
-    && args.returnImage !== false
-    && args.storeBase64 !== true
-    && args.savePng !== true
-    && args.fullPage !== true
-    && !args.selector;
-}
-
-async function callScreenshotThroughObserve(
-  env: Env,
-  deviceId: string,
-  args: Record<string, unknown>,
-  callerId: string,
-): Promise<CallToolResult> {
-  const observeArgs: Record<string, unknown> = {
-    mode: 'compact',
-    maxElements: 25,
-    includeScreenshot: true,
-    screenshotQuality: 60,
-  };
-  if (typeof args.tabId === 'number') observeArgs.tabId = args.tabId;
-  if (typeof args.windowId === 'number') observeArgs.windowId = args.windowId;
-
-  const observed = await callBrowserTool(env, deviceId, 'chrome_observe', observeArgs, callerId);
-  if (observed.isError) return observed;
-
-  const image = observed.content.find((item) => item.type === 'image') as
-    | Extract<CallToolResult['content'][number], { type: 'image' }>
-    | undefined;
-  if (!image || typeof image.data !== 'string' || !image.data) {
-    return jsonError('Brauzio screenshot relay did not receive image content from chrome_observe');
-  }
-
-  return {
-    content: [
-      {
-        type: 'text',
-        text: JSON.stringify({
-          success: true,
-          message: `Screenshot [${String(args.name || 'screenshot')}] captured successfully`,
-          tabId: typeof args.tabId === 'number' ? args.tabId : undefined,
-          returnedImage: true,
-          base64: null,
-          fileSaved: false,
-          delivery: 'observe-jpeg-relay',
-        }),
-      },
-      image,
-    ],
-    isError: false,
-  };
 }
 
 async function callerLeaseId(ctx: {
@@ -193,11 +136,7 @@ function createServer(env: Env) {
     const name = request.params.name;
     const args = (request.params.arguments || {}) as Record<string, unknown>;
     const callerId = await callerLeaseId(ctx);
-    const deviceId = deviceIdFromAuth(env);
-    if (shouldRelayScreenshotThroughObserve(name, args)) {
-      return await callScreenshotThroughObserve(env, deviceId, args, callerId);
-    }
-    return await callBrowserTool(env, deviceId, name, args, callerId);
+    return await callBrowserTool(env, deviceIdFromAuth(env), name, args, callerId);
   });
 
   return server;
