@@ -88,6 +88,8 @@ jobs:
           AUTO='app/chrome-extension/entrypoints/background/runtime-v3/automation-session.ts'
           CACHE='app/chrome-extension/entrypoints/background/relay-tool-cache.ts'
           RELAY='app/chrome-extension/entrypoints/background/remote-relay.ts'
+          LIVE='app/chrome-extension/entrypoints/background/tools/browser/live-view.ts'
+          WELCOME_DIR='app/chrome-extension/entrypoints/welcome'
           DEVICE='app/chrome-extension/entrypoints/background/tools/browser/device-mode.ts'
           DIAG='app/chrome-extension/entrypoints/background/tools/browser/diagnostics.ts'
           WORKER='app/cloudflare-mcp/src/index.ts'
@@ -101,6 +103,14 @@ jobs:
           grep -Fq 'chrome.storage.session' "$CACHE"
           grep -Fq 'RECONNECT_JITTER_RATIO' "$RELAY"
           grep -Fq 'relayMetrics.reconnectScheduled' "$RELAY"
+          grep -Fq 'export async function stopAllLiveViews' "$LIVE"
+          grep -Fq 'Promise<number>' "$LIVE"
+          test ! -e "$WELCOME_DIR/main.ts"
+          test ! -e "$WELCOME_DIR/App.vue"
+          if grep -RInE '<script|chrome\.|navigator\.clipboard|localStorage|sessionStorage|eval\(|new Function' "$WELCOME_DIR"; then
+            echo 'Welcome source must remain static HTML/CSS only.' >&2
+            exit 1
+          fi
           grep -Fq 'Emulation.setUserAgentOverride' "$DEVICE"
           grep -Fq "name = 'chrome_diagnostics'" "$DIAG"
           grep -Fq 'BRAUZIO_DIAGNOSTICS_SCHEMA' "$WORKER"
@@ -133,12 +143,13 @@ jobs:
           python - "$TMP_DIR" <<'PY'
           import json
           import pathlib
+          import re
           import sys
 
           root = pathlib.Path(sys.argv[1])
           manifest = json.loads((root / 'manifest.json').read_text(encoding='utf-8'))
 
-          assert manifest.get('version') == '3.1.0', manifest.get('version')
+          assert manifest.get('version') == '3.1.1', manifest.get('version')
           assert manifest.get('default_locale') == 'ar', manifest.get('default_locale')
           assert manifest.get('action', {}).get('default_title') == 'Brauzio', manifest.get('action')
           assert (root / '_locales' / 'ar' / 'messages.json').is_file(), 'Arabic locale missing'
@@ -149,8 +160,21 @@ jobs:
 
           background = (root / 'background.js').read_text(encoding='utf-8')
           assert 'BRAUZIO_JS_RUNTIME_V3' in background, 'JS runtime V3 marker missing from packaged background'
-          assert 'BRAUZIO_BUILD_3_1_0' in background, '3.1.0 build marker missing from packaged background'
-          print('Packaged manifest verified: Brauzio 3.1.0 + runtime/build markers + Arabic locale.')
+          assert 'BRAUZIO_BUILD_3_1_1' in background, '3.1.1 build marker missing from packaged background'
+
+          welcome_path = root / 'welcome.html'
+          welcome = welcome_path.read_text(encoding='utf-8')
+          script_srcs = re.findall(r'<script[^>]+src=[\"\']([^\"\']+)[\"\']', welcome, flags=re.I)
+          allowed_wxt = re.compile(r'/chunks/_virtual_wxt-html-plugins-[A-Za-z0-9_-]+\.js')
+          for src in script_srcs:
+              assert allowed_wxt.fullmatch(src), f'unexpected script in welcome.html: {src}'
+              chunk = root / src.lstrip('/')
+              assert chunk.is_file(), f'welcome runtime chunk missing: {src}'
+              code = chunk.read_text(encoding='utf-8').lower()
+              forbidden = ('chrome.', 'navigator.clipboard', 'localstorage', 'sessionstorage', 'brauziorelay', 'brauziodevice', 'eval(', 'new function')
+              assert not any(token in code for token in forbidden), f'unsafe welcome runtime content in {src}'
+
+          print('Packaged manifest verified: Brauzio 3.1.1 + promise-safe Live View + Defender-safe static Welcome.')
           PY
 
       - name: Upload installable Brauzio ZIP
@@ -185,7 +209,6 @@ jobs:
           git push
 
 # Current release line: Brauzio 3.1.x
-# Runtime hardening gate: Brauzio 3.1.0
-# Publish trigger: Brauzio 3.1.0
-
-# Final validation trigger: 3.1 reliability hardening
+# Extension hotfix: Brauzio 3.1.1
+# Runtime hardening gate: Brauzio 3.1.0 server / 3.1.1 extension
+# Final validation trigger: 3.1.1 login + Defender compatibility

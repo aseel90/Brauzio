@@ -102,7 +102,7 @@ function stopSession(tabId: number, reason = 'stopped'): boolean {
   return true;
 }
 
-export function stopAllLiveViews(reason = 'stopped'): number {
+export async function stopAllLiveViews(reason = 'stopped'): Promise<number> {
   const tabIds = [...sessions.keys()];
   for (const tabId of tabIds) stopSession(tabId, reason);
   return tabIds.length;
