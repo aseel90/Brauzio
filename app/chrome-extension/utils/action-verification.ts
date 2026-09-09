@@ -155,7 +155,7 @@ export async function prepareActionVerification(
   const before = await snapshotTab(tabId);
   const owner = `action-verify:${crypto.randomUUID()}`;
   const timeoutMs = clampTimeout(spec.timeoutMs);
-  const needsNetworkEvents = Boolean(spec.requestUrlIncludes);
+  const needsNetworkEvents = Boolean(spec.requestUrlIncludes || spec.networkIdle);
   const needsConsoleEvents = Boolean(spec.consoleIncludes);
   const needsCdp = needsNetworkEvents || needsConsoleEvents;
 
@@ -166,6 +166,14 @@ export async function prepareActionVerification(
   let consoleEvidence: Record<string, unknown> | null = null;
   const requestWaiters: Array<(value: Record<string, unknown>) => void> = [];
   const consoleWaiters: Array<(value: Record<string, unknown>) => void> = [];
+  const networkInflight = new Set<string>();
+  let lastNetworkActivityAt = Date.now();
+  const networkStateWaiters = new Set<() => void>();
+
+  const notifyNetworkState = () => {
+    lastNetworkActivityAt = Date.now();
+    for (const waiter of [...networkStateWaiters]) waiter();
+  };
 
   const notifyRequest = (evidence: Record<string, unknown>) => {
     if (requestEvidence) return;
@@ -184,13 +192,27 @@ export async function prepareActionVerification(
     if (needsNetworkEvents && event.method === 'Network.requestWillBeSent') {
       const request = (params.request || {}) as Record<string, any>;
       const url = String(request.url || '');
-      if (url.includes(String(spec.requestUrlIncludes || ''))) {
+      const requestId = String(params.requestId || '');
+      const resourceType = String(params.type || '');
+      if (requestId) {
+        if (!['WebSocket', 'EventSource', 'Media'].includes(resourceType)) networkInflight.add(requestId);
+      }
+      notifyNetworkState();
+      if (spec.requestUrlIncludes && url.includes(String(spec.requestUrlIncludes))) {
         notifyRequest({
           method: String(request.method || ''),
           url: cleanUrl(url),
-          resourceType: String(params.type || ''),
+          resourceType,
         });
       }
+    }
+
+    if (needsNetworkEvents && ['Network.loadingFinished', 'Network.loadingFailed'].includes(event.method)) {
+      const requestId = String(params.requestId || '');
+      if (requestId) {
+        networkInflight.delete(requestId);
+      }
+      notifyNetworkState();
     }
 
     if (
@@ -235,6 +257,60 @@ export async function prepareActionVerification(
       );
     }
   }
+
+  const waitForNetworkIdle = async (): Promise<ActionVerificationCheck> => {
+    const kind: ActionVerificationCheck['kind'] = 'network_idle';
+    const startedAt = Date.now();
+    const quietMs = Math.max(100, Math.min(Number(spec.quietMs || 500), 5000));
+
+    return await new Promise<ActionVerificationCheck>((resolve) => {
+      let done = false;
+      let quietTimer: ReturnType<typeof setTimeout> | null = null;
+      let timeoutTimer: ReturnType<typeof setTimeout> | null = null;
+      const finish = (check: ActionVerificationCheck) => {
+        if (done) return;
+        done = true;
+        if (quietTimer) clearTimeout(quietTimer);
+        if (timeoutTimer) clearTimeout(timeoutTimer);
+        networkStateWaiters.delete(onStateChanged);
+        resolve(check);
+      };
+      const evaluate = () => {
+        if (done || networkInflight.size > 0) {
+          if (quietTimer) {
+            clearTimeout(quietTimer);
+            quietTimer = null;
+          }
+          return;
+        }
+        const quietFor = Date.now() - lastNetworkActivityAt;
+        const remaining = Math.max(0, quietMs - quietFor);
+        if (remaining === 0) {
+          finish({
+            kind,
+            ok: true,
+            elapsedMs: Date.now() - startedAt,
+            details: { quietMs, inflight: 0, prearmed: true },
+          });
+          return;
+        }
+        if (quietTimer) clearTimeout(quietTimer);
+        quietTimer = setTimeout(evaluate, remaining);
+      };
+      const onStateChanged = () => evaluate();
+      networkStateWaiters.add(onStateChanged);
+      timeoutTimer = setTimeout(() => {
+        finish({
+          kind,
+          ok: false,
+          elapsedMs: Date.now() - startedAt,
+          reason: 'timeout',
+          details: { quietMs, inflight: networkInflight.size, prearmed: true },
+        });
+      }, timeoutMs);
+      evaluate();
+    });
+  };
 
   const waitForEvidence = async (
     kind: 'request' | 'console',
@@ -323,13 +399,7 @@ export async function prepareActionVerification(
       }
 
       if (spec.networkIdle) {
-        checks.push(
-          waitForBrowserCondition(tabId, {
-            condition: 'network_idle',
-            timeoutMs,
-            quietMs: spec.quietMs,
-          }).then((result) => smartCheck('network_idle', result)),
-        );
+        checks.push(waitForNetworkIdle());
       }
 
       if (spec.requestUrlIncludes) {

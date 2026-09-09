@@ -147,6 +147,7 @@ export interface V3ResolveResult {
   snapshotId: string;
   requested: V3ResolveTarget;
   candidates: V3ResolveCandidate[];
+  recoveredFromStaleEid?: boolean;
 }
 
 export interface V3Actionability {
@@ -192,6 +193,10 @@ export interface V3ActionEvidence {
   afterSnapshotId?: string;
   targetEid?: string;
   actionability?: V3Actionability;
+  attempts?: number;
+  targetResolvedBy?: string[];
+  retryReasons?: string[];
+  domSettled?: { settled: boolean; elapsedMs: number; mutations: number };
   events: V3JournalEvent[];
   verification?: unknown;
   error?: {
@@ -217,5 +222,7 @@ export interface V3RuntimeTabState {
     targetEid?: string;
     afterSnapshotId?: string;
     errorCode?: string;
+    attempts?: number;
+    targetResolvedBy?: string[];
   };
 }

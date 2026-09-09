@@ -2,6 +2,8 @@ import { createErrorResponse, type ToolResult } from '@/common/tool-handler';
 import { TOOL_NAMES } from 'brauzio-shared';
 import { BaseBrowserToolExecutor } from '../base-browser';
 import { actionEngine, type V3ActionRequest } from '../../runtime-v3/action-engine';
+import { waitForDomSettled } from '@/utils/smart-wait';
+import { automationSessions } from '../../runtime-v3/automation-session';
 import { elementRegistry } from '../../runtime-v3/element-registry';
 import { observationService } from '../../runtime-v3/observation-service';
 import type { V3ResolveTarget, V3SnapshotMode } from '../../runtime-v3/types';
@@ -29,6 +31,10 @@ interface ResolveParams {
 interface ActParams extends V3ActionRequest {
   tabId?: number;
   windowId?: number;
+  workflowId?: string;
+  stepId?: string;
+  resumeKey?: string;
+  completeWorkflow?: boolean;
 }
 
 abstract class V3BrowserTool extends BaseBrowserToolExecutor {
@@ -89,9 +95,60 @@ class ActTool extends V3BrowserTool {
 
   async execute(args: ActParams): Promise<ToolResult> {
     if (!args?.action) return createErrorResponse('chrome_act requires action');
+    let workflowStarted = false;
     try {
       const tab = await this.resolveTab(args.tabId, args.windowId);
-      const result = await actionEngine.execute(tab, args);
+      if (args.workflowId) {
+        await automationSessions.begin(args.workflowId, {
+          resumeKey: args.resumeKey,
+          stepId: args.stepId,
+          tabId: tab.id,
+          action: args.action,
+          target: args.target,
+        });
+        workflowStarted = true;
+      }
+
+      let result = await actionEngine.execute(tab, args);
+      const firstErrorCode = String(result.evidence.error?.code || '');
+      const firstErrorReason = String((result.evidence.error?.details as { reason?: unknown } | undefined)?.reason || '');
+      const retryable = !result.evidence.success && (
+        ['STALE_TARGET', 'TARGET_AMBIGUOUS', 'RESOLVE_FAILED', 'NOT_VISIBLE'].includes(firstErrorCode)
+        || (firstErrorCode === 'NOT_ACTIONABLE' && ['not_stable', 'not_visible', 'covered_or_no_pointer_events', 'actionability_timeout'].includes(firstErrorReason))
+      );
+
+      if (retryable) {
+        const settle = await waitForDomSettled(tab.id, 80, Math.min(Number(args.timeoutMs || 1200), 1200));
+        const firstEvidence = result.evidence;
+        const retried = await actionEngine.execute(tab, { ...args, snapshotId: undefined });
+        retried.evidence.attempts = Math.max(2, Number(firstEvidence.attempts || 1) + Number(retried.evidence.attempts || 1));
+        retried.evidence.retryReasons = [
+          ...(firstEvidence.retryReasons || []),
+          `auto_retry:${firstErrorCode || 'pre_action_failure'}`,
+          ...(retried.evidence.retryReasons || []),
+        ];
+        retried.evidence.domSettled = retried.evidence.domSettled || settle;
+        retried.evidence.targetResolvedBy = retried.evidence.targetResolvedBy
+          || retried.resolution?.candidates?.[0]?.reasons
+          || [];
+        result = retried;
+      } else {
+        result.evidence.attempts = result.evidence.attempts || 1;
+        result.evidence.targetResolvedBy = result.evidence.targetResolvedBy
+          || result.resolution?.candidates?.[0]?.reasons
+          || [];
+      }
+
+      const workflow = args.workflowId
+        ? await automationSessions.finishStep(args.workflowId, {
+            stepId: args.stepId,
+            success: result.evidence.success,
+            afterSnapshotId: result.evidence.afterSnapshotId || result.observation?.snapshotId,
+            error: result.evidence.error?.message,
+            completeWorkflow: args.completeWorkflow === true,
+          })
+        : undefined;
+
       const content: ToolResult['content'] = [{
         type: 'text',
         text: JSON.stringify({
@@ -99,11 +156,21 @@ class ActTool extends V3BrowserTool {
           evidence: result.evidence,
           resolution: result.resolution,
           observation: result.observation,
+          workflow,
         }),
       }];
-      if (result.screenshot) content.push({ type: 'image', data: result.screenshot.data, mimeType: result.screenshot.mimeType });
+      if (args.includeScreenshotAfter === true && result.screenshot) {
+        content.push({ type: 'image', data: result.screenshot.data, mimeType: result.screenshot.mimeType });
+      }
       return { content, isError: !result.evidence.success };
     } catch (error) {
+      if (workflowStarted && args.workflowId) {
+        await automationSessions.finishStep(args.workflowId, {
+          stepId: args.stepId,
+          success: false,
+          error: error instanceof Error ? error.message : String(error),
+        }).catch(() => undefined);
+      }
       return createErrorResponse(`chrome_act failed: ${error instanceof Error ? error.message : String(error)}`);
     }
   }

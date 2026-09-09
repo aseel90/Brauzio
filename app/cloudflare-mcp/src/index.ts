@@ -2,15 +2,30 @@ import { Server, type CallToolResult } from '@modelcontextprotocol/server';
 import { createMcpHandler, getMcpAuthContext } from 'agents/mcp/server';
 import { OAuthProvider, type AuthRequest, type OAuthHelpers } from '@cloudflare/workers-oauth-provider';
 import { TOOL_SCHEMAS } from 'brauzio-shared';
-import { BrowserSession } from './browser-session';
+import { BrowserSession } from './browser-session-v31';
 
 export { BrowserSession };
 
-const BRAUZIO_RUNTIME_VERSION = '3.0.7';
-const BRAUZIO_SCHEMA_VERSION = '3.0.7';
+const BRAUZIO_RUNTIME_VERSION = '3.1.0';
+const BRAUZIO_SCHEMA_VERSION = '3.1.0';
 const BRAUZIO_ORIGIN = 'https://brauzio-mcp.aseelsalah266.workers.dev';
 const BRAUZIO_RESOURCE = `${BRAUZIO_ORIGIN}/mcp`;
 const BRAUZIO_SCOPE = 'brauzio:control';
+const BRAUZIO_DIAGNOSTICS_SCHEMA = {
+  name: 'chrome_diagnostics',
+  description: 'Inspect Brauzio extension, Worker, relay, CDP, permissions, runtime state, reconnect metrics, recent tool errors and optional execution traces in one call.',
+  inputSchema: {
+    type: 'object' as const,
+    properties: {
+      includeTraces: { type: 'boolean', description: 'Include recent request-stage traces.' },
+      traceLimit: { type: 'number', description: 'Maximum recent traces to return, 1-40.' },
+      tabId: { type: 'number', description: 'Target tab ID. Defaults to the active tab.' },
+      windowId: { type: 'number', description: 'Target window ID when tabId is omitted.' },
+    },
+    required: [],
+  },
+};
+const BRAUZIO_TOOL_SCHEMAS = [...TOOL_SCHEMAS, BRAUZIO_DIAGNOSTICS_SCHEMA];
 const BRAUZIO_COMPUTER_ACTIONS = [
   'mouse_move',
   'mouse_down',
@@ -78,11 +93,13 @@ async function callBrowserTool(
   callerId: string,
 ): Promise<CallToolResult> {
   const requestUrl = new URL('https://brauzio-browser.internal/call');
+  const traceId = crypto.randomUUID();
+  const relayArgs = { ...args, __brauzioRequestId: traceId };
   const response = await browserStub(env, deviceId).fetch(
     new Request(requestUrl.toString(), {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ name, args, callerId }),
+      body: JSON.stringify({ name, args: relayArgs, callerId, traceId }),
     }),
   );
   const raw = await response.text();
@@ -131,7 +148,7 @@ function createServer(env: Env) {
     { capabilities: { tools: {} } },
   );
 
-  server.setRequestHandler('tools/list', async () => ({ tools: TOOL_SCHEMAS }));
+  server.setRequestHandler('tools/list', async () => ({ tools: BRAUZIO_TOOL_SCHEMAS }));
   server.setRequestHandler('tools/call', async (request, ctx) => {
     const name = request.params.name;
     const args = (request.params.arguments || {}) as Record<string, unknown>;
@@ -201,106 +218,90 @@ async function handleAuthorize(request: Request, env: Env) {
   const form = await request.formData();
   const pairingCode = String(form.get('pairing_code') || '').trim();
   const pairing = await browserStub(env, deviceId).fetch(
-    new Request('https://brauzio-browser.internal/pairing/consume', {
+    new Request('https://brauzio-browser.internal/pairing/confirm', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({ code: pairingCode }),
     }),
   );
-  const pairingBody = (await pairing.json().catch(() => ({}))) as {
+  const pairingResult = (await pairing.json().catch(() => ({}))) as {
     ok?: boolean;
-    reason?: string;
+    active?: boolean;
+    error?: string;
   };
-  if (!pairing.ok || pairingBody.ok !== true) {
-    workerLog('PAIRING_REJECTED', { deviceId, reason: pairingBody.reason || `http_${pairing.status}` });
-    const message = pairingBody.reason || 'رمز الاقتران غير صالح أو منتهي.';
-    const body = `<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>تعذر الربط</title><style>body{font-family:system-ui;background:#f7f7f8;color:#111;margin:0;padding:32px}.card{max-width:520px;margin:auto;background:#fff;border:1px solid #ddd;border-radius:18px;padding:24px}.error{color:#b42318}a{color:#111}</style></head><body><div class="card"><h1 class="error">تعذر تفويض Brauzio</h1><p>${message}</p><p><a href="${new URL(request.url).pathname}${new URL(request.url).search}">العودة والمحاولة مجددًا</a></p></div></body></html>`;
-    return new Response(body, {
-      status: 200,
-      headers: {
-        'content-type': 'text/html; charset=utf-8',
-        'cache-control': 'no-store',
-        'content-security-policy': `default-src 'none'; style-src 'unsafe-inline'; base-uri 'none'; frame-ancestors 'none'`,
-      },
-    });
+  if (!pairing.ok || pairingResult.ok !== true || pairingResult.active !== true) {
+    const body = `<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>فشل الربط</title></head><body style="font-family:system-ui;padding:32px"><h1>تعذر ربط Brauzio</h1><p>${pairingResult.error || 'رمز الاقتران غير صحيح أو انتهت صلاحيته.'}</p><p><a href="${new URL('/authorize', BRAUZIO_ORIGIN)}">حاول مرة أخرى</a></p></body></html>`;
+    return new Response(body, { status: 401, headers: { 'content-type': 'text/html; charset=utf-8', 'cache-control': 'no-store' } });
   }
 
-  const grantedScopes = oauthRequest.scope.filter((scope) => scope === BRAUZIO_SCOPE);
-  const oauthUserId = await oauthUserIdForDevice(deviceId);
-  const { redirectTo } = await env.OAUTH_PROVIDER.completeAuthorization({
+  const complete = await env.OAUTH_PROVIDER.completeAuthorization({
     request: oauthRequest,
-    userId: oauthUserId,
-    metadata: { clientName, deviceId },
-    scope: grantedScopes,
+    userId: await oauthUserIdForDevice(deviceId),
+    metadata: {
+      label: `Brauzio device ${deviceId}`,
+      pairedAt: new Date().toISOString(),
+    },
+    scope: oauthRequest.scope,
     props: { deviceId, authorizedAt: Date.now() } satisfies BrauzioAuthProps,
-    revokeExistingGrants: false,
   });
-  return Response.redirect(redirectTo, 302);
+
+  workerLog('OAUTH_APPROVED', { deviceId, clientName });
+  return Response.redirect(complete.redirectTo, 302);
 }
 
-const defaultHandler = {
-  async fetch(request: Request, env: Env): Promise<Response> {
-    const url = new URL(request.url);
-    if (url.pathname === '/health') {
-      return Response.json({
-        ok: true,
-        service: 'brauzio-mcp',
-        version: BRAUZIO_RUNTIME_VERSION,
-        schemaVersion: BRAUZIO_SCHEMA_VERSION,
-        toolCount: TOOL_SCHEMAS.length,
-      });
-    }
-    if (url.pathname === '/ws') {
-      const deviceId = deviceIdFromRequest(request, env);
-      const stub = browserStub(env, deviceId);
-      const target = new URL(request.url);
-      target.protocol = 'https:';
-      target.hostname = 'brauzio-browser.internal';
-      target.pathname = '/ws';
-      return stub.fetch(new Request(target.toString(), request));
-    }
-
-    if (url.pathname === '/authorize') return await handleAuthorize(request, env);
-    if (url.pathname === '/browser-pairing') {
-      if (request.method !== 'GET' && request.method !== 'HEAD') {
-        return Response.json({ error: 'Create pairing codes from the Brauzio extension', code: 'PAIRING_CREATE_EXTENSION_ONLY' }, { status: 405, headers: { allow: 'GET, HEAD' } });
-      }
-      return await browserStub(env, deviceIdFromRequest(request, env)).fetch(new Request('https://brauzio-browser.internal/pairing/status'));
-    }
-    if (url.pathname === '/browser-status') {
-      return await browserStub(env, deviceIdFromRequest(request, env)).fetch(new Request('https://brauzio-browser.internal/status'));
-    }
-    return new Response('Not found', { status: 404 });
-  },
-};
-
-export default new OAuthProvider<Env>({
+const oauthProvider = new OAuthProvider<Env>({
   apiRoute: '/mcp',
   apiHandler: mcpApiHandler,
-  defaultHandler,
+  defaultHandler: {
+    async fetch(request: Request, env: Env): Promise<Response> {
+      const url = new URL(request.url);
+
+      if (url.pathname === '/health') {
+        return Response.json({
+          ok: true,
+          service: 'Brauzio',
+          version: BRAUZIO_RUNTIME_VERSION,
+          schemaVersion: BRAUZIO_SCHEMA_VERSION,
+          toolCount: BRAUZIO_TOOL_SCHEMAS.length,
+          auth: 'oauth2',
+          runtime: 'cloudflare-workers',
+          transport: 'streamable-http+mcp+websocket-relay',
+          persistence: {
+            watches: true,
+            events: true,
+          },
+          javascript: {
+            pageExecution: true,
+            protocol: 'brauzio-js-runtime-v3',
+          },
+        });
+      }
+
+      if (url.pathname === '/ws') {
+        return browserStub(env, deviceIdFromRequest(request, env)).fetch(request);
+      }
+
+      if (url.pathname === '/authorize') {
+        return handleAuthorize(request, env);
+      }
+
+      if (url.pathname === '/robots.txt') {
+        return new Response('User-agent: *\nDisallow: /\n', {
+          headers: { 'content-type': 'text/plain; charset=utf-8' },
+        });
+      }
+
+      return new Response('Brauzio MCP', {
+        status: 404,
+        headers: { 'content-type': 'text/plain; charset=utf-8' },
+      });
+    },
+  },
   authorizeEndpoint: '/authorize',
-  tokenEndpoint: '/oauth/token',
-  clientRegistrationEndpoint: '/oauth/register',
-  scopesSupported: [BRAUZIO_SCOPE],
-  allowPlainPKCE: false,
-  clientIdMetadataDocumentEnabled: true,
-  resourceMetadata: {
-    resource: BRAUZIO_RESOURCE,
-    authorization_servers: [BRAUZIO_ORIGIN],
-    scopes_supported: [BRAUZIO_SCOPE],
-    resource_name: 'Brauzio Chrome Control',
-  },
-  tokenExchangeCallback: async (options) => {
-    workerLog('OAUTH_TOKEN_EXCHANGE', { grantType: options.grantType, clientId: options.clientId, userId: options.userId });
-  },
-  onError({ code, description, status, internal, request }) {
-    workerLog('OAUTH_ERROR', {
-      code,
-      status,
-      description,
-      category: internal?.category || '',
-      reason: internal?.reason || '',
-      path: request ? new URL(request.url).pathname : '',
-    });
-  },
+  tokenEndpoint: '/token',
+  clientRegistrationEndpoint: '/register',
+  accessTokenTTL: 60 * 60,
+  refreshTokenTTL: 60 * 60 * 24 * 30,
 });
+
+export default oauthProvider;

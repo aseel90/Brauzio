@@ -184,9 +184,56 @@ class ElementRegistry {
       }
 
       if (weight === 0) continue;
-      const normalizedScore = Math.max(0, Math.min(1, score / weight));
+      let normalizedScore = Math.max(0, Math.min(1, score / weight));
+
+      // Prefer candidates that are mechanically usable without letting UI state
+      // overpower the explicit target fields. These small bonuses make ties more
+      // deterministic on dynamic pages with repeated labels.
+      if (element.visible) {
+        normalizedScore += 0.05;
+        reasons.push('visible');
+      } else {
+        normalizedScore -= 0.08;
+      }
+      if (element.enabled) {
+        normalizedScore += 0.025;
+        reasons.push('enabled');
+      } else {
+        normalizedScore -= 0.08;
+      }
+      if (element.clickable) {
+        normalizedScore += 0.025;
+        reasons.push('clickable');
+      }
+      if (element.focusable) normalizedScore += 0.01;
+      if (element.editable) normalizedScore += 0.01;
+
+      if (historical) {
+        reasons.unshift('historical-fingerprint');
+        const historicalFingerprint = fingerprintSignature(historical.fingerprint);
+        const candidateFingerprint = fingerprintSignature(element.fingerprint);
+        if (historicalFingerprint === candidateFingerprint) {
+          normalizedScore += 0.12;
+          reasons.unshift('fingerprint-exact');
+        }
+        if (historical.signature === element.signature) {
+          normalizedScore += 0.06;
+          reasons.unshift('signature-stable');
+        }
+        if (historical.box && element.box) {
+          const oldX = historical.box.x + historical.box.width / 2;
+          const oldY = historical.box.y + historical.box.height / 2;
+          const newX = element.box.x + element.box.width / 2;
+          const newY = element.box.y + element.box.height / 2;
+          const distance = Math.hypot(newX - oldX, newY - oldY);
+          const proximityBonus = Math.max(0, 0.06 * (1 - Math.min(distance, 600) / 600));
+          if (proximityBonus >= 0.01) reasons.push('historical-position');
+          normalizedScore += proximityBonus;
+        }
+      }
+
+      normalizedScore = Math.max(0, Math.min(1, normalizedScore));
       if (normalizedScore >= (options.minScore ?? 0.32)) {
-        if (historical) reasons.unshift('historical-fingerprint');
         candidates.push({ eid: element.eid, score: Number(normalizedScore.toFixed(4)), reasons, element });
       }
     }
@@ -197,18 +244,23 @@ class ElementRegistry {
     const best = sliced[0]?.score || 0;
     const second = sliced[1]?.score || 0;
     const unique = sliced.length > 0 && best >= 0.78 && best - second >= 0.12;
+    const recoveredFromStaleEid = stale && unique;
+    if (recoveredFromStaleEid && sliced[0] && !sliced[0].reasons.includes('stale-eid-recovered')) {
+      sliced[0].reasons.unshift('stale-eid-recovered');
+    }
 
     return {
-      status: stale
-        ? 'stale_target'
-        : sliced.length === 0
-          ? 'not_found'
-          : unique
-            ? 'matched'
+      status: sliced.length === 0
+        ? (stale ? 'stale_target' : 'not_found')
+        : unique
+          ? 'matched'
+          : stale
+            ? 'stale_target'
             : 'ambiguous',
       snapshotId: snapshot.snapshotId,
       requested: target,
       candidates: sliced,
+      recoveredFromStaleEid,
     };
   }
 }

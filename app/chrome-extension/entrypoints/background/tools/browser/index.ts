@@ -3,6 +3,7 @@ export { windowTool } from './window';
 export { screenshotTool } from './screenshot';
 export { liveViewTool } from './live-view';
 export { deviceModeTool } from './device-mode';
+export { diagnosticsTool } from './diagnostics';
 export { webFetcherTool, getInteractiveElementsTool } from './web-fetcher';
 export { clickTool, fillTool } from './interaction';
 export { elementPickerTool } from './element-picker';
