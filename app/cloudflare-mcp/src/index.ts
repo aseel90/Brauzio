@@ -11,6 +11,21 @@ const BRAUZIO_SCHEMA_VERSION = '3.0.7';
 const BRAUZIO_ORIGIN = 'https://brauzio-mcp.aseelsalah266.workers.dev';
 const BRAUZIO_RESOURCE = `${BRAUZIO_ORIGIN}/mcp`;
 const BRAUZIO_SCOPE = 'brauzio:control';
+const BRAUZIO_DIAGNOSTICS_SCHEMA = {
+  name: 'chrome_diagnostics',
+  description: 'Inspect Brauzio extension, Worker, relay, CDP, permissions, runtime state, reconnect metrics, recent tool errors and optional execution traces in one call.',
+  inputSchema: {
+    type: 'object' as const,
+    properties: {
+      includeTraces: { type: 'boolean', description: 'Include recent request-stage traces.' },
+      traceLimit: { type: 'number', description: 'Maximum recent traces to return, 1-40.' },
+      tabId: { type: 'number', description: 'Target tab ID. Defaults to the active tab.' },
+      windowId: { type: 'number', description: 'Target window ID when tabId is omitted.' },
+    },
+    required: [],
+  },
+};
+const BRAUZIO_TOOL_SCHEMAS = [...TOOL_SCHEMAS, BRAUZIO_DIAGNOSTICS_SCHEMA];
 const BRAUZIO_COMPUTER_ACTIONS = [
   'mouse_move',
   'mouse_down',
@@ -131,7 +146,7 @@ function createServer(env: Env) {
     { capabilities: { tools: {} } },
   );
 
-  server.setRequestHandler('tools/list', async () => ({ tools: TOOL_SCHEMAS }));
+  server.setRequestHandler('tools/list', async () => ({ tools: BRAUZIO_TOOL_SCHEMAS }));
   server.setRequestHandler('tools/call', async (request, ctx) => {
     const name = request.params.name;
     const args = (request.params.arguments || {}) as Record<string, unknown>;
@@ -247,7 +262,7 @@ const defaultHandler = {
         service: 'brauzio-mcp',
         version: BRAUZIO_RUNTIME_VERSION,
         schemaVersion: BRAUZIO_SCHEMA_VERSION,
-        toolCount: TOOL_SCHEMAS.length,
+        toolCount: BRAUZIO_TOOL_SCHEMAS.length,
       });
     }
     if (url.pathname === '/ws') {
