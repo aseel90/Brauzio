@@ -74,19 +74,6 @@ jobs:
           text = text.replace("const BRAUZIO_SCHEMA_VERSION = '3.0.5';", "const BRAUZIO_SCHEMA_VERSION = '3.0.6';")
           worker.write_text(text, encoding='utf-8')
 
-          ci = Path('.github/workflows/brauzio-ci.yml')
-          text = ci.read_text(encoding='utf-8')
-          text = text.replace("          grep -Fq 'buildExecutionSource(code)' \"$JS\"\n          grep -Fq 'functionBody = `return (${userCode});`' \"$JS\"", "          grep -Fq \"BRAUZIO_JS_RUNTIME_V3\" \"$JS\"\n          grep -Fq \"buildRuntimeEvaluatorSource(code)\" \"$JS\"")
-          text = text.replace("          echo 'Runtime regression guards passed: JS result propagation + HTML5 drag fast path.'", "          echo 'Runtime regression guards passed: page-side JS evaluator + HTML5 drag fast path.'")
-          text = text.replace("          assert manifest.get('default_locale') == 'ar', manifest.get('default_locale')", "          assert manifest.get('version') == '3.0.6', manifest.get('version')\n          assert manifest.get('default_locale') == 'ar', manifest.get('default_locale')")
-          text = text.replace("          print('Packaged manifest verified: Brauzio identity, Arabic locale, custom icons, no Chinese locales.')", "          background = (root / 'background.js').read_text(encoding='utf-8')\n          assert 'BRAUZIO_JS_RUNTIME_V3' in background, 'JS runtime V3 marker missing from packaged background'\n          assert 'BRAUZIO_BUILD_3_0_6' in background, '3.0.6 build marker missing from packaged background'\n          print('Packaged manifest verified: Brauzio 3.0.6 + runtime/build markers + Arabic locale.')")
-          text = text.replace('# Runtime hardening gate: Brauzio 3.0.5', '# Runtime hardening gate: Brauzio 3.0.6')
-          text = text.replace('# Publish trigger: Brauzio 3.0.5', '# Publish trigger: Brauzio 3.0.6')
-          ci.write_text(text, encoding='utf-8')
-
-          deploy = Path('.github/workflows/deploy-cloudflare.yml')
-          text = deploy.read_text(encoding='utf-8').replace('# Brauzio 3.0.5 runtime deployment trigger', '# Brauzio 3.0.6 runtime deployment trigger')
-          deploy.write_text(text, encoding='utf-8')
           PY
 
       - name: Setup Node
@@ -166,6 +153,6 @@ jobs:
           set -euo pipefail
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add app/chrome-extension app/cloudflare-mcp/src/index.ts .github/workflows/brauzio-ci.yml .github/workflows/deploy-cloudflare.yml
+          git add app/chrome-extension app/cloudflare-mcp/src/index.ts
           git commit -m 'fix: Brauzio 3.0.6 runtime integrity and version diagnostics'
           git push
