@@ -2,6 +2,7 @@ import { createErrorResponse, type ToolResult } from '@/common/tool-handler';
 import { TOOL_NAMES } from 'brauzio-shared';
 import { BaseBrowserToolExecutor } from '../base-browser';
 import { actionEngine, type V3ActionRequest } from '../../runtime-v3/action-engine';
+import { waitForDomSettled } from '@/utils/smart-wait';
 import { elementRegistry } from '../../runtime-v3/element-registry';
 import { observationService } from '../../runtime-v3/observation-service';
 import type { V3ResolveTarget, V3SnapshotMode } from '../../runtime-v3/types';
@@ -91,7 +92,36 @@ class ActTool extends V3BrowserTool {
     if (!args?.action) return createErrorResponse('chrome_act requires action');
     try {
       const tab = await this.resolveTab(args.tabId, args.windowId);
-      const result = await actionEngine.execute(tab, args);
+      let result = await actionEngine.execute(tab, args);
+      const firstErrorCode = String(result.evidence.error?.code || '');
+      const firstErrorReason = String((result.evidence.error?.details as { reason?: unknown } | undefined)?.reason || '');
+      const retryable = !result.evidence.success && (
+        ['STALE_TARGET', 'TARGET_AMBIGUOUS', 'RESOLVE_FAILED', 'NOT_VISIBLE'].includes(firstErrorCode)
+        || (firstErrorCode === 'NOT_ACTIONABLE' && ['not_stable', 'not_visible', 'covered_or_no_pointer_events', 'actionability_timeout'].includes(firstErrorReason))
+      );
+
+      if (retryable) {
+        const settle = await waitForDomSettled(tab.id, 80, Math.min(Number(args.timeoutMs || 1200), 1200));
+        const firstEvidence = result.evidence;
+        const retried = await actionEngine.execute(tab, { ...args, snapshotId: undefined });
+        retried.evidence.attempts = Math.max(2, Number(firstEvidence.attempts || 1) + Number(retried.evidence.attempts || 1));
+        retried.evidence.retryReasons = [
+          ...(firstEvidence.retryReasons || []),
+          `auto_retry:${firstErrorCode || 'pre_action_failure'}`,
+          ...(retried.evidence.retryReasons || []),
+        ];
+        retried.evidence.domSettled = retried.evidence.domSettled || settle;
+        retried.evidence.targetResolvedBy = retried.evidence.targetResolvedBy
+          || retried.resolution?.candidates?.[0]?.reasons
+          || [];
+        result = retried;
+      } else {
+        result.evidence.attempts = result.evidence.attempts || 1;
+        result.evidence.targetResolvedBy = result.evidence.targetResolvedBy
+          || result.resolution?.candidates?.[0]?.reasons
+          || [];
+      }
+
       const content: ToolResult['content'] = [{
         type: 'text',
         text: JSON.stringify({
@@ -101,7 +131,9 @@ class ActTool extends V3BrowserTool {
           observation: result.observation,
         }),
       }];
-      if (result.screenshot) content.push({ type: 'image', data: result.screenshot.data, mimeType: result.screenshot.mimeType });
+      if (args.includeScreenshotAfter === true && result.screenshot) {
+        content.push({ type: 'image', data: result.screenshot.data, mimeType: result.screenshot.mimeType });
+      }
       return { content, isError: !result.evidence.success };
     } catch (error) {
       return createErrorResponse(`chrome_act failed: ${error instanceof Error ? error.message : String(error)}`);
