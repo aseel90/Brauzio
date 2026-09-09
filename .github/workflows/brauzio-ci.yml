@@ -105,7 +105,7 @@ jobs:
           root = pathlib.Path(sys.argv[1])
           manifest = json.loads((root / 'manifest.json').read_text(encoding='utf-8'))
 
-          assert manifest.get('version') == '3.0.6', manifest.get('version')
+          assert manifest.get('version') == '3.0.7', manifest.get('version')
           assert manifest.get('default_locale') == 'ar', manifest.get('default_locale')
           assert manifest.get('action', {}).get('default_title') == 'Brauzio', manifest.get('action')
           assert (root / '_locales' / 'ar' / 'messages.json').is_file(), 'Arabic locale missing'
@@ -116,8 +116,8 @@ jobs:
 
           background = (root / 'background.js').read_text(encoding='utf-8')
           assert 'BRAUZIO_JS_RUNTIME_V3' in background, 'JS runtime V3 marker missing from packaged background'
-          assert 'BRAUZIO_BUILD_3_0_6' in background, '3.0.6 build marker missing from packaged background'
-          print('Packaged manifest verified: Brauzio 3.0.6 + runtime/build markers + Arabic locale.')
+          assert 'BRAUZIO_BUILD_3_0_7' in background, '3.0.7 build marker missing from packaged background'
+          print('Packaged manifest verified: Brauzio 3.0.7 + runtime/build markers + Arabic locale.')
           PY
 
       - name: Upload installable Brauzio ZIP
@@ -152,7 +152,7 @@ jobs:
           git push
 
 # Current release line: Brauzio 3.0.x
-# Runtime hardening gate: Brauzio 3.0.6
-# Publish trigger: Brauzio 3.0.6
+# Runtime hardening gate: Brauzio 3.0.7
+# Publish trigger: Brauzio 3.0.7
 
-# Final validation trigger: PR19 3.0.6
+# Final validation trigger: 3.0.7 screenshot pipeline
