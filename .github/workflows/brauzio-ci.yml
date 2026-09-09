@@ -148,3 +148,4 @@ jobs:
           git push
 
 # Current release line: Brauzio 3.0.x
+# Runtime hardening gate: Brauzio 3.0.5
