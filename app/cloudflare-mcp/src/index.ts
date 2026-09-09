@@ -2,7 +2,7 @@ import { Server, type CallToolResult } from '@modelcontextprotocol/server';
 import { createMcpHandler, getMcpAuthContext } from 'agents/mcp/server';
 import { OAuthProvider, type AuthRequest, type OAuthHelpers } from '@cloudflare/workers-oauth-provider';
 import { TOOL_SCHEMAS } from 'brauzio-shared';
-import { BrowserSession } from './browser-session';
+import { BrowserSession } from './browser-session-v31';
 
 export { BrowserSession };
 
@@ -93,11 +93,13 @@ async function callBrowserTool(
   callerId: string,
 ): Promise<CallToolResult> {
   const requestUrl = new URL('https://brauzio-browser.internal/call');
+  const traceId = crypto.randomUUID();
+  const relayArgs = { ...args, __brauzioRequestId: traceId };
   const response = await browserStub(env, deviceId).fetch(
     new Request(requestUrl.toString(), {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ name, args, callerId }),
+      body: JSON.stringify({ name, args: relayArgs, callerId, traceId }),
     }),
   );
   const raw = await response.text();
