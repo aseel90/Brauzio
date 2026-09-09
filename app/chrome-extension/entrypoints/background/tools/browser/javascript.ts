@@ -69,6 +69,8 @@ interface JavaScriptToolResult {
   success: boolean;
   tabId: number;
   engine: ExecutionEngine;
+  extensionVersion?: string;
+  runtime?: string;
   result?: string;
   truncated?: boolean;
   redacted?: boolean;
@@ -146,31 +148,24 @@ function isDebuggerConflictError(error: unknown): boolean {
 }
 
 /**
- * Build an async execution wrapper while preserving expression return values.
- * Expression-only input such as `2 + 2`, `document.title`, or `await fetch(...)`
- * returns its value. Statement blocks keep explicit-return semantics.
+ * Build the evaluator entirely as page-side JavaScript source.
+ * Chrome parses this source natively inside Runtime.evaluate, avoiding
+ * async-function constructor changes introduced by extension transpilation.
  */
-function canCompileAsExpression(code: string): boolean {
-  try {
-    const AsyncFunction = Object.getPrototypeOf(async function () {}).constructor;
-    new AsyncFunction(`return (${code});`);
-    return true;
-  } catch {
-    return false;
-  }
-}
+const BRAUZIO_JS_RUNTIME = 'BRAUZIO_JS_RUNTIME_V3';
 
-function buildExecutionSource(code: string): { expression: string; functionBody: string } {
-  if (canCompileAsExpression(code)) {
-    return {
-      expression: `(async () => (${code}))()`,
-      functionBody: `return (${code});`,
-    };
-  }
-  return {
-    expression: `(async () => {\n${code}\n})()`,
-    functionBody: code,
-  };
+function buildRuntimeEvaluatorSource(code: string): string {
+  const encodedCode = JSON.stringify(code);
+  return `(async (userCode) => {
+    const AsyncFunction = Object.getPrototypeOf(async function () {}).constructor;
+    let fn;
+    try {
+      fn = new AsyncFunction('return (' + userCode + ');');
+    } catch {
+      fn = new AsyncFunction(userCode);
+    }
+    return await fn();
+  })(${encodedCode})`;
 }
 
 // ============================================================================
@@ -245,7 +240,7 @@ async function executeViaCdp(
   options: ExecutionOptions,
 ): Promise<ExecutionResult> {
   try {
-    const { expression } = buildExecutionSource(code);
+    const expression = buildRuntimeEvaluatorSource(code);
 
     const response = await withTimeout(
       cdpSessionManager.withSession(tabId, CDP_SESSION_KEY, async () => {
@@ -515,6 +510,8 @@ class JavaScriptTool extends BaseBrowserToolExecutor {
       success: true,
       tabId,
       engine: result.engine,
+      extensionVersion: chrome.runtime.getManifest().version,
+      runtime: BRAUZIO_JS_RUNTIME,
       result: result.output,
       truncated: result.truncated || undefined,
       redacted: result.redacted || undefined,
@@ -538,6 +535,8 @@ class JavaScriptTool extends BaseBrowserToolExecutor {
       success: false,
       tabId,
       engine: result.engine,
+      extensionVersion: chrome.runtime.getManifest().version,
+      runtime: BRAUZIO_JS_RUNTIME,
       error: result.error,
       warnings: warnings?.length ? warnings : undefined,
       metrics: { elapsedMs: Math.round(performance.now() - startTime) },

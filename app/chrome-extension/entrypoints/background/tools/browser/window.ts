@@ -28,6 +28,10 @@ class WindowTool extends BaseBrowserToolExecutor {
       });
 
       const result = {
+        runtime: {
+          extensionVersion: chrome.runtime.getManifest().version,
+          buildId: 'BRAUZIO_BUILD_3_0_6',
+        },
         windowCount: windows.length,
         tabCount: tabCount,
         windows: structuredWindows,
