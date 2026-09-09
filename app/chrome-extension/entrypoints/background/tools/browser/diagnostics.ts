@@ -62,6 +62,14 @@ async function workerHealth(relayUrl: string): Promise<Record<string, unknown>> 
   }
 }
 
+async function runtimeMessage<T = unknown>(type: string): Promise<T | undefined> {
+  try {
+    return await chrome.runtime.sendMessage({ type }) as T;
+  } catch {
+    return undefined;
+  }
+}
+
 class DiagnosticsTool extends BaseBrowserToolExecutor {
   name = 'chrome_diagnostics';
 
@@ -82,7 +90,11 @@ class DiagnosticsTool extends BaseBrowserToolExecutor {
       const state = tabId !== undefined ? await runtimeState.get(tabId) : undefined;
       const workflows = await automationSessions.list();
       const relay = relayMetrics.snapshot();
-      const health = await workerHealth(relayUrl);
+      const [health, relayStatusResponse, relayDiagnosticResponse] = await Promise.all([
+        workerHealth(relayUrl),
+        runtimeMessage<{ success?: boolean; status?: unknown }>('brauzio_relay_get_status'),
+        runtimeMessage<{ success?: boolean; report?: unknown; error?: string }>('brauzio_diagnostics_run'),
+      ]);
       const cdpSessions = cdpRouter.getSessionSnapshot(tabId);
       const report = {
         success: true,
@@ -97,6 +109,9 @@ class DiagnosticsTool extends BaseBrowserToolExecutor {
           configured: Boolean(relayUrl),
           deviceIdConfigured: Boolean(storage[STORAGE_KEYS.DEVICE_ID]),
           autoConnect: storage[STORAGE_KEYS.AUTO_CONNECT] !== false,
+          status: relayStatusResponse?.status,
+          internalDiagnostics: relayDiagnosticResponse?.report,
+          internalDiagnosticsError: relayDiagnosticResponse?.error,
           ...relay,
         },
         browser: {
