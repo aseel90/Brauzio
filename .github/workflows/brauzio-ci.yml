@@ -65,6 +65,18 @@ jobs:
       - name: Build Brauzio Cloud MCP
         run: pnpm --filter brauzio-cloud-mcp build
 
+      - name: Runtime regression guards
+        shell: bash
+        run: |
+          set -euo pipefail
+          JS='app/chrome-extension/entrypoints/background/tools/browser/javascript.ts'
+          ACT='app/chrome-extension/entrypoints/background/runtime-v3/action-engine.ts'
+          grep -Fq 'buildExecutionSource(code)' "$JS"
+          grep -Fq 'functionBody = `return (${userCode});`' "$JS"
+          grep -Fq 'isNativeHtml5Draggable' "$ACT"
+          grep -Fq 'const steps = 4;' "$ACT"
+          echo 'Runtime regression guards passed: JS result propagation + HTML5 drag fast path.'
+
       - name: Build Chrome extension
         run: pnpm --filter brauzio-extension build
 
