@@ -1,58 +1,61 @@
-import { createErrorResponse, ToolResult } from '@/common/tool-handler';
-import { BaseBrowserToolExecutor } from '../base-browser';
-import { TOOL_NAMES } from 'brauzio-shared';
+import { z } from 'zod';
+import { BrowserTool } from '../browser-tool';
+import { ToolResult } from '../types';
 
-class WindowTool extends BaseBrowserToolExecutor {
-  name = TOOL_NAMES.BROWSER.GET_WINDOWS_AND_TABS;
-  async execute(): Promise<ToolResult> {
-    try {
-      const windows = await chrome.windows.getAll({ populate: true });
-      let tabCount = 0;
+const WindowSchema = z.object({
+  action: z.enum(['list', 'activate', 'close']).default('list'),
+  windowId: z.number().optional(),
+});
 
-      const structuredWindows = windows.map((window) => {
-        const tabs =
-          window.tabs?.map((tab) => {
-            tabCount++;
-            return {
-              tabId: tab.id || 0,
-              url: tab.url || '',
-              title: tab.title || '',
-              active: tab.active || false,
-            };
-          }) || [];
+type WindowParams = z.infer<typeof WindowSchema>;
 
-        return {
-          windowId: window.id || 0,
-          tabs: tabs,
-        };
-      });
+export class WindowTool extends BrowserTool<WindowParams> {
+  name = 'get_windows_and_tabs' as const;
+  description = 'List all Chrome windows and tabs, activate a window, or close a window.';
+  schema = WindowSchema;
 
-      const result = {
-        runtime: {
-          extensionVersion: chrome.runtime.getManifest().version,
-          buildId: 'BRAUZIO_BUILD_3_1_0',
-        },
-        windowCount: windows.length,
-        tabCount: tabCount,
-        windows: structuredWindows,
-      };
+  async execute(args: WindowParams): Promise<ToolResult> {
+    const params = WindowSchema.parse(args);
 
-      return {
-        content: [
-          {
-            type: 'text',
-            text: JSON.stringify(result),
-          },
-        ],
-        isError: false,
-      };
-    } catch (error) {
-      console.error('Error in WindowTool.execute:', error);
-      return createErrorResponse(
-        `Error getting windows and tabs information: ${error instanceof Error ? error.message : String(error)}`,
-      );
+    if (params.action === 'activate') {
+      if (typeof params.windowId !== 'number') {
+        return { success: false, message: 'windowId is required for activate' };
+      }
+      await chrome.windows.update(params.windowId, { focused: true });
+      return { success: true, message: `Activated window ${params.windowId}` };
     }
+
+    if (params.action === 'close') {
+      if (typeof params.windowId !== 'number') {
+        return { success: false, message: 'windowId is required for close' };
+      }
+      await chrome.windows.remove(params.windowId);
+      return { success: true, message: `Closed window ${params.windowId}` };
+    }
+
+    const windows = await chrome.windows.getAll({ populate: true });
+    return {
+      success: true,
+      extensionVersion: chrome.runtime.getManifest().version,
+      buildId: 'BRAUZIO_BUILD_3_1_1',
+      windowCount: windows.length,
+      tabCount: windows.reduce((count, win) => count + (win.tabs?.length || 0), 0),
+      windows: windows.map((win) => ({
+        windowId: win.id,
+        focused: win.focused,
+        incognito: win.incognito,
+        type: win.type,
+        state: win.state,
+        tabs: (win.tabs || []).map((tab) => ({
+          tabId: tab.id,
+          windowId: tab.windowId,
+          active: tab.active,
+          pinned: tab.pinned,
+          title: tab.title,
+          url: tab.url,
+          status: tab.status,
+        })),
+      })),
+    };
   }
 }
-
-export const windowTool = new WindowTool();
