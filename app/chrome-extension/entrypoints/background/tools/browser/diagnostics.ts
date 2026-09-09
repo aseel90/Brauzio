@@ -1,6 +1,7 @@
 import { createErrorResponse, type ToolResult } from '@/common/tool-handler';
 import { cdpRouter } from '@/utils/cdp-router';
 import { relayMetrics } from '../../relay-metrics';
+import { automationSessions } from '../../runtime-v3/automation-session';
 import { runtimeState } from '../../runtime-v3/runtime-state';
 import { toolTrace } from '../../runtime-v3/tool-trace';
 import { BaseBrowserToolExecutor } from '../base-browser';
@@ -79,6 +80,7 @@ class DiagnosticsTool extends BaseBrowserToolExecutor {
       const tab = explicit || await this.getActiveTabOrThrowInWindow(args.windowId).catch(() => undefined);
       const tabId = typeof tab?.id === 'number' ? tab.id : undefined;
       const state = tabId !== undefined ? await runtimeState.get(tabId) : undefined;
+      const workflows = await automationSessions.list();
       const relay = relayMetrics.snapshot();
       const health = await workerHealth(relayUrl);
       const cdpSessions = cdpRouter.getSessionSnapshot(tabId);
@@ -114,6 +116,11 @@ class DiagnosticsTool extends BaseBrowserToolExecutor {
           attachedCount: cdpSessions.filter((session) => session.attachedByUs).length,
         },
         runtimeState: state || null,
+        automation: {
+          sessionCount: workflows.length,
+          active: workflows.filter((workflow) => workflow.status === 'running'),
+          recent: workflows.slice(0, 10),
+        },
         traceSummary: toolTrace.summary(),
         traces: args.includeTraces === true
           ? toolTrace.list(Math.max(1, Math.min(Number(args.traceLimit || 12), 40)))
