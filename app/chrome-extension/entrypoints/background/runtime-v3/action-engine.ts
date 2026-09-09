@@ -418,20 +418,48 @@ class ActionEngine {
     if ((sourceElement.sessionId || '') !== (targetElement.sessionId || '')) {
       throw this.error('CROSS_TARGET_DRAG_UNSUPPORTED', 'Drag source and target are in different CDP targets');
     }
-    const a = await actionabilityService.inspect(tabId, sourceElement, { scroll: true });
-    const b = await actionabilityService.inspect(tabId, targetElement, { scroll: true });
+    // Standards-based draggable elements use DragEvent/DataTransfer directly.
+    // Keep physical pointer drag only for sliders, canvases and custom widgets.
+    if (await this.isNativeHtml5Draggable(tabId, sourceElement)) {
+      await this.dispatchHtml5Drag(tabId, sourceElement, targetElement);
+      return;
+    }
+    const a = await actionabilityService.inspect(tabId, sourceElement, { scroll: true, stableMs: 40 });
+    const b = await actionabilityService.inspect(tabId, targetElement, { scroll: true, stableMs: 40 });
     if (!a.center || !b.center) throw this.error('NOT_ACTIONABLE', 'Drag source or target has no visible center');
     const send = (params: object) => this.send(tabId, sourceElement, 'Input.dispatchMouseEvent', params);
     await send({ type: 'mouseMoved', x: a.center.x, y: a.center.y });
     await send({ type: 'mousePressed', x: a.center.x, y: a.center.y, button: 'left', buttons: 1, clickCount: 1 });
-    const steps = 8;
+    const steps = 4;
     for (let i = 1; i <= steps; i += 1) {
       const t = i / steps;
       await send({ type: 'mouseMoved', x: a.center.x + (b.center.x - a.center.x) * t, y: a.center.y + (b.center.y - a.center.y) * t, button: 'left', buttons: 1 });
     }
     await send({ type: 'mouseReleased', x: b.center.x, y: b.center.y, button: 'left', buttons: 0, clickCount: 1 });
-    await this.dispatchHtml5Drag(tabId, sourceElement, targetElement);
   }
+
+  private async isNativeHtml5Draggable(tabId: number, sourceElement: V3Element): Promise<boolean> {
+  const objectGroup = `brauzio-v3-drag-detect:${tabId}`;
+  const resolved = await this.send<any>(tabId, sourceElement, 'DOM.resolveNode', {
+    backendNodeId: sourceElement.backendNodeId,
+    objectGroup,
+  }).catch(() => undefined);
+  const objectId = resolved?.object?.objectId;
+  if (!objectId) return false;
+  try {
+    const result = await this.send<any>(tabId, sourceElement, 'Runtime.callFunctionOn', {
+      objectId,
+      returnByValue: true,
+      functionDeclaration: `function(){
+        const el=this;
+        return Boolean(el && (el.draggable === true || el.getAttribute?.('draggable') === 'true'));
+      }`,
+    }).catch(() => undefined);
+    return Boolean(result?.result?.value);
+  } finally {
+    await this.send(tabId, sourceElement, 'Runtime.releaseObjectGroup', { objectGroup }).catch(() => undefined);
+  }
+}
 
   private async dispatchHtml5Drag(tabId: number, sourceElement: V3Element, targetElement: V3Element): Promise<void> {
     const objectGroup = `brauzio-v3-html5-drag:${tabId}`;

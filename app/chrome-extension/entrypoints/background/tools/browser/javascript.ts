@@ -146,10 +146,31 @@ function isDebuggerConflictError(error: unknown): boolean {
 }
 
 /**
- * Wrap user code in an async IIFE to support top-level await and return statements.
+ * Build an async execution wrapper while preserving expression return values.
+ * Expression-only input such as `2 + 2`, `document.title`, or `await fetch(...)`
+ * returns its value. Statement blocks keep explicit-return semantics.
  */
-function wrapUserCode(code: string): string {
-  return `(async () => {\n${code}\n})()`;
+function canCompileAsExpression(code: string): boolean {
+  try {
+    const AsyncFunction = Object.getPrototypeOf(async function () {}).constructor;
+    new AsyncFunction(`return (${code});`);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+function buildExecutionSource(code: string): { expression: string; functionBody: string } {
+  if (canCompileAsExpression(code)) {
+    return {
+      expression: `(async () => (${code}))()`,
+      functionBody: `return (${code});`,
+    };
+  }
+  return {
+    expression: `(async () => {\n${code}\n})()`,
+    functionBody: code,
+  };
 }
 
 // ============================================================================
@@ -224,7 +245,7 @@ async function executeViaCdp(
   options: ExecutionOptions,
 ): Promise<ExecutionResult> {
   try {
-    const expression = wrapUserCode(code);
+    const { expression } = buildExecutionSource(code);
 
     const response = await withTimeout(
       cdpSessionManager.withSession(tabId, CDP_SESSION_KEY, async () => {
@@ -315,7 +336,14 @@ async function executeViaScripting(
           // Use AsyncFunction constructor to support top-level await
 
           const AsyncFunction = Object.getPrototypeOf(async function () {}).constructor;
-          const fn = new AsyncFunction(userCode);
+          let functionBody = userCode;
+          try {
+            new AsyncFunction(`return (${userCode});`);
+            functionBody = `return (${userCode});`;
+          } catch {
+            // Statement block: preserve explicit return semantics.
+          }
+          const fn = new AsyncFunction(functionBody);
           const value = await fn();
           return { ok: true, value };
         } catch (err: unknown) {
