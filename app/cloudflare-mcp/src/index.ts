@@ -133,7 +133,9 @@ async function callScreenshotThroughObserve(
   if (typeof args.tabId === 'number') observeArgs.tabId = args.tabId;
   if (typeof args.windowId === 'number') observeArgs.windowId = args.windowId;
 
+  const observeStartedAt = Date.now();
   const observed = await callBrowserTool(env, deviceId, 'chrome_observe', observeArgs, callerId);
+  const observeElapsedMs = Date.now() - observeStartedAt;
   if (observed.isError) return observed;
 
   const image = observed.content.find((item) => item.type === 'image') as
@@ -141,6 +143,23 @@ async function callScreenshotThroughObserve(
     | undefined;
   if (!image || typeof image.data !== 'string' || !image.data) {
     return jsonError('Brauzio screenshot relay did not receive image content from chrome_observe');
+  }
+
+  if (String(args.name || '').startsWith('__diag_relay__')) {
+    return {
+      content: [{
+        type: 'text',
+        text: JSON.stringify({
+          success: true,
+          diagnostic: 'screenshot-observe-relay',
+          observeElapsedMs,
+          contentTypes: observed.content.map((item) => item.type),
+          imageBytesBase64: image.data.length,
+          mimeType: image.mimeType,
+        }),
+      }],
+      isError: false,
+    };
   }
 
   return {
