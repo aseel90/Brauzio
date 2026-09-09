@@ -90,7 +90,20 @@ async function callBrowserTool(
     return jsonError(raw || `Browser tool failed with HTTP ${response.status}`);
   }
   try {
-    return JSON.parse(raw) as CallToolResult;
+    const parsed = JSON.parse(raw) as unknown;
+    // Durable Object relay responses are transport envelopes: { result: CallToolResult }.
+    // MCP requires CallToolResult itself at the top level. Returning the envelope causes
+    // clients to see an empty outer content array and hides image content under result.result.content.
+    if (parsed && typeof parsed === 'object' && 'result' in parsed) {
+      const inner = (parsed as { result?: unknown }).result;
+      if (inner && typeof inner === 'object' && Array.isArray((inner as CallToolResult).content)) {
+        return inner as CallToolResult;
+      }
+    }
+    if (parsed && typeof parsed === 'object' && Array.isArray((parsed as CallToolResult).content)) {
+      return parsed as CallToolResult;
+    }
+    return jsonError('Browser tool returned a malformed MCP tool result');
   } catch {
     return jsonError(raw || 'Browser tool returned an invalid response');
   }
@@ -225,7 +238,6 @@ async function handleAuthorize(request: Request, env: Env) {
     props: { deviceId, authorizedAt: Date.now() } satisfies BrauzioAuthProps,
     revokeExistingGrants: false,
   });
-  workerLog('OAUTH_AUTHORIZED', { deviceId, clientId: oauthRequest.clientId });
   return Response.redirect(redirectTo, 302);
 }
 
@@ -251,24 +263,15 @@ const defaultHandler = {
       return stub.fetch(new Request(target.toString(), request));
     }
 
-    if (url.pathname === '/authorize') {
-      return await handleAuthorize(request, env);
-    }
+    if (url.pathname === '/authorize') return await handleAuthorize(request, env);
     if (url.pathname === '/browser-pairing') {
       if (request.method !== 'GET' && request.method !== 'HEAD') {
-        return Response.json(
-          { error: 'Create pairing codes from the Brauzio extension', code: 'PAIRING_CREATE_EXTENSION_ONLY' },
-          { status: 405, headers: { allow: 'GET, HEAD' } },
-        );
+        return Response.json({ error: 'Create pairing codes from the Brauzio extension', code: 'PAIRING_CREATE_EXTENSION_ONLY' }, { status: 405, headers: { allow: 'GET, HEAD' } });
       }
-      return await browserStub(env, deviceIdFromRequest(request, env)).fetch(
-        new Request('https://brauzio-browser.internal/pairing/status'),
-      );
+      return await browserStub(env, deviceIdFromRequest(request, env)).fetch(new Request('https://brauzio-browser.internal/pairing/status'));
     }
     if (url.pathname === '/browser-status') {
-      return await browserStub(env, deviceIdFromRequest(request, env)).fetch(
-        new Request('https://brauzio-browser.internal/status'),
-      );
+      return await browserStub(env, deviceIdFromRequest(request, env)).fetch(new Request('https://brauzio-browser.internal/status'));
     }
     return new Response('Not found', { status: 404 });
   },
@@ -291,11 +294,7 @@ export default new OAuthProvider<Env>({
     resource_name: 'Brauzio Chrome Control',
   },
   tokenExchangeCallback: async (options) => {
-    workerLog('OAUTH_TOKEN_EXCHANGE', {
-      grantType: options.grantType,
-      clientId: options.clientId,
-      userId: options.userId,
-    });
+    workerLog('OAUTH_TOKEN_EXCHANGE', { grantType: options.grantType, clientId: options.clientId, userId: options.userId });
   },
   onError({ code, description, status, internal, request }) {
     workerLog('OAUTH_ERROR', {
