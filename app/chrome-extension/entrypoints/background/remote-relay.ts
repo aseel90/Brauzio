@@ -9,6 +9,7 @@ import {
 } from './tools/browser/watch';
 import { stopAllLiveViews } from './tools/browser/live-view';
 import { releaseAllMouseHolds } from '@/utils/mouse-hold-safety';
+import { relayMetrics } from './relay-metrics';
 import {
   beginAgentToolExecution,
   configureControlStateSink,
@@ -24,6 +25,7 @@ const LOG_PREFIX = '[BrauzioRelay]';
 const HEARTBEAT_MS = 20_000;
 const HEARTBEAT_TIMEOUT_MS = 35_000;
 const RECONNECT_MAX_MS = 30_000;
+const RECONNECT_JITTER_RATIO = 0.2;
 
 function relayLog(event: string, details: Record<string, unknown> = {}) {
   console.log(LOG_PREFIX, new Date().toISOString(), event, details);
@@ -162,53 +164,21 @@ function clearReconnect() {
 function releaseMouseSafety(reason: string) {
   void releaseAllMouseHolds(reason)
     .then((count) => {
-      if (count > 0) relayLog('MOUSE_HOLD_EMERGENCY_RELEASE', { reason, count });
+      if (count > 0) relayLog('MOUSE_HOLDS_RELEASED', { reason, count });
     })
     .catch((error) => {
-      relayLog('MOUSE_HOLD_RELEASE_FAILED', {
-        reason,
-        error: error instanceof Error ? error.message : String(error),
-      });
+      relayLog('MOUSE_HOLD_RELEASE_FAILED', { reason, error: error instanceof Error ? error.message : String(error) });
     });
-}
-
-function sendControlStateMessage(state: BrauzioControlState): void {
-  if (!socket || socket.readyState !== WebSocket.OPEN || !currentStatus.authenticated) return;
-  try {
-    socket.send(
-      JSON.stringify({
-        type: 'control_state',
-        state: {
-          paused: state.paused,
-          reason: state.reason,
-          source: state.source,
-          since: state.since,
-          lastUpdated: state.lastUpdated,
-        },
-      }),
-    );
-  } catch (error) {
-    relayLog('CONTROL_STATE_SEND_FAILED', {
-      error: error instanceof Error ? error.message : String(error),
-    });
-  }
-}
-
-function sendWatchPersistenceMessage(payload: Record<string, unknown>): void {
-  if (!socket || socket.readyState !== WebSocket.OPEN || !currentStatus.authenticated) return;
-  try {
-    socket.send(JSON.stringify(payload));
-  } catch (error) {
-    relayLog('WATCH_PERSIST_SEND_FAILED', {
-      type: payload.type,
-      error: error instanceof Error ? error.message : String(error),
-    });
-  }
 }
 
 function stopLiveViewSafety(reason: string) {
-  const count = stopAllLiveViews(reason);
-  if (count > 0) relayLog('LIVE_VIEW_STOPPED', { reason, count });
+  void stopAllLiveViews(reason)
+    .then((count) => {
+      if (count > 0) relayLog('LIVE_VIEW_STOPPED', { reason, count });
+    })
+    .catch((error) => {
+      relayLog('LIVE_VIEW_STOP_FAILED', { reason, error: error instanceof Error ? error.message : String(error) });
+    });
 }
 
 function stopWatchSafety(reason: string, notifyPersistence = false) {
@@ -245,10 +215,15 @@ function closeSocket() {
 
 function scheduleReconnect() {
   if (manualDisconnect || reconnectTimer) return;
-  const delay = Math.min(1_000 * Math.pow(2, reconnectAttempt++), RECONNECT_MAX_MS);
+  const attempt = reconnectAttempt++;
+  const baseDelay = Math.min(1_000 * Math.pow(2, attempt), RECONNECT_MAX_MS);
+  const jitter = baseDelay * RECONNECT_JITTER_RATIO * (Math.random() * 2 - 1);
+  const delay = Math.max(250, Math.round(baseDelay + jitter));
+  relayMetrics.reconnectScheduled(attempt + 1);
+  relayLog('RECONNECT_SCHEDULED', { attempt: attempt + 1, baseDelayMs: baseDelay, delayMs: delay });
   reconnectTimer = setTimeout(() => {
     reconnectTimer = null;
-    void connectRelay().catch(() => {});
+    void connectRelay().catch((error) => relayMetrics.error(error));
   }, delay);
 }
 
@@ -309,92 +284,92 @@ async function runDiagnostics(): Promise<BrauzioDiagnosticReport> {
       const body = (await response.json()) as { ok?: boolean; version?: string; schemaVersion?: string; toolCount?: number };
       serverVersion = body.version ? String(body.version) : undefined;
       schemaVersion = body.schemaVersion ? String(body.schemaVersion) : undefined;
-      toolCount = Number.isFinite(Number(body.toolCount)) ? Number(body.toolCount) : undefined;
+      toolCount = typeof body.toolCount === 'number' ? body.toolCount : undefined;
       checks.push({
         key: 'cloudflare',
         label: 'Cloudflare Worker',
-        state: response.ok && body.ok ? 'ok' : 'error',
-        detail: response.ok && body.ok ? `متاح • v${serverVersion || '؟'}` : `HTTP ${response.status}`,
+        state: response.ok && body.ok !== false ? 'ok' : 'error',
+        detail: response.ok ? `Worker ${serverVersion || 'unknown'} / schema ${schemaVersion || 'unknown'} / tools ${toolCount ?? 'unknown'}` : `HTTP ${response.status}`,
         latencyMs,
       });
     } catch (error) {
-      checks.push({
-        key: 'cloudflare',
-        label: 'Cloudflare Worker',
-        state: 'error',
-        detail: error instanceof Error ? error.message : String(error),
-      });
+      checks.push({ key: 'cloudflare', label: 'Cloudflare Worker', state: 'error', detail: error instanceof Error ? error.message : String(error) });
     }
   }
 
-  if (socket?.readyState === WebSocket.OPEN && currentStatus.authenticated) {
+  if (socket && socket.readyState === WebSocket.OPEN && currentStatus.authenticated) {
     try {
       const latencyMs = await measureRelayPing();
-      checks.push({ key: 'websocket', label: 'WebSocket Relay', state: 'ok', detail: 'متصل ومصادق عليه', latencyMs });
+      checks.push({ key: 'websocket', label: 'WebSocket relay', state: 'ok', detail: 'متصل ومصادق عليه', latencyMs });
     } catch (error) {
-      checks.push({ key: 'websocket', label: 'WebSocket Relay', state: 'warn', detail: error instanceof Error ? error.message : String(error) });
+      checks.push({ key: 'websocket', label: 'WebSocket relay', state: 'warn', detail: error instanceof Error ? error.message : String(error) });
     }
   } else {
-    checks.push({ key: 'websocket', label: 'WebSocket Relay', state: 'error', detail: currentStatus.lastError || 'غير متصل' });
+    checks.push({ key: 'websocket', label: 'WebSocket relay', state: 'error', detail: `الحالة: ${currentStatus.state}${currentStatus.lastError ? ` — ${currentStatus.lastError}` : ''}` });
   }
 
   checks.push({
-    key: 'auth',
-    label: 'المصادقة',
-    state: currentStatus.authenticated ? 'ok' : 'error',
-    detail: currentStatus.authenticated ? `الجهاز ${config.deviceId || 'default'} مصادق عليه` : 'جلسة الجهاز غير مصادق عليها',
+    key: 'oauth',
+    label: 'OAuth / Pairing',
+    state: currentStatus.authenticated ? 'ok' : config.deviceToken ? 'warn' : 'error',
+    detail: currentStatus.authenticated ? `OAuth relay authenticated for ${config.deviceId || 'default'}` : config.deviceToken ? 'الرمز محفوظ لكن الاتصال غير مصادق' : currentPairing?.code ? `رمز الاقتران الحالي: ${currentPairing.code}` : 'لا يوجد رمز جهاز محفوظ',
   });
-
-  try {
-    const targets = await chrome.debugger.getTargets();
-    const pageTargets = targets.filter((target) => target.type === 'page');
-    checks.push({ key: 'debugger', label: 'Chrome Debugger', state: 'ok', detail: `جاهز • ${pageTargets.length} هدف صفحة` });
-    checks.push({ key: 'cdp', label: 'CDP', state: pageTargets.length > 0 ? 'ok' : 'warn', detail: pageTargets.length > 0 ? 'يمكن رؤية أهداف Chrome بدون attach' : 'لا توجد أهداف صفحة متاحة حاليًا' });
-  } catch (error) {
-    const detail = error instanceof Error ? error.message : String(error);
-    checks.push({ key: 'debugger', label: 'Chrome Debugger', state: 'error', detail });
-    checks.push({ key: 'cdp', label: 'CDP', state: 'error', detail: 'تعذر الوصول إلى Chrome Debugger API' });
-  }
-
-  try {
-    const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
-    const activeTab = tabs[0];
-    checks.push({
-      key: 'input',
-      label: 'Input Safety',
-      state: controlState.paused ? 'warn' : activeTab?.id ? 'ok' : 'warn',
-      detail: controlState.paused
-        ? `التحكم متوقف: ${controlState.reason || 'Human Takeover'}`
-        : activeTab?.id
-          ? `جاهز للتنفيذ الآمن على التبويب ${activeTab.id}`
-          : 'لا يوجد تبويب نشط',
-    });
-  } catch (error) {
-    checks.push({ key: 'input', label: 'Input Safety', state: 'error', detail: error instanceof Error ? error.message : String(error) });
-  }
 
   checks.push({
-    key: 'extension',
-    label: 'Brauzio Extension',
-    state: 'ok',
-    detail: `v${extensionVersion} • MV3`,
+    key: 'control',
+    label: 'Agent control',
+    state: controlState.paused ? 'warn' : 'ok',
+    detail: controlState.paused ? `متوقف مؤقتًا${controlState.pauseReason ? ` — ${controlState.pauseReason}` : ''}` : 'التحكم مفعّل',
   });
 
-  const overall: BrauzioDiagnosticState = checks.some((check) => check.state === 'error')
-    ? 'error'
-    : checks.some((check) => check.state === 'warn')
-      ? 'warn'
-      : 'ok';
+  try {
+    const permissions = await chrome.permissions.getAll();
+    const required = ['tabs', 'scripting', 'debugger'];
+    const missing = required.filter((permission) => !permissions.permissions?.includes(permission));
+    checks.push({ key: 'permissions', label: 'Chrome permissions', state: missing.length ? 'error' : 'ok', detail: missing.length ? `صلاحيات ناقصة: ${missing.join(', ')}` : 'tabs / scripting / debugger متاحة' });
+  } catch (error) {
+    checks.push({ key: 'permissions', label: 'Chrome permissions', state: 'warn', detail: error instanceof Error ? error.message : String(error) });
+  }
 
-  return {
-    generatedAt: Date.now(),
-    overall,
-    extensionVersion,
-    serverVersion,
-    schemaVersion,
-    toolCount,
-    checks,
-  };
+  try {
+    const [activeTab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
+    if (activeTab?.id) {
+      const target = { tabId: activeTab.id };
+      await chrome.debugger.attach(target, '1.3');
+      try {
+        await chrome.debugger.sendCommand(target, 'Runtime.evaluate', { expression: '1+1', returnByValue: true });
+        checks.push({ key: 'cdp', label: 'Chrome DevTools Protocol', state: 'ok', detail: `CDP يعمل على tab ${activeTab.id}` });
+      } finally {
+        await chrome.debugger.detach(target).catch(() => {});
+      }
+    } else {
+      checks.push({ key: 'cdp', label: 'Chrome DevTools Protocol', state: 'warn', detail: 'لا يوجد تبويب ويب نشط للاختبار' });
+    }
+  } catch (error) {
+    checks.push({ key: 'cdp', label: 'Chrome DevTools Protocol', state: 'warn', detail: error instanceof Error ? error.message : String(error) });
+  }
+
+  const rank: Record<BrauzioDiagnosticState, number> = { ok: 0, warn: 1, error: 2 };
+  const overall = checks.reduce<BrauzioDiagnosticState>((current, check) => rank[check.state] > rank[current] ? check.state : current, 'ok');
+  return { generatedAt: Date.now(), overall, extensionVersion, serverVersion, schemaVersion, toolCount, checks };
+}
+
+function sendControlStateMessage(state: BrauzioControlState) {
+  if (!socket || socket.readyState !== WebSocket.OPEN || !currentStatus.authenticated) return;
+  try {
+    socket.send(JSON.stringify({ type: 'control_state', state }));
+  } catch (error) {
+    relayLog('CONTROL_STATE_SEND_FAILED', { error: error instanceof Error ? error.message : String(error) });
+  }
+}
+
+function sendWatchPersistenceMessage(message: Record<string, unknown>) {
+  if (!socket || socket.readyState !== WebSocket.OPEN || !currentStatus.authenticated) return;
+  try {
+    socket.send(JSON.stringify(message));
+  } catch (error) {
+    relayLog('WATCH_PERSISTENCE_SEND_FAILED', { error: error instanceof Error ? error.message : String(error) });
+  }
 }
 
 async function executeToolCall(message: Extract<RelayInboundMessage, { type: 'tool_call' }>) {
@@ -407,6 +382,7 @@ async function executeToolCall(message: Extract<RelayInboundMessage, { type: 'to
   const startedAt = Date.now();
   const args = message.args || {};
   let guard: AgentExecutionGuard | undefined;
+  relayMetrics.toolReceived(message.requestId, message.name);
   relayLog('TOOL_RECEIVED', { requestId: message.requestId, name: message.name });
 
   try {
@@ -450,6 +426,7 @@ async function onRelayMessage(event: MessageEvent) {
   if (typeof event.data !== 'string') return;
   if (event.data === 'pong') {
     lastPongAt = Date.now();
+    relayMetrics.pong();
     if (diagnosticPingWaiter) {
       const waiter = diagnosticPingWaiter;
       diagnosticPingWaiter = null;
@@ -471,6 +448,7 @@ async function onRelayMessage(event: MessageEvent) {
     relayLog('HELLO_ACK', { authenticated: Boolean(message.authenticated) });
     if (message.authenticated) {
       reconnectAttempt = 0;
+      relayMetrics.authenticated();
       updateStatus({ state: 'connected', authenticated: true, lastError: undefined });
       await enforceRemotePause(message.controlState);
       const localControlState = await getControlState();
@@ -528,22 +506,19 @@ export async function connectRelay(): Promise<BrauzioRelayStatus> {
 
   const config = await loadConfig();
   if (!config.autoConnect) {
-    updateStatus({ state: 'disabled', authenticated: false });
+    updateStatus({ state: 'disabled', authenticated: false, lastError: undefined });
     return currentStatus;
   }
+
   if (!config.relayUrl) {
     updateStatus({ state: 'disconnected', authenticated: false, lastError: 'Relay URL is not configured' });
-    return currentStatus;
-  }
-  if (!config.deviceToken) {
-    updateStatus({ state: 'disconnected', authenticated: false, lastError: 'Device token is not configured' });
     return currentStatus;
   }
 
   let wsUrl: string;
   try {
-    const normalized = normalizeRelayUrl(config.relayUrl);
-    const url = new URL(normalized);
+    wsUrl = normalizeRelayUrl(config.relayUrl);
+    const url = new URL(wsUrl);
     url.searchParams.set('device', config.deviceId || 'default');
     wsUrl = url.toString();
   } catch (error) {
@@ -564,9 +539,10 @@ export async function connectRelay(): Promise<BrauzioRelayStatus> {
     const recycleSocket = (reason: string, errorMessage?: string) => {
       if (socket !== ws) return;
       relayLog('WS_RECYCLE', { reason, readyState: ws.readyState });
+      relayMetrics.disconnected(errorMessage || reason);
       releaseMouseSafety(reason);
-      stopWatchSafety(reason);
-      stopLiveViewSafety(reason);
+      // Preserve watches and live-view state across transient relay reconnects.
+      // They are explicitly stopped only on manual disconnect or user action.
       clearHeartbeat();
       socket = null;
       try {
@@ -580,6 +556,7 @@ export async function connectRelay(): Promise<BrauzioRelayStatus> {
 
     ws.addEventListener('open', async () => {
       if (socket !== ws) return;
+      relayMetrics.connected();
       relayLog('WS_OPEN', { relayHost: new URL(wsUrl).host, deviceId: config.deviceId || 'default' });
       const freshConfig = await loadConfig();
       ws.send(
@@ -622,6 +599,7 @@ export async function connectRelay(): Promise<BrauzioRelayStatus> {
 
     ws.addEventListener('error', () => {
       if (socket !== ws) return;
+      relayMetrics.error('WebSocket connection error');
       relayLog('WS_ERROR', { relayHost: new URL(wsUrl).host });
       recycleSocket('relay_socket_error', 'WebSocket connection error');
     });
@@ -629,9 +607,9 @@ export async function connectRelay(): Promise<BrauzioRelayStatus> {
     ws.addEventListener('close', (event) => {
       if (socket !== ws) return;
       relayLog('WS_CLOSED', { code: event.code, reason: event.reason || '', wasClean: event.wasClean });
+      relayMetrics.disconnected(event.reason || `WebSocket closed (${event.code})`);
       releaseMouseSafety('relay_socket_closed');
-      stopWatchSafety('relay_socket_closed');
-      stopLiveViewSafety('relay_socket_closed');
+      // Keep persistent watches/live view alive while transport reconnects.
       clearHeartbeat();
       socket = null;
       if (!manualDisconnect) {
@@ -641,6 +619,8 @@ export async function connectRelay(): Promise<BrauzioRelayStatus> {
     });
   } catch (error) {
     socket = null;
+    relayMetrics.error(error);
+    relayMetrics.disconnected(error instanceof Error ? error.message : String(error));
     updateStatus({
       state: 'error',
       authenticated: false,
@@ -703,61 +683,13 @@ export function initRemoteRelayListener() {
           await disconnectRelay();
           manualDisconnect = false;
           if (config.autoConnect) await connectRelay();
-          sendResponse({ success: true, config, status: currentStatus });
+          sendResponse({
+            success: true,
+            config,
+            status: currentStatus,
+          });
         })
         .catch((error) => sendResponse({ success: false, error: String(error) }));
-      return true;
-    }
-
-    if (message.type === 'brauzio_pairing_get') {
-      if (currentPairing && currentPairing.expiresAt <= Date.now()) currentPairing = null;
-      sendResponse({ success: true, pairing: currentPairing });
-      return false;
-    }
-
-    if (message.type === 'brauzio_pairing_create') {
-      if (!socket || socket.readyState !== WebSocket.OPEN || !currentStatus.authenticated) {
-        sendResponse({ success: false, error: 'Brauzio Cloud is not connected' });
-        return false;
-      }
-      currentPairing = null;
-      socket.send(JSON.stringify({ type: 'pairing_create' }));
-      sendResponse({ success: true });
-      return false;
-    }
-
-    if (message.type === 'brauzio_human_input') {
-      // Automatic human-input takeover was removed in v2.9.3. Ignore any
-      // stale content-script messages from tabs that have not reloaded yet.
-      sendResponse({ success: true, takeover: false, ignored: true });
-      return false;
-    }
-
-    if (message.type === 'brauzio_control_get_state') {
-      void getControlState()
-        .then((state) => sendResponse({ success: true, state }))
-        .catch((error) => sendResponse({ success: false, error: String(error) }));
-      return true;
-    }
-
-    if (message.type === 'brauzio_control_pause') {
-      void pauseAgentControl(String(message.reason || 'emergency_stop'), 'manual')
-        .then((state) => sendResponse({ success: true, state }))
-        .catch((error) => sendResponse({ success: false, error: String(error) }));
-      return true;
-    }
-
-    if (message.type === 'brauzio_control_resume') {
-      void resumeAgentControl('manual')
-        .then((state) => sendResponse({ success: true, state }))
-        .catch((error) => sendResponse({ success: false, error: String(error) }));
-      return true;
-    }
-
-    if (message.type === 'brauzio_diagnostics_run') {
-      void runDiagnostics()
-        .then((report) => sendResponse({ success: true, report }))
-        .catch((error) => sendResponse({ success: false, error: error instanceof Error ? error.message : String(error) }));
       return true;
     }
 
@@ -775,21 +707,49 @@ export function initRemoteRelayListener() {
       return true;
     }
 
+    if (message.type === 'brauzio_diagnostics_run') {
+      void runDiagnostics()
+        .then((report) => sendResponse({ success: true, report }))
+        .catch((error) => sendResponse({ success: false, error: String(error) }));
+      return true;
+    }
+
+    if (message.type === 'brauzio_pairing_get') {
+      sendResponse({ success: true, pairing: currentPairing });
+      return false;
+    }
+
+    if (message.type === 'brauzio_control_get_state') {
+      void getControlState()
+        .then((state) => sendResponse({ success: true, state }))
+        .catch((error) => sendResponse({ success: false, error: String(error) }));
+      return true;
+    }
+
+    if (message.type === 'brauzio_control_pause') {
+      void pauseAgentControl(String(message.reason || 'user_pause'))
+        .then((state) => {
+          sendControlStateMessage(state);
+          sendResponse({ success: true, state });
+        })
+        .catch((error) => sendResponse({ success: false, error: String(error) }));
+      return true;
+    }
+
+    if (message.type === 'brauzio_control_resume') {
+      void resumeAgentControl(String(message.reason || 'user_resume'))
+        .then((state) => {
+          sendControlStateMessage(state);
+          sendResponse({ success: true, state });
+        })
+        .catch((error) => sendResponse({ success: false, error: String(error) }));
+      return true;
+    }
+
     return false;
   });
 
-  void loadConfig()
-    .then((config) => {
-      if (config.autoConnect && config.relayUrl && config.deviceToken) {
-        return connectRelay();
-      }
-      return undefined;
-    })
-    .catch((error) => {
-      console.warn(`${LOG_PREFIX} Auto-connect failed`, error);
-    });
-
-  chrome.runtime.onStartup.addListener(() => {
-    void connectRelay().catch(() => {});
+  void loadConfig().then((config) => {
+    if (config.autoConnect && config.relayUrl) void connectRelay();
   });
 }

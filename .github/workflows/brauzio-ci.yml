@@ -77,6 +77,39 @@ jobs:
           grep -Fq 'const steps = 4;' "$ACT"
           echo 'Runtime regression guards passed: page-side JS evaluator + HTML5 drag fast path.'
 
+      - name: Brauzio 3.1 reliability contract
+        shell: bash
+        run: |
+          set -euo pipefail
+          SMART='app/chrome-extension/utils/smart-wait.ts'
+          V3='app/chrome-extension/entrypoints/background/tools/browser/v3-runtime.ts'
+          REGISTRY='app/chrome-extension/entrypoints/background/runtime-v3/element-registry.ts'
+          TRACE='app/chrome-extension/entrypoints/background/runtime-v3/tool-trace.ts'
+          AUTO='app/chrome-extension/entrypoints/background/runtime-v3/automation-session.ts'
+          CACHE='app/chrome-extension/entrypoints/background/relay-tool-cache.ts'
+          RELAY='app/chrome-extension/entrypoints/background/remote-relay.ts'
+          DEVICE='app/chrome-extension/entrypoints/background/tools/browser/device-mode.ts'
+          DIAG='app/chrome-extension/entrypoints/background/tools/browser/diagnostics.ts'
+          WORKER='app/cloudflare-mcp/src/index.ts'
+          SESSION='app/cloudflare-mcp/src/browser-session-v31.ts'
+
+          grep -Fq 'MutationObserver' "$SMART"
+          grep -Fq 'retryReasons' "$V3"
+          grep -Fq 'stale' "$REGISTRY"
+          grep -Fq 'toolTrace' "$TRACE"
+          grep -Fq 'chrome.storage.session' "$AUTO"
+          grep -Fq 'chrome.storage.session' "$CACHE"
+          grep -Fq 'RECONNECT_JITTER_RATIO' "$RELAY"
+          grep -Fq 'relayMetrics.reconnectScheduled' "$RELAY"
+          grep -Fq 'Emulation.setUserAgentOverride' "$DEVICE"
+          grep -Fq "name = 'chrome_diagnostics'" "$DIAG"
+          grep -Fq 'BRAUZIO_DIAGNOSTICS_SCHEMA' "$WORKER"
+          grep -Fq '__brauzioRequestId' "$WORKER"
+          grep -Fq 'export class BrowserSession extends BrowserSessionBase' "$SESSION"
+          grep -Fq 'CALL_RESENT_AFTER_RECONNECT' "$SESSION"
+
+          echo 'Brauzio 3.1 reliability contract passed.'
+
       - name: Build Chrome extension
         run: pnpm --filter brauzio-extension build
 
@@ -105,7 +138,7 @@ jobs:
           root = pathlib.Path(sys.argv[1])
           manifest = json.loads((root / 'manifest.json').read_text(encoding='utf-8'))
 
-          assert manifest.get('version') == '3.0.7', manifest.get('version')
+          assert manifest.get('version') == '3.1.0', manifest.get('version')
           assert manifest.get('default_locale') == 'ar', manifest.get('default_locale')
           assert manifest.get('action', {}).get('default_title') == 'Brauzio', manifest.get('action')
           assert (root / '_locales' / 'ar' / 'messages.json').is_file(), 'Arabic locale missing'
@@ -116,8 +149,8 @@ jobs:
 
           background = (root / 'background.js').read_text(encoding='utf-8')
           assert 'BRAUZIO_JS_RUNTIME_V3' in background, 'JS runtime V3 marker missing from packaged background'
-          assert 'BRAUZIO_BUILD_3_0_7' in background, '3.0.7 build marker missing from packaged background'
-          print('Packaged manifest verified: Brauzio 3.0.7 + runtime/build markers + Arabic locale.')
+          assert 'BRAUZIO_BUILD_3_1_0' in background, '3.1.0 build marker missing from packaged background'
+          print('Packaged manifest verified: Brauzio 3.1.0 + runtime/build markers + Arabic locale.')
           PY
 
       - name: Upload installable Brauzio ZIP
@@ -151,8 +184,8 @@ jobs:
           git commit -m 'build: publish latest Brauzio Chrome extension [skip ci]'
           git push
 
-# Current release line: Brauzio 3.0.x
-# Runtime hardening gate: Brauzio 3.0.7
-# Publish trigger: Brauzio 3.0.7
+# Current release line: Brauzio 3.1.x
+# Runtime hardening gate: Brauzio 3.1.0
+# Publish trigger: Brauzio 3.1.0
 
-# Final validation trigger: 3.0.7 screenshot pipeline
+# Final validation trigger: 3.1 reliability hardening

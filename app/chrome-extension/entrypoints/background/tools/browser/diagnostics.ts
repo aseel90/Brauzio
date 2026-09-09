@@ -101,6 +101,7 @@ class DiagnosticsTool extends BaseBrowserToolExecutor {
         generatedAt: Date.now(),
         extension: {
           version: manifest.version,
+          buildId: 'BRAUZIO_BUILD_3_1_0',
           manifestVersion: manifest.manifest_version,
           id: chrome.runtime.id,
         },
