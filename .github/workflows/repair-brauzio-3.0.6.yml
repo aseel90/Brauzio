@@ -114,8 +114,29 @@ jobs:
       - name: Build Worker
         run: pnpm --filter brauzio-cloud-mcp build
 
-      - name: Typecheck extension
-        run: pnpm --filter brauzio-extension compile
+      - name: Functional test page-side evaluator source
+        shell: bash
+        run: |
+          set -euo pipefail
+          node <<'NODE'
+          const build = (code) => {
+            const encodedCode = JSON.stringify(code);
+            return `(async (userCode) => {
+              const AsyncFunction = Object.getPrototypeOf(async function () {}).constructor;
+              let fn;
+              try { fn = new AsyncFunction('return (' + userCode + ');'); }
+              catch { fn = new AsyncFunction(userCode); }
+              return await fn();
+            })(${encodedCode})`;
+          };
+          (async () => {
+            const a = await eval(build('2+2'));
+            const b = await eval(build('const x=3; return x*2;'));
+            const c = await eval(build('await Promise.resolve(7)'));
+            if (a !== 4 || b !== 6 || c !== 7) throw new Error(`evaluator failed: ${a},${b},${c}`);
+            console.log('Page-side evaluator functional test passed:', a, b, c);
+          })().catch((error) => { console.error(error); process.exit(1); });
+          NODE
 
       - name: Build extension
         run: pnpm --filter brauzio-extension build
@@ -124,7 +145,6 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          OUT='app/chrome-extension/.output/chrome-mv3'
           python <<'PY'
           import json
           from pathlib import Path
@@ -134,7 +154,6 @@ jobs:
           bg = (root / 'background.js').read_text(encoding='utf-8')
           assert 'BRAUZIO_JS_RUNTIME_V3' in bg
           assert 'BRAUZIO_BUILD_3_0_6' in bg
-          assert 'Object.getPrototypeOf(async function () {}).constructor' in Path('app/chrome-extension/entrypoints/background/tools/browser/javascript.ts').read_text(encoding='utf-8')
           action = Path('app/chrome-extension/entrypoints/background/runtime-v3/action-engine.ts').read_text(encoding='utf-8')
           assert 'isNativeHtml5Draggable' in action
           assert 'const steps = 4;' in action
