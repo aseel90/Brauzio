@@ -73,52 +73,182 @@ async function waitForDomCondition(
   let attempts = 0;
   let lastError = '';
 
-  const checkOnce = async (): Promise<{ matched: boolean; error?: string }> => {
+  while (Date.now() - startedAt < timeoutMs) {
+    attempts += 1;
+    const remaining = Math.max(50, timeoutMs - (Date.now() - startedAt));
     try {
       const result = await chrome.scripting.executeScript({
         target: { tabId },
         world: 'ISOLATED',
-        func: (
+        func: async (
           conditionName: 'selector_exists' | 'selector_hidden' | 'text_appears' | 'text_disappears',
           selectorValue: string,
           textValue: string,
+          waitMs: number,
         ) => {
           const visible = (element: Element | null) => {
             if (!element) return false;
             if (!(element instanceof HTMLElement)) return true;
             const style = getComputedStyle(element);
             const rect = element.getBoundingClientRect();
-            return style.display !== 'none' && style.visibility !== 'hidden' && Number(style.opacity || 1) > 0 && rect.width > 0 && rect.height > 0;
+            return style.display !== 'none'
+              && style.visibility !== 'hidden'
+              && Number(style.opacity || 1) > 0
+              && rect.width > 0
+              && rect.height > 0;
           };
-          try {
-            if (conditionName === 'selector_exists') return { matched: Boolean(selectorValue && document.querySelector(selectorValue)) };
-            if (conditionName === 'selector_hidden') return { matched: !visible(document.querySelector(selectorValue)) };
-            const pageText = document.body?.innerText || document.documentElement?.innerText || '';
-            const hasText = Boolean(textValue) && pageText.includes(textValue);
-            return { matched: conditionName === 'text_appears' ? hasText : !hasText };
-          } catch (error) {
-            return { matched: false, error: error instanceof Error ? error.message : String(error) };
-          }
-        },
-        args: [condition, selector, text],
-      });
-      const payload = result?.[0]?.result as { matched?: boolean; error?: string } | undefined;
-      return { matched: Boolean(payload?.matched), error: payload?.error };
-    } catch (error) {
-      return { matched: false, error: error instanceof Error ? error.message : String(error) };
-    }
-  };
+          const check = () => {
+            try {
+              if (conditionName === 'selector_exists') {
+                return { matched: Boolean(selectorValue && document.querySelector(selectorValue)) };
+              }
+              if (conditionName === 'selector_hidden') {
+                return { matched: !visible(document.querySelector(selectorValue)) };
+              }
+              const pageText = document.body?.innerText || document.documentElement?.innerText || '';
+              const hasText = Boolean(textValue) && pageText.includes(textValue);
+              return { matched: conditionName === 'text_appears' ? hasText : !hasText };
+            } catch (error) {
+              return { matched: false, error: error instanceof Error ? error.message : String(error) };
+            }
+          };
 
-  while (Date.now() - startedAt <= timeoutMs) {
-    attempts += 1;
-    const check = await checkOnce();
-    if (check.matched) return { ok: true, details: { immediate: attempts === 1, attempts } };
-    if (check.error) lastError = check.error;
-    const remaining = timeoutMs - (Date.now() - startedAt);
-    if (remaining <= 0) break;
-    await new Promise((resolve) => setTimeout(resolve, Math.min(125, remaining)));
+          const immediate = check();
+          if (immediate.matched) return { ...immediate, immediate: true, mutationCount: 0 };
+
+          return await new Promise<{ matched: boolean; error?: string; timedOut?: boolean; mutationCount: number }>((resolve) => {
+            let settled = false;
+            let mutationCount = 0;
+            let fallbackTimer: ReturnType<typeof setInterval> | undefined;
+            let timeoutTimer: ReturnType<typeof setTimeout> | undefined;
+            const observer = new MutationObserver(() => {
+              mutationCount += 1;
+              const state = check();
+              if (state.matched) finish({ ...state, mutationCount });
+            });
+            const finish = (value: { matched: boolean; error?: string; timedOut?: boolean; mutationCount: number }) => {
+              if (settled) return;
+              settled = true;
+              observer.disconnect();
+              if (fallbackTimer) clearInterval(fallbackTimer);
+              if (timeoutTimer) clearTimeout(timeoutTimer);
+              resolve(value);
+            };
+
+            const root = document.documentElement || document.body;
+            if (root) {
+              observer.observe(root, {
+                subtree: true,
+                childList: true,
+                characterData: true,
+                attributes: true,
+                attributeFilter: ['style', 'class', 'hidden', 'aria-hidden', 'disabled', 'aria-disabled', 'value'],
+              });
+            }
+
+            // MutationObserver is the primary signal. A low-frequency fallback catches
+            // layout/stylesheet changes that do not mutate the target subtree.
+            fallbackTimer = setInterval(() => {
+              const state = check();
+              if (state.matched) finish({ ...state, mutationCount });
+            }, 500);
+            timeoutTimer = setTimeout(() => {
+              const state = check();
+              finish({ ...state, timedOut: !state.matched, mutationCount });
+            }, Math.max(50, waitMs));
+
+            // Close the race between the initial check and observer registration.
+            const raced = check();
+            if (raced.matched) finish({ ...raced, mutationCount });
+          });
+        },
+        args: [condition, selector, text, remaining],
+      });
+      const payload = result?.[0]?.result as {
+        matched?: boolean;
+        error?: string;
+        timedOut?: boolean;
+        immediate?: boolean;
+        mutationCount?: number;
+      } | undefined;
+      if (payload?.matched) {
+        return {
+          ok: true,
+          details: {
+            immediate: Boolean(payload.immediate) && attempts === 1,
+            attempts,
+            mutationCount: Number(payload.mutationCount || 0),
+            strategy: 'mutation_observer',
+          },
+        };
+      }
+      if (payload?.error) lastError = payload.error;
+      if (payload?.timedOut) break;
+    } catch (error) {
+      lastError = error instanceof Error ? error.message : String(error);
+      // Navigations destroy the isolated execution context. Re-arm the observer
+      // in the new document while preserving the original deadline.
+      const stillOpen = await chrome.tabs.get(tabId).then(() => true).catch(() => false);
+      if (!stillOpen) return { ok: false, reason: 'tab_closed', details: { attempts, lastError } };
+      const remaining = timeoutMs - (Date.now() - startedAt);
+      if (remaining <= 0) break;
+      await new Promise((resolve) => setTimeout(resolve, Math.min(100, remaining)));
+    }
   }
-  return { ok: false, timedOut: true, reason: 'timeout', details: { attempts, lastError: lastError || undefined } };
+
+  return {
+    ok: false,
+    timedOut: true,
+    reason: 'timeout',
+    details: { attempts, lastError: lastError || undefined, strategy: 'mutation_observer' },
+  };
+}
+
+export async function waitForDomSettled(
+  tabId: number,
+  quietMs = 80,
+  timeoutMs = 800,
+): Promise<{ settled: boolean; elapsedMs: number; mutations: number }> {
+  const startedAt = Date.now();
+  try {
+    const [result] = await chrome.scripting.executeScript({
+      target: { tabId },
+      world: 'ISOLATED',
+      func: async (quiet: number, timeout: number) => {
+        return await new Promise<{ settled: boolean; mutations: number }>((resolve) => {
+          let done = false;
+          let mutations = 0;
+          let quietTimer: ReturnType<typeof setTimeout> | undefined;
+          let timeoutTimer: ReturnType<typeof setTimeout> | undefined;
+          const finish = (settled: boolean) => {
+            if (done) return;
+            done = true;
+            observer.disconnect();
+            if (quietTimer) clearTimeout(quietTimer);
+            if (timeoutTimer) clearTimeout(timeoutTimer);
+            resolve({ settled, mutations });
+          };
+          const armQuiet = () => {
+            if (quietTimer) clearTimeout(quietTimer);
+            quietTimer = setTimeout(() => finish(true), Math.max(20, quiet));
+          };
+          const observer = new MutationObserver(() => {
+            mutations += 1;
+            armQuiet();
+          });
+          const root = document.documentElement || document.body;
+          if (root) observer.observe(root, { subtree: true, childList: true, characterData: true, attributes: true });
+          armQuiet();
+          timeoutTimer = setTimeout(() => finish(false), Math.max(quiet, timeout));
+        });
+      },
+      args: [Math.max(20, Math.min(quietMs, 500)), Math.max(50, Math.min(timeoutMs, 3000))],
+    });
+    const value = result?.result as { settled?: boolean; mutations?: number } | undefined;
+    return { settled: Boolean(value?.settled), mutations: Number(value?.mutations || 0), elapsedMs: Date.now() - startedAt };
+  } catch {
+    return { settled: false, mutations: 0, elapsedMs: Date.now() - startedAt };
+  }
 }
 
 async function waitForUrl(tabId: number, urlIncludes: string, timeoutMs: number) {
