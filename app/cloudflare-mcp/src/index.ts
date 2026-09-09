@@ -131,10 +131,15 @@ async function callerLeaseId(ctx: {
   const props = (auth?.props || {}) as Partial<BrauzioAuthProps>;
   const clientId = String(ctx.http?.authInfo?.clientId || 'unknown').slice(0, 256);
   const sessionId = String(ctx.sessionId || '').trim().slice(0, 256);
-  const deviceId = normalizeDeviceId(props.deviceId || 'default');
-  const raw = `${deviceId}|${clientId}|${sessionId || 'no-session'}`;
-  const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(raw));
-  return Array.from(new Uint8Array(digest), (byte) => byte.toString(16).padStart(2, '0')).join('').slice(0, 48);
+  const token = String(ctx.http?.authInfo?.token || '');
+  const material = sessionId
+    ? `session|${clientId}|${sessionId}`
+    : token
+      ? `token|${clientId}|${token}`
+      : `grant|${clientId}|${String(props.authorizedAt || 0)}|${normalizeDeviceId(props.deviceId || 'default')}`;
+  const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(material));
+  const hex = Array.from(new Uint8Array(digest), (byte) => byte.toString(16).padStart(2, '0')).join('');
+  return `caller-${hex.slice(0, 32)}`;
 }
 
 function createServer(env: Env) {
@@ -143,8 +148,8 @@ function createServer(env: Env) {
     { capabilities: { tools: {} } },
   );
 
-  server.setRequestHandler({ method: 'tools/list' }, async () => ({ tools: BRAUZIO_TOOL_SCHEMAS }));
-  server.setRequestHandler({ method: 'tools/call' }, async (request, ctx) => {
+  server.setRequestHandler('tools/list', async () => ({ tools: BRAUZIO_TOOL_SCHEMAS }));
+  server.setRequestHandler('tools/call', async (request, ctx) => {
     const name = request.params.name;
     const args = (request.params.arguments || {}) as Record<string, unknown>;
     const callerId = await callerLeaseId(ctx);
@@ -154,90 +159,149 @@ function createServer(env: Env) {
   return server;
 }
 
-function oauthError(message: string, status = 400): Response {
-  return new Response(message, { status, headers: { 'content-type': 'text/plain; charset=utf-8' } });
-}
+const mcpApiHandler = {
+  async fetch(request: Request, env: Env, ctx: ExecutionContext) {
+    const requestUrl = new URL(request.url);
+    const ctxProps =
+      ((ctx as ExecutionContext & { props?: Partial<BrauzioAuthProps> }).props || {});
 
-function html(body: string, status = 200): Response {
-  return new Response(body, {
-    status,
-    headers: {
-      'content-type': 'text/html; charset=utf-8',
-      'cache-control': 'no-store',
-      'x-content-type-options': 'nosniff',
-      'content-security-policy': "default-src 'none'; style-src 'unsafe-inline'; form-action 'self'; base-uri 'none'; frame-ancestors 'none'",
+    workerLog('MCP_REQUEST', {
+      method: request.method,
+      path: requestUrl.pathname,
+      mcpMethod: request.headers.get('Mcp-Method') || request.headers.get('mcp-method') || '',
+      mcpName: request.headers.get('Mcp-Name') || request.headers.get('mcp-name') || '',
+      hasAuthorizedDevice: Boolean(ctxProps.deviceId),
+    });
+
+    return createMcpHandler(() => createServer(env), {
+      route: '/mcp',
+      legacy: 'stateless',
+      onerror(error) {
+        workerLog('MCP_HANDLER_ERROR', {
+          message: error instanceof Error ? error.message : String(error),
+        });
+      },
+    })(request, env, ctx);
+  },
+};
+
+async function handleAuthorize(request: Request, env: Env) {
+  const oauthRequest = await env.OAUTH_PROVIDER.parseAuthRequest(request);
+  const clientName = oauthRequest.clientId || 'ChatGPT';
+  const deviceId = deviceIdFromRequest(request, env);
+
+  if (request.method === 'GET') {
+    const pairing = await browserStub(env, deviceId).fetch(
+      new Request('https://brauzio-browser.internal/pairing/status'),
+    );
+    const pairingStatus = (await pairing.json().catch(() => ({}))) as {
+      active?: boolean;
+      expiresAt?: number | null;
+    };
+    const expiresText = pairingStatus.expiresAt
+      ? new Date(pairingStatus.expiresAt).toLocaleTimeString('ar-LY')
+      : 'غير متاح';
+    const body = `<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ربط Brauzio</title><style>body{font-family:system-ui;background:#f7f7f8;color:#111;margin:0;padding:32px}.card{max-width:520px;margin:auto;background:#fff;border:1px solid #ddd;border-radius:18px;padding:24px;box-shadow:0 12px 40px #0001}h1{margin-top:0}input,button{box-sizing:border-box;width:100%;padding:13px;border-radius:10px;border:1px solid #bbb;font-size:16px}button{margin-top:12px;background:#111;color:#fff;border:0;cursor:pointer}.muted{color:#666;font-size:14px}.error{color:#b42318}</style></head><body><div class="card"><h1>ربط ChatGPT مع Brauzio</h1><p>أدخل رمز الاقتران الظاهر داخل إضافة Brauzio. الرمز مؤقت ويُستخدم مرة واحدة فقط.</p><p class="muted">الجهاز: ${deviceId} — انتهاء الرمز الحالي: ${expiresText}</p><form method="post"><input name="pairing_code" autocomplete="one-time-code" inputmode="numeric" required placeholder="رمز الاقتران"><button type="submit">تفويض ChatGPT</button></form><p class="muted">العميل: ${clientName}</p></div></body></html>`;
+    return new Response(body, {
+      headers: {
+        'content-type': 'text/html; charset=utf-8',
+        'cache-control': 'no-store',
+        'content-security-policy': `default-src 'none'; style-src 'unsafe-inline'; base-uri 'none'; frame-ancestors 'none'`,
+      },
+    });
+  }
+
+  if (request.method !== 'POST') {
+    return new Response('Method not allowed', { status: 405 });
+  }
+
+  const form = await request.formData();
+  const pairingCode = String(form.get('pairing_code') || '').trim();
+  const pairing = await browserStub(env, deviceId).fetch(
+    new Request('https://brauzio-browser.internal/pairing/confirm', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ code: pairingCode }),
+    }),
+  );
+  const pairingResult = (await pairing.json().catch(() => ({}))) as {
+    ok?: boolean;
+    active?: boolean;
+    error?: string;
+  };
+  if (!pairing.ok || pairingResult.ok !== true || pairingResult.active !== true) {
+    const body = `<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>فشل الربط</title></head><body style="font-family:system-ui;padding:32px"><h1>تعذر ربط Brauzio</h1><p>${pairingResult.error || 'رمز الاقتران غير صحيح أو انتهت صلاحيته.'}</p><p><a href="${new URL('/authorize', BRAUZIO_ORIGIN)}">حاول مرة أخرى</a></p></body></html>`;
+    return new Response(body, { status: 401, headers: { 'content-type': 'text/html; charset=utf-8', 'cache-control': 'no-store' } });
+  }
+
+  const complete = await env.OAUTH_PROVIDER.completeAuthorization({
+    request: oauthRequest,
+    userId: await oauthUserIdForDevice(deviceId),
+    metadata: {
+      label: `Brauzio device ${deviceId}`,
+      pairedAt: new Date().toISOString(),
     },
+    scope: oauthRequest.scope,
+    props: { deviceId, authorizedAt: Date.now() } satisfies BrauzioAuthProps,
   });
-}
 
-function authorizePage(authRequest: AuthRequest, deviceId: string): Response {
-  const requestJson = JSON.stringify(authRequest);
-  const escaped = requestJson.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;');
-  const device = deviceId.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;');
-  return html(`<!doctype html>
-<html lang="ar" dir="rtl">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Brauzio Authorization</title></head>
-<body style="font-family:system-ui,sans-serif;max-width:680px;margin:48px auto;padding:0 20px;line-height:1.7">
-<h1>Brauzio</h1><p>يطلب ChatGPT صلاحية التحكم بجهاز <b>${device}</b>.</p>
-<form method="post" action="/authorize">
-<input type="hidden" name="request" value='${escaped}'>
-<input type="hidden" name="device" value="${device}">
-<button type="submit" name="decision" value="approve" style="padding:12px 18px">السماح</button>
-<button type="submit" name="decision" value="deny" style="padding:12px 18px">رفض</button>
-</form></body></html>`);
+  workerLog('OAUTH_APPROVED', { deviceId, clientName });
+  return Response.redirect(complete.redirectTo, 302);
 }
 
 const oauthProvider = new OAuthProvider<Env>({
   apiRoute: '/mcp',
-  apiHandler: {
-    async fetch(request, env) {
-      const handler = createMcpHandler(createServer(env), { route: '/mcp' });
-      return await handler(request, env);
-    },
-  },
+  apiHandler: mcpApiHandler,
   defaultHandler: {
-    async fetch(request, env) {
+    async fetch(request: Request, env: Env): Promise<Response> {
       const url = new URL(request.url);
+
       if (url.pathname === '/health') {
-        return Response.json({ ok: true, version: BRAUZIO_RUNTIME_VERSION, schemaVersion: BRAUZIO_SCHEMA_VERSION, toolCount: BRAUZIO_TOOL_SCHEMAS.length });
-      }
-      if (url.pathname === '/ws') {
-        return await browserStub(env, deviceIdFromRequest(request, env)).fetch(request);
-      }
-      if (url.pathname === '/authorize' && request.method === 'GET') {
-        const authRequest = await env.OAUTH_PROVIDER.parseAuthRequest(request);
-        if (!authRequest) return oauthError('Invalid OAuth authorization request');
-        const deviceId = deviceIdFromRequest(request, env);
-        return authorizePage(authRequest, deviceId);
-      }
-      if (url.pathname === '/authorize' && request.method === 'POST') {
-        const form = await request.formData();
-        const decision = String(form.get('decision') || 'deny');
-        if (decision !== 'approve') return oauthError('Authorization denied', 403);
-        const encoded = String(form.get('request') || '');
-        const deviceId = normalizeDeviceId(form.get('device') || env.DEFAULT_DEVICE_ID || 'default');
-        let authRequest: AuthRequest;
-        try { authRequest = JSON.parse(encoded) as AuthRequest; } catch { return oauthError('Invalid authorization payload'); }
-        const { redirectTo } = await env.OAUTH_PROVIDER.completeAuthorization({
-          request: authRequest,
-          userId: await oauthUserIdForDevice(deviceId),
-          metadata: { label: 'Brauzio Chrome device', deviceId },
-          scope: [BRAUZIO_SCOPE],
-          props: { deviceId, authorizedAt: Date.now() },
+        return Response.json({
+          ok: true,
+          service: 'Brauzio',
+          version: BRAUZIO_RUNTIME_VERSION,
+          schemaVersion: BRAUZIO_SCHEMA_VERSION,
+          toolCount: BRAUZIO_TOOL_SCHEMAS.length,
+          auth: 'oauth2',
+          runtime: 'cloudflare-workers',
+          transport: 'streamable-http+mcp+websocket-relay',
+          persistence: {
+            watches: true,
+            events: true,
+          },
+          javascript: {
+            pageExecution: true,
+            protocol: 'brauzio-js-runtime-v3',
+          },
         });
-        return Response.redirect(redirectTo, 302);
       }
-      return new Response('Brauzio', { status: 200 });
+
+      if (url.pathname === '/ws') {
+        return browserStub(env, deviceIdFromRequest(request, env)).fetch(request);
+      }
+
+      if (url.pathname === '/authorize') {
+        return handleAuthorize(request, env);
+      }
+
+      if (url.pathname === '/robots.txt') {
+        return new Response('User-agent: *\nDisallow: /\n', {
+          headers: { 'content-type': 'text/plain; charset=utf-8' },
+        });
+      }
+
+      return new Response('Brauzio MCP', {
+        status: 404,
+        headers: { 'content-type': 'text/plain; charset=utf-8' },
+      });
     },
   },
   authorizeEndpoint: '/authorize',
   tokenEndpoint: '/token',
   clientRegistrationEndpoint: '/register',
+  accessTokenTTL: 60 * 60,
+  refreshTokenTTL: 60 * 60 * 24 * 30,
 });
 
-export default {
-  async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
-    workerLog('REQUEST', { method: request.method, path: new URL(request.url).pathname });
-    return await oauthProvider.fetch(request, env, ctx);
-  },
-};
+export default oauthProvider;
