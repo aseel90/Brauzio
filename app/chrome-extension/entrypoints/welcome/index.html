@@ -3,11 +3,61 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Brauzio — إعداد الاتصال</title>
-    <meta name="manifest.type" content="unlisted_page" />
+    <meta name="color-scheme" content="light dark" />
+    <title>Brauzio — تم التثبيت بنجاح</title>
+    <style>
+      :root {
+        font-family: Arial, Tahoma, sans-serif;
+        color: #111827;
+        background: #f8fafc;
+      }
+      * { box-sizing: border-box; }
+      body {
+        min-height: 100vh;
+        margin: 0;
+        display: grid;
+        place-items: center;
+        padding: 24px;
+      }
+      main {
+        width: min(680px, 100%);
+        background: #ffffff;
+        border: 1px solid #e5e7eb;
+        border-radius: 18px;
+        padding: 32px;
+        box-shadow: 0 10px 35px rgba(15, 23, 42, 0.08);
+      }
+      h1 { margin: 0 0 12px; font-size: 30px; }
+      p { line-height: 1.8; margin: 8px 0; }
+      .status {
+        display: inline-block;
+        margin: 10px 0 18px;
+        padding: 8px 12px;
+        border-radius: 999px;
+        background: #ecfdf5;
+        color: #065f46;
+        font-weight: 700;
+      }
+      .note {
+        margin-top: 18px;
+        padding: 14px 16px;
+        border-radius: 12px;
+        background: #f1f5f9;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root { color: #e5e7eb; background: #0f172a; }
+        main { background: #111827; border-color: #334155; }
+        .note { background: #1e293b; }
+      }
+    </style>
   </head>
   <body>
-    <div id="app"></div>
-    <script type="module" src="./main.ts"></script>
+    <main>
+      <h1>Brauzio</h1>
+      <div class="status">تم تثبيت الإضافة بنجاح</div>
+      <p>أصبحت إضافة Brauzio جاهزة للاستخدام.</p>
+      <p>افتح الإضافة من شريط أدوات Chrome لإعداد الاتصال وإدارة حالة Brauzio.</p>
+      <div class="note">لأسباب أمنية، هذه الصفحة ثابتة ولا تنفذ JavaScript ولا تقرأ بيانات من المتصفح.</div>
+    </main>
   </body>
 </html>
