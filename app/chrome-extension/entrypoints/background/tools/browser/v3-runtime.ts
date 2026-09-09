@@ -3,6 +3,7 @@ import { TOOL_NAMES } from 'brauzio-shared';
 import { BaseBrowserToolExecutor } from '../base-browser';
 import { actionEngine, type V3ActionRequest } from '../../runtime-v3/action-engine';
 import { waitForDomSettled } from '@/utils/smart-wait';
+import { automationSessions } from '../../runtime-v3/automation-session';
 import { elementRegistry } from '../../runtime-v3/element-registry';
 import { observationService } from '../../runtime-v3/observation-service';
 import type { V3ResolveTarget, V3SnapshotMode } from '../../runtime-v3/types';
@@ -30,6 +31,10 @@ interface ResolveParams {
 interface ActParams extends V3ActionRequest {
   tabId?: number;
   windowId?: number;
+  workflowId?: string;
+  stepId?: string;
+  resumeKey?: string;
+  completeWorkflow?: boolean;
 }
 
 abstract class V3BrowserTool extends BaseBrowserToolExecutor {
@@ -90,8 +95,20 @@ class ActTool extends V3BrowserTool {
 
   async execute(args: ActParams): Promise<ToolResult> {
     if (!args?.action) return createErrorResponse('chrome_act requires action');
+    let workflowStarted = false;
     try {
       const tab = await this.resolveTab(args.tabId, args.windowId);
+      if (args.workflowId) {
+        await automationSessions.begin(args.workflowId, {
+          resumeKey: args.resumeKey,
+          stepId: args.stepId,
+          tabId: tab.id,
+          action: args.action,
+          target: args.target,
+        });
+        workflowStarted = true;
+      }
+
       let result = await actionEngine.execute(tab, args);
       const firstErrorCode = String(result.evidence.error?.code || '');
       const firstErrorReason = String((result.evidence.error?.details as { reason?: unknown } | undefined)?.reason || '');
@@ -122,6 +139,16 @@ class ActTool extends V3BrowserTool {
           || [];
       }
 
+      const workflow = args.workflowId
+        ? await automationSessions.finishStep(args.workflowId, {
+            stepId: args.stepId,
+            success: result.evidence.success,
+            afterSnapshotId: result.evidence.afterSnapshotId || result.observation?.snapshotId,
+            error: result.evidence.error?.message,
+            completeWorkflow: args.completeWorkflow === true,
+          })
+        : undefined;
+
       const content: ToolResult['content'] = [{
         type: 'text',
         text: JSON.stringify({
@@ -129,6 +156,7 @@ class ActTool extends V3BrowserTool {
           evidence: result.evidence,
           resolution: result.resolution,
           observation: result.observation,
+          workflow,
         }),
       }];
       if (args.includeScreenshotAfter === true && result.screenshot) {
@@ -136,6 +164,13 @@ class ActTool extends V3BrowserTool {
       }
       return { content, isError: !result.evidence.success };
     } catch (error) {
+      if (workflowStarted && args.workflowId) {
+        await automationSessions.finishStep(args.workflowId, {
+          stepId: args.stepId,
+          success: false,
+          error: error instanceof Error ? error.message : String(error),
+        }).catch(() => undefined);
+      }
       return createErrorResponse(`chrome_act failed: ${error instanceof Error ? error.message : String(error)}`);
     }
   }
