@@ -1,6 +1,5 @@
 import { createErrorResponse, type ToolResult } from '@/common/tool-handler';
 import { cdpRouter } from '@/utils/cdp-router';
-import { TOOL_NAMES } from 'brauzio-shared';
 import { relayMetrics } from '../../relay-metrics';
 import { runtimeState } from '../../runtime-v3/runtime-state';
 import { toolTrace } from '../../runtime-v3/tool-trace';
@@ -63,7 +62,7 @@ async function workerHealth(relayUrl: string): Promise<Record<string, unknown>> 
 }
 
 class DiagnosticsTool extends BaseBrowserToolExecutor {
-  name = TOOL_NAMES.BROWSER.DIAGNOSTICS;
+  name = 'chrome_diagnostics';
 
   async execute(args: DiagnosticsParams = {}): Promise<ToolResult> {
     try {
