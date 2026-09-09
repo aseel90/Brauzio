@@ -71,11 +71,11 @@ jobs:
           set -euo pipefail
           JS='app/chrome-extension/entrypoints/background/tools/browser/javascript.ts'
           ACT='app/chrome-extension/entrypoints/background/runtime-v3/action-engine.ts'
-          grep -Fq 'buildExecutionSource(code)' "$JS"
-          grep -Fq 'functionBody = `return (${userCode});`' "$JS"
+          grep -Fq "BRAUZIO_JS_RUNTIME_V3" "$JS"
+          grep -Fq "buildRuntimeEvaluatorSource(code)" "$JS"
           grep -Fq 'isNativeHtml5Draggable' "$ACT"
           grep -Fq 'const steps = 4;' "$ACT"
-          echo 'Runtime regression guards passed: JS result propagation + HTML5 drag fast path.'
+          echo 'Runtime regression guards passed: page-side JS evaluator + HTML5 drag fast path.'
 
       - name: Build Chrome extension
         run: pnpm --filter brauzio-extension build
@@ -105,6 +105,7 @@ jobs:
           root = pathlib.Path(sys.argv[1])
           manifest = json.loads((root / 'manifest.json').read_text(encoding='utf-8'))
 
+          assert manifest.get('version') == '3.0.6', manifest.get('version')
           assert manifest.get('default_locale') == 'ar', manifest.get('default_locale')
           assert manifest.get('action', {}).get('default_title') == 'Brauzio', manifest.get('action')
           assert (root / '_locales' / 'ar' / 'messages.json').is_file(), 'Arabic locale missing'
@@ -113,7 +114,10 @@ jobs:
           assert manifest.get('icons', {}).get('128') == 'icon/128.png', manifest.get('icons')
           assert not (root / 'wxt.svg').exists(), 'WXT scaffold asset unexpectedly present'
 
-          print('Packaged manifest verified: Brauzio identity, Arabic locale, custom icons, no Chinese locales.')
+          background = (root / 'background.js').read_text(encoding='utf-8')
+          assert 'BRAUZIO_JS_RUNTIME_V3' in background, 'JS runtime V3 marker missing from packaged background'
+          assert 'BRAUZIO_BUILD_3_0_6' in background, '3.0.6 build marker missing from packaged background'
+          print('Packaged manifest verified: Brauzio 3.0.6 + runtime/build markers + Arabic locale.')
           PY
 
       - name: Upload installable Brauzio ZIP
@@ -148,5 +152,7 @@ jobs:
           git push
 
 # Current release line: Brauzio 3.0.x
-# Runtime hardening gate: Brauzio 3.0.5
-# Publish trigger: Brauzio 3.0.5
+# Runtime hardening gate: Brauzio 3.0.6
+# Publish trigger: Brauzio 3.0.6
+
+# Final validation trigger: PR19 3.0.6
