@@ -1,0 +1,163 @@
+name: Repair Brauzio 3.0.5 source only
+
+on:
+  push:
+    branches:
+      - fix/3.0.5-runtime-hardening
+    paths:
+      - '.github/workflows/repair-brauzio-3.0.5-v3.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/3.0.5-runtime-hardening
+          fetch-depth: 0
+
+      - name: Apply runtime source patch
+        shell: bash
+        run: |
+          set -euo pipefail
+          python <<'PY'
+          from pathlib import Path
+          import json, re
+
+          p = Path('app/chrome-extension/entrypoints/background/tools/browser/javascript.ts')
+          s = p.read_text(encoding='utf-8')
+          old = """/**
+           * Wrap user code in an async IIFE to support top-level await and return statements.
+           */
+          function wrapUserCode(code: string): string {
+            return `(async () => {\\n${code}\\n})()`;
+          }"""
+          new = """/**
+           * Build an async execution wrapper while preserving expression return values.
+           * Expression-only input such as `2 + 2`, `document.title`, or `await fetch(...)`
+           * returns its value. Statement blocks keep explicit-return semantics.
+           */
+          function canCompileAsExpression(code: string): boolean {
+            try {
+              const AsyncFunction = Object.getPrototypeOf(async function () {}).constructor;
+              new AsyncFunction(`return (${code});`);
+              return true;
+            } catch {
+              return false;
+            }
+          }
+
+          function buildExecutionSource(code: string): { expression: string; functionBody: string } {
+            if (canCompileAsExpression(code)) {
+              return {
+                expression: `(async () => (${code}))()`,
+                functionBody: `return (${code});`,
+              };
+            }
+            return {
+              expression: `(async () => {\\n${code}\\n})()`,
+              functionBody: code,
+            };
+          }"""
+          if old not in s:
+            raise SystemExit('javascript wrapper block not found')
+          s = s.replace(old, new, 1)
+          s = s.replace('const expression = wrapUserCode(code);', 'const { expression } = buildExecutionSource(code);', 1)
+          old2 = """          const AsyncFunction = Object.getPrototypeOf(async function () {}).constructor;
+                    const fn = new AsyncFunction(userCode);""".replace('                    const fn', '          const fn')
+          new2 = """          const AsyncFunction = Object.getPrototypeOf(async function () {}).constructor;
+                    let functionBody = userCode;
+                    try {
+                      new AsyncFunction(`return (${userCode});`);
+                      functionBody = `return (${userCode});`;
+                    } catch {
+                      // Statement block: preserve explicit return semantics.
+                    }
+                    const fn = new AsyncFunction(functionBody);""".replace('                    let functionBody', '          let functionBody').replace('                    try', '          try').replace('                      new AsyncFunction', '            new AsyncFunction').replace('                      functionBody', '            functionBody').replace('                    } catch', '          } catch').replace('                      // Statement', '            // Statement').replace('                    }', '          }').replace('                    const fn', '          const fn')
+          if old2 not in s:
+            raise SystemExit('javascript scripting fallback block not found')
+          s = s.replace(old2, new2, 1)
+          p.write_text(s, encoding='utf-8')
+
+          p = Path('app/chrome-extension/entrypoints/background/runtime-v3/action-engine.ts')
+          s = p.read_text(encoding='utf-8')
+          pattern = re.compile(r"    const a = await actionabilityService\.inspect\(tabId, sourceElement, \{ scroll: true \}\);\n    const b = await actionabilityService\.inspect\(tabId, targetElement, \{ scroll: true \}\);\n    if \(!a\.center \|\| !b\.center\) throw this\.error\('NOT_ACTIONABLE', 'Drag source or target has no visible center'\);\n    const send = \(params: object\) => this\.send\(tabId, sourceElement, 'Input\.dispatchMouseEvent', params\);\n    await send\(\{ type: 'mouseMoved'.*?\n    await this\.dispatchHtml5Drag\(tabId, sourceElement, targetElement\);", re.S)
+          replacement = """    // Standards-based draggable elements use DragEvent/DataTransfer directly.
+              // Keep physical pointer drag only for sliders, canvases and custom widgets.
+              if (await this.isNativeHtml5Draggable(tabId, sourceElement)) {
+                await this.dispatchHtml5Drag(tabId, sourceElement, targetElement);
+                return;
+              }
+              const a = await actionabilityService.inspect(tabId, sourceElement, { scroll: true, stableMs: 40 });
+              const b = await actionabilityService.inspect(tabId, targetElement, { scroll: true, stableMs: 40 });
+              if (!a.center || !b.center) throw this.error('NOT_ACTIONABLE', 'Drag source or target has no visible center');
+              const send = (params: object) => this.send(tabId, sourceElement, 'Input.dispatchMouseEvent', params);
+              await send({ type: 'mouseMoved', x: a.center.x, y: a.center.y });
+              await send({ type: 'mousePressed', x: a.center.x, y: a.center.y, button: 'left', buttons: 1, clickCount: 1 });
+              const steps = 4;
+              for (let i = 1; i <= steps; i += 1) {
+                const t = i / steps;
+                await send({ type: 'mouseMoved', x: a.center.x + (b.center.x - a.center.x) * t, y: a.center.y + (b.center.y - a.center.y) * t, button: 'left', buttons: 1 });
+              }
+              await send({ type: 'mouseReleased', x: b.center.x, y: b.center.y, button: 'left', buttons: 0, clickCount: 1 });"""
+          replacement = '\n'.join(line[10:] if line.startswith('          ') else line for line in replacement.splitlines())
+          s, count = pattern.subn(replacement, s, count=1)
+          if count != 1:
+            raise SystemExit(f'drag block replacement count={count}')
+          marker = "  private async dispatchHtml5Drag(tabId: number, sourceElement: V3Element, targetElement: V3Element): Promise<void> {"
+          helper = """  private async isNativeHtml5Draggable(tabId: number, sourceElement: V3Element): Promise<boolean> {
+            const objectGroup = `brauzio-v3-drag-detect:${tabId}`;
+            const resolved = await this.send<any>(tabId, sourceElement, 'DOM.resolveNode', {
+              backendNodeId: sourceElement.backendNodeId,
+              objectGroup,
+            }).catch(() => undefined);
+            const objectId = resolved?.object?.objectId;
+            if (!objectId) return false;
+            try {
+              const result = await this.send<any>(tabId, sourceElement, 'Runtime.callFunctionOn', {
+                objectId,
+                returnByValue: true,
+                functionDeclaration: `function(){
+                  const el=this;
+                  return Boolean(el && (el.draggable === true || el.getAttribute?.('draggable') === 'true'));
+                }`,
+              }).catch(() => undefined);
+              return Boolean(result?.result?.value);
+            } finally {
+              await this.send(tabId, sourceElement, 'Runtime.releaseObjectGroup', { objectGroup }).catch(() => undefined);
+            }
+          }
+
+          """
+          if marker not in s:
+            raise SystemExit('HTML5 drag marker not found')
+          s = s.replace(marker, helper + marker, 1)
+          p.write_text(s, encoding='utf-8')
+
+          p = Path('app/chrome-extension/package.json')
+          data = json.loads(p.read_text(encoding='utf-8'))
+          data['version'] = '3.0.5'
+          p.write_text(json.dumps(data, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+
+          p = Path('app/cloudflare-mcp/src/index.ts')
+          s = p.read_text(encoding='utf-8')
+          s = s.replace("const BRAUZIO_RUNTIME_VERSION = '3.0.4';", "const BRAUZIO_RUNTIME_VERSION = '3.0.5';")
+          s = s.replace("const BRAUZIO_SCHEMA_VERSION = '3.0.4';", "const BRAUZIO_SCHEMA_VERSION = '3.0.5';")
+          p.write_text(s, encoding='utf-8')
+          PY
+
+      - name: Commit source patch
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add app/chrome-extension/entrypoints/background/tools/browser/javascript.ts
+          git add app/chrome-extension/entrypoints/background/runtime-v3/action-engine.ts
+          git add app/chrome-extension/package.json
+          git add app/cloudflare-mcp/src/index.ts
+          git commit -m 'fix: harden Brauzio 3.0.5 runtime core'
+          git push origin HEAD:fix/3.0.5-runtime-hardening
