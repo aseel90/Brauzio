@@ -6,8 +6,8 @@ import { BrowserSession } from './browser-session-v31';
 
 export { BrowserSession };
 
-const BRAUZIO_RUNTIME_VERSION = '3.1.0';
-const BRAUZIO_SCHEMA_VERSION = '3.1.0';
+const BRAUZIO_RUNTIME_VERSION = '3.1.1';
+const BRAUZIO_SCHEMA_VERSION = '3.1.1';
 const BRAUZIO_ORIGIN = 'https://brauzio-mcp.aseelsalah266.workers.dev';
 const BRAUZIO_RESOURCE = `${BRAUZIO_ORIGIN}/mcp`;
 const BRAUZIO_SCOPE = 'brauzio:control';
@@ -300,6 +300,7 @@ const oauthProvider = new OAuthProvider<Env>({
   authorizeEndpoint: '/authorize',
   tokenEndpoint: '/token',
   clientRegistrationEndpoint: '/register',
+  clientIdMetadataDocumentEnabled: true,
   accessTokenTTL: 60 * 60,
   refreshTokenTTL: 60 * 60 * 24 * 30,
 });
