@@ -94,6 +94,7 @@ jobs:
           DIAG='app/chrome-extension/entrypoints/background/tools/browser/diagnostics.ts'
           WORKER='app/cloudflare-mcp/src/index.ts'
           SESSION='app/cloudflare-mcp/src/browser-session-v31.ts'
+          SESSION_BASE='app/cloudflare-mcp/src/browser-session.ts'
 
           grep -Fq 'MutationObserver' "$SMART"
           grep -Fq 'retryReasons' "$V3"
@@ -117,6 +118,13 @@ jobs:
           grep -Fq "name = 'chrome_diagnostics'" "$DIAG"
           grep -Fq 'BRAUZIO_DIAGNOSTICS_SCHEMA' "$WORKER"
           grep -Fq '__brauzioRequestId' "$WORKER"
+          grep -Fq "https://brauzio-browser.internal/pairing/consume" "$WORKER"
+          if grep -Fq "pairing/confirm" "$WORKER"; then
+            echo 'OAuth pairing endpoint must use /pairing/consume, not /pairing/confirm.' >&2
+            exit 1
+          fi
+          grep -Fq "if (!pairing.ok || pairingResult.ok !== true)" "$WORKER"
+          grep -Fq "url.pathname === '/pairing/consume'" "$SESSION_BASE"
           grep -Fq 'export class BrowserSession extends BrowserSessionBase' "$SESSION"
           grep -Fq 'CALL_RESENT_AFTER_RECONNECT' "$SESSION"
 
@@ -166,7 +174,7 @@ jobs:
 
           welcome_path = root / 'welcome.html'
           welcome = welcome_path.read_text(encoding='utf-8')
-          script_srcs = re.findall(r'<script[^>]+src=[\"\']([^\"\']+)[\"\']', welcome, flags=re.I)
+          script_srcs = re.findall(r'<script[^>]+src=["\']([^"\']+)["\']', welcome, flags=re.I)
           allowed_wxt = re.compile(r'/chunks/_virtual_wxt-html-plugins-[A-Za-z0-9_-]+\.js')
           for src in script_srcs:
               assert allowed_wxt.fullmatch(src), f'unexpected script in welcome.html: {src}'
@@ -212,6 +220,6 @@ jobs:
 
 # Current release line: Brauzio 3.1.x
 # Extension hotfix: Brauzio 3.1.2
-# Runtime hardening gate: Brauzio 3.1.1 server / 3.1.2 extension
-# Final validation trigger: 3.1.2 pairing + login + Defender compatibility
-# CI rerun marker: pairing bridge final validation
+# Runtime hardening gate: Brauzio 3.1.2 server / 3.1.2 extension
+# Final validation trigger: 3.1.2 pairing consume + login + Defender compatibility
+# CI rerun marker: pairing consume final validation

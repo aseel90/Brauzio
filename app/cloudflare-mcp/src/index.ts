@@ -6,8 +6,8 @@ import { BrowserSession } from './browser-session-v31';
 
 export { BrowserSession };
 
-const BRAUZIO_RUNTIME_VERSION = '3.1.1';
-const BRAUZIO_SCHEMA_VERSION = '3.1.1';
+const BRAUZIO_RUNTIME_VERSION = '3.1.2';
+const BRAUZIO_SCHEMA_VERSION = '3.1.2';
 const BRAUZIO_ORIGIN = 'https://brauzio-mcp.aseelsalah266.workers.dev';
 const BRAUZIO_RESOURCE = `${BRAUZIO_ORIGIN}/mcp`;
 const BRAUZIO_SCOPE = 'brauzio:control';
@@ -218,7 +218,7 @@ async function handleAuthorize(request: Request, env: Env) {
   const form = await request.formData();
   const pairingCode = String(form.get('pairing_code') || '').trim();
   const pairing = await browserStub(env, deviceId).fetch(
-    new Request('https://brauzio-browser.internal/pairing/confirm', {
+    new Request('https://brauzio-browser.internal/pairing/consume', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({ code: pairingCode }),
@@ -226,10 +226,10 @@ async function handleAuthorize(request: Request, env: Env) {
   );
   const pairingResult = (await pairing.json().catch(() => ({}))) as {
     ok?: boolean;
-    active?: boolean;
     error?: string;
+    code?: string;
   };
-  if (!pairing.ok || pairingResult.ok !== true || pairingResult.active !== true) {
+  if (!pairing.ok || pairingResult.ok !== true) {
     const body = `<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>فشل الربط</title></head><body style="font-family:system-ui;padding:32px"><h1>تعذر ربط Brauzio</h1><p>${pairingResult.error || 'رمز الاقتران غير صحيح أو انتهت صلاحيته.'}</p><p><a href="${new URL('/authorize', BRAUZIO_ORIGIN)}">حاول مرة أخرى</a></p></body></html>`;
     return new Response(body, { status: 401, headers: { 'content-type': 'text/html; charset=utf-8', 'cache-control': 'no-store' } });
   }
