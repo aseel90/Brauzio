@@ -6,8 +6,8 @@ import { BrowserSession } from './browser-session-v31';
 
 export { BrowserSession };
 
-const BRAUZIO_RUNTIME_VERSION = '3.1.2';
-const BRAUZIO_SCHEMA_VERSION = '3.1.2';
+const BRAUZIO_RUNTIME_VERSION = '3.1.3';
+const BRAUZIO_SCHEMA_VERSION = '3.1.3';
 const BRAUZIO_ORIGIN = 'https://brauzio-mcp.aseelsalah266.workers.dev';
 const BRAUZIO_RESOURCE = `${BRAUZIO_ORIGIN}/mcp`;
 const BRAUZIO_SCOPE = 'brauzio:control';
@@ -234,15 +234,15 @@ async function handleAuthorize(request: Request, env: Env) {
     return new Response(body, { status: 401, headers: { 'content-type': 'text/html; charset=utf-8', 'cache-control': 'no-store' } });
   }
 
+  const grantedScopes = oauthRequest.scope.filter((scope) => scope === BRAUZIO_SCOPE);
+  const oauthUserId = await oauthUserIdForDevice(deviceId);
   const complete = await env.OAUTH_PROVIDER.completeAuthorization({
     request: oauthRequest,
-    userId: await oauthUserIdForDevice(deviceId),
-    metadata: {
-      label: `Brauzio device ${deviceId}`,
-      pairedAt: new Date().toISOString(),
-    },
-    scope: oauthRequest.scope,
+    userId: oauthUserId,
+    metadata: { clientName, deviceId },
+    scope: grantedScopes,
     props: { deviceId, authorizedAt: Date.now() } satisfies BrauzioAuthProps,
+    revokeExistingGrants: false,
   });
 
   workerLog('OAUTH_APPROVED', { deviceId, clientName });
@@ -278,11 +278,35 @@ const oauthProvider = new OAuthProvider<Env>({
       }
 
       if (url.pathname === '/ws') {
-        return browserStub(env, deviceIdFromRequest(request, env)).fetch(request);
+        const deviceId = deviceIdFromRequest(request, env);
+        const stub = browserStub(env, deviceId);
+        const target = new URL(request.url);
+        target.protocol = 'https:';
+        target.hostname = 'brauzio-browser.internal';
+        target.pathname = '/ws';
+        return stub.fetch(new Request(target.toString(), request));
       }
 
       if (url.pathname === '/authorize') {
         return handleAuthorize(request, env);
+      }
+
+      if (url.pathname === '/browser-pairing') {
+        if (request.method !== 'GET' && request.method !== 'HEAD') {
+          return Response.json(
+            { error: 'Create pairing codes from the Brauzio extension', code: 'PAIRING_CREATE_EXTENSION_ONLY' },
+            { status: 405, headers: { allow: 'GET, HEAD' } },
+          );
+        }
+        return browserStub(env, deviceIdFromRequest(request, env)).fetch(
+          new Request('https://brauzio-browser.internal/pairing/status'),
+        );
+      }
+
+      if (url.pathname === '/browser-status') {
+        return browserStub(env, deviceIdFromRequest(request, env)).fetch(
+          new Request('https://brauzio-browser.internal/status'),
+        );
       }
 
       if (url.pathname === '/robots.txt') {
@@ -298,11 +322,36 @@ const oauthProvider = new OAuthProvider<Env>({
     },
   },
   authorizeEndpoint: '/authorize',
-  tokenEndpoint: '/token',
-  clientRegistrationEndpoint: '/register',
+  tokenEndpoint: '/oauth/token',
+  clientRegistrationEndpoint: '/oauth/register',
+  scopesSupported: [BRAUZIO_SCOPE],
+  allowPlainPKCE: false,
   clientIdMetadataDocumentEnabled: true,
+  resourceMetadata: {
+    resource: BRAUZIO_RESOURCE,
+    authorization_servers: [BRAUZIO_ORIGIN],
+    scopes_supported: [BRAUZIO_SCOPE],
+    resource_name: 'Brauzio Chrome Control',
+  },
   accessTokenTTL: 60 * 60,
   refreshTokenTTL: 60 * 60 * 24 * 30,
+  tokenExchangeCallback: async (options) => {
+    workerLog('OAUTH_TOKEN_EXCHANGE', {
+      grantType: options.grantType,
+      clientId: options.clientId,
+      userId: options.userId,
+    });
+  },
+  onError({ code, description, status, internal, request }) {
+    workerLog('OAUTH_ERROR', {
+      code,
+      status,
+      description,
+      category: internal?.category || '',
+      reason: internal?.reason || '',
+      path: request ? new URL(request.url).pathname : '',
+    });
+  },
 });
 
 export default oauthProvider;
