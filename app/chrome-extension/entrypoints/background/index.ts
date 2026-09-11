@@ -1,6 +1,7 @@
 import { initRemoteRelayListener } from './remote-relay';
 import { initMouseHoldSafetyListeners } from '@/utils/mouse-hold-safety';
 import { initPopupLiveViewControls } from './popup-live-view';
+import { tabTopology } from './runtime-v3/tab-topology';
 
 /**
  * Brauzio background entry point.
@@ -13,6 +14,10 @@ export default defineBackground(() => {
     if (details.reason === 'install') {
       chrome.tabs.create({ url: chrome.runtime.getURL('/welcome.html') });
     }
+  });
+
+  void tabTopology.ensureInitialized().catch((error) => {
+    console.warn('[BrauzioTopology] passive initialization failed', error);
   });
 
   initMouseHoldSafetyListeners();
