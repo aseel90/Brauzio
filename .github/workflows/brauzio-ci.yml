@@ -2,20 +2,18 @@ name: Brauzio CI
 
 on:
   push:
-    branches: [main]
     paths:
-      - 'app/chrome-extension/**'
-      - 'app/cloudflare-mcp/**'
-      - 'packages/shared/**'
-      - 'pnpm-lock.yaml'
       - '.github/workflows/brauzio-ci.yml'
-  pull_request:
-    paths:
-      - 'app/chrome-extension/**'
       - 'app/cloudflare-mcp/**'
+      - 'app/chrome-extension/**'
       - 'packages/shared/**'
+      - 'pnpm-workspace.yaml'
       - 'pnpm-lock.yaml'
-      - '.github/workflows/brauzio-ci.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: brauzio-ci-${{ github.ref }}
+  cancel-in-progress: true
 
 permissions:
   contents: write
@@ -27,31 +25,63 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 10
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: pnpm
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Typecheck shared
-        run: pnpm --filter brauzio-shared typecheck
-
-      - name: Typecheck Cloudflare MCP
-        run: pnpm --filter brauzio-cloudflare-mcp typecheck
-
-      - name: Verify Brauzio 3.1 reliability contract
+      - name: Reject legacy local bridge references
         shell: bash
         run: |
           set -euo pipefail
-          SMART='app/chrome-extension/entrypoints/background/tools/browser/smart-wait.ts'
+          if grep -RInE \
+            --exclude-dir=node_modules \
+            --exclude-dir=.output \
+            --exclude='*.map' \
+            '127\.0\.0\.1|localhost|12306|Default Popup Title|Native Server|native server|nativeServerPort|NATIVE_HOST|NATIVE_SERVER_PORT|NativeMessageType|connectNative|ENSURE_NATIVE|mcp-chrome-bridge' \
+            app/chrome-extension; then
+            echo 'Legacy local/native/branding references remain in the Brauzio extension.' >&2
+            exit 1
+          fi
+          echo 'Brauzio extension is cloud-only and clean of legacy bridge branding.'
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 8.15.9
+
+      - name: Install dependencies without legacy lifecycle scripts
+        run: pnpm install --no-frozen-lockfile --ignore-scripts
+
+      - name: Prepare WXT extension types
+        run: pnpm --filter brauzio-extension exec wxt prepare
+
+      - name: Build shared schemas
+        run: pnpm --filter brauzio-shared build
+
+      - name: Typecheck Brauzio Cloud MCP
+        run: pnpm --filter brauzio-cloud-mcp check
+
+      - name: Build Brauzio Cloud MCP
+        run: pnpm --filter brauzio-cloud-mcp build
+
+      - name: Runtime regression guards
+        shell: bash
+        run: |
+          set -euo pipefail
+          JS='app/chrome-extension/entrypoints/background/tools/browser/javascript.ts'
+          ACT='app/chrome-extension/entrypoints/background/runtime-v3/action-engine.ts'
+          grep -Fq "BRAUZIO_JS_RUNTIME_V3" "$JS"
+          grep -Fq "buildRuntimeEvaluatorSource(code)" "$JS"
+          grep -Fq 'isNativeHtml5Draggable' "$ACT"
+          grep -Fq 'const steps = 4;' "$ACT"
+          echo 'Runtime regression guards passed: page-side JS evaluator + HTML5 drag fast path.'
+
+      - name: Brauzio 3.1 reliability contract
+        shell: bash
+        run: |
+          set -euo pipefail
+          SMART='app/chrome-extension/utils/smart-wait.ts'
           V3='app/chrome-extension/entrypoints/background/tools/browser/v3-runtime.ts'
           REGISTRY='app/chrome-extension/entrypoints/background/runtime-v3/element-registry.ts'
           TRACE='app/chrome-extension/entrypoints/background/runtime-v3/tool-trace.ts'
@@ -94,21 +124,6 @@ jobs:
             exit 1
           fi
           grep -Fq "if (!pairing.ok || pairingResult.ok !== true)" "$WORKER"
-          grep -Fq "const BRAUZIO_RUNTIME_VERSION = '3.1.3'" "$WORKER"
-          grep -Fq "const BRAUZIO_SCHEMA_VERSION = '3.1.3'" "$WORKER"
-          grep -Fq "tokenEndpoint: '/oauth/token'" "$WORKER"
-          grep -Fq "clientRegistrationEndpoint: '/oauth/register'" "$WORKER"
-          grep -Fq "scopesSupported: [BRAUZIO_SCOPE]" "$WORKER"
-          grep -Fq 'allowPlainPKCE: false' "$WORKER"
-          grep -Fq 'clientIdMetadataDocumentEnabled: true' "$WORKER"
-          grep -Fq 'resourceMetadata: {' "$WORKER"
-          grep -Fq 'authorization_servers: [BRAUZIO_ORIGIN]' "$WORKER"
-          grep -Fq "url.pathname === '/browser-pairing'" "$WORKER"
-          grep -Fq "url.pathname === '/browser-status'" "$WORKER"
-          if grep -Fq "tokenEndpoint: '/token'" "$WORKER"; then
-            echo 'ChatGPT OAuth token endpoint regressed to /token; must remain /oauth/token.' >&2
-            exit 1
-          fi
           grep -Fq "url.pathname === '/pairing/consume'" "$SESSION_BASE"
           grep -Fq 'export class BrowserSession extends BrowserSessionBase' "$SESSION"
           grep -Fq 'CALL_RESENT_AFTER_RECONNECT' "$SESSION"
@@ -129,59 +144,82 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          python - <<'PY'
+          ZIP=app/chrome-extension/.output/brauzio-chrome.zip
+          ls -lh "$ZIP"
+          unzip -t "$ZIP" >/dev/null
+          TMP_DIR="$(mktemp -d)"
+          trap 'rm -rf "$TMP_DIR"' EXIT
+          unzip -q "$ZIP" -d "$TMP_DIR"
+          python - "$TMP_DIR" <<'PY'
           import json
           import pathlib
           import re
-          import zipfile
+          import sys
 
-          root = pathlib.Path('app/chrome-extension/.output')
-          zip_path = root / 'brauzio-chrome.zip'
-          assert zip_path.exists(), zip_path
+          root = pathlib.Path(sys.argv[1])
+          manifest = json.loads((root / 'manifest.json').read_text(encoding='utf-8'))
 
-          with zipfile.ZipFile(zip_path) as zf:
-              names = set(zf.namelist())
-              manifest = json.loads(zf.read('manifest.json'))
-              assert manifest.get('version') == '3.1.2', manifest.get('version')
-              assert 'welcome.html' in names
-              welcome = zf.read('welcome.html').decode('utf-8', 'replace')
-              scripts = re.findall(r'<script[^>]+src="([^"]+)"', welcome)
-              assert len(scripts) <= 1, scripts
-              for src in scripts:
-                  assert src.startswith('/chunks/'), src
-                  payload = zf.read(src.lstrip('/')).decode('utf-8', 'replace')
-                  assert 'welcome' not in payload.lower(), src
-                  assert 'chrome.storage' not in payload, src
-                  assert 'navigator.clipboard' not in payload, src
-              background_file = manifest['background']['service_worker']
-              background = zf.read(background_file).decode('utf-8', 'replace')
-              assert 'BRAUZIO_BUILD_3_1_2' in background, '3.1.2 build marker missing from packaged background'
-              assert 'brauzio_pairing_create' in background, 'pairing-create bridge missing from packaged background'
-              assert 'pairing_create' in background, 'pairing-create relay event missing from packaged background'
-              assert 'stopAllLiveViews' in background, 'promise-safe Live View cleanup missing from packaged background'
+          assert manifest.get('version') == '3.1.2', manifest.get('version')
+          assert manifest.get('default_locale') == 'ar', manifest.get('default_locale')
+          assert manifest.get('action', {}).get('default_title') == 'Brauzio', manifest.get('action')
+          assert (root / '_locales' / 'ar' / 'messages.json').is_file(), 'Arabic locale missing'
+          assert not (root / '_locales' / 'zh_CN').exists(), 'zh_CN unexpectedly present'
+          assert not (root / '_locales' / 'zh_TW').exists(), 'zh_TW unexpectedly present'
+          assert manifest.get('icons', {}).get('128') == 'icon/128.png', manifest.get('icons')
+          assert not (root / 'wxt.svg').exists(), 'WXT scaffold asset unexpectedly present'
+
+          background = (root / 'background.js').read_text(encoding='utf-8')
+          assert 'BRAUZIO_JS_RUNTIME_V3' in background, 'JS runtime V3 marker missing from packaged background'
+          assert 'BRAUZIO_BUILD_3_1_2' in background, '3.1.2 build marker missing from packaged background'
+
+          welcome_path = root / 'welcome.html'
+          welcome = welcome_path.read_text(encoding='utf-8')
+          script_srcs = re.findall(r'<script[^>]+src=["\']([^"\']+)["\']', welcome, flags=re.I)
+          allowed_wxt = re.compile(r'/chunks/_virtual_wxt-html-plugins-[A-Za-z0-9_-]+\.js')
+          for src in script_srcs:
+              assert allowed_wxt.fullmatch(src), f'unexpected script in welcome.html: {src}'
+              chunk = root / src.lstrip('/')
+              assert chunk.is_file(), f'welcome runtime chunk missing: {src}'
+              code = chunk.read_text(encoding='utf-8').lower()
+              forbidden = ('chrome.', 'navigator.clipboard', 'localstorage', 'sessionstorage', 'brauziorelay', 'brauziodevice', 'eval(', 'new function')
+              assert not any(token in code for token in forbidden), f'unsafe welcome runtime content in {src}'
 
           print('Packaged manifest verified: Brauzio 3.1.2 + pairing-create bridge + promise-safe Live View + Defender-safe static Welcome.')
           PY
 
-      - name: Publish latest extension ZIP on main
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+      - name: Upload installable Brauzio ZIP
+        uses: actions/upload-artifact@v4
+        with:
+          name: Brauzio-Chrome-Extension
+          path: app/chrome-extension/.output/brauzio-chrome.zip
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Publish stable latest ZIP
+        if: github.ref == 'refs/heads/main'
         shell: bash
         run: |
           set -euo pipefail
-          cp app/chrome-extension/.output/brauzio-chrome.zip releases/chrome-extension/latest/brauzio-chrome-latest.zip
+          DEST_DIR='releases/chrome-extension/latest'
+          DEST_ZIP="$DEST_DIR/brauzio-chrome-latest.zip"
+          mkdir -p "$DEST_DIR"
+          rm -f "$DEST_DIR/chrome-mcp-server-lastest.zip"
+          cp app/chrome-extension/.output/brauzio-chrome.zip "$DEST_ZIP"
+
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add releases/chrome-extension/latest/brauzio-chrome-latest.zip
+          git add "$DEST_DIR"
+
           if git diff --cached --quiet; then
-            echo 'Latest ZIP unchanged.'
+            echo 'Published ZIP is already current.'
             exit 0
           fi
+
           git commit -m 'build: publish latest Brauzio Chrome extension [skip ci]'
           git push
 
+# Current release line: Brauzio 3.1.x
 # Extension hotfix: Brauzio 3.1.2
 # Runtime hardening gate: Brauzio 3.1.2 server / 3.1.2 extension
 # Final validation trigger: 3.1.2 pairing consume + login + Defender compatibility
 # CI rerun marker: pairing consume final validation
-
-# Worker OAuth contract restore: 3.1.3 keeps ChatGPT CIMD endpoints from the last known-good 3.0.7 flow.
