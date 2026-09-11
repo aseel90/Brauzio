@@ -25,6 +25,12 @@ interface WindowOpenHint {
   capturedAt: number;
 }
 
+interface ExplicitParentHint {
+  parentTabId: number;
+  source: string;
+  capturedAt: number;
+}
+
 const STORAGE_KEY = 'brauzio-tab-topology-v1';
 const WINDOW_OPEN_HINT_TTL_MS = 3_000;
 
@@ -46,6 +52,7 @@ class TabTopologyService {
   private records = new Map<number, TabTopologyRecord>();
   private windowTypes = new Map<number, string>();
   private windowOpenHints: WindowOpenHint[] = [];
+  private explicitParentHints = new Map<number, ExplicitParentHint>();
   private initPromise: Promise<void> | null = null;
   private listenersRegistered = false;
 
@@ -68,6 +75,21 @@ class TabTopologyService {
       void this.captureTab(tab, 'chrome.tabs.onCreated', true).then(() => this.persist()).catch(() => undefined);
     });
 
+    chrome.tabs.onUpdated.addListener((tabId) => {
+      void this.refreshTab(tabId, undefined, 'chrome.tabs.onUpdated', true).then(() => this.persist()).catch(() => undefined);
+    });
+
+    chrome.webNavigation.onCreatedNavigationTarget.addListener((details) => {
+      this.explicitParentHints.set(details.tabId, {
+        parentTabId: details.sourceTabId,
+        source: 'chrome.webNavigation.onCreatedNavigationTarget',
+        capturedAt: now(),
+      });
+      void this.refreshTab(details.tabId, undefined, 'chrome.webNavigation.onCreatedNavigationTarget', true)
+        .then(() => this.persist())
+        .catch(() => undefined);
+    });
+
     chrome.tabs.onAttached.addListener((tabId, info) => {
       void this.refreshTab(tabId, info.newWindowId, 'chrome.tabs.onAttached').then(() => this.persist()).catch(() => undefined);
     });
@@ -86,6 +108,7 @@ class TabTopologyService {
 
     chrome.tabs.onRemoved.addListener((tabId) => {
       this.records.delete(tabId);
+      this.explicitParentHints.delete(tabId);
       void this.persist();
     });
 
@@ -182,15 +205,20 @@ class TabTopologyService {
     const windowType = await this.windowType(tab.windowId);
     const existing = this.records.get(tabId);
 
+    const explicitHint = this.explicitParentHints.get(tabId);
     const openerTabId = typeof tab.openerTabId === 'number' ? tab.openerTabId : existing?.openerTabId;
-    let parentTabId = openerTabId ?? existing?.parentTabId;
-    let confidence: TabTopologyConfidence = openerTabId !== undefined
+    let parentTabId = openerTabId ?? explicitHint?.parentTabId ?? existing?.parentTabId;
+    let confidence: TabTopologyConfidence = openerTabId !== undefined || explicitHint !== undefined
       ? 'high'
       : existing?.confidence || (windowType === 'popup' || windowType === 'devtools' ? 'high' : 'low');
     const sources = new Set(existing?.sources || []);
     sources.add(source);
 
     if (typeof tab.openerTabId === 'number') sources.add('chrome.openerTabId');
+    if (explicitHint) {
+      sources.add(explicitHint.source);
+      this.explicitParentHints.delete(tabId);
+    }
 
     if (parentTabId === undefined && allowWindowOpenHint) {
       const hint = this.takeWindowOpenHint(tabUrl(tab));
@@ -219,11 +247,16 @@ class TabTopologyService {
     return record;
   }
 
-  private async refreshTab(tabId: number, windowId?: number, source = 'refresh'): Promise<void> {
+  private async refreshTab(
+    tabId: number,
+    windowId?: number,
+    source = 'refresh',
+    allowWindowOpenHint = false,
+  ): Promise<void> {
     try {
       const tab = await chrome.tabs.get(tabId);
       void windowId;
-      await this.captureTab(tab, source);
+      await this.captureTab(tab, source, allowWindowOpenHint);
     } catch {
       // The tab may have disappeared between the event and the async lookup.
     }
@@ -237,6 +270,14 @@ class TabTopologyService {
       if (record.openerTabId === removedTabId) record.openerTabId = addedTabId;
       if (record.parentTabId === removedTabId) record.parentTabId = addedTabId;
       if (record.rootTabId === removedTabId) record.rootTabId = addedTabId;
+    }
+    const childHint = this.explicitParentHints.get(removedTabId);
+    if (childHint) {
+      this.explicitParentHints.delete(removedTabId);
+      this.explicitParentHints.set(addedTabId, childHint);
+    }
+    for (const hint of this.explicitParentHints.values()) {
+      if (hint.parentTabId === removedTabId) hint.parentTabId = addedTabId;
     }
     for (const hint of this.windowOpenHints) {
       if (hint.parentTabId === removedTabId) hint.parentTabId = addedTabId;
