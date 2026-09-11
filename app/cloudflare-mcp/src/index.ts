@@ -153,6 +153,14 @@ function createServer(env: Env) {
     const name = request.params.name;
     const args = (request.params.arguments || {}) as Record<string, unknown>;
     const callerId = await callerLeaseId(ctx);
+    const hasSessionId = Boolean(String(ctx.sessionId || '').trim());
+    const hasToken = Boolean(String(ctx.http?.authInfo?.token || ''));
+    workerLog('MCP_CALLER_CONTEXT', {
+      callerId,
+      tool: name,
+      source: hasSessionId ? 'session' : hasToken ? 'token' : 'grant',
+      clientId: String(ctx.http?.authInfo?.clientId || '').slice(0, 256),
+    });
     return await callBrowserTool(env, deviceIdFromAuth(env), name, args, callerId);
   });
 
