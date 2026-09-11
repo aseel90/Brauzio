@@ -167,7 +167,7 @@ jobs:
           root = pathlib.Path(sys.argv[1])
           manifest = json.loads((root / 'manifest.json').read_text(encoding='utf-8'))
 
-          assert manifest.get('version') == '3.1.2', manifest.get('version')
+          assert manifest.get('version') == '3.2.0', manifest.get('version')
           assert manifest.get('default_locale') == 'ar', manifest.get('default_locale')
           assert manifest.get('action', {}).get('default_title') == 'Brauzio', manifest.get('action')
           assert (root / '_locales' / 'ar' / 'messages.json').is_file(), 'Arabic locale missing'
@@ -178,7 +178,7 @@ jobs:
 
           background = (root / 'background.js').read_text(encoding='utf-8')
           assert 'BRAUZIO_JS_RUNTIME_V3' in background, 'JS runtime V3 marker missing from packaged background'
-          assert 'BRAUZIO_BUILD_3_1_2' in background, '3.1.2 build marker missing from packaged background'
+          assert 'BRAUZIO_BUILD_3_2_0_RC1' in background, '3.2.0 RC1 build marker missing from packaged background'
 
           welcome_path = root / 'welcome.html'
           welcome = welcome_path.read_text(encoding='utf-8')
@@ -192,7 +192,7 @@ jobs:
               forbidden = ('chrome.', 'navigator.clipboard', 'localstorage', 'sessionstorage', 'brauziorelay', 'brauziodevice', 'eval(', 'new function')
               assert not any(token in code for token in forbidden), f'unsafe welcome runtime content in {src}'
 
-          print('Packaged manifest verified: Brauzio 3.1.2 + pairing-create bridge + promise-safe Live View + Defender-safe static Welcome.')
+          print('Packaged manifest verified: Brauzio 3.2.0 RC1 + passive topology + pairing-create + promise-safe Live View + Defender-safe static Welcome.')
           PY
 
       - name: Upload installable Brauzio ZIP
@@ -202,6 +202,28 @@ jobs:
           path: app/chrome-extension/.output/brauzio-chrome.zip
           if-no-files-found: error
           retention-days: 30
+
+      - name: Publish Brauzio 3.2.0 RC1 candidate ZIP
+        if: github.ref == 'refs/heads/feat/3.2-tab-graph-phase12-v2'
+        shell: bash
+        run: |
+          set -euo pipefail
+          DEST_DIR='releases/chrome-extension/candidates/3.2.0-rc1'
+          DEST_ZIP="$DEST_DIR/brauzio-chrome-3.2.0-rc1.zip"
+          mkdir -p "$DEST_DIR"
+          cp app/chrome-extension/.output/brauzio-chrome.zip "$DEST_ZIP"
+
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add "$DEST_ZIP"
+
+          if git diff --cached --quiet; then
+            echo 'Candidate ZIP is already current.'
+            exit 0
+          fi
+
+          git commit -m 'build: publish Brauzio 3.2.0-rc1 candidate [skip ci]'
+          git push
 
       - name: Publish stable latest ZIP
         if: github.ref == 'refs/heads/main'
@@ -231,3 +253,5 @@ jobs:
 # Runtime hardening gate: Brauzio 3.1.2 server / 3.1.2 extension
 # Final validation trigger: 3.1.2 pairing consume + login + Defender compatibility
 # CI rerun marker: pairing consume final validation
+
+# Candidate line: Brauzio 3.2.0-rc1 passive tab topology; main remains stable until live validation.
