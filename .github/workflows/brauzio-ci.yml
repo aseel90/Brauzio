@@ -95,6 +95,7 @@ jobs:
           WORKER='app/cloudflare-mcp/src/index.ts'
           SESSION='app/cloudflare-mcp/src/browser-session-v31.ts'
           SESSION_BASE='app/cloudflare-mcp/src/browser-session.ts'
+          TOPO='app/chrome-extension/entrypoints/background/runtime-v3/tab-topology.ts'
 
           grep -Fq 'MutationObserver' "$SMART"
           grep -Fq 'retryReasons' "$V3"
@@ -127,6 +128,13 @@ jobs:
           grep -Fq "url.pathname === '/pairing/consume'" "$SESSION_BASE"
           grep -Fq 'export class BrowserSession extends BrowserSessionBase' "$SESSION"
           grep -Fq 'CALL_RESENT_AFTER_RECONNECT' "$SESSION"
+          grep -Fq "const ACTOR_LEASE_STORAGE_KEY = 'actor-lease-v1'" "$SESSION_BASE"
+          grep -Fq 'chrome.webNavigation.onCreatedNavigationTarget' "$TOPO"
+          grep -Fq 'chrome.tabs.onUpdated' "$TOPO"
+          grep -Fq 'chrome.openerTabId' "$TOPO"
+          grep -Fq 'cdp.Page.windowOpen' "$TOPO"
+          grep -Fq "const STORAGE_KEY = 'brauzio-tab-topology-v1'" "$TOPO"
+          grep -Fq 'MCP_CALLER_CONTEXT' "$WORKER"
 
           echo 'Brauzio 3.1 reliability contract passed.'
 
