@@ -222,4 +222,4 @@ jobs:
 # Extension hotfix: Brauzio 3.1.2
 # Runtime hardening gate: Brauzio 3.1.2 server / 3.1.2 extension
 # Final validation trigger: 3.1.2 pairing consume + login + Defender compatibility
-# CI rerun marker: pairing bridge final validation
+# CI rerun marker: pairing consume final validation
