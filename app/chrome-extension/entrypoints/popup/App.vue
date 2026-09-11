@@ -26,6 +26,7 @@ const controlBusy = ref(false);
 const streamBusy = ref(false);
 const diagnosticsBusy = ref(false);
 const pairingBusy = ref(false);
+const pairingError = ref('');
 const showToken = ref(false);
 const copied = ref(false);
 const streamError = ref('');
@@ -75,9 +76,9 @@ async function startLiveView() { if (streamBusy.value) return; streamBusy.value 
 async function stopLiveView() { if (streamBusy.value) return; streamBusy.value = true; streamError.value = ''; try { const response = await chrome.runtime.sendMessage({ type: 'brauzio_live_view_stop' }); if (!response?.success) throw new Error(response?.error || 'تعذر إيقاف البث'); applyLiveStatus(response.status); } catch (error) { streamError.value = error instanceof Error ? error.message : String(error); } finally { streamBusy.value = false; } }
 async function runDiagnostics() { if (diagnosticsBusy.value) return; diagnosticsBusy.value = true; try { const response = await chrome.runtime.sendMessage({ type: 'brauzio_diagnostics_run' }); if (response?.success && response.report) diagnostics.value = response.report; } finally { diagnosticsBusy.value = false; } }
 async function copyMcpUrl() { if (!mcpUrl.value) return; await navigator.clipboard.writeText(mcpUrl.value); copied.value = true; setTimeout(() => copied.value = false, 1400); }
-async function createPairingCode() { if (!isConnected.value || pairingBusy.value) return; pairingBusy.value = true; pairing.value = null; try { await chrome.runtime.sendMessage({ type: 'brauzio_pairing_create' }); } finally { pairingBusy.value = false; } }
+async function createPairingCode() { if (!isConnected.value || pairingBusy.value) return; pairingBusy.value = true; pairing.value = null; pairingError.value = ''; try { const response = await chrome.runtime.sendMessage({ type: 'brauzio_pairing_create' }); if (!response?.success) throw new Error(response?.error || 'تعذر إنشاء رمز الربط'); } catch (error) { pairingError.value = error instanceof Error ? error.message : String(error); } finally { pairingBusy.value = false; } }
 
-const runtimeListener = (message: any) => { if (message?.type === 'brauzio_relay_status_changed' && message.status) applyStatus(message.status); if (message?.type === 'brauzio_pairing_code_changed') pairing.value = message.pairing || null; if (message?.type === 'brauzio_control_state_changed' && message.state) Object.assign(control, message.state); };
+const runtimeListener = (message: any) => { if (message?.type === 'brauzio_relay_status_changed' && message.status) applyStatus(message.status); if (message?.type === 'brauzio_pairing_code_changed') { pairing.value = message.pairing || null; pairingError.value = ''; } if (message?.type === 'brauzio_control_state_changed' && message.state) Object.assign(control, message.state); };
 onMounted(async () => { chrome.runtime.onMessage.addListener(runtimeListener); await loadStreamConfig(); await loadState(); livePollTimer = setInterval(() => void refreshLiveView(), 1500); });
 onBeforeUnmount(() => { chrome.runtime.onMessage.removeListener(runtimeListener); if (livePollTimer) clearInterval(livePollTimer); });
 </script>
@@ -107,7 +108,7 @@ onBeforeUnmount(() => { chrome.runtime.onMessage.removeListener(runtimeListener)
         <button v-if="stream.running" class="button danger full stream-action" :disabled="streamBusy" @click="stopLiveView">إيقاف البث الآن</button><button v-else class="button primary full stream-action" :disabled="streamBusy" @click="startLiveView">تشغيل البث على الصفحة الحالية</button>
       </section>
 
-      <details class="fold-card"><summary><div><span class="label">ChatGPT</span><strong>ربط MCP و OAuth</strong></div><span>+</span></summary><div class="fold-body"><div class="masked-url" dir="ltr">{{ mcpUrl || 'لم يتم إنشاء الرابط بعد' }}</div><button class="button primary full" :disabled="!mcpUrl" @click="copyMcpUrl">{{ copied ? 'تم النسخ' : 'نسخ رابط MCP' }}</button><div class="pairing-box"><strong>رمز ربط مؤقت</strong><p>أنشئ الرمز ثم أدخله في صفحة التفويض.</p><button class="button quiet full" :disabled="!isConnected || pairingBusy" @click="createPairingCode">{{ pairingBusy ? 'جارٍ الإنشاء…' : 'إنشاء رمز الربط' }}</button><div v-if="pairing" class="pairing-code"><strong dir="ltr">{{ pairing.code }}</strong><span>{{ pairingRemaining }}</span></div></div></div></details>
+      <details class="fold-card"><summary><div><span class="label">ChatGPT</span><strong>ربط MCP و OAuth</strong></div><span>+</span></summary><div class="fold-body"><div class="masked-url" dir="ltr">{{ mcpUrl || 'لم يتم إنشاء الرابط بعد' }}</div><button class="button primary full" :disabled="!mcpUrl" @click="copyMcpUrl">{{ copied ? 'تم النسخ' : 'نسخ رابط MCP' }}</button><div class="pairing-box"><strong>رمز ربط مؤقت</strong><p>أنشئ الرمز ثم أدخله في صفحة التفويض.</p><button class="button quiet full" :disabled="!isConnected || pairingBusy" @click="createPairingCode">{{ pairingBusy ? 'جارٍ الإنشاء…' : 'إنشاء رمز الربط' }}</button><p v-if="pairingError" class="inline-error">{{ pairingError }}</p><div v-if="pairing" class="pairing-code"><strong dir="ltr">{{ pairing.code }}</strong><span>{{ pairingRemaining }}</span></div></div></div></details>
 
       <details v-if="diagnostics" class="fold-card"><summary><div><span class="label">Diagnostics</span><strong>نتائج الفحص</strong></div><span>+</span></summary><div class="fold-body diagnostics-results"><div v-for="check in diagnostics.checks" :key="check.key" class="diagnostic-row"><span class="diag-icon" :class="`state-${check.state}`">{{ diagnosticIcon(check.state) }}</span><div><strong>{{ check.label }}</strong><p>{{ check.detail }}</p></div></div></div></details>
 

@@ -719,6 +719,24 @@ export function initRemoteRelayListener() {
       return false;
     }
 
+    if (message.type === 'brauzio_pairing_create') {
+      if (!socket || socket.readyState !== WebSocket.OPEN || !currentStatus.authenticated) {
+        sendResponse({ success: false, error: 'Brauzio Cloud is not connected and authenticated' });
+        return false;
+      }
+      currentPairing = null;
+      try {
+        socket.send(JSON.stringify({ type: 'pairing_create' }));
+        relayLog('PAIRING_CREATE_REQUESTED');
+        sendResponse({ success: true });
+      } catch (error) {
+        const messageText = error instanceof Error ? error.message : String(error);
+        relayLog('PAIRING_CREATE_SEND_FAILED', { error: messageText });
+        sendResponse({ success: false, error: messageText });
+      }
+      return false;
+    }
+
     if (message.type === 'brauzio_control_get_state') {
       void getControlState()
         .then((state) => sendResponse({ success: true, state }))
