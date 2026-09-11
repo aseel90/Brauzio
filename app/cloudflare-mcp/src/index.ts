@@ -1,3 +1,4 @@
+import { Server, type CallToolResult } from '@modelcontextprotocol/server';
 import { createMcpHandler, getMcpAuthContext } from 'agents/mcp/server';
 import { OAuthProvider, type AuthRequest, type OAuthHelpers } from '@cloudflare/workers-oauth-provider';
 import { TOOL_SCHEMAS } from 'brauzio-shared';
@@ -29,84 +30,59 @@ const BRAUZIO_COMPUTER_ACTIONS = [
   'mouse_move',
   'mouse_down',
   'mouse_up',
-  'mouse_click',
-  'mouse_drag',
-  'mouse_wheel',
-  'key_down',
-  'key_up',
-  'key_press',
-  'type',
+  'drag_hold',
 ] as const;
-const BRAUZIO_SENSITIVE_TOOL_NAMES = new Set([
-  'chrome_screenshot',
-  'chrome_observe',
-  'chrome_live_view',
-  'chrome_clipboard',
-  'chrome_javascript',
-  'chrome_userscript',
-  'chrome_cdp',
-]);
-const BRAUZIO_MUTATING_ACTIONS = new Set([
-  'click',
-  'double_click',
-  'hover',
-  'focus',
-  'fill',
-  'clear',
-  'type',
-  'press',
-  'select',
-  'scroll',
-  'drag',
-  'upload',
-  'navigate',
-  'back',
-  'forward',
-  'reload',
-]);
 
-type BrauzioAuthProps = {
+interface BrauzioAuthProps {
   deviceId: string;
   authorizedAt: number;
-};
+}
 
 interface Env {
   BROWSER_SESSIONS: DurableObjectNamespace<BrowserSession>;
-  BROWSER_SHARED_SECRET: string;
   DEFAULT_DEVICE_ID?: string;
-  MCP_SHARED_SECRET: string;
+  BROWSER_SHARED_SECRET: string;
   OAUTH_KV: KVNamespace;
   OAUTH_PROVIDER: OAuthHelpers;
 }
 
-function normalizeDeviceId(value: unknown) {
-  return String(value || 'default').trim().slice(0, 128) || 'default';
+function workerLog(event: string, details: Record<string, unknown> = {}) {
+  console.log('[BrauzioWorker]', new Date().toISOString(), event, details);
+}
+
+function jsonError(message: string): CallToolResult {
+  return {
+    content: [{ type: 'text', text: message }],
+    isError: true,
+  };
+}
+
+function normalizeDeviceId(value: unknown): string {
+  const normalized = String(value || 'default').trim().slice(0, 128);
+  return normalized || 'default';
 }
 
 async function oauthUserIdForDevice(deviceId: string): Promise<string> {
-  const raw = new TextEncoder().encode(`brauzio:${normalizeDeviceId(deviceId)}`);
-  const digest = await crypto.subtle.digest('SHA-256', raw);
-  return Array.from(new Uint8Array(digest))
-    .map((byte) => byte.toString(16).padStart(2, '0'))
-    .join('');
+  const bytes = new TextEncoder().encode(normalizeDeviceId(deviceId));
+  const digest = await crypto.subtle.digest('SHA-256', bytes);
+  const hex = Array.from(new Uint8Array(digest), (byte) => byte.toString(16).padStart(2, '0')).join('');
+  return `device-${hex}`;
 }
 
-function deviceIdFromRequest(request: Request, env: Env) {
+function deviceIdFromRequest(request: Request, env: Env): string {
   const url = new URL(request.url);
   return normalizeDeviceId(url.searchParams.get('device') || env.DEFAULT_DEVICE_ID || 'default');
+}
+
+function deviceIdFromAuth(env: Env): string {
+  const auth = getMcpAuthContext();
+  const props = (auth?.props || {}) as Partial<BrauzioAuthProps>;
+  return normalizeDeviceId(props.deviceId || env.DEFAULT_DEVICE_ID || 'default');
 }
 
 function browserStub(env: Env, deviceId: string) {
   const id = env.BROWSER_SESSIONS.idFromName(normalizeDeviceId(deviceId));
   return env.BROWSER_SESSIONS.get(id);
-}
-
-function workerLog(event: string, details: Record<string, unknown> = {}) {
-  console.log(`[BrauzioWorker] ${new Date().toISOString()} ${event} ${JSON.stringify(details)}`);
-}
-
-function textResult(text: string) {
-  return { content: [{ type: 'text' as const, text }] };
 }
 
 async function callBrowserTool(
@@ -115,7 +91,7 @@ async function callBrowserTool(
   name: string,
   args: Record<string, unknown>,
   callerId: string,
-) {
+): Promise<CallToolResult> {
   const requestUrl = new URL('https://brauzio-browser.internal/call');
   const traceId = crypto.randomUUID();
   const relayArgs = { ...args, __brauzioRequestId: traceId };
@@ -128,79 +104,86 @@ async function callBrowserTool(
   );
   const raw = await response.text();
   if (!response.ok) {
-    throw new Error(`Brauzio browser tool failed (${response.status}): ${raw.slice(0, 800)}`);
+    return jsonError(raw || `Browser tool failed with HTTP ${response.status}`);
   }
-  const parsed = JSON.parse(raw) as { result?: unknown; error?: string };
-  if (parsed.error) throw new Error(parsed.error);
-  return parsed.result;
-}
-
-function requiresBrowserTool(name: string) {
-  return name.startsWith('chrome_') || name === 'get_windows_and_tabs' || name === 'chrome_computer';
-}
-
-function isSensitiveToolCall(name: string, args: Record<string, unknown>) {
-  if (BRAUZIO_SENSITIVE_TOOL_NAMES.has(name)) return true;
-  if (name === 'chrome_act') {
-    return BRAUZIO_MUTATING_ACTIONS.has(String(args.action || ''));
+  try {
+    const parsed = JSON.parse(raw) as unknown;
+    if (parsed && typeof parsed === 'object' && 'result' in parsed) {
+      const inner = (parsed as { result?: unknown }).result;
+      if (inner && typeof inner === 'object' && Array.isArray((inner as CallToolResult).content)) {
+        return inner as CallToolResult;
+      }
+    }
+    if (parsed && typeof parsed === 'object' && Array.isArray((parsed as CallToolResult).content)) {
+      return parsed as CallToolResult;
+    }
+    return jsonError('Browser tool returned a malformed MCP tool result');
+  } catch {
+    return jsonError(raw || 'Browser tool returned an invalid response');
   }
-  if (name === 'chrome_computer') {
-    return BRAUZIO_COMPUTER_ACTIONS.includes(String(args.action || '') as (typeof BRAUZIO_COMPUTER_ACTIONS)[number]);
-  }
-  if (name === 'chrome_navigate' || name === 'chrome_tabs') return true;
-  return false;
 }
 
-function callerIdFromContext(ctx: unknown) {
-  const value = (ctx as { sessionId?: unknown } | undefined)?.sessionId;
-  return typeof value === 'string' && value ? value : 'mcp';
-}
-
-function deviceIdFromAuth(env: Env) {
+async function callerLeaseId(ctx: {
+  sessionId?: string;
+  http?: { authInfo?: { clientId?: string; token?: string } };
+}): Promise<string> {
   const auth = getMcpAuthContext();
-  const props = auth?.props as BrauzioAuthProps | undefined;
-  return normalizeDeviceId(props?.deviceId || env.DEFAULT_DEVICE_ID || 'default');
+  const props = (auth?.props || {}) as Partial<BrauzioAuthProps>;
+  const clientId = String(ctx.http?.authInfo?.clientId || 'unknown').slice(0, 256);
+  const sessionId = String(ctx.sessionId || '').trim().slice(0, 256);
+  const token = String(ctx.http?.authInfo?.token || '');
+  const material = sessionId
+    ? `session|${clientId}|${sessionId}`
+    : token
+      ? `token|${clientId}|${token}`
+      : `grant|${clientId}|${String(props.authorizedAt || 0)}|${normalizeDeviceId(props.deviceId || 'default')}`;
+  const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(material));
+  const hex = Array.from(new Uint8Array(digest), (byte) => byte.toString(16).padStart(2, '0')).join('');
+  return `caller-${hex.slice(0, 32)}`;
 }
 
-async function requirePairedSession(env: Env, deviceId: string) {
-  const response = await browserStub(env, deviceId).fetch(
-    new Request('https://brauzio-browser.internal/pairing/status'),
+function createServer(env: Env) {
+  const server = new Server(
+    { name: 'Brauzio', version: BRAUZIO_RUNTIME_VERSION },
+    { capabilities: { tools: {} } },
   );
-  const status = (await response.json().catch(() => ({}))) as {
-    paired?: boolean;
-    active?: boolean;
-    expiresAt?: number | null;
-  };
-  if (!response.ok || status.paired !== true) {
-    const message = status.active
-      ? 'Brauzio pairing is pending. Complete pairing from the authorization page first.'
-      : 'Brauzio is not paired with this ChatGPT session. Create a new pairing code from the extension and reconnect.';
-    throw new Error(message);
-  }
+
+  server.setRequestHandler('tools/list', async () => ({ tools: BRAUZIO_TOOL_SCHEMAS }));
+  server.setRequestHandler('tools/call', async (request, ctx) => {
+    const name = request.params.name;
+    const args = (request.params.arguments || {}) as Record<string, unknown>;
+    const callerId = await callerLeaseId(ctx);
+    return await callBrowserTool(env, deviceIdFromAuth(env), name, args, callerId);
+  });
+
+  return server;
 }
 
-const mcpApiHandler = createMcpHandler(
-  (server) => {
-    server.setRequestHandler('tools/list', async () => ({ tools: BRAUZIO_TOOL_SCHEMAS }));
-    server.setRequestHandler('tools/call', async (request, ctx) => {
-      const name = request.params.name;
-      const args = (request.params.arguments || {}) as Record<string, unknown>;
-      const deviceId = deviceIdFromAuth(server.env as Env);
-      const callerId = callerIdFromContext(ctx);
+const mcpApiHandler = {
+  async fetch(request: Request, env: Env, ctx: ExecutionContext) {
+    const requestUrl = new URL(request.url);
+    const ctxProps =
+      ((ctx as ExecutionContext & { props?: Partial<BrauzioAuthProps> }).props || {});
 
-      if (!requiresBrowserTool(name)) {
-        return textResult(`Unsupported Brauzio tool: ${name}`);
-      }
-
-      if (isSensitiveToolCall(name, args)) {
-        await requirePairedSession(server.env as Env, deviceId);
-      }
-
-      return await callBrowserTool(server.env as Env, deviceId, name, args, callerId);
+    workerLog('MCP_REQUEST', {
+      method: request.method,
+      path: requestUrl.pathname,
+      mcpMethod: request.headers.get('Mcp-Method') || request.headers.get('mcp-method') || '',
+      mcpName: request.headers.get('Mcp-Name') || request.headers.get('mcp-name') || '',
+      hasAuthorizedDevice: Boolean(ctxProps.deviceId),
     });
+
+    return createMcpHandler(() => createServer(env), {
+      route: '/mcp',
+      legacy: 'stateless',
+      onerror(error) {
+        workerLog('MCP_HANDLER_ERROR', {
+          message: error instanceof Error ? error.message : String(error),
+        });
+      },
+    })(request, env, ctx);
   },
-  { capabilities: { tools: {} } },
-);
+};
 
 async function handleAuthorize(request: Request, env: Env) {
   const oauthRequest = await env.OAUTH_PROVIDER.parseAuthRequest(request);
