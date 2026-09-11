@@ -184,7 +184,9 @@ class TabTopologyService {
 
     const openerTabId = typeof tab.openerTabId === 'number' ? tab.openerTabId : existing?.openerTabId;
     let parentTabId = openerTabId ?? existing?.parentTabId;
-    let confidence: TabTopologyConfidence = openerTabId !== undefined ? 'high' : existing?.confidence || 'high';
+    let confidence: TabTopologyConfidence = openerTabId !== undefined
+      ? 'high'
+      : existing?.confidence || (windowType === 'popup' || windowType === 'devtools' ? 'high' : 'low');
     const sources = new Set(existing?.sources || []);
     sources.add(source);
 
