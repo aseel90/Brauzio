@@ -25,6 +25,43 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Apply one-shot pairing bridge hotfix
+        if: github.ref == 'refs/heads/fix/3.1.2-pairing-create'
+        shell: bash
+        run: |
+          python - <<'PYHOTFIX'
+          from pathlib import Path
+          relay = Path('app/chrome-extension/entrypoints/background/remote-relay.ts')
+          s = relay.read_text()
+          needle = """    if (message.type === 'brauzio_pairing_get') {\n      sendResponse({ success: true, pairing: currentPairing });\n      return false;\n    }\n\n"""
+          block = needle + """    if (message.type === 'brauzio_pairing_create') {\n      if (!socket || socket.readyState !== WebSocket.OPEN || !currentStatus.authenticated) {\n        sendResponse({ success: false, error: 'Brauzio Cloud is not connected and authenticated' });\n        return false;\n      }\n      currentPairing = null;\n      try {\n        socket.send(JSON.stringify({ type: 'pairing_create' }));\n        relayLog('PAIRING_CREATE_REQUESTED');\n        sendResponse({ success: true });\n      } catch (error) {\n        const messageText = error instanceof Error ? error.message : String(error);\n        relayLog('PAIRING_CREATE_SEND_FAILED', { error: messageText });\n        sendResponse({ success: false, error: messageText });\n      }\n      return false;\n    }\n\n"""
+          if "message.type === 'brauzio_pairing_create'" not in s:
+              if needle not in s: raise SystemExit('pairing get block not found')
+              s = s.replace(needle, block, 1)
+          relay.write_text(s)
+
+          popup = Path('app/chrome-extension/entrypoints/popup/App.vue')
+          s = popup.read_text()
+          if "const pairingError = ref('');" not in s:
+              s = s.replace("const pairingBusy = ref(false);\n", "const pairingBusy = ref(false);\nconst pairingError = ref('');\n", 1)
+          s = s.replace("async function createPairingCode() { if (!isConnected.value || pairingBusy.value) return; pairingBusy.value = true; pairing.value = null; try { await chrome.runtime.sendMessage({ type: 'brauzio_pairing_create' }); } finally { pairingBusy.value = false; } }", "async function createPairingCode() { if (!isConnected.value || pairingBusy.value) return; pairingBusy.value = true; pairing.value = null; pairingError.value = ''; try { const response = await chrome.runtime.sendMessage({ type: 'brauzio_pairing_create' }); if (!response?.success) throw new Error(response?.error || 'تعذر إنشاء رمز الربط'); } catch (error) { pairingError.value = error instanceof Error ? error.message : String(error); } finally { pairingBusy.value = false; } }", 1)
+          s = s.replace("const runtimeListener = (message: any) => { if (message?.type === 'brauzio_relay_status_changed' && message.status) applyStatus(message.status); if (message?.type === 'brauzio_pairing_code_changed') pairing.value = message.pairing || null; if (message?.type === 'brauzio_control_state_changed' && message.state) Object.assign(control, message.state); };", "const runtimeListener = (message: any) => { if (message?.type === 'brauzio_relay_status_changed' && message.status) applyStatus(message.status); if (message?.type === 'brauzio_pairing_code_changed') { pairing.value = message.pairing || null; pairingError.value = ''; } if (message?.type === 'brauzio_control_state_changed' && message.state) Object.assign(control, message.state); };", 1)
+          marker = "<button class=\"button quiet full\" :disabled=\"!isConnected || pairingBusy\" @click=\"createPairingCode\">{{ pairingBusy ? 'جارٍ الإنشاء…' : 'إنشاء رمز الربط' }}</button><div v-if=\"pairing\" class=\"pairing-code\">"
+          if marker in s:
+              s = s.replace(marker, marker.replace('</button><div', '</button><p v-if=\"pairingError\" class=\"inline-error\">{{ pairingError }}</p><div'), 1)
+          popup.write_text(s)
+
+          package = Path('app/chrome-extension/package.json')
+          package.write_text(package.read_text().replace('"version": "3.1.1"', '"version": "3.1.2"', 1))
+          window = Path('app/chrome-extension/entrypoints/background/tools/browser/window.ts')
+          window.write_text(window.read_text().replace('BRAUZIO_BUILD_3_1_1', 'BRAUZIO_BUILD_3_1_2'))
+          PYHOTFIX
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add app/chrome-extension/entrypoints/background/remote-relay.ts app/chrome-extension/entrypoints/popup/App.vue app/chrome-extension/package.json app/chrome-extension/entrypoints/background/tools/browser/window.ts
+          git commit -m 'Brauzio 3.1.2: restore pairing-code creation bridge' || true
+          git push origin HEAD:fix/3.1.2-pairing-create
+
       - name: Reject legacy local bridge references
         shell: bash
         run: |
@@ -103,6 +140,8 @@ jobs:
           grep -Fq 'chrome.storage.session' "$CACHE"
           grep -Fq 'RECONNECT_JITTER_RATIO' "$RELAY"
           grep -Fq 'relayMetrics.reconnectScheduled' "$RELAY"
+          grep -Fq "message.type === 'brauzio_pairing_create'" "$RELAY"
+          grep -Fq "socket.send(JSON.stringify({ type: 'pairing_create' }))" "$RELAY"
           grep -Fq 'export async function stopAllLiveViews' "$LIVE"
           grep -Fq 'Promise<number>' "$LIVE"
           test ! -e "$WELCOME_DIR/main.ts"
@@ -149,7 +188,7 @@ jobs:
           root = pathlib.Path(sys.argv[1])
           manifest = json.loads((root / 'manifest.json').read_text(encoding='utf-8'))
 
-          assert manifest.get('version') == '3.1.1', manifest.get('version')
+          assert manifest.get('version') == '3.1.2', manifest.get('version')
           assert manifest.get('default_locale') == 'ar', manifest.get('default_locale')
           assert manifest.get('action', {}).get('default_title') == 'Brauzio', manifest.get('action')
           assert (root / '_locales' / 'ar' / 'messages.json').is_file(), 'Arabic locale missing'
@@ -160,7 +199,7 @@ jobs:
 
           background = (root / 'background.js').read_text(encoding='utf-8')
           assert 'BRAUZIO_JS_RUNTIME_V3' in background, 'JS runtime V3 marker missing from packaged background'
-          assert 'BRAUZIO_BUILD_3_1_1' in background, '3.1.1 build marker missing from packaged background'
+          assert 'BRAUZIO_BUILD_3_1_2' in background, '3.1.2 build marker missing from packaged background'
 
           welcome_path = root / 'welcome.html'
           welcome = welcome_path.read_text(encoding='utf-8')
@@ -174,7 +213,7 @@ jobs:
               forbidden = ('chrome.', 'navigator.clipboard', 'localstorage', 'sessionstorage', 'brauziorelay', 'brauziodevice', 'eval(', 'new function')
               assert not any(token in code for token in forbidden), f'unsafe welcome runtime content in {src}'
 
-          print('Packaged manifest verified: Brauzio 3.1.1 + promise-safe Live View + Defender-safe static Welcome.')
+          print('Packaged manifest verified: Brauzio 3.1.2 + pairing-create bridge + promise-safe Live View + Defender-safe static Welcome.')
           PY
 
       - name: Upload installable Brauzio ZIP
@@ -209,6 +248,6 @@ jobs:
           git push
 
 # Current release line: Brauzio 3.1.x
-# Extension hotfix: Brauzio 3.1.1
-# Runtime hardening gate: Brauzio 3.1.0 server / 3.1.1 extension
-# Final validation trigger: 3.1.1 login + Defender compatibility
+# Extension hotfix: Brauzio 3.1.2
+# Runtime hardening gate: Brauzio 3.1.1 server / 3.1.2 extension
+# Final validation trigger: 3.1.2 pairing + login + Defender compatibility
